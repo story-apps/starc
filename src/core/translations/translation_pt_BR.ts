@@ -233,7 +233,7 @@
         <translation>Texto</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="1055"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="1057"/>
         <source>Copy of </source>
         <translation>Cópia de</translation>
     </message>
@@ -798,109 +798,109 @@
         <translation>ESCURECER</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="609"/>
-        <source>Background actors (atmosphere)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="610"/>
-        <source>Background actors (silent)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="611"/>
-        <source>Background actors (special)</source>
-        <translation type="unfinished"></translation>
+        <source>Background actors (atmosphere)</source>
+        <translation>Figurantes (atmosfera)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="612"/>
-        <source>Stunts</source>
-        <translation type="unfinished"></translation>
+        <source>Background actors (silent)</source>
+        <translation>Figurantes (silencio)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="613"/>
-        <source>Vehicles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="614"/>
-        <source>Props</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="615"/>
-        <source>Camera</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="616"/>
-        <source>Special effects</source>
-        <translation type="unfinished"></translation>
+        <source>Background actors (special)</source>
+        <translation>Figurantes (especial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="617"/>
-        <source>Wardrobe</source>
-        <translation type="unfinished"></translation>
+        <source>Stunts</source>
+        <translation>Dublê</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="616"/>
+        <source>Vehicles</source>
+        <translation>Veiculos</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="609"/>
+        <source>Props</source>
+        <translation>Acessórios</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="621"/>
+        <source>Camera</source>
+        <translation>Camera</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="618"/>
+        <source>Special effects</source>
+        <translation>Efeitos especiais</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="614"/>
+        <source>Wardrobe</source>
+        <translation>Guarda-roupas</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="615"/>
         <source>Makeup/hair</source>
-        <translation type="unfinished"></translation>
+        <translation>Maquiagem/cabelo</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="619"/>
         <source>Animals</source>
-        <translation type="unfinished"></translation>
+        <translation>Animais</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="620"/>
         <source>Animal handler</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="621"/>
-        <source>Music</source>
-        <translation type="unfinished">Música</translation>
+        <translation>Domador de animal</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="622"/>
-        <source>Sound</source>
-        <translation type="unfinished">Som</translation>
+        <source>Music</source>
+        <translation>Música</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="623"/>
+        <source>Sound</source>
+        <translation>Som</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="610"/>
         <source>Set dressing</source>
-        <translation type="unfinished"></translation>
+        <translation>Conjunto de vestir</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="624"/>
         <source>Greenery</source>
-        <translation type="unfinished"></translation>
+        <translation>Vegetação</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="625"/>
         <source>Special equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Equipamento especial</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="626"/>
         <source>Security</source>
-        <translation type="unfinished"></translation>
+        <translation>Segurança</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="627"/>
         <source>Additional labor</source>
-        <translation type="unfinished"></translation>
+        <translation>Trabalho adicional</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="628"/>
         <source>Optical FX (Visual FX)</source>
-        <translation type="unfinished"></translation>
+        <translation>Optical FX (Visual FX)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="629"/>
         <source>Mechanical FX</source>
-        <translation type="unfinished"></translation>
+        <translation>Mecânico FX</translation>
     </message>
 </context>
 <context>
@@ -989,7 +989,7 @@
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="299"/>
         <source>NOT SET</source>
-        <translation type="unfinished"></translation>
+        <translation>Não estabelecido</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="333"/>
@@ -1222,7 +1222,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="40"/>
         <source>Telugu template (page: A4; font: Courier Prime, Mallanna)</source>
-        <translation type="unfinished"></translation>
+        <translation>Telugu template (pagina: A4; font; Courier Prime, Mallanna)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="44"/>
@@ -1297,7 +1297,7 @@
     <message>
         <location filename="../../corelib/business_layer/templates/stageplay_template.cpp" line="21"/>
         <source>BBC stage template (page: A4; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>BBC stage template (pagina: A4; font; Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/stageplay_template.cpp" line="24"/>
@@ -1393,7 +1393,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="341"/>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>Contorno</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="346"/>
@@ -1447,37 +1447,37 @@
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="22"/>
         <source>Manuscript template (page: A4; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuscript template (pagina: A4; font: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="25"/>
         <source>Manuscript template (page: A4; font: Courier New)</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuscript template (pagina: A4; font: Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="28"/>
         <source>Manuscript template (page: A4; font: Times New Roman)</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuscript template (pagina: A4; font: Times New Roman)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="31"/>
         <source>Manuscript template (page: Letter; font: Courier Prime)</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuscript template (pagina: Letter; font: Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="35"/>
         <source>Manuscript template (page: Letter; font: Times New Roman)</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuscript template (pagina: Letter; font: Times New Roman)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="39"/>
         <source>Modern template (page: A4; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>Modern template (pagina: A4; font: Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="42"/>
         <source>Modern template (page: Letter; font: Arial)</source>
-        <translation type="unfinished"></translation>
+        <translation>Modern template (pagina: Letter; font: Arial)</translation>
     </message>
 </context>
 <context>
@@ -1573,7 +1573,7 @@
     <message>
         <location filename="../../corelib/ui/modules/character_image_card/character_image_card.cpp" line="57"/>
         <source>Prepare to generating photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Prepare-se para gerar a foto</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/character_image_card/character_image_card.cpp" line="90"/>
@@ -1695,12 +1695,12 @@
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="105"/>
         <source>PNG image</source>
-        <translation type="unfinished"></translation>
+        <translation>Imagem PNG</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="110"/>
         <source>MS Excel spreadsheet</source>
-        <translation type="unfinished"></translation>
+        <translation>MS Excel spreadsheet</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="116"/>
@@ -1848,7 +1848,7 @@
 <context>
     <name>KeySequenceDelegate</name>
     <message>
-        <location filename="../../corelib/ui/widgets/tree/tree_delegate.cpp" line="428"/>
+        <location filename="../../corelib/ui/widgets/tree/tree_delegate.cpp" line="429"/>
         <source>Press shortcut</source>
         <translation>Pressione atalho</translation>
     </message>
@@ -1895,172 +1895,172 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="686"/>
+        <location filename="../management_layer/application_manager.cpp" line="691"/>
         <source>Please update to the latest version if you want to use the Cloud.</source>
         <translation>Atualize para a versão mais recente se quiser usar a nuvem.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="687"/>
+        <location filename="../management_layer/application_manager.cpp" line="692"/>
         <source>Nope, I’m fine without Cloud</source>
         <translation>Não, estou bem sem Nuvem</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="688"/>
+        <location filename="../management_layer/application_manager.cpp" line="693"/>
         <source>Update</source>
         <translation>Atualizar</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="706"/>
+        <location filename="../management_layer/application_manager.cpp" line="711"/>
         <source>The last version is downloading</source>
         <translation>Baixando a última versão</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1160"/>
+        <location filename="../management_layer/application_manager.cpp" line="1172"/>
         <source>Read only</source>
         <translation>Somente Leitura</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1171"/>
+        <location filename="../management_layer/application_manager.cpp" line="1183"/>
         <source> - changed</source>
         <translation> - modificado</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1227"/>
-        <location filename="../management_layer/application_manager.cpp" line="1246"/>
-        <location filename="../management_layer/application_manager.cpp" line="1434"/>
+        <location filename="../management_layer/application_manager.cpp" line="1239"/>
+        <location filename="../management_layer/application_manager.cpp" line="1258"/>
+        <location filename="../management_layer/application_manager.cpp" line="1446"/>
         <source>Saving error</source>
         <translation>Erro ao salvar</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1228"/>
+        <location filename="../management_layer/application_manager.cpp" line="1240"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>As alterações não puderam ser escritas. Houve um erro de base de dados: &quot;%1&quot; Por favor, confirme se o seu arquivo existe e, se sim, se você tem permissão para escrita.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1247"/>
+        <location filename="../management_layer/application_manager.cpp" line="1259"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>As alterações não puderam ser escritas porque a story localizada em &quot;%1&quot; não existe. Por favor retorne o arquivo ao diretório e tente novamente.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1318"/>
+        <location filename="../management_layer/application_manager.cpp" line="1330"/>
         <source>Project was modified. Save changes?</source>
         <translation>O projeto foi modificado. Salvar alterações?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1319"/>
+        <location filename="../management_layer/application_manager.cpp" line="1331"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1320"/>
+        <location filename="../management_layer/application_manager.cpp" line="1332"/>
         <source>Don&apos;t save</source>
         <translation>Não salvar</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1321"/>
+        <location filename="../management_layer/application_manager.cpp" line="1333"/>
         <source>Save</source>
         <translation>Salvar</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1396"/>
+        <location filename="../management_layer/application_manager.cpp" line="1408"/>
         <source>Choose file to save story</source>
         <translation>Escolha o formato para salvar a história</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1435"/>
+        <location filename="../management_layer/application_manager.cpp" line="1447"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Não é possível salvar roteiro para arquivo %1. Por favor verifique as permissões e tente novamente</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1485"/>
+        <location filename="../management_layer/application_manager.cpp" line="1497"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Você tentou criar o projeto em um diretório inexistente %1. Por favor, escolha outro diretório para o projeto.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1490"/>
+        <location filename="../management_layer/application_manager.cpp" line="1502"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>O arquivo não pôde ser escrito. Parece que ele está aberto em outro aplicativo. Por favor feche-a e tente criar o projeto novamente.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1494"/>
+        <location filename="../management_layer/application_manager.cpp" line="1506"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>O arquivo não pôde ser escrito. Por favor, confirme se o aplicativo tem permissão para escrita no local selecionado ou escolha outra pasta para salvar como um novo projeto.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1498"/>
+        <location filename="../management_layer/application_manager.cpp" line="1510"/>
         <source>Create project error</source>
         <translation>Erro ao criar projeto</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1681"/>
-        <location filename="../management_layer/application_manager.cpp" line="1704"/>
+        <location filename="../management_layer/application_manager.cpp" line="1693"/>
+        <location filename="../management_layer/application_manager.cpp" line="1716"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>O ficheiro não pode ser aberto de moment, porque já está aberto em outra cópia da aplicação</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1707"/>
+        <location filename="../management_layer/application_manager.cpp" line="1719"/>
         <source>Ignore and open</source>
         <translation>Ignorar e abrir</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1801"/>
+        <location filename="../management_layer/application_manager.cpp" line="1813"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>O arquivo que você está tentando abrir não tem permissão de sobrescrição.   Confira as propriedades do arquivo e o permita ser editado. Já que o arquivo não é editável, ele abrirá em modo somente-leitura   </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1818"/>
+        <location filename="../management_layer/application_manager.cpp" line="1830"/>
         <source>Do you want continue to use .%1 file format?</source>
-        <translation type="unfinished"></translation>
+        <translation>Você deseja continuar a utilizar o formato de arquivo .%1?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1819"/>
+        <location filename="../management_layer/application_manager.cpp" line="1831"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alguns dados do projeto não podem ser salvos no formato .%1. Nós recomendamos que você utilize o formato Story Architect .%2 para que todos os dados do projeto sejam salvos apropriadamente.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1822"/>
+        <location filename="../management_layer/application_manager.cpp" line="1834"/>
         <source>Never ask again</source>
         <translation>Nunca pergunte novamente</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1823"/>
+        <location filename="../management_layer/application_manager.cpp" line="1835"/>
         <source>Keep .%1</source>
         <translation>Manter .% 1</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1824"/>
+        <location filename="../management_layer/application_manager.cpp" line="1836"/>
         <source>Switch to .STARC</source>
         <translation>Alternar para .STARC</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2978"/>
+        <location filename="../management_layer/application_manager.cpp" line="2998"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>A assinatura do serviço de nuvem dos proprietários do projeto expirou. Você pode continuar trabalhando com o projeto assim que renovar a assinatura.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2959"/>
-        <location filename="../management_layer/application_manager.cpp" line="2980"/>
+        <location filename="../management_layer/application_manager.cpp" line="2979"/>
+        <location filename="../management_layer/application_manager.cpp" line="3000"/>
         <source>Continue offline</source>
         <translation>Continuar offline</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="421"/>
-        <location filename="../management_layer/application_manager.cpp" line="435"/>
+        <location filename="../management_layer/application_manager.cpp" line="426"/>
+        <location filename="../management_layer/application_manager.cpp" line="440"/>
         <source>Open new window</source>
         <translation>Abrir nova janela</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="636"/>
+        <location filename="../management_layer/application_manager.cpp" line="641"/>
         <source>Loading missed fonts</source>
         <translation>Carregando fontes ausentes</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2957"/>
+        <location filename="../management_layer/application_manager.cpp" line="2977"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>Sua assinatura do serviço de nuvem expirou. Ative a assinatura para continuar trabalhando com o projeto.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2960"/>
+        <location filename="../management_layer/application_manager.cpp" line="2980"/>
         <source>Renew subscription</source>
         <translation>Renover assinatura</translation>
     </message>
@@ -2144,17 +2144,17 @@
 <context>
     <name>ManagementLayer::CharactersRelationsManager</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="541"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="531"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Nome do personagem foi modificado de &quot;%1&quot; para &quot;%2&quot;. Manter mudanças?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="543"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="533"/>
         <source>No</source>
         <translation>Não</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="544"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="534"/>
         <source>Yes</source>
         <translation>Sim</translation>
     </message>
@@ -2182,12 +2182,12 @@
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="396"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="388"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation>O código promocional com %1% de desconto está ativado e será usado na próxima compra.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="405"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="397"/>
         <source>PRO version subscription activated for %n month(s).</source>
         <translation>
             <numerusform>Assinatura da versão PRO ativada por %n mês.</numerusform>
@@ -2195,12 +2195,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="410"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="402"/>
         <source>PRO version lifetime access granted.</source>
         <translation>Acesso vitalício à versão PRO concedido.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="414"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="406"/>
         <source>TEAM version subscription activated for %n month(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -2208,12 +2208,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="419"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="411"/>
         <source>TEAM version lifetime access granted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Acesso vitalício à versão TEAM concedido.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="427"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="419"/>
         <source>%n credits were added to your balance.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -2221,27 +2221,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="607"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="592"/>
         <source>Promocode is incorrect</source>
         <translation>Cupom está incorreto</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="611"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="596"/>
         <source>Promocode expired</source>
         <translation>Cupom vencido</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="615"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="600"/>
         <source>Maximum number of promocode activations done</source>
-        <translation type="unfinished"></translation>
+        <translation>Número máximo de códigos promocionais ativados alcançado</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="619"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="604"/>
         <source>Promocode already used</source>
         <translation>Cupom já utilizado</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="691"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="668"/>
         <source>Generating text</source>
         <translation>Gerando texto</translation>
     </message>
@@ -2303,7 +2303,7 @@
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="74"/>
         <source>To edit the images gallery, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para editar a galeria de imagens, você precisa atualizar para a versão PRO</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="75"/>
@@ -2318,7 +2318,7 @@
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="154"/>
         <source>Do you want to delete selected image?</source>
-        <translation type="unfinished"></translation>
+        <translation>Gostaria de excluir a imagem selecionada?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="155"/>
@@ -2354,7 +2354,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="71"/>
         <source>To access extended location profile, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para acessar o perfil de localização estendida, você precisa atualizar para a versão PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="72"/>
@@ -2385,7 +2385,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="269"/>
         <source>Do you want to delete the location&apos;s photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Gostaria de excluir a foto de localização?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="271"/>
@@ -2396,24 +2396,24 @@
 <context>
     <name>ManagementLayer::LocationsMapManager</name>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="522"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="512"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Nome do local foi modificado de &quot;%1&quot; para &quot;%2&quot;. Manter mudanças?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="524"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="514"/>
         <source>No</source>
         <translation>Não</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="525"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="515"/>
         <source>Yes</source>
         <translation>Sim</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="140"/>
         <source>To edit the location map, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para editar o mapa de localização, você precisa atualizar para a versão PRO</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="141"/>
@@ -2428,7 +2428,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="160"/>
         <source>Location with this name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Localização com este nome já existe</translation>
     </message>
 </context>
 <context>
@@ -2436,7 +2436,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="113"/>
         <source>To edit novel cards, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para editar cartões de novels, você precisa atualizar para a versão PRO</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="114"/>
@@ -2460,7 +2460,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_outline_structure/novel_outline_structure_manager.cpp" line="362"/>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>Contorno</translation>
     </message>
 </context>
 <context>
@@ -2468,12 +2468,12 @@
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_manager.cpp" line="170"/>
         <source>Generate novel text</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerar texto de novel</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_manager.cpp" line="171"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a short novel about ...&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Começar o prompt de algo como &quot;Escreva uma novel sobre ...&quot;, ou &quot;Escreva uma pequena novel sobre ...&quot;</translation>
     </message>
 </context>
 <context>
@@ -2569,17 +2569,17 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="597"/>
         <source>Location with this name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>localização com este nome já existe</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="708"/>
         <source>Current draft</source>
-        <translation type="unfinished"></translation>
+        <translation>Rascunho atual</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="777"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Você realmente gostaria de remover documento de versão &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="882"/>
@@ -2596,22 +2596,22 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="372"/>
         <source>Remove split</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover divisão</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="373"/>
         <source>Split window</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividir janela</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="454"/>
         <source>Add folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar pasta</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="607"/>
         <source>World with this name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Palavra com este nome já existe</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="779"/>
@@ -2720,12 +2720,12 @@
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="374"/>
         <source>Hide document drafts</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar documento de rascunho</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="375"/>
         <source>Show document drafts</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar documento de rascunho</translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="2689"/>
@@ -2738,17 +2738,17 @@
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="223"/>
         <source>Show in folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar na pasta</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="230"/>
         <source>Hide from recent list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar de arquivos recentes</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="236"/>
         <source>Do you really want to hide this project from the recent list?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tem certeza de que gostaria de ocultar este projeto da lista recente?</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="237"/>
@@ -2761,18 +2761,18 @@
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="238"/>
         <source>Yes, hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Sim. oculte</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="262"/>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="321"/>
         <source>Remove project</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover projeto</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="327"/>
         <source>Do you really want to remove this project?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tem certeza de que gostaria de remover este projeto?</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="270"/>
@@ -2783,12 +2783,12 @@
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="167"/>
         <source>Move to the cloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover para a nuvem</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="176"/>
         <source>To move a project to the cloud, you should be authorized.</source>
-        <translation type="unfinished"></translation>
+        <translation>para mover este projeto para a nuvem, voce deveria ter autorização</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="177"/>
@@ -2804,7 +2804,7 @@
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="197"/>
         <source>To move a project to the cloud, you need to upgrade to the TEAM version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para mover um projeto para a nuvem, você precisa atualizar para a versão TEAM</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="200"/>
@@ -2814,27 +2814,27 @@
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="268"/>
         <source>Do you really want to remove this project from the computer?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tem certeza que gostaria de remover este projeto do seu computador?</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="306"/>
         <source>Save to local file</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar para arquivos locais</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="358"/>
         <source>Unsubscribe</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancelar subscrição</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="364"/>
         <source>Do you really want to unsubscribe from this project?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tem certeza de que gostaria de cancelar a subscrição deste projeto?</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="366"/>
         <source>Yes, unsubscribe</source>
-        <translation type="unfinished"></translation>
+        <translation>Sim, cancelar subscrição</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="640"/>
@@ -2845,196 +2845,211 @@
 <context>
     <name>ManagementLayer::ScreenplayBreakdownManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="222"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="161"/>
+        <source>To be able to work with the screenplay breakdown, you need to upgrade to the TEAM version.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="163"/>
+        <source>Maybe later</source>
+        <translation>Talvez mais tarde</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="164"/>
+        <source>Upgrade</source>
+        <translation>Upgrade</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="248"/>
         <source>Select location for saving breakdown to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione a localização para salvar repartição no arquivo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="489"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="524"/>
         <source>Scene intro</source>
-        <translation type="unfinished">Introdução de Cena</translation>
+        <translation>Introdução de Cena</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="490"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="525"/>
         <source>Scene time</source>
-        <translation type="unfinished">Tempo de Cena</translation>
+        <translation>Tempo de Cena</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="491"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="526"/>
         <source>Character extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Extensão de personagem</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="492"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="527"/>
         <source>Transition</source>
-        <translation type="unfinished">Transição</translation>
+        <translation>Transição</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="661"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="696"/>
         <source>Breakdown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="713"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="748"/>
         <source>Script order</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordem do script</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="714"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="749"/>
         <source>Scene number</source>
-        <translation type="unfinished"></translation>
+        <translation>Número de cena</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="715"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="750"/>
         <source>I/E</source>
-        <translation type="unfinished">I/E</translation>
+        <translation>I/E</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="717"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="752"/>
         <source>Location</source>
-        <translation type="unfinished">Local</translation>
+        <translation>Local</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="720"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="755"/>
         <source>Scene description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descrição da cena</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="722"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="757"/>
         <source>D/N</source>
-        <translation type="unfinished"></translation>
+        <translation>D/N</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="723"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="758"/>
         <source>Story day</source>
-        <translation type="unfinished"></translation>
+        <translation>Dia da história</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="724"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="759"/>
         <source>Duration</source>
-        <translation type="unfinished">Duração</translation>
+        <translation>Duração</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="731"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="766"/>
         <source>Cast list</source>
-        <translation type="unfinished"></translation>
+        <translation>Elenco</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="736"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="771"/>
         <source>Cast IDs</source>
-        <translation type="unfinished"></translation>
+        <translation>IDs do elenco</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="740"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="775"/>
         <source>Location (Set)</source>
-        <translation type="unfinished"></translation>
+        <translation>Localização (Definir)</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="743"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="778"/>
         <source>Location (Complex)</source>
-        <translation type="unfinished"></translation>
+        <translation>Localização (Complexo)</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="747"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="782"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Endereço</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="764"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="799"/>
         <source>%1 list</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista %1</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="769"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="804"/>
         <source>%1 IDs</source>
-        <translation type="unfinished"></translation>
+        <translation>IDs %1</translation>
     </message>
 </context>
 <context>
     <name>ManagementLayer::ScreenplayBreakdownStructureManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="121"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="183"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="387"/>
-        <source>Expand all</source>
-        <translation type="unfinished"></translation>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="192"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="400"/>
+        <source>Expand level 1</source>
+        <translation>Expandir nível 1</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="126"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="188"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="392"/>
-        <source>Collapse all</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="132"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="193"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="397"/>
-        <source>Sort alphabetically</source>
-        <translation type="unfinished"></translation>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="197"/>
+        <source>Expand level 2</source>
+        <translation>Expandir nível 2</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="140"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="202"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="406"/>
+        <source>Expand all</source>
+        <translation>Expandir tudo</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="145"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="207"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="411"/>
+        <source>Collapse all</source>
+        <translation>Recolher tudo</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="151"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="212"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="416"/>
+        <source>Sort alphabetically</source>
+        <translation>Classificar alfabeticamente</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="159"/>
         <source>Sort by script order</source>
-        <translation type="unfinished"></translation>
+        <translation>Classificar pela ordem do script</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="147"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="201"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="405"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="166"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="220"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="424"/>
         <source>Sort by duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Classificar pela duração</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="173"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="381"/>
-        <source>Expand level 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="178"/>
-        <source>Expand level 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="227"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="246"/>
         <source>Add category</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar categoria</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="253"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="272"/>
         <source>Edit category</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar categoria</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="291"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="310"/>
         <source>Remove category</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover categoria</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="300"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="319"/>
         <source>Do you really want to remove the entire &quot;%1&quot; category? All category resources (%2) will also be removed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tem certeza que deseja remover a categoria %1 por completo? Toda a categoria de recursos (%2) também sera removida.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="304"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="356"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="323"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="375"/>
         <source>No</source>
-        <translation type="unfinished">Não</translation>
+        <translation>Não</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="305"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="357"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="324"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="376"/>
         <source>Yes, remove</source>
-        <translation type="unfinished">Sim, remover</translation>
+        <translation>Sim, remover</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="343"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="362"/>
         <source>Remove resource</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover recurso</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="352"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="371"/>
         <source>Do you really want to remove resource &quot;%1&quot; from entire screenplay? It participates in %n scene(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3042,9 +3057,9 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="642"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="666"/>
         <source>Screenplay</source>
-        <translation type="unfinished">Roteiro</translation>
+        <translation>Roteiro</translation>
     </message>
 </context>
 <context>
@@ -3052,7 +3067,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="116"/>
         <source>To edit screenplay cards, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para editar o roteiro, você precisa atualizar para a versão PRO</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="117"/>
@@ -3070,12 +3085,12 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_manager.cpp" line="65"/>
         <source>Scene numbers locked</source>
-        <translation type="unfinished"></translation>
+        <translation>Números de cena bloqueados</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_manager.cpp" line="65"/>
         <source>Scene numbers unlocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Números de cena desbloqueado</translation>
     </message>
 </context>
 <context>
@@ -3083,7 +3098,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="105"/>
         <source>To access screenplay statistics, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para acessar as estatísticas do roteiro, você precisa atualizar para a versão PRO</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="106"/>
@@ -3096,14 +3111,14 @@
         <translation>Upgrade</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="290"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="280"/>
         <source>Select location for saving report to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione a localização para salvar o relatório no arquivo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="291"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="281"/>
         <source>Select location for saving plot data to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione a localização para salvar dados do gráfico no arquivo</translation>
     </message>
 </context>
 <context>
@@ -3119,12 +3134,12 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="197"/>
         <source>Generate screenplay text</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerar texto de roteiro</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="198"/>
         <source>Start prompt from something like &quot;Write a screenplay about ...&quot;, or &quot;Write a short movie screenplay about ...&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Começar o prompt de algo como &quot;Escreva uma novel sobre ...&quot;, ou &quot;Escreva um pequeno roteiro de filme sobre ...&quot;</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="445"/>
@@ -3139,7 +3154,7 @@
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="447"/>
         <source>Character extension</source>
-        <translation type="unfinished"></translation>
+        <translation>Extensão de personagem</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="448"/>
@@ -3178,42 +3193,42 @@
 <context>
     <name>ManagementLayer::SettingsManager</name>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="465"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="466"/>
         <source>Do you want to revert all changes in settings to the default state? This action can&apos;t be undone.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gostaria de reverter todas as alterações em configurações para o estado padrão? Esta ação não pode ser desfeita.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="467"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="468"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="468"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="469"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetar</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="742"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="793"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="844"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="894"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="944"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="994"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="745"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="796"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="847"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="897"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="947"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="997"/>
         <source>Choose the file to save template</source>
         <translation>Escolha o ficheiro para guardar o modelo</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="763"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="814"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="864"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="914"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="964"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1014"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="766"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="817"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="867"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="917"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="967"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1017"/>
         <source>Choose the file with template to load</source>
         <translation>Escolha o ficheiro de modelo para carregar</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1250"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1259"/>
         <source>Spelling dictionary loading</source>
         <translation>Carregando dicionário</translation>
     </message>
@@ -3269,7 +3284,7 @@
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="71"/>
         <source>To access extended world profile, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para acessar o perfile estendido do mundo, você precisa atualizar para a versão PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="72"/>
@@ -3284,7 +3299,7 @@
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="329"/>
         <source>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome do mundo foi alterado de &quot;%1&quot; para &quot;%2&quot;. Aplicar alterações?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="331"/>
@@ -3300,7 +3315,7 @@
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="370"/>
         <source>Do you want to delete the world&apos;s photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Gostaria de excluir a photo deste mundo?</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="372"/>
@@ -3313,7 +3328,7 @@
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="134"/>
         <source>To edit the world map, you need to upgrade to the PRO version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para editar o mapa do mundo, você precisa atualizar para a versão PRO.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="135"/>
@@ -3328,20 +3343,20 @@
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="154"/>
         <source>World with this name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Palavra com este nome já existe</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="513"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="502"/>
         <source>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome do mundo foi alterado de &quot;%1&quot; para &quot;%2&quot;. Aplicar alterações?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="515"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="504"/>
         <source>No</source>
         <translation>Não</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="516"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="505"/>
         <source>Yes</source>
         <translation>Sim</translation>
     </message>
@@ -3359,22 +3374,22 @@
     <message>
         <location filename="../../corelib/utils/helpers/names_generator.cpp" line="119"/>
         <source>Male names</source>
-        <translation type="unfinished"></translation>
+        <translation>Nomes masculinos</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/names_generator.cpp" line="122"/>
         <source>Female names</source>
-        <translation type="unfinished"></translation>
+        <translation>Nomes femininos</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/names_generator.cpp" line="125"/>
         <source>Both names</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambos os nomes</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/names_generator.cpp" line="152"/>
         <source>Type of name</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de nome</translation>
     </message>
 </context>
 <context>
@@ -3498,37 +3513,37 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="493"/>
         <source>Information about stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Informação sobre a peça teatral</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="495"/>
         <source>Stageplay parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Parâmetros da peça teatral</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="504"/>
         <source>Stageplay text</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto da peça</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="513"/>
         <source>Information about novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Informação da novel</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="515"/>
         <source>Novel parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Parâmetros da novel</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="524"/>
         <source>Outline text</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto de contorno</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="531"/>
         <source>Novel text</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto de novel</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="542"/>
@@ -3543,12 +3558,12 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="547"/>
         <source>Character dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>Diálogo dos personagens </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="551"/>
         <source>Locations map</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapa de localizações</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="554"/>
@@ -3558,12 +3573,12 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="558"/>
         <source>Worlds map</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapa dos mundos</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="561"/>
         <source>World information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informação do mundo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="565"/>
@@ -3578,7 +3593,7 @@
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="572"/>
         <source>Recycle bin summary info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informação do resumo da lixeira</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="575"/>
@@ -3657,12 +3672,12 @@
     <message>
         <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="584"/>
         <source>Hide left panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar painel esquerdo</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="585"/>
         <source>Hide right panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar painel direito</translation>
     </message>
 </context>
 <context>
@@ -3762,7 +3777,7 @@
     <message>
         <location filename="../ui/settings/widgets/theme_preview.cpp" line="267"/>
         <source>Paste theme HASH</source>
-        <translation type="unfinished"></translation>
+        <translation>Colar o tema HASH</translation>
     </message>
     <message>
         <location filename="../ui/settings/widgets/theme_preview.cpp" line="271"/>
@@ -3785,12 +3800,12 @@
     <message>
         <location filename="../../corelib/utils/helpers/time_helper.cpp" line="28"/>
         <source>%1min</source>
-        <translation type="unfinished"></translation>
+        <translation>%1min</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/time_helper.cpp" line="30"/>
         <source>%1h %2min</source>
-        <translation type="unfinished"></translation>
+        <translation>%1h %2min</translation>
     </message>
 </context>
 <context>
@@ -3803,7 +3818,7 @@
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="156"/>
         <source>Designed, coded and crafted with love at the</source>
-        <translation type="unfinished"></translation>
+        <translation>Projetado, desenvolvido e elaborado com armor no</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="158"/>
@@ -3818,12 +3833,12 @@
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="163"/>
         <source>Starc is being developed with strong authors’ involvement and support so we won’t waste the app performance on the features you don’t need.</source>
-        <translation type="unfinished"></translation>
+        <translation>Starc está sendo desenvolvido com forte envolvimento e suporte dos autores para que nós não percamos performance em recursos desnecessários.</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="166"/>
         <source>Feel free to contact us at any point of your creative journey to share your thoughts about the app, suggest ideas and report issues you met.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinta se livre para contatar-nos em qualquer momento de sua jornada criativa para compartilhar seus pensamentos sobre o app, sugira ideas e relate problemas que você possa encontrar.</translation>
     </message>
 </context>
 <context>
@@ -3852,7 +3867,7 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="149"/>
         <source>No credits available</source>
-        <translation type="unfinished"></translation>
+        <translation>Não há crédito disponível</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="364"/>
@@ -3883,7 +3898,7 @@
         <location filename="../ui/account/account_navigator.cpp" line="371"/>
         <location filename="../ui/account/account_navigator.cpp" line="376"/>
         <source>Try for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Teste de graça</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="373"/>
@@ -3899,7 +3914,7 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="135"/>
         <source>Used %1 GB from %2 GB</source>
-        <translation type="unfinished"></translation>
+        <translation>Usado %1 GB de %2 GB</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="374"/>
@@ -3909,12 +3924,12 @@
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="378"/>
         <source>Credits for Ai tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Créditos para ferramentas de IA</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="379"/>
         <source>Buy credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Compre créditos</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="380"/>
@@ -3937,12 +3952,12 @@
     <message>
         <location filename="../ui/account/account_view.cpp" line="564"/>
         <source>Compare versions</source>
-        <translation type="unfinished"></translation>
+        <translation>Compare versões</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="566"/>
         <source>Try TEAM for free</source>
-        <translation type="unfinished"></translation>
+        <translation>Teste TEAM de graça</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="570"/>
@@ -3990,7 +4005,7 @@
     <message>
         <location filename="../ui/account/account_view.cpp" line="558"/>
         <source>I want to receive project&apos;s news</source>
-        <translation type="unfinished"></translation>
+        <translation>Eu quero receber novidades do projeto</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="559"/>
@@ -4041,12 +4056,12 @@
     <message>
         <location filename="../ui/account/account_view.cpp" line="573"/>
         <source>Promotional or gift code</source>
-        <translation type="unfinished"></translation>
+        <translation>Código promocional ou de presente</translation>
     </message>
     <message>
         <location filename="../ui/account/account_view.cpp" line="574"/>
         <source>Activate</source>
-        <translation type="unfinished"></translation>
+        <translation>Ativar</translation>
     </message>
 </context>
 <context>
@@ -4088,21 +4103,6 @@
         <location filename="../../corelib/ui/modules/comments/add_comment_view.cpp" line="137"/>
         <source>Save</source>
         <translation>Salvar</translation>
-    </message>
-</context>
-<context>
-    <name>Ui::AddResourceView</name>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Descrição</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Cancelar</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Salvar</translation>
     </message>
 </context>
 <context>
@@ -4174,22 +4174,22 @@
 <context>
     <name>Ui::AudioplayInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="117"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="116"/>
         <source>Perfect logline length</source>
-        <translation type="unfinished"></translation>
+        <translation>Comprimento perfeito da linha de registro</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="119"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="118"/>
         <source>Good logline length</source>
-        <translation type="unfinished"></translation>
+        <translation>Bom comprimento da linha de registro</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="121"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="120"/>
         <source>Recommended logline length is 30 words</source>
-        <translation type="unfinished"></translation>
+        <translation>O comprimento recomendado da linha de registro é de 30 palavras</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="123"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="122"/>
         <source>%n word(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -4197,42 +4197,42 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="222"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="221"/>
         <source>Audioplay name</source>
         <translation>Nome do Audioplay</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="223"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="222"/>
         <source>Tagline</source>
         <translation>Tagline</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="224"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="223"/>
         <source>Logline</source>
         <translation>Logline</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="225"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="224"/>
         <source>Generate logline</source>
         <translation>Gerar logline</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="226"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="225"/>
         <source>Title page</source>
         <translation>Capa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="227"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="226"/>
         <source>Synopsis</source>
         <translation>Sinopse</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="228"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="227"/>
         <source>Audioplay</source>
         <translation>Audioplay</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="229"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="228"/>
         <source>Statistics</source>
         <translation>Estatísticas</translation>
     </message>
@@ -4240,44 +4240,44 @@
 <context>
     <name>Ui::AudioplayParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="264"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="249"/>
         <source>Header</source>
         <translation>Cabeçalho</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="265"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="250"/>
         <source>Print header on title page</source>
         <translation>Adicionar cabeçalho na capa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="266"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="251"/>
         <source>Footer</source>
         <translation>Rodapé</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="267"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="252"/>
         <source>Print footer on title page</source>
         <translation>Adicionar rodapé na capa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="268"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="253"/>
         <source>Override common settings for this audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Sobrescrever definições comuns para esta reprodução de audio</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="269"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="254"/>
         <source>Template</source>
         <translation>Modelo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="270"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="255"/>
         <source>Show block numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar números do bloco</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="256"/>
         <source>Continue block numbers through document</source>
-        <translation type="unfinished"></translation>
+        <translation>Continue números do bloco atraves do documento </translation>
     </message>
 </context>
 <context>
@@ -4338,7 +4338,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1237"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar/ocultar lista</translation>
     </message>
 </context>
 <context>
@@ -4391,12 +4391,12 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="278"/>
         <source>Disable structure items isolation mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Desabilitar modo de isolação de estrutura de itens</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="279"/>
         <source>Enable structure items isolation mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar modo de isolação de estrutura de itens</translation>
     </message>
 </context>
 <context>
@@ -4485,7 +4485,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="286"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar lista de bookmarks</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1022"/>
@@ -4575,18 +4575,18 @@
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="205"/>
         <source>Each line is a separate beat</source>
-        <translation type="unfinished"></translation>
+        <translation>Cada linha é uma batida separada</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="629"/>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="647"/>
         <source>Heading</source>
-        <translation type="unfinished"></translation>
+        <translation>Título</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="631"/>
         <source>Select item color</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione a cor do item</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="636"/>
@@ -4596,75 +4596,75 @@
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="637"/>
         <source>Human-readable name (hidden in text)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome humanamente legível (Ocultado no texto)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="638"/>
         <source>Select scene color</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione a cor da cena</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="648"/>
         <source>Header text (visible in text)</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto do cabeçalho (visível no texto)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="651"/>
         <source>Story day</source>
-        <translation type="unfinished"></translation>
+        <translation>Dia da história</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="652"/>
         <source>Stamp</source>
-        <translation type="unfinished"></translation>
+        <translation>Carimbo</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="653"/>
         <source>Auto scene numbering</source>
-        <translation type="unfinished"></translation>
+        <translation>Numeração automática de cena</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="654"/>
         <source>Scene number</source>
-        <translation type="unfinished"></translation>
+        <translation>Número de cena</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="655"/>
         <source>Skip the number of this scene</source>
-        <translation type="unfinished"></translation>
+        <translation>Pular o número desta cena</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="657"/>
         <source>Skip logical number of this scene for determining the next scene number</source>
-        <translation type="unfinished"></translation>
+        <translation>Pular número lógico desta cena para determinar o número da próxima cena</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="658"/>
         <source>Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Tags</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="659"/>
         <source>Add tag to the selected card</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar tag para o cartão selecionado</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="660"/>
         <source>Tag name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome da tag</translation>
     </message>
 </context>
 <context>
     <name>Ui::CharacterDialoguesView</name>
     <message>
-        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="339"/>
+        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="346"/>
         <source>Unlock ability to edit characters relations</source>
         <translation>Desbloqueie a habilidade para editar relações de personagens</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="340"/>
+        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="347"/>
         <source>Update character dialogues list</source>
-        <translation type="unfinished"></translation>
+        <translation>Atualizar lista de diálogos do personagem</translation>
     </message>
 </context>
 <context>
@@ -4672,37 +4672,37 @@
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="111"/>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation>Principal</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="113"/>
         <source>Personal info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informação personal</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="114"/>
         <source>Physique</source>
-        <translation type="unfinished"></translation>
+        <translation>físico</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="115"/>
         <source>Life</source>
-        <translation type="unfinished"></translation>
+        <translation>Vida</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="116"/>
         <source>Attitude</source>
-        <translation type="unfinished"></translation>
+        <translation>atitude</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="117"/>
         <source>Biography</source>
-        <translation type="unfinished"></translation>
+        <translation>Biografia</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information_structure/character_information_structure_view.cpp" line="112"/>
         <source>Story</source>
-        <translation type="unfinished"></translation>
+        <translation>História </translation>
     </message>
 </context>
 <context>
@@ -4721,7 +4721,7 @@
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1743"/>
         <source>Unlock access to extended character profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Desbloquear acesso ao perfil de personagem estendido</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1745"/>
@@ -4814,362 +4814,362 @@
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1763"/>
         <source>Photos</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotos</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1765"/>
         <source>Personal info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informação personal</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1766"/>
         <source>Real name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome real</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1767"/>
         <source>Date of birth</source>
-        <translation type="unfinished"></translation>
+        <translation>Data de nacimento</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1768"/>
         <source>Place of birth</source>
-        <translation type="unfinished"></translation>
+        <translation>Local de nascimento</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1769"/>
         <source>Ethnicity/race</source>
-        <translation type="unfinished"></translation>
+        <translation>Etnia/raça</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1770"/>
         <source>Family</source>
-        <translation type="unfinished"></translation>
+        <translation>Família</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1772"/>
         <source>Physique</source>
-        <translation type="unfinished"></translation>
+        <translation>físico</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1773"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Altura</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1774"/>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Peso</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1775"/>
         <source>Body</source>
-        <translation type="unfinished"></translation>
+        <translation>Corpo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1776"/>
         <source>Skin tone</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom de pele</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1777"/>
         <source>Hair style</source>
-        <translation type="unfinished"></translation>
+        <translation>Estilo de cabelo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1778"/>
         <source>Hair color</source>
-        <translation type="unfinished"></translation>
+        <translation>Cor de cabelo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1779"/>
         <source>Eye shape</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato do olho</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1780"/>
         <source>Eye color</source>
-        <translation type="unfinished"></translation>
+        <translation>Cor do olho</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1781"/>
         <source>Facial shape</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato facial</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1782"/>
         <source>Distinguish feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Característica distinta </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1783"/>
         <source>Other facial features</source>
-        <translation type="unfinished"></translation>
+        <translation>Outras características faciais</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1784"/>
         <source>Posture</source>
-        <translation type="unfinished"></translation>
+        <translation>Postura</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1785"/>
         <source>Other physical appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Outra aparência física</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1787"/>
         <source>Life</source>
-        <translation type="unfinished"></translation>
+        <translation>Vida</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1788"/>
         <source>Skills</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilidades</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1789"/>
         <source>How skills developed</source>
-        <translation type="unfinished"></translation>
+        <translation>Como as habilidades se desenvolveram</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1790"/>
         <source>Incompetence</source>
-        <translation type="unfinished"></translation>
+        <translation>incompetencia</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1791"/>
         <source>Strength/talent</source>
-        <translation type="unfinished"></translation>
+        <translation>Força/talento</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1792"/>
         <source>Weakness</source>
-        <translation type="unfinished"></translation>
+        <translation>Fraquesa</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1793"/>
         <source>Hobbies</source>
-        <translation type="unfinished"></translation>
+        <translation>Hobbies</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1794"/>
         <source>Habits</source>
-        <translation type="unfinished"></translation>
+        <translation>Hábitos</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1795"/>
         <source>Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Saúde</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1796"/>
         <source>Pet</source>
-        <translation type="unfinished"></translation>
+        <translation>Animal</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1797"/>
         <source>Dress</source>
-        <translation type="unfinished"></translation>
+        <translation>Vestimenta</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1798"/>
         <source>Something always carried/weapon/tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Algo sempre carregado/armas/ferramentas</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1799"/>
         <source>Accessories</source>
-        <translation type="unfinished"></translation>
+        <translation>Acessórios</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1800"/>
         <source>Area of residence/environment</source>
-        <translation type="unfinished"></translation>
+        <translation>Área de residência/ambiente</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1801"/>
         <source>Home description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descrição da casa</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1802"/>
         <source>Neighborhood</source>
-        <translation type="unfinished"></translation>
+        <translation>Vizinhança</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1803"/>
         <source>Organization involved</source>
-        <translation type="unfinished"></translation>
+        <translation>Organização envolvida</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1804"/>
         <source>Income</source>
-        <translation type="unfinished"></translation>
+        <translation>Renda</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1805"/>
         <source>Job/occupation</source>
-        <translation type="unfinished"></translation>
+        <translation>Trabalho/ocupação</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1806"/>
         <source>Job rank/position</source>
-        <translation type="unfinished"></translation>
+        <translation>Cargo/posição</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1807"/>
         <source>Job satisfaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Satisfação no trabalho</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1809"/>
         <source>Attitude</source>
-        <translation type="unfinished"></translation>
+        <translation>atitude</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1810"/>
         <source>Personality</source>
-        <translation type="unfinished"></translation>
+        <translation>Personalidade</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1811"/>
         <source>Moral</source>
-        <translation type="unfinished"></translation>
+        <translation>Moral</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1812"/>
         <source>Motivation</source>
-        <translation type="unfinished"></translation>
+        <translation>Motivação</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1813"/>
         <source>Discouragement</source>
-        <translation type="unfinished"></translation>
+        <translation>Desencorajamento</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1814"/>
         <source>Philosophy</source>
-        <translation type="unfinished"></translation>
+        <translation>Filosofia</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1815"/>
         <source>Greatest fear</source>
-        <translation type="unfinished"></translation>
+        <translation>Maior medo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1816"/>
         <source>Self control</source>
-        <translation type="unfinished"></translation>
+        <translation>Auto-controle</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1817"/>
         <source>Intelligence level</source>
-        <translation type="unfinished"></translation>
+        <translation>Nível de inteligência</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1818"/>
         <source>Confidence level</source>
-        <translation type="unfinished"></translation>
+        <translation>Nível de confidencia</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1820"/>
         <source>Biography</source>
-        <translation type="unfinished"></translation>
+        <translation>Biografia</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1821"/>
         <source>Childhood</source>
-        <translation type="unfinished"></translation>
+        <translation>Infância  </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1822"/>
         <source>Important past event</source>
-        <translation type="unfinished"></translation>
+        <translation>Evento passado importante</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1823"/>
         <source>Best accomplishment</source>
-        <translation type="unfinished"></translation>
+        <translation>Melhores realizações</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1824"/>
         <source>Other accomplishment</source>
-        <translation type="unfinished"></translation>
+        <translation>Outras realizações</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1825"/>
         <source>Worst moment</source>
-        <translation type="unfinished"></translation>
+        <translation>Piores momentos</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1826"/>
         <source>Failure</source>
-        <translation type="unfinished"></translation>
+        <translation>Fracasso</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1827"/>
         <source>Secrets</source>
-        <translation type="unfinished"></translation>
+        <translation>Segredos</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1828"/>
         <source>Best memories</source>
-        <translation type="unfinished"></translation>
+        <translation>Melhores memorias</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1829"/>
         <source>Worst memories</source>
-        <translation type="unfinished"></translation>
+        <translation>Piores memorias</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1831"/>
         <source>Story</source>
-        <translation type="unfinished"></translation>
+        <translation>História </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1832"/>
         <source>Short term goal</source>
-        <translation type="unfinished"></translation>
+        <translation>Objetivo curto prazo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1833"/>
         <source>Long term goal</source>
-        <translation type="unfinished"></translation>
+        <translation>Objetivo de longo prazo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1834"/>
         <source>Initial beliefs</source>
-        <translation type="unfinished"></translation>
+        <translation>Crenças iniciais</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1835"/>
         <source>Changed beliefs</source>
-        <translation type="unfinished"></translation>
+        <translation>Crenças alteradas </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1836"/>
         <source>What leads to change</source>
-        <translation type="unfinished"></translation>
+        <translation>O que conduz à mudança</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1837"/>
         <source>First appearance</source>
-        <translation type="unfinished"></translation>
+        <translation>Primeira aparição</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1838"/>
         <source>Plot involvement</source>
-        <translation type="unfinished"></translation>
+        <translation>Envolvimento da trama</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1839"/>
         <source>Conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>Conflito</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="1840"/>
         <source>Most defining moment</source>
-        <translation type="unfinished"></translation>
+        <translation>Momento mais marcante</translation>
     </message>
 </context>
 <context>
@@ -5235,7 +5235,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="807"/>
         <source>Border line type</source>
-        <translation type="unfinished"></translation>
+        <translation>Estilo da linha da borda</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="808"/>
@@ -5356,7 +5356,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="793"/>
         <source>To see character information and all their relations, select concrete character.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para ver todas as informações de relacionamento do personagem, selecione um personagem em concreto.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="802"/>
@@ -5386,7 +5386,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="185"/>
         <source>Choose the file to save image</source>
-        <translation type="unfinished"></translation>
+        <translation>Escolha o arquivo para salvar a imagem</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="391"/>
@@ -5416,7 +5416,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="400"/>
         <source>Save relations scheme to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar schema de relações à imagem</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="402"/>
@@ -5426,7 +5426,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="403"/>
         <source>It&apos;s time to create the first character!</source>
-        <translation>É tempo para criar o primeiro personagem</translation>
+        <translation>É hora de criar o primeiro personagem</translation>
     </message>
 </context>
 <context>
@@ -5492,17 +5492,17 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="117"/>
         <source>Perfect logline length</source>
-        <translation type="unfinished"></translation>
+        <translation>Comprimento perfeito da linha de log</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="119"/>
         <source>Good logline length</source>
-        <translation type="unfinished"></translation>
+        <translation>Bom comprimento na linha de log</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="121"/>
         <source>Recommended logline length is 30 words</source>
-        <translation type="unfinished"></translation>
+        <translation>O comprimento recomendado da linha de registro é de 30 palavras</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="123"/>
@@ -5513,42 +5513,42 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="225"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="222"/>
         <source>Comic book name</source>
         <translation>Nome da história em quadrinhos</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="226"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="223"/>
         <source>Tagline</source>
         <translation>Tagline</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="227"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="224"/>
         <source>Logline</source>
         <translation>Logline</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="228"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="225"/>
         <source>Generate logline</source>
         <translation>Gerar logline</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="229"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="226"/>
         <source>Title page</source>
         <translation>Capa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="230"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="227"/>
         <source>Synopsis</source>
         <translation>Sinopse</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="231"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="228"/>
         <source>Script</source>
         <translation>Roteiro</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="232"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="229"/>
         <source>Statistics</source>
         <translation>Estatísticas</translation>
     </message>
@@ -5556,32 +5556,32 @@
 <context>
     <name>Ui::ComicBookParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="212"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="207"/>
         <source>Header</source>
         <translation>Cabeçalho</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="213"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="208"/>
         <source>Print header on title page</source>
         <translation>Adicionar cabeçalho na capa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="214"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="209"/>
         <source>Footer</source>
         <translation>Rodapé</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="215"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="210"/>
         <source>Print footer on title page</source>
         <translation>Adicionar rodapé na capa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="216"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="211"/>
         <source>Override common settings for this comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>Sobrescrever configurações comuns para este história em quadrinhos</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="217"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="212"/>
         <source>Template</source>
         <translation>Modelo</translation>
     </message>
@@ -5617,7 +5617,7 @@
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1008"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1009"/>
         <source>%n panels</source>
         <translation>
             <numerusform>%n paineis</numerusform>
@@ -5625,29 +5625,29 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1183"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1184"/>
         <source>Bookmark</source>
         <translation>Bookmark</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1187"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1188"/>
         <source>Add</source>
         <translation>Adicionar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1193"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1194"/>
         <source>Edit</source>
         <translation>Editar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1198"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1199"/>
         <source>Remove</source>
         <translation>Remover</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1205"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1206"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar/ocultar lista</translation>
     </message>
 </context>
 <context>
@@ -5700,12 +5700,12 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="278"/>
         <source>Disable structure items isolation mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Desabilitar modo de isolação de estrutura de itens</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="279"/>
         <source>Enable structure items isolation mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar modo de isolação de estrutura de itens</translation>
     </message>
 </context>
 <context>
@@ -5797,7 +5797,7 @@
 <context>
     <name>Ui::ComicBookTextStructureDelegate</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="364"/>
+        <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="352"/>
         <source>%n PANELS</source>
         <translation>
             <numerusform>%n PAINEIS</numerusform>
@@ -5810,7 +5810,7 @@
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="276"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar lista de bookmarks</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1021"/>
@@ -5836,12 +5836,12 @@
 <context>
     <name>Ui::CommentDelegate</name>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="163"/>
+        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="164"/>
         <source>edited</source>
         <translation>editado</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="278"/>
+        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="283"/>
         <source>%n reply(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -5859,12 +5859,12 @@
     <message>
         <location filename="../../corelib/ui/modules/comments/comment_replies_view.cpp" line="281"/>
         <source>Edit reply</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar resposta</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/comments/comment_replies_view.cpp" line="283"/>
         <source>Add reply</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar resposta</translation>
     </message>
 </context>
 <context>
@@ -5950,13 +5950,13 @@
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/counters_info_widget.cpp" line="69"/>
         <location filename="../management_layer/plugins/novel_text_structure/ui/counters_info_widget.cpp" line="69"/>
         <source>No counter selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenhum contador selecionado</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/counters_info_widget.cpp" line="155"/>
         <location filename="../management_layer/plugins/novel_text_structure/ui/counters_info_widget.cpp" line="155"/>
         <source>Click to select counters to show</source>
-        <translation type="unfinished"></translation>
+        <translation>Clique para selecionar a opção de mostrar o contador</translation>
     </message>
 </context>
 <context>
@@ -5969,42 +5969,42 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="612"/>
         <source>Background image</source>
-        <translation type="unfinished"></translation>
+        <translation>Imagem de fundo</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="613"/>
         <source>Color between text and image</source>
-        <translation type="unfinished"></translation>
+        <translation>Cor entre texto e imagem</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="614"/>
         <source>black</source>
-        <translation type="unfinished"></translation>
+        <translation>preto</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="615"/>
         <source>transparent</source>
-        <translation type="unfinished"></translation>
+        <translation>transparente</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="616"/>
         <source>white</source>
-        <translation type="unfinished"></translation>
+        <translation>branco</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="617"/>
         <source>Text of the first top line</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto da primeira linha superior</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="618"/>
         <source>Text of the second top line</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto da segunda linha superior</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="619"/>
         <source>Text above of the project name</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto acima do nome do projeto</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="620"/>
@@ -6014,22 +6014,22 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="621"/>
         <source>Text under the project name</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto abaixo do nome do projeto</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="622"/>
         <source>Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Credito</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="623"/>
         <source>Release date or coming soon</source>
-        <translation type="unfinished"></translation>
+        <translation>Data de lançamento ou chegando em breve</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="624"/>
         <source>Website</source>
-        <translation type="unfinished"></translation>
+        <translation>Website</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="635"/>
@@ -6039,67 +6039,67 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="636"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamanho</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="637"/>
         <source>Text color</source>
-        <translation type="unfinished"></translation>
+        <translation>Cor do texto</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="638"/>
         <source>Make text bold</source>
-        <translation type="unfinished"></translation>
+        <translation>Torne o texto negrito</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="639"/>
         <source>Make text italic</source>
-        <translation type="unfinished"></translation>
+        <translation>Torne o texto itálico</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="640"/>
         <source>Make text underlined</source>
-        <translation type="unfinished"></translation>
+        <translation>Torne o texto sublinhado</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="641"/>
         <source>Align text to the left</source>
-        <translation type="unfinished"></translation>
+        <translation>Alinhe o texto à esquerda</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="642"/>
         <source>Align text to the center</source>
-        <translation type="unfinished"></translation>
+        <translation>Alinhe o texto ao centro</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="643"/>
         <source>Align text to the right</source>
-        <translation type="unfinished"></translation>
+        <translation>Alinhe o texto á direita</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="646"/>
         <source>Search images</source>
-        <translation type="unfinished"></translation>
+        <translation>Procure por imagens</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="647"/>
         <source>Enter keywords for search</source>
-        <translation type="unfinished"></translation>
+        <translation>Insira palavras-chave para pesquisa</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="649"/>
         <source>Paste image from clipboard (image file or image url)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cole imagem do clipboard (arquivo de imagem ou url da imagem)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="650"/>
         <source>Choose file with image</source>
-        <translation type="unfinished"></translation>
+        <translation>Escolha um arquivo com imagem</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_sidebar.cpp" line="651"/>
         <source>Loading images</source>
-        <translation type="unfinished"></translation>
+        <translation>Carregando pagina</translation>
     </message>
 </context>
 <context>
@@ -6107,27 +6107,27 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="174"/>
         <source>Loading image</source>
-        <translation type="unfinished"></translation>
+        <translation>Carregando imagem</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="198"/>
         <source>Select an area for cover background</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione uma área para o fundo da capa</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="313"/>
         <source>Select location for saving cover to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione localização para salvar a capa no arquivo</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="314"/>
         <source>PNG image</source>
-        <translation type="unfinished"></translation>
+        <translation>Imagem PNG</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="348"/>
         <source>Select file for background image</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione o arquivo para a imagem de fundo</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="349"/>
@@ -6137,30 +6137,30 @@
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="385"/>
         <source>Use cover for the project</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar capa para o projeto</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="386"/>
         <source>Close without saving</source>
-        <translation type="unfinished"></translation>
+        <translation>Fechar sem salvar</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="387"/>
         <source>Clear cover parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Limpe os parâmetros da capa</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/cover_generator/cover_generator_view.cpp" line="388"/>
         <source>Save cover to the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar capa no arquivo</translation>
     </message>
 </context>
 <context>
     <name>Ui::CoverImageCard</name>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="244"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="246"/>
         <source>Create poster</source>
-        <translation type="unfinished"></translation>
+        <translation>Criar pôster</translation>
     </message>
 </context>
 <context>
@@ -6274,12 +6274,12 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="153"/>
         <source>Add folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar pasta</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="154"/>
         <source>Add text</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar texto</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="155"/>
@@ -6294,37 +6294,37 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="157"/>
         <source>Add world</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar palavra</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="158"/>
         <source>Add screenplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar roteiro</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="159"/>
         <source>Add comic book</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar história em quadrinho</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="160"/>
         <source>Add audioplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar audioplay</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="161"/>
         <source>Add stageplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar peça</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="162"/>
         <source>Add novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar novel</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="163"/>
         <source>Add image gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar galeria de imagens</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="167"/>
@@ -6349,7 +6349,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="176"/>
         <source>Create a document with detailed world description to keep all the notes in one place</source>
-        <translation type="unfinished"></translation>
+        <translation>Criar um documento com descrição de mundo detalhado para manter todas anotações em um local</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="179"/>
@@ -6364,22 +6364,22 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="185"/>
         <source>Create a document set to streamline your work on the audio drama, or podcast.</source>
-        <translation type="unfinished"></translation>
+        <translation>Criar um conjunto de documento para otimizar seu trabalho no audio drama, ou podcast.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="187"/>
         <source>Create a document set to streamline your work on the stage play, or musical.</source>
-        <translation type="unfinished"></translation>
+        <translation>Criar um conjunto de documento para otimizar seu trabalho na peça teatral, ou musical.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="189"/>
         <source>Create a document set to streamline your work on the fiction book.</source>
-        <translation type="unfinished"></translation>
+        <translation>Criar um conjunto de documento para otimizar seu trabalho em um livro de ficção.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="191"/>
         <source>Create a moodboard with atmospheric images or photos.</source>
-        <translation type="unfinished"></translation>
+        <translation>Criar uma moodboard com imagens ou fotos atmosfericas.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="267"/>
@@ -6394,7 +6394,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="271"/>
         <source>The world should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>O mundo deveria ter um nome</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="310"/>
@@ -6404,17 +6404,17 @@
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="332"/>
         <source>Story</source>
-        <translation type="unfinished"></translation>
+        <translation>História </translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="333"/>
         <source>World of story</source>
-        <translation type="unfinished"></translation>
+        <translation>Mundo de história</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="334"/>
         <source>Structure &amp; notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Estruturas e anotações</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="336"/>
@@ -6462,7 +6462,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="198"/>
         <source>World</source>
-        <translation type="unfinished"></translation>
+        <translation>Mundo</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="203"/>
@@ -6492,7 +6492,7 @@
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="228"/>
         <source>Image gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Galeria de imagem</translation>
     </message>
 </context>
 <context>
@@ -6505,12 +6505,12 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="103"/>
         <source>Create new location</source>
-        <translation type="unfinished"></translation>
+        <translation>Criar uma nova localização</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="104"/>
         <source>Location name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome da Localização</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="105"/>
@@ -6553,7 +6553,7 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="269"/>
         <source>Since connection to the cloud service unavailable, you only can create new story on the local computer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Já que a serviço de conexão com a nuvem está indisponível, você so pode criar uma nova história no computador local.</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="303"/>
@@ -6563,17 +6563,17 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="304"/>
         <source>to create stories in the cloud.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para criar histórias na nuvem.</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="306"/>
         <source>Subscribe to TEAM version</source>
-        <translation type="unfinished"></translation>
+        <translation>Assine a versão TEAM</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="324"/>
         <source>Can&apos;t create project in this folder, choose another one</source>
-        <translation type="unfinished"></translation>
+        <translation>Você não pode criar um projeto nesta pasta, escolha outra</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="339"/>
@@ -6583,7 +6583,7 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="341"/>
         <source>Type of story</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de história</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="347"/>
@@ -6623,7 +6623,7 @@
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="379"/>
         <source>Save story on the local computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Salve história no computador local</translation>
     </message>
     <message>
         <location filename="../ui/projects/create_project_dialog.cpp" line="380"/>
@@ -6671,27 +6671,27 @@
     <message>
         <location filename="../ui/project/create_version_dialog.cpp" line="138"/>
         <source>Create new document draft</source>
-        <translation type="unfinished"></translation>
+        <translation>Crie um novo documento de rascunho</translation>
     </message>
     <message>
         <location filename="../ui/project/create_version_dialog.cpp" line="138"/>
         <source>Edit document draft</source>
-        <translation type="unfinished"></translation>
+        <translation>Edite o documento de rascunho</translation>
     </message>
     <message>
         <location filename="../ui/project/create_version_dialog.cpp" line="140"/>
         <source>Draft name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome do rascunho</translation>
     </message>
     <message>
         <location filename="../ui/project/create_version_dialog.cpp" line="141"/>
         <source>New draft based on</source>
-        <translation type="unfinished"></translation>
+        <translation>Novo rascunho baseado em</translation>
     </message>
     <message>
         <location filename="../ui/project/create_version_dialog.cpp" line="142"/>
         <source>Allow to edit draft</source>
-        <translation type="unfinished"></translation>
+        <translation>Permitir editar rascunho</translation>
     </message>
     <message>
         <location filename="../ui/project/create_version_dialog.cpp" line="143"/>
@@ -6714,17 +6714,17 @@
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="65"/>
         <source>The world should have a name</source>
-        <translation type="unfinished"></translation>
+        <translation>O mundo deveria ter um nome</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="98"/>
         <source>Create new world</source>
-        <translation type="unfinished"></translation>
+        <translation>Criar um novo mundo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="99"/>
         <source>World name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome do mundo</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="100"/>
@@ -6742,7 +6742,7 @@
     <message>
         <location filename="../ui/notifications/credits_view.cpp" line="57"/>
         <source>Credits added</source>
-        <translation type="unfinished"></translation>
+        <translation>Créditos adicionados</translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/notifications/credits_view.cpp" line="58"/>
@@ -6759,12 +6759,20 @@
         <location filename="../management_layer/plugins/screenplay_text/ui/dictionaries_view.cpp" line="147"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/dictionaries_view.cpp" line="147"/>
         <source>Dictionary type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de dicionário</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/ui/dictionaries_view.cpp" line="148"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/dictionaries_view.cpp" line="148"/>
         <source>Add new item to the current dictionary</source>
+        <translation>Adicionar um novo item para o dicionário atual</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::FastFormatWidget</name>
+    <message>
+        <location filename="../../corelib/ui/modules/fast_format_widget/fast_format_widget.cpp" line="258"/>
+        <source>Show shotcuts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6773,12 +6781,12 @@
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="205"/>
         <source>Unlock ability to edit screenplay cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Desbloquear habilidades para editar cartões de roteiro</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="206"/>
         <source>Add images to the gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar images à galeria</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_view.cpp" line="208"/>
@@ -6857,12 +6865,12 @@
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="304"/>
         <source>Select file with translation</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione um arquivo com tradução</translation>
     </message>
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="306"/>
         <source>Compiled Qt translation files</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivos de tradução do Qt compilados</translation>
     </message>
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="340"/>
@@ -6877,12 +6885,12 @@
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="345"/>
         <source>Improve</source>
-        <translation type="unfinished"></translation>
+        <translation>Melhorar</translation>
     </message>
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="346"/>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>Navegar</translation>
     </message>
     <message>
         <location filename="../ui/settings/language_dialog.cpp" line="347"/>
@@ -6895,17 +6903,17 @@
     <message>
         <location filename="../management_layer/plugins/location_information_structure/location_information_structure_view.cpp" line="105"/>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation>Principal</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information_structure/location_information_structure_view.cpp" line="106"/>
         <source>Sense</source>
-        <translation type="unfinished"></translation>
+        <translation>Senso</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information_structure/location_information_structure_view.cpp" line="107"/>
         <source>Geography</source>
-        <translation type="unfinished"></translation>
+        <translation>Geografia</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information_structure/location_information_structure_view.cpp" line="108"/>
@@ -6918,7 +6926,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="307"/>
         <source>Apply new location name</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar novo nome de localização</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="701"/>
@@ -6953,7 +6961,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="699"/>
         <source>Unlock access to extended location profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Desbloquear acesso para perfil de localização estendido</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="706"/>
@@ -6988,22 +6996,22 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="712"/>
         <source>Photos</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotos</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="714"/>
         <source>Sense info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informações de sentido</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="715"/>
         <source>Sight</source>
-        <translation type="unfinished"></translation>
+        <translation>Visão</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="716"/>
         <source>Smell</source>
-        <translation type="unfinished"></translation>
+        <translation>Olfato</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="717"/>
@@ -7013,17 +7021,17 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="718"/>
         <source>Taste</source>
-        <translation type="unfinished"></translation>
+        <translation>Paladar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="719"/>
         <source>Touch</source>
-        <translation type="unfinished"></translation>
+        <translation>Tato</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="721"/>
         <source>Geography info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informação geografica</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="722"/>
@@ -7033,27 +7041,27 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="723"/>
         <source>Climate</source>
-        <translation type="unfinished"></translation>
+        <translation>Clima</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="724"/>
         <source>Landmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Landmark</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="725"/>
         <source>Nearby places</source>
-        <translation type="unfinished"></translation>
+        <translation>Lugares próximos </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="727"/>
         <source>Background info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informações sobre o passado</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="728"/>
         <source>History</source>
-        <translation type="unfinished"></translation>
+        <translation>História</translation>
     </message>
 </context>
 <context>
@@ -7061,35 +7069,35 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="339"/>
         <source>Apply new location name</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar novo nome de localização</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="587"/>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="720"/>
         <source>To create a new route, hold the Option button and move one location to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para criar ma nova rota, segure o botão e mova de um local para a outra.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="590"/>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="723"/>
         <source>To create a new route, hold the Alt button and move one location to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para criar uma nova rota, segure o botão Alt e mova de um local a outro.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="594"/>
         <source>%1 has no routes with other locations</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Não há rotas com outros locais</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="596"/>
         <source>What routes %1 has</source>
-        <translation type="unfinished"></translation>
+        <translation>Que rotas %1 tem</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="602"/>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="750"/>
         <source>Open route details</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir detalhes de rota</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="657"/>
@@ -7097,17 +7105,17 @@
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="662"/>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="663"/>
         <source>Show all %1&apos;s routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra todas rotas de %1</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="716"/>
         <source>To see location info and all their routes, select concrete location.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para ver informações de localização e todas suas rotas, selecione a localização concreta.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="717"/>
         <source>To see route details, select concrete route.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para ver detalhes de rota, selecione uma rota concreta.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="725"/>
@@ -7127,7 +7135,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="730"/>
         <source>Border line type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de linha de borda</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="731"/>
@@ -7147,7 +7155,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="735"/>
         <source>Routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotas</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="737"/>
@@ -7226,12 +7234,12 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="184"/>
         <source>Choose the file to save image</source>
-        <translation type="unfinished"></translation>
+        <translation>Escolha o arquivo para salvar a imagem</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="388"/>
         <source>Unlock ability to edit locations map</source>
-        <translation type="unfinished"></translation>
+        <translation>Desbloquear habilidade para editar localização de mapa</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="389"/>
@@ -7251,22 +7259,22 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="394"/>
         <source>Show routes titles only for the selected locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar títulos de rotas apenas para localizações selecionadas</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="397"/>
         <source>Save locations map to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar localizações de mapa na imagem </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="399"/>
         <source>Here will be a locations map.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aqui será um mapa de localizações.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="400"/>
         <source>It&apos;s time to create the first location!</source>
-        <translation type="unfinished"></translation>
+        <translation>É hora de criar a primeira localização!</translation>
     </message>
 </context>
 <context>
@@ -7337,33 +7345,33 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="485"/>
         <source>Every successful screen story has a central character. Describe it!</source>
-        <translation type="unfinished"></translation>
+        <translation>Todo roteiro de sucesso há um personagem principal descreva-o!</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="495"/>
         <source>Untick if you don&apos;t want to include theme.</source>
-        <translation type="unfinished"></translation>
+        <translation>Desmarque se você não deseja incluir um tema.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="505"/>
         <source>Come on! No goal, no story! Complete it, then move on.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anda! Sem objetivo, sem história! Completa isto, e então mova-se em frente.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="516"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="521"/>
         <source>Untick if you don&apos;t want to include MPR.</source>
-        <translation type="unfinished"></translation>
+        <translation>Desmarque se você não deseja de incluir MPR.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="532"/>
         <source>Untick if you don&apos;t want to include special rules.</source>
-        <translation type="unfinished"></translation>
+        <translation>Desmarque se você não deseja incluir regras especiais.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="542"/>
         <source>Untick if you don&apos;t want to include stakes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Desmarque se você não deseja incluir aposta.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="574"/>
@@ -7383,25 +7391,25 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="579"/>
         <source>When</source>
-        <translation type="unfinished"></translation>
+        <translation>Quando</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="587"/>
         <source>in</source>
-        <translation type="unfinished"></translation>
+        <translation>em</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="598"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
         <source>must</source>
-        <translation type="unfinished"></translation>
+        <translation>deve</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="607"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="616"/>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="628"/>
         <source>in order to</source>
-        <translation type="unfinished"></translation>
+        <translation>com o fim de</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
@@ -7411,12 +7419,12 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="625"/>
         <source>when</source>
-        <translation type="unfinished"></translation>
+        <translation>quando</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="637"/>
         <source>before</source>
-        <translation type="unfinished"></translation>
+        <translation>antes</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="742"/>
@@ -7426,7 +7434,7 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="745"/>
         <source>Check out my new logline</source>
-        <translation type="unfinished"></translation>
+        <translation>Confira minha nova linha de registro</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="771"/>
@@ -7447,12 +7455,12 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="817"/>
         <source>E.g. &apos;A lonesome cowboy&apos;, or &apos;An arrogant publicist&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>E.g &apos;Um cowboy solitário&apos;, ou &apos;Um publicador arrogante&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="818"/>
         <source>What is their gender?</source>
-        <translation type="unfinished"></translation>
+        <translation>Qual é seu gênero?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="819"/>
@@ -7473,17 +7481,17 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="822"/>
         <source>Typically this includes the character&apos;s function or job, and some weakness and/or strength. Loglines only have character names if the names are already a part of popular culture.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geralmente isto inclui a função ou trabalho do personagem, e algumas fraquezas e/ou força. O registro de linha apenas contém nomes de personagens se eles já fazem parte da cultura popular.   </translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="826"/>
         <source>What event triggers the story&apos;s main action?</source>
-        <translation type="unfinished"></translation>
+        <translation>Que evento desencadeia a ação da história principal?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="828"/>
         <source>E.g. &apos;A shark kills a swimmer&apos; or &apos;her best friend shoots a man who tried to rape her&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>E.g &apos;Um tubarão mata um nadador&apos; ou &apos;o melhor amigo dela atira em um homem que a tentou estuprar&apos;.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="831"/>
@@ -7493,7 +7501,7 @@
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="833"/>
         <source>Events are things that happen to the main character, and that motivates their actions. They&apos;re never anything the character does. Here we&apos;re looking for the story&apos;s main event or Inciting Incident / Call To Adventure. This typically happens in the first 10 - 20 minutes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eventos são coisas que acontecem ao personagem principal, e que motiva suas ações. Eles nunca são alguma coisa que o personage faz. Aqui estamos procurando pelo evento principal da história ou incitando incidentes / Ligar ao aventureiro. Isto geralmente acontece nos primeiros 10 - 20 minutos.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="838"/>
@@ -7957,7 +7965,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="417"/>
         <source>Choose the file to save image</source>
-        <translation type="unfinished"></translation>
+        <translation>Escolha o arquivo para salvar a imagem</translation>
     </message>
 </context>
 <context>
@@ -7980,7 +7988,7 @@
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="310"/>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>Contorno</translation>
     </message>
     <message>
         <location filename="../ui/export/novel_export_dialog.cpp" line="311"/>
@@ -8038,17 +8046,17 @@
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="120"/>
         <source>Perfect logline length</source>
-        <translation type="unfinished"></translation>
+        <translation>Comprimento perfeito da linha de log</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="122"/>
         <source>Good logline length</source>
-        <translation type="unfinished"></translation>
+        <translation>Bom comprimento na linha de log</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="124"/>
         <source>Recommended logline length is 30 words</source>
-        <translation type="unfinished"></translation>
+        <translation>O comprimento recomendado da linha de registro é de 30 palavras</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="126"/>
@@ -8091,7 +8099,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="239"/>
         <source>Outline</source>
-        <translation type="unfinished"></translation>
+        <translation>Contorno</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="240"/>
@@ -8129,7 +8137,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1120"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar/ocultar lista</translation>
     </message>
 </context>
 <context>
@@ -8261,7 +8269,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="271"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar lista de bookmarks</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="272"/>
@@ -8287,32 +8295,32 @@
 <context>
     <name>Ui::NovelParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="218"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="205"/>
         <source>Header</source>
         <translation>Cabeçalho</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="219"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="206"/>
         <source>Print header on title page</source>
         <translation>Adicionar cabeçalho na capa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="220"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="207"/>
         <source>Footer</source>
         <translation>Rodapé</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="221"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="208"/>
         <source>Print footer on title page</source>
         <translation>Adicionar rodapé na capa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="222"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="209"/>
         <source>Override common settings for this novel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="223"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="210"/>
         <source>Template</source>
         <translation>Modelo</translation>
     </message>
@@ -8375,7 +8383,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1462"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar/ocultar lista</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1471"/>
@@ -8443,12 +8451,12 @@
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="295"/>
         <source>Disable structure items isolation mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Desabilitar modo de isolação de estrutura de itens</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="296"/>
         <source>Enable structure items isolation mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar modo de isolação de estrutura de itens</translation>
     </message>
 </context>
 <context>
@@ -8585,7 +8593,7 @@
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="327"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar lista de bookmarks</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="328"/>
@@ -8767,7 +8775,7 @@ FREE, PRO and TEAM features</source>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="743"/>
         <source>I want to receive project&apos;s news</source>
-        <translation type="unfinished"></translation>
+        <translation>Eu quero receber novidades do projeto</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="746"/>
@@ -8941,70 +8949,70 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectCollaboratorsView</name>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="124"/>
-        <source>People who allowed to see the project</source>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="123"/>
+        <source>People who allowed to work with the project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="125"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="124"/>
         <source>Only you have access to the project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="153"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="152"/>
         <source>Email invalid</source>
         <translation>Email inválido</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="165"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="164"/>
         <source>Invitation sent to the %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="259"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="258"/>
         <source>Owner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="262"/>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="305"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="261"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="304"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="265"/>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="306"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="264"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="305"/>
         <source>Commentator</source>
         <translation>Comentador</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="268"/>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="307"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="267"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="306"/>
         <source>Reader</source>
         <translation>Leitor</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="299"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="298"/>
         <source>Share the project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="300"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="299"/>
         <source>Add people who you’d like to share with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="301"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="300"/>
         <source>Email</source>
         <translation>Email</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="302"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="301"/>
         <source>Invite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="303"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="302"/>
         <source>Role</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9076,33 +9084,33 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectView</name>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="208"/>
-        <location filename="../ui/project/project_view.cpp" line="270"/>
+        <location filename="../ui/project/project_view.cpp" line="210"/>
+        <location filename="../ui/project/project_view.cpp" line="273"/>
         <source>Current draft</source>
-        <translation type="unfinished"></translation>
+        <translation>Rascunho atual</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="261"/>
+        <location filename="../ui/project/project_view.cpp" line="264"/>
         <source>Here will be an editor of the document you choose in the navigator (at left).</source>
         <translation>Aqui estará um editor para o documento que você escolher no navegador (à esquerda).</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="262"/>
+        <location filename="../ui/project/project_view.cpp" line="265"/>
         <source>Choose an item to edit, or</source>
         <translation>Escolher um item para editar, ou</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="263"/>
+        <location filename="../ui/project/project_view.cpp" line="266"/>
         <source>create a new one</source>
         <translation>criar um novo</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="266"/>
+        <location filename="../ui/project/project_view.cpp" line="269"/>
         <source>Ooops... looks like editor of this document not implemented yet.</source>
         <translation>Oh ouh... Parece que o editor desse documento ainda não implementou isso.</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="268"/>
+        <location filename="../ui/project/project_view.cpp" line="271"/>
         <source>But don&apos;t worry, it will be here in one of the future updates!</source>
         <translation>Não se preocupe, isso estará aqui em alguma futura atualização!</translation>
     </message>
@@ -9314,7 +9322,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/resource_category_dialog.cpp" line="147"/>
         <source>Edit category</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar categoria</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/resource_category_dialog.cpp" line="148"/>
@@ -9334,53 +9342,53 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/resource_category_dialog.cpp" line="151"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/resource_category_dialog.cpp" line="152"/>
         <source>Create</source>
-        <translation type="unfinished">Criar</translation>
+        <translation>Criar</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/resource_category_dialog.cpp" line="152"/>
         <source>Update</source>
-        <translation type="unfinished">Atualizar</translation>
+        <translation>Atualizar</translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayBreakdownAddResourcesView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="305"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="309"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="306"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="310"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="307"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="311"/>
         <source>Add</source>
-        <translation type="unfinished">Adicionar</translation>
+        <translation>Adicionar</translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayBreakdownCopyResourcesFromSceneDialog</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="197"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="203"/>
         <source>Copy resources from selected scene</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="198"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="204"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="199"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="205"/>
         <source>Copy</source>
-        <translation type="unfinished">Copiar</translation>
+        <translation>Copiar</translation>
     </message>
 </context>
 <context>
@@ -9396,75 +9404,75 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="272"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="273"/>
         <source>Create</source>
-        <translation type="unfinished">Criar</translation>
+        <translation>Criar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="290"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="291"/>
         <source>Save</source>
-        <translation type="unfinished">Salvar</translation>
+        <translation>Salvar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="383"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="384"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="384"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="385"/>
         <source>Resource name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="385"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="386"/>
         <source>Qty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="386"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="387"/>
         <source>Description</source>
-        <translation type="unfinished">Descrição</translation>
+        <translation>Descrição</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="387"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="388"/>
         <source>Description for scene</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="388"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="389"/>
         <source>Mark all mentions in screenplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="389"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="390"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayBreakdownResourcesView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="113"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="116"/>
         <source>Edit</source>
-        <translation type="unfinished">Editar</translation>
+        <translation>Editar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="120"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="123"/>
         <source>Remove</source>
-        <translation type="unfinished">Remover</translation>
+        <translation>Remover</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="355"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="368"/>
         <source>Create new resource</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="356"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="369"/>
         <source>Add exisiting resources</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="357"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="370"/>
         <source>Copy resources from scene</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9472,22 +9480,22 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayBreakdownStructureView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="422"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="437"/>
         <source>Scenes</source>
-        <translation type="unfinished">Cenas</translation>
+        <translation>Cenas</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="423"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="438"/>
         <source>Characters</source>
-        <translation type="unfinished">Personagens</translation>
+        <translation>Personagens</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="424"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="439"/>
         <source>Locations</source>
-        <translation type="unfinished">Locações</translation>
+        <translation>Locações</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="425"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="440"/>
         <source>Resources</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9495,77 +9503,77 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayBreakdownView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="365"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="370"/>
         <source>Hide scene parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="366"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="371"/>
         <source>Show scene parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="367"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="372"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar lista de bookmarks</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="368"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="373"/>
         <source>Show bookmarks list</source>
-        <translation type="unfinished">Mostrar lista de bookmarks</translation>
+        <translation>Mostrar lista de bookmarks</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="370"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="375"/>
         <source>Hide screenplay dictionaries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="371"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="376"/>
         <source>Show screenplay dictionaries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="954"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="960"/>
         <source>Do you really want to remove resource &quot;%1&quot; from current scene?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="956"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="962"/>
         <source>No</source>
-        <translation type="unfinished">Não</translation>
+        <translation>Não</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="957"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="963"/>
         <source>Yes, remove</source>
-        <translation type="unfinished">Sim, remover</translation>
+        <translation>Sim, remover</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1671"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1699"/>
         <source>Resources</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1672"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1700"/>
         <source>Formatting</source>
-        <translation type="unfinished">Formatação</translation>
+        <translation>Formatação</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1673"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1701"/>
         <source>Scene parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1674"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1702"/>
         <source>Comments</source>
-        <translation type="unfinished">Comentários</translation>
+        <translation>Comentários</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1675"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1703"/>
         <source>Bookmarks</source>
-        <translation type="unfinished">Bookmarks</translation>
+        <translation>Bookmarks</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1676"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1704"/>
         <source>Dictionaries</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9731,7 +9739,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="175"/>
         <source>Unlock ability to edit screenplay cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Desbloquear habilidades para editar cartões de roteiro</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="177"/>
@@ -9784,7 +9792,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="419"/>
         <source>Choose the file to save image</source>
-        <translation type="unfinished"></translation>
+        <translation>Escolha o arquivo para salvar a imagem</translation>
     </message>
 </context>
 <context>
@@ -9919,17 +9927,17 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="120"/>
         <source>Perfect logline length</source>
-        <translation type="unfinished"></translation>
+        <translation>Comprimento perfeito da linha de log</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="122"/>
         <source>Good logline length</source>
-        <translation type="unfinished"></translation>
+        <translation>Bom comprimento na linha de log</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="124"/>
         <source>Recommended logline length is 30 words</source>
-        <translation type="unfinished"></translation>
+        <translation>O comprimento recomendado da linha de registro é de 30 palavras</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="126"/>
@@ -9988,107 +9996,107 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="433"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="420"/>
         <source>Header</source>
         <translation>Cabeçalho</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="434"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="421"/>
         <source>Print header on title page</source>
         <translation>Adicionar cabeçalho na capa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="435"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="422"/>
         <source>Footer</source>
         <translation>Rodapé</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="436"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="423"/>
         <source>Print footer on title page</source>
         <translation>Adicionar rodapé na capa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="218"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="205"/>
         <source>Do you want unlock scene numbers?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="219"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="206"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="220"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="207"/>
         <source>Yes, unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="437"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="424"/>
         <source>Scenes numbering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="438"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="425"/>
         <source>Scenes numbers&apos; template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="439"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="426"/>
         <source>Use # mark for the scene number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="440"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="427"/>
         <source>Reset scene numbers template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="441"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="428"/>
         <source>Scenes numbering start at</source>
         <translation>Numeração de cena começa por</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="442"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="429"/>
         <source>Lock numbering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="443"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="430"/>
         <source>Lock numbering agian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="444"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="431"/>
         <source>Unlock numbering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="445"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="432"/>
         <source>Override common settings for this screenplay</source>
         <translation>Sobrescrever definições comuns para este roteiro</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="446"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="433"/>
         <source>Template</source>
         <translation>Modelo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="447"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="434"/>
         <source>Print scenes numbers</source>
         <translation>Imprimir números das cenas</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="448"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="435"/>
         <source>on the left</source>
         <translation>à esquerda</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="449"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="436"/>
         <source>on the right</source>
         <translation>à direita</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="450"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="437"/>
         <source>Print dialogues numbers</source>
         <translation>Imprimir número dos diálogos</translation>
     </message>
@@ -10096,173 +10104,173 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayStatisticsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="675"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="676"/>
         <source>Summary text statisics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="676"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="711"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="677"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="712"/>
         <source>Scenes statistics</source>
         <translation>Estatisticas de Cena</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="677"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="678"/>
         <source>Locations statistics</source>
         <translation>Estatisticas de localizações</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="678"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="709"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="679"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="710"/>
         <source>Characters statistics</source>
         <translation>Estatisticas de Personagens</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="680"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="681"/>
         <source>Show characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="681"/>
-        <source>Sort scenes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="682"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="691"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="701"/>
-        <source>by script order</source>
+        <source>Sort scenes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="683"/>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="692"/>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="702"/>
-        <source>by alphabetical order</source>
+        <source>by script order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="684"/>
-        <source>from longest to shortest scene</source>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="693"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="703"/>
+        <source>by alphabetical order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="685"/>
-        <source>from shortest to longest scene</source>
+        <source>from longest to shortest scene</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="686"/>
-        <source>from massive to unmanned scene</source>
+        <source>from shortest to longest scene</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="687"/>
+        <source>from massive to unmanned scene</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="688"/>
         <source>from unmanned to massive scene</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="689"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="690"/>
         <source>Extended view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="690"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="691"/>
         <source>Sort locations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="693"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="694"/>
         <source>from most to least occurences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="694"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="695"/>
         <source>from least to most occurences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="695"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="696"/>
         <source>from longest to shortest duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="696"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="697"/>
         <source>from shortest to longest duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="698"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="699"/>
         <source>Show detailed scenes info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="699"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="700"/>
         <source>Show words count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="700"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="701"/>
         <source>Sort characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="703"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="704"/>
         <source>from most to least scenes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="704"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="705"/>
         <source>from least to most scenes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="705"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="706"/>
         <source>from most to least dialogues</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="706"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="707"/>
         <source>from least to most dialogues</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="708"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="709"/>
         <source>Bechdel test</source>
         <translation>testes Bechdel</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="710"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="711"/>
         <source>Dialogues statistics</source>
         <translation>Estatísticas de diálogos</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="713"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="714"/>
         <source>Scene duration</source>
         <translation>Duração da cena</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="714"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="715"/>
         <source>Action duration</source>
         <translation>Duração da ação</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="715"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="716"/>
         <source>Dialogues duration</source>
         <translation>Duração dos diálogos</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="716"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="717"/>
         <source>Characters count</source>
         <translation>Contagem de caracteres</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="717"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="718"/>
         <source>Dialogues count</source>
         <translation>Contagem de Diálogos</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="719"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="720"/>
         <source>All characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10320,7 +10328,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="319"/>
         <source>Unlock ability to edit screenplay cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Desbloquear habilidades para editar cartões de roteiro</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="320"/>
@@ -10410,71 +10418,71 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayTemplatePageView</name>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="348"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="346"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="348"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="346"/>
         <source>inch</source>
         <translation>pol</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="349"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="347"/>
         <source>Template name</source>
         <translation>Nome de modelo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="350"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="348"/>
         <source>Page format</source>
         <translation>Formato de página</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="367"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="365"/>
         <source>Page margins</source>
         <translation>Margens de página</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="368"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="380"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="366"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="378"/>
         <source>Left</source>
         <translation>Esquerda</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="370"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="377"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="368"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="375"/>
         <source>Top</source>
         <translation>Topo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="372"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="382"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="370"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="380"/>
         <source>Right</source>
         <translation>Direita</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="374"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="378"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="372"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="376"/>
         <source>Bottom</source>
         <translation>Fundo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="376"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="374"/>
         <source>Page numbering alignment by vertical</source>
         <translation>Alinhamento de numeração de página na vertical</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="379"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="377"/>
         <source>by horizontal</source>
         <translation>Na horizontal</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="381"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="379"/>
         <source>Center</source>
         <translation>Centro</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="383"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="381"/>
         <source>Split page into columns in proportion</source>
         <translation>Dividir página entre colunas em proporção</translation>
     </message>
@@ -10482,166 +10490,166 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayTemplateParagraphsView</name>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="794"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="792"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="794"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="792"/>
         <source>inch</source>
         <translation>pol</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="798"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="796"/>
         <source>Is paragraph style available</source>
         <translation>Estilo de paragráfo está disponivel</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="799"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="797"/>
         <source>Font family</source>
         <translation>Familia de fontes</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="800"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="798"/>
         <source>Font size</source>
         <translation>Tamanho de fonte</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="801"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="799"/>
         <source>Place paragraph at the top of the page</source>
         <translation>Colocar parágrafo no topo de página</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="802"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="800"/>
         <source>Use UPPERCASE characters for paragraph text</source>
         <translation>Usar personagens MAIÚSCULOS para texto de paragrafo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="803"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="801"/>
         <source>Bold</source>
         <translation>Negrito</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="804"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="802"/>
         <source>Italic</source>
         <translation>Itálico</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="805"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="803"/>
         <source>Underline</source>
         <translation>Sublinhado</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="806"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="804"/>
         <source>Align text on the page</source>
         <translation>Alinhar texto na página</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="807"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="817"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="825"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="805"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="815"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="823"/>
         <source>Left</source>
         <translation>Esquerda</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="808"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="806"/>
         <source>Center</source>
         <translation>Centro</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="809"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="821"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="827"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="807"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="819"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="825"/>
         <source>Right</source>
         <translation>Direita</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="810"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="808"/>
         <source>Justify</source>
         <translation>Justificado</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="811"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="809"/>
         <source>Vertical indentation</source>
         <translation>Identação vertical</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="812"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="810"/>
         <source>Top</source>
         <translation>Topo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="813"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="811"/>
         <source>Bottom</source>
         <translation>Fundo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="814"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="812"/>
         <source>lines</source>
         <translation>linhas</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="816"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="814"/>
         <source>Horizontal indentation</source>
         <translation>Identação horizontal</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="819"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="817"/>
         <source>First line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="824"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="822"/>
         <source>Horizontal indentation (for two-column mode)</source>
         <translation>Identação horizontal (para modo de duas colunas)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="829"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="827"/>
         <source>Line spacing</source>
         <translation>Espaçamento de linha</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="828"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
         <source>Single</source>
         <translation>Único</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
         <source>One and half</source>
         <translation>Um e meio</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
         <source>Double</source>
         <translation>Duplo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
         <source>Fixed</source>
         <translation>Fixo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="833"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="831"/>
         <source>Value</source>
         <translation>Valor</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="835"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="833"/>
         <source>Show paragraph&apos;s title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="836"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="834"/>
         <source>Use custom title</source>
         <translation>Use um título personalizado</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="837"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="835"/>
         <source>Title</source>
         <translation>Título</translation>
     </message>
@@ -10685,49 +10693,49 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1481"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1481"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1475"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1475"/>
         <source>Merge paragraph</source>
         <translation>Juntar parágrafo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1483"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1483"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1477"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1477"/>
         <source>Split paragraph</source>
         <translation>Dividir parágrafo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1510"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1510"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1504"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1504"/>
         <source>Bookmark</source>
         <translation>Bookmark</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1514"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1514"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1508"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1508"/>
         <source>Add</source>
         <translation>Adicionar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1520"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1520"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1514"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1514"/>
         <source>Edit</source>
         <translation>Editar</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1526"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1526"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1520"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1520"/>
         <source>Remove</source>
         <translation>Remover</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1533"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1533"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1527"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1527"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar/ocultar lista</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1542"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1536"/>
         <source>Generate text</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10736,37 +10744,37 @@ Discuss everything with fellow community of writers, share your work in progress
     <name>Ui::ScreenplayTextEditToolbar</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="98"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="93"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="101"/>
         <source>Scene heading</source>
         <translation>Cabeçalho de cena</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="278"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="271"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="293"/>
         <source>Undo last action</source>
         <translation>Desfazer última ação</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="282"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="275"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="297"/>
         <source>Redo last action</source>
         <translation>Refazer última ação</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="285"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="278"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="300"/>
         <source>Current paragraph format</source>
         <translation>Formato de parágrafo atual</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="287"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="280"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="302"/>
         <source>Hide fast format panel</source>
         <translation>Esconder painel de formatação rápida</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="288"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="281"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="303"/>
         <source>Show fast format panel</source>
         <translation>Mostrar painel de formatação rápida</translation>
     </message>
@@ -10782,36 +10790,41 @@ Discuss everything with fellow community of writers, share your work in progress
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="292"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="283"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="305"/>
         <source>Search text</source>
         <translation>Procurar no texto</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="295"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="286"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="308"/>
         <source>Disable review mode</source>
         <translation>Desabilitar modo de revisão</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="296"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="287"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="309"/>
         <source>Enable review mode</source>
         <translation>Habilitar modo de revisão</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="298"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="289"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="311"/>
         <source>Disable structure items isolation mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Desabilitar modo de isolação de estrutura de itens</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="299"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="290"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="312"/>
         <source>Enable structure items isolation mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar modo de isolação de estrutura de itens</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="291"/>
+        <source>Unlock ability to work with the screenplay breakdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="313"/>
         <source>Export screenplay breakdown</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10979,7 +10992,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="376"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar lista de bookmarks</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="379"/>
@@ -11052,7 +11065,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1165"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar/ocultar lista</translation>
     </message>
 </context>
 <context>
@@ -11184,7 +11197,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="300"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar lista de bookmarks</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="301"/>
@@ -11302,37 +11315,37 @@ STARTED</source>
 <context>
     <name>Ui::SessionStatisticsView</name>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="290"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="289"/>
         <source>Separate statistics by devices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="294"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="293"/>
         <source>To show detailed statistics, you need to upgrade to the PRO version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="295"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="294"/>
         <source>Dayly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="296"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="295"/>
         <source>Monthly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="297"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="296"/>
         <source>Yearly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="298"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="297"/>
         <source>Words</source>
         <translation>Palavras</translation>
     </message>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="299"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="298"/>
         <source>Time, min</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11445,945 +11458,950 @@ STARTED</source>
 <context>
     <name>Ui::SettingsView</name>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1430"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1433"/>
         <source>Choose the folder where backups will be saved</source>
         <translation>Selecionar diretório onde os Backups serão salvos</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1541"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1701"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1992"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2121"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2266"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2387"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1546"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1706"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1997"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2126"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2271"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2392"/>
         <source>Edit</source>
         <translation>Editar</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1555"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1715"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2006"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2135"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2280"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2401"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1560"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1720"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2011"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2140"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2285"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2406"/>
         <source>Save to file</source>
         <translation>Guardar para ficheiro</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1561"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1721"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2012"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2141"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2286"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2407"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1566"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1726"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2017"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2146"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2291"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2412"/>
         <source>Remove</source>
         <translation>Remover</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1568"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1728"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2019"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2148"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2293"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2414"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1573"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1733"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2024"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2153"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2298"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2419"/>
         <source>Load template from file</source>
         <translation>Carregar modelo de ficheiro</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3177"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3187"/>
         <source>Application settings</source>
         <translation>Configurações do aplicativo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3178"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3188"/>
         <source>Language</source>
         <translation>Idioma</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3190"/>
-        <source>Qty</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3191"/>
-        <source>Text editing</source>
-        <translation>Edição de texto</translation>
-    </message>
-    <message>
         <location filename="../ui/settings/settings_view.cpp" line="3192"/>
-        <source>Show documents pages</source>
-        <translation>Mostrar páginas de documentos</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3193"/>
-        <source>Use typewriter sound for keys pressing</source>
-        <translation>Usar som de máquina de escrever enquanto digita</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3194"/>
-        <source>Spell check</source>
-        <translation>Verificação ortográfica</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3195"/>
-        <source>Spelling dictionary</source>
-        <translation>Dicionário</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3197"/>
-        <source>Afrikaans</source>
-        <translation>Africâner</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3198"/>
-        <source>Aragonese</source>
-        <translation>Aragonês</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3199"/>
-        <source>Arabic</source>
-        <translation>Árabe</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3200"/>
-        <source>Asturian</source>
+        <source>Make application interface compact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="3201"/>
+        <source>Qty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="3202"/>
+        <source>Text editing</source>
+        <translation>Edição de texto</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="3203"/>
+        <source>Show documents pages</source>
+        <translation>Mostrar páginas de documentos</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="3204"/>
+        <source>Use typewriter sound for keys pressing</source>
+        <translation>Usar som de máquina de escrever enquanto digita</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="3205"/>
+        <source>Spell check</source>
+        <translation>Verificação ortográfica</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="3206"/>
+        <source>Spelling dictionary</source>
+        <translation>Dicionário</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="3208"/>
+        <source>Afrikaans</source>
+        <translation>Africâner</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="3209"/>
+        <source>Aragonese</source>
+        <translation>Aragonês</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="3210"/>
+        <source>Arabic</source>
+        <translation>Árabe</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="3211"/>
+        <source>Asturian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="3212"/>
         <source>Azerbaijani</source>
         <translation>Azerbaijano</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3202"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3213"/>
         <source>Belarusian</source>
         <translation>Bielorusso</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3203"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3214"/>
         <source>Bulgarian</source>
         <translation>Búlgaro</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3204"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3215"/>
         <source>Bengali</source>
         <translation>Bengali</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3205"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3216"/>
         <source>Tibetan</source>
         <translation>Tibetano</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3206"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3217"/>
         <source>Breton</source>
         <translation>Bretão</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3207"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3218"/>
         <source>Bosnian</source>
         <translation>Bósnio</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3208"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3219"/>
         <source>Catalan (Valencian)</source>
         <translation>Catalão (Valenciano)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3209"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3220"/>
         <source>Catalan</source>
         <translation>Catalão</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3210"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3221"/>
         <source>Czech</source>
         <translation>Tcheco</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3211"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3222"/>
         <source>Welsh</source>
         <translation>Galês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3212"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3223"/>
         <source>Danish</source>
         <translation>Dinamarquês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3213"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3224"/>
         <source>German (Austria)</source>
         <translation>Alemão (Áustria)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3214"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3225"/>
         <source>German (Switzerland)</source>
         <translation>Alemão (Suíça)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3215"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3226"/>
         <source>German</source>
         <translation>Alemão</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3216"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3227"/>
         <source>Greek (Polytonic)</source>
         <translation>Grego (Polytrônico)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3217"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3228"/>
         <source>Greek</source>
         <translation>Grego</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3218"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3229"/>
         <source>English (Australia)</source>
         <translation>Inglês (Austrália)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3219"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3230"/>
         <source>English (Canada)</source>
         <translation>Inglês (Canadá)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3220"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3231"/>
         <source>English (United Kingdom)</source>
         <translation>Inglês (Reino Unido)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3221"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3232"/>
         <source>English (New Zealand)</source>
         <translation>Inglês (Nova Zelândia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3222"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3233"/>
         <source>English (South Africa)</source>
         <translation>Inglês (África do Sul)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3223"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3234"/>
         <source>English (United States)</source>
         <translation>Inglês (Estados Unidos)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3224"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3235"/>
         <source>Esperanto</source>
         <translation>Esperanto</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3225"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3236"/>
         <source>Spanish (Argentina)</source>
         <translation>Espanhol (Argentina)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3226"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3237"/>
         <source>Spanish (Bolivia)</source>
         <translation>Espanhol (Bolívia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3227"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3238"/>
         <source>Spanish (Chile)</source>
         <translation>Espanhol (Chile)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3228"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3239"/>
         <source>Spanish (Colombia)</source>
         <translation>Espanhol (Colômbia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3229"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3240"/>
         <source>Spanish (Costa Rica)</source>
         <translation>Espanhol (Costa Rica)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3230"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3241"/>
         <source>Spanish (Cuba)</source>
         <translation>Espanhol (Cuba)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3231"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3242"/>
         <source>Spanish (Dominican Republic)</source>
         <translation>Espanhol (República Dominicana)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3232"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3243"/>
         <source>Spanish (Ecuador)</source>
         <translation>Espanhol (Equador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3233"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3244"/>
         <source>Spanish (Guatemala)</source>
         <translation>Espanhol (Guatemala)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3234"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3245"/>
         <source>Spanish (Honduras)</source>
         <translation>Espanhol (Honduras)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3235"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3246"/>
         <source>Spanish (Mexico)</source>
         <translation>Espanhol (México)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3236"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3247"/>
         <source>Spanish (Nicaragua)</source>
         <translation>Espanhol (Nicarágua)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3237"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3248"/>
         <source>Spanish (Panama)</source>
         <translation>Espanhol (Panamá)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3238"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3249"/>
         <source>Spanish (Peru)</source>
         <translation>Espanhol (Peru)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3239"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3250"/>
         <source>Spanish (Philippines)</source>
         <translation>Espanhol (Filipinas)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3240"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3251"/>
         <source>Spanish (Puerto Rico)</source>
         <translation>Espanhol (Porto Rico)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3241"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3252"/>
         <source>Spanish (Paraguay)</source>
         <translation>Espanhol (Paraguai)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3242"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3253"/>
         <source>Spanish (El Salvador)</source>
         <translation>Espanhol (El Salvador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3243"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3254"/>
         <source>Spanish (United States)</source>
         <translation>Espanhol (Estados Unidos)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3244"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3255"/>
         <source>Spanish (Uruguay)</source>
         <translation>Espanhol (Uruguai)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3245"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3256"/>
         <source>Spanish (Venezuela)</source>
         <translation>Espanhol (Venezuela)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3246"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3257"/>
         <source>Spanish</source>
         <translation>Espanhol</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3247"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3258"/>
         <source>Estonian</source>
         <translation>Estoniano</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3248"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3259"/>
         <source>Basque</source>
         <translation>Basco</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3249"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3260"/>
         <source>Persian</source>
         <translation>Persa</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3250"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3261"/>
         <source>Faroese</source>
         <translation>Faroês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3251"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3262"/>
         <source>French</source>
         <translation>Francês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3252"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3263"/>
         <source>Friulian</source>
         <translation>Friuliano</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3253"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3264"/>
         <source>Western Frisian</source>
         <translation>Frisão ocidental</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3254"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3265"/>
         <source>Irish</source>
         <translation>Irlandês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3255"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3266"/>
         <source>Gaelic</source>
         <translation>Gaélico</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3256"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3267"/>
         <source>Galician</source>
         <translation>Galego</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3257"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3268"/>
         <source>Gujarati</source>
         <translation>Guzerate</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3258"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3269"/>
         <source>Guarani</source>
         <translation>Guarani</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3259"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3270"/>
         <source>Hebrew</source>
         <translation>Hebreu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3260"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3271"/>
         <source>Hindi</source>
         <translation>Hindi</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3261"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3272"/>
         <source>Croatian</source>
         <translation>Croata</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3262"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3273"/>
         <source>Hungarian</source>
         <translation>Húngaro</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3263"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3274"/>
         <source>Armenian</source>
         <translation>Armeno</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3264"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3275"/>
         <source>Armenian (Western)</source>
         <translation>Armeno (Ocidental)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3265"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3276"/>
         <source>Interlingua</source>
         <translation>Interlíngua</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3266"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3277"/>
         <source>Indonesian</source>
         <translation>Indonésio</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3267"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3278"/>
         <source>Icelandic</source>
         <translation>Islandês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3268"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3279"/>
         <source>Italian</source>
         <translation>Italiano</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3269"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3280"/>
         <source>Georgian</source>
         <translation>Georgiano</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3270"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3281"/>
         <source>Kazakh</source>
         <translation>Cazaque</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3271"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3282"/>
         <source>Kurdish</source>
         <translation>Curdo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3272"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3283"/>
         <source>Korean</source>
         <translation>Coreano</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3273"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3284"/>
         <source>Latin</source>
         <translation>Latin</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3274"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3285"/>
         <source>Luxembourgish</source>
         <translation>Luxemburguês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3275"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3286"/>
         <source>Lao</source>
         <translation>Laosiano</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3276"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3287"/>
         <source>Lithuanian</source>
         <translation>Lituano</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3277"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3288"/>
         <source>Latgalian</source>
         <translation>Latgalian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3278"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3289"/>
         <source>Latvian</source>
         <translation>Letão</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3279"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3290"/>
         <source>Macedonian</source>
         <translation>Macedônio</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3280"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3291"/>
         <source>Mongolian</source>
         <translation>Mongol</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3281"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3292"/>
         <source>Maltese</source>
         <translation>Maltês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3282"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3286"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3293"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3297"/>
         <source>Norwegian</source>
         <translation>Norueguês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3283"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3294"/>
         <source>Low German</source>
         <translation>Baixo alemão</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3284"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3295"/>
         <source>Nepali</source>
         <translation>Nepalês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3285"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3296"/>
         <source>Dutch</source>
         <translation>Holandês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3287"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3298"/>
         <source>Occitan</source>
         <translation>Occitano</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3288"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3299"/>
         <source>Polish</source>
         <translation>Polonês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3289"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3300"/>
         <source>Portuguese (Brazilian)</source>
         <translation>Português (Brasileiro)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3290"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3301"/>
         <source>Portuguese</source>
         <translation>Português</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3291"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3302"/>
         <source>Quechua</source>
         <translation>Quechua</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3292"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3303"/>
         <source>Romanian</source>
         <translation>Romeno</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3293"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3304"/>
         <source>Russian (with Yo)</source>
         <translation>Russo (com yo)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3294"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3305"/>
         <source>Russian</source>
         <translation>Russo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3295"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3306"/>
         <source>Kinyarwanda</source>
         <translation>Kinyarwanda</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3296"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3307"/>
         <source>Sinhala</source>
         <translation>Sinhala</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3297"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3308"/>
         <source>Slovak</source>
         <translation>Eslovaco</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3298"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3309"/>
         <source>Slovenian</source>
         <translation>Esloveno</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3299"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3310"/>
         <source>Albanian</source>
         <translation>Albanês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3300"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3311"/>
         <source>Serbian (Latin)</source>
         <translation>Sérvio (latino)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3301"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3312"/>
         <source>Serbian</source>
         <translation>Sérvio</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3302"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3313"/>
         <source>Swedish (Finland)</source>
         <translation>Sueco (Finlândia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3303"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3314"/>
         <source>Swedish</source>
         <translation>Sueco</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3304"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3315"/>
         <source>Swahili</source>
         <translation>Suaíli</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3305"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3316"/>
         <source>Tamil</source>
         <translation>Tâmil</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3306"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3317"/>
         <source>Telugu</source>
         <translation>Telugu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3307"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3318"/>
         <source>Thai</source>
         <translation>Tailandês</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3308"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3319"/>
         <source>Turkmen</source>
         <translation>Turcomano</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3309"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3320"/>
         <source>Klingon (Latin)</source>
         <translation>Kliingon (latino)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3310"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3321"/>
         <source>Klingon</source>
         <translation>Klingon</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3311"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3322"/>
         <source>Turkish</source>
         <translation>Turco</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3312"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3323"/>
         <source>Ukrainian</source>
         <translation>Ucrâniano</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3313"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3324"/>
         <source>Vietnamese</source>
         <translation>Vietnamita</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3323"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3334"/>
         <source>User interface</source>
         <translation>Interface de usuário</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3324"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3335"/>
         <source>Manage user dictionary</source>
         <translation>Gerir dicionário de usuário</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3329"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3340"/>
         <source>Automatic text corrections</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3330"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3341"/>
         <source>Replace three single dots with ellipsis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3331"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3342"/>
         <source>Replace vertical quotation marks to curly ones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3332"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3343"/>
         <source>Replace two dashes with em dash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3333"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3344"/>
         <source>Avoid multiple spaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3340"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3351"/>
         <source>Turn on/off text and folders module</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3354"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3365"/>
         <source>Turn on/off screenplay module</source>
         <translation>Ligar/Desligar módulo de roteiro</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3364"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3375"/>
         <source>Add a continuation (CONT&apos;D) to dialogues separated by an action</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3366"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3377"/>
         <source>Automatically correct screenplay text on page breaks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3368"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3379"/>
         <source>Show hints for major &amp; related to a current story characters and locations only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3421"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3441"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3466"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3432"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3452"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3477"/>
         <source>Show hints for major &amp; related to a current story characters only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3370"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3423"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3443"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3468"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3381"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3434"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3454"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3479"/>
         <source>Show characters suggestions in empty paragraph</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3372"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3383"/>
         <source>Use opening bracket in dialogue to switch to parenthetical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3373"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3384"/>
         <source>Screenplay navigator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3374"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3385"/>
         <source>Show beats</source>
         <translation>Mostrar beats</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3375"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3386"/>
         <source>in treatment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3376"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3387"/>
         <source>in screenplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3397"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3408"/>
         <source>Calculate duration based on the custom rules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3398"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3409"/>
         <source>For action</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3399"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3410"/>
         <source>Per entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3401"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3406"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3410"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3412"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3417"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3421"/>
         <source>+</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3402"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3413"/>
         <source>Each 50 characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3404"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3415"/>
         <source>For dialogue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3408"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3419"/>
         <source>For scene heading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3414"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3425"/>
         <source>Turn on/off comic book module</source>
         <translation>Ligar/Desligar módulo de quadrinhos</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3432"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3443"/>
         <source>Audioplay module</source>
         <translation>Módulo audioplay</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3433"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3444"/>
         <source>Turn on/off audioplay module</source>
         <translation>Ligar/Desligar o módulo audioplay</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3438"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3449"/>
         <source>Show block numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar números do bloco</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3439"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3450"/>
         <source>Continue block numbers through document</source>
-        <translation type="unfinished"></translation>
+        <translation>Continue números do bloco atraves do documento </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3478"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3489"/>
         <source>Novel module</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3479"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3490"/>
         <source>Turn on/off novel module</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3499"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3510"/>
         <source>If you press in empty paragraph</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3444"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3455"/>
         <source>Audioplay navigator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3453"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3464"/>
         <source>Calculate duration based on the count of words</source>
         <translation>Calcular a duração baseada no número de palavras</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3455"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3466"/>
         <source>words</source>
         <translation>Palavras</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3459"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3470"/>
         <source>Stageplay module</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3460"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3471"/>
         <source>Turn on/off stageplay module</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3469"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3480"/>
         <source>Stageplay navigator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3493"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3504"/>
         <source>Screenplay editor</source>
         <translation>Editor de roteiro</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3496"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3507"/>
         <source>Block name</source>
         <translation>Nome de bloco</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3497"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3508"/>
         <source>Shortcut</source>
         <translation>Atalho</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3498"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3509"/>
         <source>If you press in paragraphs end</source>
         <translation>Se pressionar no fim de parágrafos</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3502"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3513"/>
         <source>Add paragraph</source>
         <translation>Adicionar parágrafo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3503"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3514"/>
         <source>Change to</source>
         <translation>Mudar para</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3179"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3189"/>
         <source>Size of the user interface elements:</source>
         <translation>Tamanho dos elementos da interface de usuário:</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1548"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1708"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1999"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2128"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2273"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2394"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1553"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1713"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2004"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2133"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2278"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2399"/>
         <source>Create new based on current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3180"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3190"/>
         <source>small</source>
         <translation>Pequeno</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3181"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3191"/>
         <source>big</source>
         <translation>Grande</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3182"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3193"/>
         <source>Save changes &amp; backups</source>
         <translation>Salvar alterações e backups</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3183"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3194"/>
         <source>Automatically save changes as soon as possible</source>
         <translation>Salvar alterações automaticamente conforme acontecem</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3185"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3196"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
@@ -12392,189 +12410,189 @@ O projeto é salvo a cada 3 segundos se você não usar o mouse ou o teclado.
 Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3188"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3199"/>
         <source>Save backups</source>
         <translation>Salvar backups</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3189"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3200"/>
         <source>Backups folder path</source>
         <translation>Caminho do diretório de Backups</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3326"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3337"/>
         <source>Focus current paragraph</source>
         <translation>Focar no parágrafo atual</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3328"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3339"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
         <translation>Usar rolagem de máquina de escrever (mantém a linha do cursor no centro do ecrã) </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3335"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3346"/>
         <source>Components</source>
         <translation>Componentes</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3339"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3350"/>
         <source>Simple text module</source>
         <translation>Módulo de texto simples</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3341"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3355"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3415"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3434"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3461"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3480"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3352"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3366"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3426"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3445"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3472"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3491"/>
         <source>Text editor</source>
         <translation>Editor de texto</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3342"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3356"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3416"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3435"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3462"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3481"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3353"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3367"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3427"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3446"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3473"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3492"/>
         <source>Default template</source>
         <translation>Modelo padrão</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3344"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3358"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3418"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3437"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3464"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3483"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3355"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3369"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3429"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3448"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3475"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3494"/>
         <source>Available actions for the selected template</source>
         <translation>Ações disponíveis para o modelo selecionado</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3359"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3377"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3445"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3470"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3370"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3388"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3456"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3481"/>
         <source>Show scene number</source>
         <translation>Mostrar número da cena</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3360"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3371"/>
         <source>on the left</source>
         <translation>à esquerda</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3361"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3372"/>
         <source>on the right</source>
         <translation>à direita</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3362"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3419"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3373"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3430"/>
         <source>Show dialogue number</source>
         <translation>Mostrar número do diálogo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3325"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3336"/>
         <source>Highlight current line</source>
         <translation>Destacar linha atual</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3345"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3424"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3484"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3356"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3435"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3495"/>
         <source>Navigator</source>
         <translation>Navegador</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3346"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3357"/>
         <source>Show chapter text, lines</source>
         <translation>Mostrar texto, linhas de capitulos</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3353"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3364"/>
         <source>Screenplay module</source>
         <translation>Módulo de roteiro</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3378"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3446"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3471"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3485"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3389"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3457"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3482"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3496"/>
         <source>Show scene text, lines</source>
         <translation>Mostrar texto da cena, linhas</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3384"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3452"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3395"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3463"/>
         <source>Duration</source>
         <translation>Duração</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3385"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3396"/>
         <source>Calculate duration based on the count of pages</source>
         <translation>Estimar duração baseada na contagem de páginas</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3386"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3392"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3454"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3397"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3403"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3465"/>
         <source>at the rate of</source>
         <translation>à taxa de</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3387"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3398"/>
         <source>pages</source>
         <translation>páginas</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3388"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3395"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3456"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3399"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3406"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3467"/>
         <source>has duration</source>
         <translation>têm duração</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3389"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3396"/>
         <location filename="../ui/settings/settings_view.cpp" line="3400"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3403"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3405"/>
         <location filename="../ui/settings/settings_view.cpp" line="3407"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3409"/>
         <location filename="../ui/settings/settings_view.cpp" line="3411"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3457"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3414"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3416"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3418"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3420"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3422"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3468"/>
         <source>seconds</source>
         <translation>segundos</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3391"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3402"/>
         <source>Calculate duration based on the count of letters</source>
         <translation>Estimar duração baseada na contagem de caracteres</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3393"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3404"/>
         <source>letters</source>
         <translation>caracteres</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3394"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3405"/>
         <source>including spaces</source>
         <translation>incluir espaços</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3413"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3424"/>
         <source>Comic book module</source>
         <translation>Módulo de quadrinhos</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3425"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3436"/>
         <source>Show panel text, lines</source>
         <translation>Mostrar texto, linhas de paineis</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3492"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3503"/>
         <source>Shortcuts</source>
         <translation>Atalhos de teclado</translation>
     </message>
@@ -12604,7 +12622,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="701"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar/ocultar lista</translation>
     </message>
 </context>
 <context>
@@ -12657,12 +12675,12 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="273"/>
         <source>Disable structure items isolation mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Desabilitar modo de isolação de estrutura de itens</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="274"/>
         <source>Enable structure items isolation mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar modo de isolação de estrutura de itens</translation>
     </message>
 </context>
 <context>
@@ -12782,7 +12800,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="261"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar lista de bookmarks</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="262"/>
@@ -12868,17 +12886,17 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="117"/>
         <source>Perfect logline length</source>
-        <translation type="unfinished"></translation>
+        <translation>Comprimento perfeito da linha de log</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="119"/>
         <source>Good logline length</source>
-        <translation type="unfinished"></translation>
+        <translation>Bom comprimento na linha de log</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="121"/>
         <source>Recommended logline length is 30 words</source>
-        <translation type="unfinished"></translation>
+        <translation>O comprimento recomendado da linha de registro é de 30 palavras</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="123"/>
@@ -12932,32 +12950,32 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
 <context>
     <name>Ui::StageplayParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="218"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="205"/>
         <source>Header</source>
         <translation>Cabeçalho</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="219"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="206"/>
         <source>Print header on title page</source>
         <translation>Adicionar cabeçalho na capa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="220"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="207"/>
         <source>Footer</source>
         <translation>Rodapé</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="221"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="208"/>
         <source>Print footer on title page</source>
         <translation>Adicionar rodapé na capa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="222"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="209"/>
         <source>Override common settings for this stageplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="223"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="210"/>
         <source>Template</source>
         <translation>Modelo</translation>
     </message>
@@ -13015,7 +13033,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1276"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar/ocultar lista</translation>
     </message>
 </context>
 <context>
@@ -13068,12 +13086,12 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="278"/>
         <source>Disable structure items isolation mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Desabilitar modo de isolação de estrutura de itens</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="279"/>
         <source>Enable structure items isolation mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar modo de isolação de estrutura de itens</translation>
     </message>
 </context>
 <context>
@@ -13162,7 +13180,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="262"/>
         <source>Hide bookmarks list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ocultar lista de bookmarks</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="263"/>
@@ -13299,7 +13317,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="117"/>
         <source>No credits available</source>
-        <translation type="unfinished"></translation>
+        <translation>Não há crédito disponível</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="136"/>
@@ -13332,7 +13350,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../ui/settings/theme_setup_view.cpp" line="116"/>
         <source>Text color</source>
-        <translation type="unfinished"></translation>
+        <translation>Cor do texto </translation>
     </message>
 </context>
 <context>
@@ -13363,52 +13381,52 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
         <translation>HASH colado.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="416"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="413"/>
         <source>Copy theme HASH to share your custom theme with others</source>
         <translation>Copiar tema HASH para partilhar o seu tema personalizado com outros</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="417"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="414"/>
         <source>Paste theme HASH from clipboard and apply it</source>
         <translation>Cole tema HASH da área de transferência e aplique-o</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="419"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="416"/>
         <source>Primary</source>
         <translation>Primário</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="420"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="417"/>
         <source>Accent</source>
         <translation>Destaque</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="421"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="418"/>
         <source>Background</source>
         <translation>Fundo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="422"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="419"/>
         <source>Surface</source>
         <translation>Superfície</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="423"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="420"/>
         <source>Error</source>
         <translation>Erro</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="424"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="421"/>
         <source>Text edit</source>
         <translation>Editar texto</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="426"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="423"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="427"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="424"/>
         <source>Save</source>
         <translation>Salvar</translation>
     </message>
@@ -13454,7 +13472,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="156"/>
         <source>Main</source>
-        <translation type="unfinished"></translation>
+        <translation>Principal</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="157"/>
@@ -13485,7 +13503,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="173"/>
         <source>Animals</source>
-        <translation type="unfinished"></translation>
+        <translation>Animais</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="177"/>
@@ -13495,7 +13513,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="181"/>
         <source>Climate</source>
-        <translation type="unfinished"></translation>
+        <translation>Clima</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="183"/>
@@ -13593,7 +13611,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1310"/>
         <source>Photos</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotos</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1312"/>
@@ -13649,7 +13667,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1323"/>
         <source>Geography</source>
-        <translation type="unfinished"></translation>
+        <translation>Geografia</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1324"/>
@@ -13664,7 +13682,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1326"/>
         <source>Animals</source>
-        <translation type="unfinished"></translation>
+        <translation>Animais</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1327"/>
@@ -13674,7 +13692,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1328"/>
         <source>Climate</source>
-        <translation type="unfinished"></translation>
+        <translation>Clima</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1330"/>
@@ -13915,13 +13933,13 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="571"/>
         <source>What routes %1 has</source>
-        <translation type="unfinished"></translation>
+        <translation>Que rotas %1 tem</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="577"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="719"/>
         <source>Open route details</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir detalhes de rota</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="632"/>
@@ -13929,7 +13947,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="637"/>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="638"/>
         <source>Show all %1&apos;s routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra todas rotas de %1</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="690"/>
@@ -13939,7 +13957,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="691"/>
         <source>To see route details, select concrete route.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para ver detalhes de rota, selecione uma rota concreta.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="699"/>
@@ -13959,7 +13977,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="704"/>
         <source>Border line type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de linha de borda</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="705"/>
@@ -13979,7 +13997,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="709"/>
         <source>Routes</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotas</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="711"/>
@@ -14033,7 +14051,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="182"/>
         <source>Choose the file to save image</source>
-        <translation type="unfinished"></translation>
+        <translation>Escolha o arquivo para salvar a imagem</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="382"/>
@@ -14043,7 +14061,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="383"/>
         <source>Add world</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar palavra</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="384"/>
@@ -14063,7 +14081,7 @@ Se você trabalhar sem interrupções, o projeto é salvo a cada 3 minutos.</tra
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="391"/>
         <source>Save relations scheme to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar schema de relações à imagem</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="393"/>

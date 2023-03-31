@@ -233,7 +233,7 @@
         <translation>نص</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="1055"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="1057"/>
         <source>Copy of </source>
         <translation>نسخة من</translation>
     </message>
@@ -798,59 +798,59 @@
         <translation>تَلاشٍ إلى الأسود</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="609"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="611"/>
         <source>Background actors (atmosphere)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="610"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="612"/>
         <source>Background actors (silent)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="611"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="613"/>
         <source>Background actors (special)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="612"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="617"/>
         <source>Stunts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="613"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="616"/>
         <source>Vehicles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="614"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="609"/>
         <source>Props</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="615"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="621"/>
         <source>Camera</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="616"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="618"/>
         <source>Special effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="617"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="614"/>
         <source>Wardrobe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="618"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="615"/>
         <source>Makeup/hair</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="619"/>
         <source>Animals</source>
-        <translation type="unfinished">حيوانات</translation>
+        <translation>حيوانات</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="620"/>
@@ -858,17 +858,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="621"/>
-        <source>Music</source>
-        <translation type="unfinished">موسيقى</translation>
-    </message>
-    <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="622"/>
-        <source>Sound</source>
-        <translation type="unfinished">صوت</translation>
+        <source>Music</source>
+        <translation>موسيقى</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="623"/>
+        <source>Sound</source>
+        <translation>صوت</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="610"/>
         <source>Set dressing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1699,7 +1699,7 @@
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="105"/>
         <source>PNG image</source>
-        <translation type="unfinished">صورة PNG</translation>
+        <translation>صورة PNG</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="110"/>
@@ -1852,7 +1852,7 @@
 <context>
     <name>KeySequenceDelegate</name>
     <message>
-        <location filename="../../corelib/ui/widgets/tree/tree_delegate.cpp" line="428"/>
+        <location filename="../../corelib/ui/widgets/tree/tree_delegate.cpp" line="429"/>
         <source>Press shortcut</source>
         <translation>اضغط على الاختصار</translation>
     </message>
@@ -1899,172 +1899,172 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="686"/>
+        <location filename="../management_layer/application_manager.cpp" line="691"/>
         <source>Please update to the latest version if you want to use the Cloud.</source>
         <translation>يرجى التحديث إلى الإصدار الأخير إذا أردت استخدام الخدمة السحابية.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="687"/>
+        <location filename="../management_layer/application_manager.cpp" line="692"/>
         <source>Nope, I’m fine without Cloud</source>
         <translation>لا أرغب بالخدمة السحابية</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="688"/>
+        <location filename="../management_layer/application_manager.cpp" line="693"/>
         <source>Update</source>
         <translation>تحديث</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="706"/>
+        <location filename="../management_layer/application_manager.cpp" line="711"/>
         <source>The last version is downloading</source>
         <translation>يتم تحميل الإصدار الأخير</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1160"/>
+        <location filename="../management_layer/application_manager.cpp" line="1172"/>
         <source>Read only</source>
         <translation>قراءة فقط</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1171"/>
+        <location filename="../management_layer/application_manager.cpp" line="1183"/>
         <source> - changed</source>
         <translation>- تم التغيير</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1227"/>
-        <location filename="../management_layer/application_manager.cpp" line="1246"/>
-        <location filename="../management_layer/application_manager.cpp" line="1434"/>
+        <location filename="../management_layer/application_manager.cpp" line="1239"/>
+        <location filename="../management_layer/application_manager.cpp" line="1258"/>
+        <location filename="../management_layer/application_manager.cpp" line="1446"/>
         <source>Saving error</source>
         <translation>خطأ في الحفظ</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1228"/>
+        <location filename="../management_layer/application_manager.cpp" line="1240"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>لا يمكن كتابة التغييرات. يوجد خطأ داخلي في قاعدة البيانات: &quot;1%&quot; الرجاء التحقق مما إذا كان الملف موجودًا وما إذا كان لديك صلاحية للكتابة.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1247"/>
+        <location filename="../management_layer/application_manager.cpp" line="1259"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>لا يمكن كتابة التغييرات لأن القصة الموجودة في &quot;1%&quot; غير موجودة. يرجى إعادة الملف وإعادة محاولة الحفظ.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1318"/>
+        <location filename="../management_layer/application_manager.cpp" line="1330"/>
         <source>Project was modified. Save changes?</source>
         <translation>تم تعديل المشروع. حفظ التغييرات؟</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1319"/>
+        <location filename="../management_layer/application_manager.cpp" line="1331"/>
         <source>Cancel</source>
         <translation>الغاء</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1320"/>
+        <location filename="../management_layer/application_manager.cpp" line="1332"/>
         <source>Don&apos;t save</source>
         <translation>لا تحفظ</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1321"/>
+        <location filename="../management_layer/application_manager.cpp" line="1333"/>
         <source>Save</source>
         <translation>حفظ</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1396"/>
+        <location filename="../management_layer/application_manager.cpp" line="1408"/>
         <source>Choose file to save story</source>
         <translation>اختر ملفًا لحفظ القصة</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1435"/>
+        <location filename="../management_layer/application_manager.cpp" line="1447"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>لا يمكن حفظ القصة في الملف 1%. يرجى التحقق من الصلاحيات وإعادة المحاولة.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1485"/>
+        <location filename="../management_layer/application_manager.cpp" line="1497"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>لقد حاولت إنشاء مشروع في مجلد غير موجود 1% . يرجى اختيار موقع آخر للمشروع الجديد.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1490"/>
+        <location filename="../management_layer/application_manager.cpp" line="1502"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>لا يمكن كتابة الملف. يبدو أنه تم فتحه بواسطة تطبيق آخر. الرجاء إغلاقها وإعادة المحاولة لإنشاء مشروع جديد.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1494"/>
+        <location filename="../management_layer/application_manager.cpp" line="1506"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>لا يمكن كتابة الملف. من فضلك ، تحقق من التطبيق ومنح أذونات للكتابة في المجلد المحدد ، أو اختر مجلدًا آخر لحفظ مشروع جديد.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1498"/>
+        <location filename="../management_layer/application_manager.cpp" line="1510"/>
         <source>Create project error</source>
         <translation>خطأ في انشاء المشروع</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1681"/>
-        <location filename="../management_layer/application_manager.cpp" line="1704"/>
+        <location filename="../management_layer/application_manager.cpp" line="1693"/>
+        <location filename="../management_layer/application_manager.cpp" line="1716"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>لا يمكن فتح هذا الملف في الوقت الحالي ، لأنه مفتوح بالفعل في نسخة أخرى من التطبيق.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1707"/>
+        <location filename="../management_layer/application_manager.cpp" line="1719"/>
         <source>Ignore and open</source>
         <translation>تجاهل وافتح</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1801"/>
+        <location filename="../management_layer/application_manager.cpp" line="1813"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation>الملف الذي تحاول فتحه لا يملك صلاحيات كتابة. تحقق من خصائص الملف والسماح بتحريره. نظرًا لأنه غير قابل للتحرير ، سيتم فتحه في وضع القراءة فقط.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1818"/>
+        <location filename="../management_layer/application_manager.cpp" line="1830"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation>هل تريد متابعة استخدام صيغة ملف.1%؟</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1819"/>
+        <location filename="../management_layer/application_manager.cpp" line="1831"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation>لا يمكن حفظ بعض بيانات المشروع بصيغة 1%. نوصيك باستخدام صيغة Story Architect .%2 حتى يتم حفظ جميع بيانات المشروع بشكل صحيح.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1822"/>
+        <location filename="../management_layer/application_manager.cpp" line="1834"/>
         <source>Never ask again</source>
         <translation>لا تطلب مرة أخرى</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1823"/>
+        <location filename="../management_layer/application_manager.cpp" line="1835"/>
         <source>Keep .%1</source>
         <translation>حفظ 1%.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1824"/>
+        <location filename="../management_layer/application_manager.cpp" line="1836"/>
         <source>Switch to .STARC</source>
         <translation>التبديل إلى .STARC</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2978"/>
+        <location filename="../management_layer/application_manager.cpp" line="2998"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>انتهت مدة اشتراك الخدمات السحابية لأصحاب المشروع. يمكنك متابعة العمل مع المشروع بمجرد تجديد الاشتراك.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2959"/>
-        <location filename="../management_layer/application_manager.cpp" line="2980"/>
+        <location filename="../management_layer/application_manager.cpp" line="2979"/>
+        <location filename="../management_layer/application_manager.cpp" line="3000"/>
         <source>Continue offline</source>
         <translation>استمر بدون اتصال</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="421"/>
-        <location filename="../management_layer/application_manager.cpp" line="435"/>
+        <location filename="../management_layer/application_manager.cpp" line="426"/>
+        <location filename="../management_layer/application_manager.cpp" line="440"/>
         <source>Open new window</source>
         <translation>افتح نافذة جديدة</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="636"/>
+        <location filename="../management_layer/application_manager.cpp" line="641"/>
         <source>Loading missed fonts</source>
         <translation>تحميل الخطوط المفقودة</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2957"/>
+        <location filename="../management_layer/application_manager.cpp" line="2977"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>انتهت مدة اشتراكك في الخدمة السحابية. قم بتفعيل الاشتراك لمتابعة العمل بالمشروع.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2960"/>
+        <location filename="../management_layer/application_manager.cpp" line="2980"/>
         <source>Renew subscription</source>
         <translation>تجديد الاشتراك</translation>
     </message>
@@ -2148,17 +2148,17 @@
 <context>
     <name>ManagementLayer::CharactersRelationsManager</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="541"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="531"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>تم تغيير اسم الشخصية من &quot;1% إلى &quot;2%&quot;. تطبيق التغييرات؟</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="543"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="533"/>
         <source>No</source>
         <translation>لا</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="544"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="534"/>
         <source>Yes</source>
         <translation>نعم</translation>
     </message>
@@ -2186,12 +2186,12 @@
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="396"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="388"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation>تم تنشيط رمز القسيمة بخصم ٪ 1٪ وسيتم استخدامه في عملية الشراء التالية.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="405"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="397"/>
         <source>PRO version subscription activated for %n month(s).</source>
         <translation>
             <numerusform>تم تفعيل الإصدار PRO لمدة n% شهر (أشهر).</numerusform>
@@ -2203,12 +2203,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="410"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="402"/>
         <source>PRO version lifetime access granted.</source>
         <translation>تم منح حق الوصول مدى الحياة لإصدار PRO.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="414"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="406"/>
         <source>TEAM version subscription activated for %n month(s).</source>
         <translation>
             <numerusform>تم تفعيل الإصدار TEAM لمدة n% شهر (أشهر).</numerusform>
@@ -2220,12 +2220,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="419"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="411"/>
         <source>TEAM version lifetime access granted.</source>
         <translation>تم منح حق الوصول مدى الحياة لإصدار TEAM.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="427"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="419"/>
         <source>%n credits were added to your balance.</source>
         <translation>
             <numerusform>n% نقطة رصيد تم إضافتها إلى رصيدك</numerusform>
@@ -2237,27 +2237,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="607"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="592"/>
         <source>Promocode is incorrect</source>
         <translation>قسيمة العرض غير صحيحة</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="611"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="596"/>
         <source>Promocode expired</source>
         <translation>قسيمة العرض منتهية الصلاحية</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="615"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="600"/>
         <source>Maximum number of promocode activations done</source>
         <translation>تم تنفيذ الحد الأقصى لعدد عمليات تنشيط قسيمة العرض</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="619"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="604"/>
         <source>Promocode already used</source>
         <translation>قسيمة العرض مستخدمة سابقاً </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="691"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="668"/>
         <source>Generating text</source>
         <translation>توليد نص</translation>
     </message>
@@ -2412,17 +2412,17 @@
 <context>
     <name>ManagementLayer::LocationsMapManager</name>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="522"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="512"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>تم تغيير اسم الموقع من &quot;1%&quot; إلى &quot;2%&quot;. تطبيق التغييرات؟</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="524"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="514"/>
         <source>No</source>
         <translation>لا</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="525"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="515"/>
         <source>Yes</source>
         <translation>نعم</translation>
     </message>
@@ -2861,115 +2861,122 @@
 <context>
     <name>ManagementLayer::ScreenplayBreakdownManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="222"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="161"/>
+        <source>To be able to work with the screenplay breakdown, you need to upgrade to the TEAM version.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="163"/>
+        <source>Maybe later</source>
+        <translation>ربما لاحقاً</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="164"/>
+        <source>Upgrade</source>
+        <translation>تحديث</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="248"/>
         <source>Select location for saving breakdown to file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Generate screenplay text</source>
-        <translation type="obsolete">توليد نص سيناريو</translation>
-    </message>
-    <message>
-        <source>Start prompt from something like &quot;Write a screenplay about ...&quot;, or &quot;Write a short movie screenplay about ...&quot;</source>
-        <translation type="obsolete">ابدأ المطالبة بشيء مثل &quot;كتابة سيناريو عن ...&quot; ، أو &quot;كتابة سيناريو فيلم قصير عن ...&quot;</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="489"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="524"/>
         <source>Scene intro</source>
-        <translation type="unfinished">إفتتاحية المشهد</translation>
+        <translation>إفتتاحية المشهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="490"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="525"/>
         <source>Scene time</source>
-        <translation type="unfinished">زمان المشهد</translation>
+        <translation>زمان المشهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="491"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="526"/>
         <source>Character extension</source>
-        <translation type="unfinished">توسع الشخصية</translation>
+        <translation>توسع الشخصية</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="492"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="527"/>
         <source>Transition</source>
-        <translation type="unfinished"></translation>
+        <translation>إنتقال</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="661"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="696"/>
         <source>Breakdown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="713"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="748"/>
         <source>Script order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="714"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="749"/>
         <source>Scene number</source>
-        <translation type="unfinished">رقم المشهد</translation>
+        <translation>رقم المشهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="715"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="750"/>
         <source>I/E</source>
-        <translation type="unfinished">داخلي / خارجي</translation>
+        <translation>داخلي / خارجي</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="717"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="752"/>
         <source>Location</source>
-        <translation type="unfinished">موقع</translation>
+        <translation>موقع</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="720"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="755"/>
         <source>Scene description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="722"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="757"/>
         <source>D/N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="723"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="758"/>
         <source>Story day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="724"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="759"/>
         <source>Duration</source>
-        <translation type="unfinished">المدّة</translation>
+        <translation>المدّة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="731"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="766"/>
         <source>Cast list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="736"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="771"/>
         <source>Cast IDs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="740"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="775"/>
         <source>Location (Set)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="743"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="778"/>
         <source>Location (Complex)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="747"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="782"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="764"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="799"/>
         <source>%1 list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="769"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="804"/>
         <source>%1 IDs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2977,88 +2984,88 @@
 <context>
     <name>ManagementLayer::ScreenplayBreakdownStructureManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="121"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="183"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="387"/>
-        <source>Expand all</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="126"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="188"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="392"/>
-        <source>Collapse all</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="132"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="193"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="397"/>
-        <source>Sort alphabetically</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="140"/>
-        <source>Sort by script order</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="147"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="201"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="405"/>
-        <source>Sort by duration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="173"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="381"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="192"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="400"/>
         <source>Expand level 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="178"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="197"/>
         <source>Expand level 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="227"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="140"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="202"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="406"/>
+        <source>Expand all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="145"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="207"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="411"/>
+        <source>Collapse all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="151"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="212"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="416"/>
+        <source>Sort alphabetically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="159"/>
+        <source>Sort by script order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="166"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="220"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="424"/>
+        <source>Sort by duration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="246"/>
         <source>Add category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="253"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="272"/>
         <source>Edit category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="291"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="310"/>
         <source>Remove category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="300"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="319"/>
         <source>Do you really want to remove the entire &quot;%1&quot; category? All category resources (%2) will also be removed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="304"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="356"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="323"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="375"/>
         <source>No</source>
-        <translation type="unfinished">لا</translation>
+        <translation>لا</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="305"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="357"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="324"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="376"/>
         <source>Yes, remove</source>
-        <translation type="unfinished">نعم ، إزالة</translation>
+        <translation>نعم ، إزالة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="343"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="362"/>
         <source>Remove resource</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="352"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="371"/>
         <source>Do you really want to remove resource &quot;%1&quot; from entire screenplay? It participates in %n scene(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3070,9 +3077,9 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="642"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="666"/>
         <source>Screenplay</source>
-        <translation type="unfinished">سيناريو</translation>
+        <translation>سيناريو</translation>
     </message>
 </context>
 <context>
@@ -3124,18 +3131,14 @@
         <translation>تحديث</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="290"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="280"/>
         <source>Select location for saving report to file</source>
         <translation>حدد موقعًا لحفظ التقرير في ملف</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="291"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="281"/>
         <source>Select location for saving plot data to file</source>
         <translation>حدد موقعًا لحفظ بيانات الحبكة في ملف</translation>
-    </message>
-    <message>
-        <source>MS Excel document</source>
-        <translation type="vanished">مستند مايكروسوفت أكسل</translation>
     </message>
 </context>
 <context>
@@ -3210,42 +3213,42 @@
 <context>
     <name>ManagementLayer::SettingsManager</name>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="465"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="466"/>
         <source>Do you want to revert all changes in settings to the default state? This action can&apos;t be undone.</source>
         <translation>هل تريد إعادة جميع التغييرات في الإعدادات إلى الحالة الافتراضية؟ لا يمكن التراجع عن هذا الإجراء.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="467"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="468"/>
         <source>Cancel</source>
         <translation>الغاء</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="468"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="469"/>
         <source>Reset</source>
         <translation>إعادة ضبط</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="742"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="793"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="844"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="894"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="944"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="994"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="745"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="796"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="847"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="897"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="947"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="997"/>
         <source>Choose the file to save template</source>
         <translation>اختر الملف لحفظ القالب</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="763"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="814"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="864"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="914"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="964"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1014"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="766"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="817"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="867"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="917"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="967"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1017"/>
         <source>Choose the file with template to load</source>
         <translation>اختر الملف بالقالب المراد تحميله</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1250"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1259"/>
         <source>Spelling dictionary loading</source>
         <translation>تحميل قاموس التدقيق الإملائي</translation>
     </message>
@@ -3363,17 +3366,17 @@
         <translation>عالم بهذا الاسم موجود بالفعل</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="513"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="502"/>
         <source>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>تم تغيير اسم العالم من &quot;1%&quot; إلى &quot;2%&quot;. تطبيق التغييرات؟</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="515"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="504"/>
         <source>No</source>
         <translation>لا</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="516"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="505"/>
         <source>Yes</source>
         <translation>نعم</translation>
     </message>
@@ -4127,21 +4130,6 @@
     </message>
 </context>
 <context>
-    <name>Ui::AddResourceView</name>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">وصف</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">الغاء</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">حفظ</translation>
-    </message>
-</context>
-<context>
     <name>Ui::ApplicationView</name>
     <message>
         <location filename="../ui/application_view.cpp" line="254"/>
@@ -4210,22 +4198,22 @@
 <context>
     <name>Ui::AudioplayInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="117"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="116"/>
         <source>Perfect logline length</source>
         <translation>طول السطر الوصفي المثالي</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="119"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="118"/>
         <source>Good logline length</source>
         <translation>طول السطر الوصفي الجيد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="121"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="120"/>
         <source>Recommended logline length is 30 words</source>
         <translation>طول سطر الوصف الموصى به هو 30 كلمة</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="123"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="122"/>
         <source>%n word(s)</source>
         <translation>
             <numerusform>n% كلمة (ات)</numerusform>
@@ -4237,42 +4225,42 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="222"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="221"/>
         <source>Audioplay name</source>
         <translation>اسم العمل الصوتي</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="223"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="222"/>
         <source>Tagline</source>
         <translation>سطر الوصف</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="224"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="223"/>
         <source>Logline</source>
         <translation>سطر الوصف</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="225"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="224"/>
         <source>Generate logline</source>
         <translation>توليد سطر وصف</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="226"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="225"/>
         <source>Title page</source>
         <translation>صفحة العنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="227"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="226"/>
         <source>Synopsis</source>
         <translation>الملخص</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="228"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="227"/>
         <source>Audioplay</source>
         <translation>عمل صوتي</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="229"/>
+        <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="228"/>
         <source>Statistics</source>
         <translation>الإحصائيات</translation>
     </message>
@@ -4280,42 +4268,42 @@
 <context>
     <name>Ui::AudioplayParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="264"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="249"/>
         <source>Header</source>
         <translation>الترويسة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="265"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="250"/>
         <source>Print header on title page</source>
         <translation>طباعة الترويسة على صفحة العنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="266"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="251"/>
         <source>Footer</source>
         <translation>تذييل</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="267"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="252"/>
         <source>Print footer on title page</source>
         <translation>طباعة التذييل على صفحة العنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="268"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="253"/>
         <source>Override common settings for this audioplay</source>
         <translation>تجاوز الإعدادات العامة لهذا العمل الصوتي</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="269"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="254"/>
         <source>Template</source>
         <translation>قالب</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="270"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="255"/>
         <source>Show block numbers</source>
         <translation>إظهار أرقام الكتلة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/audioplay_parameters/audioplay_parameters_view.cpp" line="256"/>
         <source>Continue block numbers through document</source>
         <translation>استمر بترقيم الكتل من خلال المستند</translation>
     </message>
@@ -4697,12 +4685,12 @@
 <context>
     <name>Ui::CharacterDialoguesView</name>
     <message>
-        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="339"/>
+        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="346"/>
         <source>Unlock ability to edit characters relations</source>
         <translation>تفعيل القدرة على تحرير العلاقات بين الشخصيات</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="340"/>
+        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="347"/>
         <source>Update character dialogues list</source>
         <translation>تحديث قائمة حوارات الشخصيات</translation>
     </message>
@@ -5557,42 +5545,42 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="225"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="222"/>
         <source>Comic book name</source>
         <translation>اسم القصة المصوّرة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="226"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="223"/>
         <source>Tagline</source>
         <translation>سطر الوصف</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="227"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="224"/>
         <source>Logline</source>
         <translation>سطر الوصف</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="228"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="225"/>
         <source>Generate logline</source>
         <translation>توليد سطر وصف</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="229"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="226"/>
         <source>Title page</source>
         <translation>صفحة العنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="230"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="227"/>
         <source>Synopsis</source>
         <translation>الملخص</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="231"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="228"/>
         <source>Script</source>
         <translation>نص</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="232"/>
+        <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="229"/>
         <source>Statistics</source>
         <translation>الإحصائيات</translation>
     </message>
@@ -5600,32 +5588,32 @@
 <context>
     <name>Ui::ComicBookParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="212"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="207"/>
         <source>Header</source>
         <translation>الترويسة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="213"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="208"/>
         <source>Print header on title page</source>
         <translation>طباعة الترويسة على صفحة العنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="214"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="209"/>
         <source>Footer</source>
         <translation>تذييل</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="215"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="210"/>
         <source>Print footer on title page</source>
         <translation>طباعة التذييل على صفحة العنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="216"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="211"/>
         <source>Override common settings for this comic book</source>
         <translation>تجاوز الإعدادات العامة لهذه القصة المصورة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="217"/>
+        <location filename="../management_layer/plugins/comic_book_parameters/comic_book_parameters_view.cpp" line="212"/>
         <source>Template</source>
         <translation>نموذج</translation>
     </message>
@@ -5661,7 +5649,7 @@
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1008"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1009"/>
         <source>%n panels</source>
         <translation>
             <numerusform>n% لوحة</numerusform>
@@ -5673,27 +5661,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1183"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1184"/>
         <source>Bookmark</source>
         <translation>إشارة مرجعية</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1187"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1188"/>
         <source>Add</source>
         <translation>أضف</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1193"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1194"/>
         <source>Edit</source>
         <translation>تعديل</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1198"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1199"/>
         <source>Remove</source>
         <translation>إزالة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1205"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1206"/>
         <source>Show/hide list</source>
         <translation>إظهار / إخفاء القائمة</translation>
     </message>
@@ -5845,7 +5833,7 @@
 <context>
     <name>Ui::ComicBookTextStructureDelegate</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="364"/>
+        <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="352"/>
         <source>%n PANELS</source>
         <translation>
             <numerusform>n% لوحة</numerusform>
@@ -5888,12 +5876,12 @@
 <context>
     <name>Ui::CommentDelegate</name>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="163"/>
+        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="164"/>
         <source>edited</source>
         <translation>تم تحريره</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="278"/>
+        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="283"/>
         <source>%n reply(s)</source>
         <translation>
             <numerusform>n% رد</numerusform>
@@ -6214,7 +6202,7 @@
 <context>
     <name>Ui::CoverImageCard</name>
     <message>
-        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="244"/>
+        <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="246"/>
         <source>Create poster</source>
         <translation>أنشأ بوستر</translation>
     </message>
@@ -6826,6 +6814,14 @@
         <location filename="../management_layer/plugins/screenplay_breakdown/ui/dictionaries_view.cpp" line="148"/>
         <source>Add new item to the current dictionary</source>
         <translation>إضافة عنصر جديد إلى القاموس الحالي</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::FastFormatWidget</name>
+    <message>
+        <location filename="../../corelib/ui/modules/fast_format_widget/fast_format_widget.cpp" line="258"/>
+        <source>Show shotcuts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8351,32 +8347,32 @@
 <context>
     <name>Ui::NovelParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="218"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="205"/>
         <source>Header</source>
         <translation>الترويسة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="219"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="206"/>
         <source>Print header on title page</source>
         <translation>طباعة الترويسة على صفحة العنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="220"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="207"/>
         <source>Footer</source>
         <translation>تذييل</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="221"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="208"/>
         <source>Print footer on title page</source>
         <translation>طباعة التذييل على صفحة العنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="222"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="209"/>
         <source>Override common settings for this novel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="223"/>
+        <location filename="../management_layer/plugins/novel_parameters/novel_parameters_view.cpp" line="210"/>
         <source>Template</source>
         <translation>قالب</translation>
     </message>
@@ -9038,70 +9034,70 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectCollaboratorsView</name>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="124"/>
-        <source>People who allowed to see the project</source>
-        <translation>الأشخاص المصرح لهم برؤية المشروع</translation>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="123"/>
+        <source>People who allowed to work with the project</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="125"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="124"/>
         <source>Only you have access to the project</source>
         <translation>أنت فقط من لديه حق الوصول إلى المشروع</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="153"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="152"/>
         <source>Email invalid</source>
         <translation>البريد الإلكتروني غير صحيح</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="165"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="164"/>
         <source>Invitation sent to the %1</source>
         <translation>تم إرسال دعوة إلى %1</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="259"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="258"/>
         <source>Owner</source>
         <translation>المالك</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="262"/>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="305"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="261"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="304"/>
         <source>Editor</source>
         <translation>محرر</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="265"/>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="306"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="264"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="305"/>
         <source>Commentator</source>
         <translation>المعلق</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="268"/>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="307"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="267"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="306"/>
         <source>Reader</source>
         <translation>قارئ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="299"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="298"/>
         <source>Share the project</source>
         <translation>شارك المشروع</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="300"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="299"/>
         <source>Add people who you’d like to share with</source>
         <translation>أضف الأشخاص الذين تريد المشاركة معهم</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="301"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="300"/>
         <source>Email</source>
         <translation>البريد الإلكتروني</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="302"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="301"/>
         <source>Invite</source>
         <translation>دعوة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="303"/>
+        <location filename="../management_layer/plugins/project_collaborators/project_collaborators_view.cpp" line="302"/>
         <source>Role</source>
         <translation>الدور</translation>
     </message>
@@ -9173,33 +9169,33 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectView</name>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="208"/>
-        <location filename="../ui/project/project_view.cpp" line="270"/>
+        <location filename="../ui/project/project_view.cpp" line="210"/>
+        <location filename="../ui/project/project_view.cpp" line="273"/>
         <source>Current draft</source>
         <translation>المسودة الحالية</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="261"/>
+        <location filename="../ui/project/project_view.cpp" line="264"/>
         <source>Here will be an editor of the document you choose in the navigator (at left).</source>
         <translation>ستجد هنا محررًا للمستند الذي تختاره في المستكشف (على اليسار).</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="262"/>
+        <location filename="../ui/project/project_view.cpp" line="265"/>
         <source>Choose an item to edit, or</source>
         <translation>اختر عنصرًا لتحريره ، أو</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="263"/>
+        <location filename="../ui/project/project_view.cpp" line="266"/>
         <source>create a new one</source>
         <translation>إنشاء واحد جديد</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="266"/>
+        <location filename="../ui/project/project_view.cpp" line="269"/>
         <source>Ooops... looks like editor of this document not implemented yet.</source>
         <translation>عفوًا ... يبدو أن محرر هذا المستند لم يتم تعيينه بعد.</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_view.cpp" line="268"/>
+        <location filename="../ui/project/project_view.cpp" line="271"/>
         <source>But don&apos;t worry, it will be here in one of the future updates!</source>
         <translation>لكن لا تقلق ، سيكون هنا في أحد التحديثات المستقبلية!</translation>
     </message>
@@ -9439,53 +9435,53 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/resource_category_dialog.cpp" line="151"/>
         <source>Cancel</source>
-        <translation type="unfinished">الغاء</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/resource_category_dialog.cpp" line="152"/>
         <source>Create</source>
-        <translation type="unfinished">إنشاء</translation>
+        <translation>إنشاء</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/resource_category_dialog.cpp" line="152"/>
         <source>Update</source>
-        <translation type="unfinished">تحديث</translation>
+        <translation>تحديث</translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayBreakdownAddResourcesView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="305"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="309"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="306"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="310"/>
         <source>Cancel</source>
-        <translation type="unfinished">الغاء</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="307"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_add_resources_view.cpp" line="311"/>
         <source>Add</source>
-        <translation type="unfinished">أضف</translation>
+        <translation>أضف</translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayBreakdownCopyResourcesFromSceneDialog</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="197"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="203"/>
         <source>Copy resources from selected scene</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="198"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="204"/>
         <source>Cancel</source>
-        <translation type="unfinished">الغاء</translation>
+        <translation>الغاء</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="199"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="205"/>
         <source>Copy</source>
-        <translation type="unfinished">نسخ</translation>
+        <translation>نسخ</translation>
     </message>
 </context>
 <context>
@@ -9501,75 +9497,75 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="272"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="273"/>
         <source>Create</source>
-        <translation type="unfinished">إنشاء</translation>
+        <translation>إنشاء</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="290"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="291"/>
         <source>Save</source>
-        <translation type="unfinished">حفظ</translation>
+        <translation>حفظ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="383"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="384"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="384"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="385"/>
         <source>Resource name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="385"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="386"/>
         <source>Qty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="386"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="387"/>
         <source>Description</source>
-        <translation type="unfinished">وصف</translation>
+        <translation>وصف</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="387"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="388"/>
         <source>Description for scene</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="388"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="389"/>
         <source>Mark all mentions in screenplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="389"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_create_resource_view.cpp" line="390"/>
         <source>Cancel</source>
-        <translation type="unfinished">الغاء</translation>
+        <translation>الغاء</translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayBreakdownResourcesView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="113"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="116"/>
         <source>Edit</source>
-        <translation type="unfinished">تعديل</translation>
+        <translation>تعديل</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="120"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="123"/>
         <source>Remove</source>
-        <translation type="unfinished">إزالة</translation>
+        <translation>إزالة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="355"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="368"/>
         <source>Create new resource</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="356"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="369"/>
         <source>Add exisiting resources</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="357"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_resources_view.cpp" line="370"/>
         <source>Copy resources from scene</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9577,22 +9573,22 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayBreakdownStructureView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="422"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="437"/>
         <source>Scenes</source>
-        <translation type="unfinished">مشاهد</translation>
+        <translation>مشاهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="423"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="438"/>
         <source>Characters</source>
-        <translation type="unfinished">الشخصيات</translation>
+        <translation>الشخصيات</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="424"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="439"/>
         <source>Locations</source>
-        <translation type="unfinished">المواقع </translation>
+        <translation>المواقع </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="425"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_view.cpp" line="440"/>
         <source>Resources</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9600,83 +9596,79 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayBreakdownView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="365"/>
-        <source>Hide scene parameters</source>
-        <translation type="unfinished">إخفاء معلمات المشهد</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="366"/>
-        <source>Show scene parameters</source>
-        <translation type="unfinished">إظهار معلمات المشهد</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="367"/>
-        <source>Hide bookmarks list</source>
-        <translation type="unfinished">إخفاء قائمة الإشارات المرجعية</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="368"/>
-        <source>Show bookmarks list</source>
-        <translation type="unfinished">أظهر قائمة الإشارات المرجعية</translation>
-    </message>
-    <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="370"/>
-        <source>Hide screenplay dictionaries</source>
-        <translation type="unfinished">إخفاء قواميس السيناريو</translation>
+        <source>Hide scene parameters</source>
+        <translation>إخفاء معلمات المشهد</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="371"/>
-        <source>Show screenplay dictionaries</source>
-        <translation type="unfinished">عرض قواميس السيناريو</translation>
+        <source>Show scene parameters</source>
+        <translation>إظهار معلمات المشهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="954"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="372"/>
+        <source>Hide bookmarks list</source>
+        <translation>إخفاء قائمة الإشارات المرجعية</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="373"/>
+        <source>Show bookmarks list</source>
+        <translation>أظهر قائمة الإشارات المرجعية</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="375"/>
+        <source>Hide screenplay dictionaries</source>
+        <translation>إخفاء قواميس السيناريو</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="376"/>
+        <source>Show screenplay dictionaries</source>
+        <translation>عرض قواميس السيناريو</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="960"/>
         <source>Do you really want to remove resource &quot;%1&quot; from current scene?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="956"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="962"/>
         <source>No</source>
-        <translation type="unfinished">لا</translation>
+        <translation>لا</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="957"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="963"/>
         <source>Yes, remove</source>
-        <translation type="unfinished">نعم ، إزالة</translation>
+        <translation>نعم ، إزالة</translation>
     </message>
     <message>
-        <source>Writing text</source>
-        <translation type="obsolete">كتابة نص</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1671"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1699"/>
         <source>Resources</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1672"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1700"/>
         <source>Formatting</source>
-        <translation type="unfinished">التنسيق</translation>
+        <translation>التنسيق</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1673"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1701"/>
         <source>Scene parameters</source>
-        <translation type="unfinished">معلمات المشهد</translation>
+        <translation>معلمات المشهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1674"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1702"/>
         <source>Comments</source>
-        <translation type="unfinished">تعليقات</translation>
+        <translation>تعليقات</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1675"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1703"/>
         <source>Bookmarks</source>
-        <translation type="unfinished">إشارات مرجعية</translation>
+        <translation>إشارات مرجعية</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1676"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1704"/>
         <source>Dictionaries</source>
-        <translation type="unfinished">قواميس</translation>
+        <translation>قواميس</translation>
     </message>
 </context>
 <context>
@@ -10105,107 +10097,107 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="433"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="420"/>
         <source>Header</source>
         <translation>الترويسة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="434"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="421"/>
         <source>Print header on title page</source>
         <translation>طباعة الترويسة على صفحة العنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="435"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="422"/>
         <source>Footer</source>
         <translation>تذييل</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="436"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="423"/>
         <source>Print footer on title page</source>
         <translation>طباعة التذييل على صفحة العنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="218"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="205"/>
         <source>Do you want unlock scene numbers?</source>
         <translation>هل تريد فك قفل أرقام المشهد؟</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="219"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="206"/>
         <source>Cancel</source>
         <translation>الغاء</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="220"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="207"/>
         <source>Yes, unlock</source>
         <translation>نعم, فك القفل</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="437"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="424"/>
         <source>Scenes numbering</source>
         <translation>ترقيم المشاهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="438"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="425"/>
         <source>Scenes numbers&apos; template</source>
         <translation>نموذج أرقام المشاهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="439"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="426"/>
         <source>Use # mark for the scene number</source>
         <translation>استخدم علامة # لرقم المشهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="440"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="427"/>
         <source>Reset scene numbers template</source>
         <translation>إعادة تعيين قالب أرقام المشهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="441"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="428"/>
         <source>Scenes numbering start at</source>
         <translation>يبدأ ترقيم المشاهد في</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="442"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="429"/>
         <source>Lock numbering</source>
         <translation>قفل الترقيم</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="443"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="430"/>
         <source>Lock numbering agian</source>
         <translation>قفل الترقيم مرة أخرى</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="444"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="431"/>
         <source>Unlock numbering</source>
         <translation>فك قفل الترقيم</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="445"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="432"/>
         <source>Override common settings for this screenplay</source>
         <translation>تجاوز الإعدادات العامة لهذا السيناريو</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="446"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="433"/>
         <source>Template</source>
         <translation>نموذج</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="447"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="434"/>
         <source>Print scenes numbers</source>
         <translation>طباعة أرقام المشاهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="448"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="435"/>
         <source>on the left</source>
         <translation>على اليسار</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="449"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="436"/>
         <source>on the right</source>
         <translation>على اليمين</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="450"/>
+        <location filename="../management_layer/plugins/screenplay_parameters/screenplay_parameters_view.cpp" line="437"/>
         <source>Print dialogues numbers</source>
         <translation>طباعة أرقام الحوارات</translation>
     </message>
@@ -10213,173 +10205,173 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayStatisticsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="675"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="676"/>
         <source>Summary text statisics</source>
         <translation>ملخص إحصائيات النص</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="676"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="711"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="677"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="712"/>
         <source>Scenes statistics</source>
         <translation>إحصائيات المشاهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="677"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="678"/>
         <source>Locations statistics</source>
         <translation>إحصائيات المواقع</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="678"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="709"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="679"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="710"/>
         <source>Characters statistics</source>
         <translation>إحصائيات الشخصيات</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="680"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="681"/>
         <source>Show characters</source>
         <translation>إظهار الشخصيات</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="681"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="682"/>
         <source>Sort scenes</source>
         <translation>ترتيب المشاهد</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="682"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="691"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="701"/>
-        <source>by script order</source>
-        <translation>حسب ترتيب السيناريو</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="683"/>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="692"/>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="702"/>
+        <source>by script order</source>
+        <translation>حسب ترتيب السيناريو</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="684"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="693"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="703"/>
         <source>by alphabetical order</source>
         <translation>حسب الترتيب الأبجدي</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="684"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="685"/>
         <source>from longest to shortest scene</source>
         <translation>من أطول إلى أقصر مشهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="685"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="686"/>
         <source>from shortest to longest scene</source>
         <translation>من أقصر إلى أطول مشهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="686"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="687"/>
         <source>from massive to unmanned scene</source>
         <translation>من مشهد ضخم إلى مشهد غير مأهول</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="687"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="688"/>
         <source>from unmanned to massive scene</source>
         <translation>من مشهد غير مأهول إلى مشهد ضخم</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="689"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="690"/>
         <source>Extended view</source>
         <translation>عرض ممتد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="690"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="691"/>
         <source>Sort locations</source>
         <translation>فرز المواقع</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="693"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="694"/>
         <source>from most to least occurences</source>
         <translation>من معظم الأحداث إلى أقلها</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="694"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="695"/>
         <source>from least to most occurences</source>
         <translation>من أقل الأحداث إلى معظمها</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="695"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="696"/>
         <source>from longest to shortest duration</source>
         <translation>من الأطول إلى الأقصر مدةً</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="696"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="697"/>
         <source>from shortest to longest duration</source>
         <translation>من الأقصر إلى الأطول مدةً</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="698"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="699"/>
         <source>Show detailed scenes info</source>
         <translation>إظهار معلومات مفصلة عن المشاهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="699"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="700"/>
         <source>Show words count</source>
         <translation>إظهار عدد الكلمات</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="700"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="701"/>
         <source>Sort characters</source>
         <translation>فرز الشخصيات</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="703"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="704"/>
         <source>from most to least scenes</source>
         <translation>من معظم إلى أقل المشاهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="704"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="705"/>
         <source>from least to most scenes</source>
         <translation>من أقل إلى معظم المشاهد</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="705"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="706"/>
         <source>from most to least dialogues</source>
         <translation>من معظم الحوارات إلى أقلها</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="706"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="707"/>
         <source>from least to most dialogues</source>
         <translation>من أقل الحوارات إلى معظمها</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="708"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="709"/>
         <source>Bechdel test</source>
         <translation>اختبار بشديل</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="710"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="711"/>
         <source>Dialogues statistics</source>
         <translation>إحصائيات الحوارات</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="713"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="714"/>
         <source>Scene duration</source>
         <translation>مدة السيناريو</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="714"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="715"/>
         <source>Action duration</source>
         <translation>مدة الأكشن</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="715"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="716"/>
         <source>Dialogues duration</source>
         <translation>مدة الحوارات</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="716"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="717"/>
         <source>Characters count</source>
         <translation>عدد الشخصيات</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="717"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="718"/>
         <source>Dialogues count</source>
         <translation>عدد الحوارات</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="719"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="720"/>
         <source>All characters</source>
         <translation>كل الشخصيات</translation>
     </message>
@@ -10527,71 +10519,71 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayTemplatePageView</name>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="348"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="346"/>
         <source>mm</source>
         <translation>ملم</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="348"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="346"/>
         <source>inch</source>
         <translation>إنش</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="349"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="347"/>
         <source>Template name</source>
         <translation>اسم القالب</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="350"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="348"/>
         <source>Page format</source>
         <translation>تنسيق الصفحة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="367"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="365"/>
         <source>Page margins</source>
         <translation>هوامش الصفحة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="368"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="380"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="366"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="378"/>
         <source>Left</source>
         <translation>يسار</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="370"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="377"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="368"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="375"/>
         <source>Top</source>
         <translation>قمة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="372"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="382"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="370"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="380"/>
         <source>Right</source>
         <translation>يمين</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="374"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="378"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="372"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="376"/>
         <source>Bottom</source>
         <translation>الأسفل</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="376"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="374"/>
         <source>Page numbering alignment by vertical</source>
         <translation>محاذاة ترقيم الصفحات عامودياً</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="379"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="377"/>
         <source>by horizontal</source>
         <translation>أفقياً</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="381"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="379"/>
         <source>Center</source>
         <translation>مركز</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="383"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_page_view.cpp" line="381"/>
         <source>Split page into columns in proportion</source>
         <translation>تقسيم الصفحة إلى أعمدة بشكل متناسب</translation>
     </message>
@@ -10599,166 +10591,166 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayTemplateParagraphsView</name>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="794"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="792"/>
         <source>mm</source>
         <translation>ملم</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="794"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="792"/>
         <source>inch</source>
         <translation>إنش</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="798"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="796"/>
         <source>Is paragraph style available</source>
         <translation>هل نمط الفقرة متاح</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="799"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="797"/>
         <source>Font family</source>
         <translation>عائلة الخط</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="800"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="798"/>
         <source>Font size</source>
         <translation>حجم الخط</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="801"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="799"/>
         <source>Place paragraph at the top of the page</source>
         <translation>ضع فقرة في أعلى الصفحة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="802"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="800"/>
         <source>Use UPPERCASE characters for paragraph text</source>
         <translation>استخدم الأحرف الكبيرة لنص الفقرة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="803"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="801"/>
         <source>Bold</source>
         <translation>غليظ</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="804"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="802"/>
         <source>Italic</source>
         <translation>مائل</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="805"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="803"/>
         <source>Underline</source>
         <translation>تسطير</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="806"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="804"/>
         <source>Align text on the page</source>
         <translation>محاذاة النص على الصفحة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="807"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="817"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="825"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="805"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="815"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="823"/>
         <source>Left</source>
         <translation>يسار</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="808"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="806"/>
         <source>Center</source>
         <translation>مركز</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="809"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="821"/>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="827"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="807"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="819"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="825"/>
         <source>Right</source>
         <translation>يمين</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="810"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="808"/>
         <source>Justify</source>
         <translation>ملائمة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="811"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="809"/>
         <source>Vertical indentation</source>
         <translation>المسافة البادئة العمودية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="812"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="810"/>
         <source>Top</source>
         <translation>قمة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="813"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="811"/>
         <source>Bottom</source>
         <translation>الأسفل</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="814"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="812"/>
         <source>lines</source>
         <translation>خطوط</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="816"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="814"/>
         <source>Horizontal indentation</source>
         <translation>المسافة البادئة الأفقية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="819"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="817"/>
         <source>First line</source>
         <translation>السطر الأول</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="824"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="822"/>
         <source>Horizontal indentation (for two-column mode)</source>
         <translation>مسافة بادئة أفقية (لوضعية العامودين)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="829"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="827"/>
         <source>Line spacing</source>
         <translation>تباعد الأسطر</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="828"/>
         <source>Type</source>
         <translation>نوع</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
         <source>Single</source>
         <translation>فردي</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
         <source>One and half</source>
         <translation>فردي ونصف</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
         <source>Double</source>
         <translation>مضاعف</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="832"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="830"/>
         <source>Fixed</source>
         <translation>ثابت</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="833"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="831"/>
         <source>Value</source>
         <translation>القيمة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="835"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="833"/>
         <source>Show paragraph&apos;s title</source>
         <translation>إظهار عنوان الفقرة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="836"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="834"/>
         <source>Use custom title</source>
         <translation>استخدم عنوانًا مخصصًا</translation>
     </message>
     <message>
-        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="837"/>
+        <location filename="../ui/settings/screenplay_template/screenplay_template_paragraphs_view.cpp" line="835"/>
         <source>Title</source>
         <translation>العنوان</translation>
     </message>
@@ -10802,49 +10794,49 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1481"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1481"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1475"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1475"/>
         <source>Merge paragraph</source>
         <translation>دمج الفقرة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1483"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1483"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1477"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1477"/>
         <source>Split paragraph</source>
         <translation>تقسيم الفقرة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1510"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1510"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1504"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1504"/>
         <source>Bookmark</source>
         <translation>إشارة مرجعية</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1514"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1514"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1508"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1508"/>
         <source>Add</source>
         <translation>أضف</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1520"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1520"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1514"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1514"/>
         <source>Edit</source>
         <translation>تعديل</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1526"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1526"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1520"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1520"/>
         <source>Remove</source>
         <translation>إزالة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1533"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1533"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1527"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1527"/>
         <source>Show/hide list</source>
         <translation>إظهار / إخفاء القائمة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1542"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1536"/>
         <source>Generate text</source>
         <translation>توليد نص</translation>
     </message>
@@ -10853,37 +10845,37 @@ Discuss everything with fellow community of writers, share your work in progress
     <name>Ui::ScreenplayTextEditToolbar</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="98"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="93"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="101"/>
         <source>Scene heading</source>
         <translation>عنوان المشهد</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="278"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="271"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="293"/>
         <source>Undo last action</source>
         <translation>تراجع عن الإجراء الأخير</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="282"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="275"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="297"/>
         <source>Redo last action</source>
         <translation>إعادة الإجراء الأخير</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="285"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="278"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="300"/>
         <source>Current paragraph format</source>
         <translation>تنسيق الفقرة الحالي</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="287"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="280"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="302"/>
         <source>Hide fast format panel</source>
         <translation>إخفاء لوحة التنسيق السريع</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="288"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="281"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="303"/>
         <source>Show fast format panel</source>
         <translation>إظهار لوحة التنسيق السريع</translation>
     </message>
@@ -10899,36 +10891,41 @@ Discuss everything with fellow community of writers, share your work in progress
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="292"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="283"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="305"/>
         <source>Search text</source>
         <translation>بحث نص</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="295"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="286"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="308"/>
         <source>Disable review mode</source>
         <translation>تعطيل وضع المراجعة</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="296"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="287"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="309"/>
         <source>Enable review mode</source>
         <translation>تمكين وضع المراجعة</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="298"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="289"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="311"/>
         <source>Disable structure items isolation mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="299"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="290"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="312"/>
         <source>Enable structure items isolation mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="291"/>
+        <source>Unlock ability to work with the screenplay breakdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="313"/>
         <source>Export screenplay breakdown</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11446,37 +11443,37 @@ STARTED</source>
 <context>
     <name>Ui::SessionStatisticsView</name>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="290"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="289"/>
         <source>Separate statistics by devices</source>
         <translation>إحصائيات منفصلة حسب الأجهزة</translation>
     </message>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="294"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="293"/>
         <source>To show detailed statistics, you need to upgrade to the PRO version.</source>
         <translation>لإظهار الإحصائيات التفصيلية ، تحتاج إلى الترقية إلى إصدار PRO.</translation>
     </message>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="295"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="294"/>
         <source>Dayly</source>
         <translation>يوميًا</translation>
     </message>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="296"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="295"/>
         <source>Monthly</source>
         <translation>شهرياً</translation>
     </message>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="297"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="296"/>
         <source>Yearly</source>
         <translation>سنوياً</translation>
     </message>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="298"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="297"/>
         <source>Words</source>
         <translation>كلمات</translation>
     </message>
     <message>
-        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="299"/>
+        <location filename="../ui/session_statistics/session_statistics_view.cpp" line="298"/>
         <source>Time, min</source>
         <translation>الوقت ، دقيقة</translation>
     </message>
@@ -11589,1134 +11586,1139 @@ STARTED</source>
 <context>
     <name>Ui::SettingsView</name>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1430"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1433"/>
         <source>Choose the folder where backups will be saved</source>
         <translation>اختر المجلد الذي سيتم حفظ النسخ الاحتياطية فيه</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1541"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1701"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1992"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2121"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2266"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2387"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1546"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1706"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1997"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2126"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2271"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2392"/>
         <source>Edit</source>
         <translation>تعديل</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1555"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1715"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2006"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2135"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2280"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2401"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1560"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1720"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2011"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2140"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2285"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2406"/>
         <source>Save to file</source>
         <translation>احفظ في ملف</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1561"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1721"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2012"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2141"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2286"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2407"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1566"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1726"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2017"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2146"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2291"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2412"/>
         <source>Remove</source>
         <translation>إزالة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1568"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1728"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2019"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2148"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2293"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2414"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1573"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1733"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2024"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2153"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2298"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2419"/>
         <source>Load template from file</source>
         <translation>تحميل نموذج من ملف</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3177"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3187"/>
         <source>Application settings</source>
         <translation>إعدادات البرنامج</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3178"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3188"/>
         <source>Language</source>
         <translation>اللغة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3190"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3192"/>
+        <source>Make application interface compact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="3201"/>
         <source>Qty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3191"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3202"/>
         <source>Text editing</source>
         <translation>تحرير النص</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3192"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3203"/>
         <source>Show documents pages</source>
         <translation>إظهار صفحات المستندات</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3193"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3204"/>
         <source>Use typewriter sound for keys pressing</source>
         <translation>استخدم صوت الآلة الكاتبة عند الضغط على المفاتيح</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3194"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3205"/>
         <source>Spell check</source>
         <translation>التدقيق الإملائي</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3195"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3206"/>
         <source>Spelling dictionary</source>
         <translation>القاموس الإملائي</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3197"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3208"/>
         <source>Afrikaans</source>
         <translation>الأفريكانية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3198"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3209"/>
         <source>Aragonese</source>
         <translation>أراغون</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3199"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3210"/>
         <source>Arabic</source>
         <translation>العربية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3200"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3211"/>
         <source>Asturian</source>
         <translation>النمساوية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3201"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3212"/>
         <source>Azerbaijani</source>
         <translation>الأذربيجانية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3202"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3213"/>
         <source>Belarusian</source>
         <translation>البيلاروسية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3203"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3214"/>
         <source>Bulgarian</source>
         <translation>البلغارية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3204"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3215"/>
         <source>Bengali</source>
         <translation>البنغالية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3205"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3216"/>
         <source>Tibetan</source>
         <translation>التبتية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3206"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3217"/>
         <source>Breton</source>
         <translation>بريتون</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3207"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3218"/>
         <source>Bosnian</source>
         <translation>البوسنية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3208"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3219"/>
         <source>Catalan (Valencian)</source>
         <translation>الكتالانية (بلنسية)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3209"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3220"/>
         <source>Catalan</source>
         <translation>الكاتالونية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3210"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3221"/>
         <source>Czech</source>
         <translation>التشيكية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3211"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3222"/>
         <source>Welsh</source>
         <translation>الويلزية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3212"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3223"/>
         <source>Danish</source>
         <translation>الدانماركية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3213"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3224"/>
         <source>German (Austria)</source>
         <translation>الألمانية (النمسا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3214"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3225"/>
         <source>German (Switzerland)</source>
         <translation>الألمانية (سويسرا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3215"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3226"/>
         <source>German</source>
         <translation>الألمانية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3216"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3227"/>
         <source>Greek (Polytonic)</source>
         <translation>اليونانية (بوليتونيك)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3217"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3228"/>
         <source>Greek</source>
         <translation>اليونانية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3218"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3229"/>
         <source>English (Australia)</source>
         <translation>الإنجليزية (أستراليا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3219"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3230"/>
         <source>English (Canada)</source>
         <translation>الإنجليزية (كندا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3220"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3231"/>
         <source>English (United Kingdom)</source>
         <translation>الإنجليزية (المملكة المتحدة)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3221"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3232"/>
         <source>English (New Zealand)</source>
         <translation>الإنجليزية (نيوزيلندا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3222"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3233"/>
         <source>English (South Africa)</source>
         <translation>الإنجليزية (جنوب إفريقيا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3223"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3234"/>
         <source>English (United States)</source>
         <translation>الانجليزية (الولايات المتحدة)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3224"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3235"/>
         <source>Esperanto</source>
         <translation>اسبرانتو</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3225"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3236"/>
         <source>Spanish (Argentina)</source>
         <translation>الإسبانية (الأرجنتين)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3226"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3237"/>
         <source>Spanish (Bolivia)</source>
         <translation>الإسبانية (بوليفيا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3227"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3238"/>
         <source>Spanish (Chile)</source>
         <translation>الأسبانية (تشيلي)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3228"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3239"/>
         <source>Spanish (Colombia)</source>
         <translation>الإسبانية (كولومبيا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3229"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3240"/>
         <source>Spanish (Costa Rica)</source>
         <translation>الأسبانية (كوستاريكا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3230"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3241"/>
         <source>Spanish (Cuba)</source>
         <translation>الإسبانية (كوبا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3231"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3242"/>
         <source>Spanish (Dominican Republic)</source>
         <translation>الإسبانية (جمهورية الدومينيكان)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3232"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3243"/>
         <source>Spanish (Ecuador)</source>
         <translation>الإسبانية (الإكوادور)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3233"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3244"/>
         <source>Spanish (Guatemala)</source>
         <translation>الأسبانية (غواتيمالا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3234"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3245"/>
         <source>Spanish (Honduras)</source>
         <translation>الإسبانية (هندوراس)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3235"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3246"/>
         <source>Spanish (Mexico)</source>
         <translation>الإسبانية (المكسيك)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3236"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3247"/>
         <source>Spanish (Nicaragua)</source>
         <translation>الأسبانية (نيكاراغوا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3237"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3248"/>
         <source>Spanish (Panama)</source>
         <translation>الإسبانية (بنما)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3238"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3249"/>
         <source>Spanish (Peru)</source>
         <translation>الإسبانية (بيرو)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3239"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3250"/>
         <source>Spanish (Philippines)</source>
         <translation>الإسبانية (الفلبين)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3240"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3251"/>
         <source>Spanish (Puerto Rico)</source>
         <translation>الأسبانية (بورتوريكو)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3241"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3252"/>
         <source>Spanish (Paraguay)</source>
         <translation>الأسبانية (باراغواي)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3242"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3253"/>
         <source>Spanish (El Salvador)</source>
         <translation>الإسبانية (السلفادور)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3243"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3254"/>
         <source>Spanish (United States)</source>
         <translation>الإسبانية (الولايات المتحدة)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3244"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3255"/>
         <source>Spanish (Uruguay)</source>
         <translation>الأسبانية (أوروغواي)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3245"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3256"/>
         <source>Spanish (Venezuela)</source>
         <translation>الإسبانية (فنزويلا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3246"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3257"/>
         <source>Spanish</source>
         <translation>الأسبانية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3247"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3258"/>
         <source>Estonian</source>
         <translation>الإستونية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3248"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3259"/>
         <source>Basque</source>
         <translation>الباسك</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3249"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3260"/>
         <source>Persian</source>
         <translation>الفارسية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3250"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3261"/>
         <source>Faroese</source>
         <translation>فارويز</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3251"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3262"/>
         <source>French</source>
         <translation>الفرنسية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3252"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3263"/>
         <source>Friulian</source>
         <translation>فريوليان</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3253"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3264"/>
         <source>Western Frisian</source>
         <translation>الفريزية الغربية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3254"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3265"/>
         <source>Irish</source>
         <translation>الإيرلندية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3255"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3266"/>
         <source>Gaelic</source>
         <translation>الغيلية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3256"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3267"/>
         <source>Galician</source>
         <translation>الجاليكية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3257"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3268"/>
         <source>Gujarati</source>
         <translation>الغوجاراتية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3258"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3269"/>
         <source>Guarani</source>
         <translation>غواراني</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3259"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3270"/>
         <source>Hebrew</source>
         <translation>العبرية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3260"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3271"/>
         <source>Hindi</source>
         <translation>الهندية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3261"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3272"/>
         <source>Croatian</source>
         <translation>الكرواتية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3262"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3273"/>
         <source>Hungarian</source>
         <translation>المجرية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3263"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3274"/>
         <source>Armenian</source>
         <translation>الأرمنية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3264"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3275"/>
         <source>Armenian (Western)</source>
         <translation>أرمينيا ( الغربية )</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3265"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3276"/>
         <source>Interlingua</source>
         <translation>إنترلينجوا</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3266"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3277"/>
         <source>Indonesian</source>
         <translation>الإندونيسية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3267"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3278"/>
         <source>Icelandic</source>
         <translation>آيسلند</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3268"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3279"/>
         <source>Italian</source>
         <translation>الايطالية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3269"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3280"/>
         <source>Georgian</source>
         <translation>الجورجية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3270"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3281"/>
         <source>Kazakh</source>
         <translation>الكازاخستانية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3271"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3282"/>
         <source>Kurdish</source>
         <translation>الكردية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3272"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3283"/>
         <source>Korean</source>
         <translation>الكورية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3273"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3284"/>
         <source>Latin</source>
         <translation>لاتينية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3274"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3285"/>
         <source>Luxembourgish</source>
         <translation>اللوكسمبرجية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3275"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3286"/>
         <source>Lao</source>
         <translation>لاو</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3276"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3287"/>
         <source>Lithuanian</source>
         <translation>الليتوانية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3277"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3288"/>
         <source>Latgalian</source>
         <translation>لاتغاليان</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3278"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3289"/>
         <source>Latvian</source>
         <translation>لاتفيا</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3279"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3290"/>
         <source>Macedonian</source>
         <translation>المقدونية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3280"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3291"/>
         <source>Mongolian</source>
         <translation>المنغولية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3281"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3292"/>
         <source>Maltese</source>
         <translation>المالطية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3282"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3286"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3293"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3297"/>
         <source>Norwegian</source>
         <translation>النرويجية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3283"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3294"/>
         <source>Low German</source>
         <translation>لغة ألمانية منخفضة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3284"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3295"/>
         <source>Nepali</source>
         <translation>النيبالية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3285"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3296"/>
         <source>Dutch</source>
         <translation>الهولندية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3287"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3298"/>
         <source>Occitan</source>
         <translation>الأوكيتان</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3288"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3299"/>
         <source>Polish</source>
         <translation>البولندية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3289"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3300"/>
         <source>Portuguese (Brazilian)</source>
         <translation>البرتغالية (البرازيلية)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3290"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3301"/>
         <source>Portuguese</source>
         <translation>البرتغالية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3291"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3302"/>
         <source>Quechua</source>
         <translation>الكيتشوا</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3292"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3303"/>
         <source>Romanian</source>
         <translation>الرومانية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3293"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3304"/>
         <source>Russian (with Yo)</source>
         <translation>الروسية (مع يو)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3294"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3305"/>
         <source>Russian</source>
         <translation>الروسية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3295"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3306"/>
         <source>Kinyarwanda</source>
         <translation>كينيارواندا</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3296"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3307"/>
         <source>Sinhala</source>
         <translation>السنهالية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3297"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3308"/>
         <source>Slovak</source>
         <translation>السلوفاكية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3298"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3309"/>
         <source>Slovenian</source>
         <translation>السلوفينية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3299"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3310"/>
         <source>Albanian</source>
         <translation>الألبانية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3300"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3311"/>
         <source>Serbian (Latin)</source>
         <translation>الصربية (اللاتينية)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3301"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3312"/>
         <source>Serbian</source>
         <translation>الصربية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3302"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3313"/>
         <source>Swedish (Finland)</source>
         <translation>السويدية (فنلندا)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3303"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3314"/>
         <source>Swedish</source>
         <translation>السويدية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3304"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3315"/>
         <source>Swahili</source>
         <translation>السواحيلية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3305"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3316"/>
         <source>Tamil</source>
         <translation>التاميل</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3306"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3317"/>
         <source>Telugu</source>
         <translation>التيلجو</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3307"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3318"/>
         <source>Thai</source>
         <translation>التايلاندية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3308"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3319"/>
         <source>Turkmen</source>
         <translation>التركمانية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3309"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3320"/>
         <source>Klingon (Latin)</source>
         <translation>كلينجون (اللاتينية)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3310"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3321"/>
         <source>Klingon</source>
         <translation>كلينجون</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3311"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3322"/>
         <source>Turkish</source>
         <translation>التركية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3312"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3323"/>
         <source>Ukrainian</source>
         <translation>الأوكرانية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3313"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3324"/>
         <source>Vietnamese</source>
         <translation>فيتنامي</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3323"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3334"/>
         <source>User interface</source>
         <translation>واجهة البرنامج</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3324"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3335"/>
         <source>Manage user dictionary</source>
         <translation>إدارة قاموس المستخدم</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3329"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3340"/>
         <source>Automatic text corrections</source>
         <translation>تصحيحات النص التلقائية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3330"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3341"/>
         <source>Replace three single dots with ellipsis</source>
         <translation>استبدل ثلاث نقاط مفردة بقفزة فراغ</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3331"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3342"/>
         <source>Replace vertical quotation marks to curly ones</source>
         <translation>استبدل علامات الاقتباس العمودية بعلامات الاقتباس المتعرجة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3332"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3343"/>
         <source>Replace two dashes with em dash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3333"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3344"/>
         <source>Avoid multiple spaces</source>
         <translation>تجنب الفراغات المتعددة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3340"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3351"/>
         <source>Turn on/off text and folders module</source>
         <translation>تشغيل / إيقاف وحدة النص والمجلدات</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3354"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3365"/>
         <source>Turn on/off screenplay module</source>
         <translation>تشغيل / إيقاف قالب السيناريو</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3364"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3375"/>
         <source>Add a continuation (CONT&apos;D) to dialogues separated by an action</source>
         <translation>أضف استمرارًا (CONT&apos;D) إلى الحوارات المفصولة بـ أكشن</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3366"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3377"/>
         <source>Automatically correct screenplay text on page breaks</source>
         <translation>تصحيح نص السيناريو تلقائيًا في فواصل الصفحات</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3368"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3379"/>
         <source>Show hints for major &amp; related to a current story characters and locations only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3421"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3441"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3466"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3432"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3452"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3477"/>
         <source>Show hints for major &amp; related to a current story characters only</source>
         <translation>إظهار تلميحات الشخصيات الرئيسية والمتعلقة بالقصة الحالية فقط</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3370"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3423"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3443"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3468"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3381"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3434"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3454"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3479"/>
         <source>Show characters suggestions in empty paragraph</source>
         <translation>إظهار اقتراحات الشخصيات في فقرة فارغة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3372"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3383"/>
         <source>Use opening bracket in dialogue to switch to parenthetical</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3373"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3384"/>
         <source>Screenplay navigator</source>
         <translation>مستكشف السيناريو</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3374"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3385"/>
         <source>Show beats</source>
         <translation>أظهر الإيقاعات</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3375"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3386"/>
         <source>in treatment</source>
         <translation>في المعالجة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3376"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3387"/>
         <source>in screenplay</source>
         <translation>في السيناريو</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3397"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3408"/>
         <source>Calculate duration based on the custom rules</source>
         <translation>احسب المدة بناءً على القواعد المخصصة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3398"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3409"/>
         <source>For action</source>
         <translation>للأكشن</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3399"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3410"/>
         <source>Per entry</source>
         <translation>لكل إدخال</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3401"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3406"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3410"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3412"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3417"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3421"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3402"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3413"/>
         <source>Each 50 characters</source>
         <translation>كل 50 حرف</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3404"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3415"/>
         <source>For dialogue</source>
         <translation>للحوار</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3408"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3419"/>
         <source>For scene heading</source>
         <translation>لترويسة المشهد</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3414"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3425"/>
         <source>Turn on/off comic book module</source>
         <translation>تشغيل / إيقاف قالب القصص المصورة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3432"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3443"/>
         <source>Audioplay module</source>
         <translation>قالب عمل صوتي</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3433"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3444"/>
         <source>Turn on/off audioplay module</source>
         <translation>تشغيل / إيقاف قالب العمل الصوتي</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3438"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3449"/>
         <source>Show block numbers</source>
         <translation>إظهار أرقام الكتلة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3439"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3450"/>
         <source>Continue block numbers through document</source>
         <translation>استمر بترقيم الكتل من خلال المستند</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3478"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3489"/>
         <source>Novel module</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3479"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3490"/>
         <source>Turn on/off novel module</source>
         <translation>تشغيل\أيقاف قالب الرواية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3499"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3510"/>
         <source>If you press in empty paragraph</source>
         <translation>إذا ضغطت في فقرة فارغة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3444"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3455"/>
         <source>Audioplay navigator</source>
         <translation>مستكشف العمل الصوتي</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3453"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3464"/>
         <source>Calculate duration based on the count of words</source>
         <translation>احسب المدة بناءً على عدد الكلمات</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3455"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3466"/>
         <source>words</source>
         <translation>كلمات</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3459"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3470"/>
         <source>Stageplay module</source>
         <translation>نموذج مسرحية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3460"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3471"/>
         <source>Turn on/off stageplay module</source>
         <translation>تشغيل / إيقاف قالب المسرحية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3469"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3480"/>
         <source>Stageplay navigator</source>
         <translation>مستكشف السيناريو</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3493"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3504"/>
         <source>Screenplay editor</source>
         <translation>محرر السيناريو</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3496"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3507"/>
         <source>Block name</source>
         <translation>اسم الكتلة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3497"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3508"/>
         <source>Shortcut</source>
         <translation>اختصار</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3498"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3509"/>
         <source>If you press in paragraphs end</source>
         <translation>إذا ضغطت في نهاية الفقرات</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3502"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3513"/>
         <source>Add paragraph</source>
         <translation>إضافة فقرة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3503"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3514"/>
         <source>Change to</source>
         <translation>التغيير إلى</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3179"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3189"/>
         <source>Size of the user interface elements:</source>
         <translation>حجم عناصر واجهة المستخدم :</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1548"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1708"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1999"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2128"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2273"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2394"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1553"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1713"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2004"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2133"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2278"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2399"/>
         <source>Create new based on current</source>
         <translation>إنشاء جديد على أساس الحالي</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3180"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3190"/>
         <source>small</source>
         <translation>صغير</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3181"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3191"/>
         <source>big</source>
         <translation>كبير</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3182"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3193"/>
         <source>Save changes &amp; backups</source>
         <translation>حفظ التغييرات والنسخ الاحتياطية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3183"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3194"/>
         <source>Automatically save changes as soon as possible</source>
         <translation>تلقائيا حفظ التغييرات في أقرب وقت ممكن</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3185"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3196"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>خاصية الحفظ الآلي تقوم بحفظ المشروع كل 3 ثواني في حال لم تقم بإستخدام الفأرة أو لوحة المفاتيح وكلّ 3 دقائق إذا كنت تعمل دون إنقطاع.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3188"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3199"/>
         <source>Save backups</source>
         <translation>حفظ النسخ الاحتياطية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3189"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3200"/>
         <source>Backups folder path</source>
         <translation>مسار مجلد النسخ الاحتياطية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3326"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3337"/>
         <source>Focus current paragraph</source>
         <translation>ركز على الفقرة الحالية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3328"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3339"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
         <translation>استخدم انزلاق الآلة الكاتبة (للمحافظة على الخط مع المؤشر في وسط الشاشة)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3335"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3346"/>
         <source>Components</source>
         <translation>العناصر</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3339"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3350"/>
         <source>Simple text module</source>
         <translation>قالب نص بسيط</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3341"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3355"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3415"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3434"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3461"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3480"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3352"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3366"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3426"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3445"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3472"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3491"/>
         <source>Text editor</source>
         <translation>محرر النص</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3342"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3356"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3416"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3435"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3462"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3481"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3353"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3367"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3427"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3446"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3473"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3492"/>
         <source>Default template</source>
         <translation>القالب الافتراضي</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3344"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3358"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3418"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3437"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3464"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3483"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3355"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3369"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3429"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3448"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3475"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3494"/>
         <source>Available actions for the selected template</source>
         <translation>الأكشن المتاح للنموذج المختار</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3359"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3377"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3445"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3470"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3370"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3388"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3456"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3481"/>
         <source>Show scene number</source>
         <translation>إظهار رقم المشهد</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3360"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3371"/>
         <source>on the left</source>
         <translation>على اليسار</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3361"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3372"/>
         <source>on the right</source>
         <translation>على اليمين</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3362"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3419"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3373"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3430"/>
         <source>Show dialogue number</source>
         <translation>إظهار رقم الحوار</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3325"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3336"/>
         <source>Highlight current line</source>
         <translation>قم بتمييز السطر الحالي</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3345"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3424"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3484"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3356"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3435"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3495"/>
         <source>Navigator</source>
         <translation>مستكشف</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3346"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3357"/>
         <source>Show chapter text, lines</source>
         <translation>إظهار نص الفصل ، سطور</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3353"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3364"/>
         <source>Screenplay module</source>
         <translation>نموذج السيناريو</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3378"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3446"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3471"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3485"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3389"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3457"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3482"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3496"/>
         <source>Show scene text, lines</source>
         <translation>إظهار نص المشهد ، سطور</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3384"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3452"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3395"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3463"/>
         <source>Duration</source>
         <translation>المدّة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3385"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3396"/>
         <source>Calculate duration based on the count of pages</source>
         <translation>حساب المدة على أساس عدد الصفحات</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3386"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3392"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3454"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3397"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3403"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3465"/>
         <source>at the rate of</source>
         <translation>بمعدل</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3387"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3398"/>
         <source>pages</source>
         <translation>صفحات</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3388"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3395"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3456"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3399"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3406"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3467"/>
         <source>has duration</source>
         <translation>مدّته</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3389"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3396"/>
         <location filename="../ui/settings/settings_view.cpp" line="3400"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3403"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3405"/>
         <location filename="../ui/settings/settings_view.cpp" line="3407"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3409"/>
         <location filename="../ui/settings/settings_view.cpp" line="3411"/>
-        <location filename="../ui/settings/settings_view.cpp" line="3457"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3414"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3416"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3418"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3420"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3422"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3468"/>
         <source>seconds</source>
         <translation>ثانية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3391"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3402"/>
         <source>Calculate duration based on the count of letters</source>
         <translation>احسب المدة بناءً على عدد الأحرف</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3393"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3404"/>
         <source>letters</source>
         <translation>حروف</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3394"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3405"/>
         <source>including spaces</source>
         <translation>بما في ذلك الفراغات</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3413"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3424"/>
         <source>Comic book module</source>
         <translation>قالب قصص مصورة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3425"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3436"/>
         <source>Show panel text, lines</source>
         <translation>إظهار نص اللوحة ، سطور</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3492"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3503"/>
         <source>Shortcuts</source>
         <translation>إختصارات</translation>
     </message>
@@ -13078,32 +13080,32 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="218"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="205"/>
         <source>Header</source>
         <translation>الترويسة</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="219"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="206"/>
         <source>Print header on title page</source>
         <translation>طباعة الترويسة على صفحة العنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="220"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="207"/>
         <source>Footer</source>
         <translation>تذييل</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="221"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="208"/>
         <source>Print footer on title page</source>
         <translation>طباعة التذييل على صفحة العنوان</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="222"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="209"/>
         <source>Override common settings for this stageplay</source>
         <translation>تجاوز الإعدادات العامة لهذه المسرحية</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="223"/>
+        <location filename="../management_layer/plugins/stageplay_parameters/stageplay_parameters_view.cpp" line="210"/>
         <source>Template</source>
         <translation>نموذج</translation>
     </message>
@@ -13521,52 +13523,52 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>تم لصق الـ HASH.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="416"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="413"/>
         <source>Copy theme HASH to share your custom theme with others</source>
         <translation>نسخ HASH السمة لمشاركة المظهر المخصص الخاص بك مع الآخرين</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="417"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="414"/>
         <source>Paste theme HASH from clipboard and apply it</source>
         <translation>لصق HASH السمة من الحافظة وتطبيقه</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="419"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="416"/>
         <source>Primary</source>
         <translation>أساسي</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="420"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="417"/>
         <source>Accent</source>
         <translation>لهجة</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="421"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="418"/>
         <source>Background</source>
         <translation>الخلفية</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="422"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="419"/>
         <source>Surface</source>
         <translation>سطح</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="423"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="420"/>
         <source>Error</source>
         <translation>مشكل</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="424"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="421"/>
         <source>Text edit</source>
         <translation>تعديل النص</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="426"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="423"/>
         <source>Cancel</source>
         <translation>الغاء</translation>
     </message>
     <message>
-        <location filename="../ui/settings/theme_setup_view.cpp" line="427"/>
+        <location filename="../ui/settings/theme_setup_view.cpp" line="424"/>
         <source>Save</source>
         <translation>حفظ</translation>
     </message>
