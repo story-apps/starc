@@ -6772,7 +6772,7 @@
     <name>Ui::FastFormatWidget</name>
     <message>
         <location filename="../../corelib/ui/modules/fast_format_widget/fast_format_widget.cpp" line="258"/>
-        <source>Show shotcuts</source>
+        <source>Show shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

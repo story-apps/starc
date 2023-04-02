@@ -765,6 +765,7 @@ void ApplicationManager::Implementation::askUpdateToLatestVersion()
 
 void ApplicationManager::Implementation::configureAutoSave()
 {
+    Log::info("Configure autosaving");
     autosaveTimer.stop();
     autosaveTimer.disconnect();
 
@@ -1117,6 +1118,7 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
 
 void ApplicationManager::Implementation::setDesignSystemTheme(Ui::ApplicationTheme _theme)
 {
+    Log::info("Setup design system theme");
     if (state == ApplicationState::Working) {
         WAF::Animation::circleTransparentIn(applicationView, QCursor::pos(),
                                             applicationView->grab());
@@ -1132,6 +1134,7 @@ void ApplicationManager::Implementation::setDesignSystemCustomThemeColors(
         return;
     }
 
+    Log::info("Setup design system theme custom colors");
     if (state == ApplicationState::Working) {
         WAF::Animation::circleTransparentIn(applicationView, QCursor::pos(),
                                             applicationView->grab());
@@ -1142,12 +1145,14 @@ void ApplicationManager::Implementation::setDesignSystemCustomThemeColors(
 
 void ApplicationManager::Implementation::setDesignSystemScaleFactor(qreal _scaleFactor)
 {
+    Log::info("Setup design system scale factor");
     Ui::DesignSystem::setScaleFactor(_scaleFactor);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
 void ApplicationManager::Implementation::setDesignSystemDensity(int _density)
 {
+    Log::info("Setup design system density");
     Ui::DesignSystem::setDensity(_density);
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
@@ -2127,7 +2132,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     Log::init(loggingLevel, logFilePath);
 
 
-    QString applicationVersion = "0.4.5";
+    QString applicationVersion = "0.5.0";
 #if defined(DEV_BUILD) && DEV_BUILD > 0
     applicationVersion += QString(" dev %1").arg(DEV_BUILD);
 #endif
@@ -2272,6 +2277,7 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
     //
     // Покажем интерфейс
     //
+    Log::info("Show application window");
     d->applicationView->show();
 
     //

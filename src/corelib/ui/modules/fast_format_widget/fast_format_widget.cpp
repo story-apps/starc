@@ -255,7 +255,7 @@ void FastFormatWidget::setCurrentParagraphType(const QModelIndex& _index)
 
 void FastFormatWidget::updateTranslations()
 {
-    d->showShortcuts->setText(tr("Show shotcuts"));
+    d->showShortcuts->setText(tr("Show shortcuts"));
 }
 
 void FastFormatWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
