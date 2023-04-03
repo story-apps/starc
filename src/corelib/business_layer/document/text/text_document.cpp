@@ -1718,8 +1718,13 @@ void TextDocument::splitParagraph(const TextCursor& _cursor)
     // Вставляем таблицу
     //
     insertTable(cursor);
-    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor, 2);
+    //
+    // Назначим блоку после таблицы формат PageSplitter
+    //
+    setParagraphType(TextParagraphType::PageSplitter, cursor);
     cursor.restartEditBlock();
+
+    cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::MoveAnchor, 2);
 
     //
     // Применяем сохранённый формат блока каждой из колонок
@@ -1729,10 +1734,6 @@ void TextDocument::splitParagraph(const TextCursor& _cursor)
     setParagraphType(lastBlockType, cursor);
     cursor.movePosition(QTextCursor::NextBlock);
 
-    //
-    // Назначим блоку после таблицы формат PageSplitter
-    //
-    setParagraphType(TextParagraphType::PageSplitter, cursor);
 
     //
     // Завершаем редактирование
@@ -1908,7 +1909,7 @@ void TextDocument::processModelReset()
 
 void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, int _charsAdded)
 {
-    if (d->model == nullptr || !d->canChangeModel || isEditTransactionActive()) {
+    if (d->model == nullptr || !d->canChangeModel) {
         return;
     }
 
