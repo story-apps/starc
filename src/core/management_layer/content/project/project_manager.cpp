@@ -2954,12 +2954,14 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     //
     switch (documentType) {
     case Domain::DocumentObjectType::Characters: {
+        //
+        // Берём элементы из модели структуры проекта, там они отсортированы в правильном порядке
+        //
+        const auto charactersItem
+            = d->projectStructureModel->itemForType(Domain::DocumentObjectType::Characters);
         auto charactersModel = static_cast<BusinessLayer::CharactersModel*>(documentModel);
-        const auto characterDocuments
-            = DataStorageLayer::StorageFacade::documentStorage()->documents(
-                Domain::DocumentObjectType::Character);
-        for (const auto characterDocument : characterDocuments) {
-            auto characterModel = d->modelsFacade.modelFor(characterDocument);
+        for (int index = 0; index < charactersItem->childCount(); ++index) {
+            auto characterModel = d->modelsFacade.modelFor(charactersItem->childAt(index)->uuid());
             charactersModel->addCharacterModel(
                 qobject_cast<BusinessLayer::CharacterModel*>(characterModel));
         }
@@ -2974,14 +2976,16 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     }
 
     case Domain::DocumentObjectType::Locations: {
+        //
+        // Берём элементы из модели структуры проекта, там они отсортированы в правильном порядке
+        //
+        const auto locationsItem
+            = d->projectStructureModel->itemForType(Domain::DocumentObjectType::Locations);
         auto locationsModel = static_cast<BusinessLayer::LocationsModel*>(documentModel);
-        const auto locationDocuments
-            = DataStorageLayer::StorageFacade::documentStorage()->documents(
-                Domain::DocumentObjectType::Location);
-        for (const auto locationDocument : locationDocuments) {
-            auto locationModel = d->modelsFacade.modelFor(locationDocument);
+        for (int index = 0; index < locationsItem->childCount(); ++index) {
+            auto characterModel = d->modelsFacade.modelFor(locationsItem->childAt(index)->uuid());
             locationsModel->addLocationModel(
-                qobject_cast<BusinessLayer::LocationModel*>(locationModel));
+                qobject_cast<BusinessLayer::LocationModel*>(characterModel));
         }
         break;
     }
@@ -2994,12 +2998,15 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     }
 
     case Domain::DocumentObjectType::Worlds: {
+        //
+        // Берём элементы из модели структуры проекта, там они отсортированы в правильном порядке
+        //
+        const auto worldsItem
+            = d->projectStructureModel->itemForType(Domain::DocumentObjectType::Worlds);
         auto worldsModel = static_cast<BusinessLayer::WorldsModel*>(documentModel);
-        const auto worldDocuments = DataStorageLayer::StorageFacade::documentStorage()->documents(
-            Domain::DocumentObjectType::World);
-        for (const auto worldDocument : worldDocuments) {
-            auto worldModel = d->modelsFacade.modelFor(worldDocument);
-            worldsModel->addWorldModel(qobject_cast<BusinessLayer::WorldModel*>(worldModel));
+        for (int index = 0; index < worldsItem->childCount(); ++index) {
+            auto characterModel = d->modelsFacade.modelFor(worldsItem->childAt(index)->uuid());
+            worldsModel->addWorldModel(qobject_cast<BusinessLayer::WorldModel*>(characterModel));
         }
         break;
     }

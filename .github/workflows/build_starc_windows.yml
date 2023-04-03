@@ -120,7 +120,7 @@ jobs:
           $PublishForm = @{
             api_key = $env:STARC_API_KEY
             name_for_file = 'starc-setup-64.exe'
-            #file_bin = Get-Item -Path 'build\windows\starc-setup-64.exe'
+            file_bin = Get-Item -Path 'build\windows\starc-setup-64.exe'
           }
           Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/publish' -Method Post -Form $PublishForm
           $NotifyForm = @{
@@ -250,7 +250,7 @@ jobs:
           $PublishForm = @{
             api_key = $env:STARC_API_KEY
             name_for_file = 'starc-setup-32.exe'
-            #file_bin = Get-Item -Path 'build\windows\starc-setup-32.exe'
+            file_bin = Get-Item -Path 'build\windows\starc-setup-32.exe'
           }
           Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/publish' -Method Post -Form $PublishForm
           $NotifyForm = @{
