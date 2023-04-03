@@ -112,10 +112,23 @@ jobs:
 
       - name: Publish artifacts to the dev stream and notify clients
         if: startsWith(github.ref, 'refs/tags/') != true
-        shell: bash
+        shell: pwsh
+        env:
+          STARC_API_KEY: ${{ secrets.STARC_API_KEY }}
+          BUILD_VERSION: ${{env.APP_VERSION}} dev ${{env.DEV_BUILD}}
         run: |
-          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "name_for_file=starc-setup-64.exe" -F "file_bin=@build/windows/starc-setup-64.exe" https://starc.app/api/app/updates/publish
-          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows64" -F "version=${{env.APP_VERSION}} dev ${{env.DEV_BUILD}}" https://starc.app/api/app/updates/notify
+          $PublishForm = @{
+            api_key = $env:STARC_API_KEY
+            name_for_file = 'starc-setup-64.exe'
+            #file_bin = Get-Item -Path 'build\windows\starc-setup-64.exe'
+          }
+          Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/publish' -Method Post -Form $PublishForm
+          $NotifyForm = @{
+            api_key = $env:STARC_API_KEY
+            system = 'windows64'
+            version = $env:BUILD_VERSION
+          }
+          Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/notify' -Method Post -Form $NotifyForm
 
       - name: Publish artifacts to the GitHub releases
         uses: softprops/action-gh-release@v1
@@ -229,10 +242,23 @@ jobs:
 
       - name: Publish artifacts to the dev stream and notify clients
         if: startsWith(github.ref, 'refs/tags/') != true
-        shell: bash
+        shell: pwsh
+        env:
+          STARC_API_KEY: ${{ secrets.STARC_API_KEY }}
+          BUILD_VERSION: ${{env.APP_VERSION}} dev ${{env.DEV_BUILD}}
         run: |
-          curl -k -F "api_key=${{ secrets.STARC_API_KEY }}" -F "name_for_file=starc-setup-32.exe" -F "file_bin=@build/windows/starc-setup-32.exe" https://starc.app/api/app/updates/publish
-          curl -k -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows32" -F "version=${{env.APP_VERSION}} dev ${{env.DEV_BUILD}}" https://starc.app/api/app/updates/notify
+          $PublishForm = @{
+            api_key = $env:STARC_API_KEY
+            name_for_file = 'starc-setup-32.exe'
+            #file_bin = Get-Item -Path 'build\windows\starc-setup-32.exe'
+          }
+          Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/publish' -Method Post -Form $PublishForm
+          $NotifyForm = @{
+            api_key = $env:STARC_API_KEY
+            system = 'windows32'
+            version = $env:BUILD_VERSION
+          }
+          Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/notify' -Method Post -Form $NotifyForm
 
       - name: Publish artifacts to GitHub releases
         uses: softprops/action-gh-release@v1
