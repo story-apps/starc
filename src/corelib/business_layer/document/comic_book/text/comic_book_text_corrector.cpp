@@ -597,6 +597,8 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
             break;
         }
 
+        const int blockTextSourceLength = block.text().length();
+
         switch (blockType) {
         case TextParagraphType::PageHeading: {
             const auto item = itemFromBlock(block);
@@ -731,6 +733,14 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
         default: {
             break;
         }
+        }
+
+        //
+        // Если длина текста изменилась, корректируем конечную позицию, чтобы учесть изменение
+        //
+        const int blockTextLength = block.text().length();
+        if (blockTextLength != blockTextSourceLength) {
+            endPosition += blockTextLength - blockTextSourceLength;
         }
 
         block = block.next();
