@@ -24,6 +24,12 @@ public:
     void setCompleterActive(bool _use);
 
     /**
+     * @brief Автоматическое дополнение
+     */
+    bool isAutoCompleteEnabled() const;
+    void setAutoCompleteEnabled(bool _enabled);
+
+    /**
      * @brief Получить подстановщика
      */
     Completer* completer() const;

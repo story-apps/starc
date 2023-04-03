@@ -21,6 +21,11 @@ public:
     bool isCompleterActive = true;
 
     /**
+     * @brief Активно ли автодополнение
+     */
+    bool isAutoCompleteEnabled = true;
+
+    /**
      * @brief Подстановщик для завершения текста
      */
     Completer* completer = nullptr;
@@ -55,6 +60,16 @@ bool CompleterTextEdit::isCompleterActive() const
 void CompleterTextEdit::setCompleterActive(bool _use)
 {
     d->isCompleterActive = _use;
+}
+
+bool CompleterTextEdit::isAutoCompleteEnabled() const
+{
+    return d->isAutoCompleteEnabled;
+}
+
+void CompleterTextEdit::setAutoCompleteEnabled(bool _enabled)
+{
+    d->isAutoCompleteEnabled = _enabled;
 }
 
 Completer* CompleterTextEdit::completer() const

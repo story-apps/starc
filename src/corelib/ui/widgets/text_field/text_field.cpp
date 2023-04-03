@@ -1061,7 +1061,9 @@ void TextField::focusInEvent(QFocusEvent* _event)
 
     d->finishAnimationIfInvisible();
 
-    d->completeIfNeeded();
+    if (isAutoCompleteEnabled()) {
+        d->completeIfNeeded();
+    }
 }
 
 void TextField::focusOutEvent(QFocusEvent* _event)
