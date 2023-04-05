@@ -183,8 +183,7 @@ void ProjectInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _e
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->projectInfoLayout->setVerticalSpacing(
-        static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
+    d->projectInfoLayout->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
     d->projectInfoLayout->setRowMinimumHeight(0,
                                               static_cast<int>(Ui::DesignSystem::layout().px24()));
     d->projectInfoLayout->setRowMinimumHeight(3,

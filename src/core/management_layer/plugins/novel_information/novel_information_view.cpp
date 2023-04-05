@@ -268,8 +268,7 @@ void NovelInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _eve
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->novelInfoLayout->setVerticalSpacing(
-        static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
+    d->novelInfoLayout->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
     d->novelInfoLayout->setRowMinimumHeight(0, static_cast<int>(Ui::DesignSystem::layout().px24()));
     d->novelInfoLayout->setRowMinimumHeight(
         d->novelInfoLayout->rowCount() - 1,

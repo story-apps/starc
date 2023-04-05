@@ -31,8 +31,9 @@ public:
     void setImageCroppingText(const QString& _text);
 
     /**
-     * @brief Задать изображение
+     * @brief Изображение
      */
+    QPixmap image() const;
     void setImage(const QPixmap& _image);
 
     /**

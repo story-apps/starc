@@ -251,8 +251,7 @@ void ComicBookInformationView::designSystemChangeEvent(DesignSystemChangeEvent* 
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->comicBookInfoLayout->setVerticalSpacing(
-        static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
+    d->comicBookInfoLayout->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
     d->comicBookInfoLayout->setRowMinimumHeight(
         0, static_cast<int>(Ui::DesignSystem::layout().px24()));
     d->comicBookInfoLayout->setRowMinimumHeight(

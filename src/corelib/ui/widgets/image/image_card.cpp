@@ -304,6 +304,11 @@ void ImageCard::setImageCroppingText(const QString& _text)
     d->imageCroppingText = _text;
 }
 
+QPixmap ImageCard::image() const
+{
+    return d->image.source;
+}
+
 void ImageCard::setImage(const QPixmap& _image)
 {
     if ((d->image.source.isNull() && _image.isNull())

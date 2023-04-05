@@ -263,8 +263,7 @@ void ScreenplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent*
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->screenplayInfoLayout->setVerticalSpacing(
-        static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
+    d->screenplayInfoLayout->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
     d->screenplayInfoLayout->setRowMinimumHeight(
         0, static_cast<int>(Ui::DesignSystem::layout().px24()));
     d->screenplayInfoLayout->setRowMinimumHeight(

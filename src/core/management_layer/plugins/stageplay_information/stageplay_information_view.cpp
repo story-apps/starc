@@ -254,8 +254,7 @@ void StageplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent* 
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    d->stageplayInfoLayout->setVerticalSpacing(
-        static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
+    d->stageplayInfoLayout->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
     d->stageplayInfoLayout->setRowMinimumHeight(
         0, static_cast<int>(Ui::DesignSystem::layout().px24()));
     d->stageplayInfoLayout->setRowMinimumHeight(

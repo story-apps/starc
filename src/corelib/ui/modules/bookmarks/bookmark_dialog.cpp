@@ -147,7 +147,7 @@ void BookmarkDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
-    contentsLayout()->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
+    contentsLayout()->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
     d->buttonsLayout->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
                   Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12())

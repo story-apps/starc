@@ -436,7 +436,7 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
         button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
-    contentsLayout()->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px12()));
+    contentsLayout()->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
     d->buttonsLayout->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
                   Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12())

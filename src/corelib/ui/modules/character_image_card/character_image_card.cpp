@@ -78,6 +78,11 @@ void CharacterImageCard::Implementation::generateCharacterPhoto()
     const auto pageIndex = QRandomGenerator::global()->bounded(0, totalPages);
     const auto photosPageUrl = QString("%1&page=%2").arg(url).arg(pageIndex);
     NetworkRequestLoader::loadAsync(photosPageUrl, q, [this](const QByteArray& _data) {
+        if (_data.isEmpty()) {
+            TaskBar::finishTask(photoGenerationTaskId);
+            return;
+        }
+
         //
         // Выбираем случайную фотку на странице и загружаем ссылки на неё
         //
@@ -91,6 +96,11 @@ void CharacterImageCard::Implementation::generateCharacterPhoto()
                              .arg(photoInfo["user"].toObject()["name"].toString());
         NetworkRequestLoader::loadAsync(
             photoPageUrl, q, [this, photoInfo](const QByteArray& _data) {
+                if (_data.isEmpty()) {
+                    TaskBar::finishTask(photoGenerationTaskId);
+                    return;
+                }
+
                 //
                 // Собственно загружаем фотографию
                 //
@@ -99,6 +109,11 @@ void CharacterImageCard::Implementation::generateCharacterPhoto()
                 NetworkRequest* request = new NetworkRequest;
                 connect(request, &NetworkRequest::downloadComplete, q,
                         [this](const QByteArray& _imageData) {
+                            if (_imageData.isEmpty()) {
+                                TaskBar::finishTask(photoGenerationTaskId);
+                                return;
+                            }
+
                             QPixmap image;
                             image.loadFromData(_imageData);
                             cropImage(image);

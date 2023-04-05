@@ -110,6 +110,7 @@ void TaskBar::addTask(const QString& _taskId)
 
     tasks.append({ _taskId, {}, {} });
     Implementation::instance->d->correctGeometry(Implementation::instance);
+    Implementation::instance->raise();
     Implementation::instance->show();
 }
 

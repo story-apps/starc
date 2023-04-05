@@ -253,7 +253,7 @@ void CrashReportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                                Ui::DesignSystem::layout().px16(),
                                                Ui::DesignSystem::layout().px24(), 0);
 
-    contentsLayout()->setVerticalSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
+    contentsLayout()->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
     d->buttonsLayout->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
                   Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12())
