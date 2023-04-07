@@ -2137,6 +2137,24 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                             d->projectStructureProxyModel->mapFromSource(itemIndex));
                     }
                 }
+
+                //
+                // Переименовываем вложенные локации
+                //
+                for (int index = 0; index < locationsModel->rowCount(); ++index) {
+                    auto location = locationsModel->location(index);
+                    auto oldNameDots = _oldName;
+                    oldNameDots.replace(" - ", ". ");
+                    if (location->name().startsWith(_oldName)) {
+                        auto newLocationName = location->name();
+                        newLocationName.replace(_oldName, _newName);
+                        location->setName(newLocationName);
+                    } else if (location->name().startsWith(oldNameDots)) {
+                        auto newLocationName = location->name();
+                        newLocationName.replace(oldNameDots, _newName);
+                        location->setName(newLocationName);
+                    }
+                }
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::createWorldRequested, this,
             [this](const QString& _name, const QByteArray& _content) {
