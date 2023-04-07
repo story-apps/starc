@@ -35,7 +35,7 @@ public:
     /**
      * @brief Задать делегат для отрисовки элементов выпадающего списка
      */
-    void setPopupItemsDelegate(QAbstractItemDelegate* _delegate);
+    void setPopupItemDelegate(QAbstractItemDelegate* _delegate);
 
     /**
      * @brief Необходимо ли расширят размер попапа, чтобы содержимое полностью вмещалось

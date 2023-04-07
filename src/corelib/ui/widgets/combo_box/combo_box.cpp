@@ -128,7 +128,7 @@ void ComboBox::setPopupMaxItems(int _maxItems)
     d->popupMaxItems = _maxItems;
 }
 
-void ComboBox::setPopupItemsDelegate(QAbstractItemDelegate* _delegate)
+void ComboBox::setPopupItemDelegate(QAbstractItemDelegate* _delegate)
 {
     d->popup->setItemDelegate(_delegate);
 }
