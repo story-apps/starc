@@ -46,7 +46,7 @@ public:
     /**
      * @brief Делегат для отрисовки списка автоподстановки
      */
-    TreeDelegate* popupDelegate = nullptr;
+    QAbstractItemDelegate* popupDelegate = nullptr;
 
     /**
      * @brief Анимация отображения попапа
@@ -124,6 +124,15 @@ void Completer::setTextColor(const QColor& _color)
     d->reconfigurePopup();
 }
 
+void Completer::setItemDelegate(QAbstractItemDelegate* _delegate)
+{
+    if (d->popupDelegate != nullptr) {
+        d->popupDelegate->deleteLater();
+    }
+
+    d->popupDelegate = _delegate;
+}
+
 void Completer::showCompleter(const QRect& _rect)
 {
     //
@@ -152,7 +161,7 @@ void Completer::showCompleter(const QRect& _rect)
     //
     const int finalHeight = static_cast<int>(std::min(maxVisibleItems(), completionCount())
                                              * Ui::DesignSystem::treeOneLineItem().height());
-    popup()->resize(_rect.width(), finalHeight);
+    popup()->resize(d->popup->sizeHintForColumn(0), finalHeight);
 
     //
     // Прикидываем размещение попапа на экране

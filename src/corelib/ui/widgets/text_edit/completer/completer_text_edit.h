@@ -2,6 +2,7 @@
 
 #include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
 
+class QAbstractItemDelegate;
 class QAbstractItemModel;
 class Completer;
 
@@ -28,6 +29,11 @@ public:
      */
     bool isAutoCompleteEnabled() const;
     void setAutoCompleteEnabled(bool _enabled);
+
+    /**
+     * @brief Задать делегат для отрисовки элементов выпадающего списка
+     */
+    void setCompleterItemDelegate(QAbstractItemDelegate* _delegate);
 
     /**
      * @brief Получить подстановщика

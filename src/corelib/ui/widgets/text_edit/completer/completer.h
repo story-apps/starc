@@ -4,6 +4,8 @@
 
 #include <corelib_global.h>
 
+class QAbstractItemDelegate;
+
 
 /**
  * @brief Переопределяем комплитер, чтобы показывать список красиво
@@ -23,6 +25,11 @@ public:
      * @brief Цвет текста попапа
      */
     void setTextColor(const QColor& _color);
+
+    /**
+     * @brief Задать делегат для отрисовки элементов выпадающего списка
+     */
+    void setItemDelegate(QAbstractItemDelegate* _delegate);
 
     /**
      * @brief Переопределяется для отображения подсказки по глобальной координате

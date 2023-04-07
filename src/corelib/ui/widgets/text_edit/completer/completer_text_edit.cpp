@@ -72,6 +72,11 @@ void CompleterTextEdit::setAutoCompleteEnabled(bool _enabled)
     d->isAutoCompleteEnabled = _enabled;
 }
 
+void CompleterTextEdit::setCompleterItemDelegate(QAbstractItemDelegate* _delegate)
+{
+    d->completer->setItemDelegate(_delegate);
+}
+
 Completer* CompleterTextEdit::completer() const
 {
     return d->completer;
