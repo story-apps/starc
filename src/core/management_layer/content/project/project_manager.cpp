@@ -2614,6 +2614,12 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     // Сбрасываем название последнего открытого проекта
     //
     d->projectStructureModel->setProjectName({});
+
+    //
+    // Сбрасываем список соавторов
+    //
+    d->collaboratorsCursors.clear();
+    d->collaboratorsToolBar->setCollaborators({});
 }
 
 void ProjectManager::clearChangesHistory()

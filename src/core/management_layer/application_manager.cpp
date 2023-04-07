@@ -3148,8 +3148,14 @@ void ApplicationManager::initConnections()
                 d->cloudServiceManager->updateCursor(currentProject.id(), _documentUuid,
                                                      _cursorData);
             });
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::cursorsChanged,
-            d->projectManager.data(), &ProjectManager::setCursors);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::cursorsChanged, this,
+            [this](int _projectId, const QUuid& _documentUuid,
+                   const QVector<Domain::CursorInfo>& _cursors) {
+                if (const auto currentProject = d->projectsManager->currentProject();
+                    currentProject.isRemote() && currentProject.id() == _projectId) {
+                    d->projectManager->setCursors(_documentUuid, _cursors);
+                }
+            });
 
     //
     // Статистика по сессии
