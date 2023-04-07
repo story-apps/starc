@@ -36,12 +36,12 @@ CollaboratorsToolBar::Implementation::Implementation(CollaboratorsToolBar* _q)
 
 qreal CollaboratorsToolBar::Implementation::avatarSize() const
 {
-    return Ui::DesignSystem::layout().px(40);
+    return DesignSystem::treeOneLineItem().avatarSize().width();
 }
 
 qreal CollaboratorsToolBar::Implementation::spacing() const
 {
-    return Ui::DesignSystem::layout().px8();
+    return DesignSystem::layout().px8();
 }
 
 void CollaboratorsToolBar::Implementation::updateSize()
@@ -54,10 +54,9 @@ void CollaboratorsToolBar::Implementation::updatePosition()
     auto parentWidget = q->parentWidget();
     Q_ASSERT(parentWidget);
 
-    q->move(q->isLeftToRight()
-                ? parentWidget->width() - q->width() - Ui::DesignSystem::layout().px24()
-                : Ui::DesignSystem::layout().px24(),
-            parentWidget->height() - q->height() - Ui::DesignSystem::layout().px24());
+    q->move(q->isLeftToRight() ? parentWidget->width() - q->width() - DesignSystem::layout().px24()
+                               : DesignSystem::layout().px24(),
+            parentWidget->height() - q->height() - DesignSystem::layout().px24());
 }
 
 
@@ -141,7 +140,7 @@ void CollaboratorsToolBar::setCollaborators(const QVector<Domain::CursorInfo>& _
 
 QSize CollaboratorsToolBar::sizeHint() const
 {
-    const auto size = d->avatarSize();
+    const auto size = d->avatarSize() + DesignSystem::layout().px4();
     const auto spacing = d->spacing();
     return QSize(
         std::max(0.0, d->collaborators.size() * size + (d->collaborators.size() - 1) * spacing),
@@ -178,15 +177,16 @@ void CollaboratorsToolBar::paintEvent(QPaintEvent* _event)
         //
         // ... цветной кружок под аватаркой
         //
-        const QRectF avatarBackgroundRect(x, 0.0, size, size);
+        const QRectF avatarRect(x + DesignSystem::layout().px2(), DesignSystem::layout().px2(),
+                                size, size);
+        const auto avatarBackgroundRect
+            = avatarRect.adjusted(-DesignSystem::layout().px2(), -DesignSystem::layout().px2(),
+                                  DesignSystem::layout().px2(), DesignSystem::layout().px2());
         painter.setBrush(ColorHelper::forText(collaborator.name));
         painter.drawEllipse(avatarBackgroundRect);
         //
         // ... сама аватарка
         //
-        const auto avatarRect = avatarBackgroundRect.adjusted(
-            Ui::DesignSystem::layout().px2(), Ui::DesignSystem::layout().px2(),
-            -Ui::DesignSystem::layout().px2(), -Ui::DesignSystem::layout().px2());
         const auto avatar = AvatarGenerator::avatar(collaborator.name, collaborator.email);
         painter.drawPixmap(avatarRect, avatar, avatar.rect());
 
