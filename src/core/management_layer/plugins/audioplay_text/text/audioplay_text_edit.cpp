@@ -20,6 +20,7 @@
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/tools/debouncer.h>
 
 #include <QAction>
 #include <QCoreApplication>
@@ -57,11 +58,18 @@ public:
     bool continueBlockNumber = false;
 
     QVector<Domain::CursorInfo> collaboratorsCursorInfo;
+    QVector<Domain::CursorInfo> pendingCollaboratorsCursorInfo;
+    Debouncer collaboratorCursorInfoUpdateDebouncer;
 };
 
 AudioplayTextEdit::Implementation::Implementation(AudioplayTextEdit* _q)
     : q(_q)
+    , collaboratorCursorInfoUpdateDebouncer(500)
 {
+    connect(&collaboratorCursorInfoUpdateDebouncer, &Debouncer::gotWork, q, [this] {
+        std::swap(collaboratorsCursorInfo, pendingCollaboratorsCursorInfo);
+        q->update();
+    });
 }
 
 const BusinessLayer::AudioplayTemplate& AudioplayTextEdit::Implementation::audioplayTemplate() const
@@ -123,6 +131,25 @@ AudioplayTextEdit::AudioplayTextEdit(QWidget* _parent)
 
     setDocument(&d->document);
     setCapitalizeWords(false);
+
+
+    connect(document(), &QTextDocument::contentsChange, this,
+            [this](int _position, int _charsRemoved, int _charsAdded) {
+                auto updateCursors = [_position, _charsRemoved,
+                                      _charsAdded](QVector<Domain::CursorInfo>& _cursors) {
+                    for (auto& collaboratorCursor : _cursors) {
+                        int collaboratorCursorPosition = collaboratorCursor.cursorData.toInt();
+                        if (collaboratorCursorPosition >= _position) {
+                            collaboratorCursorPosition += _charsAdded - _charsRemoved;
+                            collaboratorCursor.cursorData
+                                = QByteArray::number(collaboratorCursorPosition);
+                        }
+                    }
+                };
+                updateCursors(d->collaboratorsCursorInfo);
+
+                d->collaboratorCursorInfoUpdateDebouncer.abortWork();
+            });
 }
 
 AudioplayTextEdit::~AudioplayTextEdit() = default;
@@ -507,9 +534,8 @@ void AudioplayTextEdit::addReviewMark(const QColor& _textColor, const QColor& _b
 
 void AudioplayTextEdit::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
-    d->collaboratorsCursorInfo = _cursors;
-
-    update();
+    d->pendingCollaboratorsCursorInfo = _cursors;
+    d->collaboratorCursorInfoUpdateDebouncer.orderWork();
 }
 
 void AudioplayTextEdit::keyPressEvent(QKeyEvent* _event)

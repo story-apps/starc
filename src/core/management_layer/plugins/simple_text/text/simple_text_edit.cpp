@@ -15,6 +15,7 @@
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/tools/debouncer.h>
 
 #include <QAction>
 #include <QCoreApplication>
@@ -60,11 +61,18 @@ public:
     bool showDialogueNumber = false;
 
     QVector<Domain::CursorInfo> collaboratorsCursorInfo;
+    QVector<Domain::CursorInfo> pendingCollaboratorsCursorInfo;
+    Debouncer collaboratorCursorInfoUpdateDebouncer;
 };
 
 SimpleTextEdit::Implementation::Implementation(SimpleTextEdit* _q)
     : q(_q)
+    , collaboratorCursorInfoUpdateDebouncer(500)
 {
+    connect(&collaboratorCursorInfoUpdateDebouncer, &Debouncer::gotWork, q, [this] {
+        std::swap(collaboratorsCursorInfo, pendingCollaboratorsCursorInfo);
+        q->update();
+    });
 }
 
 const BusinessLayer::TextTemplate& SimpleTextEdit::Implementation::textTemplate() const
@@ -123,6 +131,25 @@ SimpleTextEdit::SimpleTextEdit(QWidget* _parent)
 
     setDocument(&d->document);
     setCapitalizeWords(false);
+
+
+    connect(document(), &QTextDocument::contentsChange, this,
+            [this](int _position, int _charsRemoved, int _charsAdded) {
+                auto updateCursors = [_position, _charsRemoved,
+                                      _charsAdded](QVector<Domain::CursorInfo>& _cursors) {
+                    for (auto& collaboratorCursor : _cursors) {
+                        int collaboratorCursorPosition = collaboratorCursor.cursorData.toInt();
+                        if (collaboratorCursorPosition >= _position) {
+                            collaboratorCursorPosition += _charsAdded - _charsRemoved;
+                            collaboratorCursor.cursorData
+                                = QByteArray::number(collaboratorCursorPosition);
+                        }
+                    }
+                };
+                updateCursors(d->collaboratorsCursorInfo);
+
+                d->collaboratorCursorInfoUpdateDebouncer.abortWork();
+            });
 }
 
 SimpleTextEdit::~SimpleTextEdit() = default;
@@ -259,9 +286,8 @@ void SimpleTextEdit::addReviewMark(const QColor& _textColor, const QColor& _back
 
 void SimpleTextEdit::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
-    d->collaboratorsCursorInfo = _cursors;
-
-    update();
+    d->pendingCollaboratorsCursorInfo = _cursors;
+    d->collaboratorCursorInfoUpdateDebouncer.orderWork();
 }
 
 void SimpleTextEdit::keyPressEvent(QKeyEvent* _event)
