@@ -33,6 +33,7 @@ public:
     /**
      * @brief Установить текущим элемент для заданного индекса модели сценария и позиции в блоке
      */
+    QModelIndex currentIndex() const;
     void setCurrentIndex(const QModelIndex& _index);
 
     /**

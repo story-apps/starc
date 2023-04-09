@@ -43,6 +43,9 @@ public:
     QAction* textColorAction = nullptr;
     QAction* textBackgroundColorAction = nullptr;
     QAction* commentAction = nullptr;
+    QAction* markAsDoneAction = nullptr;
+    QAction* removeAction = nullptr;
+    QAction* separatorAction = nullptr;
     QAction* colorAction = nullptr;
 
     QVariantAnimation opacityAnimation;
@@ -57,6 +60,9 @@ CommentsToolbar::Implementation::Implementation(QWidget* _parent)
     : textColorAction(new QAction)
     , textBackgroundColorAction(new QAction)
     , commentAction(new QAction)
+    , markAsDoneAction(new QAction)
+    , removeAction(new QAction)
+    , separatorAction(new QAction)
     , colorAction(new QAction)
     , colorPickerPopup(new ColorPickerPopup(_parent))
 {
@@ -120,9 +126,15 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
     d->commentAction->setIconText(u8"\U000f0188");
     addAction(d->commentAction);
 
-    auto separatorAction = new QAction(this);
-    separatorAction->setSeparator(true);
-    addAction(separatorAction);
+    d->markAsDoneAction->setIconText(u8"\U000F012C");
+    d->markAsDoneAction->setCheckable(true);
+    addAction(d->markAsDoneAction);
+
+    d->removeAction->setIconText(u8"\U000F01B4");
+    addAction(d->removeAction);
+
+    d->separatorAction->setSeparator(true);
+    addAction(d->separatorAction);
 
     d->colorAction->setIconText(u8"\U000f0765");
     addAction(d->colorAction);
@@ -139,6 +151,8 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
             [this] { emit textBackgoundColorChangeRequested(actionColor(d->colorAction)); });
     connect(d->commentAction, &QAction::triggered, this,
             [this] { emit commentAddRequested(actionColor(d->colorAction)); });
+    connect(d->markAsDoneAction, &QAction::toggled, this, &CommentsToolbar::markAsDoneRequested);
+    connect(d->removeAction, &QAction::triggered, this, &CommentsToolbar::removeRequested);
     connect(d->colorAction, &QAction::triggered, this, [this] {
         if (d->colorPickerPopup->isPopupShown()) {
             d->colorPickerPopup->hidePopup();
@@ -162,6 +176,27 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
 }
 
 CommentsToolbar::~CommentsToolbar() = default;
+
+void CommentsToolbar::setMode(Mode _mode)
+{
+    const auto isAddNewCommentVisible = _mode == Mode::AddNewComment;
+    d->textColorAction->setVisible(isAddNewCommentVisible);
+    d->textBackgroundColorAction->setVisible(isAddNewCommentVisible);
+    d->commentAction->setVisible(isAddNewCommentVisible);
+    d->separatorAction->setVisible(isAddNewCommentVisible);
+    d->colorAction->setVisible(isAddNewCommentVisible);
+    const auto isEditCommentVisible = !isAddNewCommentVisible;
+    d->markAsDoneAction->setVisible(isEditCommentVisible);
+    d->removeAction->setVisible(isEditCommentVisible);
+
+    resize(sizeHint());
+}
+
+void CommentsToolbar::setCurrentCommentIsDone(bool _isDone)
+{
+    QSignalBlocker signalBlocker(d->markAsDoneAction);
+    d->markAsDoneAction->setChecked(_isDone);
+}
 
 void CommentsToolbar::showToolbar()
 {

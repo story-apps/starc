@@ -13,8 +13,27 @@ class CORE_LIBRARY_EXPORT CommentsToolbar : public FloatingToolBar
     Q_OBJECT
 
 public:
+    /**
+     * @brief Режим работы панели инструментов
+     */
+    enum class Mode {
+        AddNewComment,
+        EditComment,
+    };
+
+public:
     explicit CommentsToolbar(QWidget* _parent = nullptr);
     ~CommentsToolbar() override;
+
+    /**
+     * @brief Настроить режим работы панели инструментов
+     */
+    void setMode(Mode _mode);
+
+    /**
+     * @brief Установить решённость текущего комментария
+     */
+    void setCurrentCommentIsDone(bool _isDone);
 
     /**
      * @brief Отобразить тулбар
@@ -46,6 +65,16 @@ signals:
      * @brief Пользователь хочет добавить комментарий с заданным цветом
      */
     void commentAddRequested(const QColor& _color);
+
+    /**
+     * @brief Пользователь хочет пометить текущий комментарий как решённый
+     */
+    void markAsDoneRequested(bool _isDone);
+
+    /**
+     * @brief Пользователь хочет удалить текущий комеентарий
+     */
+    void removeRequested();
 
 protected:
     /**

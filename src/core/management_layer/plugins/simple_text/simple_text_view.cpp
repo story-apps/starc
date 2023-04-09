@@ -330,8 +330,24 @@ void SimpleTextView::Implementation::updateTextEditPageMargins()
 
 void SimpleTextView::Implementation::updateCommentsToolbar()
 {
-    if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()
-        || !textEdit->textCursor().hasSelection()) {
+    if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()) {
+        commentsToolbar->hideToolbar();
+        return;
+    }
+
+    //
+    // Настроим список доступных действий панели рецензирования
+    //
+    if (textEdit->textCursor().hasSelection()) {
+        commentsToolbar->setMode(CommentsToolbar::Mode::AddNewComment);
+    } else if (commentsView->currentIndex().isValid()) {
+        commentsToolbar->setMode(CommentsToolbar::Mode::EditComment);
+        commentsToolbar->setCurrentCommentIsDone(
+            commentsModel
+                ->data(commentsView->currentIndex(),
+                       BusinessLayer::CommentsModel::ReviewMarkIsDoneRole)
+                .toBool());
+    } else {
         commentsToolbar->hideToolbar();
         return;
     }
@@ -503,6 +519,19 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
                             d->textEdit->cursorRect().topLeft()))
                         .y());
             });
+    connect(d->commentsToolbar, &CommentsToolbar::markAsDoneRequested, this, [this](bool _checked) {
+        QSignalBlocker blocker(d->commentsView);
+        if (_checked) {
+            d->commentsModel->markAsDone({ d->commentsView->currentIndex() });
+        } else {
+            d->commentsModel->markAsUndone({ d->commentsView->currentIndex() });
+        }
+    });
+    connect(d->commentsToolbar, &CommentsToolbar::removeRequested, this, [this] {
+        QSignalBlocker blocker(d->commentsView);
+        d->commentsModel->remove({ d->commentsView->currentIndex() });
+        d->commentsToolbar->hideToolbar();
+    });
     connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
             [this](const QColor& _color, const QString& _comment) {
                 d->addReviewMark({}, _color, _comment);

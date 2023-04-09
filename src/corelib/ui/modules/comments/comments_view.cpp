@@ -333,6 +333,11 @@ void CommentsView::setModel(QAbstractItemModel* _model)
     }
 }
 
+QModelIndex CommentsView::currentIndex() const
+{
+    return d->commentsView->currentIndex();
+}
+
 void CommentsView::setCurrentIndex(const QModelIndex& _index)
 {
     QSignalBlocker blocker(this);
