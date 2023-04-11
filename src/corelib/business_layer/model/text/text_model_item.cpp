@@ -1,6 +1,7 @@
 #include "text_model_item.h"
 
 #include <QVariant>
+#include <QXmlStreamReader>
 
 
 namespace BusinessLayer {
@@ -74,6 +75,16 @@ QVariant TextModelItem::data(int _role) const
         return static_cast<int>(d->type);
     }
 
+    return {};
+}
+
+QStringRef TextModelItem::readCustomContent(QXmlStreamReader& _contentReader)
+{
+    return _contentReader.name();
+}
+
+QByteArray TextModelItem::customContent() const
+{
     return {};
 }
 

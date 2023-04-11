@@ -354,6 +354,17 @@ QVector<BreakdownResourceCategory> ScreenplayDictionariesModel::resourceCategori
     return d->resourceCategories;
 }
 
+BreakdownResourceCategory ScreenplayDictionariesModel::resourceCategory(const QUuid& _uuid) const
+{
+    for (const auto& category : std::as_const(d->resourceCategories)) {
+        if (category.uuid == _uuid) {
+            return category;
+        }
+    }
+
+    return {};
+}
+
 void ScreenplayDictionariesModel::addResourceCategory(const QString& _name, const QString& _icon,
                                                       const QColor& _color, bool _hasIds)
 {
@@ -431,6 +442,17 @@ void ScreenplayDictionariesModel::removeResourceCategory(const QUuid& _uuid)
 QVector<BreakdownResource> ScreenplayDictionariesModel::resources() const
 {
     return d->resources;
+}
+
+BreakdownResource ScreenplayDictionariesModel::resource(const QUuid& _uuid) const
+{
+    for (const auto& resource : std::as_const(d->resources)) {
+        if (resource.uuid == _uuid) {
+            return resource;
+        }
+    }
+
+    return {};
 }
 
 void ScreenplayDictionariesModel::addResource(const QUuid& _categoryUuid, const QString& _name,
@@ -642,6 +664,12 @@ void ScreenplayDictionariesModel::initDocument()
             resourceCategory.uuid = resourceCategoryNode.attributeNode(kItemUuidAttribute).value();
             resourceCategory.name = TextHelper::fromHtmlEscaped(resourceCategoryNode.text());
             resourceCategory.icon = resourceCategoryNode.attributeNode(kItemIconAttribute).value();
+            //
+            // FIXME: выпилить в версии 0.6.0
+            //
+            if (resourceCategory.icon.isEmpty()) {
+                resourceCategory.icon = u8"\U000F0766";
+            }
             if (resourceCategoryNode.hasAttribute(kItemColorAttribute)) {
                 resourceCategory.color
                     = resourceCategoryNode.attributeNode(kItemColorAttribute).value();

@@ -404,6 +404,12 @@ protected:
      * @brief Установить область обрезки так, чтобы вырезалось всё, что выходит на поля страницы
      */
     void clipPageDecorationRegions(QPainter* _painter);
+
+    /**
+     * @brief Интерфейс для кастомизации отрисовки в наследниках
+     */
+    virtual void paintUnderText(QPainter* _painter);
+    virtual void paintOverText(QPainter* _painter);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PageTextEdit::AutoFormatting)

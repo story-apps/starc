@@ -48,6 +48,11 @@ public:
      */
     QString dialogueNumber(const QTextBlock& _forBlock) const;
 
+    /**
+     * @brief Получить список ресурсов блока
+     */
+    QVector<TextModelTextItem::ResourceMark> resourceMarks(const QTextBlock& _forBlock);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

@@ -5,7 +5,6 @@
 #include <utils/tools/run_once.h>
 
 #include <QAction>
-#include <QHBoxLayout>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QSettings>

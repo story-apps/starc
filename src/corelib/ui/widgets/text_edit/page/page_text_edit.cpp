@@ -2355,10 +2355,13 @@ QPoint PageTextEditPrivate::correctMousePosition(const QPoint& _eventPos) const
 
 void PageTextEditPrivate::paint(QPainter* p, QPaintEvent* e)
 {
+    Q_Q(PageTextEdit);
+
     paintPagesView(p);
     paintPageMargins(p);
     paintLineHighlighting(p);
 
+    q->paintUnderText(p);
 
     const int xOffset = horizontalOffset();
     const int yOffset = verticalOffset();
@@ -2389,6 +2392,7 @@ void PageTextEditPrivate::paint(QPainter* p, QPaintEvent* e)
 
     p->translate(xOffset, yOffset);
 
+    q->paintOverText(p);
 
     clipPageDecorationRegions(p);
     paintTextBlocksOverlay(p);
@@ -3952,6 +3956,16 @@ void PageTextEdit::clipPageDecorationRegions(QPainter* _painter)
 {
     Q_D(PageTextEdit);
     d->clipPageDecorationRegions(_painter);
+}
+
+void PageTextEdit::paintUnderText(QPainter* _painter)
+{
+    Q_UNUSED(_painter)
+}
+
+void PageTextEdit::paintOverText(QPainter* _painter)
+{
+    Q_UNUSED(_painter)
 }
 
 #include "moc_page_text_edit.cpp"

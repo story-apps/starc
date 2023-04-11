@@ -80,16 +80,6 @@ QVariant ScreenplayTextModelBeatItem::data(int _role) const
     }
 }
 
-QStringRef ScreenplayTextModelBeatItem::readCustomContent(QXmlStreamReader& _contentReader)
-{
-    return _contentReader.name();
-}
-
-QByteArray ScreenplayTextModelBeatItem::customContent() const
-{
-    return {};
-}
-
 void ScreenplayTextModelBeatItem::handleChange()
 {
     QString heading;

@@ -218,4 +218,25 @@ QString ScreenplayTextDocument::dialogueNumber(const QTextBlock& _forBlock) cons
     return textItem->number().value_or(TextModelTextItem::Number()).text;
 }
 
+QVector<TextModelTextItem::ResourceMark> ScreenplayTextDocument::resourceMarks(
+    const QTextBlock& _forBlock)
+{
+    if (_forBlock.userData() == nullptr) {
+        return {};
+    }
+
+    const auto blockData = static_cast<TextBlockData*>(_forBlock.userData());
+    if (blockData == nullptr) {
+        return {};
+    }
+
+    const auto item = blockData->item();
+    if (item == nullptr || item->type() != TextModelItemType::Text) {
+        return {};
+    }
+
+    const auto textItem = static_cast<const TextModelTextItem*>(item);
+    return textItem->resourceMarks();
+}
+
 } // namespace BusinessLayer

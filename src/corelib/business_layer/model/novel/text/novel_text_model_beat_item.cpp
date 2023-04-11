@@ -65,16 +65,6 @@ QVariant NovelTextModelBeatItem::data(int _role) const
     }
 }
 
-QStringRef NovelTextModelBeatItem::readCustomContent(QXmlStreamReader& _contentReader)
-{
-    return _contentReader.name();
-}
-
-QByteArray NovelTextModelBeatItem::customContent() const
-{
-    return {};
-}
-
 void NovelTextModelBeatItem::handleChange()
 {
     QString heading;

@@ -128,6 +128,11 @@ public:
                        const QString& _comment, const TextCursor& _cursor);
 
     /**
+     * @brief Добавить ресурсную заметку в текущее выделение
+     */
+    void addResourceMark(const QUuid& _resourceUuid, const TextCursor& _cursor);
+
+    /**
      * @brief Получить закладку блока
      */
     TextModelTextItem::Bookmark bookmark(const QTextBlock& _forBlock) const;

@@ -114,7 +114,11 @@ AddBookmarkView::~AddBookmarkView() = default;
 
 void AddBookmarkView::setTopMargin(int _margin)
 {
-    d->content->widget()->layout()->setContentsMargins(0, _margin, 0, 0);
+    d->content->widget()->layout()->setContentsMargins(
+        0,
+        std::min(static_cast<int>(std::max(0.0, _margin - DesignSystem::layout().px24())),
+                 height() - d->bookmarkNameContainer->height()),
+        0, 0);
 }
 
 QString AddBookmarkView::bookmarkName() const

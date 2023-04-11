@@ -56,16 +56,6 @@ QVariant SimpleTextModelChapterItem::data(int _role) const
     }
 }
 
-QStringRef SimpleTextModelChapterItem::readCustomContent(QXmlStreamReader& _contentReader)
-{
-    return _contentReader.name();
-}
-
-QByteArray SimpleTextModelChapterItem::customContent() const
-{
-    return {};
-}
-
 void SimpleTextModelChapterItem::handleChange()
 {
     QString heading;

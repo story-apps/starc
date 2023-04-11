@@ -412,6 +412,17 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
             reviewCursor.mergeCharFormat(reviewMark.charFormat());
         }
 
+        //
+        // Вставим ресурсные заметки
+        //
+        auto resourceCursor = _cursor;
+        for (const auto& resourceMark : textItem->resourceMarks()) {
+            resourceCursor.setPosition(reviewCursor.block().position() + resourceMark.from);
+            resourceCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                        resourceMark.length);
+            resourceCursor.mergeCharFormat(resourceMark.charFormat());
+        }
+
         break;
     }
 
@@ -653,8 +664,16 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                     cursor.setCharFormat(blockStyle.charFormat());
 
                     //
-                    // Применяем форматирование из редакторских заметок элемента
+                    // Применяем форматирование из форматов и редакторских заметок элемента
                     //
+                    for (const auto& format : textItem->formats()) {
+                        cursor.movePosition(QTextCursor::StartOfBlock);
+                        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
+                                            format.from);
+                        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
+                                            format.length);
+                        cursor.mergeCharFormat(format.charFormat());
+                    }
                     for (const auto& reviewMark : textItem->reviewMarks()) {
                         cursor.movePosition(QTextCursor::StartOfBlock);
                         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
@@ -663,13 +682,13 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                                             reviewMark.length);
                         cursor.mergeCharFormat(reviewMark.charFormat());
                     }
-                    for (const auto& format : textItem->formats()) {
+                    for (const auto& resourceMark : textItem->resourceMarks()) {
                         cursor.movePosition(QTextCursor::StartOfBlock);
                         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor,
-                                            format.from);
+                                            resourceMark.from);
                         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
-                                            format.length);
-                        cursor.mergeCharFormat(format.charFormat());
+                                            resourceMark.length);
+                        cursor.mergeCharFormat(resourceMark.charFormat());
                     }
                 }
                 //
@@ -1871,6 +1890,15 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
     cursor.mergeCharFormat(reviewMark.charFormat());
 }
 
+void TextDocument::addResourceMark(const QUuid& _resourceUuid, const TextCursor& _cursor)
+{
+    TextModelTextItem::ResourceMark resourceMark;
+    resourceMark.uuid = _resourceUuid;
+
+    auto cursor = _cursor;
+    cursor.mergeCharFormat(resourceMark.charFormat());
+}
+
 TextModelTextItem::Bookmark TextDocument::bookmark(const QTextBlock& _forBlock) const
 {
     if (_forBlock.userData() == nullptr) {
@@ -2510,6 +2538,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             textItem->setText(block.text());
             textItem->setFormats(block.textFormats());
             textItem->setReviewMarks(block.textFormats());
+            textItem->setResourceMarks(block.textFormats());
 
             //
             // Является ли предыдущий элемент футером папки
@@ -2832,6 +2861,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 textItem->setText(block.text());
                 textItem->setFormats(block.textFormats());
                 textItem->setReviewMarks(block.textFormats());
+                textItem->setResourceMarks(block.textFormats());
             }
 
             d->model->updateItem(item);

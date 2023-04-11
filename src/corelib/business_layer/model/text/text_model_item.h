@@ -3,6 +3,7 @@
 #include <business_layer/model/abstract_model_item.h>
 
 class QXmlStreamReader;
+class QStringRef;
 
 
 namespace BusinessLayer {
@@ -92,6 +93,17 @@ public:
      * @brief Проверить равен ли текущий элемент заданному
      */
     virtual bool isEqual(TextModelItem* _item) const = 0;
+
+protected:
+    /**
+     * @brief Считать кастомный контент и вернуть название тэга на котором стоит ридер
+     */
+    virtual QStringRef readCustomContent(QXmlStreamReader& _contentReader);
+
+    /**
+     * @brief Сформировать xml-блок с кастомными данными элемента
+     */
+    virtual QByteArray customContent() const;
 
 private:
     class Implementation;

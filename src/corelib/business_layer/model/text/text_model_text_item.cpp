@@ -89,14 +89,19 @@ public:
     QString text;
 
     /**
+     * @brief Форматирование текста в параграфе
+     */
+    QVector<TextFormat> formats;
+
+    /**
      * @brief Редакторские заметки в параграфе
      */
     QVector<ReviewMark> reviewMarks;
 
     /**
-     * @brief Форматирование текста в параграфе
+     * @brief Ресурсы блока
      */
-    QVector<TextFormat> formats;
+    QVector<ResourceMark> resourceMarks;
 
     /**
      * @brief Ревизии в блоке
@@ -238,6 +243,32 @@ void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader
         } while (!_contentReader.atEnd());
     }
 
+    if (currentTag == xml::kResourceMarksTag) {
+        do {
+            currentTag = xml::readNextElement(_contentReader);
+
+            //
+            // Прекращаем обработку, если дошли до конца ресурсов
+            //
+            if (currentTag == xml::kResourceMarksTag && _contentReader.isEndElement()) {
+                currentTag = xml::readNextElement(_contentReader);
+                break;
+            }
+
+            else if (currentTag == xml::kResourceMarkTag) {
+                const auto formatAttributes = _contentReader.attributes();
+                ResourceMark format;
+                format.from = formatAttributes.value(xml::kFromAttribute).toInt();
+                format.length = formatAttributes.value(xml::kLengthAttribute).toInt();
+                format.uuid = formatAttributes.value(xml::kUuidAttribute).toString();
+
+                resourceMarks.append(format);
+            }
+
+            xml::readNextElement(_contentReader); // end
+        } while (!_contentReader.atEnd());
+    }
+
     if (currentTag == xml::kRevisionsTag) {
         Q_ASSERT(false);
         //        auto revisionNode = revisionsNode.firstChildElement();
@@ -249,6 +280,8 @@ void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader
         //            revisionNode = revisionNode.nextSiblingElement();
         //        }
     }
+
+    currentTag = q->readCustomContent(_contentReader);
 
     xml::readNextElement(_contentReader); // next
 }
@@ -414,19 +447,66 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
     }
 
     //
-    // Сохраняем ревизии блока
+    // Сохранить ресурсные заметки
     //
-    if (!revisions.isEmpty()) {
-        xml += QString("<%1>").arg(xml::kRevisionsTag).toUtf8();
-        for (const auto& revision : std::as_const(revisions)) {
+    QVector<ResourceMark> resourceMarksToSave;
+    for (const auto& resourceMark : std::as_const(resourceMarks)) {
+        if (resourceMark.from >= _end) {
+            continue;
+        }
+
+        //
+        // Корректируем заметки, которые будут сохранены,
+        // т.к. начало и конец сохраняемого блока могут отличаться
+        //
+        auto resourceMarkToSave = resourceMark;
+        if (resourceMark.from >= _from) {
+            resourceMarkToSave.from -= _from;
+        } else {
+            resourceMarkToSave.from = 0;
+            resourceMarkToSave.length -= _from - resourceMark.from;
+        }
+        if (resourceMark.end() > _end) {
+            resourceMarkToSave.length -= resourceMark.end() - _end;
+        }
+        resourceMarksToSave.append(resourceMarkToSave);
+    }
+    //
+    // Собственно сохраняем
+    //
+    if (!resourceMarksToSave.isEmpty()) {
+        xml += QString("<%1>").arg(xml::kResourceMarksTag).toUtf8();
+        for (const auto& resourceMark : std::as_const(resourceMarksToSave)) {
             xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\"/>")
-                       .arg(xml::kRevisionTag, xml::kFromAttribute, QString::number(revision.from),
-                            xml::kLengthAttribute, QString::number(revision.length),
-                            xml::kColorAttribute, revision.color.name())
+                       .arg(xml::kResourceMarkTag, xml::kFromAttribute,
+                            QString::number(resourceMark.from), xml::kLengthAttribute,
+                            QString::number(resourceMark.length), xml::kUuidAttribute,
+                            resourceMark.uuid.toString())
                        .toUtf8();
         }
-        xml += QString("</%1>").arg(xml::kRevisionsTag).toUtf8();
+        xml += QString("</%1>").arg(xml::kResourceMarksTag).toUtf8();
     }
+
+    //
+    // Сохраняем ревизии блока
+    //
+    //    if (!revisions.isEmpty()) {
+    //        xml += QString("<%1>").arg(xml::kRevisionsTag).toUtf8();
+    //        for (const auto& revision : std::as_const(revisions)) {
+    //            xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\"/>")
+    //                       .arg(xml::kRevisionTag, xml::kFromAttribute,
+    //                       QString::number(revision.from),
+    //                            xml::kLengthAttribute, QString::number(revision.length),
+    //                            xml::kColorAttribute, revision.color.name())
+    //                       .toUtf8();
+    //        }
+    //        xml += QString("</%1>").arg(xml::kRevisionsTag).toUtf8();
+    //    }
+
+    //
+    // Сохраняем кастомные данные
+    //
+    xml += q->customContent();
 
     //
     // Закрываем блок
@@ -543,6 +623,24 @@ QTextCharFormat TextModelTextItem::ReviewMark::charFormat() const
     return format;
 }
 
+bool TextModelTextItem::ResourceMark::operator==(const ResourceMark& _other) const
+{
+    return from == _other.from && length == _other.length && uuid == _other.uuid;
+}
+
+QTextCharFormat TextModelTextItem::ResourceMark::charFormat() const
+{
+    QTextCharFormat format;
+    format.setProperty(TextBlockStyle::PropertyIsResourceMark, true);
+    format.setProperty(TextBlockStyle::PropertyResourceUuid, uuid);
+    return format;
+}
+
+bool TextModelTextItem::Revision::operator==(const Revision& _other) const
+{
+    return from == _other.from && length == _other.length && color == _other.color;
+}
+
 bool TextModelTextItem::Bookmark::operator==(const TextModelTextItem::Bookmark& _other) const
 {
     return color == _other.color && name == _other.name;
@@ -551,11 +649,6 @@ bool TextModelTextItem::Bookmark::operator==(const TextModelTextItem::Bookmark& 
 bool TextModelTextItem::Bookmark::isValid() const
 {
     return color.isValid();
-}
-
-bool TextModelTextItem::Revision::operator==(const Revision& _other) const
-{
-    return from == _other.from && length == _other.length && color == _other.color;
 }
 
 TextModelTextItem::TextModelTextItem(const TextModel* _model)
@@ -777,6 +870,23 @@ void TextModelTextItem::removeText(int _from)
     //
     d->text = d->text.left(_from);
     //
+    // ... форматирование
+    //
+    for (int index = 0; index < d->formats.size(); ++index) {
+        auto& format = d->formats[index];
+        if (format.end() < _from) {
+            continue;
+        }
+
+        if (format.from < _from) {
+            format.length = _from - format.from;
+            continue;
+        }
+
+        d->formats.remove(index);
+        --index;
+    }
+    //
     // ... редакторские заметки
     //
     for (int index = 0; index < d->reviewMarks.size(); ++index) {
@@ -794,10 +904,10 @@ void TextModelTextItem::removeText(int _from)
         --index;
     }
     //
-    // ... форматирование
+    // ... ресурсы
     //
-    for (int index = 0; index < d->formats.size(); ++index) {
-        auto& format = d->formats[index];
+    for (int index = 0; index < d->resourceMarks.size(); ++index) {
+        auto& format = d->resourceMarks[index];
         if (format.end() < _from) {
             continue;
         }
@@ -807,7 +917,7 @@ void TextModelTextItem::removeText(int _from)
             continue;
         }
 
-        d->formats.remove(index);
+        d->resourceMarks.remove(index);
         --index;
     }
 
@@ -880,35 +990,34 @@ void TextModelTextItem::setReviewMarks(const QVector<TextModelTextItem::ReviewMa
     markChanged();
 }
 
-void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks)
+void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& _formats)
 {
     QVector<ReviewMark> newReviewMarks;
-    for (const auto& reviewMark : _reviewMarks) {
-        if (reviewMark.format.boolProperty(TextBlockStyle::PropertyIsReviewMark) == false) {
+    for (const auto& format : _formats) {
+        if (format.format.boolProperty(TextBlockStyle::PropertyIsReviewMark) == false) {
             continue;
         }
 
         ReviewMark newReviewMark;
-        newReviewMark.from = reviewMark.start;
-        newReviewMark.length = reviewMark.length;
-        if (reviewMark.format.hasProperty(QTextFormat::ForegroundBrush)) {
-            newReviewMark.textColor = reviewMark.format.foreground().color();
+        newReviewMark.from = format.start;
+        newReviewMark.length = format.length;
+        if (format.format.hasProperty(QTextFormat::ForegroundBrush)) {
+            newReviewMark.textColor = format.format.foreground().color();
         }
-        if (reviewMark.format.hasProperty(QTextFormat::BackgroundBrush)) {
-            newReviewMark.backgroundColor = reviewMark.format.background().color();
+        if (format.format.hasProperty(QTextFormat::BackgroundBrush)) {
+            newReviewMark.backgroundColor = format.format.background().color();
         }
-        newReviewMark.isDone = reviewMark.format.boolProperty(TextBlockStyle::PropertyIsDone);
+        newReviewMark.isDone = format.format.boolProperty(TextBlockStyle::PropertyIsDone);
         const QStringList comments
-            = reviewMark.format.property(TextBlockStyle::PropertyComments).toStringList();
+            = format.format.property(TextBlockStyle::PropertyComments).toStringList();
         const QStringList dates
-            = reviewMark.format.property(TextBlockStyle::PropertyCommentsDates).toStringList();
+            = format.format.property(TextBlockStyle::PropertyCommentsDates).toStringList();
         const QStringList authors
-            = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthors).toStringList();
+            = format.format.property(TextBlockStyle::PropertyCommentsAuthors).toStringList();
         const QStringList emails
-            = reviewMark.format.property(TextBlockStyle::PropertyCommentsAuthorsEmails)
-                  .toStringList();
+            = format.format.property(TextBlockStyle::PropertyCommentsAuthorsEmails).toStringList();
         const QStringList isEdited
-            = reviewMark.format.property(TextBlockStyle::PropertyCommentsIsEdited).toStringList();
+            = format.format.property(TextBlockStyle::PropertyCommentsIsEdited).toStringList();
         for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
             newReviewMark.comments.append({ authors.at(commentIndex), emails.at(commentIndex),
                                             dates.at(commentIndex), comments.at(commentIndex),
@@ -919,6 +1028,42 @@ void TextModelTextItem::setReviewMarks(const QVector<QTextLayout::FormatRange>& 
     }
 
     setReviewMarks(newReviewMarks);
+}
+
+const QVector<TextModelTextItem::ResourceMark>& TextModelTextItem::resourceMarks() const
+{
+    return d->resourceMarks;
+}
+
+void TextModelTextItem::setResourceMarks(const QVector<ResourceMark>& _resourceMarks)
+{
+    if (d->resourceMarks == _resourceMarks) {
+        return;
+    }
+
+    d->resourceMarks = _resourceMarks;
+    d->updateXml();
+    markChanged();
+}
+
+void TextModelTextItem::setResourceMarks(const QVector<QTextLayout::FormatRange>& _formats)
+{
+    QVector<ResourceMark> newResourceMarks;
+    for (const auto& format : _formats) {
+        if (format.format.boolProperty(TextBlockStyle::PropertyIsResourceMark) == false) {
+            continue;
+        }
+
+        ResourceMark newResourceMark;
+        newResourceMark.from = format.start;
+        newResourceMark.length = format.length;
+        newResourceMark.uuid
+            = format.format.property(TextBlockStyle::PropertyResourceUuid).toUuid();
+
+        newResourceMarks.append(newResourceMark);
+    }
+
+    setResourceMarks(newResourceMarks);
 }
 
 const QVector<TextModelTextItem::Revision>& TextModelTextItem::revisions() const
@@ -941,6 +1086,10 @@ void TextModelTextItem::mergeWith(const TextModelTextItem* _other)
     for (auto format : _other->formats()) {
         format.from += sourceTextLength;
         d->formats.append(format);
+    }
+    for (auto resourceMark : _other->resourceMarks()) {
+        resourceMark.from += sourceTextLength;
+        d->resourceMarks.append(resourceMark);
     }
 
     d->updateXml();
@@ -1019,6 +1168,7 @@ void TextModelTextItem::copyFrom(TextModelItem* _item)
     d->bookmark = textItem->d->bookmark;
     d->text = textItem->d->text;
     d->reviewMarks = textItem->d->reviewMarks;
+    d->resourceMarks = textItem->d->resourceMarks;
     d->formats = textItem->d->formats;
     d->revisions = textItem->d->revisions;
     d->xml = textItem->d->xml;
@@ -1041,7 +1191,8 @@ bool TextModelTextItem::isEqual(TextModelItem* _item) const
         //
         && textToSave() == textItem->textToSave()
         //
-        && d->reviewMarks == textItem->d->reviewMarks && d->formats == textItem->d->formats
+        && d->reviewMarks == textItem->d->reviewMarks
+        && d->resourceMarks == textItem->d->resourceMarks && d->formats == textItem->d->formats
         && d->revisions == textItem->d->revisions;
 }
 

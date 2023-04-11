@@ -46,6 +46,8 @@ const QLatin1String kReviewMarkTag("rm");
 const QLatin1String kCommentTag("c");
 const QLatin1String kFormatsTag("fms");
 const QLatin1String kFormatTag("fm");
+const QLatin1String kResourceMarksTag("rss");
+const QLatin1String kResourceMarkTag("rs");
 const QLatin1String kRevisionsTag("revs");
 const QLatin1String kRevisionTag("rev");
 const QLatin1String kFromAttribute("from");

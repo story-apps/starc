@@ -14,7 +14,7 @@ namespace BusinessLayer {
 struct BreakdownResourceCategory {
     QUuid uuid;
     QString name;
-    QString icon;
+    QString icon = u8"\U000F0766";
     QColor color;
     bool hasIds = false;
 };
@@ -87,6 +87,7 @@ public:
     Q_SIGNAL void tagsChanged();
 
     QVector<BreakdownResourceCategory> resourceCategories() const;
+    BreakdownResourceCategory resourceCategory(const QUuid& _uuid) const;
     void addResourceCategory(const QString& _name, const QString& _icon, const QColor& _color,
                              bool _hasIds);
     void setResourceCategory(const QUuid& _uuid, const QString& _name, const QString& _icon,
@@ -96,6 +97,7 @@ public:
     Q_SIGNAL void resourceCategoriesChanged();
 
     QVector<BreakdownResource> resources() const;
+    BreakdownResource resource(const QUuid& _uuid) const;
     void addResource(const QUuid& _categoryUuid, const QString& _name, const QString& _description);
     void setResource(const QUuid& _uuid, const QUuid& _categoryUuid, const QString& _name,
                      const QString& _description);

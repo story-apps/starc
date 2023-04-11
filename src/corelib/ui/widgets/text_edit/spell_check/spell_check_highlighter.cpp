@@ -51,7 +51,7 @@ SpellCheckHighlighter::Implementation::Implementation(const SpellChecker& _check
     //
     // Настроим стиль выделения текста не прошедшего проверку
     //
-    misspeledCharFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
+    misspeledCharFormat.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
     misspeledCharFormat.setUnderlineColor(Qt::red);
 
     recheckTimer.setInterval(1600);

@@ -5,6 +5,7 @@
 #include <QColor>
 #include <QString>
 #include <QTextLayout>
+#include <QUuid>
 
 #include <optional>
 
@@ -78,6 +79,18 @@ public:
 
         QTextCharFormat charFormat() const;
     };
+    struct CORE_LIBRARY_EXPORT ResourceMark : TextPart {
+        QUuid uuid;
+
+        bool operator==(const ResourceMark& _other) const;
+
+        QTextCharFormat charFormat() const;
+    };
+    struct CORE_LIBRARY_EXPORT Revision : TextPart {
+        QColor color;
+
+        bool operator==(const Revision& _other) const;
+    };
     struct CORE_LIBRARY_EXPORT Number {
         int value = 0;
         QString text;
@@ -89,11 +102,6 @@ public:
         bool operator==(const Bookmark& _other) const;
 
         bool isValid() const;
-    };
-    struct CORE_LIBRARY_EXPORT Revision : TextPart {
-        QColor color;
-
-        bool operator==(const Revision& _other) const;
     };
 
 public:
@@ -166,7 +174,7 @@ public:
 
     /**
      * @brief Удалить текст, начиная с заданной позиции, при этом корректируется и остальной контент
-     * блока
+     *        блока
      */
     void removeText(int _from);
 
@@ -182,6 +190,13 @@ public:
     const QVector<ReviewMark>& reviewMarks() const;
     void setReviewMarks(const QVector<ReviewMark>& _reviewMarks);
     void setReviewMarks(const QVector<QTextLayout::FormatRange>& _reviewMarks);
+
+    /**
+     * @brief Ресурсы блока
+     */
+    const QVector<ResourceMark>& resourceMarks() const;
+    void setResourceMarks(const QVector<ResourceMark>& _resourceMarks);
+    void setResourceMarks(const QVector<QTextLayout::FormatRange>& _formats);
 
     /**
      * @brief Ревизии

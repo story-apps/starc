@@ -64,16 +64,6 @@ public:
 
 protected:
     /**
-     * @brief Считываем дополнительный контент
-     */
-    QStringRef readCustomContent(QXmlStreamReader& _contentReader) override;
-
-    /**
-     * @brief Сформировать xml-блок с кастомными данными элемента
-     */
-    QByteArray customContent() const override;
-
-    /**
      * @brief Обновляем текст страницы при изменении кого-то из детей
      */
     void handleChange() override;

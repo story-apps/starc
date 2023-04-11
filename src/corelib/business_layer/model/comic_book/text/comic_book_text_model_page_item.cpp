@@ -129,16 +129,6 @@ QVariant ComicBookTextModelPageItem::data(int _role) const
     }
 }
 
-QStringRef ComicBookTextModelPageItem::readCustomContent(QXmlStreamReader& _contentReader)
-{
-    return _contentReader.name();
-}
-
-QByteArray ComicBookTextModelPageItem::customContent() const
-{
-    return {};
-}
-
 void ComicBookTextModelPageItem::handleChange()
 {
     QString heading;

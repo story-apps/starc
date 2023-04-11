@@ -56,16 +56,6 @@ QVariant AudioplayTextModelSceneItem::data(int _role) const
     }
 }
 
-QStringRef AudioplayTextModelSceneItem::readCustomContent(QXmlStreamReader& _contentReader)
-{
-    return _contentReader.name();
-}
-
-QByteArray AudioplayTextModelSceneItem::customContent() const
-{
-    return {};
-}
-
 void AudioplayTextModelSceneItem::handleChange()
 {
     QString heading;

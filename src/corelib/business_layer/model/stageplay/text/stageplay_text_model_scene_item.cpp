@@ -19,16 +19,6 @@ StageplayTextModelSceneItem::StageplayTextModelSceneItem(const StageplayTextMode
 
 StageplayTextModelSceneItem::~StageplayTextModelSceneItem() = default;
 
-QStringRef StageplayTextModelSceneItem::readCustomContent(QXmlStreamReader& _contentReader)
-{
-    return _contentReader.name();
-}
-
-QByteArray StageplayTextModelSceneItem::customContent() const
-{
-    return {};
-}
-
 void StageplayTextModelSceneItem::handleChange()
 {
     QString heading;

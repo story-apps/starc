@@ -220,16 +220,6 @@ protected:
      */
     void setReviewMarksSize(int _size);
 
-    /**
-     * @brief Считать кастомный контент и вернуть название тэга на котором стоит ридер
-     */
-    virtual QStringRef readCustomContent(QXmlStreamReader& _contentReader) = 0;
-
-    /**
-     * @brief Сформировать xml-блок с кастомными данными элемента
-     */
-    virtual QByteArray customContent() const = 0;
-
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
