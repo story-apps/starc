@@ -766,6 +766,10 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         return currentItem;
     };
     auto handleCursorPositionChanged = [this, findCurrentModelItem] {
+        if (!hasFocus()) {
+            return;
+        }
+
         //
         // Обновим состояние панелей форматов
         //

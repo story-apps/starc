@@ -594,8 +594,7 @@ void ScreenplayTextManager::bind(IDocumentManager* _manager)
     //
     else {
         connect(_manager->asQObject(), SIGNAL(currentModelIndexChanged(QModelIndex)), this,
-                SLOT(setCurrentModelIndex(QModelIndex)),
-                static_cast<Qt::ConnectionType>(Qt::QueuedConnection | Qt::UniqueConnection));
+                SLOT(setCurrentModelIndex(QModelIndex)), Qt::UniqueConnection);
     }
 }
 
