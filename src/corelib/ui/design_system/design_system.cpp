@@ -2577,7 +2577,7 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
         accent = "#448aff";
         background = "#ffffff";
         surface = "#f3f3f3";
-        error = "#b00020";
+        error = "#ec3740";
         shadow = [] {
             QColor color = "#000000";
             color.setAlphaF(0.36);
@@ -2597,7 +2597,7 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
         accent = "#5796ff";
         background = "#272b34";
         surface = "#22262e";
-        error = "#ec3740";
+        error = "#ff4e4e";
         shadow = [] {
             QColor color = "#000000";
             color.setAlphaF(0.68);
@@ -2617,7 +2617,7 @@ DesignSystem::Color DesignSystem::color(ApplicationTheme _forTheme)
         accent = "#448aff";
         background = "#ffffff";
         surface = "#f3f3f3";
-        error = "#b00020";
+        error = "#ec3740";
         shadow = [] {
             QColor color = "#000000";
             color.setAlphaF(0.36);
