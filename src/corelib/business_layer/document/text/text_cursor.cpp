@@ -565,13 +565,13 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
     //
     const auto topBlock = document()->findBlock(topCursorPosition);
     const auto topParagraphType = TextBlockStyle::forBlock(topBlock);
-    const auto topStyle = textTemplate().paragraphStyle(topParagraphType);
+    const auto& topStyle = textTemplate().paragraphStyle(topParagraphType);
     //
     // ... и конца
     //
     const auto bottomBlock = document()->findBlock(bottomCursorPosition);
     const auto bottomParagraphType = TextBlockStyle::forBlock(bottomBlock);
-    const auto bottomStyle = textTemplate().paragraphStyle(bottomParagraphType);
+    const auto& bottomStyle = textTemplate().paragraphStyle(bottomParagraphType);
 
     //
     // Определим стиль результирующего блока и сохраним его данные

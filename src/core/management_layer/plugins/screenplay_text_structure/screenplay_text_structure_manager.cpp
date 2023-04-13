@@ -368,7 +368,7 @@ void ScreenplayTextStructureManager::setModel(BusinessLayer::AbstractModel* _mod
     //
     // Настраиваем соединения с новой моделью
     //
-    if (d->model != nullptr) {
+    if (d->model != nullptr && d->model->informationModel() != nullptr) {
         auto updateTitle = [this] {
             d->view->setTitle(
                 QString("%1 | %2").arg(tr("Screenplay"), d->model->informationModel()->name()));

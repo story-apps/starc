@@ -33,7 +33,7 @@ void ParentheticalHandler::handleEnter(QKeyEvent*)
     // ... текст после курсора
     QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
     // ... префикс и постфикс стиля
-    const auto style
+    const auto& style
         = editor()->screenplayTemplate().paragraphStyle(TextParagraphType::Parenthetical);
     QString stylePrefix = style.prefix();
     QString stylePostfix = style.postfix();
@@ -127,7 +127,7 @@ void ParentheticalHandler::handleTab(QKeyEvent*)
     // ... текст после курсора
     QString cursorForwardText = currentBlock.text().mid(cursor.positionInBlock());
     // ... префикс и постфикс стиля
-    const auto style
+    const auto& style
         = editor()->screenplayTemplate().paragraphStyle(TextParagraphType::Parenthetical);
     QString stylePrefix = style.prefix();
     QString stylePostfix = style.postfix();

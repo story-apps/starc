@@ -337,16 +337,27 @@ void ComicBookTextCorrector::Implementation::updateBlocksVisibility(int _from)
             //
             return true;
         }();
+
+        cursor.setPosition(block.position());
+        auto blockFormat = cursor.blockFormat();
+        const auto& paragraphStyleBlockFormat
+            = currentTemplate.paragraphStyle(TextBlockStyle::forBlock(block))
+                  .blockFormat(cursor.inTable());
+
         //
         // Корректируем параметры в кейсах
         // - сменилась видимость блока
         // - это первый видимый блок (у него не должно быть дополнительных отступов сверху)
         // - это первый блок который шёл после невидимых (он был первым видимым в предыдущем проходе
         //   и поэтому у него сброшены отступы)
+        // - это не первый видимый блок и его высота отличается от канонической
         //
         if (block.isVisible() != isBlockShouldBeVisible
             || (isBlockShouldBeVisible && isFirstVisibleBlock)
-            || (block.isVisible() && isBlockShouldBeVisible && isFirstBlockAfterInvisible)) {
+            || (block.isVisible() && isBlockShouldBeVisible && isFirstBlockAfterInvisible)
+            || (block.isVisible() && !isFirstVisibleBlock
+                && !qFuzzyCompare(blockFormat.topMargin(),
+                                  paragraphStyleBlockFormat.topMargin()))) {
             //
             // ... если это кейс с обновлением формата первого блока следующего за невидимым,
             //     то запомним, что мы его выполнили
@@ -364,8 +375,6 @@ void ComicBookTextCorrector::Implementation::updateBlocksVisibility(int _from)
             //
             // ... уберём отступы у скрытых блоков, чтобы они не ломали компоновку документа
             //
-            cursor.setPosition(block.position());
-            auto blockFormat = cursor.blockFormat();
             if (!isBlockShouldBeVisible) {
                 blockFormat.setTopMargin(0);
                 blockFormat.setBottomMargin(0);
@@ -375,9 +384,6 @@ void ComicBookTextCorrector::Implementation::updateBlocksVisibility(int _from)
             // ... а для блоков, которые возвращаются для отображения, настроим отступы
             //
             else {
-                auto paragraphStyleBlockFormat
-                    = currentTemplate.paragraphStyle(TextBlockStyle::forBlock(block))
-                          .blockFormat(cursor.inTable());
                 blockFormat.setTopMargin(
                     isFirstVisibleBlock ? 0 : paragraphStyleBlockFormat.topMargin());
                 blockFormat.setBottomMargin(paragraphStyleBlockFormat.bottomMargin());
@@ -1073,8 +1079,8 @@ void ComicBookTextCorrector::Implementation::correctPageBreaks(int _position)
                 //
                 if (cursor.block().text().isEmpty()) {
                     const auto blockType = TextBlockStyle::forBlock(cursor);
-                    const auto blockStyle = TemplatesFacade::comicBookTemplate(q->templateId())
-                                                .paragraphStyle(blockType);
+                    const auto& blockStyle = TemplatesFacade::comicBookTemplate(q->templateId())
+                                                 .paragraphStyle(blockType);
                     cursor.setBlockCharFormat(blockStyle.charFormat());
                 }
             } else {
@@ -1737,8 +1743,8 @@ void ComicBookTextCorrector::Implementation::breakDialogue(const QTextBlockForma
     //
     // Оформить его, как персонажа, но без отступа сверху
     //
-    const auto moreKeywordStyle = TemplatesFacade::comicBookTemplate(q->templateId())
-                                      .paragraphStyle(TextParagraphType::Character);
+    const auto& moreKeywordStyle = TemplatesFacade::comicBookTemplate(q->templateId())
+                                       .paragraphStyle(TextParagraphType::Character);
     QTextBlockFormat moreKeywordFormat = moreKeywordStyle.blockFormat(_cursor.inTable());
     moreKeywordFormat.setTopMargin(0);
     moreKeywordFormat.setProperty(TextBlockStyle::PropertyIsCorrection, true);

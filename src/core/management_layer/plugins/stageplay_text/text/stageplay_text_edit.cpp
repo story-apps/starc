@@ -935,7 +935,7 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                 //
                 // Прорисовка тайтлов блоков
                 //
-                const auto blockStyle = d->stageplayTemplate().paragraphStyle(blockType);
+                const auto& blockStyle = d->stageplayTemplate().paragraphStyle(blockType);
                 if (blockStyle.isTitleVisible()) {
                     setPainterPen(palette().text().color());
                     painter.setFont(cursor.charFormat().font());
@@ -943,7 +943,7 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
                     //
                     // Определим область для отрисовки (отступы используем от стиля персонажа)
                     //
-                    const auto characterStyle
+                    const auto& characterStyle
                         = d->stageplayTemplate().paragraphStyle(TextParagraphType::Character);
                     const QPointF topLeft(
                         isLeftToRight ? textLeft + leftDelta + spaceBetweenSceneNumberAndText

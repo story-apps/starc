@@ -210,7 +210,7 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
             // Назначим блоку перед таблицей формат PageSplitter
             //
             auto insertPageSplitter = [&_cursor, this] {
-                const auto style
+                const auto& style
                     = documentTemplate().paragraphStyle(TextParagraphType::PageSplitter);
                 _cursor.setBlockFormat(style.blockFormat());
                 _cursor.setBlockCharFormat(style.charFormat());
@@ -344,7 +344,7 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
         //
         // Установим стиль блока
         //
-        const auto currentStyle = documentTemplate().paragraphStyle(textItem->paragraphType());
+        const auto& currentStyle = documentTemplate().paragraphStyle(textItem->paragraphType());
         _cursor.setBlockFormat(currentStyle.blockFormat(_cursor.inTable()));
         _cursor.setBlockCharFormat(currentStyle.charFormat());
         _cursor.setCharFormat(currentStyle.charFormat());
@@ -659,7 +659,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                     cursor.movePosition(QTextCursor::StartOfBlock);
                     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                     const auto blockType = TextBlockStyle::forBlock(cursor.block());
-                    const auto blockStyle = d->documentTemplate().paragraphStyle(blockType);
+                    const auto& blockStyle = d->documentTemplate().paragraphStyle(blockType);
                     cursor.setBlockCharFormat(blockStyle.charFormat());
                     cursor.setCharFormat(blockStyle.charFormat());
 
@@ -1600,7 +1600,7 @@ void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
     auto cursor = _cursor;
     cursor.beginEditBlock();
 
-    const auto newBlockStyle = d->documentTemplate().paragraphStyle(_type);
+    const auto& newBlockStyle = d->documentTemplate().paragraphStyle(_type);
 
     //
     // Обновим стили
@@ -1648,7 +1648,7 @@ void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
     //
     if (_type == TextParagraphType::ActHeading || _type == TextParagraphType::SequenceHeading
         || _type == TextParagraphType::PartHeading || _type == TextParagraphType::ChapterHeading) {
-        const auto footerStyle = d->documentTemplate().paragraphStyle([_type] {
+        const auto& footerStyle = d->documentTemplate().paragraphStyle([_type] {
             switch (_type) {
             default:
             case TextParagraphType::ActHeading: {
@@ -1847,7 +1847,7 @@ void TextDocument::mergeParagraph(const TextCursor& _cursor)
     // Если таблица была пуста, то создаём пустой блок, с типом исходного блока, где был курсор
     //
     if (firstColumnData.isEmpty() && secondColumnData.isEmpty()) {
-        const auto blockStyle = d->documentTemplate().paragraphStyle(sourceBlockType);
+        const auto& blockStyle = d->documentTemplate().paragraphStyle(sourceBlockType);
         cursor.insertBlock(blockStyle.blockFormat(), blockStyle.charFormat());
     }
     //

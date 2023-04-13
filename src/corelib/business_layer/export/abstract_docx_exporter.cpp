@@ -538,7 +538,7 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         // ... признак RTL и разворачиваем отступы
         //
         if (block.textDirection() == Qt::RightToLeft) {
-            const auto blockStyle = documentTemplate.paragraphStyle(correctedBlockType);
+            const auto& blockStyle = documentTemplate.paragraphStyle(correctedBlockType);
             documentXml.append(
                 QString("<w:ind w:left=\"%1\" w:right=\"%2\"/>")
                     .arg(pxToTwips(blockStyle.blockFormat(_cursor.inTable()).rightMargin()))
@@ -867,7 +867,7 @@ void AbstractDocxExporter::Implementation::writeStyles(QtZipWriter* _zip,
     const QString defaultFontFamily
         = audioplayTemplate.paragraphStyle(TextParagraphType::Description).font().family();
     for (const auto& paragraphType : q->paragraphTypes()) {
-        const auto blockStyle = audioplayTemplate.paragraphStyle(paragraphType);
+        const auto& blockStyle = audioplayTemplate.paragraphStyle(paragraphType);
         styleXml.append(docxBlockStyle(blockStyle, defaultFontFamily));
         const auto onHalfPage = true;
         styleXml.append(docxBlockStyle(blockStyle, defaultFontFamily, onHalfPage));

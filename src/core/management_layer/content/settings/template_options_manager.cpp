@@ -279,7 +279,7 @@ void TemplateOptionsManager::Implementation::saveTitlePage()
 void TemplateOptionsManager::Implementation::updateParagraphParameters(
     BusinessLayer::TextParagraphType _paragraphType)
 {
-    const auto paragraphStyle = currentTemplate.get().paragraphStyle(_paragraphType);
+    const auto& paragraphStyle = currentTemplate.get().paragraphStyle(_paragraphType);
     paragraphsView->setParagraphEnabled(paragraphStyle.isActive());
     paragraphsView->setFontFamily(paragraphStyle.font().family());
     paragraphsView->setFontSize(MeasurementHelper::pxToPt(paragraphStyle.font().pixelSize()));

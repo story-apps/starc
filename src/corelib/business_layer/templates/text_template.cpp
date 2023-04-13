@@ -1257,12 +1257,12 @@ const TextTemplate& TextTemplate::synopsisTemplate() const
     return *d->synopsisTemplate;
 }
 
-TextBlockStyle TextTemplate::paragraphStyle(TextParagraphType _forType) const
+const TextBlockStyle& TextTemplate::paragraphStyle(TextParagraphType _forType) const
 {
-    return d->paragraphsStyles.value(_forType);
+    return d->paragraphsStyles[_forType];
 }
 
-TextBlockStyle TextTemplate::paragraphStyle(const QTextBlock& _forBlock) const
+const TextBlockStyle& TextTemplate::paragraphStyle(const QTextBlock& _forBlock) const
 {
     return paragraphStyle(TextBlockStyle::forBlock(_forBlock));
 }

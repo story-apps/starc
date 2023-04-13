@@ -577,8 +577,8 @@ public:
     /**
      * @brief Получить стиль блока
      */
-    TextBlockStyle paragraphStyle(TextParagraphType _forType) const;
-    TextBlockStyle paragraphStyle(const QTextBlock& _forBlock) const;
+    const TextBlockStyle& paragraphStyle(TextParagraphType _forType) const;
+    const TextBlockStyle& paragraphStyle(const QTextBlock& _forBlock) const;
     void setParagraphStyle(const TextBlockStyle& _style);
 
 private:

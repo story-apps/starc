@@ -62,7 +62,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                 const QString dialogueNumber = textItem->number()->text;
                 const int numberDelta
                     = TextHelper::fineTextWidthF(dialogueNumber, _painter->font());
-                const auto characterBlockStyle
+                const auto& characterBlockStyle
                     = exportTemplate.paragraphStyle(TextParagraphType::Character);
                 QRectF dialogueNumberRect;
                 if (QLocale().textDirection() == Qt::LeftToRight) {
@@ -119,14 +119,14 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
     //
     // Прорисовка заголовков блоков
     //
-    const auto paragraphStyle = exportTemplate.paragraphStyle(_paragraphType);
+    const auto& paragraphStyle = exportTemplate.paragraphStyle(_paragraphType);
     if (!_block.text().isEmpty() && paragraphStyle.isTitleVisible()) {
         _painter->setFont(_block.charFormat().font());
 
         //
         // Определим область для отрисовки (отступы используем от стиля персонажа)
         //
-        const auto characterBlockStyle
+        const auto& characterBlockStyle
             = exportTemplate.paragraphStyle(TextParagraphType::Character);
         QRectF dialogueNumberRect;
         if (QLocale().textDirection() == Qt::LeftToRight) {

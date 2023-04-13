@@ -150,7 +150,7 @@ void PrepareHandler::handleOther(QKeyEvent* _event)
     //
     QTextCursor topCursor(editor()->document());
     topCursor.setPosition(qMin(cursor.selectionStart(), cursor.selectionEnd()));
-    const auto topStyle = editor()->stageplayTemplate().paragraphStyle(
+    const auto& topStyle = editor()->stageplayTemplate().paragraphStyle(
         BusinessLayer::TextBlockStyle::forBlock(topCursor.block()));
 
     //
@@ -158,7 +158,7 @@ void PrepareHandler::handleOther(QKeyEvent* _event)
     //
     QTextCursor bottomCursor(editor()->document());
     bottomCursor.setPosition(qMax(cursor.selectionStart(), cursor.selectionEnd()));
-    const auto bottomStyle = editor()->stageplayTemplate().paragraphStyle(
+    const auto& bottomStyle = editor()->stageplayTemplate().paragraphStyle(
         BusinessLayer::TextBlockStyle::forBlock(bottomCursor.block()));
 
     if (!_event->text().isEmpty()) {
