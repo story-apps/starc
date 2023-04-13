@@ -2287,6 +2287,8 @@ void ApplicationManager::exec(const QString& _fileToOpenPath)
     QMetaObject::invokeMethod(
         this,
         [this, _fileToOpenPath] {
+            Log::info("Make startup checks");
+
 #ifdef CLOUD_SERVICE_MANAGER
             //
             // Запуск облачного сервиса
@@ -2804,19 +2806,25 @@ void ApplicationManager::initConnections()
                 // Если поймали подключение и сейчас работаем с облачным проектом
                 //
                 if (d->projectsManager->currentProject().isRemote()) {
+                    const auto currentProjectId = d->projectsManager->currentProject().id();
                     //
                     // ... то синхронизируем все документы, у которых есть офлайн правки
                     //
                     const auto unsyncedDocuments = d->projectManager->unsyncedDocuments();
                     for (const auto document : unsyncedDocuments) {
-                        d->cloudServiceManager->openDocument(
-                            d->projectsManager->currentProject().id(), document);
+                        d->cloudServiceManager->openDocument(currentProjectId, document);
                     }
                     //
-                    // ... а также текущий открытый документ
+                    // ... текущий открытый документ
                     //
-                    d->cloudServiceManager->openDocument(d->projectsManager->currentProject().id(),
+                    d->cloudServiceManager->openDocument(currentProjectId,
                                                          d->projectManager->currentDocument());
+                    //
+                    // ... а также структуру, данные проекта и словари
+                    //
+                    d->cloudServiceManager->openStructure(currentProjectId);
+                    d->cloudServiceManager->openProjectInfo(currentProjectId);
+                    d->cloudServiceManager->openScreenplayDictionaries(currentProjectId);
                 }
             });
 
