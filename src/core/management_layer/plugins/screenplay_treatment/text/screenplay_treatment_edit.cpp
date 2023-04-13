@@ -506,7 +506,7 @@ BusinessLayer::TextParagraphType ScreenplayTreatmentEdit::currentParagraphType()
 
 QModelIndex ScreenplayTreatmentEdit::currentModelIndex() const
 {
-    if (d->model == nullptr) {
+    if (d->model == nullptr || d->document.isEditTransactionActive()) {
         return {};
     }
 

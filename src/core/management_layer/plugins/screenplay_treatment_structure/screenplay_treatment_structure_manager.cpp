@@ -14,7 +14,6 @@
 #include <ui/widgets/context_menu/context_menu.h>
 
 #include <QAction>
-#include <QTimer>
 #include <QWidgetAction>
 
 #include <optional>
@@ -241,6 +240,11 @@ QObject* ScreenplayTreatmentStructureManager::asQObject()
     return this;
 }
 
+bool ScreenplayTreatmentStructureManager::isNavigationManager() const
+{
+    return true;
+}
+
 Ui::IDocumentView* ScreenplayTreatmentStructureManager::view()
 {
     return d->view;
@@ -316,12 +320,18 @@ void ScreenplayTreatmentStructureManager::setCurrentModelIndex(const QModelIndex
     QSignalBlocker signalBlocker(this);
 
     //
+    // Из редактора карточек мы получаем индексы сцен и папок
+    //
+    auto indexForSelect = d->structureModel->mapFromSource(_index);
+    //
     // Из редактора сценария мы получаем индексы текстовых элементов, они хранятся внутри
     // папок, сцен или битов, которые как раз и отображаются в навигаторе
     //
-    auto indexForSelect = d->structureModel->mapFromSource(_index.parent());
+    if (!indexForSelect.isValid()) {
+        indexForSelect = d->structureModel->mapFromSource(_index.parent());
+    }
     //
-    // ... когда быти скрыты в навигаторе, берём папку или сцену, в которой они находятся
+    // ... когда биты скрыты в навигаторе, берём папку или сцену, в которой они находятся
     //
     if (!indexForSelect.isValid()) {
         indexForSelect = d->structureModel->mapFromSource(_index.parent().parent());
@@ -335,9 +345,8 @@ void ScreenplayTreatmentStructureManager::setModel(BusinessLayer::AbstractModel*
     //
     // Разрываем соединения со старой моделью
     //
-    if (d->model != nullptr) {
-        disconnect(d->model->informationModel(),
-                   &BusinessLayer::ScreenplayInformationModel::nameChanged, d->view, nullptr);
+    if (d->model != nullptr && d->model->informationModel() != nullptr) {
+        d->model->informationModel()->disconnect(d->view);
     }
 
     //
@@ -361,7 +370,7 @@ void ScreenplayTreatmentStructureManager::setModel(BusinessLayer::AbstractModel*
     //
     // Настраиваем соединения с новой моделью
     //
-    if (d->model != nullptr) {
+    if (d->model != nullptr && d->model->informationModel() != nullptr) {
         auto updateTitle = [this] {
             d->view->setTitle(
                 QString("%1 | %2").arg(tr("Treatment"), d->model->informationModel()->name()));

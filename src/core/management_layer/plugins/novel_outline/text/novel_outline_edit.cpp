@@ -463,7 +463,7 @@ BusinessLayer::TextParagraphType NovelOutlineEdit::currentParagraphType() const
 
 QModelIndex NovelOutlineEdit::currentModelIndex() const
 {
-    if (d->model == nullptr) {
+    if (d->model == nullptr || d->document.isEditTransactionActive()) {
         return {};
     }
 
