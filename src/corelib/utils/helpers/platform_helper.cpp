@@ -17,6 +17,16 @@
 namespace {
 
 #ifdef Q_OS_WIN
+//
+// Код взят и адаптирован отсюда https://github.com/komiyamma/win32-darkmode/
+//
+// clang-format off
+enum IMMERSIVE_HC_CACHE_MODE
+{
+    IHCM_USE_CACHED_VALUE,
+    IHCM_REFRESH
+};
+
 enum PreferredAppMode {
     Default,
     AllowDark,
@@ -62,39 +72,91 @@ struct WINDOWCOMPOSITIONATTRIBDATA {
     SIZE_T cbData;
 };
 
-using fnAllowDarkModeForWindow = BOOL(WINAPI*)(HWND hWnd, BOOL allow);
-using fnSetPreferredAppMode = PreferredAppMode(WINAPI*)(PreferredAppMode appMode);
-using fnSetWindowCompositionAttribute = BOOL(WINAPI*)(HWND hwnd, WINDOWCOMPOSITIONATTRIBDATA*);
+using fnRtlGetNtVersionNumbers = void (WINAPI *)(LPDWORD major, LPDWORD minor, LPDWORD build);
+using fnSetWindowCompositionAttribute = BOOL (WINAPI *)(HWND hWnd, WINDOWCOMPOSITIONATTRIBDATA*);
+// 1809 17763
+using fnShouldAppsUseDarkMode = bool (WINAPI *)(); // ordinal 132
+using fnAllowDarkModeForWindow = bool (WINAPI *)(HWND hWnd, bool allow); // ordinal 133
+using fnAllowDarkModeForApp = bool (WINAPI *)(bool allow); // ordinal 135, in 1809
+using fnFlushMenuThemes = void (WINAPI *)(); // ordinal 136
+using fnRefreshImmersiveColorPolicyState = void (WINAPI *)(); // ordinal 104
+using fnIsDarkModeAllowedForWindow = bool (WINAPI *)(HWND hWnd); // ordinal 137
+using fnGetIsImmersiveColorUsingHighContrast = bool (WINAPI *)(IMMERSIVE_HC_CACHE_MODE mode); // ordinal 106
+using fnOpenNcThemeData = HTHEME(WINAPI *)(HWND hWnd, LPCWSTR pszClassList); // ordinal 49
+// 1903 18362
+using fnShouldSystemUseDarkMode = bool (WINAPI *)(); // ordinal 138
+using fnSetPreferredAppMode = PreferredAppMode (WINAPI *)(PreferredAppMode appMode); // ordinal 135, in 1903
+using fnIsDarkModeAllowedForApp = bool (WINAPI *)(); // ordinal 139
 
-static void setTitleBarThemeImpl(HWND hwnd, bool _isLight)
+constexpr bool CheckBuildNumber(DWORD buildNumber)
 {
-    HMODULE hUxtheme = LoadLibraryExW(L"uxtheme.dll", NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
+    return (buildNumber == 17763 || // 1809
+            buildNumber == 18362 || // 1903
+            buildNumber == 18363 || // 1909
+            buildNumber == 19041 || // 2004
+            buildNumber >= 19042); // over 2009
+}
+
+void setTitleBarThemeImpl(HWND hwnd, bool _isLight)
+{
+    auto RtlGetNtVersionNumbers = reinterpret_cast<fnRtlGetNtVersionNumbers>(GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "RtlGetNtVersionNumbers"));
+    if (!RtlGetNtVersionNumbers) {
+        return;
+    }
+
+    DWORD major, minor, buildNumber = 0;
+    RtlGetNtVersionNumbers(&major, &minor, &buildNumber);
+    buildNumber &= ~0xF0000000;
+    if (major < 10 || !CheckBuildNumber(buildNumber)) {
+        return;
+    }
+
+    auto hUxtheme = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
     if (!hUxtheme) {
         return;
     }
 
-    HMODULE hUser32 = GetModuleHandleW(L"user32.dll");
-    if (!hUser32) {
-        return;
+    auto _OpenNcThemeData = reinterpret_cast<fnOpenNcThemeData>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(49)));
+    auto _RefreshImmersiveColorPolicyState = reinterpret_cast<fnRefreshImmersiveColorPolicyState>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(104)));
+    auto  _ShouldAppsUseDarkMode = reinterpret_cast<fnShouldAppsUseDarkMode>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(132)));
+    auto  _AllowDarkModeForWindow = reinterpret_cast<fnAllowDarkModeForWindow>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(133)));
+
+    auto ord135 = GetProcAddress(hUxtheme, MAKEINTRESOURCEA(135));
+    fnAllowDarkModeForApp _AllowDarkModeForApp = nullptr;
+    fnSetPreferredAppMode _SetPreferredAppMode = nullptr;
+    if (buildNumber < 18362) {
+        _AllowDarkModeForApp = reinterpret_cast<fnAllowDarkModeForApp>(ord135);
+    } else {
+        _SetPreferredAppMode = reinterpret_cast<fnSetPreferredAppMode>(ord135);
     }
 
-    fnAllowDarkModeForWindow AllowDarkModeForWindow = reinterpret_cast<fnAllowDarkModeForWindow>(
-        GetProcAddress(hUxtheme, MAKEINTRESOURCEA(133)));
-    fnSetPreferredAppMode SetPreferredAppMode
-        = reinterpret_cast<fnSetPreferredAppMode>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(135)));
-    fnSetWindowCompositionAttribute SetWindowCompositionAttribute
-        = reinterpret_cast<fnSetWindowCompositionAttribute>(
-            GetProcAddress(hUser32, "SetWindowCompositionAttribute"));
-    if (!AllowDarkModeForWindow || !SetPreferredAppMode || !SetWindowCompositionAttribute) {
-        return;
-    }
+    auto _IsDarkModeAllowedForWindow = reinterpret_cast<fnIsDarkModeAllowedForWindow>(GetProcAddress(hUxtheme, MAKEINTRESOURCEA(137)));
 
-    SetPreferredAppMode(_isLight ? Default : AllowDark);
-    BOOL dark = _isLight ? FALSE : TRUE;
-    AllowDarkModeForWindow(hwnd, dark);
-    WINDOWCOMPOSITIONATTRIBDATA data = { WCA_USEDARKMODECOLORS, &dark, sizeof(dark) };
-    SetWindowCompositionAttribute(hwnd, &data);
+    if (_OpenNcThemeData &&
+        _RefreshImmersiveColorPolicyState &&
+        _ShouldAppsUseDarkMode &&
+        _AllowDarkModeForWindow &&
+        (_AllowDarkModeForApp || _SetPreferredAppMode) &&
+        _IsDarkModeAllowedForWindow) {
+        _RefreshImmersiveColorPolicyState();
+
+        BOOL dark = _isLight ? FALSE : TRUE;
+        if (_AllowDarkModeForApp) {
+            _AllowDarkModeForApp(dark);
+        } else if (_SetPreferredAppMode) {
+            _SetPreferredAppMode(_isLight ? Default : AllowDark);
+        }
+
+        auto _SetWindowCompositionAttribute = reinterpret_cast<fnSetWindowCompositionAttribute>(GetProcAddress(GetModuleHandleW(L"user32.dll"), "SetWindowCompositionAttribute"));
+        if (buildNumber < 18362) {
+            SetPropW(hwnd, L"UseImmersiveDarkModeColors", reinterpret_cast<HANDLE>(static_cast<INT_PTR>(dark)));
+        } else if (_SetWindowCompositionAttribute) {
+            WINDOWCOMPOSITIONATTRIBDATA data = { WCA_USEDARKMODECOLORS, &dark, sizeof(dark) };
+            _SetWindowCompositionAttribute(hwnd, &data);
+        }
+    }
 }
+// clang-format on
 #endif
 
 bool openPath(const QString& _path)
