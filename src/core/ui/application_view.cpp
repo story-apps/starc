@@ -258,6 +258,8 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Q_UNUSED(_event)
 
+    Log::info("Init design system for the application view");
+
     setBackgroundColor(Ui::DesignSystem::color().primary());
 
     QPalette toolTipPalette;
@@ -282,12 +284,16 @@ void ApplicationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->turnOffFullScreenIcon->move(Ui::DesignSystem::layout().px24(),
                                    Ui::DesignSystem::layout().px24());
 
+    Log::info("Register task bar");
     TaskBar::registerTaskBar(this, Ui::DesignSystem::color().primary(),
                              Ui::DesignSystem::color().onPrimary(),
                              Ui::DesignSystem::color().accent());
 
+    Log::info("Init window title bar theme");
     PlatformHelper::setTitleBarTheme(
         this, ColorHelper::isColorLight(Ui::DesignSystem::color().background()));
+
+    Log::info("Application view design system successfully initialized");
 }
 
 } // namespace Ui

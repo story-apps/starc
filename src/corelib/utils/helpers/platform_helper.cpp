@@ -69,7 +69,15 @@ using fnSetWindowCompositionAttribute = BOOL(WINAPI*)(HWND hwnd, WINDOWCOMPOSITI
 static void setTitleBarThemeImpl(HWND hwnd, bool _isLight)
 {
     HMODULE hUxtheme = LoadLibraryExW(L"uxtheme.dll", NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
+    if (!hUxtheme) {
+        return;
+    }
+
     HMODULE hUser32 = GetModuleHandleW(L"user32.dll");
+    if (!hUser32) {
+        return;
+    }
+
     fnAllowDarkModeForWindow AllowDarkModeForWindow = reinterpret_cast<fnAllowDarkModeForWindow>(
         GetProcAddress(hUxtheme, MAKEINTRESOURCEA(133)));
     fnSetPreferredAppMode SetPreferredAppMode
@@ -77,6 +85,9 @@ static void setTitleBarThemeImpl(HWND hwnd, bool _isLight)
     fnSetWindowCompositionAttribute SetWindowCompositionAttribute
         = reinterpret_cast<fnSetWindowCompositionAttribute>(
             GetProcAddress(hUser32, "SetWindowCompositionAttribute"));
+    if (!AllowDarkModeForWindow || !SetPreferredAppMode || !SetWindowCompositionAttribute) {
+        return;
+    }
 
     SetPreferredAppMode(_isLight ? Default : AllowDark);
     BOOL dark = _isLight ? FALSE : TRUE;
