@@ -766,7 +766,7 @@ bool ContextMenu::eventFilter(QObject* _watched, QEvent* _event)
         case QEvent::MouseButtonRelease: {
             const auto event = static_cast<QMouseEvent*>(_event);
             const auto triggeredAction = contextMenu->d->actionForPosition(event->pos());
-            if (!triggeredAction->isCheckable()
+            if (triggeredAction != nullptr && !triggeredAction->isCheckable()
                 && qobject_cast<const QWidgetAction*>(triggeredAction) == nullptr) {
                 QMetaObject::invokeMethod(this, &ContextMenu::hideContextMenu,
                                           Qt::QueuedConnection);
