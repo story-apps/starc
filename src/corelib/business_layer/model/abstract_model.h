@@ -125,6 +125,12 @@ public:
     QVariant data(const QModelIndex& _index, int _role) const override;
     /** @} */
 
+    /**
+     * @brief Интерфейс для уведомления о том, что впереди много операций по изменению модели
+     */
+    void beginChangeRows();
+    void endChangeRows();
+
 signals:
     /**
      * @brief Изменилось название документа модели

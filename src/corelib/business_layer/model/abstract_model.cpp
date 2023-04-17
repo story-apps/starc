@@ -326,6 +326,16 @@ QVariant AbstractModel::data(const QModelIndex& _index, int _role) const
     return {};
 }
 
+void AbstractModel::beginChangeRows()
+{
+    emit rowsAboutToBeChanged();
+}
+
+void AbstractModel::endChangeRows()
+{
+    emit rowsChanged();
+}
+
 void AbstractModel::beginResetModelTransaction()
 {
     if (d->resetModelTransationsCounter == 0) {

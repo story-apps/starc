@@ -1963,6 +1963,8 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
     };
 
 
+    d->model->beginChangeRows();
+
     //
     // Удаляем из модели элементы удалённых блоков и корректируем позиции блоков идущих после правки
     //
@@ -2878,6 +2880,8 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
         //
         block = block.next();
     }
+
+    d->model->endChangeRows();
 }
 
 void TextDocument::insertTable(const TextCursor& _cursor)

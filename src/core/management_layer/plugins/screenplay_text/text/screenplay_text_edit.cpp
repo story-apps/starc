@@ -115,6 +115,8 @@ void ScreenplayTextEdit::Implementation::revertAction(bool previous)
         return;
     }
 
+    auto finalCursorPosition = q->textCursor().position();
+
     BusinessLayer::ChangeCursor changeCursor;
     if (previous) {
         changeCursor = model->undo();
@@ -125,25 +127,26 @@ void ScreenplayTextEdit::Implementation::revertAction(bool previous)
     if (changeCursor.item != nullptr) {
         const auto item = static_cast<BusinessLayer::TextModelItem*>(changeCursor.item);
         const auto itemIndex = model->indexForItem(item);
-        auto position = document.itemEndPosition(itemIndex);
+        finalCursorPosition = document.itemEndPosition(itemIndex);
         if (changeCursor.position >= 0) {
-            position += changeCursor.position;
+            finalCursorPosition += changeCursor.position;
         } else if (item->type() == BusinessLayer::TextModelItemType::Text) {
             const auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
-            position += textItem->text().length();
+            finalCursorPosition += textItem->text().length();
         }
-        auto cursor = q->textCursor();
-        cursor.setPosition(position);
-        q->setTextCursorAndKeepScrollBars(cursor);
-        q->ensureCursorVisible();
-
-        //
-        // При отмене/повторе последнего действия позиция курсора могла и не поменяться,
-        // но тип параграфа сменился, поэтому перестраховываемся и говорим будто бы
-        // сменилась позиция курсора, чтобы обновить состояние панелей
-        //
-        emit q->cursorPositionChanged();
     }
+
+    auto cursor = q->textCursor();
+    cursor.setPosition(finalCursorPosition);
+    q->setTextCursorAndKeepScrollBars(cursor);
+    q->ensureCursorVisible();
+
+    //
+    // При отмене/повторе последнего действия позиция курсора могла и не поменяться,
+    // но тип параграфа сменился, поэтому перестраховываемся и говорим будто бы
+    // сменилась позиция курсора, чтобы обновить состояние панелей
+    //
+    emit q->cursorPositionChanged();
 }
 
 BusinessLayer::TextModelItem* ScreenplayTextEdit::Implementation::currentItem() const
@@ -714,10 +717,12 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     // ... вырезать текст
     //
     else if (_event == QKeySequence::Cut) {
-        copy();
         BusinessLayer::TextCursor cursor = textCursor();
-        cursor.removeCharacters(this);
-        d->model->saveChanges();
+        if (cursor.hasSelection()) {
+            copy();
+            cursor.removeCharacters(this);
+            d->model->saveChanges();
+        }
     }
     //
     // ... вставить текст
