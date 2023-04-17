@@ -218,6 +218,10 @@ bool TextModelGroupItem::setNumber(int _number, const QString& _followNumber)
     auto newNumber = d->number.value_or(Number());
     newNumber.value = numberText;
     newNumber.followNumber = _followNumber;
+    if (d->number == newNumber) {
+        return false;
+    }
+
     d->number = newNumber;
     setChanged(true);
 

@@ -18,6 +18,8 @@
 #include <QStringListModel>
 #include <QXmlStreamReader>
 
+#include <set>
+
 
 namespace BusinessLayer {
 
@@ -70,6 +72,16 @@ public:
      * @brief Справочники, которые строятся в рантайме
      */
     QStringListModel* charactersModelFromText = nullptr;
+
+    /**
+     * @brief Можно ли обновлять счётчики
+     */
+    bool canUpdateCounters = true;
+
+    /**
+     * @brief Список элементов для отложенного обновления счётчиков
+     */
+    std::set<QModelIndex> indexesForUpdate;
 };
 
 AudioplayTextModel::Implementation::Implementation(AudioplayTextModel* _q)
@@ -173,10 +185,14 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
     , d(new Implementation(this))
 {
     auto updateCounters = [this](const QModelIndex& _index) {
+        if (!d->canUpdateCounters) {
+            d->indexesForUpdate.insert(_index);
+            return;
+        }
+
         d->updateNumbering();
         d->updateChildrenDuration(itemForIndex(_index));
     };
-
     //
     // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
     // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
@@ -184,6 +200,32 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
     //
     connect(this, &AudioplayTextModel::afterRowsInserted, this, updateCounters);
     connect(this, &AudioplayTextModel::afterRowsRemoved, this, updateCounters);
+    //
+    // При осуществлении групповых изменений, обновляем счётчики только в конце изменения,
+    // накапливая список элементов, номера и хронометраж которых необходимо обновить
+    //
+    connect(this, &AudioplayTextModel::rowsAboutToBeChanged, this,
+            [this] { d->canUpdateCounters = false; });
+    connect(this, &AudioplayTextModel::rowsChanged, this, [this] {
+        d->updateNumbering();
+        //
+        // Удаляем вложенные элементы, чтобы не делать одну работу несколько раз
+        //
+        for (auto iter = d->indexesForUpdate.begin(); iter != d->indexesForUpdate.end();) {
+            if (auto findIter = d->indexesForUpdate.find(iter->parent());
+                findIter != d->indexesForUpdate.end()) {
+                iter = d->indexesForUpdate.erase(findIter);
+            } else {
+                ++iter;
+            }
+        }
+        for (const auto& index : std::as_const(d->indexesForUpdate)) {
+            d->updateChildrenDuration(itemForIndex(index));
+        }
+        d->indexesForUpdate.clear();
+
+        d->canUpdateCounters = true;
+    });
 
     connect(this, &AudioplayTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });

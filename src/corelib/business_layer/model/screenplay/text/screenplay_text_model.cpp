@@ -21,6 +21,8 @@
 #include <QStringListModel>
 #include <QXmlStreamReader>
 
+#include <set>
+
 
 namespace BusinessLayer {
 
@@ -90,6 +92,16 @@ public:
      * @brief Количество сцен
      */
     int scenesCount = 0;
+
+    /**
+     * @brief Можно ли обновлять счётчики
+     */
+    bool canUpdateCounters = true;
+
+    /**
+     * @brief Список элементов для отложенного обновления счётчиков
+     */
+    std::set<QModelIndex> indexesForUpdate;
 };
 
 ScreenplayTextModel::Implementation::Implementation(ScreenplayTextModel* _q)
@@ -139,6 +151,11 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
     , d(new Implementation(this))
 {
     auto updateCounters = [this](const QModelIndex& _index) {
+        if (!d->canUpdateCounters) {
+            d->indexesForUpdate.insert(_index);
+            return;
+        }
+
         updateNumbering();
         d->updateChildrenDuration(itemForIndex(_index));
     };
@@ -149,6 +166,32 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
     //
     connect(this, &ScreenplayTextModel::afterRowsInserted, this, updateCounters);
     connect(this, &ScreenplayTextModel::afterRowsRemoved, this, updateCounters);
+    //
+    // При осуществлении групповых изменений, обновляем счётчики только в конце изменения,
+    // накапливая список элементов, номера и хронометраж которых необходимо обновить
+    //
+    connect(this, &ScreenplayTextModel::rowsAboutToBeChanged, this,
+            [this] { d->canUpdateCounters = false; });
+    connect(this, &ScreenplayTextModel::rowsChanged, this, [this] {
+        updateNumbering();
+        //
+        // Удаляем вложенные элементы, чтобы не делать одну работу несколько раз
+        //
+        for (auto iter = d->indexesForUpdate.begin(); iter != d->indexesForUpdate.end();) {
+            if (auto findIter = d->indexesForUpdate.find(iter->parent());
+                findIter != d->indexesForUpdate.end()) {
+                iter = d->indexesForUpdate.erase(findIter);
+            } else {
+                ++iter;
+            }
+        }
+        for (const auto& index : std::as_const(d->indexesForUpdate)) {
+            d->updateChildrenDuration(itemForIndex(index));
+        }
+        d->indexesForUpdate.clear();
+
+        d->canUpdateCounters = true;
+    });
 
     connect(this, &ScreenplayTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });
