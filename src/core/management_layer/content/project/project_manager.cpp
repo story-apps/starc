@@ -2144,6 +2144,10 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 //
                 for (int index = 0; index < locationsModel->rowCount(); ++index) {
                     auto location = locationsModel->location(index);
+                    if (location->name().startsWith(_newName)) {
+                        continue;
+                    }
+
                     auto oldNameDots = _oldName;
                     oldNameDots.replace(" - ", ". ");
                     if (location->name().startsWith(_oldName)) {
