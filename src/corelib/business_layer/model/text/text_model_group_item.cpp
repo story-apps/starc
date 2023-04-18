@@ -111,7 +111,8 @@ public:
 
 bool TextModelGroupItem::Number::operator==(const TextModelGroupItem::Number& _other) const
 {
-    return text == _other.text;
+    return value == _other.value && isCustom == _other.isCustom && isEatNumber == _other.isEatNumber
+        && isLocked == _other.isLocked && followNumber == _other.followNumber;
 }
 
 TextModelGroupItem::TextModelGroupItem(const TextModel* _model)
