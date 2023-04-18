@@ -29,12 +29,17 @@ public:
     /**
      * @brief Задать параметры отчёта
      */
-    void setParameters(int _sortBy);
+    void setParameters(const QVector<QString>& _characters);
 
     /**
      * @brief Получить информацию о репликах
      */
     QAbstractItemModel* dialoguesModel() const;
+
+    /**
+     * @brief Получить список персонажей из отчёта
+     */
+    QVector<QString> characters() const;
 
 private:
     class Implementation;

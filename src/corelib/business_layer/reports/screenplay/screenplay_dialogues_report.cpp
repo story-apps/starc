@@ -29,14 +29,15 @@ class ScreenplayDialoguesReport::Implementation
 {
 public:
     /**
-     * @brief Модель персонажей
+     * @brief Модель реплик
      */
     QScopedPointer<QStandardItemModel> dialoguesModel;
 
     /**
-     * @brief Порядок сортировки
+     * @brief Список персонажей + видимые
      */
-    int sortBy = 0;
+    QVector<QString> characters;
+    std::optional<QVector<QString>> visibleCharacters;
 };
 
 
@@ -82,6 +83,7 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
     };
     QVector<SceneData> scenes;
     SceneData lastScene;
+    QSet<QString> characters;
 
     //
     // Подготовим текстовый документ, для определения страниц сцен
@@ -109,8 +111,8 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
     // Собираем статистику
     //
     std::function<void(const TextModelItem*)> includeInReport;
-    includeInReport = [&includeInReport, &scenes, &lastScene, textItemPage,
-                       &dialogueNumber](const TextModelItem* _item) {
+    includeInReport = [&includeInReport, &scenes, &lastScene, textItemPage, &dialogueNumber,
+                       &characters, invalidPage](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
@@ -145,7 +147,7 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
                 }
 
                 case TextParagraphType::Character: {
-                    if (textItem->isCorrection()) {
+                    if (textItem->isCorrection() || textItem->text().isEmpty()) {
                         break;
                     }
 
@@ -154,6 +156,8 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
                     dialogue.character = ScreenplayCharacterParser::name(textItem->text());
                     dialogue.extension = ScreenplayCharacterParser::extension(textItem->text());
                     lastScene.dialogues.append(dialogue);
+
+                    characters.insert(dialogue.character);
                     break;
                 }
 
@@ -240,9 +244,18 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
     const auto titleBackgroundColor = QVariant::fromValue(ColorHelper::transparent(
         Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::elevationEndOpacity()));
     for (const auto& scene : scenes) {
+        if (scene.dialogues.isEmpty()) {
+            continue;
+        }
+
         auto sceneItem
             = createModelItem(QString("%1 %2").arg(scene.number, scene.name), titleBackgroundColor);
         for (const auto& dialogue : scene.dialogues) {
+            if (d->visibleCharacters.has_value()
+                && !d->visibleCharacters->contains(dialogue.character)) {
+                break;
+            }
+
             auto dialogueItem = createModelItem(dialogue.character);
             dialogueItem->setData(dialogue.number, Qt::UserRole);
             sceneItem->appendRow({
@@ -251,6 +264,11 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
                 createModelItem(dialogue.parenthetical),
                 createModelItem(dialogue.extension),
             });
+        }
+
+        if (!sceneItem->hasChildren()) {
+            delete sceneItem;
+            continue;
         }
 
         d->dialoguesModel->appendRow({
@@ -277,6 +295,10 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
         3, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplayDialoguesReport", "Extension"),
         Qt::DisplayRole);
+
+    //
+    d->characters = { characters.begin(), characters.end() };
+    std::sort(d->characters.begin(), d->characters.end());
 }
 
 void ScreenplayDialoguesReport::saveToFile(const QString& _fileName) const
@@ -327,14 +349,19 @@ void ScreenplayDialoguesReport::saveToFile(const QString& _fileName) const
     xlsx.saveAs(_fileName);
 }
 
-void ScreenplayDialoguesReport::setParameters(int _sortBy)
+void ScreenplayDialoguesReport::setParameters(const QVector<QString>& _characters)
 {
-    d->sortBy = _sortBy;
+    d->visibleCharacters = _characters;
 }
 
 QAbstractItemModel* ScreenplayDialoguesReport::dialoguesModel() const
 {
     return d->dialoguesModel.data();
+}
+
+QVector<QString> ScreenplayDialoguesReport::characters() const
+{
+    return d->characters;
 }
 
 } // namespace BusinessLayer

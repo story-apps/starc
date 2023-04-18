@@ -294,6 +294,7 @@ void ScreenplayCharactersActivityPlot::build(QAbstractItemModel* _model) const
     }
     //
     d->characters = characters;
+    std::sort(d->characters.begin(), d->characters.end());
 }
 
 Plot ScreenplayCharactersActivityPlot::plot() const

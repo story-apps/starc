@@ -71,7 +71,7 @@ public:
      * @brief Отчёт по репликам
      */
     const ScreenplayDialoguesReport& dialoguesReport() const;
-    void setDialoguesReportParameters(int _sortBy);
+    void setDialoguesReportParameters(const QVector<QString>& _visibleCharacters);
 
     /**
      * @brief Гнедерный анализ

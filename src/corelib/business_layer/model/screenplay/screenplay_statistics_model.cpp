@@ -6,6 +6,7 @@
 #include <business_layer/plots/screenplay/screenplay_characters_activity_plot.h>
 #include <business_layer/plots/screenplay/screenplay_structure_analysis_plot.h>
 #include <business_layer/reports/screenplay/screenplay_cast_report.h>
+#include <business_layer/reports/screenplay/screenplay_dialogues_report.h>
 #include <business_layer/reports/screenplay/screenplay_gender_report.h>
 #include <business_layer/reports/screenplay/screenplay_location_report.h>
 #include <business_layer/reports/screenplay/screenplay_scene_report.h>
@@ -23,6 +24,7 @@ public:
     ScreenplaySceneReport sceneReport;
     ScreenplayLocationReport locationReport;
     ScreenplayCastReport castReport;
+    ScreenplayDialoguesReport dialoguesReport;
     ScreenplayGenderReport genderReport;
     //
     ScreenplayStructureAnalysisPlot structureAnalysisPlot;
@@ -63,6 +65,7 @@ void ScreenplayStatisticsModel::updateReports()
     d->summaryReport.build(d->textModel);
     d->sceneReport.build(d->textModel);
     d->castReport.build(d->textModel);
+    d->dialoguesReport.build(d->textModel);
     d->locationReport.build(d->textModel);
     d->genderReport.build(d->textModel);
     d->structureAnalysisPlot.build(d->textModel);
@@ -105,6 +108,18 @@ void ScreenplayStatisticsModel::setCastReportParameters(int _sortBy)
 {
     d->castReport.setParameters(_sortBy);
     d->castReport.build(d->textModel);
+}
+
+const ScreenplayDialoguesReport& ScreenplayStatisticsModel::dialoguesReport() const
+{
+    return d->dialoguesReport;
+}
+
+void ScreenplayStatisticsModel::setDialoguesReportParameters(
+    const QVector<QString>& _visibleCharacters)
+{
+    d->dialoguesReport.setParameters(_visibleCharacters);
+    d->dialoguesReport.build(d->textModel);
 }
 
 const ScreenplayGenderReport& ScreenplayStatisticsModel::genderReport() const
