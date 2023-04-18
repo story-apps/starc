@@ -762,8 +762,8 @@ void ScreenplayTextModel::updateNumbering()
                     else {
                         if (groupItem->setNumber(sceneNumber, lastLockedSceneFullNumber)) {
                             updateItem(groupItem);
-                            ++sceneNumber;
                         }
+                        ++sceneNumber;
                     }
 
                     //
