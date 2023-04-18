@@ -336,7 +336,7 @@ void TextBlockStyle::setFont(const QFont& _font)
     }
 
     m_font = _font;
-    m_font.setHintingPreference(QFont::HintingPreference::PreferNoHinting);
+    //    m_font.setHintingPreference(QFont::HintingPreference::PreferNoHinting);
     m_charFormat.setFont(m_font);
     updateLineHeight();
 }
@@ -560,7 +560,7 @@ TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
         "Apple Color Emoji",
         "Noto Color Emoji",
     });
-    m_font.setHintingPreference(QFont::HintingPreference::PreferNoHinting);
+    //    m_font.setHintingPreference(QFont::HintingPreference::PreferNoHinting);
     m_font.setPixelSize(MeasurementHelper::ptToPx(_blockAttributes.value("font_size").toDouble()));
     //
     // ... начертание
