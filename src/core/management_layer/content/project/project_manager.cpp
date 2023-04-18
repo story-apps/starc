@@ -468,6 +468,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
             Domain::DocumentObjectType::Project,
             Domain::DocumentObjectType::Characters,
             Domain::DocumentObjectType::Locations,
+            Domain::DocumentObjectType::Worlds,
             Domain::DocumentObjectType::ScreenplayTitlePage,
             Domain::DocumentObjectType::ScreenplaySynopsis,
             Domain::DocumentObjectType::ScreenplayTreatment,
@@ -519,9 +520,9 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     }
 
     //
-    // Каждый из элементов можно открыть в своём окне
+    // Каждый из элементов можно открыть в своём окне, кроме корзины
     //
-    if (_index.isValid()) {
+    if (_index.isValid() && currentItem->type() != Domain::DocumentObjectType::RecycleBin) {
         auto openInNewWindow = new QAction(tr("Open in new window"));
         openInNewWindow->setSeparator(!isDocumentActionAdded && !menuActions.isEmpty());
         openInNewWindow->setIconText(u8"\U000F03CC");

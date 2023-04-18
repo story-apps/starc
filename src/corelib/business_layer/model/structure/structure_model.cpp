@@ -382,7 +382,7 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
     }
     case DocumentObjectType::World: {
         //
-        // FIXME: SAD-811 выпилить в версии 0.5.0
+        // FIXME: SAD-811 выпилить в версии 0.6.0
         //
         auto worldsItem = itemForType(Domain::DocumentObjectType::Worlds);
         if (worldsItem == nullptr) {
