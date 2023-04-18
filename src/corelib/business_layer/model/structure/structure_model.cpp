@@ -661,8 +661,11 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     case Domain::DocumentObjectType::Audioplay:
     case Domain::DocumentObjectType::Stageplay:
     case Domain::DocumentObjectType::Novel:
+    case Domain::DocumentObjectType::Characters:
     case Domain::DocumentObjectType::Character:
+    case Domain::DocumentObjectType::Locations:
     case Domain::DocumentObjectType::Location:
+    case Domain::DocumentObjectType::Worlds:
     case Domain::DocumentObjectType::World:
     case Domain::DocumentObjectType::Folder: {
         return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
@@ -672,10 +675,7 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     // В элемент можно только вставлять другие
     //
     case Domain::DocumentObjectType::Project:
-    case Domain::DocumentObjectType::RecycleBin:
-    case Domain::DocumentObjectType::Characters:
-    case Domain::DocumentObjectType::Locations:
-    case Domain::DocumentObjectType::Worlds: {
+    case Domain::DocumentObjectType::RecycleBin: {
         return defaultFlags | Qt::ItemIsDropEnabled;
     }
 
@@ -788,22 +788,37 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     // Смотрим, что за данные перемещаются
     //
     bool hasCharacters = false;
+    bool hasCharacter = false;
     bool hasLocations = false;
+    bool hasLocation = false;
     bool hasWorlds = false;
+    bool hasWorld = false;
     for (const auto item : std::as_const(d->lastMimeItems)) {
         switch (item->type()) {
-        case Domain::DocumentObjectType::Character: {
+        case Domain::DocumentObjectType::Characters: {
             hasCharacters = true;
             break;
         }
-
-        case Domain::DocumentObjectType::Location: {
-            hasLocations = true;
+        case Domain::DocumentObjectType::Character: {
+            hasCharacter = true;
             break;
         }
 
-        case Domain::DocumentObjectType::World: {
+        case Domain::DocumentObjectType::Locations: {
+            hasLocations = true;
+            break;
+        }
+        case Domain::DocumentObjectType::Location: {
+            hasLocation = true;
+            break;
+        }
+
+        case Domain::DocumentObjectType::Worlds: {
             hasWorlds = true;
+            break;
+        }
+        case Domain::DocumentObjectType::World: {
+            hasWorld = true;
             break;
         }
 
@@ -820,19 +835,25 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     //
     // ... eсли среди перемещаемых есть хотя бы два из трёх особенных, то запрещаем перемещение
     //
-    if (hasCharacters + hasLocations + hasWorlds > 1) {
+    if (hasCharacters + hasCharacter + hasLocations + hasLocation + hasWorlds + hasWorld > 1) {
         return false;
+    }
+    //
+    // ... карты персонажей, локаций и миров можно таскать только по верхнему уровню, кроме корзины
+    //
+    else if (hasCharacters || hasLocations || hasWorlds) {
+        return dropTarget->type() == Domain::DocumentObjectType::Undefined;
     }
     //
     // ... персонажей и локации можно перетаскивать только внутри родительского элемента
     //
-    else if (hasCharacters) {
+    else if (hasCharacter) {
         return dropTarget->type() == Domain::DocumentObjectType::Characters
             || dropTarget->type() == Domain::DocumentObjectType::RecycleBin;
-    } else if (hasLocations) {
+    } else if (hasLocation) {
         return dropTarget->type() == Domain::DocumentObjectType::Locations
             || dropTarget->type() == Domain::DocumentObjectType::RecycleBin;
-    } else if (hasWorlds) {
+    } else if (hasWorld) {
         return dropTarget->type() == Domain::DocumentObjectType::Worlds
             || dropTarget->type() == Domain::DocumentObjectType::RecycleBin;
     }
