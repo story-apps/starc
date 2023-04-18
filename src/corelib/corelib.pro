@@ -222,6 +222,7 @@ SOURCES += \
     business_layer/reports/comic_book/comic_book_summary_report.cpp \
     business_layer/reports/novel/novel_summary_report.cpp \
     business_layer/reports/screenplay/screenplay_cast_report.cpp \
+    business_layer/reports/screenplay/screenplay_dialogues_report.cpp \
     business_layer/reports/screenplay/screenplay_gender_report.cpp \
     business_layer/reports/screenplay/screenplay_location_report.cpp \
     business_layer/reports/screenplay/screenplay_scene_report.cpp \
@@ -535,6 +536,7 @@ HEADERS += \
     business_layer/reports/comic_book/comic_book_summary_report.h \
     business_layer/reports/novel/novel_summary_report.h \
     business_layer/reports/screenplay/screenplay_cast_report.h \
+    business_layer/reports/screenplay/screenplay_dialogues_report.h \
     business_layer/reports/screenplay/screenplay_gender_report.h \
     business_layer/reports/screenplay/screenplay_location_report.h \
     business_layer/reports/screenplay/screenplay_scene_report.h \

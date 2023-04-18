@@ -7,9 +7,9 @@
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <utils/helpers/text_helper.h>
 
-#include <QAbstractItemView>
 #include <QPainter>
 #include <QScopedValueRollback>
+#include <QTreeView>
 
 
 TreeDelegate::TreeDelegate(QObject* _parent)
@@ -379,20 +379,27 @@ QSize MultilineDelegate::sizeHint(const QStyleOptionViewItem& _option,
     //
     // Ширина
     //
+
     int width = _option.widget->width();
-    if (const QAbstractItemView* view = qobject_cast<const QAbstractItemView*>(_option.widget)) {
+    if (const QTreeView* view = qobject_cast<const QTreeView*>(_option.widget)) {
+        width = view->columnWidth(_index.column());
+    } else if (const QAbstractItemView* view
+               = qobject_cast<const QAbstractItemView*>(_option.widget)) {
         width = view->viewport()->width();
     }
-    //
-    // ... вручную считаем сколько слева было съедено на декорации дерева
-    //
-    int level = 1;
-    auto parentIndex = _index;
-    while (parentIndex.parent().isValid()) {
-        ++level;
-        parentIndex = parentIndex.parent();
+
+    if (_index.column() == 0) {
+        //
+        // ... вручную считаем сколько слева было съедено на декорации дерева
+        //
+        int level = 1;
+        auto parentIndex = _index;
+        while (parentIndex.parent().isValid()) {
+            ++level;
+            parentIndex = parentIndex.parent();
+        }
+        width -= level * Ui::DesignSystem::tree().indicatorWidth() + m_additionalLeftMargin;
     }
-    width -= level * Ui::DesignSystem::tree().indicatorWidth();
 
     const auto availableWidth = width - Ui::DesignSystem::treeOneLineItem().margins().left()
         - Ui::DesignSystem::treeOneLineItem().margins().right();

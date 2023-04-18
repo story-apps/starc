@@ -241,6 +241,11 @@ QRect Tree::visualRect(const QModelIndex& _index) const
     return d->tree->visualRect(_index);
 }
 
+void Tree::setFirstColumnSpanned(int _row, const QModelIndex& _parent, bool _span)
+{
+    d->tree->setFirstColumnSpanned(_row, _parent, _span);
+}
+
 void Tree::setHeader(QHeaderView* _headerView)
 {
     if (d->header) {
@@ -249,7 +254,7 @@ void Tree::setHeader(QHeaderView* _headerView)
 
     d->header = _headerView;
     d->header->setSectionResizeMode(QHeaderView::Stretch);
-    d->tree->setHeader(_headerView);
+    d->tree->setHeader(d->header);
 }
 
 QHeaderView* Tree::headerView() const

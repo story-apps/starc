@@ -141,6 +141,11 @@ public:
     QRect visualRect(const QModelIndex& _index) const;
 
     /**
+     * @brief Объединить колонки, для заданной строки
+     */
+    void setFirstColumnSpanned(int _row, const QModelIndex& _parent, bool _span);
+
+    /**
      * @brief Представление заголовка дерева
      */
     void setHeader(QHeaderView* _headerView);

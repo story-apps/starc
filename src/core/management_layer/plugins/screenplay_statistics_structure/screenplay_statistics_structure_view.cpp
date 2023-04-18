@@ -16,6 +16,7 @@ enum {
     kSceneReportIndex,
     kLocationReportIndex,
     kCastReportIndex,
+    kDialoguesReportIndex,
     kGenderReportIndex,
 };
 enum {
@@ -60,6 +61,7 @@ ScreenplayStatisticsStructureView::Implementation::Implementation(QWidget* _pare
         return item;
     };
     auto reportsModel = new QStandardItemModel(reports);
+    reportsModel->appendRow(createItem(u8"\U000F014D"));
     reportsModel->appendRow(createItem(u8"\U000F014D"));
     reportsModel->appendRow(createItem(u8"\U000F014D"));
     reportsModel->appendRow(createItem(u8"\U000F014D"));
@@ -142,6 +144,7 @@ void ScreenplayStatisticsStructureView::updateTranslations()
     reportsModel->item(kSceneReportIndex)->setText(tr("Scene report"));
     reportsModel->item(kLocationReportIndex)->setText(tr("Location report"));
     reportsModel->item(kCastReportIndex)->setText(tr("Cast report"));
+    reportsModel->item(kDialoguesReportIndex)->setText(tr("Dialogues report"));
     reportsModel->item(kGenderReportIndex)->setText(tr("Gender analysis"));
     //
     d->plotsTitle->setText(tr("Plots"));

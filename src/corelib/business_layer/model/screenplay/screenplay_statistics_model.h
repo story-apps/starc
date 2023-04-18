@@ -6,6 +6,7 @@
 namespace BusinessLayer {
 
 class ScreenplayCastReport;
+class ScreenplayDialoguesReport;
 class ScreenplayGenderReport;
 class ScreenplayLocationReport;
 class ScreenplaySceneReport;
@@ -65,6 +66,12 @@ public:
      */
     const ScreenplayCastReport& castReport() const;
     void setCastReportParameters(int _sortBy);
+
+    /**
+     * @brief Отчёт по репликам
+     */
+    const ScreenplayDialoguesReport& dialoguesReport() const;
+    void setDialoguesReportParameters(int _sortBy);
 
     /**
      * @brief Гнедерный анализ
