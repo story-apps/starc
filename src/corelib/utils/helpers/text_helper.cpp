@@ -110,6 +110,7 @@ static void initFontMetrics()
     addFontDelta("Arial", 2355.0);
     addFontDelta("Times New Roman", 2355.0);
 }
+
 } // namespace
 
 qreal TextHelper::fineTextWidthF(const QString& _text, const QFont& _font)
@@ -153,6 +154,20 @@ qreal TextHelper::fineLineSpacing(const QFont& _font)
         0;
 #endif
     return metrics.lineSpacing() + sFontToLineSpacing.value(_font.family(), platformDelta);
+}
+
+void TextHelper::updateFontHinting(QFont& _font)
+{
+#ifdef Q_OS_WINDOWS
+    //
+    // Arial в Windows при масштабировании рисуется коряво, поэтому убираем ему хинтинг
+    //
+    if (_font.family() == "Arial") {
+        _font.setHintingPreference(QFont::PreferNoHinting);
+    }
+#else
+    Q_UNUSED(_font)
+#endif
 }
 
 qreal TextHelper::heightForWidth(const QString& _text, const QFont& _font, qreal _width)

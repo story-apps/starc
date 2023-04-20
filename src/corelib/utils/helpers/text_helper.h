@@ -33,6 +33,11 @@ public:
     static qreal fineLineSpacing(const QFont& _font);
 
     /**
+     * @brief Обновить хинтинг шрифта в зависимости от гарнитуры
+     */
+    static void updateFontHinting(QFont& _font);
+
+    /**
      * Возвращает высоту текста
      * @param text Текст
      * @param font Шрифт, которым рисуется текст
