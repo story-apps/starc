@@ -19,6 +19,7 @@
 #include <ui/settings/settings_view.h>
 #include <ui/settings/theme_setup_view.h>
 #include <ui/widgets/dialog/dialog.h>
+#include <ui/widgets/dialog/standard_dialog.h>
 #include <ui/widgets/task_bar/task_bar.h>
 #include <ui/widgets/tree/tree_header_view.h>
 #include <utils/helpers/dialog_helper.h>
@@ -1293,9 +1294,12 @@ void SettingsManager::loadSpellingDictionaryAffFile(const QString& _languageCode
     connect(dictionaryLoader, &NetworkRequest::downloadComplete, this,
             [this, _languageCode, affFileName](const QByteArray& _data) {
                 if (_data.isEmpty()) {
-                    //
-                    // TODO: сообщить об ошибке
-                    //
+                    StandardDialog::information(
+                        d->view->topLevelWidget(), tr("Dictionary loading error"),
+                        tr("For some reason dictionary file isn't loaded. Please check internet "
+                           "connection and firewall/anitivirus settings, and try to reload "
+                           "dictionary."));
+                    TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
                     return;
                 }
 
@@ -1315,11 +1319,16 @@ void SettingsManager::loadSpellingDictionaryAffFile(const QString& _languageCode
                 //
                 loadSpellingDictionaryDicFile(_languageCode);
             });
-    connect(dictionaryLoader, &NetworkRequest::error, this, [] {
-        //
-        // TODO: сообщить об ошибке
-        //
-    });
+    connect(dictionaryLoader, &NetworkRequest::error, this,
+            [this, _languageCode](const QString& _error) {
+                StandardDialog::information(
+                    d->view->topLevelWidget(), tr("Dictionary loading error"),
+                    _error + "\n\n"
+                        + tr("Please check internet connection and firewall/anitivirus settings, "
+                             "and try to reload dictionary.")
+                              .arg(_error));
+                TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
+            });
     connect(dictionaryLoader, &NetworkRequest::finished, dictionaryLoader,
             &NetworkRequest::deleteLater);
 
@@ -1349,9 +1358,12 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
     connect(dictionaryLoader, &NetworkRequest::downloadComplete, this,
             [this, _languageCode, dicFileName](const QByteArray& _data) {
                 if (_data.isEmpty()) {
-                    //
-                    // TODO: сообщить об ошибке
-                    //
+                    StandardDialog::information(
+                        d->view->topLevelWidget(), tr("Dictionary loading error"),
+                        tr("For some reason dictionary file isn't loaded. Please check internet "
+                           "connection and firewall/anitivirus settings, and try to reload "
+                           "dictionary."));
+                    TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
                     return;
                 }
 
@@ -1376,11 +1388,16 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
                 //
                 emit applicationSpellCheckerLanguageChanged(_languageCode);
             });
-    connect(dictionaryLoader, &NetworkRequest::error, this, [] {
-        //
-        // TODO: сообщить об ошибке
-        //
-    });
+    connect(dictionaryLoader, &NetworkRequest::error, this,
+            [this, _languageCode](const QString& _error) {
+                StandardDialog::information(
+                    d->view->topLevelWidget(), tr("Dictionary loading error"),
+                    _error + "\n\n"
+                        + tr("Please check internet connection and firewall/anitivirus settings, "
+                             "and try to reload dictionary.")
+                              .arg(_error));
+                TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
+            });
     connect(dictionaryLoader, &NetworkRequest::finished, dictionaryLoader,
             &NetworkRequest::deleteLater);
 
