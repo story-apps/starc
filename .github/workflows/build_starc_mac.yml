@@ -1,7 +1,7 @@
 name: Build Starc for Mac
 
 env:
-  APP_VERSION: 0.5.0a
+  APP_VERSION: 0.5.1
 
 on:
   push:
