@@ -38,6 +38,11 @@ public:
      */
     static void finishTask(const QString& _taskId);
 
+    /**
+     * @brief Завершён ли заданный процесс
+     */
+    static bool isTaskFinished(const QString& _taskId);
+
 public:
     ~TaskBar() override;
 

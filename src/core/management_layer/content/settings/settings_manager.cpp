@@ -1291,34 +1291,37 @@ void SettingsManager::loadSpellingDictionaryAffFile(const QString& _languageCode
         const qreal progress = _value * 0.1;
         TaskBar::setTaskProgress(spellCheckerLoadingTaskId(_languageCode), progress);
     });
-    connect(dictionaryLoader, &NetworkRequest::downloadComplete, this,
-            [this, _languageCode, affFileName](const QByteArray& _data) {
-                if (_data.isEmpty()) {
+    connect(
+        dictionaryLoader, &NetworkRequest::downloadComplete, this,
+        [this, _languageCode, affFileName](const QByteArray& _data) {
+            if (_data.isEmpty()) {
+                if (!TaskBar::isTaskFinished(spellCheckerLoadingTaskId(_languageCode))) {
                     StandardDialog::information(
                         d->view->topLevelWidget(), tr("Dictionary loading error"),
                         tr("For some reason dictionary file isn't loaded. Please check internet "
                            "connection and firewall/anitivirus settings, and try to reload "
                            "dictionary."));
                     TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
-                    return;
                 }
+                return;
+            }
 
-                //
-                // Сохраняем файл
-                //
-                QFile affFile(
-                    QString("%1/hunspell/%2")
-                        .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
-                             affFileName));
-                affFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
-                affFile.write(_data);
-                affFile.close();
+            //
+            // Сохраняем файл
+            //
+            QFile affFile(
+                QString("%1/hunspell/%2")
+                    .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
+                         affFileName));
+            affFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+            affFile.write(_data);
+            affFile.close();
 
-                //
-                // Загрузим следующий файл
-                //
-                loadSpellingDictionaryDicFile(_languageCode);
-            });
+            //
+            // Загрузим следующий файл
+            //
+            loadSpellingDictionaryDicFile(_languageCode);
+        });
     connect(dictionaryLoader, &NetworkRequest::error, this,
             [this, _languageCode](const QString& _error) {
                 StandardDialog::information(
@@ -1355,39 +1358,42 @@ void SettingsManager::loadSpellingDictionaryDicFile(const QString& _languageCode
         const qreal progress = 10 + _value * 0.9;
         TaskBar::setTaskProgress(spellCheckerLoadingTaskId(_languageCode), progress);
     });
-    connect(dictionaryLoader, &NetworkRequest::downloadComplete, this,
-            [this, _languageCode, dicFileName](const QByteArray& _data) {
-                if (_data.isEmpty()) {
+    connect(
+        dictionaryLoader, &NetworkRequest::downloadComplete, this,
+        [this, _languageCode, dicFileName](const QByteArray& _data) {
+            if (_data.isEmpty()) {
+                if (!TaskBar::isTaskFinished(spellCheckerLoadingTaskId(_languageCode))) {
                     StandardDialog::information(
                         d->view->topLevelWidget(), tr("Dictionary loading error"),
                         tr("For some reason dictionary file isn't loaded. Please check internet "
                            "connection and firewall/anitivirus settings, and try to reload "
                            "dictionary."));
                     TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
-                    return;
                 }
+                return;
+            }
 
-                //
-                // Сохраняем файл
-                //
-                QFile affFile(
-                    QString("%1/hunspell/%2")
-                        .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
-                             dicFileName));
-                affFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
-                affFile.write(_data);
-                affFile.close();
+            //
+            // Сохраняем файл
+            //
+            QFile affFile(
+                QString("%1/hunspell/%2")
+                    .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
+                         dicFileName));
+            affFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+            affFile.write(_data);
+            affFile.close();
 
-                //
-                // Cкрываем прогресс
-                //
-                TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
+            //
+            // Cкрываем прогресс
+            //
+            TaskBar::finishTask(spellCheckerLoadingTaskId(_languageCode));
 
-                //
-                // Уведимим клиентов, что теперь можно использовать данный словарь
-                //
-                emit applicationSpellCheckerLanguageChanged(_languageCode);
-            });
+            //
+            // Уведимим клиентов, что теперь можно использовать данный словарь
+            //
+            emit applicationSpellCheckerLanguageChanged(_languageCode);
+        });
     connect(dictionaryLoader, &NetworkRequest::error, this,
             [this, _languageCode](const QString& _error) {
                 StandardDialog::information(
