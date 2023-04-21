@@ -649,7 +649,7 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     }
 #ifdef Q_OS_MAC
     //
-    // Особая комбинация для вставки точки независимо от раскладки
+    // Control + Option + . для вставки точки независимо от раскладки
     //
     else if (_event->modifiers().testFlag(Qt::MetaModifier)
              && _event->modifiers().testFlag(Qt::AltModifier)
@@ -657,12 +657,24 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         insertPlainText(".");
     }
     //
-    // Особая комбинация для вставки запятой независимо от раскладки
+    // Control + Option + , для вставки запятой независимо от раскладки
     //
     else if (_event->modifiers().testFlag(Qt::MetaModifier)
              && _event->modifiers().testFlag(Qt::AltModifier)
              && (_event->key() == Qt::Key_Comma || _event->key() == 1041)) {
         insertPlainText(",");
+    }
+    //
+    // Home & End перекидываем в начало и конец строки
+    //
+    else if (_event->key() == Qt::Key_Home) {
+        auto cursor = textCursor();
+        cursor.movePosition(QTextCursor::StartOfLine);
+        setTextCursor(cursor);
+    } else if (_event->key() == Qt::Key_End) {
+        auto cursor = textCursor();
+        cursor.movePosition(QTextCursor::EndOfLine);
+        setTextCursor(cursor);
     }
 #endif
     //
