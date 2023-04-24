@@ -3181,10 +3181,10 @@ void ApplicationManager::initConnections()
             d->accountManager.data(), &AccountManager::buyCredits);
     connect(d->projectManager.data(), &ProjectManager::generateTextRequested,
             d->cloudServiceManager.data(),
-            [this](const QString& _title, const QString& _promptHint, const QString& _prompt,
-                   const QString& _promptPostfix) {
-                d->cloudServiceManager->generateText(_title, _promptHint, _prompt, _promptPostfix,
-                                                     d->applicationView);
+            [this](const QString& _title, const QString& _promptHint, const QString& _promptPrefix,
+                   const QString& _prompt, const QString& _promptSuffix) {
+                d->cloudServiceManager->generateText(_title, _promptHint, _promptPrefix, _prompt,
+                                                     _promptSuffix, d->applicationView);
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textGenerated,
             d->projectManager.data(), &ProjectManager::setGeneratedText);

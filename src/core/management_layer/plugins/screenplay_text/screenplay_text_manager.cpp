@@ -197,7 +197,7 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
             tr("Generate screenplay text"),
             tr("Start prompt from something like \"Write a screenplay about ...\", or \"Write a "
                "short movie screenplay about ...\""),
-            _text, QLatin1String("Write result in fountain format."));
+            {}, _text, QLatin1String("Write result in fountain format."));
     });
     //
     connect(

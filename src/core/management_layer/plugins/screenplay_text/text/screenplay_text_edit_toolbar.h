@@ -67,6 +67,12 @@ public:
     void setCommentsModeEnabled(bool _enabled);
 
     /**
+     * @brief Включён ли режим ИИ помощника
+     */
+    bool isTextGenerationEnabled() const;
+    void setTextGenerationEnabled(bool _enabled);
+
+    /**
      * @brief Включена ли опция изолирования элементов на экране
      */
     bool isItemIsolationEnabled() const;
@@ -80,6 +86,7 @@ signals:
     void fastFormatPanelVisibleChanged(bool _visible);
     void searchPressed();
     void commentsModeEnabledChanged(bool _enabled);
+    void textGenerationEnabledChanged(bool _enabled);
     void itemIsolationEnabledChanged(bool _enabled);
 
 protected:

@@ -260,7 +260,8 @@ signals:
      * @brief Запрос на генерацию текста с заданными настройками
      */
     void generateTextRequested(const QString& _title, const QString& _promptHint,
-                               const QString& _prompt, const QString& _promptPostfix);
+                               const QString& _promptPrefix, const QString& _prompt,
+                               const QString& _promptSuffix);
 
 protected:
     /**

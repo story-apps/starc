@@ -170,7 +170,7 @@ Ui::NovelTextView* NovelTextManager::Implementation::createView(
             tr("Generate novel text"),
             tr("Start prompt from something like \"Write a novel about ...\", or \"Write a "
                "short novel about ...\""),
-            _text, {});
+            {}, _text, {});
     });
 
 

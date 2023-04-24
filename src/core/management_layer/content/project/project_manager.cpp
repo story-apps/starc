@@ -3663,11 +3663,12 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
                     SLOT(activateLink(QUuid, QModelIndex)), Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal(
-                "generateTextRequested(QString,QString,QString,QString)")
+                "generateTextRequested(QString,QString,QString,QString,QString)")
             != invalidSignalIndex) {
             connect(documentManager,
-                    SIGNAL(generateTextRequested(QString, QString, QString, QString)), this,
-                    SIGNAL(generateTextRequested(QString, QString, QString, QString)),
+                    SIGNAL(generateTextRequested(QString, QString, QString, QString, QString)),
+                    this,
+                    SIGNAL(generateTextRequested(QString, QString, QString, QString, QString)),
                     Qt::UniqueConnection);
         }
     }
