@@ -184,7 +184,12 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
     : TextModel(_parent, createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
-    auto updateCounters = [this](const QModelIndex& _index) {
+    //
+    // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
+    // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
+    // приводить к падению внутри них
+    //
+    connect(this, &AudioplayTextModel::afterRowsInserted, this, [this](const QModelIndex& _index) {
         if (!d->canUpdateCounters) {
             d->indexesForUpdate.insert(_index);
             return;
@@ -192,14 +197,15 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
 
         d->updateNumbering();
         d->updateChildrenDuration(itemForIndex(_index));
-    };
-    //
-    // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
-    // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
-    // приводить к падению внутри них
-    //
-    connect(this, &AudioplayTextModel::afterRowsInserted, this, updateCounters);
-    connect(this, &AudioplayTextModel::afterRowsRemoved, this, updateCounters);
+    });
+    connect(this, &AudioplayTextModel::afterRowsRemoved, this, [this](const QModelIndex& _index) {
+        if (!d->canUpdateCounters) {
+            d->indexesForUpdate.erase(_index);
+            return;
+        }
+
+        d->updateNumbering();
+    });
     //
     // При осуществлении групповых изменений, обновляем счётчики только в конце изменения,
     // накапливая список элементов, номера и хронометраж которых необходимо обновить
