@@ -395,7 +395,10 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
             //
             else {
                 blockFormat.setTopMargin(
-                    isFirstVisibleBlock ? 0 : paragraphStyleBlockFormat.topMargin());
+                    (isFirstVisibleBlock
+                     || blockFormat.boolProperty(TextBlockStyle::PropertyIsCorrectionContinued))
+                        ? 0
+                        : paragraphStyleBlockFormat.topMargin());
                 blockFormat.setBottomMargin(paragraphStyleBlockFormat.bottomMargin());
                 blockFormat.setPageBreakPolicy(isFirstVisibleBlock
                                                    ? QTextFormat::PageBreak_Auto
