@@ -688,7 +688,9 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
         const auto comicBookModelIndex = d->textEdit->currentModelIndex();
-        emit currentModelIndexChanged(comicBookModelIndex);
+        if (hasFocus()) {
+            emit currentModelIndexChanged(comicBookModelIndex);
+        }
         //
         // Если необходимо выберем соответствующий комментарий
         //

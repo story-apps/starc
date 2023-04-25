@@ -661,7 +661,9 @@ NovelOutlineView::NovelOutlineView(QWidget* _parent)
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
         const auto novelModelIndex = d->textEdit->currentModelIndex();
-        emit currentModelIndexChanged(novelModelIndex);
+        if (hasFocus()) {
+            emit currentModelIndexChanged(novelModelIndex);
+        }
         //
         // Если необходимо выберем соответствующий комментарий
         //

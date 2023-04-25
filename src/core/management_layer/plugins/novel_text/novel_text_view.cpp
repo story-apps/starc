@@ -710,10 +710,6 @@ NovelTextView::NovelTextView(QWidget* _parent)
         return currentItem;
     };
     auto handleCursorPositionChanged = [this, findCurrentModelItem] {
-        if (!hasFocus()) {
-            return;
-        }
-
         //
         // Обновим состояние панелей форматов
         //
@@ -723,7 +719,9 @@ NovelTextView::NovelTextView(QWidget* _parent)
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
         const auto novelModelIndex = d->textEdit->currentModelIndex();
-        emit currentModelIndexChanged(novelModelIndex);
+        if (hasFocus()) {
+            emit currentModelIndexChanged(novelModelIndex);
+        }
 
         //
         // Отобразим параметры сцены

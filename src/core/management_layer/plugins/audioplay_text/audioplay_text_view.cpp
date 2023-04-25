@@ -698,7 +698,9 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
         const auto audioplayModelIndex = d->textEdit->currentModelIndex();
-        emit currentModelIndexChanged(audioplayModelIndex);
+        if (hasFocus()) {
+            emit currentModelIndexChanged(audioplayModelIndex);
+        }
         //
         // Если необходимо выберем соответствующий комментарий
         //

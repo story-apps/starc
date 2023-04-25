@@ -691,7 +691,9 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
         const auto screenplayModelIndex = d->textEdit->currentModelIndex();
-        emit currentModelIndexChanged(screenplayModelIndex);
+        if (hasFocus()) {
+            emit currentModelIndexChanged(screenplayModelIndex);
+        }
         //
         // Если необходимо выберем соответствующий комментарий
         //

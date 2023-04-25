@@ -787,10 +787,6 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         return currentItem;
     };
     auto handleCursorPositionChanged = [this, findCurrentModelItem] {
-        if (!hasFocus()) {
-            return;
-        }
-
         //
         // Обновим состояние панелей форматов
         //
@@ -800,7 +796,9 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
         const auto screenplayModelIndex = d->textEdit->currentModelIndex();
-        emit currentModelIndexChanged(screenplayModelIndex);
+        if (hasFocus()) {
+            emit currentModelIndexChanged(screenplayModelIndex);
+        }
 
         //
         // Отобразим параметры сцены

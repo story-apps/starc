@@ -674,7 +674,9 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
         const auto stageplayModelIndex = d->textEdit->currentModelIndex();
-        emit currentModelIndexChanged(stageplayModelIndex);
+        if (hasFocus()) {
+            emit currentModelIndexChanged(stageplayModelIndex);
+        }
         //
         // Если необходимо выберем соответствующий комментарий
         //
