@@ -443,7 +443,33 @@ void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
     // Все остальные блоки просто добавляются в текст
     //
     else {
+
+        //
+        // Если изменяется заголовок изолированного элемента, то снимаем изоляцию на время
+        // операции, а после изолируем предшествующий текущему элемент, либо его родителя
+        //
+        const QSet<TextParagraphType> headerTypes = {
+            TextParagraphType::SceneHeading,    TextParagraphType::BeatHeading,
+            TextParagraphType::SequenceHeading, TextParagraphType::SequenceFooter,
+            TextParagraphType::ActHeading,      TextParagraphType::ActFooter,
+        };
+
+        const auto currentTypeIsHeader = headerTypes.contains(currentParagraphType());
+        const auto targetTypeIsHeader = headerTypes.contains(_type);
+        const auto needReisolate = (currentTypeIsHeader || targetTypeIsHeader)
+            && d->document.visibleTopLeveLItem().isValid();
+        if (needReisolate) {
+            d->document.setVisibleTopLevelItem({});
+        }
+
         d->document.addParagraph(_type, textCursor());
+
+        //
+        // ... при необходимости восстанавливаем режим изоляции
+        //
+        if (needReisolate) {
+            d->document.setVisibleTopLevelItem(d->document.itemIndex(textCursor().block()));
+        }
     }
 
     emit paragraphTypeChanged();

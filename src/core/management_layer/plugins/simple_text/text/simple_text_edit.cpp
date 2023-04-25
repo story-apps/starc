@@ -214,7 +214,32 @@ void SimpleTextEdit::redo()
 
 void SimpleTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
 {
+    //
+    // Если изменяется заголовок изолированного элемента, то снимаем изоляцию на время
+    // операции, а после изолируем предшествующий текущему элемент, либо его родителя
+    //
+    const QSet<TextParagraphType> headerTypes = {
+        TextParagraphType::ChapterHeading1, TextParagraphType::ChapterHeading2,
+        TextParagraphType::ChapterHeading3, TextParagraphType::ChapterHeading4,
+        TextParagraphType::ChapterHeading5, TextParagraphType::ChapterHeading6,
+    };
+
+    const auto currentTypeIsHeader = headerTypes.contains(currentParagraphType());
+    const auto targetTypeIsHeader = headerTypes.contains(_type);
+    const auto needReisolate = (currentTypeIsHeader || targetTypeIsHeader)
+        && d->document.visibleTopLeveLItem().isValid();
+    if (needReisolate) {
+        d->document.setVisibleTopLevelItem({});
+    }
+
     d->document.addParagraph(_type, textCursor());
+
+    //
+    // ... при необходимости восстанавливаем режим изоляции
+    //
+    if (needReisolate) {
+        d->document.setVisibleTopLevelItem(d->document.itemIndex(textCursor().block()));
+    }
 
     emit paragraphTypeChanged();
 }
@@ -225,7 +250,32 @@ void SimpleTextEdit::setCurrentParagraphType(BusinessLayer::TextParagraphType _t
         return;
     }
 
+    //
+    // Если изменяется заголовок изолированного элемента, то снимаем изоляцию на время
+    // операции, а после изолируем предшествующий текущему элемент, либо его родителя
+    //
+    const QSet<TextParagraphType> headerTypes = {
+        TextParagraphType::ChapterHeading1, TextParagraphType::ChapterHeading2,
+        TextParagraphType::ChapterHeading3, TextParagraphType::ChapterHeading4,
+        TextParagraphType::ChapterHeading5, TextParagraphType::ChapterHeading6,
+    };
+
+    const auto currentTypeIsHeader = headerTypes.contains(currentParagraphType());
+    const auto targetTypeIsHeader = headerTypes.contains(_type);
+    const auto needReisolate = (currentTypeIsHeader || targetTypeIsHeader)
+        && d->document.visibleTopLeveLItem().isValid();
+    if (needReisolate) {
+        d->document.setVisibleTopLevelItem({});
+    }
+
     d->document.setParagraphType(_type, textCursor());
+
+    //
+    // ... при необходимости восстанавливаем режим изоляции
+    //
+    if (needReisolate) {
+        d->document.setVisibleTopLevelItem(d->document.itemIndex(textCursor().block()));
+    }
 
     emit paragraphTypeChanged();
 }
