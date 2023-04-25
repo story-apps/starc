@@ -20,8 +20,6 @@
 #include <QStringListModel>
 #include <QXmlStreamReader>
 
-#include <set>
-
 
 namespace BusinessLayer {
 
@@ -80,16 +78,6 @@ public:
      * @brief Количество сцен
      */
     int scenesCount = 0;
-
-    /**
-     * @brief Можно ли обновлять счётчики
-     */
-    bool canUpdateCounters = true;
-
-    /**
-     * @brief Список элементов для отложенного обновления счётчиков
-     */
-    std::set<QModelIndex> indexesForUpdate;
 };
 
 NovelTextModel::Implementation::Implementation(NovelTextModel* _q)
@@ -137,50 +125,15 @@ NovelTextModel::NovelTextModel(QObject* _parent)
     : TextModel(_parent, NovelTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
+    auto updateCounters
+        = [this](const QModelIndex& _index) { d->updateChildrenCounters(itemForIndex(_index)); };
     //
     // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
     // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
     // приводить к падению внутри них
     //
-    connect(this, &NovelTextModel::afterRowsInserted, this, [this](const QModelIndex& _index) {
-        if (!d->canUpdateCounters) {
-            d->indexesForUpdate.insert(_index);
-            return;
-        }
-
-        d->updateChildrenCounters(itemForIndex(_index));
-    });
-    connect(this, &NovelTextModel::afterRowsRemoved, this, [this](const QModelIndex& _index) {
-        if (!d->canUpdateCounters) {
-            d->indexesForUpdate.erase(_index);
-            return;
-        }
-    });
-    //
-    // При осуществлении групповых изменений, обновляем счётчики только в конце изменения,
-    // накапливая список элементов, номера и хронометраж которых необходимо обновить
-    //
-    connect(this, &NovelTextModel::rowsAboutToBeChanged, this,
-            [this] { d->canUpdateCounters = false; });
-    connect(this, &NovelTextModel::rowsChanged, this, [this] {
-        //
-        // Удаляем вложенные элементы, чтобы не делать одну работу несколько раз
-        //
-        for (auto iter = d->indexesForUpdate.begin(); iter != d->indexesForUpdate.end();) {
-            if (auto findIter = d->indexesForUpdate.find(iter->parent());
-                findIter != d->indexesForUpdate.end()) {
-                iter = d->indexesForUpdate.erase(findIter);
-            } else {
-                ++iter;
-            }
-        }
-        for (const auto& index : std::as_const(d->indexesForUpdate)) {
-            d->updateChildrenCounters(itemForIndex(index));
-        }
-        d->indexesForUpdate.clear();
-
-        d->canUpdateCounters = true;
-    });
+    connect(this, &NovelTextModel::afterRowsInserted, this, updateCounters);
+    connect(this, &NovelTextModel::afterRowsRemoved, this, updateCounters);
 }
 
 NovelTextModel::~NovelTextModel() = default;

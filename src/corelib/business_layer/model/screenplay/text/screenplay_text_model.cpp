@@ -21,8 +21,6 @@
 #include <QStringListModel>
 #include <QXmlStreamReader>
 
-#include <set>
-
 
 namespace BusinessLayer {
 
@@ -92,16 +90,6 @@ public:
      * @brief Количество сцен
      */
     int scenesCount = 0;
-
-    /**
-     * @brief Можно ли обновлять счётчики
-     */
-    bool canUpdateCounters = true;
-
-    /**
-     * @brief Список элементов для отложенного обновления счётчиков
-     */
-    std::set<QModelIndex> indexesForUpdate;
 };
 
 ScreenplayTextModel::Implementation::Implementation(ScreenplayTextModel* _q)
@@ -150,54 +138,17 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
     : TextModel(_parent, ScreenplayTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
+    auto updateCounters = [this](const QModelIndex& _index) {
+        updateNumbering();
+        d->updateChildrenDuration(itemForIndex(_index));
+    };
     //
     // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
     // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
     // приводить к падению внутри них
     //
-    connect(this, &ScreenplayTextModel::afterRowsInserted, this, [this](const QModelIndex& _index) {
-        if (!d->canUpdateCounters) {
-            d->indexesForUpdate.insert(_index);
-            return;
-        }
-
-        updateNumbering();
-        d->updateChildrenDuration(itemForIndex(_index));
-    });
-    connect(this, &ScreenplayTextModel::afterRowsRemoved, this, [this](const QModelIndex& _index) {
-        if (!d->canUpdateCounters) {
-            d->indexesForUpdate.erase(_index);
-            return;
-        }
-
-        updateNumbering();
-    });
-    //
-    // При осуществлении групповых изменений, обновляем счётчики только в конце изменения,
-    // накапливая список элементов, номера и хронометраж которых необходимо обновить
-    //
-    connect(this, &ScreenplayTextModel::rowsAboutToBeChanged, this,
-            [this] { d->canUpdateCounters = false; });
-    connect(this, &ScreenplayTextModel::rowsChanged, this, [this] {
-        updateNumbering();
-        //
-        // Удаляем вложенные элементы, чтобы не делать одну работу несколько раз
-        //
-        for (auto iter = d->indexesForUpdate.begin(); iter != d->indexesForUpdate.end();) {
-            if (auto findIter = d->indexesForUpdate.find(iter->parent());
-                findIter != d->indexesForUpdate.end()) {
-                iter = d->indexesForUpdate.erase(findIter);
-            } else {
-                ++iter;
-            }
-        }
-        for (const auto& index : std::as_const(d->indexesForUpdate)) {
-            d->updateChildrenDuration(itemForIndex(index));
-        }
-        d->indexesForUpdate.clear();
-
-        d->canUpdateCounters = true;
-    });
+    connect(this, &ScreenplayTextModel::afterRowsInserted, this, updateCounters);
+    connect(this, &ScreenplayTextModel::afterRowsRemoved, this, updateCounters);
 
     connect(this, &ScreenplayTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });
@@ -767,7 +718,7 @@ void ScreenplayTextModel::updateNumbering()
                     //
                     else {
                         if (groupItem->setNumber(sceneNumber, lastLockedSceneFullNumber)) {
-                            updateItem(groupItem);
+                            updateItemForRoles(groupItem, { TextModelGroupItem::GroupNumberRole });
                         }
                         ++sceneNumber;
                     }
@@ -782,25 +733,29 @@ void ScreenplayTextModel::updateNumbering()
 
             case TextModelItemType::Text: {
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                if (!textItem->isCorrection()) {
-                    switch (textItem->paragraphType()) {
-                    case TextParagraphType::Character: {
-                        ++dialogueNumber;
-                        Q_FALLTHROUGH();
-                    }
-
-                    case TextParagraphType::Dialogue:
-                    case TextParagraphType::Lyrics: {
-                        textItem->setNumber(dialogueNumber);
-                        updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole });
-                        break;
-                    }
-
-                    default: {
-                        break;
-                    }
-                    }
+                if (textItem->isCorrection()) {
+                    break;
                 }
+
+                switch (textItem->paragraphType()) {
+                case TextParagraphType::Character: {
+                    ++dialogueNumber;
+                    Q_FALLTHROUGH();
+                }
+
+                case TextParagraphType::Dialogue:
+                case TextParagraphType::Lyrics: {
+                    if (textItem->setNumber(dialogueNumber)) {
+                        updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole });
+                    }
+                    break;
+                }
+
+                default: {
+                    break;
+                }
+                }
+
                 break;
             }
 

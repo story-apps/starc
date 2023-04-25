@@ -123,7 +123,7 @@ public:
      * @brief Номер элемента
      */
     std::optional<Number> number() const;
-    void setNumber(int _number);
+    bool setNumber(int _number);
 
     /**
      * @brief Является ли блок декорацией

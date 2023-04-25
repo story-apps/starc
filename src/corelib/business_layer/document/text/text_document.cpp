@@ -567,7 +567,9 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                 return;
             }
 
-            if (_roles.size() == 1 && _roles.constFirst() == TextModelTextItem::TextNumberRole) {
+            if (_roles.size() == 1
+                && (_roles.constFirst() == TextModelGroupItem::GroupNumberRole
+                    || _roles.constFirst() == TextModelTextItem::TextNumberRole)) {
                 return;
             }
 
@@ -1147,18 +1149,9 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     // случае, если массовые изменения были инициированы извне, а не во время изменения модели самим
     // документом
     //
-    connect(d->model, &TextModel::rowsAboutToBeChanged, this, [this] {
-        if (d->state != DocumentState::Ready || d->isEditTransactionActive) {
-            return;
-        }
-
-        TextCursor(this).beginEditBlock();
-    });
+    connect(d->model, &TextModel::rowsAboutToBeChanged, this,
+            [this] { TextCursor(this).beginEditBlock(); });
     connect(d->model, &TextModel::rowsChanged, this, [this] {
-        if (d->state != DocumentState::Ready || d->isEditTransactionActive) {
-            return;
-        }
-
         //
         // Завершаем групповое изменение, но при этом обходим стороной корректировки документа,
         // т.к. всё это происходило в модели и документ уже находится в синхронизированном с
@@ -1973,8 +1966,6 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
         return static_cast<TextModelTextItem*>(_item);
     };
 
-
-    d->model->beginChangeRows();
 
     //
     // Удаляем из модели элементы удалённых блоков и корректируем позиции блоков идущих после правки
@@ -2891,8 +2882,6 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
         //
         block = block.next();
     }
-
-    d->model->endChangeRows();
 }
 
 void TextDocument::insertTable(const TextCursor& _cursor)

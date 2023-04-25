@@ -685,16 +685,17 @@ std::optional<TextModelTextItem::Number> TextModelTextItem::number() const
     return d->number;
 }
 
-void TextModelTextItem::setNumber(int _number)
+bool TextModelTextItem::setNumber(int _number)
 {
     if (d->number.has_value() && d->number->value == _number) {
-        return;
+        return false;
     }
 
     const auto newNumber
         = QString(QLocale().textDirection() == Qt::LeftToRight ? "%1." : ".%1").arg(_number);
     d->number = { _number, newNumber };
     markChanged();
+    return true;
 }
 
 bool TextModelTextItem::isCorrection() const

@@ -18,8 +18,6 @@
 #include <QStringListModel>
 #include <QXmlStreamReader>
 
-#include <set>
-
 
 namespace BusinessLayer {
 
@@ -72,16 +70,6 @@ public:
      * @brief Справочники, которые строятся в рантайме
      */
     QStringListModel* charactersModelFromText = nullptr;
-
-    /**
-     * @brief Можно ли обновлять счётчики
-     */
-    bool canUpdateCounters = true;
-
-    /**
-     * @brief Список элементов для отложенного обновления счётчиков
-     */
-    std::set<QModelIndex> indexesForUpdate;
 };
 
 AudioplayTextModel::Implementation::Implementation(AudioplayTextModel* _q)
@@ -113,8 +101,9 @@ void AudioplayTextModel::Implementation::updateNumbering()
                 updateChildNumbering(childItem);
                 auto groupItem = static_cast<TextModelGroupItem*>(childItem);
                 if (groupItem->setNumber(sceneNumber, {})) {
-                    ++sceneNumber;
+                    q->updateItemForRoles(groupItem, { TextModelGroupItem::GroupNumberRole });
                 }
+                ++sceneNumber;
                 break;
             }
 
@@ -132,8 +121,9 @@ void AudioplayTextModel::Implementation::updateNumbering()
 
                     case TextParagraphType::Dialogue:
                     case TextParagraphType::Lyrics: {
-                        textItem->setNumber(dialogueNumber);
-                        q->updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole });
+                        if (textItem->setNumber(dialogueNumber)) {
+                            q->updateItemForRoles(textItem, { TextModelTextItem::TextNumberRole });
+                        }
                         break;
                     }
 
@@ -184,54 +174,17 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
     : TextModel(_parent, createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
+    auto updateCounters = [this](const QModelIndex& _index) {
+        d->updateNumbering();
+        d->updateChildrenDuration(itemForIndex(_index));
+    };
     //
     // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
     // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
     // приводить к падению внутри них
     //
-    connect(this, &AudioplayTextModel::afterRowsInserted, this, [this](const QModelIndex& _index) {
-        if (!d->canUpdateCounters) {
-            d->indexesForUpdate.insert(_index);
-            return;
-        }
-
-        d->updateNumbering();
-        d->updateChildrenDuration(itemForIndex(_index));
-    });
-    connect(this, &AudioplayTextModel::afterRowsRemoved, this, [this](const QModelIndex& _index) {
-        if (!d->canUpdateCounters) {
-            d->indexesForUpdate.erase(_index);
-            return;
-        }
-
-        d->updateNumbering();
-    });
-    //
-    // При осуществлении групповых изменений, обновляем счётчики только в конце изменения,
-    // накапливая список элементов, номера и хронометраж которых необходимо обновить
-    //
-    connect(this, &AudioplayTextModel::rowsAboutToBeChanged, this,
-            [this] { d->canUpdateCounters = false; });
-    connect(this, &AudioplayTextModel::rowsChanged, this, [this] {
-        d->updateNumbering();
-        //
-        // Удаляем вложенные элементы, чтобы не делать одну работу несколько раз
-        //
-        for (auto iter = d->indexesForUpdate.begin(); iter != d->indexesForUpdate.end();) {
-            if (auto findIter = d->indexesForUpdate.find(iter->parent());
-                findIter != d->indexesForUpdate.end()) {
-                iter = d->indexesForUpdate.erase(findIter);
-            } else {
-                ++iter;
-            }
-        }
-        for (const auto& index : std::as_const(d->indexesForUpdate)) {
-            d->updateChildrenDuration(itemForIndex(index));
-        }
-        d->indexesForUpdate.clear();
-
-        d->canUpdateCounters = true;
-    });
+    connect(this, &AudioplayTextModel::afterRowsInserted, this, updateCounters);
+    connect(this, &AudioplayTextModel::afterRowsRemoved, this, updateCounters);
 
     connect(this, &AudioplayTextModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });
