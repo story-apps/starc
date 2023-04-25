@@ -1143,11 +1143,22 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
             cursor.endEditBlock();
         });
     //
-    // Группируем массовые изменения, чтобы не мелькать пользователю перед глазами
+    // Группируем массовые изменения, чтобы не мелькать пользователю перед глазами, но только в
+    // случае, если массовые изменения были инициированы извне, а не во время изменения модели самим
+    // документом
     //
-    connect(d->model, &TextModel::rowsAboutToBeChanged, this,
-            [this] { TextCursor(this).beginEditBlock(); });
+    connect(d->model, &TextModel::rowsAboutToBeChanged, this, [this] {
+        if (d->state != DocumentState::Ready || d->isEditTransactionActive) {
+            return;
+        }
+
+        TextCursor(this).beginEditBlock();
+    });
     connect(d->model, &TextModel::rowsChanged, this, [this] {
+        if (d->state != DocumentState::Ready || d->isEditTransactionActive) {
+            return;
+        }
+
         //
         // Завершаем групповое изменение, но при этом обходим стороной корректировки документа,
         // т.к. всё это происходило в модели и документ уже находится в синхронизированном с
