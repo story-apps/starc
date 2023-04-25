@@ -527,8 +527,9 @@ void ScreenplayTextView::Implementation::updateCommentsToolbar()
 void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
     const bool isSidebarShouldBeVisible = toolbar->isFastFormatPanelVisible()
-        || toolbar->isCommentsModeEnabled() || showSceneParametersAction->isChecked()
-        || showBookmarksAction->isChecked() || showDictionariesAction->isChecked();
+        || toolbar->isCommentsModeEnabled() || toolbar->isTextGenerationEnabled()
+        || showSceneParametersAction->isChecked() || showBookmarksAction->isChecked()
+        || showDictionariesAction->isChecked();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
