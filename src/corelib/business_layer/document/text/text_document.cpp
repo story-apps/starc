@@ -2118,6 +2118,17 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 return;
             }
 
+            //
+            // ... если в данный момент изолирован один из удаляемых элементов, снимем изоляцию
+            //
+            if (d->corrector != nullptr
+                && itemsToDeleteGroup.contains(d->corrector->visibleTopLevelItem())) {
+                d->corrector->setVisibleTopLevelItem(nullptr);
+            }
+
+            //
+            // ... собственно удаляем элементы
+            //
             d->model->removeItems(itemsToDeleteGroup.constFirst(), itemsToDeleteGroup.constLast());
 
             itemsToDeleteGroup.clear();
@@ -2196,6 +2207,12 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             // Запомним родителя и удаляем сам элемент
             //
             auto itemParent = item->parent();
+            //
+            // ... если удаляется изолированный элемент, то сбросим изоляцию
+            //
+            if (d->corrector != nullptr && d->corrector->visibleTopLevelItem() == item) {
+                d->corrector->setVisibleTopLevelItem(nullptr);
+            }
             d->model->removeItem(item);
 
             //
@@ -2310,6 +2327,13 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     }
 
                     lastMovedItem = childItem;
+                }
+
+                //
+                // Если удаляется изолированный элемент, то сбросим изоляцию
+                //
+                if (d->corrector->visibleTopLevelItem() == itemParent) {
+                    d->corrector->setVisibleTopLevelItem(nullptr);
                 }
 
                 //
