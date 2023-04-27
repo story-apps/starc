@@ -103,6 +103,13 @@ public:
     virtual void setEditingMode(DocumentEditingMode)
     {
     }
+
+    /**
+     * @brief Задать доступное кол-во кредитов для использования ИИ инструментов
+     */
+    virtual void setAvailableCredits(int)
+    {
+    }
 };
 
 } // namespace ManagementLayer

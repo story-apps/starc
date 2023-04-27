@@ -133,6 +133,11 @@ public:
     void setEditingMode(DocumentEditingMode _mode) const;
 
     /**
+     * @brief Задать количество кредитов доступных для использования с ИИ инструментами
+     */
+    void setAvailableCredits(int _credits) const;
+
+    /**
      * @brief Сбросить модели для всех плагинов
      */
     void resetModels() const;

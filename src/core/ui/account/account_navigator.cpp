@@ -145,7 +145,7 @@ void AccountNavigator::Implementation::updateTeamSubtitleLabel()
 void AccountNavigator::Implementation::updateCreditsSubtitleLabel()
 {
     creditsSubtitle->setText(creditsAvailable > 0
-                                 ? tr("%n credits available", nullptr, creditsAvailable)
+                                 ? tr("%n credits available", nullptr, creditsAvailable / 1000)
                                  : tr("No credits available"));
 }
 

@@ -1220,6 +1220,9 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 d->commentsModel->remove(_indexes);
             });
     //
+    connect(d->textGenerationView, &TextGenerationView::rephraseRequested, this,
+            &ScreenplayTextView::rephraseTextRequested);
+    //
     connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
             &ScreenplayTextView::createBookmarkRequested);
     connect(d->bookmarksView, &BookmarksView::changeBookmarkRequested, this,
@@ -1338,6 +1341,11 @@ void ScreenplayTextView::setCurrentModelIndex(const QModelIndex& _index)
     d->textEdit->setCurrentModelIndex(_index);
 }
 
+void ScreenplayTextView::setAvailableCredits(int _credits)
+{
+    d->textGenerationView->setAvailableWords(_credits);
+}
+
 void ScreenplayTextView::setGeneratedText(const QString& _text)
 {
     const QLatin1String textWritingTaskKey("text-writing-task");
@@ -1429,6 +1437,11 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
     d->textEdit->setCompleterActive(true);
 
     TaskBar::finishTask(textWritingTaskKey);
+}
+
+void ScreenplayTextView::setRephrasedText(const QString& _text)
+{
+    d->textGenerationView->setRephraseResult(_text);
 }
 
 DictionariesView* ScreenplayTextView::dictionariesView() const

@@ -275,6 +275,11 @@ public:
      * @brief Текущий режим работы редакторов
      */
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
+
+    /**
+     * @brief Количество кредитов доступных для использования с ИИ инструментами
+     */
+    int availableCredits = 0;
 };
 
 Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
@@ -341,6 +346,7 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
 
         auto plugin = qobject_cast<ManagementLayer::IDocumentManager*>(pluginObject);
         plugin->setEditingMode(editingMode);
+        plugin->setAvailableCredits(availableCredits);
         plugins.insert(_mimeType, plugin);
     }
 
@@ -367,6 +373,7 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
     }
     }
     view->setEditingMode(editingMode);
+    view->setAvailableCredits(availableCredits);
     return view;
 }
 
@@ -861,6 +868,18 @@ void PluginsBuilder::setEditingMode(DocumentEditingMode _mode) const
     d->editingMode = _mode;
     for (auto plugin : std::as_const(d->plugins)) {
         plugin->setEditingMode(d->editingMode);
+    }
+}
+
+void PluginsBuilder::setAvailableCredits(int _credits) const
+{
+    if (d->availableCredits == _credits) {
+        return;
+    }
+
+    d->availableCredits = _credits;
+    for (auto plugin : std::as_const(d->plugins)) {
+        plugin->setAvailableCredits(_credits);
     }
 }
 

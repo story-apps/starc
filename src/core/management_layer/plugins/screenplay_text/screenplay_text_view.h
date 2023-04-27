@@ -32,7 +32,9 @@ public:
     void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
     void setCursors(const QVector<Domain::CursorInfo>& _cursors) override;
     void setCurrentModelIndex(const QModelIndex& _index) override;
+    void setAvailableCredits(int _credits) override;
     void setGeneratedText(const QString& _text) override;
+    void setRephrasedText(const QString& _text) override;
     /** @} */
 
     /**
@@ -103,8 +105,9 @@ signals:
     void cursorChanged(const QByteArray& _cursorData);
 
     /**
-     * @brief Запрос на генерацию текста
+     * @brief Запросы к интеллектуальному помощнику
      */
+    void rephraseTextRequested(const QString& _sourceText, const QString& _style);
     void generateTextRequested(const QString& _text);
 
 protected:

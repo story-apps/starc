@@ -5,7 +5,6 @@
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/label.h>
-#include <ui/widgets/progress_bar/progress_bar.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
@@ -73,11 +72,11 @@ public:
     TextField* rephraseSourceText = nullptr;
     TextField* rephraseStyleText = nullptr;
     TextField* rephraseResultText = nullptr;
-    Button* rephraseButton = nullptr;
     Button* rephraseInsertButton = nullptr;
+    Button* rephraseButton = nullptr;
+    QHBoxLayout* rephraseButtonsLayout = nullptr;
 
 
-    ProgressBar* availableWordsProgress = nullptr;
     CaptionLabel* availableWordsLabel = nullptr;
     Button* buyCreditsButton = nullptr;
 };
@@ -97,10 +96,10 @@ TextGenerationView::Implementation::Implementation(QWidget* _parent)
     , rephraseSourceText(new TextField(rephrasePage))
     , rephraseStyleText(new TextField(rephrasePage))
     , rephraseResultText(new TextField(rephrasePage))
-    , rephraseButton(new Button(rephrasePage))
     , rephraseInsertButton(new Button(rephrasePage))
+    , rephraseButton(new Button(rephrasePage))
+    , rephraseButtonsLayout(new QHBoxLayout)
     //
-    , availableWordsProgress(new ProgressBar(_parent))
     , availableWordsLabel(new CaptionLabel(_parent))
     , buyCreditsButton(new Button(_parent))
 {
@@ -144,13 +143,18 @@ TextGenerationView::Implementation::Implementation(QWidget* _parent)
     {
         rephraseResultText->hide();
         rephraseInsertButton->hide();
+        rephraseButtonsLayout->setContentsMargins({});
+        rephraseButtonsLayout->setSpacing(0);
+        rephraseButtonsLayout->addStretch();
+        rephraseButtonsLayout->addWidget(rephraseInsertButton);
+        rephraseButtonsLayout->addWidget(rephraseButton);
+
 
         auto layout = rephrasePage->contentsLayout;
         layout->addWidget(rephraseSourceText);
         layout->addWidget(rephraseStyleText);
         layout->addWidget(rephraseResultText);
-        layout->addWidget(rephraseButton, 0, Qt::AlignRight);
-        layout->addWidget(rephraseInsertButton, 0, Qt::AlignRight);
+        layout->addLayout(rephraseButtonsLayout);
         layout->addStretch();
     }
 }
@@ -167,12 +171,14 @@ TextGenerationView::TextGenerationView(QWidget* _parent)
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(d->pages, 1);
-    layout->addWidget(d->availableWordsProgress);
     layout->addWidget(d->availableWordsLabel);
     layout->addWidget(d->buyCreditsButton);
 
-    connect(d->openRephraseButton, &Button::clicked, this,
-            [this] { d->pages->setCurrentWidget(d->rephrasePage); });
+    connect(d->openRephraseButton, &Button::clicked, this, [this] {
+        d->rephraseResultText->hide();
+        d->rephraseInsertButton->hide();
+        d->pages->setCurrentWidget(d->rephrasePage);
+    });
     for (auto page : {
              d->rephrasePage,
          }) {
@@ -181,6 +187,11 @@ TextGenerationView::TextGenerationView(QWidget* _parent)
         connect(page->titleLabel, &Subtitle2Label::clicked, this,
                 [this] { d->pages->setCurrentWidget(d->buttonsPage); });
     }
+    connect(d->rephraseButton, &Button::clicked, this, [this] {
+        emit rephraseRequested(d->rephraseSourceText->text(), d->rephraseStyleText->text());
+    });
+    connect(d->rephraseInsertButton, &Button::clicked, this,
+            [this] { emit insertTextRequested(d->rephraseResultText->text()); });
 }
 
 TextGenerationView::~TextGenerationView()
@@ -216,6 +227,24 @@ void TextGenerationView::setReadOnly(bool _readOnly)
     //
 }
 
+void TextGenerationView::setRephraseResult(const QString& _text)
+{
+    d->rephraseResultText->setText(_text);
+    d->rephraseResultText->show();
+    d->rephraseInsertButton->show();
+}
+
+void TextGenerationView::setAvailableWords(int _availableWords)
+{
+    d->availableWordsLabel->setText(_availableWords > 0
+                                        ? tr("%n word(s) available", nullptr, _availableWords)
+                                        : tr("No words available"));
+
+    //
+    // TODO: Заблокировать кнопки генерации, если кончились кредиты и показать кнопку пополнения
+    //
+}
+
 void TextGenerationView::updateTranslations()
 {
     d->openRephraseButton->setText(tr("Rephrase"));
@@ -246,12 +275,12 @@ void TextGenerationView::designSystemChangeEvent(DesignSystemChangeEvent* _event
 {
     Widget::designSystemChangeEvent(_event);
 
-    setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->pages->setBackgroundColor(Ui::DesignSystem::color().primary());
+    setBackgroundColor(DesignSystem::color().primary());
+    d->pages->setBackgroundColor(DesignSystem::color().primary());
 
     d->buttonsPage->setBackgroundColor(DesignSystem::color().primary());
     d->buttonsPage->setTextColor(DesignSystem::color().onPrimary());
-    d->buttonsPage->layout()->setSpacing(Ui::DesignSystem::compactLayout().px16());
+    d->buttonsPage->layout()->setSpacing(DesignSystem::compactLayout().px16());
     d->buttonsPage->layout()->setContentsMargins(
         DesignSystem::layout().px24(), DesignSystem::layout().px24(), DesignSystem::layout().px24(),
         DesignSystem::compactLayout().px12());
@@ -273,7 +302,7 @@ void TextGenerationView::designSystemChangeEvent(DesignSystemChangeEvent* _event
          }) {
         page->setBackgroundColor(DesignSystem::color().primary());
         page->setTextColor(DesignSystem::color().onPrimary());
-        page->layout()->setSpacing(Ui::DesignSystem::compactLayout().px16());
+        page->layout()->setSpacing(DesignSystem::compactLayout().px16());
 
         page->backButton->setBackgroundColor(DesignSystem::color().primary());
         page->backButton->setTextColor(DesignSystem::color().onPrimary());
@@ -286,16 +315,28 @@ void TextGenerationView::designSystemChangeEvent(DesignSystemChangeEvent* _event
              d->rephraseStyleText,
              d->rephraseResultText,
          }) {
-        textField->setBackgroundColor(Ui::DesignSystem::color().onPrimary());
-        textField->setTextColor(Ui::DesignSystem::color().onPrimary());
+        textField->setBackgroundColor(DesignSystem::color().onPrimary());
+        textField->setTextColor(DesignSystem::color().onPrimary());
     }
     for (auto button : {
              d->rephraseButton,
              d->rephraseInsertButton,
          }) {
-        button->setBackgroundColor(DesignSystem::color().primary());
+        button->setBackgroundColor(DesignSystem::color().accent());
         button->setTextColor(DesignSystem::color().accent());
     }
+    for (auto buttonsLayout : {
+             d->rephraseButtonsLayout,
+         }) {
+        buttonsLayout->setContentsMargins(isLeftToRight() ? 0.0 : DesignSystem::layout().px8(), 0.0,
+                                          isLeftToRight() ? DesignSystem::layout().px8() : 0.0,
+                                          0.0);
+    }
+
+    d->availableWordsLabel->setBackgroundColor(DesignSystem::color().primary());
+    d->availableWordsLabel->setTextColor(ColorHelper::transparent(
+        DesignSystem::color().onPrimary(), DesignSystem::inactiveTextOpacity()));
+    d->availableWordsLabel->setContentsMarginsF(DesignSystem::label().margins());
 }
 
 } // namespace Ui

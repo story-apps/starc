@@ -37,6 +37,7 @@ public:
     void bind(IDocumentManager* _manager) override;
     void saveSettings() override;
     void setEditingMode(DocumentEditingMode _mode) override;
+    void setAvailableCredits(int _credits) override;
     /** @} */
 
 signals:
@@ -57,6 +58,7 @@ signals:
     void generateTextRequested(const QString& _title, const QString& _promptHint,
                                const QString& _promptPrefix, const QString& _prompt,
                                const QString& _promptSuffix);
+    void rephraseTextRequested(const QString& _sourceText, const QString& _style);
 
 protected:
     /**

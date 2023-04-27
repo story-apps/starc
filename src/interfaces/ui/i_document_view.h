@@ -73,9 +73,23 @@ public:
     }
 
     /**
+     * @brief Задать доступное кол-во кредитов для использования ИИ инструментов
+     */
+    virtual void setAvailableCredits(int _credits)
+    {
+    }
+
+    /**
      * @brief Задать сгенерированный текст
      */
     virtual void setGeneratedText(const QString& _text)
+    {
+    }
+
+    /**
+     * @brief Задать сгенерированный текст
+     */
+    virtual void setRephrasedText(const QString& _text)
     {
     }
 };

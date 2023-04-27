@@ -199,6 +199,8 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
                "short movie screenplay about ...\""),
             {}, _text, QLatin1String("Write result in fountain format."));
     });
+    connect(view, &Ui::ScreenplayTextView::rephraseTextRequested, q,
+            &ScreenplayTextManager::rephraseTextRequested);
     //
     connect(
         view->dictionariesView(), &Ui::DictionariesView::typeChanged, q,
@@ -617,6 +619,17 @@ void ScreenplayTextManager::setEditingMode(DocumentEditingMode _mode)
         }
 
         viewAndModel.view->setEditingMode(_mode);
+    }
+}
+
+void ScreenplayTextManager::setAvailableCredits(int _credits)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setAvailableCredits(_credits);
     }
 }
 

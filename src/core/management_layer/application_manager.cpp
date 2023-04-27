@@ -2844,6 +2844,7 @@ void ApplicationManager::initConnections()
                 d->projectsManager->setProjectsInCloudCanBeCreated(
                     true, _accountInfo.subscriptions.constLast().type);
                 d->projectManager->checkAvailabilityToEdit();
+                d->projectManager->setAvailableCredits(_accountInfo.credits);
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::promocodeActivated,
             d->accountManager.data(), &AccountManager::showPromocodeActivationMessage);
@@ -3186,8 +3187,12 @@ void ApplicationManager::initConnections()
                 d->cloudServiceManager->generateText(_title, _promptHint, _promptPrefix, _prompt,
                                                      _promptSuffix, d->applicationView);
             });
+    connect(d->projectManager.data(), &ProjectManager::rephraseTextRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::aiRephraseText);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textGenerated,
             d->projectManager.data(), &ProjectManager::setGeneratedText);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textRephrased,
+            d->projectManager.data(), &ProjectManager::setRephrasedText);
 #endif
 }
 

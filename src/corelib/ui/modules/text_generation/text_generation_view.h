@@ -22,6 +22,27 @@ public:
     bool isReadOnly() const;
     void setReadOnly(bool _readOnly);
 
+    /**
+     * @brief Задать результат перефразирования
+     */
+    void setRephraseResult(const QString& _text);
+
+    /**
+     * @brief Задать количество доступных слов для генерации
+     */
+    void setAvailableWords(int _availableWords);
+
+signals:
+    /**
+     * @brief Пользователь хочет перефразировать текст в заданном стиле
+     */
+    void rephraseRequested(const QString& _source, const QString& _style);
+
+    /**
+     * @brief Пользователь хочет вставить заданный текст в редактор
+     */
+    void insertTextRequested(const QString& _text);
+
 protected:
     /**
      * @brief Обновить переводы

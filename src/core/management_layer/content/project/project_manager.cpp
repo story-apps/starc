@@ -3325,6 +3325,11 @@ void ProjectManager::clearCursors()
     d->collaboratorsCursors.clear();
 }
 
+void ProjectManager::setAvailableCredits(int _credits)
+{
+    d->pluginsBuilder.setAvailableCredits(_credits);
+}
+
 void ProjectManager::setGeneratedText(const QString& _generatedText)
 {
     auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
@@ -3337,6 +3342,21 @@ void ProjectManager::setGeneratedText(const QString& _generatedText)
 
     if (view != nullptr) {
         view->setGeneratedText(_generatedText);
+    }
+}
+
+void ProjectManager::setRephrasedText(const QString& _text)
+{
+    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = plugin->view(d->view.activeModel);
+    } else {
+        view = plugin->secondaryView(d->view.activeModel);
+    }
+
+    if (view != nullptr) {
+        view->setRephrasedText(_text);
     }
 }
 
@@ -3670,6 +3690,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
                     this,
                     SIGNAL(generateTextRequested(QString, QString, QString, QString, QString)),
                     Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal("rephraseTextRequested(QString,QString)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(rephraseTextRequested(QString, QString)), this,
+                    SIGNAL(rephraseTextRequested(QString, QString)), Qt::UniqueConnection);
         }
     }
 

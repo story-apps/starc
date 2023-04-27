@@ -178,9 +178,15 @@ public:
     void clearCursors();
 
     /**
+     * @brief Задать кол-во кредитов доступных для использования с ИИ инструментами
+     */
+    void setAvailableCredits(int _credits);
+
+    /**
      * @brief Установить результат генерации текста
      */
     void setGeneratedText(const QString& _generatedText);
+    void setRephrasedText(const QString& _text);
 
 signals:
     /**
@@ -262,6 +268,7 @@ signals:
     void generateTextRequested(const QString& _title, const QString& _promptHint,
                                const QString& _promptPrefix, const QString& _prompt,
                                const QString& _promptSuffix);
+    void rephraseTextRequested(const QString& _sourceText, const QString& _style);
 
 protected:
     /**
