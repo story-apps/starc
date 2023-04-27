@@ -39,6 +39,12 @@ public:
     void setHelper(const QString& _text);
 
     /**
+     * @brief Текст количества слов
+     */
+    QString wordCount() const;
+    void setWordCount(const QString& _text);
+
+    /**
      * @brief Текст ошибки
      */
     QString error() const;

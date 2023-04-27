@@ -101,6 +101,7 @@ public:
 
     QString label;
     QString helper;
+    QString wordCount;
     QString error;
     QString placeholder;
     QString suffix;
@@ -278,7 +279,7 @@ QRectF TextField::Implementation::decorationRect() const
 {
     qreal top
         = q->height() - Ui::DesignSystem::textField().underlineHeight() - contentMargins().bottom();
-    if (!helper.isEmpty() || !error.isEmpty()) {
+    if (!helper.isEmpty() || !wordCount.isEmpty() || !error.isEmpty()) {
         top -= Ui::DesignSystem::textField().helperHeight();
     }
     return QRectF(contentMargins().left(), top,
@@ -290,7 +291,7 @@ QRectF TextField::Implementation::decorationRectInFocus() const
 {
     qreal top = q->height() - Ui::DesignSystem::textField().underlineHeightInFocus()
         - contentMargins().bottom();
-    if (!helper.isEmpty() || !error.isEmpty()) {
+    if (!helper.isEmpty() || !wordCount.isEmpty() || !error.isEmpty()) {
         top -= Ui::DesignSystem::textField().helperHeight();
     }
     return QRectF(contentMargins().left(), top,
@@ -311,7 +312,8 @@ QRectF TextField::Implementation::inputTextRect() const
     QPointF labelTopLeft = QPointF(Ui::DesignSystem::textField().labelTopLeft().x(), 0)
         + QPointF(contentMargins().left() + (q->isRightToLeft() ? offset : 0),
                   contentMargins().top() + margins().top());
-    const qreal additionalBottomMargin = !error.isEmpty() || !helper.isEmpty()
+    const qreal additionalBottomMargin
+        = !helper.isEmpty() || !wordCount.isEmpty() || !error.isEmpty()
         ? Ui::DesignSystem::textField().helperHeight()
         : 0.0;
 
@@ -352,7 +354,8 @@ QRectF TextField::Implementation::suffixRect() const
         topLeft = QPointF(q->width() - contentMargins().right() - margins().right() - suffixWidth,
                           margins().top());
     }
-    const qreal additionalBottomMargin = !error.isEmpty() || !helper.isEmpty()
+    const qreal additionalBottomMargin
+        = !helper.isEmpty() || !wordCount.isEmpty() || !error.isEmpty()
         ? Ui::DesignSystem::textField().helperHeight()
         : 0.0;
 
@@ -517,6 +520,22 @@ void TextField::setHelper(const QString& _text)
     }
 
     d->helper = _text;
+    updateGeometry();
+    update();
+}
+
+QString TextField::wordCount() const
+{
+    return d->wordCount;
+}
+
+void TextField::setWordCount(const QString& _text)
+{
+    if (d->wordCount == _text) {
+        return;
+    }
+
+    d->wordCount = _text;
     updateGeometry();
     update();
 }
@@ -771,10 +790,17 @@ QSize TextField::sizeHint() const
         const auto errorWidth
             = TextHelper::fineTextWidthF(d->error, Ui::DesignSystem::font().caption());
         size = size.expandedTo({ errorWidth, 1 });
-    } else if (!d->helper.isEmpty()) {
-        const auto helperWidth
-            = TextHelper::fineTextWidthF(d->helper, Ui::DesignSystem::font().caption());
-        size = size.expandedTo({ helperWidth, 1 });
+    } else {
+        if (!d->helper.isEmpty()) {
+            const auto helperWidth
+                = TextHelper::fineTextWidthF(d->helper, Ui::DesignSystem::font().caption());
+            size = size.expandedTo({ helperWidth, 1 });
+        }
+        if (!d->wordCount.isEmpty()) {
+            const auto wordCountWidth
+                = TextHelper::fineTextWidthF(d->wordCount, Ui::DesignSystem::font().caption());
+            size = size.expandedTo({ wordCountWidth, 1 });
+        }
     }
     size += QSizeF(d->margins().left() + d->margins().right(),
                    d->margins().top() + d->margins().bottom())
@@ -805,7 +831,7 @@ int TextField::heightForWidth(int _width) const
                                               static_cast<int>(width));
     height += d->margins().top() + d->margins().bottom();
     height += d->contentMargins().top() + d->contentMargins().bottom();
-    if (!d->helper.isEmpty() || !d->error.isEmpty()) {
+    if (!d->helper.isEmpty() || !d->wordCount.isEmpty() || !d->error.isEmpty()) {
         height += Ui::DesignSystem::textField().helperHeight();
     }
     return qCeil(height);
@@ -863,7 +889,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     //
     painter.begin(viewport());
     QRectF backgroundRect = rect().marginsRemoved(d->contentMargins().toMargins());
-    if (!d->helper.isEmpty() || !d->error.isEmpty()) {
+    if (!d->helper.isEmpty() || !d->wordCount.isEmpty() || !d->error.isEmpty()) {
         backgroundRect.setBottom(backgroundRect.bottom()
                                  - Ui::DesignSystem::textField().helperHeight());
     }
@@ -984,7 +1010,7 @@ void TextField::paintEvent(QPaintEvent* _event)
     //
     // ... ошибка или подсказка
     //
-    if (!d->error.isEmpty() || !d->helper.isEmpty()) {
+    if (!d->helper.isEmpty() || !d->wordCount.isEmpty() || !d->error.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().caption());
         const QColor color
             = !d->error.isEmpty() ? Ui::DesignSystem::color().error() : d->textDisabledColor;
@@ -995,8 +1021,16 @@ void TextField::paintEvent(QPaintEvent* _event)
                               width() - d->contentMargins().left() - d->margins().left()
                                   - d->margins().right() - d->contentMargins().right(),
                               Ui::DesignSystem::textField().helperHeight());
-        const QString text = !d->error.isEmpty() ? d->error : d->helper;
-        painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, text);
+        if (!d->error.isEmpty()) {
+            painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->error);
+        } else {
+            if (!d->helper.isEmpty()) {
+                painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, d->helper);
+            }
+            if (!d->wordCount.isEmpty()) {
+                painter.drawText(textRect, Qt::AlignRight | Qt::AlignVCenter, d->wordCount);
+            }
+        }
     }
     //
     // ... декорация нажатии на кнопке
