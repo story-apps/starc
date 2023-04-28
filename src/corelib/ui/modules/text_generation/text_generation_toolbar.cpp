@@ -2,5 +2,4 @@
 
 text_generation_toolbar::text_generation_toolbar()
 {
-
 }

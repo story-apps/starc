@@ -319,7 +319,8 @@ void ScreenplayDialoguesReport::saveToFile(const QString& _fileName) const
     writeHeader(
         1, QCoreApplication::translate("BusinessLayer::ScreenplayDialoguesReport", "Scene number"));
     writeHeader(
-        2, QCoreApplication::translate("BusinessLayer::ScreenplayDialoguesReport", "Scene name"));
+        2,
+        QCoreApplication::translate("BusinessLayer::ScreenplayDialoguesReport", "Scene heading"));
     writeHeader(
         3,
         QCoreApplication::translate("BusinessLayer::ScreenplayDialoguesReport", "Dialogue number"));

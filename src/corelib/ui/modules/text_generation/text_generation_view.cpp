@@ -760,8 +760,8 @@ void TextGenerationView::updateTranslations()
     d->shortenButton->setText(tr("Shorten"));
     d->shortenInsertButton->setText(tr("Insert"));
     d->insertPage->titleLabel->setText(tr("Insert"));
-    d->insertAfterText->setLabel(tr("Insert text after"));
-    d->insertBeforeText->setLabel(tr("Insert text before"));
+    d->insertAfterText->setLabel(tr("Text before inserted"));
+    d->insertBeforeText->setLabel(tr("Text after inserted"));
     d->insertResultText->setLabel(tr("Inserted text"));
     d->insertButton->setText(tr("Generate"));
     d->insertInsertButton->setText(tr("Insert"));

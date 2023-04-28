@@ -520,8 +520,9 @@ void AccountManager::buyCredits()
     }
 
     d->initPurchaseDialog();
-    d->purchaseDialog->setDescription(tr("Credits can be used for AI tools, such as text "
-                                         "generation.\n\n1 credit equals 1000 generated words."));
+    d->purchaseDialog->setDescription(
+        tr("Credits are our internal currency. They are used for AI tools, such as text "
+           "generation.\n\n1 credit equals 1000 words processed by AI."));
     d->purchaseDialog->setPaymentOptions(creditPaymentOptions);
     d->purchaseDialog->selectOption(creditPaymentOptions.constLast());
     d->purchaseDialog->showDialog();

@@ -721,12 +721,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="322"/>
-        <source>Scene name</source>
-        <translation></translation>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="323"/>
+        <source>Scene heading</source>
+        <translation type="unfinished">Scene heading</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="325"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="326"/>
         <source>Dialogue number</source>
         <translation></translation>
     </message>
@@ -2037,11 +2037,11 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="523"/>
-        <source>Credits can be used for AI tools, such as text generation.
+        <location filename="../management_layer/content/account/account_manager.cpp" line="524"/>
+        <source>Credits are our internal currency. They are used for AI tools, such as text generation.
 
-1 credit equals 1000 generated words.</source>
-        <translation></translation>
+1 credit equals 1000 words processed by AI.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="390"/>
@@ -2431,8 +2431,8 @@
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="1472"/>
-        <source>Summarizeing text</source>
-        <translation></translation>
+        <source>Summarizing text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="1573"/>
@@ -15004,13 +15004,13 @@ If you work with no interruptions it saves the project every 3 minutes.</transla
     </message>
     <message>
         <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="763"/>
-        <source>Insert text after</source>
-        <translation></translation>
+        <source>Text before inserted</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="764"/>
-        <source>Insert text before</source>
-        <translation></translation>
+        <source>Text after inserted</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="765"/>
