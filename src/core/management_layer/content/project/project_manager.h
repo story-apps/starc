@@ -206,6 +206,11 @@ signals:
     void upgradeToTeamRequested();
 
     /**
+     * @brief Запрос на покупку кредитов из одного из плагинов
+     */
+    void buyCreditsRequested();
+
+    /**
      * @brief Изменились данные
      */
     void contentsChanged(BusinessLayer::AbstractModel* _model);

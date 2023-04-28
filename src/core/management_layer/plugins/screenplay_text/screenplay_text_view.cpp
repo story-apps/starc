@@ -1234,6 +1234,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             &ScreenplayTextView::generateTextRequested);
     connect(d->textGenerationView, &TextGenerationView::insertTextRequested, this,
             [this](const QString& _text) { d->textEdit->insertPlainText(_text); });
+    connect(d->textGenerationView, &TextGenerationView::buyCreditsPressed, this,
+            &ScreenplayTextView::buyCreditsRequested);
     //
     connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
             &ScreenplayTextView::createBookmarkRequested);

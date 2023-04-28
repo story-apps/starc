@@ -5,6 +5,7 @@
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/label/link_label.h>
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -141,9 +142,9 @@ public:
     Button* generateButton = nullptr;
     QHBoxLayout* generateButtonsLayout = nullptr;
 
-
-    CaptionLabel* availableWordsLabel = nullptr;
-    Button* buyCreditsButton = nullptr;
+    Body2Label* availableWordsLabel = nullptr;
+    Body2LinkLabel* buyCreditsLabel = nullptr;
+    QHBoxLayout* buttonsLayout = nullptr;
 };
 
 TextGenerationView::Implementation::Implementation(QWidget* _parent)
@@ -212,8 +213,9 @@ TextGenerationView::Implementation::Implementation(QWidget* _parent)
     , generateButton(new Button(generatePage))
     , generateButtonsLayout(new QHBoxLayout)
     //
-    , availableWordsLabel(new CaptionLabel(_parent))
-    , buyCreditsButton(new Button(_parent))
+    , availableWordsLabel(new Body2Label(_parent))
+    , buyCreditsLabel(new Body2LinkLabel(_parent))
+    , buttonsLayout(new QHBoxLayout)
 {
     pages->setAnimationType(StackWidget::AnimationType::Slide);
     pages->setCurrentWidget(buttonsPage);
@@ -411,7 +413,11 @@ TextGenerationView::Implementation::Implementation(QWidget* _parent)
         layout->addStretch();
     }
 
-    buyCreditsButton->hide();
+    buttonsLayout->setContentsMargins({});
+    buttonsLayout->setSpacing(0);
+    buttonsLayout->addWidget(availableWordsLabel);
+    buttonsLayout->addWidget(buyCreditsLabel);
+    buttonsLayout->addStretch();
 }
 
 
@@ -426,8 +432,7 @@ TextGenerationView::TextGenerationView(QWidget* _parent)
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(d->pages, 1);
-    layout->addWidget(d->availableWordsLabel);
-    layout->addWidget(d->buyCreditsButton);
+    layout->addLayout(d->buttonsLayout);
 
     connect(d->openRephraseButton, &Button::clicked, this, [this] {
         d->rephraseSourceText->clear();
@@ -609,6 +614,9 @@ TextGenerationView::TextGenerationView(QWidget* _parent)
     connect(d->generatePromptText, &TextField::textChanged, this, updateGenerateWordCounters);
     connect(d->generateButton, &Button::clicked, this,
             [this] { emit generateRequested(d->generatePromptText->text()); });
+
+    connect(d->buyCreditsLabel, &Body1LinkLabel::clicked, this,
+            &TextGenerationView::buyCreditsPressed);
 }
 
 TextGenerationView::~TextGenerationView() = default;
@@ -705,6 +713,8 @@ void TextGenerationView::setAvailableWords(int _availableWords)
     d->availableWordsLabel->setText(_availableWords > 0
                                         ? tr("%n word(s) available", nullptr, _availableWords)
                                         : tr("No words available"));
+
+    //    d->buyCreditsLabel->setVisible(_availableWords > 0);
 
     //
     // TODO: Заблокировать кнопки генерации, если кончились кредиты и показать кнопку пополнения
@@ -928,7 +938,7 @@ void TextGenerationView::updateTranslations()
     d->generateInsertAtEnd->setText(tr("at the end of the document"));
     d->generateButton->setText(tr("Generate"));
 
-    d->buyCreditsButton->setText(tr("Buy credits"));
+    d->buyCreditsLabel->setText(tr("purchase"));
 }
 
 void TextGenerationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -1051,7 +1061,14 @@ void TextGenerationView::designSystemChangeEvent(DesignSystemChangeEvent* _event
     d->availableWordsLabel->setBackgroundColor(DesignSystem::color().primary());
     d->availableWordsLabel->setTextColor(ColorHelper::transparent(
         DesignSystem::color().onPrimary(), DesignSystem::inactiveTextOpacity()));
-    d->availableWordsLabel->setContentsMarginsF(DesignSystem::label().margins());
+    d->availableWordsLabel->setContentsMargins(
+        DesignSystem::layout().px24(), DesignSystem::compactLayout().px16(),
+        DesignSystem::layout().px4(), DesignSystem::layout().px24());
+    d->buyCreditsLabel->setBackgroundColor(DesignSystem::color().primary());
+    d->buyCreditsLabel->setTextColor(DesignSystem::color().accent());
+    d->buyCreditsLabel->setContentsMargins(
+        DesignSystem::layout().px4(), DesignSystem::compactLayout().px16(),
+        DesignSystem::layout().px24(), DesignSystem::layout().px24());
 }
 
 } // namespace Ui

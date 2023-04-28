@@ -63,6 +63,11 @@ signals:
     void translateTextRequested(const QString& _text, const QString& _languageCode);
     void generateTextRequested(const QString& _prompt, const QString& _promptSuffix);
 
+    /**
+     * @brief Пользователь хочет докупить кредитов
+     */
+    void buyCreditsRequested();
+
 protected:
     /**
      * @brief Переопределяем, чтобы отслеживать событие смены языка

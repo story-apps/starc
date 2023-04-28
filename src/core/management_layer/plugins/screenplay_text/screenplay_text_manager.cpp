@@ -207,6 +207,8 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
     connect(view, &Ui::ScreenplayTextView::generateTextRequested, q, [this](const QString& _text) {
         emit q->generateTextRequested(_text, "write result in fountain format.");
     });
+    connect(view, &Ui::ScreenplayTextView::buyCreditsRequested, q,
+            &ScreenplayTextManager::buyCreditsRequested);
     //
     connect(
         view->dictionariesView(), &Ui::DictionariesView::typeChanged, q,

@@ -120,6 +120,11 @@ signals:
     void translateTextRequested(const QString& _text, const QString& _languageCode);
     void generateTextRequested(const QString& _text);
 
+    /**
+     * @brief Пользователь хочет докупить кредитов
+     */
+    void buyCreditsRequested();
+
 protected:
     /**
      * @brief Фильтруем события для корректировки панелей

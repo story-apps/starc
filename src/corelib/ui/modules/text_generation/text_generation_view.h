@@ -98,6 +98,11 @@ signals:
      */
     void insertTextRequested(const QString& _text);
 
+    /**
+     * @brief Нажата кнопка покупки кредитов
+     */
+    void buyCreditsPressed();
+
 protected:
     /**
      * @brief Обновить переводы

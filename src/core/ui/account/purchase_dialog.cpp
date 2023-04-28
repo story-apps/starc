@@ -5,6 +5,7 @@
 #include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
+#include <ui/widgets/label/label.h>
 
 #include <QApplication>
 #include <QHBoxLayout>
@@ -23,6 +24,7 @@ public:
     void updateOptionsState(PurchaseDialogOption* _checkedOption);
 
 
+    Body1Label* descriptionLabel = nullptr;
     Widget* content = nullptr;
     QVector<PurchaseDialogOption*> options;
 
@@ -32,11 +34,14 @@ public:
 };
 
 PurchaseDialog::Implementation::Implementation(QWidget* _parent)
-    : content(new Widget(_parent))
+    : descriptionLabel(new Body1Label(_parent))
+    , content(new Widget(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
     , purchaseButton(new Button(_parent))
 {
+    descriptionLabel->hide();
+
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
     buttonsLayout->addStretch();
@@ -66,8 +71,9 @@ PurchaseDialog::PurchaseDialog(QWidget* _parent)
     setAcceptButton(d->purchaseButton);
     setRejectButton(d->cancelButton);
 
-    contentsLayout()->addWidget(d->content, 0, 0);
-    contentsLayout()->addLayout(d->buttonsLayout, 1, 0);
+    contentsLayout()->addWidget(d->descriptionLabel, 0, 0);
+    contentsLayout()->addWidget(d->content, 1, 0);
+    contentsLayout()->addLayout(d->buttonsLayout, 2, 0);
 
     connect(d->cancelButton, &Button::clicked, this, &PurchaseDialog::canceled);
     connect(d->purchaseButton, &Button::clicked, this, [this] {
@@ -81,6 +87,12 @@ PurchaseDialog::PurchaseDialog(QWidget* _parent)
 }
 
 PurchaseDialog::~PurchaseDialog() = default;
+
+void PurchaseDialog::setDescription(const QString& _description)
+{
+    d->descriptionLabel->setText(_description);
+    d->descriptionLabel->setVisible(!_description.isEmpty());
+}
 
 void PurchaseDialog::setPaymentOptions(const QVector<Domain::PaymentOption>& _paymentOptions)
 {
@@ -165,6 +177,11 @@ void PurchaseDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     setContentFixedWidth(Ui::DesignSystem::dialog().maximumWidth());
 
     d->content->setBackgroundColor(Ui::DesignSystem::color().background());
+
+    d->descriptionLabel->setBackgroundColor(DesignSystem::color().background());
+    d->descriptionLabel->setTextColor(DesignSystem::color().onBackground());
+    d->descriptionLabel->setContentsMargins(DesignSystem::layout().px24(), 0,
+                                            DesignSystem::layout().px24(), 0);
 
     for (auto button : {
              d->cancelButton,

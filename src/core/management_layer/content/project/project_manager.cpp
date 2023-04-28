@@ -3752,6 +3752,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             connect(documentManager, SIGNAL(upgradeToTeamRequested()), this,
                     SIGNAL(upgradeToTeamRequested()), Qt::UniqueConnection);
         }
+        if (documentManager->metaObject()->indexOfSignal("buyCreditsRequested()")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(buyCreditsRequested()), this,
+                    SIGNAL(buyCreditsRequested()), Qt::UniqueConnection);
+        }
         if (documentManager->metaObject()->indexOfSignal("linkActivated(QUuid,QModelIndex)")
             != invalidSignalIndex) {
             connect(documentManager, SIGNAL(linkActivated(QUuid, QModelIndex)), this,

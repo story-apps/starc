@@ -2584,6 +2584,8 @@ void ApplicationManager::initConnections()
             d->accountManager.data(), &AccountManager::upgradeAccountToPro);
     connect(d->projectManager.data(), &ProjectManager::upgradeToTeamRequested,
             d->accountManager.data(), &AccountManager::upgradeAccountToTeam);
+    connect(d->projectManager.data(), &ProjectManager::buyCreditsRequested,
+            d->accountManager.data(), &AccountManager::buyCredits);
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
             [this] { d->markChangesSaved(false); });
     connect(d->projectManager.data(), &ProjectManager::projectUuidChanged,
@@ -3178,8 +3180,6 @@ void ApplicationManager::initConnections()
     //
     // Генерация текста
     //
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::buyCreditsRequested,
-            d->accountManager.data(), &AccountManager::buyCredits);
     connect(d->projectManager.data(), &ProjectManager::rephraseTextRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiRephraseText);
     connect(d->projectManager.data(), &ProjectManager::expandTextRequested,
@@ -3193,7 +3193,7 @@ void ApplicationManager::initConnections()
     connect(d->projectManager.data(), &ProjectManager::translateTextRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiTranslateText);
     connect(d->projectManager.data(), &ProjectManager::generateTextRequested,
-            d->cloudServiceManager.data(), &CloudServiceManager::generateText);
+            d->cloudServiceManager.data(), &CloudServiceManager::aiGenerateText);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textRephrased,
             d->projectManager.data(), &ProjectManager::setRephrasedText);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textExpanded,

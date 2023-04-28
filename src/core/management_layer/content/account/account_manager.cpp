@@ -508,20 +508,22 @@ void AccountManager::renewTeam()
 
 void AccountManager::buyCredits()
 {
-    auto teamPaymentOptions = d->accountInfo.paymentOptions;
-    for (int index = teamPaymentOptions.size() - 1; index >= 0; --index) {
-        const auto& option = teamPaymentOptions.at(index);
+    auto creditPaymentOptions = d->accountInfo.paymentOptions;
+    for (int index = creditPaymentOptions.size() - 1; index >= 0; --index) {
+        const auto& option = creditPaymentOptions.at(index);
         if (option.type != Domain::PaymentType::Credits) {
-            teamPaymentOptions.removeAt(index);
+            creditPaymentOptions.removeAt(index);
         }
     }
-    if (teamPaymentOptions.isEmpty()) {
+    if (creditPaymentOptions.isEmpty()) {
         return;
     }
 
     d->initPurchaseDialog();
-    d->purchaseDialog->setPaymentOptions(teamPaymentOptions);
-    d->purchaseDialog->selectOption(teamPaymentOptions.constLast());
+    d->purchaseDialog->setDescription(tr("Credits can be used for AI tools, such as text "
+                                         "generation.\n\n1 credit equals 1000 generated words."));
+    d->purchaseDialog->setPaymentOptions(creditPaymentOptions);
+    d->purchaseDialog->selectOption(creditPaymentOptions.constLast());
     d->purchaseDialog->showDialog();
 }
 

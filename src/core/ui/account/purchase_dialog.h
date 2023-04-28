@@ -21,6 +21,11 @@ public:
     ~PurchaseDialog() override;
 
     /**
+     * @brief Задать описание опций покупок
+     */
+    void setDescription(const QString& _description);
+
+    /**
      * @brief Задать доступные опции покупки
      */
     void setPaymentOptions(const QVector<Domain::PaymentOption>& _paymentOptions);
