@@ -3180,19 +3180,34 @@ void ApplicationManager::initConnections()
     //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::buyCreditsRequested,
             d->accountManager.data(), &AccountManager::buyCredits);
-    connect(d->projectManager.data(), &ProjectManager::generateTextRequested,
-            d->cloudServiceManager.data(),
-            [this](const QString& _title, const QString& _promptHint, const QString& _promptPrefix,
-                   const QString& _prompt, const QString& _promptSuffix) {
-                d->cloudServiceManager->generateText(_title, _promptHint, _promptPrefix, _prompt,
-                                                     _promptSuffix, d->applicationView);
-            });
     connect(d->projectManager.data(), &ProjectManager::rephraseTextRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiRephraseText);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::textGenerated,
-            d->projectManager.data(), &ProjectManager::setGeneratedText);
+    connect(d->projectManager.data(), &ProjectManager::expandTextRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::aiExpandText);
+    connect(d->projectManager.data(), &ProjectManager::shortenTextRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::aiShortenText);
+    connect(d->projectManager.data(), &ProjectManager::insertTextRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::aiInsertText);
+    connect(d->projectManager.data(), &ProjectManager::summarizeTextRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::aiSummarizeText);
+    connect(d->projectManager.data(), &ProjectManager::translateTextRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::aiTranslateText);
+    connect(d->projectManager.data(), &ProjectManager::generateTextRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::generateText);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textRephrased,
             d->projectManager.data(), &ProjectManager::setRephrasedText);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textExpanded,
+            d->projectManager.data(), &ProjectManager::setExpandedText);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textShortened,
+            d->projectManager.data(), &ProjectManager::setShortenedText);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textInserted,
+            d->projectManager.data(), &ProjectManager::setInsertedText);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textSummarizeed,
+            d->projectManager.data(), &ProjectManager::setSummarizeedText);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textTranslated,
+            d->projectManager.data(), &ProjectManager::setTranslatedText);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::textGenerated,
+            d->projectManager.data(), &ProjectManager::setGeneratedText);
 #endif
 }
 

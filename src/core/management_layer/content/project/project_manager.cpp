@@ -3330,21 +3330,6 @@ void ProjectManager::setAvailableCredits(int _credits)
     d->pluginsBuilder.setAvailableCredits(_credits);
 }
 
-void ProjectManager::setGeneratedText(const QString& _generatedText)
-{
-    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
-    Ui::IDocumentView* view = nullptr;
-    if (d->view.active == d->view.left) {
-        view = plugin->view(d->view.activeModel);
-    } else {
-        view = plugin->secondaryView(d->view.activeModel);
-    }
-
-    if (view != nullptr) {
-        view->setGeneratedText(_generatedText);
-    }
-}
-
 void ProjectManager::setRephrasedText(const QString& _text)
 {
     auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
@@ -3357,6 +3342,96 @@ void ProjectManager::setRephrasedText(const QString& _text)
 
     if (view != nullptr) {
         view->setRephrasedText(_text);
+    }
+}
+
+void ProjectManager::setExpandedText(const QString& _text)
+{
+    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = plugin->view(d->view.activeModel);
+    } else {
+        view = plugin->secondaryView(d->view.activeModel);
+    }
+
+    if (view != nullptr) {
+        view->setExpandedText(_text);
+    }
+}
+
+void ProjectManager::setShortenedText(const QString& _text)
+{
+    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = plugin->view(d->view.activeModel);
+    } else {
+        view = plugin->secondaryView(d->view.activeModel);
+    }
+
+    if (view != nullptr) {
+        view->setShortenedText(_text);
+    }
+}
+
+void ProjectManager::setInsertedText(const QString& _text)
+{
+    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = plugin->view(d->view.activeModel);
+    } else {
+        view = plugin->secondaryView(d->view.activeModel);
+    }
+
+    if (view != nullptr) {
+        view->setInsertedText(_text);
+    }
+}
+
+void ProjectManager::setSummarizeedText(const QString& _text)
+{
+    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = plugin->view(d->view.activeModel);
+    } else {
+        view = plugin->secondaryView(d->view.activeModel);
+    }
+
+    if (view != nullptr) {
+        view->setSummarizedText(_text);
+    }
+}
+
+void ProjectManager::setTranslatedText(const QString& _text)
+{
+    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = plugin->view(d->view.activeModel);
+    } else {
+        view = plugin->secondaryView(d->view.activeModel);
+    }
+
+    if (view != nullptr) {
+        view->setTranslatedText(_text);
+    }
+}
+
+void ProjectManager::setGeneratedText(const QString& _generatedText)
+{
+    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = plugin->view(d->view.activeModel);
+    } else {
+        view = plugin->secondaryView(d->view.activeModel);
+    }
+
+    if (view != nullptr) {
+        view->setGeneratedText(_generatedText);
     }
 }
 
@@ -3682,19 +3757,40 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             connect(documentManager, SIGNAL(linkActivated(QUuid, QModelIndex)), this,
                     SLOT(activateLink(QUuid, QModelIndex)), Qt::UniqueConnection);
         }
-        if (documentManager->metaObject()->indexOfSignal(
-                "generateTextRequested(QString,QString,QString,QString,QString)")
-            != invalidSignalIndex) {
-            connect(documentManager,
-                    SIGNAL(generateTextRequested(QString, QString, QString, QString, QString)),
-                    this,
-                    SIGNAL(generateTextRequested(QString, QString, QString, QString, QString)),
-                    Qt::UniqueConnection);
-        }
         if (documentManager->metaObject()->indexOfSignal("rephraseTextRequested(QString,QString)")
             != invalidSignalIndex) {
             connect(documentManager, SIGNAL(rephraseTextRequested(QString, QString)), this,
                     SIGNAL(rephraseTextRequested(QString, QString)), Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal("expandTextRequested(QString)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(expandTextRequested(QString)), this,
+                    SIGNAL(expandTextRequested(QString)), Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal("shortenTextRequested(QString)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(shortenTextRequested(QString)), this,
+                    SIGNAL(shortenTextRequested(QString)), Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal("insertTextRequested(QString,QString)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(insertTextRequested(QString, QString)), this,
+                    SIGNAL(insertTextRequested(QString, QString)), Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal("summarizeTextRequested(QString)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(summarizeTextRequested(QString)), this,
+                    SIGNAL(summarizeTextRequested(QString)), Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal("translateTextRequested(QString,QString)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(translateTextRequested(QString, QString)), this,
+                    SIGNAL(translateTextRequested(QString, QString)), Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal("generateTextRequested(QString,QString)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(generateTextRequested(QString, QString)), this,
+                    SIGNAL(generateTextRequested(QString, QString)), Qt::UniqueConnection);
         }
     }
 

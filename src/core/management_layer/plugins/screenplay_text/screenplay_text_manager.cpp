@@ -192,15 +192,21 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
         modelForView(view)->updateItem(textItem);
     });
     //
-    connect(view, &Ui::ScreenplayTextView::generateTextRequested, q, [this](const QString& _text) {
-        emit q->generateTextRequested(
-            tr("Generate screenplay text"),
-            tr("Start prompt from something like \"Write a screenplay about ...\", or \"Write a "
-               "short movie screenplay about ...\""),
-            {}, _text, QLatin1String("Write result in fountain format."));
-    });
     connect(view, &Ui::ScreenplayTextView::rephraseTextRequested, q,
             &ScreenplayTextManager::rephraseTextRequested);
+    connect(view, &Ui::ScreenplayTextView::expandTextRequested, q,
+            &ScreenplayTextManager::expandTextRequested);
+    connect(view, &Ui::ScreenplayTextView::shortenTextRequested, q,
+            &ScreenplayTextManager::shortenTextRequested);
+    connect(view, &Ui::ScreenplayTextView::insertTextRequested, q,
+            &ScreenplayTextManager::insertTextRequested);
+    connect(view, &Ui::ScreenplayTextView::summarizeTextRequested, q,
+            &ScreenplayTextManager::summarizeTextRequested);
+    connect(view, &Ui::ScreenplayTextView::translateTextRequested, q,
+            &ScreenplayTextManager::translateTextRequested);
+    connect(view, &Ui::ScreenplayTextView::generateTextRequested, q, [this](const QString& _text) {
+        emit q->generateTextRequested(_text, "write result in fountain format.");
+    });
     //
     connect(
         view->dictionariesView(), &Ui::DictionariesView::typeChanged, q,

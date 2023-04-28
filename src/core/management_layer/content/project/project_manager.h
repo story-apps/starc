@@ -185,8 +185,13 @@ public:
     /**
      * @brief Установить результат генерации текста
      */
-    void setGeneratedText(const QString& _generatedText);
     void setRephrasedText(const QString& _text);
+    void setExpandedText(const QString& _text);
+    void setShortenedText(const QString& _text);
+    void setInsertedText(const QString& _text);
+    void setSummarizeedText(const QString& _text);
+    void setTranslatedText(const QString& _text);
+    void setGeneratedText(const QString& _generatedText);
 
 signals:
     /**
@@ -265,10 +270,13 @@ signals:
     /**
      * @brief Запрос на генерацию текста с заданными настройками
      */
-    void generateTextRequested(const QString& _title, const QString& _promptHint,
-                               const QString& _promptPrefix, const QString& _prompt,
-                               const QString& _promptSuffix);
     void rephraseTextRequested(const QString& _sourceText, const QString& _style);
+    void expandTextRequested(const QString& _sourceText);
+    void shortenTextRequested(const QString& _sourceText);
+    void insertTextRequested(const QString& _after, const QString& _before);
+    void summarizeTextRequested(const QString& _sourceText);
+    void translateTextRequested(const QString& _text, const QString& _languageCode);
+    void generateTextRequested(const QString& _prompt, const QString& _promptSuffix);
 
 protected:
     /**

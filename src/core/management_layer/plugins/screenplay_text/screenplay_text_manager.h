@@ -55,10 +55,13 @@ signals:
     /**
      * @brief Запрос на генерацию текста с заданными настройками
      */
-    void generateTextRequested(const QString& _title, const QString& _promptHint,
-                               const QString& _promptPrefix, const QString& _prompt,
-                               const QString& _promptSuffix);
     void rephraseTextRequested(const QString& _sourceText, const QString& _style);
+    void expandTextRequested(const QString& _text);
+    void shortenTextRequested(const QString& _text);
+    void insertTextRequested(const QString& _after, const QString& _before);
+    void summarizeTextRequested(const QString& _text);
+    void translateTextRequested(const QString& _text, const QString& _languageCode);
+    void generateTextRequested(const QString& _prompt, const QString& _promptSuffix);
 
 protected:
     /**

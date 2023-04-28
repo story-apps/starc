@@ -82,14 +82,25 @@ public:
     /**
      * @brief Задать сгенерированный текст
      */
-    virtual void setGeneratedText(const QString& _text)
+    virtual void setRephrasedText(const QString& _text)
     {
     }
-
-    /**
-     * @brief Задать сгенерированный текст
-     */
-    virtual void setRephrasedText(const QString& _text)
+    virtual void setExpandedText(const QString& _text)
+    {
+    }
+    virtual void setShortenedText(const QString& _text)
+    {
+    }
+    virtual void setInsertedText(const QString& _text)
+    {
+    }
+    virtual void setSummarizedText(const QString& _text)
+    {
+    }
+    virtual void setTranslatedText(const QString& _text)
+    {
+    }
+    virtual void setGeneratedText(const QString& _text)
     {
     }
 };

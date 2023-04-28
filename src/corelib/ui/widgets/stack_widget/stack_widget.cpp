@@ -462,12 +462,11 @@ QWidget* StackWidget::currentWidget() const
 
 QSize StackWidget::sizeHint() const
 {
-    QSize sizeHint;
-    for (auto widget : std::as_const(d->widgets)) {
-        sizeHint.setWidth(std::max(sizeHint.width(), widget->sizeHint().width()));
-        sizeHint.setHeight(std::max(sizeHint.height(), widget->sizeHint().height()));
+    if (d->currentWidget == nullptr) {
+        return {};
     }
-    return sizeHint;
+
+    return d->currentWidget->sizeHint();
 }
 
 int StackWidget::animationDuration() const

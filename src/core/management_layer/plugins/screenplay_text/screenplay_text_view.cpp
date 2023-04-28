@@ -877,8 +877,6 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             &ScreenplayTextView::removeBookmarkRequested);
     connect(d->textEdit, &ScreenplayTextEdit::showBookmarksRequested, d->showBookmarksAction,
             &QAction::toggle);
-    connect(d->textEdit, &ScreenplayTextEdit::generateTextRequested, this,
-            &ScreenplayTextView::generateTextRequested);
     //
     connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this](int _currentIndex) {
         switch (_currentIndex) {
@@ -1222,6 +1220,20 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     //
     connect(d->textGenerationView, &TextGenerationView::rephraseRequested, this,
             &ScreenplayTextView::rephraseTextRequested);
+    connect(d->textGenerationView, &TextGenerationView::expandRequested, this,
+            &ScreenplayTextView::expandTextRequested);
+    connect(d->textGenerationView, &TextGenerationView::shortenRequested, this,
+            &ScreenplayTextView::shortenTextRequested);
+    connect(d->textGenerationView, &TextGenerationView::insertRequested, this,
+            &ScreenplayTextView::insertTextRequested);
+    connect(d->textGenerationView, &TextGenerationView::summarizeRequested, this,
+            &ScreenplayTextView::summarizeTextRequested);
+    connect(d->textGenerationView, &TextGenerationView::translateRequested, this,
+            &ScreenplayTextView::translateTextRequested);
+    connect(d->textGenerationView, &TextGenerationView::generateRequested, this,
+            &ScreenplayTextView::generateTextRequested);
+    connect(d->textGenerationView, &TextGenerationView::insertTextRequested, this,
+            [this](const QString& _text) { d->textEdit->insertPlainText(_text); });
     //
     connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
             &ScreenplayTextView::createBookmarkRequested);
@@ -1346,6 +1358,36 @@ void ScreenplayTextView::setAvailableCredits(int _credits)
     d->textGenerationView->setAvailableWords(_credits);
 }
 
+void ScreenplayTextView::setRephrasedText(const QString& _text)
+{
+    d->textGenerationView->setRephraseResult(_text);
+}
+
+void ScreenplayTextView::setExpandedText(const QString& _text)
+{
+    d->textGenerationView->setExpandResult(_text);
+}
+
+void ScreenplayTextView::setShortenedText(const QString& _text)
+{
+    d->textGenerationView->setShortenResult(_text);
+}
+
+void ScreenplayTextView::setInsertedText(const QString& _text)
+{
+    d->textGenerationView->setInsertResult(_text);
+}
+
+void ScreenplayTextView::setSummarizedText(const QString& _text)
+{
+    d->textGenerationView->setSummarizeResult(_text);
+}
+
+void ScreenplayTextView::setTranslatedText(const QString& _text)
+{
+    d->textGenerationView->setTransateResult(_text);
+}
+
 void ScreenplayTextView::setGeneratedText(const QString& _text)
 {
     const QLatin1String textWritingTaskKey("text-writing-task");
@@ -1358,11 +1400,28 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
     d->textEdit->setCompleterActive(false);
 
     //
-    // Переходим в конец текущей строки/на новую строку, чтобы помещать текст в новом блоке
+    // Переходим в конец позицию вставки, а затем переводим его на новую строку, или сдвигаем
+    // последующий текст, чтобы помещать текст в новом блоке
     //
-    if (!d->textEdit->textCursor().block().text().isEmpty()) {
+    switch (d->textGenerationView->textInsertPosition()) {
+    case TextGenerationView::TextInsertPosition::AtBeginning: {
+        d->textEdit->moveCursor(QTextCursor::Start);
+        d->textEdit->addParagraph(d->textEdit->currentParagraphType());
+        d->textEdit->moveCursor(QTextCursor::Start);
+        break;
+    }
+
+    case TextGenerationView::TextInsertPosition::AtCursorPosition: {
         d->textEdit->moveCursor(QTextCursor::EndOfBlock);
         d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
+        break;
+    }
+
+    case TextGenerationView::TextInsertPosition::AtEnd: {
+        d->textEdit->moveCursor(QTextCursor::End);
+        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
+        break;
+    }
     }
 
     QElapsedTimer timer;
@@ -1437,11 +1496,6 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
     d->textEdit->setCompleterActive(true);
 
     TaskBar::finishTask(textWritingTaskKey);
-}
-
-void ScreenplayTextView::setRephrasedText(const QString& _text)
-{
-    d->textGenerationView->setRephraseResult(_text);
 }
 
 DictionariesView* ScreenplayTextView::dictionariesView() const
@@ -1713,6 +1767,10 @@ void ScreenplayTextView::updateTranslations()
     d->sidebarTabs->setTabName(kTextGenerationTabIndex, tr("AI assistant"));
     d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
     d->sidebarTabs->setTabName(kDictionariesTabIndex, tr("Dictionaries"));
+
+    d->textGenerationView->setGenerationPromptHint(
+        tr("Start prompt from something like \"Write a screenplay about ...\", or \"Write a short "
+           "movie screenplay about ...\""));
 
     d->updateOptionsTranslations();
 
