@@ -182,6 +182,7 @@ void Pie::Implementation::insertSlices(const QModelIndex& _parent, int _first, i
         auto slice = Implementation::Slice();
         auto ok = false;
 
+        slice.index = model->index(i, 0);
         slice.color = model->data(model->index(i, 0), Qt::DecorationPropertyRole).value<QColor>();
         slice.value = model->data(model->index(i, 1)).toDouble(&ok);
 
@@ -259,6 +260,7 @@ void Pie::Implementation::updateSlices(const QModelIndex& _topLeft, const QModel
 
 void Pie::Implementation::connectToModel()
 {
+    connect(model, &QAbstractItemModel::modelReset, q, [this] { setModel(model, valueColumn); });
     connect(model, &QAbstractItemModel::rowsInserted, q,
             [this](const QModelIndex& _parent, int _first, int _last) {
                 insertSlices(_parent, _first, _last);
