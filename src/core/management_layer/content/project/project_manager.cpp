@@ -2583,11 +2583,13 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     }
     if (d->splitScreenAction->isChecked()) {
         d->splitScreenAction->toggle();
-        d->view.activeIndex = {};
-        d->view.active->showDefaultPage();
-        d->view.inactiveIndex = {};
-        d->view.inactive->showDefaultPage();
     }
+    d->view.activeIndex = {};
+    d->view.active->showDefaultPage();
+    d->view.activeViewMimeType.clear();
+    d->view.inactiveIndex = {};
+    d->view.inactive->showDefaultPage();
+    d->view.inactiveViewMimeType.clear();
 
     //
     // Очищаем все карты для синхронизации
