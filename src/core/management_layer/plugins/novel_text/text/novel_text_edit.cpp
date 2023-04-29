@@ -1462,36 +1462,6 @@ ContextMenu* NovelTextEdit::createContextMenu(const QPoint& _position, QWidget* 
 
     const BusinessLayer::TextCursor cursor = textCursor();
 
-    auto splitAction = new QAction(this);
-    splitAction->setSeparator(true);
-    splitAction->setWhatsThis(QKeySequence("Ctrl+D").toString(QKeySequence::NativeText));
-    splitAction->setIconText(u8"\U000F1917");
-    if (cursor.inTable()) {
-        splitAction->setText(tr("Merge paragraph"));
-    } else {
-        splitAction->setText(tr("Split paragraph"));
-
-        //
-        // Запрещаем разделять некоторые блоки
-        //
-        splitAction->setEnabled(d->canSplitParagraph(cursor));
-    }
-    connect(splitAction, &QAction::triggered, this, [this] {
-        BusinessLayer::TextCursor cursor = textCursor();
-        if (cursor.inTable()) {
-            d->document.mergeParagraph(cursor);
-        } else {
-            d->document.splitParagraph(cursor);
-
-            //
-            // После разделения, возвращаемся в первую ячейку таблицы
-            //
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::EndOfBlock);
-        }
-    });
-
     //
     // Работа с закладками
     //
@@ -1520,20 +1490,8 @@ ContextMenu* NovelTextEdit::createContextMenu(const QPoint& _position, QWidget* 
     showBookmarks->setIconText(u8"\U000F0E16");
     connect(showBookmarks, &QAction::triggered, this, &NovelTextEdit::showBookmarksRequested);
 
-    //
-    // Генерация текста сценария
-    //
-    auto generateAction = new QAction(this);
-    generateAction->setSeparator(true);
-    generateAction->setText(tr("Generate text"));
-    generateAction->setIconText(u8"\U000F0068");
-    connect(generateAction, &QAction::triggered, this,
-            [this] { emit generateTextRequested(textCursor().selectedText()); });
-
     auto actions = menu->actions().toVector();
-    actions.prepend(splitAction);
     actions.prepend(bookmarkAction);
-    actions.append(generateAction);
     menu->setActions(actions);
 
     return menu;

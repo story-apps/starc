@@ -798,8 +798,6 @@ NovelTextView::NovelTextView(QWidget* _parent)
             &NovelTextView::removeBookmarkRequested);
     connect(d->textEdit, &NovelTextEdit::showBookmarksRequested, d->showBookmarksAction,
             &QAction::toggle);
-    connect(d->textEdit, &NovelTextEdit::generateTextRequested, this,
-            &NovelTextView::generateTextRequested);
     //
     connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this](int _currentIndex) {
         switch (_currentIndex) {

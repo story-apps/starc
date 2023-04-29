@@ -173,11 +173,6 @@ signals:
      */
     void showBookmarksRequested();
 
-    /**
-     * @brief Запрос на генерацию текста
-     */
-    void generateTextRequested(const QString& _text);
-
 protected:
     /**
      * @brief Нажатия многих клавиш обрабатываются вручную
