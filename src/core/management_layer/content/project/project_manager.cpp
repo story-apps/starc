@@ -358,7 +358,7 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
 
     splitScreenAction->setCheckable(true);
     splitScreenAction->setIconText(u8"\U000F10E7");
-    splitScreenAction->setShortcut(QKeySequence("F2"));
+    splitScreenAction->setWhatsThis(QKeySequence("F2").toString(QKeySequence::NativeText));
     showVersionsAction->setCheckable(true);
     showVersionsAction->setIconText(u8"\U000F0AB8");
     updateOptionsText();
