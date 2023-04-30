@@ -253,7 +253,7 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
         for (const auto& dialogue : scene.dialogues) {
             if (d->visibleCharacters.has_value()
                 && !d->visibleCharacters->contains(dialogue.character)) {
-                break;
+                continue;
             }
 
             auto dialogueItem = createModelItem(dialogue.character);
