@@ -277,7 +277,6 @@ SOURCES += \
     ui/modules/logline_generator/logline_generator_dialog.cpp \
     ui/modules/cards/card_item_parameters_view.cpp \
     ui/modules/script_text_edit/script_text_edit.cpp \
-    ui/modules/text_generation/text_generation_dialog.cpp \
     ui/modules/text_generation/text_generation_toolbar.cpp \
     ui/modules/text_generation/text_generation_view.cpp \
     ui/widgets/animations/click_animation.cpp \
@@ -596,7 +595,6 @@ HEADERS += \
     ui/modules/logline_generator/logline_generator_dialog.h \
     ui/modules/cards/card_item_parameters_view.h \
     ui/modules/script_text_edit/script_text_edit.h \
-    ui/modules/text_generation/text_generation_dialog.h \
     ui/modules/text_generation/text_generation_toolbar.h \
     ui/modules/text_generation/text_generation_view.h \
     ui/widgets/animations/click_animation.h \
