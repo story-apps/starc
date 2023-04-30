@@ -2772,23 +2772,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2710"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2712"/>
         <source>Title page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2712"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2714"/>
         <source>Synopsis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2724"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2726"/>
         <source>Treatment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="2012"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2715"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2717"/>
         <source>Screenplay</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2803,7 +2803,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2718"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2720"/>
         <source>Statistics</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8580,43 +8580,28 @@
 <context>
     <name>Ui::NovelTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1470"/>
-        <source>Merge paragraph</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1472"/>
-        <source>Split paragraph</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1499"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1469"/>
         <source>Bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1503"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1473"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1508"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1478"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1513"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1483"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1519"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1489"/>
         <source>Show/hide list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1528"/>
-        <source>Generate text</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8830,27 +8815,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1240"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1238"/>
         <source>Writing text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1545"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1543"/>
         <source>Formatting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1546"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1544"/>
         <source>Scene parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1547"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1545"/>
         <source>Comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1548"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1546"/>
         <source>Bookmarks</source>
         <translation type="unfinished"></translation>
     </message>

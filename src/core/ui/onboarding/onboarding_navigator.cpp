@@ -239,11 +239,11 @@ void OnboardingNavigator::Implementation::initUiPage()
 
         return languageItem;
     };
-    addLanguage("Azərbaycan", QLocale::Azerbaijani, 98);
+    addLanguage("Azərbaycan", QLocale::Azerbaijani, 95);
     addLanguage("Беларуский", QLocale::Belarusian, 45);
-    addLanguage("Català", QLocale::Catalan, 81);
-    addLanguage("Dansk", QLocale::Danish, 93);
-    addLanguage("Deutsch", QLocale::German, 100);
+    addLanguage("Català", QLocale::Catalan, 78);
+    addLanguage("Dansk", QLocale::Danish, 89);
+    addLanguage("Deutsch", QLocale::German, 97);
     auto englishItem = addLanguage("English", QLocale::English, 100);
     addLanguage("Español", QLocale::Spanish, 79);
     addLanguage("Esperanto", QLocale::Esperanto, 9);
@@ -261,14 +261,14 @@ void OnboardingNavigator::Implementation::initUiPage()
     addLanguage("Русский", QLocale::Russian, 100);
     addLanguage("Slovenski", QLocale::Slovenian, 100);
     addLanguage("Tagalog", QLocale::Filipino, 19);
-    addLanguage("Türkçe", QLocale::Turkish, 100);
+    addLanguage("Türkçe", QLocale::Turkish, 97);
     addLanguage("Українська", QLocale::Ukrainian, 100);
-    addLanguage("اَلْعَرَبِيَّةُ", QLocale::Arabic, 95);
+    addLanguage("اَلْعَرَبِيَّةُ", QLocale::Arabic, 90);
     addLanguage("فارسی", QLocale::Persian, 63);
-    addLanguage("עִבְרִית", QLocale::Hebrew, 97);
+    addLanguage("עִבְרִית", QLocale::Hebrew, 93);
     addLanguage("हिन्दी", QLocale::Hindi, 32);
     addLanguage("தமிழ்", QLocale::Tamil, 41);
-    addLanguage("తెలుగు", QLocale::Telugu, 100);
+    addLanguage("తెలుగు", QLocale::Telugu, 95);
     addLanguage("汉语", QLocale::Chinese, 5);
     addLanguage("한국어", QLocale::Korean, 69);
     uiLanguage->setModel(uiLanguageModel);

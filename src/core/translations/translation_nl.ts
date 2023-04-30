@@ -655,9 +655,47 @@
 <context>
     <name>BusinessLayer::ScreenplayCharactersActivityPlot</name>
     <message>
-        <location filename="../../corelib/business_layer/plots/screenplay/screenplay_characters_activity_plot.cpp" line="323"/>
+        <location filename="../../corelib/business_layer/plots/screenplay/screenplay_characters_activity_plot.cpp" line="324"/>
         <source>Scene</source>
         <translation>Scène</translation>
+    </message>
+</context>
+<context>
+    <name>BusinessLayer::ScreenplayDialoguesReport</name>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="284"/>
+        <source>Character</source>
+        <translation>Personage</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="288"/>
+        <source>Dialogue/lyrics</source>
+        <translation>Dialoog/Songtekst</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="292"/>
+        <source>Parenthetical</source>
+        <translation>Parenthetisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="296"/>
+        <source>Extension</source>
+        <translation>Uitbreiding</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="320"/>
+        <source>Scene number</source>
+        <translation>Scènenummer</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="323"/>
+        <source>Scene heading</source>
+        <translation>Kop van scène</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="326"/>
+        <source>Dialogue number</source>
+        <translation>Dialoognummer</translation>
     </message>
 </context>
 <context>
@@ -1048,7 +1086,7 @@
 <context>
     <name>BusinessLayer::ScreenplayStatisticsModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_statistics_model.cpp" line="42"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_statistics_model.cpp" line="44"/>
         <source>Statistics</source>
         <translation>Statistieken</translation>
     </message>
@@ -1233,7 +1271,7 @@
 <context>
     <name>BusinessLayer::ScreenplayTextModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/text/screenplay_text_model.cpp" line="185"/>
+        <location filename="../../corelib/business_layer/model/screenplay/text/screenplay_text_model.cpp" line="161"/>
         <source>Screenplay</source>
         <translation>Scenario</translation>
     </message>
@@ -1833,14 +1871,14 @@
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
         <location filename="../../corelib/business_layer/export/abstract_exporter.cpp" line="280"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1022"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="956"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="916"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1118"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1014"/>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="873"/>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1078"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1131"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1052"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="986"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="947"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1148"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1044"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="903"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1108"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1161"/>
         <source>END OF</source>
         <translation>EINDE VAN</translation>
     </message>
@@ -1848,7 +1886,7 @@
 <context>
     <name>KeySequenceDelegate</name>
     <message>
-        <location filename="../../corelib/ui/widgets/tree/tree_delegate.cpp" line="429"/>
+        <location filename="../../corelib/ui/widgets/tree/tree_delegate.cpp" line="436"/>
         <source>Press shortcut</source>
         <translation>Druk op een sneltoets</translation>
     </message>
@@ -1885,6 +1923,15 @@
         <location filename="../management_layer/content/account/account_manager.cpp" line="473"/>
         <source>Activate TEAM</source>
         <translation>TEAM-versie gebruiken</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="524"/>
+        <source>Credits are our internal currency. They are used for AI tools, such as text generation.
+
+1 credit equals 1000 words processed by AI.</source>
+        <translation>Punten zijn onze interne valuta. Ze worden gebruikt voor KI-hulpmiddelen, zoals de tekstgenerator.
+
+1 punt = 1000 door de KI verwerkte woorden.</translation>
     </message>
     <message>
         <location filename="../management_layer/content/account/account_manager.cpp" line="390"/>
@@ -2033,13 +2080,13 @@
         <translation>.STARC gebruiken</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3012"/>
+        <location filename="../management_layer/application_manager.cpp" line="3015"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>Het cloudabonnement van de projecteigenaren is verlopen. U kunt uw werk voortzetten zodra het abonnement verlengd is.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2993"/>
-        <location filename="../management_layer/application_manager.cpp" line="3014"/>
+        <location filename="../management_layer/application_manager.cpp" line="2996"/>
+        <location filename="../management_layer/application_manager.cpp" line="3017"/>
         <source>Continue offline</source>
         <translation>Offline werken</translation>
     </message>
@@ -2055,12 +2102,12 @@
         <translation>Bezig met laden van lettertypen…</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2991"/>
+        <location filename="../management_layer/application_manager.cpp" line="2994"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>Uw cloudabonnement is verlopen. Verleng uw abonnement om uw werk voort te zetten.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="2994"/>
+        <location filename="../management_layer/application_manager.cpp" line="2997"/>
         <source>Renew subscription</source>
         <translation>Abonnement verlengen</translation>
     </message>
@@ -2182,12 +2229,12 @@
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="388"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="393"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation>De promotiecode die %1% korting geeft is geactiveerd en inbegrepen bij uw volgende aankoop.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="397"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="402"/>
         <source>PRO version subscription activated for %n month(s).</source>
         <translation>
             <numerusform>Het PRO-abonnement is geactiveerd voor de duur van %n maand.</numerusform>
@@ -2195,12 +2242,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="402"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="407"/>
         <source>PRO version lifetime access granted.</source>
         <translation>Het PRO-abonnement is levenslang geactiveerd.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="406"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="411"/>
         <source>TEAM version subscription activated for %n month(s).</source>
         <translation>
             <numerusform>Het TEAM-abonnement is geactiveerd voor de duur van %n maand.</numerusform>
@@ -2208,12 +2255,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="411"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="416"/>
         <source>TEAM version lifetime access granted.</source>
         <translation>Het TEAM-abonnement is levenslang geactiveerd.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="419"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="424"/>
         <source>%n credits were added to your balance.</source>
         <translation>
             <numerusform>Er is %n punt toegevoegd aan uw tegoed.</numerusform>
@@ -2221,27 +2268,57 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="593"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="598"/>
         <source>Promocode is incorrect</source>
         <translation>De promotiecode is onjuist</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="597"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="602"/>
         <source>Promocode expired</source>
         <translation>De promotiecode is verlopen</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="601"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="606"/>
         <source>Maximum number of promocode activations done</source>
         <translation>De promotiecode is al te vaak gebruikt</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="605"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="610"/>
         <source>Promocode already used</source>
         <translation>De promotiecode is al gebruikt</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="669"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1066"/>
+        <source>Rephrasing text</source>
+        <translation>Tekst anders verwoorden</translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1169"/>
+        <source>Expanding text</source>
+        <translation>Tekst uitbreiden</translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1270"/>
+        <source>Shortening text</source>
+        <translation>Tekst inkorten</translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1371"/>
+        <source>Inserting text</source>
+        <translation>Tekst invoegen</translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1472"/>
+        <source>Summarizing text</source>
+        <translation>Tekst samenvatten</translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1573"/>
+        <source>Translating text</source>
+        <translation>Tekst vertalen</translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1602"/>
         <source>Generating text</source>
         <translation>Tekst genereren</translation>
     </message>
@@ -2546,50 +2623,50 @@
         <translation>Document toevoegen</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="495"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="496"/>
         <source>Remove document</source>
         <translation>Document verwijderen</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="510"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1829"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="511"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1830"/>
         <source>Create new draft</source>
         <translation>Concept opstellen</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="525"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="526"/>
         <source>Open in new window</source>
         <translation>Openen in nieuw venster</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="587"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="588"/>
         <source>Character with this name already exists</source>
         <translation>Er is al een personage met deze naam</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="597"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="598"/>
         <source>Location with this name already exists</source>
         <translation>Er is al een locatie met deze naam</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="708"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="709"/>
         <source>Current draft</source>
         <translation>Huidig concept</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="777"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="778"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation>Weet u zeker dat u documentversie ‘%1’ wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="882"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="883"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Weet u zeker dat u het document permanent wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="778"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="883"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1296"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="779"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="884"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1297"/>
         <source>No</source>
         <translation>Nee</translation>
     </message>
@@ -2609,111 +2686,111 @@
         <translation>Map toevoegen</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="607"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="608"/>
         <source>World with this name already exists</source>
         <translation>Er is al een wereld met deze naam</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="779"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="884"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1297"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="780"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="885"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1298"/>
         <source>Yes, remove</source>
         <translation>Ja, verwijderen</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1110"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1111"/>
         <source>Characters from the text</source>
         <translation>Personages uit de tekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1120"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1121"/>
         <source>Characters that are not found in the text</source>
         <translation>Personages niet voorkomend in tekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1133"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1134"/>
         <source>Save only characters from the text</source>
         <translation>Alleen personages uit tekst opslaan</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1134"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1135"/>
         <source>Save all characters</source>
         <translation>Alle personages opslaan</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1135"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1238"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1136"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1239"/>
         <source>Change nothing</source>
         <translation>Niets wijzigen</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1213"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1214"/>
         <source>Locations from the text</source>
         <translation>Locaties uit de tekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1223"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1224"/>
         <source>Locations that are not found in the text</source>
         <translation>Locaties niet voorkomend in tekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1236"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1237"/>
         <source>Save only locations from the text</source>
         <translation>Alleen locaties uit tekst opslaan</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1237"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1238"/>
         <source>Save all locations</source>
         <translation>Alle locaties opslaan</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1295"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1296"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Weet u zeker dat u alle documenten permanent wilt verwijderen uit de prullenbak?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1843"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1844"/>
         <source>Edit</source>
         <translation>Bewerken</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1853"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1854"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2013"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2034"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2055"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2076"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2014"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2035"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2056"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2077"/>
         <source>draft</source>
         <translation>Concept</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2032"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2053"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2074"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2033"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2054"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2075"/>
         <source>Script</source>
         <translation>Script</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2705"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2712"/>
         <source>Title page</source>
         <translation>Voorblad</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2707"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2714"/>
         <source>Synopsis</source>
         <translation>Synopsis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2719"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2726"/>
         <source>Treatment</source>
         <translation>Behandeling</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2011"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2710"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2012"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2717"/>
         <source>Screenplay</source>
         <translation>Scenario</translation>
     </message>
@@ -2728,7 +2805,7 @@
         <translation>Concepten tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2713"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2720"/>
         <source>Statistics</source>
         <translation>Statistieken</translation>
     </message>
@@ -2845,132 +2922,224 @@
 <context>
     <name>ManagementLayer::ScreenplayBreakdownManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="160"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="173"/>
         <source>To be able to work with the screenplay breakdown, you need to upgrade to the TEAM version.</source>
         <translation>Scenario-uiteenzettingen kunnen alléén worden gebruikt in de PRO-versie.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="162"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="175"/>
         <source>Maybe later</source>
         <translation>Later aanschaffen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="163"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="176"/>
         <source>Upgrade</source>
         <translation>Nu aanschaffen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="247"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="260"/>
         <source>Select location for saving breakdown to file</source>
         <translation>Kies de opslaglocatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="523"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="536"/>
         <source>Scene intro</source>
         <translation>Introductie van scène</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="524"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="537"/>
         <source>Scene time</source>
         <translation>Duur van scène</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="525"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="538"/>
         <source>Character extension</source>
         <translation>Personagerol vergroten</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="526"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="539"/>
         <source>Transition</source>
         <translation>Overgang</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="697"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="755"/>
         <source>Breakdown</source>
         <translation>Uiteenzetting</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="749"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="816"/>
         <source>Script order</source>
         <translation>Scriptvolgorde</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="750"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="819"/>
         <source>Scene number</source>
         <translation>Scènenummer</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="751"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="822"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1296"/>
         <source>I/E</source>
         <translation>I/E</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="753"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="825"/>
         <source>Location</source>
         <translation>Locatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="756"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="828"/>
         <source>Scene description</source>
         <translation>Scène-omschrijving</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="758"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="832"/>
         <source>D/N</source>
         <translation>D/N</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="759"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="834"/>
         <source>Story day</source>
         <translation>Dag in verhaal</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="760"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="836"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1155"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1309"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1473"/>
         <source>Duration</source>
         <translation>Duur</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="770"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="844"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1112"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1317"/>
         <source>Cast list</source>
         <translation>Castinglijst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="817"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="885"/>
         <source>%1 list with IDs</source>
         <translation>%1-lijst met id&apos;s</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="767"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1136"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1457"/>
+        <source>Board ID</source>
+        <translation>Bord-id</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1139"/>
+        <source>Character</source>
+        <translation>Personage</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1142"/>
+        <source>Age</source>
+        <translation>Leeftijd</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1145"/>
+        <source>Gender</source>
+        <translation>Geslacht</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1148"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1302"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1466"/>
+        <source>One sentense description</source>
+        <translation>Beschrijving in één zin</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1152"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1306"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1470"/>
+        <source>Scenes count</source>
+        <translation>Aantal scènes</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1165"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1483"/>
+        <source>Scenes</source>
+        <translation>Aantal scènes</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1207"/>
+        <source>Male</source>
+        <translation>Man</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1209"/>
+        <source>Female</source>
+        <translation>Vrouw</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1210"/>
+        <source>Other</source>
+        <translation>Overig</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1248"/>
+        <source>Location list</source>
+        <translation>Locatielijst</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1290"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1457"/>
+        <source>Number</source>
+        <translation>Aantal</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1293"/>
+        <source>Location (complex)</source>
+        <translation>Locatie (gebouw)</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1460"/>
+        <source>Element name</source>
+        <translation>Elementnaam</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1463"/>
+        <source>Max qty</source>
+        <translation>Max. hoeveelheid</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="852"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1325"/>
         <source>Cast IDs</source>
         <translation>Casting-id&apos;s</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="773"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="847"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1320"/>
         <source>Cast list with IDs</source>
         <translation>Castinglijst met id&apos;s</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="779"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="856"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1299"/>
         <source>Location (Set)</source>
         <translation>Locatie (set)</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="782"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="859"/>
         <source>Location (Complex)</source>
         <translation>Locatie (gebouw)</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="790"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="863"/>
         <source>Address</source>
         <translation>Adres</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="812"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="880"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="1433"/>
         <source>%1 list</source>
         <translation>%1 lijst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="808"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="888"/>
         <source>%1 IDs</source>
         <translation>%1 id&apos;s</translation>
     </message>
@@ -3148,27 +3317,27 @@
 <context>
     <name>ManagementLayer::ScreenplayStatisticsManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="105"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="106"/>
         <source>To access screenplay statistics, you need to upgrade to the PRO version.</source>
         <translation>Scenariostatistieken zijn alléén beschikbaar in de PRO-versie.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="106"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="107"/>
         <source>Maybe later</source>
         <translation>Later aanschaffen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="107"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="108"/>
         <source>Upgrade</source>
         <translation>Nu aanschaffen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="280"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="291"/>
         <source>Select location for saving report to file</source>
         <translation>Kies de opslaglocatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="281"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="292"/>
         <source>Select location for saving plot data to file</source>
         <translation>Kies de opslaglocatie</translation>
     </message>
@@ -3184,32 +3353,22 @@
 <context>
     <name>ManagementLayer::ScreenplayTextManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="197"/>
-        <source>Generate screenplay text</source>
-        <translation>Scenariotekst genereren</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="198"/>
-        <source>Start prompt from something like &quot;Write a screenplay about ...&quot;, or &quot;Write a short movie screenplay about ...&quot;</source>
-        <translation>Begin de suggestie met iets als ‘Schrijf een scenario over …’ of ‘Schrijf een kortfilm over …’</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="445"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="455"/>
         <source>Scene intro</source>
         <translation>Introductie van scène</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="446"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="456"/>
         <source>Scene time</source>
         <translation>Duur van scène</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="447"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="457"/>
         <source>Character extension</source>
         <translation>Personagerol vergroten</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="448"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="458"/>
         <source>Transition</source>
         <translation>Overgang</translation>
     </message>
@@ -3245,44 +3404,64 @@
 <context>
     <name>ManagementLayer::SettingsManager</name>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="466"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="467"/>
         <source>Do you want to revert all changes in settings to the default state? This action can&apos;t be undone.</source>
         <translation>Weet u zeker dat u alle standaardwaarden wilt herstellen? Deze actie is onomkeerbaar.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="468"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="469"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="469"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="470"/>
         <source>Reset</source>
         <translation>Herstellen</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="745"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="796"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="847"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="897"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="947"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="997"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="746"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="797"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="848"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="898"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="948"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="998"/>
         <source>Choose the file to save template</source>
         <translation>Kies het sjabloonbestand</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="766"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="817"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="867"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="917"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="967"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1017"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="767"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="818"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="868"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="918"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="968"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1018"/>
         <source>Choose the file with template to load</source>
         <translation>Kies het te openen sjabloonbestand</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1259"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1260"/>
         <source>Spelling dictionary loading</source>
         <translation>Bezig met laden van spellingcontrole…</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1300"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1328"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1367"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1400"/>
+        <source>Dictionary loading error</source>
+        <translation>Woordenboek is niet geladen</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1301"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1368"/>
+        <source>For some reason dictionary file isn&apos;t loaded. Please check internet connection and firewall/anitivirus settings, and try to reload dictionary.</source>
+        <translation>Om onbekende reden kan het woordenboek niet worden geladen. Controleer de interverbinding en firewall-/antivirusinstellingen en probeer het opnieuw.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1330"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1402"/>
+        <source>Please check internet connection and firewall/anitivirus settings, and try to reload dictionary.</source>
+        <translation>Controleer de interverbinding en firewall-/antivirusinstellingen en probeer het opnieuw.</translation>
     </message>
 </context>
 <context>
@@ -3478,207 +3657,207 @@
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="416"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="423"/>
         <source>Information about project</source>
         <translation>Projectinformatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="418"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="425"/>
         <source>Project collaborators</source>
         <translation>Projectmedewerkers</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="422"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="429"/>
         <source>Information about screenplay</source>
         <translation>Scenario-informatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="424"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="431"/>
         <source>Screenplay parameters</source>
         <translation>Scenario-opties</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="427"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="458"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="478"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="498"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="518"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="434"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="465"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="485"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="505"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="525"/>
         <source>Title page text</source>
         <translation>Voorbladtekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="430"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="461"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="481"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="501"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="521"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="437"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="468"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="488"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="508"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="528"/>
         <source>Synopsis text</source>
         <translation>Synopsistekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="435"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="526"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="442"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="533"/>
         <source>Beats</source>
         <translation>Beats</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="444"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="535"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="451"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="542"/>
         <source>Timeline</source>
         <translation>Tijdlijn</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="446"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="453"/>
         <source>Breakdown</source>
         <translation>Uiteenzetting</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="453"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="460"/>
         <source>Information about comic book</source>
         <translation>Stripboekinformatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="455"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="462"/>
         <source>Comic book parameters</source>
         <translation>Stripboekopties</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="464"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="471"/>
         <source>Comic book text</source>
         <translation>Stripboektekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="473"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="480"/>
         <source>Information about audioplay</source>
         <translation>Hoorspelinformatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="475"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="482"/>
         <source>Audioplay parameters</source>
         <translation>Hoorspelopties</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="484"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="491"/>
         <source>Audioplay text</source>
         <translation>Hoorspeltekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="493"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="500"/>
         <source>Information about stageplay</source>
         <translation>Toneelstukinformatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="495"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="502"/>
         <source>Stageplay parameters</source>
         <translation>Toneelstukopties</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="504"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="511"/>
         <source>Stageplay text</source>
         <translation>Toneelstuktekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="513"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="520"/>
         <source>Information about novel</source>
         <translation>Romaninformatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="515"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="522"/>
         <source>Novel parameters</source>
         <translation>Romanopties</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="524"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="531"/>
         <source>Outline text</source>
         <translation>Tekst voorzien van contour</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="531"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="538"/>
         <source>Novel text</source>
         <translation>Romantekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="542"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="549"/>
         <source>Characters relations</source>
         <translation>Personagerelaties</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="545"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="552"/>
         <source>Character information</source>
         <translation>Personage-informatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="547"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="554"/>
         <source>Character dialogues</source>
         <translation>Dialogen van personages</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="551"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="558"/>
         <source>Locations map</source>
         <translation>Locatiekaart</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="554"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="561"/>
         <source>Location information</source>
         <translation>Locatie-informatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="558"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="565"/>
         <source>Worlds map</source>
         <translation>Wereldenkaart</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="561"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="568"/>
         <source>World information</source>
         <translation>Wereldinformatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="565"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="572"/>
         <source>Folder text</source>
         <translation>Maptekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="568"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="575"/>
         <source>Document text</source>
         <translation>Documenttekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="572"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="579"/>
         <source>Recycle bin summary info</source>
         <translation>Prullenbakinformatie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="575"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="582"/>
         <source>Images gallery</source>
         <translation>Galerij</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="433"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="440"/>
         <source>Treatment text</source>
         <translation>Behandelingstekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="440"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="447"/>
         <source>Screenplay text</source>
         <translation>Scenariotekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="437"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="442"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="466"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="486"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="506"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="528"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="533"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="444"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="449"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="473"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="493"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="513"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="535"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="540"/>
         <source>Cards</source>
         <translation>Kaarten</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="449"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="469"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="489"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="509"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="538"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="456"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="476"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="496"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="516"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="545"/>
         <source>Statistics</source>
         <translation>Statistieken</translation>
     </message>
@@ -4368,27 +4547,27 @@
 <context>
     <name>Ui::AudioplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1241"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1271"/>
         <source>Bookmark</source>
         <translation>Bladwijzer</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1245"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1275"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1251"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1281"/>
         <source>Edit</source>
         <translation>Bewerken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1256"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1286"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1263"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1293"/>
         <source>Show/hide list</source>
         <translation>Lijst tonen/verbergen</translation>
     </message>
@@ -4540,17 +4719,17 @@
         <translation>Bladwijzerlijst verbergen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1051"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1053"/>
         <source>Formatting</source>
         <translation>Opmaak</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1052"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1054"/>
         <source>Comments</source>
         <translation>Opmerkingen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1053"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1055"/>
         <source>Bookmarks</source>
         <translation>Bladwijzers</translation>
     </message>
@@ -5669,7 +5848,7 @@
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1035"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1065"/>
         <source>%n panels</source>
         <translation>
             <numerusform>%n paneel</numerusform>
@@ -5677,27 +5856,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1210"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1240"/>
         <source>Bookmark</source>
         <translation>Bladwijzer</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1214"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1244"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1220"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1250"/>
         <source>Edit</source>
         <translation>Bewerken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1225"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1255"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1232"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1262"/>
         <source>Show/hide list</source>
         <translation>Lijst tonen/verbergen</translation>
     </message>
@@ -5865,17 +6044,17 @@
         <translation>Bladwijzerlijst verbergen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1050"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1052"/>
         <source>Formatting</source>
         <translation>Opmaak</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1051"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1053"/>
         <source>Comments</source>
         <translation>Opmerkingen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1052"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1054"/>
         <source>Bookmarks</source>
         <translation>Bladwijzers</translation>
     </message>
@@ -8167,27 +8346,27 @@
 <context>
     <name>Ui::NovelOutlineEdit</name>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1126"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1156"/>
         <source>Bookmark</source>
         <translation>Bladwijzer</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1130"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1160"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1135"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1165"/>
         <source>Edit</source>
         <translation>Bewerken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1140"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1170"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1147"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1177"/>
         <source>Show/hide list</source>
         <translation>Lijst tonen/verbergen</translation>
     </message>
@@ -8329,17 +8508,17 @@
         <translation>Bladwijzerlijst tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="986"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="988"/>
         <source>Formatting</source>
         <translation>Opmaak</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="987"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="989"/>
         <source>Comments</source>
         <translation>Opmerkingen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="988"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="990"/>
         <source>Bookmarks</source>
         <translation>Bladwijzers</translation>
     </message>
@@ -8403,14 +8582,12 @@
 <context>
     <name>Ui::NovelTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1440"/>
         <source>Merge paragraph</source>
-        <translation>Alinea samenvoegen</translation>
+        <translation type="vanished">Alinea samenvoegen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1442"/>
         <source>Split paragraph</source>
-        <translation>Alinea splitsen</translation>
+        <translation type="vanished">Alinea splitsen</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1469"/>
@@ -8438,9 +8615,8 @@
         <translation>Lijst tonen/verbergen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1498"/>
         <source>Generate text</source>
-        <translation>Tekst genereren</translation>
+        <translation type="vanished">Tekst genereren</translation>
     </message>
 </context>
 <context>
@@ -8653,27 +8829,27 @@
         <translation>Bladwijzerlijst tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1242"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1238"/>
         <source>Writing text</source>
         <translation>Tekst schrijven</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1547"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1543"/>
         <source>Formatting</source>
         <translation>Opmaak</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1548"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1544"/>
         <source>Scene parameters</source>
         <translation>Scène-opties</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1549"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1545"/>
         <source>Comments</source>
         <translation>Opmerkingen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1550"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1546"/>
         <source>Bookmarks</source>
         <translation>Bladwijzers</translation>
     </message>
@@ -9232,17 +9408,17 @@ Bespreek alles wat u maar wilt met andere schrijvers, deel uw voortgang en praat
 <context>
     <name>Ui::PurchaseDialog</name>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="156"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="168"/>
         <source>Choose what suits you</source>
         <translation>Kies het best passende</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="157"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="169"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="158"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="170"/>
         <source>Purchase</source>
         <translation>Aanschaffen</translation>
     </message>
@@ -9882,47 +10058,47 @@ Bespreek alles wat u maar wilt met andere schrijvers, deel uw voortgang en praat
         <translation>Scenariowoordenboeken tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1163"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1161"/>
         <source>Do you really want to remove element &quot;%1&quot; from current scene?</source>
         <translation>Weet u zeker dat u het element “%1” wilt verwijderen uit de huidige scène?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1965"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1963"/>
         <source>Elements</source>
         <translation>Elementen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1165"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1163"/>
         <source>No</source>
         <translation>Nee</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1166"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1164"/>
         <source>Yes, remove</source>
         <translation>Ja, verwijderen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1966"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1964"/>
         <source>Formatting</source>
         <translation>Opmaak</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1967"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1965"/>
         <source>Scene parameters</source>
         <translation>Scène-opties</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1968"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1966"/>
         <source>Comments</source>
         <translation>Opmerkingen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1969"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1967"/>
         <source>Bookmarks</source>
         <translation>Bladwijzers</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1970"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1968"/>
         <source>Dictionaries</source>
         <translation>Woordenboeken</translation>
     </message>
@@ -10453,173 +10629,174 @@ Bespreek alles wat u maar wilt met andere schrijvers, deel uw voortgang en praat
 <context>
     <name>Ui::ScreenplayStatisticsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="676"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="789"/>
         <source>Summary text statisics</source>
         <translation>Samenvatting van tekststatistieken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="677"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="712"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="790"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="827"/>
         <source>Scenes statistics</source>
         <translation>Scènestatistieken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="678"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="791"/>
         <source>Locations statistics</source>
         <translation>Locatiestatistieken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="679"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="710"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="792"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="825"/>
         <source>Characters statistics</source>
         <translation>Personagestatistieken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="681"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="794"/>
         <source>Show characters</source>
         <translation>Personages tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="682"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="795"/>
         <source>Sort scenes</source>
         <translation>Scènes sorteren</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="683"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="692"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="702"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="796"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="805"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="815"/>
         <source>by script order</source>
         <translation>op scriptvolgorde</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="684"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="693"/>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="703"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="797"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="806"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="816"/>
         <source>by alphabetical order</source>
         <translation>op alfabetische volgorde</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="685"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="798"/>
         <source>from longest to shortest scene</source>
         <translation>van langste naar kortste scène</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="686"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="799"/>
         <source>from shortest to longest scene</source>
         <translation>van kortste naar langste scène</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="687"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="800"/>
         <source>from massive to unmanned scene</source>
         <translation>van scène met meeste tot minste personages</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="688"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="801"/>
         <source>from unmanned to massive scene</source>
         <translation>van scène met minste tot meeste personages</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="690"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="803"/>
         <source>Extended view</source>
         <translation>Uitgebreide weergave</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="691"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="804"/>
         <source>Sort locations</source>
         <translation>Locaties sorteren</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="694"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="807"/>
         <source>from most to least occurences</source>
         <translation>op meeste tot minste opnames</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="695"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="808"/>
         <source>from least to most occurences</source>
         <translation>op minste tot meeste opnames</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="696"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="809"/>
         <source>from longest to shortest duration</source>
         <translation>van langste tot kortste duur</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="697"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="810"/>
         <source>from shortest to longest duration</source>
         <translation>van kortste tot langste duur</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="699"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="812"/>
         <source>Show detailed scenes info</source>
         <translation>Uitgebreide scène-informatie tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="700"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="813"/>
         <source>Show words count</source>
         <translation>Aantal woorden tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="701"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="814"/>
         <source>Sort characters</source>
         <translation>Personages sorteren</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="704"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="817"/>
         <source>from most to least scenes</source>
         <translation>op meeste tot minst aantal scènes</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="705"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="818"/>
         <source>from least to most scenes</source>
         <translation>op minst tot meeste aantal scènes</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="706"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="819"/>
         <source>from most to least dialogues</source>
         <translation>van meeste tot minst aantal dialogen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="707"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="820"/>
         <source>from least to most dialogues</source>
         <translation>van minst tot meeste aantal dialogen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="709"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="824"/>
         <source>Bechdel test</source>
         <translation>Bechdeltest</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="711"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="826"/>
         <source>Dialogues statistics</source>
         <translation>Dialoogstatistieken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="714"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="829"/>
         <source>Scene duration</source>
         <translation>Duur van scène</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="715"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="830"/>
         <source>Action duration</source>
         <translation>Duur van actie</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="716"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="831"/>
         <source>Dialogues duration</source>
         <translation>Duur van dialogen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="717"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="832"/>
         <source>Characters count</source>
         <translation>Aantal personages</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="718"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="833"/>
         <source>Dialogues count</source>
         <translation>Aantal dialogen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="720"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="822"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="835"/>
         <source>All characters</source>
         <translation>Alle personages</translation>
     </message>
@@ -10627,47 +10804,52 @@ Bespreek alles wat u maar wilt met andere schrijvers, deel uw voortgang en praat
 <context>
     <name>Ui::ScreenplayStatisticsStructureView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="139"/>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="141"/>
         <source>Reports</source>
         <translation>Verslagen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="141"/>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="143"/>
         <source>Summary statistics</source>
         <translation>Samenvatting</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="142"/>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="144"/>
         <source>Scene report</source>
         <translation>Scèneverslag</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="143"/>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="145"/>
         <source>Location report</source>
         <translation>Locatieverslag</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="144"/>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="146"/>
         <source>Cast report</source>
         <translation>Rolbezettingsverslag</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="145"/>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="147"/>
+        <source>Dialogues report</source>
+        <translation>Dialoogverslag</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="148"/>
         <source>Gender analysis</source>
         <translation>Geslachtsanalyse</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="147"/>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="150"/>
         <source>Plots</source>
         <translation>Plots</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="149"/>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="152"/>
         <source>Story structure analysis</source>
         <translation>Structuuranalyse van verhaal</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="150"/>
+        <location filename="../management_layer/plugins/screenplay_statistics_structure/screenplay_statistics_structure_view.cpp" line="153"/>
         <source>Characters activity</source>
         <translation>Personage-activiteit</translation>
     </message>
@@ -10675,17 +10857,17 @@ Bespreek alles wat u maar wilt met andere schrijvers, deel uw voortgang en praat
 <context>
     <name>Ui::ScreenplayStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="319"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="339"/>
         <source>Unlock ability to edit screenplay cards</source>
         <translation>Mogelijkheid om toneelstukkaarten te bewerken ontgrendelen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="320"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="340"/>
         <source>Update statistics</source>
         <translation>Statistieken bijwerken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="321"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="341"/>
         <source>Save statistics to the file</source>
         <translation>Statistieken opslaan naar bestand</translation>
     </message>
@@ -11042,127 +11224,132 @@ Bespreek alles wat u maar wilt met andere schrijvers, deel uw voortgang en praat
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1502"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1557"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1532"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1587"/>
         <source>Merge paragraph</source>
         <translation>Alinea samenvoegen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1504"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1559"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1534"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1589"/>
         <source>Split paragraph</source>
         <translation>Alinea splitsen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1531"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1586"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1561"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1616"/>
         <source>Bookmark</source>
         <translation>Bladwijzer</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1535"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1590"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1565"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1620"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1541"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1596"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1571"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1626"/>
         <source>Edit</source>
         <translation>Bewerken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1547"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1602"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1577"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1632"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1554"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1609"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1584"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1639"/>
         <source>Show/hide list</source>
         <translation>Lijst tonen/verbergen</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1563"/>
-        <source>Generate text</source>
-        <translation>Tekst genereren</translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayTextEditToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="98"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="100"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="101"/>
         <source>Scene heading</source>
         <translation>Scènekop</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="278"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="298"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="293"/>
         <source>Undo last action</source>
         <translation>Vorige actie ongedaan maken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="282"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="302"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="297"/>
         <source>Redo last action</source>
         <translation>Vorige actie opnieuw uitvoeren</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="285"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="305"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="300"/>
         <source>Current paragraph format</source>
         <translation>Huidige alinea-indeling</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="287"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="307"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="302"/>
         <source>Hide fast format panel</source>
         <translation>Snelle-opmaakpaneel verbergen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="288"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="308"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="303"/>
         <source>Show fast format panel</source>
         <translation>Snelle-opmaakpaneel tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="289"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="309"/>
         <source>Hide beats headings</source>
         <translation>Beatkoppen verbergen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="290"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="310"/>
         <source>Show beats headings</source>
         <translation>Beatkoppen tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="292"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="312"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="305"/>
         <source>Search text</source>
         <translation>Zoeken naar tekst</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="295"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="315"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="308"/>
         <source>Disable review mode</source>
         <translation>Beoordelingsmodus sluiten</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="296"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="316"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="309"/>
         <source>Enable review mode</source>
         <translation>Beoordelingsmodus starten</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="298"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="318"/>
+        <source>Disable AI assistant</source>
+        <translation>KI-assistent uitschakelen</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="319"/>
+        <source>Enable AI assistant</source>
+        <translation>KI-assistent inschakelen</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="321"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="311"/>
         <source>Disable structure items isolation mode</source>
         <translation>Isolatiemodus van structurele items uitschakelen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="299"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="322"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="312"/>
         <source>Enable structure items isolation mode</source>
         <translation>Isolatiemodus van structurele items inschakelen</translation>
@@ -11329,62 +11516,72 @@ Bespreek alles wat u maar wilt met andere schrijvers, deel uw voortgang en praat
 <context>
     <name>Ui::ScreenplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="374"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="383"/>
         <source>Hide scene parameters</source>
         <translation>Scène-opties verbergen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="375"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="384"/>
         <source>Show scene parameters</source>
         <translation>Scène-opties tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="376"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="385"/>
         <source>Hide bookmarks list</source>
         <translation>Bladwijzerlijst verbergen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="379"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="388"/>
         <source>Hide screenplay dictionaries</source>
         <translation>Scenariowoordenboeken verbergen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="380"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="389"/>
         <source>Show screenplay dictionaries</source>
         <translation>Scenariowoordenboeken tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1320"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1397"/>
         <source>Writing text</source>
         <translation>Tekst schrijven</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1669"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1766"/>
         <source>Formatting</source>
         <translation>Opmaak</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1670"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1767"/>
         <source>Scene parameters</source>
         <translation>Scène-opties</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1671"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1768"/>
         <source>Comments</source>
         <translation>Opmerkingen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1672"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1769"/>
+        <source>AI assistant</source>
+        <translation>KI-assistent</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1770"/>
         <source>Bookmarks</source>
         <translation>Bladwijzers</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1673"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1771"/>
         <source>Dictionaries</source>
         <translation>Woordenboeken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="377"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1774"/>
+        <source>Start prompt from something like &quot;Write a screenplay about ...&quot;, or &quot;Write a short movie screenplay about ...&quot;</source>
+        <translation>Begin de suggestie met iets als ‘Schrijf een scenario over …’ of ‘Schrijf een kortfilm over …’</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="386"/>
         <source>Show bookmarks list</source>
         <translation>Bladwijzerlijst tonen</translation>
     </message>
@@ -11392,27 +11589,27 @@ Bespreek alles wat u maar wilt met andere schrijvers, deel uw voortgang en praat
 <context>
     <name>Ui::ScreenplayTreatmentEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1169"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1200"/>
         <source>Bookmark</source>
         <translation>Bladwijzer</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1173"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1204"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1179"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1210"/>
         <source>Edit</source>
         <translation>Bewerken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1185"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1216"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1192"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1223"/>
         <source>Show/hide list</source>
         <translation>Lijst tonen/verbergen</translation>
     </message>
@@ -11554,17 +11751,17 @@ Bespreek alles wat u maar wilt met andere schrijvers, deel uw voortgang en praat
         <translation>Bladwijzerlijst tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1045"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1047"/>
         <source>Formatting</source>
         <translation>Opmaak</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1046"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1048"/>
         <source>Comments</source>
         <translation>Opmerkingen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1047"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1049"/>
         <source>Bookmarks</source>
         <translation>Bladwijzers</translation>
     </message>
@@ -12952,27 +13149,27 @@ Als er geen inactiviteit is, dan worden ze elke 3 minuten opgeslagen.</translati
 <context>
     <name>Ui::SimpleTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="706"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="761"/>
         <source>Bookmark</source>
         <translation>Bladwijzer</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="710"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="765"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="715"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="770"/>
         <source>Edit</source>
         <translation>Bewerken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="720"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="775"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="727"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="782"/>
         <source>Show/hide list</source>
         <translation>Lijst tonen/verbergen</translation>
     </message>
@@ -13160,17 +13357,17 @@ Als er geen inactiviteit is, dan worden ze elke 3 minuten opgeslagen.</translati
         <translation>Bladwijzerlijst tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="982"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="984"/>
         <source>Formatting</source>
         <translation>Opmaak</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="983"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="985"/>
         <source>Comments</source>
         <translation>Opmerkingen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="984"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="986"/>
         <source>Bookmarks</source>
         <translation>Bladwijzers</translation>
     </message>
@@ -13363,27 +13560,27 @@ Als er geen inactiviteit is, dan worden ze elke 3 minuten opgeslagen.</translati
 <context>
     <name>Ui::StageplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1280"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1310"/>
         <source>Bookmark</source>
         <translation>Bladwijzer</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1284"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1314"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1290"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1320"/>
         <source>Edit</source>
         <translation>Bewerken</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1295"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1325"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1302"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1332"/>
         <source>Show/hide list</source>
         <translation>Lijst tonen/verbergen</translation>
     </message>
@@ -13540,17 +13737,17 @@ Als er geen inactiviteit is, dan worden ze elke 3 minuten opgeslagen.</translati
         <translation>Bladwijzerlijst tonen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1012"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1014"/>
         <source>Formatting</source>
         <translation>Opmaak</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1013"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1015"/>
         <source>Comments</source>
         <translation>Opmerkingen</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1014"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1016"/>
         <source>Bookmarks</source>
         <translation>Bladwijzers</translation>
     </message>
@@ -13690,6 +13887,862 @@ Als er geen inactiviteit is, dan worden ze elke 3 minuten opgeslagen.</translati
         <location filename="../../corelib/ui/modules/text_generation/text_generation_dialog.cpp" line="139"/>
         <source>Generate</source>
         <translation>Opmaken</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::TextGenerationView</name>
+    <message numerus="yes">
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="714"/>
+        <source>%n word(s) available</source>
+        <translation>
+            <numerusform>%n woord beschikbaar</numerusform>
+            <numerusform>%n woorden beschikbaar</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="715"/>
+        <source>No words available</source>
+        <translation>Er zijn geen woorden beschikbaar</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="726"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="745"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="750"/>
+        <source>Rephrase</source>
+        <translation>Anders verwoorden</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="727"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="752"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="755"/>
+        <source>Expand</source>
+        <translation>Uitbreiden</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="728"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="757"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="760"/>
+        <source>Shorten</source>
+        <translation>Inkorten</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="729"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="751"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="756"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="761"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="762"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="767"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="772"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="932"/>
+        <source>Insert</source>
+        <translation>Invoegen</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="730"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="768"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="771"/>
+        <source>Summarize</source>
+        <translation>Samenvatten</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="731"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="773"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="931"/>
+        <source>Translate</source>
+        <translation>Vertalen</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="732"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="766"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="933"/>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="939"/>
+        <source>Generate</source>
+        <translation>Opmaken</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="743"/>
+        <source>Go back to list of assistant functions</source>
+        <translation>Terug naar lijst met assistenttaken</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="746"/>
+        <source>Text to rephrase</source>
+        <translation>Anders te verwoorden tekst</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="747"/>
+        <source>Rephrase in style of</source>
+        <translation>Verwoorden in de stijl van</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="748"/>
+        <source>Keep empty to avoid style changing</source>
+        <translation>Laat leeg om de stijl niet te veranderen</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="749"/>
+        <source>Rephrased text</source>
+        <translation>Anders verwoorde tekst</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="753"/>
+        <source>Text to expand</source>
+        <translation>Uit te breiden tekst</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="754"/>
+        <source>Expanded text</source>
+        <translation>Uitgebreide tekst</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="758"/>
+        <source>Text to shorten</source>
+        <translation>In te korten tekst</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="759"/>
+        <source>Shortened text</source>
+        <translation>Ingekorte tekst</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="763"/>
+        <source>Text before inserted</source>
+        <translation>Tekst vóór invoegen</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="764"/>
+        <source>Text after inserted</source>
+        <translation>Tekst ná invoegen</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="765"/>
+        <source>Inserted text</source>
+        <translation>Ingevoegde tekst</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="769"/>
+        <source>Text to summarize</source>
+        <translation>Samen te vatten tekst</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="770"/>
+        <source>Summarized text</source>
+        <translation>Samengevatte tekst</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="774"/>
+        <source>Text to translate</source>
+        <translation>Te vertalen tekst</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="775"/>
+        <source>Translate to</source>
+        <translation>Vertalen naar het</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="778"/>
+        <source>Afrikaans</source>
+        <translation>Afrikaans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="779"/>
+        <source>Albanian</source>
+        <translation>Albanees</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="780"/>
+        <source>Amharic</source>
+        <translation>Amhaars</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="781"/>
+        <source>Arabic</source>
+        <translation>Arabisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="782"/>
+        <source>Armenian</source>
+        <translation>Armeens</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="783"/>
+        <source>Assamese</source>
+        <translation>Assamees</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="784"/>
+        <source>Aymara</source>
+        <translation>Aymara</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="785"/>
+        <source>Azerbaijani</source>
+        <translation>Azerbeidzjaans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="786"/>
+        <source>Bambara</source>
+        <translation>Bambara</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="787"/>
+        <source>Basque</source>
+        <translation>Baskisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="788"/>
+        <source>Belarusian</source>
+        <translation>Wit-Russisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="789"/>
+        <source>Bengali</source>
+        <translation>Bengaals</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="790"/>
+        <source>Bhojpuri</source>
+        <translation>Bhojpuri</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="791"/>
+        <source>Bosnian</source>
+        <translation>Bosnisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="792"/>
+        <source>Bulgarian</source>
+        <translation>Bulgaars</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="793"/>
+        <source>Catalan</source>
+        <translation>Catalaans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="794"/>
+        <source>Cebuano</source>
+        <translation>Cebuano</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="795"/>
+        <source>Chinese (Simplified)</source>
+        <translation>Chinees (vereenvoudigd)</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="796"/>
+        <source>Chinese (Traditional)</source>
+        <translation>Chinees (traditioneel)</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="797"/>
+        <source>Corsican</source>
+        <translation>Corsicaans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="798"/>
+        <source>Croatian</source>
+        <translation>Kroatisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="799"/>
+        <source>Czech</source>
+        <translation>Tsjechisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="800"/>
+        <source>Danish</source>
+        <translation>Deens</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="801"/>
+        <source>Dhivehi</source>
+        <translation>Dhivehi</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="802"/>
+        <source>Dogri</source>
+        <translation>Dogri</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="803"/>
+        <source>Dutch</source>
+        <translation>Nederlands</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="804"/>
+        <source>English</source>
+        <translation>Engels</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="805"/>
+        <source>Esperanto</source>
+        <translation>Esperanto</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="806"/>
+        <source>Estonian</source>
+        <translation>Ests</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="807"/>
+        <source>Ewe</source>
+        <translation>Ewe</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="808"/>
+        <source>Filipino (Tagalog)</source>
+        <translation>Filipijns (Tagalog)</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="809"/>
+        <source>Finnish</source>
+        <translation>Fins</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="810"/>
+        <source>French</source>
+        <translation>Frans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="811"/>
+        <source>Frisian</source>
+        <translation>Fries</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="812"/>
+        <source>Galician</source>
+        <translation>Galicisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="813"/>
+        <source>Georgian</source>
+        <translation>Georgisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="814"/>
+        <source>German</source>
+        <translation>Duits</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="815"/>
+        <source>Greek</source>
+        <translation>Grieks</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="816"/>
+        <source>Guarani</source>
+        <translation>Guarani</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="817"/>
+        <source>Gujarati</source>
+        <translation>Gujarati</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="818"/>
+        <source>Haitian Creole</source>
+        <translation>Haïtiaans Creools</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="819"/>
+        <source>Hausa</source>
+        <translation>Hausa</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="820"/>
+        <source>Hawaiian</source>
+        <translation>Hawaïaans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="821"/>
+        <source>Hebrew</source>
+        <translation>Hebreeuws</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="822"/>
+        <source>Hindi</source>
+        <translation>Hindi</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="823"/>
+        <source>Hmong</source>
+        <translation>Hmong</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="824"/>
+        <source>Hungarian</source>
+        <translation>Hongaars</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="825"/>
+        <source>Icelandic</source>
+        <translation>IJslands</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="826"/>
+        <source>Igbo</source>
+        <translation>Igbo</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="827"/>
+        <source>Ilocano</source>
+        <translation>Ilocano</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="828"/>
+        <source>Indonesian</source>
+        <translation>Indonesisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="829"/>
+        <source>Irish</source>
+        <translation>Iers</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="830"/>
+        <source>Italian</source>
+        <translation>Italiaans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="831"/>
+        <source>Japanese</source>
+        <translation>Japans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="832"/>
+        <source>Javanese</source>
+        <translation>Javaans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="833"/>
+        <source>Kannada</source>
+        <translation>Kannada</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="834"/>
+        <source>Kazakh</source>
+        <translation>Kazachs</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="835"/>
+        <source>Khmer</source>
+        <translation>Khmer</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="836"/>
+        <source>Kinyarwanda</source>
+        <translation>Kinyarwanda</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="837"/>
+        <source>Konkani</source>
+        <translation>Konkani</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="838"/>
+        <source>Korean</source>
+        <translation>Koreaans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="839"/>
+        <source>Krio</source>
+        <translation>Krio</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="840"/>
+        <source>Kurdish</source>
+        <translation>Koerdisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="841"/>
+        <source>Kurdish (Sorani)</source>
+        <translation>Koerdisch (Sorani)</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="842"/>
+        <source>Kyrgyz</source>
+        <translation>Kirgizisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="843"/>
+        <source>Lao</source>
+        <translation>Lao</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="844"/>
+        <source>Latin</source>
+        <translation>Latijn</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="845"/>
+        <source>Latvian</source>
+        <translation>Lets</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="846"/>
+        <source>Lingala</source>
+        <translation>Lingala</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="847"/>
+        <source>Lithuanian</source>
+        <translation>Litouws</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="848"/>
+        <source>Luganda</source>
+        <translation>Luganda</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="849"/>
+        <source>Luxembourgish</source>
+        <translation>Luxemburgs</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="850"/>
+        <source>Macedonian</source>
+        <translation>Macedonisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="851"/>
+        <source>Maithili</source>
+        <translation>Maithili</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="852"/>
+        <source>Malagasy</source>
+        <translation>Malagassisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="853"/>
+        <source>Malay</source>
+        <translation>Maleis</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="854"/>
+        <source>Malayalam</source>
+        <translation>Malayalam</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="855"/>
+        <source>Maltese</source>
+        <translation>Maltees</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="856"/>
+        <source>Maori</source>
+        <translation>Maori</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="857"/>
+        <source>Marathi</source>
+        <translation>Marathi</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="858"/>
+        <source>Meiteilon (Manipuri)</source>
+        <translation>Meiteilon (Manipuri)</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="859"/>
+        <source>Mizo</source>
+        <translation>Mizo</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="860"/>
+        <source>Mongolian</source>
+        <translation>Mongools</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="861"/>
+        <source>Myanmar (Burmese)</source>
+        <translation>Myanmar (Burmees)</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="862"/>
+        <source>Nepali</source>
+        <translation>Nepalees</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="863"/>
+        <source>Norwegian</source>
+        <translation>Noors</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="864"/>
+        <source>Nyanja (Chichewa)</source>
+        <translation>Nyanja (Chichewa)</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="865"/>
+        <source>Odia (Oriya)</source>
+        <translation>Odia (Oriya)</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="866"/>
+        <source>Oromo</source>
+        <translation>Oromo</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="867"/>
+        <source>Pashto</source>
+        <translation>Pashto</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="868"/>
+        <source>Persian</source>
+        <translation>Perzisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="869"/>
+        <source>Polish</source>
+        <translation>Pools</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="870"/>
+        <source>Portuguese (Portugal, Brazil)</source>
+        <translation>Portugees (Portugal, Brazilië)</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="871"/>
+        <source>Punjabi</source>
+        <translation>Punjabi</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="872"/>
+        <source>Quechua</source>
+        <translation>Quechua</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="873"/>
+        <source>Romanian</source>
+        <translation>Romaans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="874"/>
+        <source>Russian</source>
+        <translation>Russisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="875"/>
+        <source>Samoan</source>
+        <translation>Samoaans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="876"/>
+        <source>Sanskrit</source>
+        <translation>Sanskriet</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="877"/>
+        <source>Scots Gaelic</source>
+        <translation>Schots Gaelic</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="878"/>
+        <source>Sepedi</source>
+        <translation>Sepedi</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="879"/>
+        <source>Serbian</source>
+        <translation>Servisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="880"/>
+        <source>Sesotho</source>
+        <translation>Sesotho</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="881"/>
+        <source>Shona</source>
+        <translation>Shona</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="882"/>
+        <source>Sindhi</source>
+        <translation>Sindhi</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="883"/>
+        <source>Sinhala (Sinhalese)</source>
+        <translation>Sinhala (Sinhalees)</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="884"/>
+        <source>Slovak</source>
+        <translation>Slowaaks</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="885"/>
+        <source>Slovenian</source>
+        <translation>Sloveens</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="886"/>
+        <source>Somali</source>
+        <translation>Somalisch</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="887"/>
+        <source>Spanish</source>
+        <translation>Spaans</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="888"/>
+        <source>Sundanese</source>
+        <translation>Sundanees</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="889"/>
+        <source>Swahili</source>
+        <translation>Swahili</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="890"/>
+        <source>Swedish</source>
+        <translation>Zweeds</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="891"/>
+        <source>Tagalog (Filipino)</source>
+        <translation>Tagalog (Filipijns)</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="892"/>
+        <source>Tajik</source>
+        <translation>Tajik</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="893"/>
+        <source>Tamil</source>
+        <translation>Tamil</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="894"/>
+        <source>Tatar</source>
+        <translation>Tatar</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="895"/>
+        <source>Telugu</source>
+        <translation>Telugu</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="896"/>
+        <source>Thai</source>
+        <translation>Thai</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="897"/>
+        <source>Tigrinya</source>
+        <translation>Tigrinya</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="898"/>
+        <source>Tsonga</source>
+        <translation>Tsonga</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="899"/>
+        <source>Turkish</source>
+        <translation>Turks</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="900"/>
+        <source>Turkmen</source>
+        <translation>Turkmeens</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="901"/>
+        <source>Twi (Akan)</source>
+        <translation>Twi (Akan)</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="902"/>
+        <source>Ukrainian</source>
+        <translation>Oekraïens</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="903"/>
+        <source>Urdu</source>
+        <translation>Urdu</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="904"/>
+        <source>Uyghur</source>
+        <translation>Uyghur</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="905"/>
+        <source>Uzbek</source>
+        <translation>Oezbeeks</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="906"/>
+        <source>Vietnamese</source>
+        <translation>Vietnamees</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="907"/>
+        <source>Welsh</source>
+        <translation>Welsh</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="908"/>
+        <source>Xhosa</source>
+        <translation>Xhosa</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="909"/>
+        <source>Yiddish</source>
+        <translation>Joods</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="910"/>
+        <source>Yoruba</source>
+        <translation>Yoruba</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="911"/>
+        <source>Zulu</source>
+        <translation>Zulu</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="930"/>
+        <source>Translated text</source>
+        <translation>Vertaalde tekst</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="934"/>
+        <source>Prompt</source>
+        <translation>Suggestie</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="935"/>
+        <source>Insert result</source>
+        <translation>Resultaat invoegen</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="936"/>
+        <source>at the beginning of the document</source>
+        <translation>aan het begin van het document</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="937"/>
+        <source>at the cursor position</source>
+        <translation>op de cursorlocatie</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="938"/>
+        <source>at the end of the document</source>
+        <translation>aan het einde van het document</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/text_generation/text_generation_view.cpp" line="941"/>
+        <source>purchase</source>
+        <translation>Aanschaffen</translation>
     </message>
 </context>
 <context>
