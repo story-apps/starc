@@ -60,7 +60,7 @@ bool stringEndsWithAbbrev(const QString& _text)
  * @brief Функции для получения корректных кавычек в зависимости от локали приложения
  */
 /** @{ */
-QString localeQuote(bool _open)
+QString localeDoubleQuote(bool _open)
 {
     switch (QLocale().language()) {
     default: {
@@ -86,13 +86,38 @@ QString localeQuote(bool _open)
     }
     }
 }
-QString localOpenQuote()
+QString localOpenDoubleQuote()
 {
-    return localeQuote(true);
+    return localeDoubleQuote(true);
 }
-QString localCloseQuote()
+QString localCloseDoubleQuote()
 {
-    return localeQuote(false);
+    return localeDoubleQuote(false);
+}
+//
+QString localeSingleQuote(bool _open)
+{
+    switch (QLocale().language()) {
+    default: {
+        return "\'";
+    }
+
+    case QLocale::English: {
+        if (_open) {
+            return "‘";
+        } else {
+            return "’";
+        }
+    }
+    }
+}
+QString localOpenSingleQuote()
+{
+    return localeSingleQuote(true);
+}
+QString localCloseSingleQuote()
+{
+    return localeSingleQuote(false);
 }
 /** @} */
 
@@ -823,26 +848,55 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     //
     // Корректируем кавычки
     //
-    if (d->smartQuotes && _eventText == "\"" && localOpenQuote() != "\"") {
+    if (d->smartQuotes) {
         //
-        // Выделим введённый символ
+        // ... двойные кавычки
         //
-        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 1);
-        //
-        // Определим предшествующий текст
-        //
-        QTextCursor cursorCopy = cursor;
-        cursorCopy.setPosition(cursor.selectionStart());
-        cursorCopy.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+        if (_eventText == "\"") {
+            //
+            // Выделим введённый символ
+            //
+            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 1);
+            //
+            // Определим предшествующий текст
+            //
+            QTextCursor cursorCopy = cursor;
+            cursorCopy.setPosition(cursor.selectionStart());
+            cursorCopy.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
 
-        if (cursorCopy.selectedText().isEmpty()
-            || QStringList({ " ", "(" }).contains(cursorCopy.selectedText().right(1))) {
-            cursor.insertText(localOpenQuote());
-        } else {
-            cursor.insertText(localCloseQuote());
+            if (cursorCopy.selectedText().isEmpty()
+                || QStringList({ " ", "(" }).contains(cursorCopy.selectedText().right(1))) {
+                cursor.insertText(localOpenDoubleQuote());
+            } else {
+                cursor.insertText(localCloseDoubleQuote());
+            }
+
+            return true;
         }
+        //
+        // ... одинарные кавычки
+        //
+        else if (_eventText == "\'") {
+            //
+            // Выделим введённый символ
+            //
+            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 1);
+            //
+            // Определим предшествующий текст
+            //
+            QTextCursor cursorCopy = cursor;
+            cursorCopy.setPosition(cursor.selectionStart());
+            cursorCopy.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
 
-        return true;
+            if (cursorCopy.selectedText().isEmpty()
+                || QStringList({ " ", "(" }).contains(cursorCopy.selectedText().right(1))) {
+                cursor.insertText(localOpenSingleQuote());
+            } else {
+                cursor.insertText(localCloseSingleQuote());
+            }
+
+            return true;
+        }
     }
 
     //
