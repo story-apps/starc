@@ -293,6 +293,8 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
             ignoreWord(sceneIntro.endsWith('.') ? sceneIntro.chopped(1) : sceneIntro);
         }
     }
+
+    emit cursorPositionChanged();
 }
 
 void ScreenplayTextEdit::reinit()

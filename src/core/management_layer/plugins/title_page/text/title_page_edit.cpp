@@ -351,6 +351,8 @@ void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
     // изменений
     //
     d->document.setModel(d->model);
+
+    emit cursorPositionChanged();
 }
 
 void TitlePageEdit::reinit()

@@ -265,6 +265,8 @@ void ScreenplayTreatmentEdit::initWithModel(BusinessLayer::ScreenplayTextModel* 
             ignoreWord(sceneIntro.endsWith('.') ? sceneIntro.chopped(1) : sceneIntro);
         }
     }
+
+    emit cursorPositionChanged();
 }
 
 void ScreenplayTreatmentEdit::reinit()

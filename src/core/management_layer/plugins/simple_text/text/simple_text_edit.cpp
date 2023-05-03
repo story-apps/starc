@@ -187,6 +187,8 @@ void SimpleTextEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
         connect(d->model, &BusinessLayer::SimpleTextModel::dataChanged, this,
                 qOverload<>(&SimpleTextEdit::update));
     }
+
+    emit cursorPositionChanged();
 }
 
 void SimpleTextEdit::reinit()

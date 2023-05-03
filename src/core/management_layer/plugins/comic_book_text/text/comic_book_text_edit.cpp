@@ -226,6 +226,8 @@ void ComicBookTextEdit::initWithModel(BusinessLayer::ComicBookTextModel* _model)
                 &BusinessLayer::ComicBookInformationModel::footerChanged, this,
                 &ComicBookTextEdit::setFooter);
     }
+
+    emit cursorPositionChanged();
 }
 
 void ComicBookTextEdit::reinit()

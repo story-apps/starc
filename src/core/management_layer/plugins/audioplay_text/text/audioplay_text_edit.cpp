@@ -216,6 +216,8 @@ void AudioplayTextEdit::initWithModel(BusinessLayer::AudioplayTextModel* _model)
                 &BusinessLayer::AudioplayInformationModel::footerChanged, this,
                 &AudioplayTextEdit::setFooter);
     }
+
+    emit cursorPositionChanged();
 }
 
 void AudioplayTextEdit::reinit()

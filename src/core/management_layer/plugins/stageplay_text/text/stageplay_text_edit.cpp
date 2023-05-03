@@ -216,6 +216,8 @@ void StageplayTextEdit::initWithModel(BusinessLayer::StageplayTextModel* _model)
                 &BusinessLayer::StageplayInformationModel::footerChanged, this,
                 &StageplayTextEdit::setFooter);
     }
+
+    emit cursorPositionChanged();
 }
 
 void StageplayTextEdit::reinit()

@@ -239,6 +239,8 @@ void NovelOutlineEdit::initWithModel(BusinessLayer::NovelTextModel* _model)
         connect(d->model->informationModel(), &BusinessLayer::NovelInformationModel::footerChanged,
                 this, &NovelOutlineEdit::setFooter);
     }
+
+    emit cursorPositionChanged();
 }
 
 void NovelOutlineEdit::reinit()
