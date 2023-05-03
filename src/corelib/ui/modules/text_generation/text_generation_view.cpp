@@ -633,21 +633,18 @@ void TextGenerationView::setReadOnly(bool _readOnly)
     }
 
     d->isReadOnly = _readOnly;
-    for (auto button : {
-             d->openRephraseButton,
-             d->openExpandButton,
-             d->openShortenButton,
-             d->openInsertButton,
-             d->openSummarizeButton,
-             d->openTranslateButton,
-             d->openGenerateButton,
+    for (auto button : std::vector<QWidget*>{
+             d->buttonsPage,
+             d->rephrasePage,
+             d->expandPage,
+             d->shortenPage,
+             d->insertPage,
+             d->summarizePage,
+             d->translatePage,
+             d->generatePage,
          }) {
         button->setEnabled(!_readOnly);
     }
-
-    //
-    // TODO: все остальные поля тоже задизейблить
-    //
 }
 
 void TextGenerationView::setGenerationPromptHint(const QString& _hint)
@@ -713,12 +710,6 @@ void TextGenerationView::setAvailableWords(int _availableWords)
     d->availableWordsLabel->setText(_availableWords > 0
                                         ? tr("%n word(s) available", nullptr, _availableWords)
                                         : tr("No words available"));
-
-    //    d->buyCreditsLabel->setVisible(_availableWords > 0);
-
-    //
-    // TODO: Заблокировать кнопки генерации, если кончились кредиты и показать кнопку пополнения
-    //
 }
 
 void TextGenerationView::updateTranslations()

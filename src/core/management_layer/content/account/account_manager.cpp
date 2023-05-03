@@ -293,15 +293,17 @@ void AccountManager::setAccountInfo(const Domain::AccountInfo& _accountInfo)
     // Тут для простоты берём последнюю из действующих подписок, т.к. если их несколько,
     // то первая будет PRO Lifetime
     //
-    const auto& subscription = d->accountInfo.subscriptions.constLast();
-    if (currentDateTime < subscription.end) {
-        //
-        // Т.к. таймер запускается на int миллисекунд, нельзя в него передавать слишком большое
-        // значение (количество миллисекунд до самого конца подписки), выходящее за пределы INT_MAX
-        //
-        const qint64 maxInterval = INT_MAX;
-        const auto interval = std::min(currentDateTime.msecsTo(subscription.end), maxInterval);
-        d->subscriptionEndsTimer.start(interval);
+    if (!d->accountInfo.subscriptions.isEmpty()) {
+        const auto& subscription = d->accountInfo.subscriptions.constLast();
+        if (currentDateTime < subscription.end) {
+            //
+            // Т.к. таймер запускается на int миллисекунд, нельзя в него передавать слишком большое
+            // значение (количество миллисекунд до самого конца подписки), выходящее за INT_MAX
+            //
+            const qint64 maxInterval = INT_MAX;
+            const auto interval = std::min(currentDateTime.msecsTo(subscription.end), maxInterval);
+            d->subscriptionEndsTimer.start(interval);
+        }
     }
 
     //
@@ -508,6 +510,14 @@ void AccountManager::renewTeam()
 
 void AccountManager::buyCredits()
 {
+    //
+    // Если ещё не авторизован, то отправим на авторизацию
+    //
+    if (d->accountInfo.email.isEmpty()) {
+        signIn();
+        return;
+    }
+
     auto creditPaymentOptions = d->accountInfo.paymentOptions;
     for (int index = creditPaymentOptions.size() - 1; index >= 0; --index) {
         const auto& option = creditPaymentOptions.at(index);

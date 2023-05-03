@@ -2844,7 +2844,10 @@ void ApplicationManager::initConnections()
                 d->menuView->setAccountName(_accountInfo.name);
                 d->menuView->setAccountEmail(_accountInfo.email);
                 d->projectsManager->setProjectsInCloudCanBeCreated(
-                    true, _accountInfo.subscriptions.constLast().type);
+                    true,
+                    (_accountInfo.subscriptions.isEmpty()
+                         ? Domain::SubscriptionType::Undefined
+                         : _accountInfo.subscriptions.constLast().type));
                 d->projectManager->checkAvailabilityToEdit();
                 d->projectManager->setAvailableCredits(_accountInfo.credits);
             });
@@ -3180,6 +3183,8 @@ void ApplicationManager::initConnections()
     //
     // Генерация текста
     //
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::buyCreditsRequested,
+            d->accountManager.data(), &AccountManager::buyCredits);
     connect(d->projectManager.data(), &ProjectManager::rephraseTextRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiRephraseText);
     connect(d->projectManager.data(), &ProjectManager::expandTextRequested,

@@ -385,6 +385,10 @@ void AccountView::setAccountInfo(const Domain::AccountInfo& _account)
     d->subscriptionUpgradeToPro->hide();
     d->subscriptionUpgradeToTeam->hide();
 
+    if (_account.subscriptions.isEmpty()) {
+        return;
+    }
+
     const auto subscription = _account.subscriptions.constLast();
     switch (subscription.type) {
     case Domain::SubscriptionType::Free: {
