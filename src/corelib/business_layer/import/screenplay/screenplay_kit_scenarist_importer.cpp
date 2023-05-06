@@ -466,7 +466,6 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
         if (blockType == TextParagraphType::SequenceFooter) {
             writer.writeEndElement(); // контент текущей папки
             writer.writeEndElement(); // текущая папка
-            break;
         }
 
         //
@@ -491,7 +490,7 @@ ScreenplayAbstractImporter::Documents ScreenplayKitScenaristImporter::importDocu
         database.setDatabaseName(_options.filePath);
         if (database.open()) {
             //
-            // Загрузим данные о прсонажах
+            // Загрузим данные о персонажах
             //
             if (_options.importCharacters) {
                 QSqlQuery charactersQuery(database);
