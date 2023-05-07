@@ -179,15 +179,21 @@ QSize TreeDelegate::sizeHint(const QStyleOptionViewItem& _option, const QModelIn
     Q_UNUSED(_option)
     Q_UNUSED(_index)
 
-    return QSizeF(Ui::DesignSystem::treeOneLineItem().margins().left()
-                      + TextHelper::fineTextWidthF(_index.data().toString(),
-                                                   Ui::DesignSystem::font().subtitle2())
-                      + Ui::DesignSystem::treeOneLineItem().margins().right()
-                      // ... для последнего столбца, добавляем дополнительный отступ от края
-                      + (_index.column() == _index.model()->columnCount() - 1
-                             ? Ui::DesignSystem::layout().px24()
-                             : 0.0),
-                  Ui::DesignSystem::treeOneLineItem().height())
+    return QSizeF(
+               Ui::DesignSystem::treeOneLineItem().margins().left()
+                   // ... если задана иконка, то добавляем её ширину и оступ между иконкой и текстом
+                   + (_index.data(Qt::DecorationRole).isValid()
+                          ? Ui::DesignSystem::treeOneLineItem().iconSize().width()
+                              + Ui::DesignSystem::treeOneLineItem().spacing()
+                          : 0.0)
+                   + TextHelper::fineTextWidthF(_index.data().toString(),
+                                                Ui::DesignSystem::font().subtitle2())
+                   + Ui::DesignSystem::treeOneLineItem().margins().right()
+                   // ... для последнего столбца, добавляем дополнительный отступ от края
+                   + (_index.column() == _index.model()->columnCount() - 1
+                          ? Ui::DesignSystem::layout().px24()
+                          : 0.0),
+               Ui::DesignSystem::treeOneLineItem().height())
         .toSize();
 }
 
