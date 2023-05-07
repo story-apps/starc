@@ -31,7 +31,11 @@ const QLatin1String kItemHasIdsAttribute("has_ids");
 struct ColorsComparator {
     bool operator()(const QPair<QString, QColor>& _lhs, const QPair<QString, QColor>& _rhs) const
     {
-        return _lhs.first < _rhs.first && _lhs.second.name() < _rhs.second.name();
+        if (_lhs.first != _rhs.first) {
+            return _lhs.first < _rhs.first;
+        }
+
+        return _lhs.second.name() < _rhs.second.name();
     }
 };
 
