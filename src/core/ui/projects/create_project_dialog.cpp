@@ -400,8 +400,8 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->cloudProjectCreationActionNote,
              d->advancedSettingsButton,
          }) {
-        widget->setTextColor(Ui::DesignSystem::color().onBackground());
-        widget->setBackgroundColor(Ui::DesignSystem::color().background());
+        widget->setTextColor(DesignSystem::color().onBackground());
+        widget->setBackgroundColor(DesignSystem::color().background());
     }
 
     for (auto textField : std::vector<TextField*>{
@@ -410,36 +410,38 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->projectFolder,
              d->importFilePath,
          }) {
-        textField->setTextColor(Ui::DesignSystem::color().onBackground());
-        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+        textField->setTextColor(DesignSystem::color().onBackground());
+        textField->setBackgroundColor(DesignSystem::color().onBackground());
     }
+    d->projectName->setCustomMargins({ DesignSystem::layout().px24(),
+                                       DesignSystem::compactLayout().px16(),
+                                       DesignSystem::layout().px24(), 0 });
     for (auto combobox : {
              d->projectType,
          }) {
-        combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+        combobox->setPopupBackgroundColor(DesignSystem::color().background());
     }
 
-    d->cloudProjectCreationNote->setContentsMargins(QMarginsF(Ui::DesignSystem::layout().px24(),
-                                                              Ui::DesignSystem::layout().px8(),
-                                                              Ui::DesignSystem::layout().px24(), 0)
+    d->cloudProjectCreationNote->setContentsMargins(QMarginsF(DesignSystem::layout().px24(),
+                                                              DesignSystem::layout().px8(),
+                                                              DesignSystem::layout().px24(), 0)
                                                         .toMargins());
-    d->cloudProjectCreationAction->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(), 0.0, Ui::DesignSystem::layout().px4(),
-                  Ui::DesignSystem::layout().px12())
-            .toMargins());
-    d->cloudProjectCreationAction->setTextColor(Ui::DesignSystem::color().accent());
+    d->cloudProjectCreationAction->setContentsMargins(QMarginsF(DesignSystem::layout().px24(), 0.0,
+                                                                DesignSystem::layout().px4(),
+                                                                DesignSystem::layout().px12())
+                                                          .toMargins());
+    d->cloudProjectCreationAction->setTextColor(DesignSystem::color().accent());
     d->cloudProjectCreationActionNote->setContentsMargins(
-        QMarginsF(0, 0.0, Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px12())
+        QMarginsF(0, 0.0, DesignSystem::layout().px24(), DesignSystem::layout().px12())
             .toMargins());
     for (auto button : { d->cancelButton, d->createButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
+        button->setBackgroundColor(DesignSystem::color().accent());
+        button->setTextColor(DesignSystem::color().accent());
     }
 
-    contentsLayout()->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
     d->buttonsLayout->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12())
+        QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+                  DesignSystem::layout().px16(), DesignSystem::layout().px12())
             .toMargins());
 }
 
