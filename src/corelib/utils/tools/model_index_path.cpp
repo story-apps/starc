@@ -11,6 +11,16 @@ ModelIndexPath::ModelIndexPath(const QModelIndex& _index)
     }
 }
 
+QList<int> ModelIndexPath::path() const
+{
+    return m_path;
+}
+
+bool ModelIndexPath::operator==(const ModelIndexPath& _other) const
+{
+    return m_path == _other.m_path;
+}
+
 bool ModelIndexPath::operator<(const ModelIndexPath& _other) const
 {
     return m_path < _other.m_path;

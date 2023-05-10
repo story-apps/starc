@@ -56,6 +56,11 @@ public:
     bool isCurtain = false;
 
     /**
+     * @brief Отображать ли панель в плоском виде
+     */
+    bool isFlat = false;
+
+    /**
      * @brief Иконка на которой кликнули последней
      */
     QAction* lastPressedAction = nullptr;
@@ -108,6 +113,10 @@ void FloatingToolBar::Implementation::animateClick()
 
 void FloatingToolBar::Implementation::animateHoverIn()
 {
+    if (isFlat) {
+        return;
+    }
+
     if (shadowBlurRadiusAnimation.direction() == QVariantAnimation::Forward
         && shadowBlurRadiusAnimation.currentValue() == shadowBlurRadiusAnimation.endValue()) {
         return;
@@ -121,6 +130,10 @@ void FloatingToolBar::Implementation::animateHoverIn()
 
 void FloatingToolBar::Implementation::animateHoverOut()
 {
+    if (isFlat) {
+        return;
+    }
+
     opacityAnimation.setDirection(QVariantAnimation::Backward);
     opacityAnimation.start();
     shadowBlurRadiusAnimation.setDirection(QVariantAnimation::Backward);
@@ -234,6 +247,16 @@ void FloatingToolBar::setCurtain(bool _curtain)
     }
 
     d->isCurtain = _curtain;
+    update();
+}
+
+void FloatingToolBar::setFlat(bool _flat)
+{
+    if (d->isFlat == _flat) {
+        return;
+    }
+
+    d->isFlat = _flat;
     update();
 }
 
@@ -394,13 +417,15 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     //
     // ... рисуем тень
     //
-    const qreal shadowBlurRadius
-        = std::max(Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius(),
-                   d->shadowBlurRadiusAnimation.currentValue().toReal());
-    const QPixmap shadow = ImageHelper::dropShadow(
-        backgroundImage, Ui::DesignSystem::floatingToolBar().shadowMargins(), shadowBlurRadius,
-        Ui::DesignSystem::color().shadow());
-    painter.drawPixmap(0, 0, shadow);
+    if (!d->isFlat) {
+        const qreal shadowBlurRadius
+            = std::max(Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius(),
+                       d->shadowBlurRadiusAnimation.currentValue().toReal());
+        const QPixmap shadow = ImageHelper::dropShadow(
+            backgroundImage, Ui::DesignSystem::floatingToolBar().shadowMargins(), shadowBlurRadius,
+            Ui::DesignSystem::color().shadow());
+        painter.drawPixmap(0, 0, shadow);
+    }
     //
     // ... рисуем сам фон
     //

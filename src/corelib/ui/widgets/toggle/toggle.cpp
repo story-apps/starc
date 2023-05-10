@@ -121,6 +121,11 @@ void Toggle::setChecked(bool _checked)
     emit checkedChanged(d->isChecked);
 }
 
+void Toggle::toggle()
+{
+    setChecked(!isChecked());
+}
+
 QSize Toggle::minimumSizeHint() const
 {
     return d->contentSize().toSize();

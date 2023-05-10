@@ -26,6 +26,11 @@ public:
     void setCurtain(bool _curtain);
 
     /**
+     * @brief Задать плоский режим работы тулбара
+     */
+    void setFlat(bool _flat);
+
+    /**
      * @brief Задать стартовую прозрачность
      */
     void setStartOpacity(qreal _opacity);

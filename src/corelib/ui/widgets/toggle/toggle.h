@@ -19,6 +19,7 @@ public:
      */
     bool isChecked() const;
     void setChecked(bool _checked);
+    void toggle();
 
     /**
      * @brief Минимальный размер виджета
