@@ -1550,7 +1550,8 @@ SettingsView::SettingsView(QWidget* _parent)
             actions.append(editAction);
         }
         //
-        auto duplicateAction = new QAction(tr("Create new based on current"), d->contextMenu);
+        auto duplicateAction
+            = new QAction(tr("Create new template based on current"), d->contextMenu);
         connect(duplicateAction, &QAction::triggered, this, [this, templateId] {
             emit duplicateCurrentSimpleTextEditorTemplateRequested(templateId);
         });
@@ -1710,7 +1711,8 @@ SettingsView::SettingsView(QWidget* _parent)
             actions.append(editAction);
         }
         //
-        auto duplicateAction = new QAction(tr("Create new based on current"), d->contextMenu);
+        auto duplicateAction
+            = new QAction(tr("Create new template based on current"), d->contextMenu);
         connect(duplicateAction, &QAction::triggered, this, [this, templateId] {
             emit duplicateCurrentScreenplayEditorTemplateRequested(templateId);
         });
@@ -2001,7 +2003,8 @@ SettingsView::SettingsView(QWidget* _parent)
             actions.append(editAction);
         }
         //
-        auto duplicateAction = new QAction(tr("Create new based on current"), d->contextMenu);
+        auto duplicateAction
+            = new QAction(tr("Create new template based on current"), d->contextMenu);
         connect(duplicateAction, &QAction::triggered, this, [this, templateId] {
             emit duplicateCurrentComicBookEditorTemplateRequested(templateId);
         });
@@ -2130,7 +2133,8 @@ SettingsView::SettingsView(QWidget* _parent)
             actions.append(editAction);
         }
         //
-        auto duplicateAction = new QAction(tr("Create new based on current"), d->contextMenu);
+        auto duplicateAction
+            = new QAction(tr("Create new template based on current"), d->contextMenu);
         connect(duplicateAction, &QAction::triggered, this, [this, templateId] {
             emit duplicateCurrentAudioplayEditorTemplateRequested(templateId);
         });
@@ -2275,7 +2279,8 @@ SettingsView::SettingsView(QWidget* _parent)
             actions.append(editAction);
         }
         //
-        auto duplicateAction = new QAction(tr("Create new based on current"), d->contextMenu);
+        auto duplicateAction
+            = new QAction(tr("Create new template based on current"), d->contextMenu);
         connect(duplicateAction, &QAction::triggered, this, [this, templateId] {
             emit duplicateCurrentStageplayEditorTemplateRequested(templateId);
         });
@@ -2396,7 +2401,8 @@ SettingsView::SettingsView(QWidget* _parent)
             actions.append(editAction);
         }
         //
-        auto duplicateAction = new QAction(tr("Create new based on current"), d->contextMenu);
+        auto duplicateAction
+            = new QAction(tr("Create new template based on current"), d->contextMenu);
         connect(duplicateAction, &QAction::triggered, this, [this, templateId] {
             emit duplicateCurrentNovelEditorTemplateRequested(templateId);
         });

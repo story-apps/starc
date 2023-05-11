@@ -250,7 +250,7 @@ bool ProjectNavigator::eventFilter(QObject* _watched, QEvent* _event)
     if (_watched == d->tree && _event->type() == QEvent::ToolTip) {
         QHelpEvent* event = static_cast<QHelpEvent*>(_event);
         if (d->isOnDocumentNavigatorButton(event->pos())) {
-            QToolTip::showText(event->globalPos(), tr("Show document navigator"));
+            QToolTip::showText(event->globalPos(), tr("Show document structure"));
         }
     }
     return StackWidget::eventFilter(_watched, _event);

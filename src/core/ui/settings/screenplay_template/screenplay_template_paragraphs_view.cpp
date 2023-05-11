@@ -936,7 +936,6 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
                                       isLeftToRight() ? 0.0 : DesignSystem::layout().px24(), 0.0 });
     }
     for (auto textField : std::vector<TextField*>{
-             d->fontSize,
              d->bottomIndent,
              d->firstLineIndent,
              d->rightIndent,
@@ -947,6 +946,11 @@ void ScreenplayTemplateParagraphsView::designSystemChangeEvent(DesignSystemChang
             { isLeftToRight() ? DesignSystem::compactLayout().px16() : 0.0, 0.0,
               isLeftToRight() ? 0.0 : DesignSystem::compactLayout().px16(), 0.0 });
     }
+    d->fontSize->setCustomMargins(
+        { isLeftToRight() ? DesignSystem::compactLayout().px16() : DesignSystem::layout().px24(),
+          0.0,
+          isLeftToRight() ? DesignSystem::layout().px24() : DesignSystem::compactLayout().px16(),
+          0.0 });
     for (auto combobox : {
              d->fontFamily,
              d->fontSize,
