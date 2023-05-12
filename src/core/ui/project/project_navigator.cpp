@@ -78,7 +78,7 @@ bool ProjectNavigator::Implementation::isOnDocumentNavigatorButton(const QPoint&
 {
     const auto isNavigatorAvailable
         = q->currentIndex()
-              .data(static_cast<int>(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable))
+              .data(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable)
               .toBool();
     if (!isNavigatorAvailable) {
         return false;

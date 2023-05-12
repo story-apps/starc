@@ -730,9 +730,16 @@ QVariant StructureModel::data(const QModelIndex& _index, int _role) const
     //
     // Кастомные данные модели
     //
-    if (static_cast<StructureModelDataRole>(_role)
-        == StructureModelDataRole::IsNavigatorAvailable) {
+    switch (_role) {
+    case StructureModelDataRole::DocumentUuidRole: {
+        return itemForIndex(_index)->uuid();
+    }
+    case StructureModelDataRole::IsNavigatorAvailable: {
         return d->navigatorAvailableIndexes.contains(_index);
+    }
+    default: {
+        break;
+    }
     }
 
     //

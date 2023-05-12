@@ -28,9 +28,7 @@ void ProjectTreeDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& 
     //
     const auto isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
     const auto hasDecoration = opt.state.testFlag(QStyle::State_Selected)
-        && _index
-               .data(static_cast<int>(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable))
-               .toBool();
+        && _index.data(BusinessLayer::StructureModelDataRole::IsNavigatorAvailable).toBool();
     const auto decorationWidth = Ui::DesignSystem::treeOneLineItem().iconSize().width();
     const auto canDrawDecoration = opt.rect.width() > decorationWidth * 2;
     if (hasDecoration && canDrawDecoration) {

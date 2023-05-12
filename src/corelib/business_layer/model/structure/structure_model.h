@@ -15,7 +15,10 @@ class StructureModelItem;
 /**
  * @brief Список ролей дополнительных данных для навигатора
  */
-enum class StructureModelDataRole { IsNavigatorAvailable = Qt::UserRole + 1 };
+enum StructureModelDataRole {
+    DocumentUuidRole = Qt::UserRole + 1,
+    IsNavigatorAvailable,
+};
 
 
 /**

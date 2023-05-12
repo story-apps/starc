@@ -8,6 +8,7 @@ struct ProjectCollaboratorInfo;
 }
 
 namespace BusinessLayer {
+class StructureModel;
 
 class CORE_LIBRARY_EXPORT ProjectInformationModel : public AbstractModel
 {
@@ -32,6 +33,9 @@ public:
     void setCover(const QUuid& _uuid, const QPixmap& _cover);
     Q_SIGNAL void coverChanged(const QPixmap& _cover);
 
+    BusinessLayer::StructureModel* structureModel() const;
+    void setStructureModel(BusinessLayer::StructureModel* _model);
+
     QVector<Domain::ProjectCollaboratorInfo> collaborators() const;
     void setCollaborators(const QVector<Domain::ProjectCollaboratorInfo>& _collaborators);
     Q_SIGNAL void collaboratorsChanged(
@@ -41,8 +45,10 @@ signals:
     /**
      * @brief Пользователь хочет добавить соавтора в проект
      */
-    void collaboratorInviteRequested(const QString& _email, const QColor& _color, int _role);
-    void collaboratorUpdateRequested(const QString& _email, const QColor& _color, int _role);
+    void collaboratorInviteRequested(const QString& _email, const QColor& _color, int _role,
+                                     const QHash<QUuid, int>& _permissions);
+    void collaboratorUpdateRequested(const QString& _email, const QColor& _color, int _role,
+                                     const QHash<QUuid, int>& _permissions);
     void collaboratorRemoveRequested(const QString& _email);
 
 protected:

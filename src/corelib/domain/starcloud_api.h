@@ -191,12 +191,13 @@ struct ProjectCollaboratorInfo {
     QString email;
     int role = 0;
     QColor color;
+    QHash<QUuid, int> permissions;
 };
 
 inline bool operator==(const ProjectCollaboratorInfo& _lhs, const ProjectCollaboratorInfo& _rhs)
 {
     return _lhs.name == _rhs.name && _lhs.email == _rhs.email && _lhs.role == _rhs.role
-        && _lhs.color == _rhs.color;
+        && _lhs.color == _rhs.color && _lhs.permissions == _rhs.permissions;
 }
 
 /**
@@ -208,6 +209,7 @@ struct ProjectInfo {
     QString logline;
     QByteArray poster;
     int accountRole = 0;
+    QHash<QUuid, int> accountPermissions;
     QDateTime lastEditTime;
     QVector<ProjectCollaboratorInfo> collaborators;
 };

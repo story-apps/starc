@@ -1375,8 +1375,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 const auto mappedIndex = d->projectStructureProxyModel->mapToSource(_index);
                 if (!d->projectStructureModel
                          ->data(mappedIndex,
-                                static_cast<int>(
-                                    BusinessLayer::StructureModelDataRole::IsNavigatorAvailable))
+                                BusinessLayer::StructureModelDataRole::IsNavigatorAvailable)
                          .toBool()) {
                     return;
                 }
@@ -2498,24 +2497,12 @@ void ProjectManager::loadCurrentProject(const Project& _project)
         emit projectLoglineChanged(projectInformationModel->logline());
         emit projectCoverChanged(projectInformationModel->cover());
     }
+    projectInformationModel->setStructureModel(d->projectStructureModel);
 
     //
-    // Синхронизировать структуру с облаком
+    // Восстанавливаем состояние проекта
     //
-
-    //
-    // Открыть структуру
-    //
-
     restoreCurrentProjectState(_project.path());
-
-    //
-    // Синхронизировать выбранный документ
-    //
-
-    //
-    // Синхрониировать все остальные изменения
-    //
 }
 
 void ProjectManager::updateCurrentProject(const Project& _project)

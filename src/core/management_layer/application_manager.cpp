@@ -2944,27 +2944,21 @@ void ApplicationManager::initConnections()
             d->cloudServiceManager.data(), &CloudServiceManager::updateProject);
     connect(d->projectManager.data(), &ProjectManager::projectCollaboratorInviteRequested,
             d->projectsManager.data(),
-            [this](const QString& _email, const QColor& _color, int _role) {
+            [this](const QString& _email, const QColor& _color, int _role,
+                   const QHash<QUuid, int>& _permissions) {
                 Q_UNUSED(_color)
-                //
-                // Добавляем единицу, чтобы смапить с облачным перечислением,
-                // т.к. там 0 - владелец проекта
-                //
-                const auto accountRole = _role + 1;
+                const auto accountRole = _role;
                 d->cloudServiceManager->addCollaborator(d->projectsManager->currentProject().id(),
-                                                        _email, accountRole);
+                                                        _email, accountRole, _permissions);
             });
     connect(d->projectManager.data(), &ProjectManager::projectCollaboratorUpdateRequested,
             d->projectsManager.data(),
-            [this](const QString& _email, const QColor& _color, int _role) {
+            [this](const QString& _email, const QColor& _color, int _role,
+                   const QHash<QUuid, int>& _permissions) {
                 Q_UNUSED(_color)
-                //
-                // Добавляем единицу, чтобы смапить с облачным перечислением,
-                // т.к. там 0 - владелец проекта
-                //
-                const auto accountRole = _role + 1;
+                const auto accountRole = _role;
                 d->cloudServiceManager->updateCollaborator(
-                    d->projectsManager->currentProject().id(), _email, accountRole);
+                    d->projectsManager->currentProject().id(), _email, accountRole, _permissions);
             });
     connect(d->projectManager.data(), &ProjectManager::projectCollaboratorRemoveRequested,
             d->projectsManager.data(), [this](const QString& _email) {

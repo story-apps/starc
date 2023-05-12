@@ -238,8 +238,10 @@ signals:
     /**
      * @brief Пользователь хочет изменить список соавторов в проекте
      */
-    void projectCollaboratorInviteRequested(const QString& _email, const QColor& _color, int _role);
-    void projectCollaboratorUpdateRequested(const QString& _email, const QColor& _color, int _role);
+    void projectCollaboratorInviteRequested(const QString& _email, const QColor& _color, int _role,
+                                            const QHash<QUuid, int>& _permissions);
+    void projectCollaboratorUpdateRequested(const QString& _email, const QColor& _color, int _role,
+                                            const QHash<QUuid, int>& _permissions);
     void projectCollaboratorRemoveRequested(const QString& _email);
 
     /**

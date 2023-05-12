@@ -27,6 +27,9 @@ public:
     QString name;
     QString logline;
     Domain::DocumentImage cover;
+
+    StructureModel* structureModel = nullptr;
+
     QVector<Domain::ProjectCollaboratorInfo> collaborators;
 };
 
@@ -136,6 +139,16 @@ void ProjectInformationModel::setCover(const QUuid& _uuid, const QPixmap& _cover
     emit coverChanged(d->cover.image);
 }
 
+StructureModel* ProjectInformationModel::structureModel() const
+{
+    return d->structureModel;
+}
+
+void ProjectInformationModel::setStructureModel(StructureModel* _model)
+{
+    d->structureModel = _model;
+}
+
 QVector<Domain::ProjectCollaboratorInfo> ProjectInformationModel::collaborators() const
 {
     return d->collaborators;
@@ -181,7 +194,14 @@ void ProjectInformationModel::initDocument()
 
 void ProjectInformationModel::clearDocument()
 {
+    //
+    // Сохраняем указатель на модель структуры, чтобы после очистки восстановить его
+    //
+    auto structureModel = d->structureModel;
+
     d.reset(new Implementation);
+
+    d->structureModel = structureModel;
 }
 
 QByteArray ProjectInformationModel::toXml() const
