@@ -305,26 +305,16 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
 
 void StandardKeyHandler::handlePageUp(QKeyEvent* _event)
 {
-    QTextCursor cursor = editor()->textCursor();
-    cursor.beginEditBlock();
-
     for (int line = 0; line < 20; ++line) {
         handleUp(_event);
     }
-
-    cursor.endEditBlock();
 }
 
 void StandardKeyHandler::handlePageDown(QKeyEvent* _event)
 {
-    QTextCursor cursor = editor()->textCursor();
-    cursor.beginEditBlock();
-
     for (int line = 0; line < 20; ++line) {
         handleDown(_event);
     }
-
-    cursor.endEditBlock();
 }
 
 void StandardKeyHandler::handleOther(QKeyEvent*)

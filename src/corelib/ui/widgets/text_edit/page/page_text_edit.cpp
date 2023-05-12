@@ -2206,7 +2206,9 @@ void PageTextEditPrivate::prepareBlockWithCursorPlacementUpdate(QKeyEvent* _even
     // Если включена прокрутка, как в печатной машинке, то регистрируем необходимость скрола
     // при нажатии кнопки, в которой есть текст
     //
-    const QSet<int> keys = { Qt::Key_Enter, Qt::Key_Return, Qt::Key_Backspace, Qt::Key_Delete };
+    const QSet<int> keys = {
+        Qt::Key_Enter, Qt::Key_Return, Qt::Key_Backspace, Qt::Key_Delete, Qt::Key_Up, Qt::Key_Down,
+    };
     needUpdateBlockWithCursorPlacement
         = useTypewriterScrolling && (!_event->text().isEmpty() || keys.contains(_event->key()));
 }
@@ -3891,6 +3893,17 @@ void PageTextEdit::setUseTypewriterScrolling(bool _use)
     }
 
     d->useTypewriterScrolling = _use;
+}
+
+void PageTextEdit::updateTypewriterScroll()
+{
+    Q_D(PageTextEdit);
+    if (!d->useTypewriterScrolling) {
+        return;
+    }
+
+    d->needUpdateBlockWithCursorPlacement = true;
+    d->updateBlockWithCursorPlacement();
 }
 
 void PageTextEdit::stopVerticalScrollAnimation()

@@ -388,6 +388,7 @@ public:
      * @brief Использовать режим прокрутки как в печатной машинке
      */
     void setUseTypewriterScrolling(bool _use);
+    void updateTypewriterScroll();
 
     /**
      * @brief Остановить анимацию вертикального скрола

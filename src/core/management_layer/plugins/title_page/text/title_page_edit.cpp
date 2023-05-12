@@ -478,6 +478,7 @@ void TitlePageEdit::keyPressEvent(QKeyEvent* _event)
     //
     if (!_event->isAccepted()) {
         handler->handle(_event);
+        updateTypewriterScroll();
     }
 
     //
