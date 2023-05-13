@@ -293,7 +293,7 @@ void StageplaySummaryReport::build(QAbstractItemModel* _model)
         };
         addCharacterItemToReport(
             QCoreApplication::translate("BusinessLogic::StageplaySummaryReport",
-                                        "More then 10 dialogues"),
+                                        "More than 10 dialogues"),
             speakMore10);
         addCharacterItemToReport(QCoreApplication::translate(
                                      "BusinessLogic::StageplaySummaryReport", "About 10 dialogues"),

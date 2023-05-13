@@ -440,7 +440,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
         };
         addCharacterItemToReport(
             QCoreApplication::translate("BusinessLogic::ScreenplaySummaryReport",
-                                        "More then 10 dialogues"),
+                                        "More than 10 dialogues"),
             speakMore10);
         addCharacterItemToReport(
             QCoreApplication::translate("BusinessLogic::ScreenplaySummaryReport",
