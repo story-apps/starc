@@ -481,6 +481,15 @@ void ProjectsManager::loadProjects()
             project.setId(projectJson["id"].toInt());
             project.setOwner(projectJson["is_owner"].toBool());
             project.setEditingMode(static_cast<DocumentEditingMode>(projectJson["role"].toInt()));
+
+            QHash<QUuid, DocumentEditingMode> permissions;
+            const auto permissionsJson = projectJson["permissions"].toArray();
+            for (const auto& documentAccessJson : permissionsJson) {
+                const auto documentAccess = documentAccessJson.toObject();
+                permissions[documentAccess["uuid"].toString()]
+                    = static_cast<DocumentEditingMode>(documentAccess["role"].toInt());
+            }
+            project.setEditingPermissions(permissions);
         }
         project.setType(static_cast<ProjectType>(projectJson["type"].toInt()));
         project.setUuid(projectJson["uuid"].toString());
@@ -506,6 +515,16 @@ void ProjectsManager::saveProjects()
             projectJson["id"] = project.id();
             projectJson["is_owner"] = project.isOwner();
             projectJson["role"] = static_cast<int>(project.editingMode());
+
+            QJsonArray permissionsJson;
+            const auto permissions = project.editingPermissions();
+            for (auto iter = permissions.begin(); iter != permissions.end(); ++iter) {
+                QJsonObject documentAccess;
+                documentAccess["uuid"] = iter.key().toString();
+                documentAccess["role"] = static_cast<int>(iter.value());
+                permissionsJson.append(documentAccess);
+            }
+            projectJson["permissions"] = permissionsJson;
         }
         projectJson["type"] = static_cast<int>(project.type());
         projectJson["uuid"] = project.uuid().toString();
@@ -726,6 +745,7 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     if (_projectInfo.accountRole == 0) {
         cloudProject.setOwner(true);
         cloudProject.setEditingMode(DocumentEditingMode::Edit);
+        cloudProject.clearEditingPermissions();
     }
     //
     // В противном случае
@@ -733,6 +753,12 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     else {
         cloudProject.setOwner(false);
         cloudProject.setEditingMode(static_cast<DocumentEditingMode>(_projectInfo.accountRole - 1));
+        QHash<QUuid, DocumentEditingMode> permissions;
+        for (auto iter = _projectInfo.accountPermissions.begin();
+             iter != _projectInfo.accountPermissions.end(); ++iter) {
+            permissions[iter.key()] = static_cast<DocumentEditingMode>(iter.value() - 1);
+        }
+        cloudProject.setEditingPermissions(permissions);
     }
     //
     // Обновим параметры проекта

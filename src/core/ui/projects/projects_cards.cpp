@@ -285,7 +285,7 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
             }
 
             case ManagementLayer::DocumentEditingMode::Comment: {
-                roleIcon = u8"\U000F0208";
+                roleIcon = u8"\U000F0184";
                 roleText = projectsScene()->tr("Commentator");
                 break;
             }
@@ -293,6 +293,12 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
             case ManagementLayer::DocumentEditingMode::Read: {
                 roleIcon = u8"\U000F0208";
                 roleText = projectsScene()->tr("Reader");
+                break;
+            }
+
+            case ManagementLayer::DocumentEditingMode::Mixed: {
+                roleIcon = u8"\U000F11BF";
+                roleText = projectsScene()->tr("Partical access");
                 break;
             }
             }

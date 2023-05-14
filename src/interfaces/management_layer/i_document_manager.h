@@ -23,6 +23,7 @@ enum class DocumentEditingMode {
     Edit = 0,
     Comment,
     Read,
+    Mixed,
 };
 
 /**

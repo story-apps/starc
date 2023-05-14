@@ -628,8 +628,11 @@ void FloatingToolBar::mouseReleaseEvent(QMouseEvent* _event)
         return;
     }
 
-    pressedAction->toggle();
-    update();
+    if (pressedAction->actionGroup() == nullptr
+        || pressedAction->actionGroup()->checkedAction() != pressedAction) {
+        pressedAction->toggle();
+        update();
+    }
 }
 
 void FloatingToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

@@ -139,6 +139,13 @@ public:
     bool isReadOnly() const;
 
     /**
+     * @brief Разрешения на работу с конкретными документами
+     */
+    QHash<QUuid, DocumentEditingMode> editingPermissions() const;
+    void setEditingPermissions(const QHash<QUuid, DocumentEditingMode>& _permissions);
+    void clearEditingPermissions();
+
+    /**
      * @brief Список соавторов
      */
     QVector<Domain::ProjectCollaboratorInfo> collaborators() const;

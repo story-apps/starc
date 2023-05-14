@@ -31,6 +31,11 @@ public:
     void setProjectInfoVisible(bool _visible);
     void setRecycleBinVisible(bool _visible);
 
+    /**
+     * @brief Задать фильтр документов для отображения
+     */
+    void setItemsFilter(const QList<QUuid>& _uuids);
+
 protected:
     /**
      * @brief Фильтровать в соответствии с настройками и с базовыми правилами

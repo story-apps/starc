@@ -29,6 +29,7 @@ public:
     int id = -1;
     bool isOwner = true;
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
+    QHash<QUuid, DocumentEditingMode> editingPermissions;
     QVector<Domain::ProjectCollaboratorInfo> collaborators;
 };
 
@@ -253,6 +254,21 @@ void Project::setEditingMode(DocumentEditingMode _mode)
 bool Project::isReadOnly() const
 {
     return d->editingMode == DocumentEditingMode::Read;
+}
+
+QHash<QUuid, DocumentEditingMode> Project::editingPermissions() const
+{
+    return d->editingPermissions;
+}
+
+void Project::setEditingPermissions(const QHash<QUuid, DocumentEditingMode>& _permissions)
+{
+    d->editingPermissions = _permissions;
+}
+
+void Project::clearEditingPermissions()
+{
+    d->editingPermissions.clear();
 }
 
 QVector<Domain::ProjectCollaboratorInfo> Project::collaborators() const

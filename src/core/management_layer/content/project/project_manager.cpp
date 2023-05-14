@@ -147,6 +147,11 @@ public:
     void openCurrentDocumentInNewWindow();
 
     /**
+     * @brief Режим редакитрования заданного документа
+     */
+    DocumentEditingMode documentEditingMode(BusinessLayer::StructureModelItem* _documentItem) const;
+
+    /**
      * @brief Добавить документ в проект
      */
     void addDocument(Domain::DocumentObjectType _type = Domain::DocumentObjectType::Undefined);
@@ -309,6 +314,11 @@ public:
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
 
     /**
+     * @brief Список документов и разрешения на работу с ними
+     */
+    QHash<QUuid, DocumentEditingMode> editingPermissions;
+
+    /**
      * @brief Список документов и таймеров для полной синхронизации
      */
     mutable QHash<QUuid, QSharedPointer<QTimer>> documentToSyncTimer;
@@ -408,7 +418,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     const auto currentItemIndex = projectStructureProxyModel->mapToSource(_index);
     const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
 
-    const auto enabled = editingMode == DocumentEditingMode::Edit;
+    const auto enabled = documentEditingMode(currentItem) == DocumentEditingMode::Edit;
 
     //
     // Формируем список действий для конкретных элементов структуры проекта
@@ -553,6 +563,51 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
 
         this->view.windows.append(window);
     }
+}
+
+DocumentEditingMode ProjectManager::Implementation::documentEditingMode(
+    BusinessLayer::StructureModelItem* _documentItem) const
+{
+    if (editingPermissions.isEmpty()) {
+        return editingMode;
+    }
+
+    auto uuidToCheck = _documentItem->uuid();
+    switch (_documentItem->type()) {
+    case Domain::DocumentObjectType::ScreenplayTitlePage:
+    case Domain::DocumentObjectType::ScreenplaySynopsis:
+    case Domain::DocumentObjectType::ScreenplayTreatment:
+    case Domain::DocumentObjectType::ScreenplayText:
+    case Domain::DocumentObjectType::ScreenplayStatistics:
+    case Domain::DocumentObjectType::ComicBookTitlePage:
+    case Domain::DocumentObjectType::ComicBookSynopsis:
+    case Domain::DocumentObjectType::ComicBookText:
+    case Domain::DocumentObjectType::ComicBookStatistics:
+    case Domain::DocumentObjectType::AudioplayTitlePage:
+    case Domain::DocumentObjectType::AudioplaySynopsis:
+    case Domain::DocumentObjectType::AudioplayText:
+    case Domain::DocumentObjectType::AudioplayStatistics:
+    case Domain::DocumentObjectType::StageplayTitlePage:
+    case Domain::DocumentObjectType::StageplaySynopsis:
+    case Domain::DocumentObjectType::StageplayText:
+    case Domain::DocumentObjectType::StageplayStatistics:
+    case Domain::DocumentObjectType::NovelTitlePage:
+    case Domain::DocumentObjectType::NovelSynopsis:
+    case Domain::DocumentObjectType::NovelOutline:
+    case Domain::DocumentObjectType::NovelText:
+    case Domain::DocumentObjectType::NovelStatistics:
+    case Domain::DocumentObjectType::Character:
+    case Domain::DocumentObjectType::Location:
+    case Domain::DocumentObjectType::World: {
+        uuidToCheck = _documentItem->parent()->uuid();
+        break;
+    }
+
+    default: {
+        break;
+    }
+    }
+    return editingPermissions.value(uuidToCheck, DocumentEditingMode::Read);
 }
 
 void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _type)
@@ -1820,8 +1875,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 [this](int _versionIndex) {
                     const auto currentItemIndex
                         = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
+                    const auto item = d->projectStructureModel->itemForIndex(currentItemIndex);
 
-                    const auto enabled = d->editingMode == DocumentEditingMode::Edit;
+                    const auto enabled = d->documentEditingMode(item) == DocumentEditingMode::Edit;
 
                     QVector<QAction*> menuActions;
                     auto createNewVersionAction = new QAction;
@@ -2511,7 +2567,9 @@ void ProjectManager::updateCurrentProject(const Project& _project)
     d->isProjectRemote = _project.isRemote();
     d->isProjectOwner = _project.isOwner();
     d->editingMode = _project.editingMode();
+    d->editingPermissions = _project.editingPermissions();
     d->pluginsBuilder.setEditingMode(d->editingMode);
+    d->projectStructureProxyModel->setItemsFilter(d->editingPermissions.keys());
     d->navigator->setReadOnly(d->editingMode != DocumentEditingMode::Edit);
 
     d->projectStructureModel->setProjectName(_project.name());
@@ -3675,7 +3733,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     Log::trace("Set project info");
     view->setProjectInfo(d->isProjectRemote, d->isProjectOwner);
     Log::trace("Set editing mode");
-    view->setEditingMode(d->editingMode);
+    view->setEditingMode(d->documentEditingMode(itemForShow));
     Log::trace("Set document versions");
     d->view.active->setDocumentVersions(aliasedItem->versions());
     Log::trace("Show view");
@@ -3837,7 +3895,8 @@ void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item
         d->view.active->showNotImplementedPage();
         return;
     }
-    view->setEditingMode(_item->isReadOnly() ? DocumentEditingMode::Read : d->editingMode);
+    view->setEditingMode(_item->isReadOnly() ? DocumentEditingMode::Read
+                                             : d->documentEditingMode(_item));
     d->view.active->showEditor(view->asQWidget());
 
     //
