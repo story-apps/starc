@@ -275,6 +275,9 @@ void ScreenplayParametersView::setEditingMode(ManagementLayer::DocumentEditingMo
     const auto enabled = !readOnly;
     d->printHeaderOnTitlePage->setEnabled(enabled);
     d->printFooterOnTitlePage->setEnabled(enabled);
+    d->lockScenesNumbers->setEnabled(enabled);
+    d->relockScenesNumbers->setEnabled(enabled);
+    d->unlockScenesNumbers->setEnabled(enabled);
     d->overrideCommonSettings->setEnabled(enabled);
     d->showSceneNumbers->setEnabled(enabled);
     d->showSceneNumbersOnLeft->setEnabled(enabled);
