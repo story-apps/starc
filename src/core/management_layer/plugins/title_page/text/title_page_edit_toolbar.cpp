@@ -160,12 +160,12 @@ TitlePageEditToolbar::~TitlePageEditToolbar() = default;
 
 void TitlePageEditToolbar::setReadOnly(bool _readOnly)
 {
-    //    const auto enabled = !_readOnly;
-    //    d->undoAction->setEnabled(enabled);
-    //    d->redoAction->setEnabled(enabled);
-    //    d->textFontAction->setEnabled(enabled);
-    //    d->textFontSizeAction->setEnabled(enabled);
-    //    d->restoreTitlePageAction->setEnabled(enabled);
+    const auto enabled = !_readOnly;
+    d->undoAction->setEnabled(enabled);
+    d->redoAction->setEnabled(enabled);
+    d->textFontAction->setEnabled(enabled);
+    d->textFontSizeAction->setEnabled(enabled);
+    d->restoreTitlePageAction->setEnabled(enabled);
 }
 
 void TitlePageEditToolbar::setCurrentFont(const QFont& _font)

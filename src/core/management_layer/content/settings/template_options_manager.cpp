@@ -11,6 +11,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
+#include <interfaces/management_layer/i_document_manager.h>
 #include <interfaces/ui/i_document_view.h>
 #include <management_layer/plugins_builder.h>
 #include <ui/design_system/design_system.h>
@@ -459,10 +460,10 @@ TemplateOptionsManager::TemplateOptionsManager(QObject* _parent, QWidget* _paren
         //
         // Получим редактор титульной страницы
         //
-        d->titlePageView = d->pluginsBuilder
-                               .activateView("application/x-starc/editor/screenplay/title-page",
-                                             &d->titlePageModel)
-                               ->asQWidget();
+        auto titlePageView = d->pluginsBuilder.activateView(
+            "application/x-starc/editor/screenplay/title-page", &d->titlePageModel);
+        titlePageView->setEditingMode(DocumentEditingMode::Edit);
+        d->titlePageView = titlePageView->asQWidget();
 
         //
         // Смещаем тулбар, чтобы он не наезжал на тулбар редактора шаблона
