@@ -567,7 +567,11 @@ void CardItemParametersView::setReadOnly(bool _readOnly)
     }
     d->storyDay->setEnabled(enabled);
     d->stamp->setEnabled(enabled);
+    d->autoNumbering->setEnabled(enabled);
+    d->customNumber->setEnabled(enabled);
+    d->eatNumber->setEnabled(enabled);
     d->addTagButton->setEnabled(enabled);
+    d->tags->setEnabled(enabled);
 }
 
 bool CardItemParametersView::eventFilter(QObject* _watched, QEvent* _event)
