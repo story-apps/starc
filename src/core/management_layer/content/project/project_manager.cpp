@@ -418,7 +418,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     const auto currentItemIndex = projectStructureProxyModel->mapToSource(_index);
     const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
 
-    const auto enabled = documentEditingMode(currentItem) == DocumentEditingMode::Edit;
+    const auto enabled = editingMode == DocumentEditingMode::Edit;
 
     //
     // Формируем список действий для конкретных элементов структуры проекта
