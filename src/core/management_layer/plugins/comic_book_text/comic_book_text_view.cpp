@@ -16,6 +16,7 @@
 #include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/ai_assistant/ai_assistant_view.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
 #include <ui/modules/bookmarks/bookmarks_view.h>
 #include <ui/modules/comments/comments_model.h>
@@ -28,15 +29,20 @@
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/tab_bar/tab_bar.h>
+#include <ui/widgets/task_bar/task_bar.h>
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/measurement_helper.h>
+#include <utils/helpers/text_helper.h>
 #include <utils/helpers/ui_helper.h>
 #include <utils/tools/debouncer.h>
 
 #include <QAction>
+#include <QCoreApplication>
+#include <QElapsedTimer>
 #include <QPointer>
+#include <QRandomGenerator>
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QTimer>
@@ -47,15 +53,19 @@ namespace Ui {
 namespace {
 const int kTypeDataRole = Qt::UserRole + 100;
 
-const int kFastFormatTabIndex = 0;
-const int kCommentsTabIndex = 1;
-const int kBookmarksTabIndex = 2;
+enum {
+    kFastFormatTabIndex = 0,
+    kCommentsTabIndex,
+    kAiAssistantTabIndex,
+    kBookmarksTabIndex,
+};
 
 const QString kSettingsKey = "comicBook-text";
 const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
 const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
 const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+const QString kIsAiAssistantEnabledKey = kSettingsKey + "/is-ai-assistant-enabled";
 const QString kIsItemIsolationEnabledKey = kSettingsKey + "/is-item-isolation-enabled";
 const QString kIsBookmarksListVisibleKey = kSettingsKey + "/is-bookmarks-list-visible";
 const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
@@ -149,6 +159,7 @@ public:
     StackWidget* sidebarContent = nullptr;
     FastFormatWidget* fastFormatWidget = nullptr;
     CommentsView* commentsView = nullptr;
+    AiAssistantView* aiAssistantView = nullptr;
     BookmarksView* bookmarksView = nullptr;
     //
     Splitter* splitter = nullptr;
@@ -182,6 +193,7 @@ ComicBookTextView::Implementation::Implementation(ComicBookTextView* _q)
     , sidebarContent(new StackWidget(_q))
     , fastFormatWidget(new FastFormatWidget(_q))
     , commentsView(new CommentsView(_q))
+    , aiAssistantView(new AiAssistantView(_q))
     , bookmarksView(new BookmarksView(_q))
     , splitter(new Splitter(_q))
     , showBookmarksAction(new QAction(_q))
@@ -207,17 +219,21 @@ ComicBookTextView::Implementation::Implementation(ComicBookTextView* _q)
     sidebarTabs->setTabVisible(kFastFormatTabIndex, false);
     sidebarTabs->addTab({}); // comments
     sidebarTabs->setTabVisible(kCommentsTabIndex, false);
+    sidebarTabs->addTab({}); // ai assistant
+    sidebarTabs->setTabVisible(kAiAssistantTabIndex, false);
     sidebarTabs->addTab({}); // bookmarks
     sidebarTabs->setTabVisible(kBookmarksTabIndex, false);
     sidebarContent->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     sidebarContent->setAnimationType(StackWidget::AnimationType::Slide);
     sidebarContent->addWidget(fastFormatWidget);
     sidebarContent->addWidget(commentsView);
+    sidebarContent->addWidget(aiAssistantView);
     sidebarContent->addWidget(bookmarksView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
     commentsView->setModel(commentsModel);
     commentsView->hide();
+    aiAssistantView->hide();
     bookmarksView->setModel(bookmarksModel);
     bookmarksView->hide();
 
@@ -411,7 +427,8 @@ void ComicBookTextView::Implementation::updateCommentsToolbar()
 void ComicBookTextView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
     const bool isSidebarShouldBeVisible = toolbar->isFastFormatPanelVisible()
-        || toolbar->isCommentsModeEnabled() || showBookmarksAction->isChecked();
+        || toolbar->isCommentsModeEnabled() || toolbar->isAiAssistantEnabled()
+        || showBookmarksAction->isChecked();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
@@ -511,6 +528,16 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
                     d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
                     d->sidebarContent->setCurrentWidget(d->commentsView);
                     d->updateCommentsToolbar();
+                }
+                d->updateSideBarVisibility(this);
+            });
+    connect(d->toolbar, &ComicBookTextEditToolbar::aiAssistantEnabledChanged, this,
+            [this](bool _enabled) {
+                d->sidebarTabs->setTabVisible(kAiAssistantTabIndex, _enabled);
+                d->aiAssistantView->setVisible(_enabled);
+                if (_enabled) {
+                    d->sidebarTabs->setCurrentTab(kAiAssistantTabIndex);
+                    d->sidebarContent->setCurrentWidget(d->aiAssistantView);
                 }
                 d->updateSideBarVisibility(this);
             });
@@ -615,6 +642,25 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
                 d->commentsModel->remove(_indexes);
             });
     //
+    connect(d->aiAssistantView, &AiAssistantView::rephraseRequested, this,
+            &ComicBookTextView::rephraseTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::expandRequested, this,
+            &ComicBookTextView::expandTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::shortenRequested, this,
+            &ComicBookTextView::shortenTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::insertRequested, this,
+            &ComicBookTextView::insertTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::summarizeRequested, this,
+            &ComicBookTextView::summarizeTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
+            &ComicBookTextView::translateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::generateRequested, this,
+            &ComicBookTextView::generateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
+            [this](const QString& _text) { d->textEdit->insertPlainText(_text); });
+    connect(d->aiAssistantView, &AiAssistantView::buyCreditsPressed, this,
+            &ComicBookTextView::buyCreditsRequested);
+    //
     connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
             &ComicBookTextView::createBookmarkRequested);
     connect(d->bookmarksView, &BookmarksView::changeBookmarkRequested, this,
@@ -651,7 +697,10 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
             d->sidebarContent->setCurrentWidget(d->commentsView);
             break;
         }
-
+        case kAiAssistantTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->aiAssistantView);
+            break;
+        }
         case kBookmarksTabIndex: {
             d->sidebarContent->setCurrentWidget(d->bookmarksView);
             break;
@@ -803,6 +852,7 @@ void ComicBookTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mod
     d->toolbar->setReadOnly(readOnly);
     d->searchManager->setReadOnly(readOnly);
     d->commentsView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
+    d->aiAssistantView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->bookmarksView->setReadOnly(readOnly);
     const auto enabled = !readOnly;
     d->shortcutsManager.setEnabled(enabled);
@@ -821,6 +871,146 @@ void ComicBookTextView::setCurrentModelIndex(const QModelIndex& _index)
     }
 
     d->textEdit->setCurrentModelIndex(_index);
+}
+
+void ComicBookTextView::setAvailableCredits(int _credits)
+{
+    d->aiAssistantView->setAvailableWords(_credits);
+}
+
+void ComicBookTextView::setRephrasedText(const QString& _text)
+{
+    d->aiAssistantView->setRephraseResult(_text);
+}
+
+void ComicBookTextView::setExpandedText(const QString& _text)
+{
+    d->aiAssistantView->setExpandResult(_text);
+}
+
+void ComicBookTextView::setShortenedText(const QString& _text)
+{
+    d->aiAssistantView->setShortenResult(_text);
+}
+
+void ComicBookTextView::setInsertedText(const QString& _text)
+{
+    d->aiAssistantView->setInsertResult(_text);
+}
+
+void ComicBookTextView::setSummarizedText(const QString& _text)
+{
+    d->aiAssistantView->setSummarizeResult(_text);
+}
+
+void ComicBookTextView::setTranslatedText(const QString& _text)
+{
+    d->aiAssistantView->setTransateResult(_text);
+}
+
+void ComicBookTextView::setGeneratedText(const QString& _text)
+{
+    const QLatin1String textWritingTaskKey("text-writing-task");
+    TaskBar::addTask(textWritingTaskKey);
+    TaskBar::setTaskTitle(textWritingTaskKey, tr("Writing text"));
+
+    //
+    // Отключим отображение всплывающих подсказок
+    //
+    d->textEdit->setCompleterActive(false);
+
+    //
+    // Переходим в конец позицию вставки, а затем переводим его на новую строку, или сдвигаем
+    // последующий текст, чтобы помещать текст в новом блоке
+    //
+    switch (d->aiAssistantView->textInsertPosition()) {
+    case AiAssistantView::TextInsertPosition::AtBeginning: {
+        d->textEdit->moveCursor(QTextCursor::Start);
+        d->textEdit->addParagraph(d->textEdit->currentParagraphType());
+        d->textEdit->moveCursor(QTextCursor::Start);
+        break;
+    }
+
+    case AiAssistantView::TextInsertPosition::AtCursorPosition: {
+        d->textEdit->moveCursor(QTextCursor::EndOfBlock);
+        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
+        break;
+    }
+
+    case AiAssistantView::TextInsertPosition::AtEnd: {
+        d->textEdit->moveCursor(QTextCursor::End);
+        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
+        break;
+    }
+    }
+
+    QElapsedTimer timer;
+    int progress = 0;
+    auto waitForNextOperation = [&timer, &progress, maximum = _text.length(), textWritingTaskKey] {
+        timer.restart();
+        const auto delay = QRandomGenerator::global()->bounded(10, 60);
+        while (!timer.hasExpired(delay)) {
+            QCoreApplication::processEvents();
+        }
+
+        ++progress;
+        TaskBar::setTaskProgress(textWritingTaskKey, progress * 100 / static_cast<qreal>(maximum));
+    };
+
+    auto postEvent = [this](Qt::Key _key, const QString& _text = {}) {
+        QCoreApplication::postEvent(d->textEdit,
+                                    new QKeyEvent(QEvent::KeyPress, _key, Qt::NoModifier, _text));
+        QCoreApplication::postEvent(d->textEdit,
+                                    new QKeyEvent(QEvent::KeyRelease, _key, Qt::NoModifier, _text));
+    };
+
+    auto lines = _text.split('\n', Qt::SkipEmptyParts);
+    bool nextBlockShoudBeDialogue = false;
+    for (auto& line : lines) {
+        static QRegularExpression panelNumberPattern("\\s+\\d*(:|)($|[ ])");
+        if (line.contains(panelNumberPattern)
+            || (line == TextHelper::smartToUpper(line) && line.contains('.')
+                && (line.contains('-') || line.contains("–")))) {
+            if (nextBlockShoudBeDialogue) {
+                nextBlockShoudBeDialogue = false;
+                postEvent(Qt::Key_Return);
+            }
+            d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::PanelHeading);
+            line.replace(panelNumberPattern, ":");
+        } else if (line.contains(':') || line == TextHelper::smartToUpper(line)) {
+            d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Character);
+            line = line.remove('"').replace(": ", ":");
+            nextBlockShoudBeDialogue = true;
+        } else if (nextBlockShoudBeDialogue) {
+            //
+        } else {
+            d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Description);
+        }
+        for (int index = 0; index < line.length(); ++index) {
+            const auto character = line.mid(index, 1);
+
+            if (character == ':' && character != line.right(1)) {
+                postEvent(Qt::Key_Return);
+                if (index + 1 < line.length()) {
+                    nextBlockShoudBeDialogue = false;
+                }
+                continue;
+            }
+
+            postEvent(Qt::Key_unknown, character);
+            waitForNextOperation();
+        }
+
+        postEvent(Qt::Key_Return);
+        waitForNextOperation();
+    }
+
+    //
+    // Возвращаем возможность использования всплывающих подсказок
+    //
+    d->textEdit->setCompleterActive(true);
+
+    TaskBar::finishTask(textWritingTaskKey);
 }
 
 void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
@@ -931,6 +1121,8 @@ void ComicBookTextView::loadViewSettings()
     d->toolbar->setItemIsolationEnabled(isItemIsolationEnabled);
     const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
+    const auto isTextGenerationEnabled = settingsValue(kIsAiAssistantEnabledKey, false).toBool();
+    d->toolbar->setAiAssistantEnabled(isTextGenerationEnabled);
     const auto isFastFormatPanelVisible
         = settingsValue(kIsFastFormatPanelVisibleKey, false).toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
@@ -949,6 +1141,7 @@ void ComicBookTextView::saveViewSettings()
 
     setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
     setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
+    setSettingsValue(kIsAiAssistantEnabledKey, d->toolbar->isAiAssistantEnabled());
     setSettingsValue(kIsItemIsolationEnabledKey, d->toolbar->isItemIsolationEnabled());
     setSettingsValue(kIsBookmarksListVisibleKey, d->showBookmarksAction->isChecked());
     setSettingsValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab());
@@ -1051,7 +1244,11 @@ void ComicBookTextView::updateTranslations()
 {
     d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
+    d->sidebarTabs->setTabName(kAiAssistantTabIndex, tr("AI assistant"));
     d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
+
+    d->aiAssistantView->setGenerationPromptHint(
+        tr("Start prompt from something like \"Write a comic book script about ...\""));
 
     d->updateOptionsTranslations();
 

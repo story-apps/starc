@@ -149,6 +149,24 @@ Ui::ComicBookTextView* ComicBookTextManager::Implementation::createView(
         textItem->clearBookmark();
         modelForView(view)->updateItem(textItem);
     });
+    //
+    connect(view, &Ui::ComicBookTextView::rephraseTextRequested, q,
+            &ComicBookTextManager::rephraseTextRequested);
+    connect(view, &Ui::ComicBookTextView::expandTextRequested, q,
+            &ComicBookTextManager::expandTextRequested);
+    connect(view, &Ui::ComicBookTextView::shortenTextRequested, q,
+            &ComicBookTextManager::shortenTextRequested);
+    connect(view, &Ui::ComicBookTextView::insertTextRequested, q,
+            &ComicBookTextManager::insertTextRequested);
+    connect(view, &Ui::ComicBookTextView::summarizeTextRequested, q,
+            &ComicBookTextManager::summarizeTextRequested);
+    connect(view, &Ui::ComicBookTextView::translateTextRequested, q,
+            &ComicBookTextManager::translateTextRequested);
+    connect(view, &Ui::ComicBookTextView::generateTextRequested, q, [this](const QString& _text) {
+        emit q->generateTextRequested(_text, "write result in fountain format.");
+    });
+    connect(view, &Ui::ComicBookTextView::buyCreditsRequested, q,
+            &ComicBookTextManager::buyCreditsRequested);
 
     return view;
 }
@@ -374,6 +392,17 @@ void ComicBookTextManager::setEditingMode(DocumentEditingMode _mode)
         }
 
         viewAndModel.view->setEditingMode(_mode);
+    }
+}
+
+void ComicBookTextManager::setAvailableCredits(int _credits)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setAvailableCredits(_credits);
     }
 }
 
