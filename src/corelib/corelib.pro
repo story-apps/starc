@@ -254,6 +254,8 @@ SOURCES += \
     domain/objects_builder.cpp \
     ui/design_system/design_system.cpp \
     ui/layouts/flow_layout/flow_layout.cpp \
+    ui/modules/ai_assistant/ai_assistant_toolbar.cpp \
+    ui/modules/ai_assistant/ai_assistant_view.cpp \
     ui/modules/avatar_generator/avatar_generator.cpp \
     ui/modules/bookmarks/add_bookmark_view.cpp \
     ui/modules/bookmarks/bookmark_delegate.cpp \
@@ -277,8 +279,6 @@ SOURCES += \
     ui/modules/logline_generator/logline_generator_dialog.cpp \
     ui/modules/cards/card_item_parameters_view.cpp \
     ui/modules/script_text_edit/script_text_edit.cpp \
-    ui/modules/text_generation/text_generation_toolbar.cpp \
-    ui/modules/text_generation/text_generation_view.cpp \
     ui/widgets/animations/click_animation.cpp \
     ui/widgets/app_bar/app_bar.cpp \
     ui/widgets/button/button.cpp \
@@ -572,6 +572,8 @@ HEADERS += \
     ui/abstract_navigator.h \
     ui/design_system/design_system.h \
     ui/layouts/flow_layout/flow_layout.h \
+    ui/modules/ai_assistant/ai_assistant_toolbar.h \
+    ui/modules/ai_assistant/ai_assistant_view.h \
     ui/modules/avatar_generator/avatar_generator.h \
     ui/modules/bookmarks/add_bookmark_view.h \
     ui/modules/bookmarks/bookmark_delegate.h \
@@ -595,8 +597,6 @@ HEADERS += \
     ui/modules/logline_generator/logline_generator_dialog.h \
     ui/modules/cards/card_item_parameters_view.h \
     ui/modules/script_text_edit/script_text_edit.h \
-    ui/modules/text_generation/text_generation_toolbar.h \
-    ui/modules/text_generation/text_generation_view.h \
     ui/widgets/animations/click_animation.h \
     ui/widgets/app_bar/app_bar.h \
     ui/widgets/button/button.h \

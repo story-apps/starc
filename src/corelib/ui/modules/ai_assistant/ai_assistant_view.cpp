@@ -1,4 +1,4 @@
-#include "text_generation_view.h"
+#include "ai_assistant_view.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -68,7 +68,7 @@ public:
 
 } // namespace
 
-class TextGenerationView::Implementation
+class AiAssistantView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -147,7 +147,7 @@ public:
     QHBoxLayout* buttonsLayout = nullptr;
 };
 
-TextGenerationView::Implementation::Implementation(QWidget* _parent)
+AiAssistantView::Implementation::Implementation(QWidget* _parent)
     : pages(new StackWidget(_parent))
     , buttonsPage(new Widget(pages))
     , openRephraseButton(new Button(buttonsPage))
@@ -424,7 +424,7 @@ TextGenerationView::Implementation::Implementation(QWidget* _parent)
 // ****
 
 
-TextGenerationView::TextGenerationView(QWidget* _parent)
+AiAssistantView::AiAssistantView(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
@@ -616,17 +616,17 @@ TextGenerationView::TextGenerationView(QWidget* _parent)
             [this] { emit generateRequested(d->generatePromptText->text()); });
 
     connect(d->buyCreditsLabel, &Body1LinkLabel::clicked, this,
-            &TextGenerationView::buyCreditsPressed);
+            &AiAssistantView::buyCreditsPressed);
 }
 
-TextGenerationView::~TextGenerationView() = default;
+AiAssistantView::~AiAssistantView() = default;
 
-bool TextGenerationView::isReadOnly() const
+bool AiAssistantView::isReadOnly() const
 {
     return d->isReadOnly;
 }
 
-void TextGenerationView::setReadOnly(bool _readOnly)
+void AiAssistantView::setReadOnly(bool _readOnly)
 {
     if (d->isReadOnly == _readOnly) {
         return;
@@ -647,12 +647,12 @@ void TextGenerationView::setReadOnly(bool _readOnly)
     }
 }
 
-void TextGenerationView::setGenerationPromptHint(const QString& _hint)
+void AiAssistantView::setGenerationPromptHint(const QString& _hint)
 {
     d->generatePromptHintLabel->setText(_hint);
 }
 
-TextGenerationView::TextInsertPosition TextGenerationView::textInsertPosition() const
+AiAssistantView::TextInsertPosition AiAssistantView::textInsertPosition() const
 {
     if (d->generateInsertAtBegin->isChecked()) {
         return TextInsertPosition::AtBeginning;
@@ -663,56 +663,56 @@ TextGenerationView::TextInsertPosition TextGenerationView::textInsertPosition() 
     }
 }
 
-void TextGenerationView::setRephraseResult(const QString& _text)
+void AiAssistantView::setRephraseResult(const QString& _text)
 {
     d->rephraseResultText->setText(_text);
     d->rephraseResultText->show();
     d->rephraseInsertButton->show();
 }
 
-void TextGenerationView::setExpandResult(const QString& _text)
+void AiAssistantView::setExpandResult(const QString& _text)
 {
     d->expandResultText->setText(_text);
     d->expandResultText->show();
     d->expandInsertButton->show();
 }
 
-void TextGenerationView::setShortenResult(const QString& _text)
+void AiAssistantView::setShortenResult(const QString& _text)
 {
     d->shortenResultText->setText(_text);
     d->shortenResultText->show();
     d->shortenInsertButton->show();
 }
 
-void TextGenerationView::setInsertResult(const QString& _text)
+void AiAssistantView::setInsertResult(const QString& _text)
 {
     d->insertResultText->setText(_text);
     d->insertResultText->show();
     d->insertInsertButton->show();
 }
 
-void TextGenerationView::setSummarizeResult(const QString& _text)
+void AiAssistantView::setSummarizeResult(const QString& _text)
 {
     d->summarizeResultText->setText(_text);
     d->summarizeResultText->show();
     d->summarizeInsertButton->show();
 }
 
-void TextGenerationView::setTransateResult(const QString& _text)
+void AiAssistantView::setTransateResult(const QString& _text)
 {
     d->translateResultText->setText(_text);
     d->translateResultText->show();
     d->translateInsertButton->show();
 }
 
-void TextGenerationView::setAvailableWords(int _availableWords)
+void AiAssistantView::setAvailableWords(int _availableWords)
 {
     d->availableWordsLabel->setText(_availableWords > 0
                                         ? tr("%n word(s) available", nullptr, _availableWords)
                                         : tr("No words available"));
 }
 
-void TextGenerationView::updateTranslations()
+void AiAssistantView::updateTranslations()
 {
     d->openRephraseButton->setText(tr("Rephrase"));
     d->openExpandButton->setText(tr("Expand"));
@@ -932,7 +932,7 @@ void TextGenerationView::updateTranslations()
     d->buyCreditsLabel->setText(tr("purchase"));
 }
 
-void TextGenerationView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 

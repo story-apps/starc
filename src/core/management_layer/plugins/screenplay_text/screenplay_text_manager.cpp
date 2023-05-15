@@ -26,7 +26,7 @@ const int kSceneTimesIndex = 1;
 const int kCharacterExtensionsIndex = 2;
 const int kTransitionIndex = 3;
 
-const QString kSettingsKey = "screenplay-text";
+const QLatin1String kSettingsKey("screenplay-text");
 QString cursorPositionFor(Domain::DocumentObject* _item)
 {
     return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());

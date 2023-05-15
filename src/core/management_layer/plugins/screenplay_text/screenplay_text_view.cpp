@@ -22,6 +22,7 @@
 #include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/ai_assistant/ai_assistant_view.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
 #include <ui/modules/bookmarks/bookmarks_view.h>
 #include <ui/modules/cards/card_item_parameters_view.h>
@@ -29,7 +30,6 @@
 #include <ui/modules/comments/comments_toolbar.h>
 #include <ui/modules/comments/comments_view.h>
 #include <ui/modules/fast_format_widget/fast_format_widget.h>
-#include <ui/modules/text_generation/text_generation_view.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -64,7 +64,7 @@ enum {
     kFastFormatTabIndex = 0,
     kSceneParametersTabIndex,
     kCommentsTabIndex,
-    kTextGenerationTabIndex,
+    kAiAssistantTabIndex,
     kBookmarksTabIndex,
     kDictionariesTabIndex,
 };
@@ -75,7 +75,7 @@ const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
 const QString kIsBeatsVisibleKey = kSettingsKey + "/is-beats-visible";
 const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
-const QString kIsTextGenerationEnabledKey = kSettingsKey + "/is-text-generation-enabled";
+const QString kIsAiAssistantEnabledKey = kSettingsKey + "/is-ai-assistant-enabled";
 const QString kIsItemIsolationEnabledKey = kSettingsKey + "/is-item-isolation-enabled";
 const QString kIsSceneParametersVisibleKey = kSettingsKey + "/is-scene-parameters-visible";
 const QString kIsBookmarksListVisibleKey = kSettingsKey + "/is-bookmarks-list-visible";
@@ -180,7 +180,7 @@ public:
     FastFormatWidget* fastFormatWidget = nullptr;
     CardItemParametersView* itemParametersView = nullptr;
     CommentsView* commentsView = nullptr;
-    TextGenerationView* textGenerationView = nullptr;
+    AiAssistantView* aiAssistantView = nullptr;
     BookmarksView* bookmarksView = nullptr;
     DictionariesView* dictionariesView = nullptr;
     //
@@ -219,7 +219,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     , fastFormatWidget(new FastFormatWidget(_q))
     , itemParametersView(new CardItemParametersView(_q))
     , commentsView(new CommentsView(_q))
-    , textGenerationView(new TextGenerationView(_q))
+    , aiAssistantView(new AiAssistantView(_q))
     , bookmarksView(new BookmarksView(_q))
     , dictionariesView(new DictionariesView(_q))
     , splitter(new Splitter(_q))
@@ -254,8 +254,8 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     sidebarTabs->setTabVisible(kSceneParametersTabIndex, false);
     sidebarTabs->addTab({}); // comments
     sidebarTabs->setTabVisible(kCommentsTabIndex, false);
-    sidebarTabs->addTab({}); // text generation
-    sidebarTabs->setTabVisible(kTextGenerationTabIndex, false);
+    sidebarTabs->addTab({}); // ai assistant
+    sidebarTabs->setTabVisible(kAiAssistantTabIndex, false);
     sidebarTabs->addTab({}); // bookmarks
     sidebarTabs->setTabVisible(kBookmarksTabIndex, false);
     sidebarTabs->addTab({}); // dictionaries
@@ -265,7 +265,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     sidebarContent->addWidget(fastFormatWidget);
     sidebarContent->addWidget(itemParametersView);
     sidebarContent->addWidget(commentsView);
-    sidebarContent->addWidget(textGenerationView);
+    sidebarContent->addWidget(aiAssistantView);
     sidebarContent->addWidget(bookmarksView);
     sidebarContent->addWidget(dictionariesView);
     fastFormatWidget->hide();
@@ -274,7 +274,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     itemParametersView->hide();
     commentsView->setModel(commentsModel);
     commentsView->hide();
-    textGenerationView->hide();
+    aiAssistantView->hide();
     bookmarksView->setModel(bookmarksModel);
     bookmarksView->hide();
     dictionariesView->hide();
@@ -527,7 +527,7 @@ void ScreenplayTextView::Implementation::updateCommentsToolbar()
 void ScreenplayTextView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
     const bool isSidebarShouldBeVisible = toolbar->isFastFormatPanelVisible()
-        || toolbar->isCommentsModeEnabled() || toolbar->isTextGenerationEnabled()
+        || toolbar->isCommentsModeEnabled() || toolbar->isAiAssistantEnabled()
         || showSceneParametersAction->isChecked() || showBookmarksAction->isChecked()
         || showDictionariesAction->isChecked();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
@@ -699,14 +699,13 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 }
                 d->updateSideBarVisibility(this);
             });
-    connect(d->toolbar, &ScreenplayTextEditToolbar::textGenerationEnabledChanged, this,
+    connect(d->toolbar, &ScreenplayTextEditToolbar::aiAssistantEnabledChanged, this,
             [this](bool _enabled) {
-                d->sidebarTabs->setTabVisible(kTextGenerationTabIndex, _enabled);
-                d->textGenerationView->setVisible(_enabled);
+                d->sidebarTabs->setTabVisible(kAiAssistantTabIndex, _enabled);
+                d->aiAssistantView->setVisible(_enabled);
                 if (_enabled) {
-                    d->sidebarTabs->setCurrentTab(kTextGenerationTabIndex);
-                    d->sidebarContent->setCurrentWidget(d->textGenerationView);
-                    //                    d->updateCommentsToolbar();
+                    d->sidebarTabs->setCurrentTab(kAiAssistantTabIndex);
+                    d->sidebarContent->setCurrentWidget(d->aiAssistantView);
                 }
                 d->updateSideBarVisibility(this);
             });
@@ -895,8 +894,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             break;
         }
 
-        case kTextGenerationTabIndex: {
-            d->sidebarContent->setCurrentWidget(d->textGenerationView);
+        case kAiAssistantTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->aiAssistantView);
             break;
         }
 
@@ -1218,23 +1217,23 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 d->commentsModel->remove(_indexes);
             });
     //
-    connect(d->textGenerationView, &TextGenerationView::rephraseRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::rephraseRequested, this,
             &ScreenplayTextView::rephraseTextRequested);
-    connect(d->textGenerationView, &TextGenerationView::expandRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::expandRequested, this,
             &ScreenplayTextView::expandTextRequested);
-    connect(d->textGenerationView, &TextGenerationView::shortenRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::shortenRequested, this,
             &ScreenplayTextView::shortenTextRequested);
-    connect(d->textGenerationView, &TextGenerationView::insertRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::insertRequested, this,
             &ScreenplayTextView::insertTextRequested);
-    connect(d->textGenerationView, &TextGenerationView::summarizeRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::summarizeRequested, this,
             &ScreenplayTextView::summarizeTextRequested);
-    connect(d->textGenerationView, &TextGenerationView::translateRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
             &ScreenplayTextView::translateTextRequested);
-    connect(d->textGenerationView, &TextGenerationView::generateRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::generateRequested, this,
             &ScreenplayTextView::generateTextRequested);
-    connect(d->textGenerationView, &TextGenerationView::insertTextRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
             [this](const QString& _text) { d->textEdit->insertPlainText(_text); });
-    connect(d->textGenerationView, &TextGenerationView::buyCreditsPressed, this,
+    connect(d->aiAssistantView, &AiAssistantView::buyCreditsPressed, this,
             &ScreenplayTextView::buyCreditsRequested);
     //
     connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
@@ -1333,7 +1332,7 @@ void ScreenplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mo
     d->searchManager->setReadOnly(readOnly);
     d->itemParametersView->setReadOnly(readOnly);
     d->commentsView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
-    d->textGenerationView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
+    d->aiAssistantView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->bookmarksView->setReadOnly(readOnly);
     d->dictionariesView->setReadOnly(readOnly);
     const auto enabled = !readOnly;
@@ -1357,37 +1356,37 @@ void ScreenplayTextView::setCurrentModelIndex(const QModelIndex& _index)
 
 void ScreenplayTextView::setAvailableCredits(int _credits)
 {
-    d->textGenerationView->setAvailableWords(_credits);
+    d->aiAssistantView->setAvailableWords(_credits);
 }
 
 void ScreenplayTextView::setRephrasedText(const QString& _text)
 {
-    d->textGenerationView->setRephraseResult(_text);
+    d->aiAssistantView->setRephraseResult(_text);
 }
 
 void ScreenplayTextView::setExpandedText(const QString& _text)
 {
-    d->textGenerationView->setExpandResult(_text);
+    d->aiAssistantView->setExpandResult(_text);
 }
 
 void ScreenplayTextView::setShortenedText(const QString& _text)
 {
-    d->textGenerationView->setShortenResult(_text);
+    d->aiAssistantView->setShortenResult(_text);
 }
 
 void ScreenplayTextView::setInsertedText(const QString& _text)
 {
-    d->textGenerationView->setInsertResult(_text);
+    d->aiAssistantView->setInsertResult(_text);
 }
 
 void ScreenplayTextView::setSummarizedText(const QString& _text)
 {
-    d->textGenerationView->setSummarizeResult(_text);
+    d->aiAssistantView->setSummarizeResult(_text);
 }
 
 void ScreenplayTextView::setTranslatedText(const QString& _text)
 {
-    d->textGenerationView->setTransateResult(_text);
+    d->aiAssistantView->setTransateResult(_text);
 }
 
 void ScreenplayTextView::setGeneratedText(const QString& _text)
@@ -1405,21 +1404,21 @@ void ScreenplayTextView::setGeneratedText(const QString& _text)
     // Переходим в конец позицию вставки, а затем переводим его на новую строку, или сдвигаем
     // последующий текст, чтобы помещать текст в новом блоке
     //
-    switch (d->textGenerationView->textInsertPosition()) {
-    case TextGenerationView::TextInsertPosition::AtBeginning: {
+    switch (d->aiAssistantView->textInsertPosition()) {
+    case AiAssistantView::TextInsertPosition::AtBeginning: {
         d->textEdit->moveCursor(QTextCursor::Start);
         d->textEdit->addParagraph(d->textEdit->currentParagraphType());
         d->textEdit->moveCursor(QTextCursor::Start);
         break;
     }
 
-    case TextGenerationView::TextInsertPosition::AtCursorPosition: {
+    case AiAssistantView::TextInsertPosition::AtCursorPosition: {
         d->textEdit->moveCursor(QTextCursor::EndOfBlock);
         d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
         break;
     }
 
-    case TextGenerationView::TextInsertPosition::AtEnd: {
+    case AiAssistantView::TextInsertPosition::AtEnd: {
         d->textEdit->moveCursor(QTextCursor::End);
         d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
         break;
@@ -1611,8 +1610,8 @@ void ScreenplayTextView::loadViewSettings()
     d->toolbar->setItemIsolationEnabled(isItemIsolationEnabled);
     const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
-    const auto isTextGenerationEnabled = settingsValue(kIsTextGenerationEnabledKey, false).toBool();
-    d->toolbar->setTextGenerationEnabled(isTextGenerationEnabled);
+    const auto isTextGenerationEnabled = settingsValue(kIsAiAssistantEnabledKey, false).toBool();
+    d->toolbar->setAiAssistantEnabled(isTextGenerationEnabled);
     const auto isFastFormatPanelVisible
         = settingsValue(kIsFastFormatPanelVisibleKey, false).toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
@@ -1641,7 +1640,7 @@ void ScreenplayTextView::saveViewSettings()
     setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
     setSettingsValue(kIsBeatsVisibleKey, d->toolbar->isBeatsVisible());
     setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
-    setSettingsValue(kIsTextGenerationEnabledKey, d->toolbar->isTextGenerationEnabled());
+    setSettingsValue(kIsAiAssistantEnabledKey, d->toolbar->isAiAssistantEnabled());
     setSettingsValue(kIsItemIsolationEnabledKey, d->toolbar->isItemIsolationEnabled());
     setSettingsValue(kIsSceneParametersVisibleKey, d->showSceneParametersAction->isChecked());
     setSettingsValue(kIsBookmarksListVisibleKey, d->showBookmarksAction->isChecked());
@@ -1766,11 +1765,11 @@ void ScreenplayTextView::updateTranslations()
     d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
     d->sidebarTabs->setTabName(kSceneParametersTabIndex, tr("Scene parameters"));
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
-    d->sidebarTabs->setTabName(kTextGenerationTabIndex, tr("AI assistant"));
+    d->sidebarTabs->setTabName(kAiAssistantTabIndex, tr("AI assistant"));
     d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
     d->sidebarTabs->setTabName(kDictionariesTabIndex, tr("Dictionaries"));
 
-    d->textGenerationView->setGenerationPromptHint(
+    d->aiAssistantView->setGenerationPromptHint(
         tr("Start prompt from something like \"Write a screenplay about ...\", or \"Write a short "
            "movie screenplay about ...\""));
 

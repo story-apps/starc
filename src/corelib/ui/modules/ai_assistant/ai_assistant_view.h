@@ -8,7 +8,7 @@ namespace Ui {
 /**
  * @brief Сайдбар с инструментами ИИ помощника
  */
-class CORE_LIBRARY_EXPORT TextGenerationView : public Widget
+class CORE_LIBRARY_EXPORT AiAssistantView : public Widget
 {
     Q_OBJECT
 
@@ -23,8 +23,8 @@ public:
     };
 
 public:
-    explicit TextGenerationView(QWidget* _parent = nullptr);
-    ~TextGenerationView() override;
+    explicit AiAssistantView(QWidget* _parent = nullptr);
+    ~AiAssistantView() override;
 
     /**
      * @brief Задать возможность редактирования
