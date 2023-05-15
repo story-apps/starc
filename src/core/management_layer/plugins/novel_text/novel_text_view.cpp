@@ -20,6 +20,7 @@
 #include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/ai_assistant/ai_assistant_view.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
 #include <ui/modules/bookmarks/bookmarks_view.h>
 #include <ui/modules/cards/card_item_parameters_view.h>
@@ -61,6 +62,7 @@ enum {
     kFastFormatTabIndex = 0,
     kSceneParametersTabIndex,
     kCommentsTabIndex,
+    kAiAssistantTabIndex,
     kBookmarksTabIndex,
 };
 
@@ -70,6 +72,7 @@ const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
 const QString kIsBeatsVisibleKey = kSettingsKey + "/is-beats-visible";
 const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+const QString kIsAiAssistantEnabledKey = kSettingsKey + "/is-ai-assistant-enabled";
 const QString kIsItemIsolationEnabledKey = kSettingsKey + "/is-item-isolation-enabled";
 const QString kIsSceneParametersVisibleKey = kSettingsKey + "/is-scene-parameters-visible";
 const QString kIsBookmarksListVisibleKey = kSettingsKey + "/is-bookmarks-list-visible";
@@ -170,6 +173,7 @@ public:
     FastFormatWidget* fastFormatWidget = nullptr;
     CardItemParametersView* itemParametersView = nullptr;
     CommentsView* commentsView = nullptr;
+    AiAssistantView* aiAssistantView = nullptr;
     BookmarksView* bookmarksView = nullptr;
     DictionariesView* dictionariesView = nullptr;
     //
@@ -206,6 +210,7 @@ NovelTextView::Implementation::Implementation(NovelTextView* _q)
     , fastFormatWidget(new FastFormatWidget(_q))
     , itemParametersView(new CardItemParametersView(_q))
     , commentsView(new CommentsView(_q))
+    , aiAssistantView(new AiAssistantView(_q))
     , bookmarksView(new BookmarksView(_q))
     , splitter(new Splitter(_q))
     , showSceneParametersAction(new QAction(_q))
@@ -238,6 +243,8 @@ NovelTextView::Implementation::Implementation(NovelTextView* _q)
     sidebarTabs->setTabVisible(kSceneParametersTabIndex, false);
     sidebarTabs->addTab({}); // comments
     sidebarTabs->setTabVisible(kCommentsTabIndex, false);
+    sidebarTabs->addTab({}); // ai assistant
+    sidebarTabs->setTabVisible(kAiAssistantTabIndex, false);
     sidebarTabs->addTab({}); // bookmarks
     sidebarTabs->setTabVisible(kBookmarksTabIndex, false);
     sidebarContent->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
@@ -245,6 +252,7 @@ NovelTextView::Implementation::Implementation(NovelTextView* _q)
     sidebarContent->addWidget(fastFormatWidget);
     sidebarContent->addWidget(itemParametersView);
     sidebarContent->addWidget(commentsView);
+    sidebarContent->addWidget(aiAssistantView);
     sidebarContent->addWidget(bookmarksView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
@@ -253,6 +261,7 @@ NovelTextView::Implementation::Implementation(NovelTextView* _q)
     itemParametersView->hide();
     commentsView->setModel(commentsModel);
     commentsView->hide();
+    aiAssistantView->hide();
     bookmarksView->setModel(bookmarksModel);
     bookmarksView->hide();
 
@@ -466,8 +475,8 @@ void NovelTextView::Implementation::updateCommentsToolbar()
 void NovelTextView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
     const bool isSidebarShouldBeVisible = toolbar->isFastFormatPanelVisible()
-        || toolbar->isCommentsModeEnabled() || showSceneParametersAction->isChecked()
-        || showBookmarksAction->isChecked();
+        || toolbar->isCommentsModeEnabled() || toolbar->isAiAssistantEnabled()
+        || showSceneParametersAction->isChecked() || showBookmarksAction->isChecked();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
@@ -631,6 +640,16 @@ NovelTextView::NovelTextView(QWidget* _parent)
                     d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
                     d->sidebarContent->setCurrentWidget(d->commentsView);
                     d->updateCommentsToolbar();
+                }
+                d->updateSideBarVisibility(this);
+            });
+    connect(d->toolbar, &NovelTextEditToolbar::aiAssistantEnabledChanged, this,
+            [this](bool _enabled) {
+                d->sidebarTabs->setTabVisible(kAiAssistantTabIndex, _enabled);
+                d->aiAssistantView->setVisible(_enabled);
+                if (_enabled) {
+                    d->sidebarTabs->setCurrentTab(kAiAssistantTabIndex);
+                    d->sidebarContent->setCurrentWidget(d->aiAssistantView);
                 }
                 d->updateSideBarVisibility(this);
             });
@@ -805,17 +824,18 @@ NovelTextView::NovelTextView(QWidget* _parent)
             d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
             break;
         }
-
         case kSceneParametersTabIndex: {
             d->sidebarContent->setCurrentWidget(d->itemParametersView);
             break;
         }
-
         case kCommentsTabIndex: {
             d->sidebarContent->setCurrentWidget(d->commentsView);
             break;
         }
-
+        case kAiAssistantTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->aiAssistantView);
+            break;
+        }
         case kBookmarksTabIndex: {
             d->sidebarContent->setCurrentWidget(d->bookmarksView);
             break;
@@ -1128,6 +1148,25 @@ NovelTextView::NovelTextView(QWidget* _parent)
                 d->commentsModel->remove(_indexes);
             });
     //
+    connect(d->aiAssistantView, &AiAssistantView::rephraseRequested, this,
+            &NovelTextView::rephraseTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::expandRequested, this,
+            &NovelTextView::expandTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::shortenRequested, this,
+            &NovelTextView::shortenTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::insertRequested, this,
+            &NovelTextView::insertTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::summarizeRequested, this,
+            &NovelTextView::summarizeTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
+            &NovelTextView::translateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::generateRequested, this,
+            &NovelTextView::generateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
+            [this](const QString& _text) { d->textEdit->insertPlainText(_text); });
+    connect(d->aiAssistantView, &AiAssistantView::buyCreditsPressed, this,
+            &NovelTextView::buyCreditsRequested);
+    //
     connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
             &NovelTextView::createBookmarkRequested);
     connect(d->bookmarksView, &BookmarksView::changeBookmarkRequested, this,
@@ -1211,6 +1250,7 @@ void NovelTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
     d->searchManager->setReadOnly(readOnly);
     d->itemParametersView->setReadOnly(readOnly);
     d->commentsView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
+    d->aiAssistantView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->bookmarksView->setReadOnly(readOnly);
     const auto enabled = !readOnly;
     d->shortcutsManager.setEnabled(enabled);
@@ -1229,6 +1269,41 @@ void NovelTextView::setCurrentModelIndex(const QModelIndex& _index)
     }
 
     d->textEdit->setCurrentModelIndex(_index);
+}
+
+void NovelTextView::setAvailableCredits(int _credits)
+{
+    d->aiAssistantView->setAvailableWords(_credits);
+}
+
+void NovelTextView::setRephrasedText(const QString& _text)
+{
+    d->aiAssistantView->setRephraseResult(_text);
+}
+
+void NovelTextView::setExpandedText(const QString& _text)
+{
+    d->aiAssistantView->setExpandResult(_text);
+}
+
+void NovelTextView::setShortenedText(const QString& _text)
+{
+    d->aiAssistantView->setShortenResult(_text);
+}
+
+void NovelTextView::setInsertedText(const QString& _text)
+{
+    d->aiAssistantView->setInsertResult(_text);
+}
+
+void NovelTextView::setSummarizedText(const QString& _text)
+{
+    d->aiAssistantView->setSummarizeResult(_text);
+}
+
+void NovelTextView::setTranslatedText(const QString& _text)
+{
+    d->aiAssistantView->setTransateResult(_text);
 }
 
 void NovelTextView::setGeneratedText(const QString& _text)
@@ -1264,37 +1339,8 @@ void NovelTextView::setGeneratedText(const QString& _text)
     };
 
     const auto lines = _text.split('\n', Qt::SkipEmptyParts);
-    bool nextBlockShoudBeDialogue = false;
     for (const auto& line : lines) {
-        if (line == TextHelper::smartToUpper(line)) {
-            if (line.contains('.') && (line.contains('-') || line.contains("–"))) {
-                d->textEdit->setCurrentParagraphType(
-                    BusinessLayer::TextParagraphType::SceneHeading);
-                nextBlockShoudBeDialogue = false;
-            } else if (line == lines.constFirst() || line == lines.constLast()
-                       || line.trimmed().endsWith(':')) {
-                //
-                // TODO: добавить проверку на стандартные переходы и кадры
-                //
-                d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Shot);
-                nextBlockShoudBeDialogue = false;
-            } else {
-                d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Character);
-                nextBlockShoudBeDialogue = true;
-            }
-        } else {
-            if (line.startsWith('(') && line.endsWith(')')) {
-                d->textEdit->setCurrentParagraphType(
-                    BusinessLayer::TextParagraphType::Parenthetical);
-                nextBlockShoudBeDialogue = true;
-            } else if (nextBlockShoudBeDialogue) {
-                d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Dialogue);
-                nextBlockShoudBeDialogue = false;
-            } else {
-                d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Action);
-                nextBlockShoudBeDialogue = false;
-            }
-        }
+        d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Text);
 
         for (int index = 0; index < line.length(); ++index) {
             QCoreApplication::postEvent(
@@ -1409,6 +1455,8 @@ void NovelTextView::loadViewSettings()
     d->toolbar->setItemIsolationEnabled(isItemIsolationEnabled);
     const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
+    const auto isTextGenerationEnabled = settingsValue(kIsAiAssistantEnabledKey, false).toBool();
+    d->toolbar->setAiAssistantEnabled(isTextGenerationEnabled);
     const auto isFastFormatPanelVisible
         = settingsValue(kIsFastFormatPanelVisibleKey, false).toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
@@ -1435,6 +1483,7 @@ void NovelTextView::saveViewSettings()
     setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
     setSettingsValue(kIsBeatsVisibleKey, d->toolbar->isBeatsVisible());
     setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
+    setSettingsValue(kIsAiAssistantEnabledKey, d->toolbar->isAiAssistantEnabled());
     setSettingsValue(kIsItemIsolationEnabledKey, d->toolbar->isItemIsolationEnabled());
     setSettingsValue(kIsSceneParametersVisibleKey, d->showSceneParametersAction->isChecked());
     setSettingsValue(kIsBookmarksListVisibleKey, d->showBookmarksAction->isChecked());
@@ -1543,7 +1592,12 @@ void NovelTextView::updateTranslations()
     d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
     d->sidebarTabs->setTabName(kSceneParametersTabIndex, tr("Scene parameters"));
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
+    d->sidebarTabs->setTabName(kAiAssistantTabIndex, tr("AI assistant"));
     d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
+
+    d->aiAssistantView->setGenerationPromptHint(
+        tr("Start prompt from something like \"Write a novel about ...\", or \"Write a chapter "
+           "about ...\""));
 
     d->updateOptionsTranslations();
 

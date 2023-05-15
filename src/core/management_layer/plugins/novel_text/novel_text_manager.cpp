@@ -20,7 +20,7 @@ namespace ManagementLayer {
 
 namespace {
 
-const QString kSettingsKey = "novel-text";
+const QLatin1String kSettingsKey("novel-text");
 QString cursorPositionFor(Domain::DocumentObject* _item)
 {
     return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
@@ -165,13 +165,22 @@ Ui::NovelTextView* NovelTextManager::Implementation::createView(
         modelForView(view)->updateItem(textItem);
     });
     //
-    connect(view, &Ui::NovelTextView::generateTextRequested, q, [this](const QString& _text) {
-        emit q->generateTextRequested(
-            tr("Generate novel text"),
-            tr("Start prompt from something like \"Write a novel about ...\", or \"Write a "
-               "short novel about ...\""),
-            {}, _text, {});
-    });
+    connect(view, &Ui::NovelTextView::rephraseTextRequested, q,
+            &NovelTextManager::rephraseTextRequested);
+    connect(view, &Ui::NovelTextView::expandTextRequested, q,
+            &NovelTextManager::expandTextRequested);
+    connect(view, &Ui::NovelTextView::shortenTextRequested, q,
+            &NovelTextManager::shortenTextRequested);
+    connect(view, &Ui::NovelTextView::insertTextRequested, q,
+            &NovelTextManager::insertTextRequested);
+    connect(view, &Ui::NovelTextView::summarizeTextRequested, q,
+            &NovelTextManager::summarizeTextRequested);
+    connect(view, &Ui::NovelTextView::translateTextRequested, q,
+            &NovelTextManager::translateTextRequested);
+    connect(view, &Ui::NovelTextView::generateTextRequested, q,
+            [this](const QString& _text) { emit q->generateTextRequested(_text, {}); });
+    connect(view, &Ui::NovelTextView::buyCreditsRequested, q,
+            &NovelTextManager::buyCreditsRequested);
 
 
     updateTranslations();
@@ -414,6 +423,17 @@ void NovelTextManager::setEditingMode(DocumentEditingMode _mode)
         }
 
         viewAndModel.view->setEditingMode(_mode);
+    }
+}
+
+void NovelTextManager::setAvailableCredits(int _credits)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setAvailableCredits(_credits);
     }
 }
 

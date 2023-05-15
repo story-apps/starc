@@ -67,6 +67,12 @@ public:
     void setCommentsModeEnabled(bool _enabled);
 
     /**
+     * @brief Включён ли режим ИИ помощника
+     */
+    bool isAiAssistantEnabled() const;
+    void setAiAssistantEnabled(bool _enabled);
+
+    /**
      * @brief Включена ли опция изолирования элементов на экране
      */
     bool isItemIsolationEnabled() const;
@@ -80,6 +86,7 @@ signals:
     void beatsVisibleChanged(bool _visible);
     void searchPressed();
     void commentsModeEnabledChanged(bool _enabled);
+    void aiAssistantEnabledChanged(bool _enabled);
     void itemIsolationEnabledChanged(bool _enabled);
 
 protected:
