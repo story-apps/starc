@@ -165,7 +165,7 @@ bool StructureProxyModel::filterAcceptsRow(int _sourceRow, const QModelIndex& _s
     case Domain::DocumentObjectType::Character:
     case Domain::DocumentObjectType::Location:
     case Domain::DocumentObjectType::World: {
-        return d->isSubitemsVisible;
+        return d->isSubitemsVisible && item->isVisible();
     }
 
     //
