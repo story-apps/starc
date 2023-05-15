@@ -15,6 +15,7 @@
 #include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/ai_assistant/ai_assistant_view.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
 #include <ui/modules/bookmarks/bookmarks_view.h>
 #include <ui/modules/comments/comments_model.h>
@@ -27,6 +28,7 @@
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/tab_bar/tab_bar.h>
+#include <ui/widgets/task_bar/task_bar.h>
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <utils/helpers/color_helper.h>
@@ -34,7 +36,10 @@
 #include <utils/tools/debouncer.h>
 
 #include <QAction>
+#include <QCoreApplication>
+#include <QElapsedTimer>
 #include <QPointer>
+#include <QRandomGenerator>
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QTimer>
@@ -46,15 +51,19 @@ namespace Ui {
 namespace {
 const int kTypeDataRole = Qt::UserRole + 100;
 
-const int kFastFormatTabIndex = 0;
-const int kCommentsTabIndex = 1;
-const int kBookmarksTabIndex = 2;
+enum {
+    kFastFormatTabIndex = 0,
+    kCommentsTabIndex,
+    kAiAssistantTabIndex,
+    kBookmarksTabIndex,
+};
 
 const QString kSettingsKey = "simple-text";
 const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
 const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
 const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+const QString kIsAiAssistantEnabledKey = kSettingsKey + "/is-ai-assistant-enabled";
 const QString kIsItemIsolationEnabledKey = kSettingsKey + "/is-item-isolation-enabled";
 const QString kIsBookmarksListVisibleKey = kSettingsKey + "/is-bookmarks-list-visible";
 const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
@@ -147,6 +156,7 @@ public:
     StackWidget* sidebarContent = nullptr;
     FastFormatWidget* fastFormatWidget = nullptr;
     CommentsView* commentsView = nullptr;
+    AiAssistantView* aiAssistantView = nullptr;
     BookmarksView* bookmarksView = nullptr;
     //
     Splitter* splitter = nullptr;
@@ -180,6 +190,7 @@ SimpleTextView::Implementation::Implementation(SimpleTextView* _q)
     , sidebarContent(new StackWidget(_q))
     , fastFormatWidget(new FastFormatWidget(_q))
     , commentsView(new CommentsView(_q))
+    , aiAssistantView(new AiAssistantView(_q))
     , bookmarksView(new BookmarksView(_q))
     , splitter(new Splitter(_q))
     , showBookmarksAction(new QAction(_q))
@@ -204,17 +215,21 @@ SimpleTextView::Implementation::Implementation(SimpleTextView* _q)
     sidebarTabs->setTabVisible(kFastFormatTabIndex, false);
     sidebarTabs->addTab({}); // comments
     sidebarTabs->setTabVisible(kCommentsTabIndex, false);
+    sidebarTabs->addTab({}); // ai assistant
+    sidebarTabs->setTabVisible(kAiAssistantTabIndex, false);
     sidebarTabs->addTab({}); // bookmarks
     sidebarTabs->setTabVisible(kBookmarksTabIndex, false);
     sidebarContent->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     sidebarContent->setAnimationType(StackWidget::AnimationType::Slide);
     sidebarContent->addWidget(fastFormatWidget);
     sidebarContent->addWidget(commentsView);
+    sidebarContent->addWidget(aiAssistantView);
     sidebarContent->addWidget(bookmarksView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
     commentsView->setModel(commentsModel);
     commentsView->hide();
+    aiAssistantView->hide();
     bookmarksView->setModel(bookmarksModel);
     bookmarksView->hide();
 
@@ -384,7 +399,8 @@ void SimpleTextView::Implementation::updateCommentsToolbar()
 void SimpleTextView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
     const bool isSidebarShouldBeVisible = toolbar->isFastFormatPanelVisible()
-        || toolbar->isCommentsModeEnabled() || showBookmarksAction->isChecked();
+        || toolbar->isCommentsModeEnabled() || toolbar->isAiAssistantEnabled()
+        || showBookmarksAction->isChecked();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
@@ -483,6 +499,16 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
                     d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
                     d->sidebarContent->setCurrentWidget(d->commentsView);
                     d->updateCommentsToolbar();
+                }
+                d->updateSideBarVisibility(this);
+            });
+    connect(d->toolbar, &SimpleTextEditToolbar::aiAssistantEnabledChanged, this,
+            [this](bool _enabled) {
+                d->sidebarTabs->setTabVisible(kAiAssistantTabIndex, _enabled);
+                d->aiAssistantView->setVisible(_enabled);
+                if (_enabled) {
+                    d->sidebarTabs->setCurrentTab(kAiAssistantTabIndex);
+                    d->sidebarContent->setCurrentWidget(d->aiAssistantView);
                 }
                 d->updateSideBarVisibility(this);
             });
@@ -587,6 +613,25 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
                 d->commentsModel->remove(_indexes);
             });
     //
+    connect(d->aiAssistantView, &AiAssistantView::rephraseRequested, this,
+            &SimpleTextView::rephraseTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::expandRequested, this,
+            &SimpleTextView::expandTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::shortenRequested, this,
+            &SimpleTextView::shortenTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::insertRequested, this,
+            &SimpleTextView::insertTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::summarizeRequested, this,
+            &SimpleTextView::summarizeTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
+            &SimpleTextView::translateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::generateRequested, this,
+            &SimpleTextView::generateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
+            [this](const QString& _text) { d->textEdit->insertPlainText(_text); });
+    connect(d->aiAssistantView, &AiAssistantView::buyCreditsPressed, this,
+            &SimpleTextView::buyCreditsRequested);
+    //
     connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
             &SimpleTextView::createBookmarkRequested);
     connect(d->bookmarksView, &BookmarksView::changeBookmarkRequested, this,
@@ -621,6 +666,10 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
         }
         case kCommentsTabIndex: {
             d->sidebarContent->setCurrentWidget(d->commentsView);
+            break;
+        }
+        case kAiAssistantTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->aiAssistantView);
             break;
         }
         case kBookmarksTabIndex: {
@@ -772,6 +821,7 @@ void SimpleTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
     d->toolbar->setReadOnly(readOnly);
     d->searchManager->setReadOnly(readOnly);
     d->commentsView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
+    d->aiAssistantView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->bookmarksView->setReadOnly(readOnly);
     const auto enabled = !readOnly;
     d->shortcutsManager.setEnabled(enabled);
@@ -790,6 +840,118 @@ void SimpleTextView::setCurrentModelIndex(const QModelIndex& _index)
     }
 
     d->textEdit->setCurrentModelIndex(_index);
+}
+
+void SimpleTextView::setAvailableCredits(int _credits)
+{
+    d->aiAssistantView->setAvailableWords(_credits);
+}
+
+void SimpleTextView::setRephrasedText(const QString& _text)
+{
+    d->aiAssistantView->setRephraseResult(_text);
+}
+
+void SimpleTextView::setExpandedText(const QString& _text)
+{
+    d->aiAssistantView->setExpandResult(_text);
+}
+
+void SimpleTextView::setShortenedText(const QString& _text)
+{
+    d->aiAssistantView->setShortenResult(_text);
+}
+
+void SimpleTextView::setInsertedText(const QString& _text)
+{
+    d->aiAssistantView->setInsertResult(_text);
+}
+
+void SimpleTextView::setSummarizedText(const QString& _text)
+{
+    d->aiAssistantView->setSummarizeResult(_text);
+}
+
+void SimpleTextView::setTranslatedText(const QString& _text)
+{
+    d->aiAssistantView->setTransateResult(_text);
+}
+
+void SimpleTextView::setGeneratedText(const QString& _text)
+{
+    const QLatin1String textWritingTaskKey("text-writing-task");
+    TaskBar::addTask(textWritingTaskKey);
+    TaskBar::setTaskTitle(textWritingTaskKey, tr("Writing text"));
+
+    //
+    // Отключим отображение всплывающих подсказок
+    //
+    d->textEdit->setCompleterActive(false);
+
+    //
+    // Переходим в конец позицию вставки, а затем переводим его на новую строку, или сдвигаем
+    // последующий текст, чтобы помещать текст в новом блоке
+    //
+    switch (d->aiAssistantView->textInsertPosition()) {
+    case AiAssistantView::TextInsertPosition::AtBeginning: {
+        d->textEdit->moveCursor(QTextCursor::Start);
+        d->textEdit->addParagraph(d->textEdit->currentParagraphType());
+        d->textEdit->moveCursor(QTextCursor::Start);
+        break;
+    }
+
+    case AiAssistantView::TextInsertPosition::AtCursorPosition: {
+        d->textEdit->moveCursor(QTextCursor::EndOfBlock);
+        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
+        break;
+    }
+
+    case AiAssistantView::TextInsertPosition::AtEnd: {
+        d->textEdit->moveCursor(QTextCursor::End);
+        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
+        break;
+    }
+    }
+
+    QElapsedTimer timer;
+    int progress = 0;
+    auto waitForNextOperation = [&timer, &progress, maximum = _text.length(), textWritingTaskKey] {
+        timer.restart();
+        const auto delay = QRandomGenerator::global()->bounded(10, 60);
+        while (!timer.hasExpired(delay)) {
+            QCoreApplication::processEvents();
+        }
+
+        ++progress;
+        TaskBar::setTaskProgress(textWritingTaskKey, progress * 100 / static_cast<qreal>(maximum));
+    };
+
+    auto lines = _text.split('\n', Qt::SkipEmptyParts);
+    for (auto& line : lines) {
+        d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Text);
+        for (int index = 0; index < line.length(); ++index) {
+            QCoreApplication::postEvent(d->textEdit,
+                                        new QKeyEvent(QEvent::KeyPress, Qt::Key_unknown,
+                                                      Qt::NoModifier, line.mid(index, 1)));
+            QCoreApplication::postEvent(d->textEdit,
+                                        new QKeyEvent(QEvent::KeyRelease, Qt::Key_unknown,
+                                                      Qt::NoModifier, line.mid(index, 1)));
+            waitForNextOperation();
+        }
+
+        QCoreApplication::postEvent(
+            d->textEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
+        QCoreApplication::postEvent(
+            d->textEdit, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Return, Qt::NoModifier));
+        waitForNextOperation();
+    }
+
+    //
+    // Возвращаем возможность использования всплывающих подсказок
+    //
+    d->textEdit->setCompleterActive(true);
+
+    TaskBar::finishTask(textWritingTaskKey);
 }
 
 void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
@@ -878,6 +1040,8 @@ void SimpleTextView::loadViewSettings()
     d->toolbar->setItemIsolationEnabled(isItemIsolationEnabled);
     const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
+    const auto isTextGenerationEnabled = settingsValue(kIsAiAssistantEnabledKey, false).toBool();
+    d->toolbar->setAiAssistantEnabled(isTextGenerationEnabled);
     const auto isFastFormatPanelVisible
         = settingsValue(kIsFastFormatPanelVisibleKey, false).toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
@@ -896,6 +1060,7 @@ void SimpleTextView::saveViewSettings()
 
     setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
     setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
+    setSettingsValue(kIsAiAssistantEnabledKey, d->toolbar->isAiAssistantEnabled());
     setSettingsValue(kIsItemIsolationEnabledKey, d->toolbar->isItemIsolationEnabled());
     setSettingsValue(kIsBookmarksListVisibleKey, d->showBookmarksAction->isChecked());
     setSettingsValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab());
@@ -983,7 +1148,12 @@ void SimpleTextView::updateTranslations()
 {
     d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
+    d->sidebarTabs->setTabName(kAiAssistantTabIndex, tr("AI assistant"));
     d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
+
+    d->aiAssistantView->setGenerationPromptHint(
+        tr("Start prompt from something like \"Write a story about ...\", or \"Write about ...\", "
+           "or simply ask AI about anything"));
 
     d->updateOptionsTranslations();
 

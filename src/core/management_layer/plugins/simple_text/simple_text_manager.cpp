@@ -16,7 +16,7 @@
 namespace ManagementLayer {
 
 namespace {
-const QString kSettingsKey = "simple-text";
+const QLatin1String kSettingsKey("simple-text");
 QString cursorPositionFor(Domain::DocumentObject* _item)
 {
     return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
@@ -147,6 +147,23 @@ Ui::SimpleTextView* SimpleTextManager::Implementation::createView(
         textItem->clearBookmark();
         modelForView(view)->updateItem(textItem);
     });
+    //
+    connect(view, &Ui::SimpleTextView::rephraseTextRequested, q,
+            &SimpleTextManager::rephraseTextRequested);
+    connect(view, &Ui::SimpleTextView::expandTextRequested, q,
+            &SimpleTextManager::expandTextRequested);
+    connect(view, &Ui::SimpleTextView::shortenTextRequested, q,
+            &SimpleTextManager::shortenTextRequested);
+    connect(view, &Ui::SimpleTextView::insertTextRequested, q,
+            &SimpleTextManager::insertTextRequested);
+    connect(view, &Ui::SimpleTextView::summarizeTextRequested, q,
+            &SimpleTextManager::summarizeTextRequested);
+    connect(view, &Ui::SimpleTextView::translateTextRequested, q,
+            &SimpleTextManager::translateTextRequested);
+    connect(view, &Ui::SimpleTextView::generateTextRequested, q,
+            [this](const QString& _text) { emit q->generateTextRequested(_text, {}); });
+    connect(view, &Ui::SimpleTextView::buyCreditsRequested, q,
+            &SimpleTextManager::buyCreditsRequested);
 
     return view;
 }
@@ -372,6 +389,17 @@ void SimpleTextManager::setEditingMode(DocumentEditingMode _mode)
         }
 
         viewAndModel.view->setEditingMode(_mode);
+    }
+}
+
+void SimpleTextManager::setAvailableCredits(int _credits)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setAvailableCredits(_credits);
     }
 }
 
