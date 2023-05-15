@@ -982,7 +982,7 @@ void ComicBookTextView::setGeneratedText(const QString& _text)
             line = line.remove('"').replace(": ", ":");
             nextBlockShoudBeDialogue = true;
         } else if (nextBlockShoudBeDialogue) {
-            //
+            nextBlockShoudBeDialogue = false;
         } else {
             d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Description);
         }

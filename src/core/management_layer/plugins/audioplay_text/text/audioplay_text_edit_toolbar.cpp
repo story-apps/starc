@@ -27,6 +27,7 @@ public:
     QAction* fastFormatAction = nullptr;
     QAction* searchAction = nullptr;
     QAction* commentsAction = nullptr;
+    QAction* aiAssistantAction = nullptr;
     QAction* isolationAction = nullptr;
 
     CardPopupWithTree* popup = nullptr;
@@ -39,6 +40,7 @@ AudioplayTextEditToolbar::Implementation::Implementation(QWidget* _parent)
     , fastFormatAction(new QAction(_parent))
     , searchAction(new QAction(_parent))
     , commentsAction(new QAction(_parent))
+    , aiAssistantAction(new QAction(_parent))
     , isolationAction(new QAction(_parent))
     , popup(new CardPopupWithTree(_parent))
 {
@@ -119,6 +121,14 @@ AudioplayTextEditToolbar::AudioplayTextEditToolbar(QWidget* _parent)
             &AudioplayTextEditToolbar::updateTranslations);
     connect(d->commentsAction, &QAction::toggled, this,
             &AudioplayTextEditToolbar::commentsModeEnabledChanged);
+
+    d->aiAssistantAction->setIconText(u8"\U000F0068");
+    d->aiAssistantAction->setCheckable(true);
+    addAction(d->aiAssistantAction);
+    connect(d->aiAssistantAction, &QAction::toggled, this,
+            &AudioplayTextEditToolbar::updateTranslations);
+    connect(d->aiAssistantAction, &QAction::toggled, this,
+            &AudioplayTextEditToolbar::aiAssistantEnabledChanged);
 
     d->isolationAction->setIconText(u8"\U000F0EFF");
     d->isolationAction->setCheckable(true);
@@ -239,6 +249,16 @@ void AudioplayTextEditToolbar::setCommentsModeEnabled(bool _enabled)
     d->commentsAction->setChecked(_enabled);
 }
 
+bool AudioplayTextEditToolbar::isAiAssistantEnabled() const
+{
+    return d->aiAssistantAction->isChecked();
+}
+
+void AudioplayTextEditToolbar::setAiAssistantEnabled(bool _enabled)
+{
+    d->aiAssistantAction->setChecked(_enabled);
+}
+
 bool AudioplayTextEditToolbar::isItemIsolationEnabled() const
 {
     return d->isolationAction->isChecked();
@@ -274,6 +294,8 @@ void AudioplayTextEditToolbar::updateTranslations()
             QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     d->commentsAction->setToolTip(d->commentsAction->isChecked() ? tr("Disable review mode")
                                                                  : tr("Enable review mode"));
+    d->aiAssistantAction->setToolTip(d->aiAssistantAction->isChecked() ? tr("Disable AI assistant")
+                                                                       : tr("Enable AI assistant"));
     d->isolationAction->setToolTip(d->isolationAction->isChecked()
                                        ? tr("Disable structure items isolation mode")
                                        : tr("Enable structure items isolation mode"));

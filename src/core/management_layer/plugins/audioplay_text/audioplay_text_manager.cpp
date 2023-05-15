@@ -16,7 +16,7 @@
 namespace ManagementLayer {
 
 namespace {
-const QString kSettingsKey = "audioplay-text";
+const QLatin1String kSettingsKey("audioplay-text");
 QString cursorPositionFor(Domain::DocumentObject* _item)
 {
     return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
@@ -152,6 +152,24 @@ Ui::AudioplayTextView* AudioplayTextManager::Implementation::createView(
         textItem->clearBookmark();
         model->updateItem(textItem);
     });
+    //
+    connect(view, &Ui::AudioplayTextView::rephraseTextRequested, q,
+            &AudioplayTextManager::rephraseTextRequested);
+    connect(view, &Ui::AudioplayTextView::expandTextRequested, q,
+            &AudioplayTextManager::expandTextRequested);
+    connect(view, &Ui::AudioplayTextView::shortenTextRequested, q,
+            &AudioplayTextManager::shortenTextRequested);
+    connect(view, &Ui::AudioplayTextView::insertTextRequested, q,
+            &AudioplayTextManager::insertTextRequested);
+    connect(view, &Ui::AudioplayTextView::summarizeTextRequested, q,
+            &AudioplayTextManager::summarizeTextRequested);
+    connect(view, &Ui::AudioplayTextView::translateTextRequested, q,
+            &AudioplayTextManager::translateTextRequested);
+    connect(view, &Ui::AudioplayTextView::generateTextRequested, q, [this](const QString& _text) {
+        emit q->generateTextRequested(_text, "write result in fountain format.");
+    });
+    connect(view, &Ui::AudioplayTextView::buyCreditsRequested, q,
+            &AudioplayTextManager::buyCreditsRequested);
 
     return view;
 }
@@ -377,6 +395,17 @@ void AudioplayTextManager::setEditingMode(DocumentEditingMode _mode)
         }
 
         viewAndModel.view->setEditingMode(_mode);
+    }
+}
+
+void AudioplayTextManager::setAvailableCredits(int _credits)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setAvailableCredits(_credits);
     }
 }
 

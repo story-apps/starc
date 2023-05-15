@@ -16,7 +16,7 @@
 namespace ManagementLayer {
 
 namespace {
-const QString kSettingsKey = "stageplay-text";
+const QLatin1String kSettingsKey("stageplay-text");
 QString cursorPositionFor(Domain::DocumentObject* _item)
 {
     return QString("%1/%2/last-cursor").arg(kSettingsKey, _item->uuid().toString());
@@ -149,6 +149,24 @@ Ui::StageplayTextView* StageplayTextManager::Implementation::createView(
         textItem->clearBookmark();
         modelForView(view)->updateItem(textItem);
     });
+    //
+    connect(view, &Ui::StageplayTextView::rephraseTextRequested, q,
+            &StageplayTextManager::rephraseTextRequested);
+    connect(view, &Ui::StageplayTextView::expandTextRequested, q,
+            &StageplayTextManager::expandTextRequested);
+    connect(view, &Ui::StageplayTextView::shortenTextRequested, q,
+            &StageplayTextManager::shortenTextRequested);
+    connect(view, &Ui::StageplayTextView::insertTextRequested, q,
+            &StageplayTextManager::insertTextRequested);
+    connect(view, &Ui::StageplayTextView::summarizeTextRequested, q,
+            &StageplayTextManager::summarizeTextRequested);
+    connect(view, &Ui::StageplayTextView::translateTextRequested, q,
+            &StageplayTextManager::translateTextRequested);
+    connect(view, &Ui::StageplayTextView::generateTextRequested, q, [this](const QString& _text) {
+        emit q->generateTextRequested(_text, "write result in fountain format.");
+    });
+    connect(view, &Ui::StageplayTextView::buyCreditsRequested, q,
+            &StageplayTextManager::buyCreditsRequested);
 
     return view;
 }
@@ -373,6 +391,17 @@ void StageplayTextManager::setEditingMode(DocumentEditingMode _mode)
         }
 
         viewAndModel.view->setEditingMode(_mode);
+    }
+}
+
+void StageplayTextManager::setAvailableCredits(int _credits)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setAvailableCredits(_credits);
     }
 }
 
