@@ -16,6 +16,7 @@
 #include <QPainter>
 #include <QParallelAnimationGroup>
 #include <QScreen>
+#include <QShortcut>
 #include <QTimer>
 #include <QToolTip>
 #include <QVBoxLayout>
@@ -96,6 +97,15 @@ ApplicationView::ApplicationView(QWidget* _parent)
 
     connect(d->turnOffFullScreenIcon, &IconsBigLabel::clicked, this,
             &ApplicationView::turnOffFullScreenRequested);
+
+
+#ifndef Q_OS_WIN
+    //
+    // Добавляем шорткат для выхода по Ctrl+Q
+    //
+    new QShortcut(QKeySequence("Ctrl+Q"), this, this, &ApplicationView::close,
+                  Qt::ApplicationShortcut);
+#endif
 }
 
 ApplicationView::~ApplicationView() = default;
