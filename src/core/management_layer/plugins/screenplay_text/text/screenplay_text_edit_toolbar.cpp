@@ -314,9 +314,8 @@ void ScreenplayTextEditToolbar::updateTranslations()
             QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     d->commentsAction->setToolTip(d->commentsAction->isChecked() ? tr("Disable review mode")
                                                                  : tr("Enable review mode"));
-    d->aiAssistantAction->setToolTip(d->aiAssistantAction->isChecked()
-                                            ? tr("Disable AI assistant")
-                                            : tr("Enable AI assistant"));
+    d->aiAssistantAction->setToolTip(d->aiAssistantAction->isChecked() ? tr("Disable AI assistant")
+                                                                       : tr("Enable AI assistant"));
     d->isolationAction->setToolTip(d->isolationAction->isChecked()
                                        ? tr("Disable structure items isolation mode")
                                        : tr("Enable structure items isolation mode"));
