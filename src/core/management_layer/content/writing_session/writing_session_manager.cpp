@@ -227,9 +227,10 @@ void WritingSessionManager::Implementation::processStatistics()
             data.brushColor
                 = ColorHelper::transparent(data.color, Ui::DesignSystem::elevationEndOpacity());
             data.x = { x.begin(), x.end() };
-            QVector<qreal> dataY = { deviceY[iter.key()].begin(), deviceY[iter.key()].end() };
-            std::transform(dataY.begin(), dataY.end(), lastY.begin(), std::back_inserter(data.y),
-                           std::plus<qreal>());
+            data.y = { deviceY[iter.key()].begin(), deviceY[iter.key()].end() };
+            for (auto i = 0; i < lastY.size(); ++i) {
+                data.y[i] += lastY[i];
+            }
             plot.data.prepend(data);
 
             lastY = data.y;
