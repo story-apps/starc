@@ -138,7 +138,7 @@ QModelIndexList StageplayTextStructureView::selectedIndexes() const
 
 void StageplayTextStructureView::updateTranslations()
 {
-    d->backText->setText("Back to navigator");
+    d->backText->setText(tr("Back to navigator"));
 }
 
 void StageplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

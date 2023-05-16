@@ -132,7 +132,7 @@ QModelIndexList ComicBookTextStructureView::selectedIndexes() const
 
 void ComicBookTextStructureView::updateTranslations()
 {
-    d->backText->setText("Back to navigator");
+    d->backText->setText(tr("Back to navigator"));
 }
 
 void ComicBookTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

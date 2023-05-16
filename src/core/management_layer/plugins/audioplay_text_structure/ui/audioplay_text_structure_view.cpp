@@ -138,7 +138,7 @@ QModelIndexList AudioplayTextStructureView::selectedIndexes() const
 
 void AudioplayTextStructureView::updateTranslations()
 {
-    d->backText->setText("Back to navigator");
+    d->backText->setText(tr("Back to navigator"));
 }
 
 void AudioplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

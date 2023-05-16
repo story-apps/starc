@@ -298,7 +298,7 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
 
             case ManagementLayer::DocumentEditingMode::Mixed: {
                 roleIcon = u8"\U000F11BF";
-                roleText = projectsScene()->tr("Partical access");
+                roleText = projectsScene()->tr("Partial access");
                 break;
             }
             }
