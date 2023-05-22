@@ -18,6 +18,7 @@
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <ui/widgets/tree/tree.h>
+#include <utils/helpers/time_helper.h>
 
 #include <QAction>
 #include <QSortFilterProxyModel>
@@ -115,6 +116,7 @@ void ScreenplayTextStructureView::Implementation::updateCounters()
     }();
 
     countersWidget->setCounters({
+        QString("%1: %2").arg(tr("Duration"), TimeHelper::toString(screenplayModel->duration())),
         tr("%n page(s)", "", pageCount),
         tr("%n scene(s)", "", screenplayModel->scenesCount()),
         tr("%n word(s)", "", screenplayModel->wordsCount()),
