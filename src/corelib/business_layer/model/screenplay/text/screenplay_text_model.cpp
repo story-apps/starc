@@ -301,7 +301,8 @@ void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QSt
                             || (text.length() > nameEndIndex + 1
                                 && text.mid(nameEndIndex, 2) == " ,");
                         if (!atLeftAllOk || !atRightAllOk) {
-                            nameIndex = TextHelper::smartToUpper(text).indexOf(oldName, nameIndex);
+                            nameIndex
+                                = TextHelper::smartToUpper(text).indexOf(oldName, nameEndIndex);
                             continue;
                         }
 

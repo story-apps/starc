@@ -261,7 +261,8 @@ void NovelTextModel::updateCharacterName(const QString& _oldName, const QString&
                             || (text.length() > nameEndIndex + 1
                                 && text.mid(nameEndIndex, 2) == " ,");
                         if (!atLeftAllOk || !atRightAllOk) {
-                            nameIndex = TextHelper::smartToUpper(text).indexOf(oldName, nameIndex);
+                            nameIndex
+                                = TextHelper::smartToUpper(text).indexOf(oldName, nameEndIndex);
                             continue;
                         }
 
