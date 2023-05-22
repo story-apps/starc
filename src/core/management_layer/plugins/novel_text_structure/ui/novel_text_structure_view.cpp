@@ -229,6 +229,8 @@ QModelIndexList NovelTextStructureView::selectedIndexes() const
 
 void NovelTextStructureView::updateTranslations()
 {
+    d->backIcon->setToolTip(tr("Back to navigator"));
+    d->backText->setToolTip(tr("Back to navigator"));
     d->updateCounters();
 }
 
