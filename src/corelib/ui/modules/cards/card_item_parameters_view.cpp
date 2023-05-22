@@ -266,6 +266,11 @@ CardItemParametersView::CardItemParametersView(QWidget* _parent)
             [this] { emit storyDayChanged(d->storyDay->text()); });
     connect(d->stamp, &TextField::textChanged, this,
             [this] { emit stampChanged(d->stamp->text()); });
+    connect(d->numberingTitle, &AbstractLabel::clicked, this, [this] {
+        if (d->autoNumbering->isVisible() && d->autoNumbering->isEnabled()) {
+            d->autoNumbering->toggle();
+        }
+    });
     connect(d->autoNumbering, &Toggle::checkedChanged, this, [this](bool _checked) {
         const auto isCustomNumber = !_checked;
         d->customNumber->setVisible(isCustomNumber);
