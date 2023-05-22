@@ -13,25 +13,23 @@
 
 namespace Ui {
 
-namespace {
-
-QString settingsCounterKey(int _index)
-{
-    return QString("widgets/counters-info-widget/novel/%1").arg(_index);
-}
-
-} // namespace
-
 class CountersInfoWidget::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
 
     /**
+     * @brief Ключи для доступа к сохранённым значениям о включённых для отображения счётчиках
+     */
+    QString settingsCounterKey(int _index);
+
+    /**
      * @brief Обновить текст лейбла со счётчиками в соответствии с выбранными настройками
      */
     void updateCountersLabelText();
 
+
+    QString settingsCounterModuleKey = QLatin1String("text");
 
     AbstractLabel* countersLabel = nullptr;
     AbstractLabel* showCountersMenuLabel = nullptr;
@@ -49,6 +47,11 @@ CountersInfoWidget::Implementation::Implementation(QWidget* _parent)
 {
     showCountersMenuLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     showCountersMenuLabel->setText(u8"\U000F035D");
+}
+
+QString CountersInfoWidget::Implementation::settingsCounterKey(int _index)
+{
+    return QString("widgets/counters-info-widget/%1/%2").arg(settingsCounterModuleKey).arg(_index);
 }
 
 void CountersInfoWidget::Implementation::updateCountersLabelText()
@@ -102,7 +105,7 @@ CountersInfoWidget::CountersInfoWidget(QWidget* _parent)
                 action->setIconText(_checked ? u8"\U000F012C" : u8"\U000F68C0");
                 d->updateCountersLabelText();
 
-                QSettings().setValue(settingsCounterKey(index), _checked);
+                QSettings().setValue(d->settingsCounterKey(index), _checked);
             });
 
             menuActions.append(action);
@@ -123,6 +126,11 @@ CountersInfoWidget::CountersInfoWidget(QWidget* _parent)
 
 CountersInfoWidget::~CountersInfoWidget() = default;
 
+void CountersInfoWidget::setSettingsCounterModuleKey(const QString& _key)
+{
+    d->settingsCounterModuleKey = _key;
+}
+
 void CountersInfoWidget::setCounters(const QVector<QString>& _counters)
 {
     Q_ASSERT(!_counters.isEmpty());
@@ -135,10 +143,10 @@ void CountersInfoWidget::setCounters(const QVector<QString>& _counters)
         //
         // ... если это первое использование, включим отображение первого из счётчиков
         //
-        d->counters[0].isVisible = QSettings().value(settingsCounterKey(0), true).toBool();
+        d->counters[0].isVisible = QSettings().value(d->settingsCounterKey(0), true).toBool();
         for (int index = 1; index < d->counters.size(); ++index) {
             d->counters[index].isVisible
-                = QSettings().value(settingsCounterKey(index), false).toBool();
+                = QSettings().value(d->settingsCounterKey(index), false).toBool();
         }
     }
 

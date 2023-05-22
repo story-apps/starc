@@ -270,6 +270,7 @@ SOURCES += \
     ui/modules/comments/comments_model.cpp \
     ui/modules/comments/comments_toolbar.cpp \
     ui/modules/comments/comments_view.cpp \
+    ui/modules/counters_info/counters_info_widget.cpp \
     ui/modules/cover_generator/cover_generator_sidebar.cpp \
     ui/modules/cover_generator/cover_generator_view.cpp \
     ui/modules/cover_generator/unsplash_images_view.cpp \
@@ -588,6 +589,7 @@ HEADERS += \
     ui/modules/comments/comments_model.h \
     ui/modules/comments/comments_toolbar.h \
     ui/modules/comments/comments_view.h \
+    ui/modules/counters_info/counters_info_widget.h \
     ui/modules/cover_generator/cover_generator_sidebar.h \
     ui/modules/cover_generator/cover_generator_view.h \
     ui/modules/cover_generator/unsplash_images_view.h \

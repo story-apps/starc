@@ -33,14 +33,12 @@ DEPENDPATH += $$PWD/../../../../corelib
 HEADERS += \
     business_layer/novel_text_structure_model.h \
     novel_text_structure_manager.h \
-    ui/counters_info_widget.h \
     ui/novel_text_structure_delegate.h \
     ui/novel_text_structure_view.h
 
 SOURCES += \
     business_layer/novel_text_structure_model.cpp \
     novel_text_structure_manager.cpp \
-    ui/counters_info_widget.cpp \
     ui/novel_text_structure_delegate.cpp \
     ui/novel_text_structure_view.cpp
 

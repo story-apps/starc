@@ -1,6 +1,5 @@
 #include "screenplay_text_structure_view.h"
 
-#include "counters_info_widget.h"
 #include "screenplay_text_structure_delegate.h"
 
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
@@ -13,6 +12,7 @@
 #include <data_layer/storage/storage_facade.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/counters_info/counters_info_widget.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -67,6 +67,8 @@ ScreenplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     content->setDragDropEnabled(true);
     content->setSelectionMode(QAbstractItemView::ExtendedSelection);
     content->setItemDelegate(contentDelegate);
+
+    countersWidget->setSettingsCounterModuleKey(QLatin1String("screenplay"));
 
     new Shadow(Qt::TopEdge, content);
     new Shadow(Qt::BottomEdge, content);

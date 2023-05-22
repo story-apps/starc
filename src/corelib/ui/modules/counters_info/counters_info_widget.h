@@ -17,6 +17,11 @@ public:
     ~CountersInfoWidget() override;
 
     /**
+     * @brief Задать ключ с названием модуля для сохранения настроек включённых счётчиков
+     */
+    void setSettingsCounterModuleKey(const QString& _key);
+
+    /**
      * @brief Задать счётчики
      */
     void setCounters(const QVector<QString>& _counters);
