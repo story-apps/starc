@@ -56,6 +56,7 @@ const QLatin1String kWeaknessKey("weakness");
 const QLatin1String kHobbiesKey("hobbies");
 const QLatin1String kHabitsKey("habits");
 const QLatin1String kHealthKey("health");
+const QLatin1String kSpeechKey("speech");
 const QLatin1String kPetKey("pet");
 const QLatin1String kDressKey("dress");
 const QLatin1String kSomethingAlwaysCarriedKey("something_always_carried");
@@ -137,6 +138,7 @@ public:
     QString hobbies;
     QString habits;
     QString health;
+    QString speech;
     QString pet;
     QString dress;
     QString somethingAlwaysCarried;
@@ -284,6 +286,7 @@ CharacterModel::CharacterModel(QObject* _parent)
     connect(this, &CharacterModel::hobbiesChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::habitsChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::healthChanged, this, &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::speechChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::petChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::dressChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::somethingAlwaysCarriedChanged, this,
@@ -958,6 +961,20 @@ void CharacterModel::setHealth(const QString& _text)
     d->health = _text;
     emit healthChanged(d->health);
 }
+
+QString CharacterModel::speech() const
+{
+    return d->speech;
+}
+void CharacterModel::setSpeech(const QString& _text)
+{
+    if (d->speech == _text) {
+        return;
+    }
+    d->speech = _text;
+    emit speechChanged(d->speech);
+}
+
 QString CharacterModel::pet() const
 {
     return d->pet;
@@ -1567,6 +1584,7 @@ void CharacterModel::initDocument()
     d->hobbies = load(kHobbiesKey);
     d->habits = load(kHabitsKey);
     d->health = load(kHealthKey);
+    d->speech = load(kSpeechKey);
     d->pet = load(kPetKey);
     d->dress = load(kDressKey);
     d->somethingAlwaysCarried = load(kSomethingAlwaysCarriedKey);
@@ -1687,6 +1705,7 @@ QByteArray CharacterModel::toXml() const
     save(kHobbiesKey, d->hobbies);
     save(kHabitsKey, d->habits);
     save(kHealthKey, d->health);
+    save(kSpeechKey, d->speech);
     save(kPetKey, d->pet);
     save(kDressKey, d->dress);
     save(kSomethingAlwaysCarriedKey, d->somethingAlwaysCarried);
@@ -1880,6 +1899,7 @@ ChangeCursor CharacterModel::applyPatch(const QByteArray& _patch)
     setHobbies(load(kHobbiesKey));
     setHabits(load(kHabitsKey));
     setHealth(load(kHealthKey));
+    setSpeech(load(kSpeechKey));
     setPet(load(kPetKey));
     setDress(load(kDressKey));
     setSomethingAlwaysCarried(load(kSomethingAlwaysCarriedKey));

@@ -228,6 +228,10 @@ public:
     void setHealth(const QString& _text);
     Q_SIGNAL void healthChanged(const QString& _text);
 
+    QString speech() const;
+    void setSpeech(const QString& _text);
+    Q_SIGNAL void speechChanged(const QString& _text);
+
     QString pet() const;
     void setPet(const QString& _text);
     Q_SIGNAL void petChanged(const QString& _text);
