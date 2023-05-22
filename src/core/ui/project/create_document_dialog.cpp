@@ -288,6 +288,7 @@ void CreateDocumentDialog::setDocumentType(Domain::DocumentObjectType _type)
     for (auto option : std::as_const(d->options)) {
         if (option->documentType() == _type) {
             option->setChecked(true);
+            d->content->ensureWidgetVisible(option);
             break;
         }
     }
