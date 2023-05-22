@@ -33,6 +33,11 @@ public:
     SpellChecker& spellChecker;
 
     /**
+     * @brief Язык проверки орфографии текущего редактора
+     */
+    QString spellCheckerLanguage;
+
+    /**
      * @brief Политика обновления состояния проверки орфографии
      */
     SpellCheckPolicy policy = SpellCheckPolicy::Auto;
@@ -107,9 +112,11 @@ bool SpellCheckTextEdit::useSpellChecker() const
 
 void SpellCheckTextEdit::setSpellCheckLanguage(const QString& _languageCode)
 {
-    if (d->spellChecker.spellingLanguage() == _languageCode) {
+    if (d->spellCheckerLanguage == _languageCode) {
         return;
     }
+
+    d->spellCheckerLanguage = _languageCode;
 
     //
     // Установим язык проверяющего
