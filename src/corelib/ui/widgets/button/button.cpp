@@ -98,8 +98,6 @@ Button::Button(QWidget* _parent)
             qOverload<>(&Button::update));
     connect(&d->shadowBlurRadiusAnimation, &QVariantAnimation::valueChanged, this,
             qOverload<>(&Button::update));
-
-    designSystemChangeEvent(nullptr);
 }
 
 Button::~Button() = default;

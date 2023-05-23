@@ -41,9 +41,6 @@ CardPopupWithTree::CardPopupWithTree(QWidget* _parent)
         hidePopup();
         emit currentIndexChanged(_index);
     });
-
-
-    designSystemChangeEvent(nullptr);
 }
 
 CardPopupWithTree::~CardPopupWithTree() = default;

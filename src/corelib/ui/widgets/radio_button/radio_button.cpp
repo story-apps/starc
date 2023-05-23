@@ -33,8 +33,6 @@ RadioButton::RadioButton(QWidget* _parent)
 
     connect(&d->decorationAnimation, &ClickAnimation::valueChanged, this,
             qOverload<>(&RadioButton::update));
-
-    designSystemChangeEvent(nullptr);
 }
 
 RadioButton::~RadioButton() = default;

@@ -65,7 +65,6 @@ ColorHueSlider::ColorHueSlider(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation)
 {
-    designSystemChangeEvent(nullptr);
 }
 
 ColorHueSlider::~ColorHueSlider() = default;

@@ -14,9 +14,6 @@ ProjectsToolBar::ProjectsToolBar(QWidget* _parent)
     menuAction->setText(u8"\U000f035c");
     addAction(menuAction);
     connect(menuAction, &QAction::triggered, this, &ProjectsToolBar::menuPressed);
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 void ProjectsToolBar::updateTranslations()

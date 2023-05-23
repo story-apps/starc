@@ -29,7 +29,7 @@ public:
     /**
      * @brief Скрыть кнопку остановки сессии
      */
-    void hideterminateButton();
+    void hideTerminateButton();
 
 signals:
     /**

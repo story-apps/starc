@@ -35,8 +35,6 @@ SettingsToolBar::SettingsToolBar(QWidget* _parent)
     backAction->setIconText(u8"\U000F004D");
     d->toolBar->addAction(backAction);
     connect(backAction, &QAction::triggered, this, &SettingsToolBar::backPressed);
-
-    designSystemChangeEvent(nullptr);
 }
 
 SettingsToolBar::~SettingsToolBar() = default;

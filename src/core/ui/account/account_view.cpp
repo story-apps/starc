@@ -529,7 +529,7 @@ void AccountView::setSessions(const QVector<Domain::SessionInfo>& _sessions)
         auto sessionWidget = new SessionWidget(d->content->widget());
         sessionWidget->setSessionInfo(sessionInfo);
         if (_sessions.size() == 1) {
-            sessionWidget->hideterminateButton();
+            sessionWidget->hideTerminateButton();
         }
 
         connect(sessionWidget, &SessionWidget::terminateOthersRequested, this,

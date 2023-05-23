@@ -35,8 +35,6 @@ SessionStatisticsToolBar::SessionStatisticsToolBar(QWidget* _parent)
     backAction->setIconText(u8"\U000F004D");
     d->toolBar->addAction(backAction);
     connect(backAction, &QAction::triggered, this, &SessionStatisticsToolBar::backPressed);
-
-    designSystemChangeEvent(nullptr);
 }
 
 SessionStatisticsToolBar::~SessionStatisticsToolBar() = default;

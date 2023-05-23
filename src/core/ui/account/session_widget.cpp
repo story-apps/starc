@@ -72,10 +72,6 @@ SessionWidget::SessionWidget(QWidget* _parent)
             emit terminateRequested();
         }
     });
-
-
-    updateTranslations();
-    designSystemChangeEvent(nullptr);
 }
 
 SessionWidget::~SessionWidget() = default;
@@ -113,7 +109,7 @@ void SessionWidget::setSessionInfo(const Domain::SessionInfo& _sessionInfo)
     designSystemChangeEvent(nullptr);
 }
 
-void SessionWidget::hideterminateButton()
+void SessionWidget::hideTerminateButton()
 {
     d->terinateSession->hide();
 }

@@ -67,9 +67,6 @@ public:
         layout->addWidget(m_readMore, 0, Qt::AlignLeft);
         layout->addStretch();
         setLayout(layout);
-
-        updateTranslations();
-        designSystemChangeEvent(nullptr);
     }
 
     void setText(const QString& _text)

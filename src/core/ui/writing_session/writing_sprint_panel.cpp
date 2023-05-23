@@ -297,9 +297,6 @@ WritingSprintPanel::WritingSprintPanel(QWidget* _parent)
         d->sprintOptions->move(mapToGlobal(rect().center())
                                - QPoint(d->sprintOptions->width() / 2, 0));
     });
-
-
-    designSystemChangeEvent(nullptr);
 }
 
 WritingSprintPanel::~WritingSprintPanel() = default;

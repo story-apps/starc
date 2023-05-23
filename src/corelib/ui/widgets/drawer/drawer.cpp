@@ -230,8 +230,6 @@ Drawer::Drawer(QWidget* _parent)
             [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
-
-    designSystemChangeEvent(nullptr);
 }
 
 Drawer::~Drawer() = default;
