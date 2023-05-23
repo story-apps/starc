@@ -1759,6 +1759,29 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
     auto newItemsPlain = makeItemsPlain(newItems);
 
     //
+    // Если изменение касается таблицы, но в списке элементов нет закрывающего таблицу элемента,
+    // добавим его вручную, чтобы корректно отработал алгоритм корректировки текста
+    //
+    bool needToAddSplitterEnd = false;
+    for (const auto& item : oldItemsPlain) {
+        if (item->type() != TextModelItemType::Splitter) {
+            continue;
+        }
+
+        const auto splitterItem = static_cast<TextModelSplitterItem*>(item);
+        needToAddSplitterEnd = splitterItem->splitterType() == TextModelSplitterItemType::Start;
+    }
+    if (needToAddSplitterEnd) {
+        auto splitterEndItem = [this] {
+            auto item = createSplitterItem();
+            item->setSplitterType(TextModelSplitterItemType::End);
+            return item;
+        };
+        oldItemsPlain.append(splitterEndItem());
+        newItemsPlain.append(splitterEndItem());
+    }
+
+    //
     // Если элеметов очень много, то обсчитывать все изменения будет очень дорого,
     // поэтому применяем грубую силу - просто накатываем патч и обновляем модель целиком
     //
