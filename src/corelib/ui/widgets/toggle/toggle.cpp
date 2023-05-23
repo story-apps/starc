@@ -1,6 +1,7 @@
 #include "toggle.h"
 
 #include <ui/design_system/design_system.h>
+#include <ui/widgets/animations/click_animation.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
 
@@ -33,6 +34,11 @@ public:
     Toggle* q = nullptr;
     bool isChecked = true;
     QVariantAnimation tumblerAnimation;
+
+    /**
+     * @brief  Декорации переключателя при клике
+     */
+    ClickAnimation decorationAnimation;
 };
 
 Toggle::Implementation::Implementation(Toggle* _q)
@@ -94,12 +100,15 @@ Toggle::Toggle(QWidget* _parent)
     : Widget(_parent)
     , d(new Implementation(this))
 {
+    setAttribute(Qt::WA_Hover);
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     d->animateToggle();
 
     connect(&d->tumblerAnimation, &QVariantAnimation::valueChanged, this,
+            qOverload<>(&Toggle::update));
+    connect(&d->decorationAnimation, &ClickAnimation::valueChanged, this,
             qOverload<>(&Toggle::update));
 }
 
@@ -198,6 +207,26 @@ void Toggle::paintEvent(QPaintEvent* _event)
                                       Ui::DesignSystem::card().shadowMargins().top() },
                        shadow);
     //
+    // ... рисуем декорацию
+    //
+    if (underMouse() || hasFocus()) {
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(isChecked() ? Ui::DesignSystem::color().accent() : textColor());
+        painter.setOpacity(hasFocus() ? Ui::DesignSystem::focusBackgroundOpacity()
+                                      : Ui::DesignSystem::hoverBackgroundOpacity());
+        const auto radius = d->decorationAnimation.maximumRadius();
+        painter.drawEllipse(toggleRect.center(), radius, radius);
+        painter.setOpacity(1.0);
+    }
+    if (d->decorationAnimation.state() == ClickAnimation::Running) {
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(isChecked() ? Ui::DesignSystem::color().accent() : textColor());
+        painter.setOpacity(d->decorationAnimation.opacity());
+        const auto radius = d->decorationAnimation.radius();
+        painter.drawEllipse(toggleRect.center(), radius, radius);
+        painter.setOpacity(1.0);
+    }
+    //
     // ... рисуем сам переключатель
     //
     painter.drawRoundedRect(toggleRect, toggleRect.width() / 2.0, toggleRect.width() / 2.0);
@@ -205,12 +234,27 @@ void Toggle::paintEvent(QPaintEvent* _event)
 
 void Toggle::mousePressEvent(QMouseEvent* _event)
 {
-    Widget::mousePressEvent(_event);
+    Q_UNUSED(_event);
+    d->decorationAnimation.start();
 }
 
 void Toggle::mouseReleaseEvent(QMouseEvent* _event)
 {
-    Widget::mouseReleaseEvent(_event);
+    if (!rect().contains(_event->pos())) {
+        return;
+    }
 
     setChecked(!d->isChecked);
+}
+
+void Toggle::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    Q_UNUSED(_event)
+
+    d->decorationAnimation.setRadiusInterval(Ui::DesignSystem::toggle().tumblerSize().height()
+                                                 / 2.0,
+                                             Ui::DesignSystem::toggle().tumblerSize().height());
+
+    updateGeometry();
+    update();
 }

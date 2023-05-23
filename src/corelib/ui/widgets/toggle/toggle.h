@@ -49,6 +49,11 @@ protected:
     void mousePressEvent(QMouseEvent* _event) override;
     void mouseReleaseEvent(QMouseEvent* _event) override;
 
+    /**
+     * @brief Переопределяем для обработки события смены дизайн-системы
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
