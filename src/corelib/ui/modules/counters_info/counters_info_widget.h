@@ -8,7 +8,7 @@ namespace Ui {
 /**
  * @brief Виджет с информацией о счётчиках
  */
-class CountersInfoWidget : public Widget
+class CORE_LIBRARY_EXPORT CountersInfoWidget : public Widget
 {
     Q_OBJECT
 
