@@ -180,14 +180,14 @@ void BaseTextEdit::Implementation::reconfigure(BaseTextEdit* _textEdit)
 bool BaseTextEdit::Implementation::selectBlockOnTripleClick(QMouseEvent* _event,
                                                             BaseTextEdit* _textEdit)
 {
-    if (_event->button() == Qt::RightButton) {
+    if (_event->button() != Qt::LeftButton) {
         return false;
     }
 
     const qint64 curentMouseClickTime = QDateTime::currentMSecsSinceEpoch();
     const qint64 timeDelta = curentMouseClickTime - lastMouseClickTime;
     if (timeDelta <= (QApplication::styleHints()->mouseDoubleClickInterval())) {
-        mouseClicks += 1;
+        ++mouseClicks;
     } else {
         mouseClicks = 1;
     }
@@ -197,7 +197,7 @@ bool BaseTextEdit::Implementation::selectBlockOnTripleClick(QMouseEvent* _event,
     // Тройной клик обрабатываем самостоятельно
     //
     if (mouseClicks > 2) {
-        mouseClicks = 1;
+        mouseClicks = 0;
         QTextCursor cursor = _textEdit->textCursor();
         cursor.movePosition(QTextCursor::StartOfBlock);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
