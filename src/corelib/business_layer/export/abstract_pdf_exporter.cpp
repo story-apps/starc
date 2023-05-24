@@ -271,7 +271,8 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
         {
             watermarkPixmap.fill(Qt::transparent);
             QPainter painter(&watermarkPixmap);
-            painter.rotate(qRadiansToDegrees(atan(_body.height() / _body.width())));
+            painter.translate(0, _body.height());
+            painter.rotate(qRadiansToDegrees(tan(_body.height() / _body.width())));
             painter.setFont(font);
             painter.setPen(_exportOptions.watermarkColor);
             const int delta = TextHelper::fineLineSpacing(font) / 4;
