@@ -221,6 +221,11 @@ void AbstractModel::undoChange(const QByteArray& _undo, const QByteArray& _redo)
     d->undoStep += 2;
 }
 
+bool AbstractModel::isUndoInProcess() const
+{
+    return d->isUndoInProgress;
+}
+
 ChangeCursor AbstractModel::redo()
 {
     if (d->undoedChanges.isEmpty()) {
@@ -234,6 +239,11 @@ ChangeCursor AbstractModel::redo()
     saveChanges();
 
     return d->undoRedoPosition;
+}
+
+bool AbstractModel::isRedoInProcess() const
+{
+    return d->isRedoInProgress;
 }
 
 bool AbstractModel::mergeDocumentChanges(const QByteArray _content,

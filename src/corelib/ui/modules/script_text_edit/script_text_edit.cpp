@@ -66,15 +66,22 @@ void ScriptTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
     horizontalScrollBar()->setValue(horizontalScrollValue);
 }
 
-bool ScriptTextEdit::updateEnteredText(const QString& _eventText)
+bool ScriptTextEdit::updateEnteredText(const QKeyEvent* _event)
 {
-    if (_eventText.isEmpty()) {
+    //
+    // Ничего не делаем, если текст пуст,
+    // или нажат хотя бы один из модификаторов делающих нажатие шорткатом
+    //
+    if (_event->text().isEmpty() || _event->modifiers().testFlag(Qt::ControlModifier)
+        || _event->modifiers().testFlag(Qt::AltModifier)
+        || _event->modifiers().testFlag(Qt::MetaModifier)) {
         return false;
     }
 
     //
     // Получим значения
     //
+    const auto eventText = _event->text();
     // ... курсора
     QTextCursor cursor = textCursor();
     // ... блок текста в котором находится курсор
@@ -92,19 +99,19 @@ bool ScriptTextEdit::updateEnteredText(const QString& _eventText)
     // Определяем необходимость установки верхнего регистра для первого символа блока
     //
     if (currentCharFormat.boolProperty(TextBlockStyle::PropertyIsFirstUppercase)
-        && cursorBackwardText != " " && cursorBackwardText == _eventText
-        && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
+        && cursorBackwardText != " " && cursorBackwardText == eventText
+        && eventText[0] != TextHelper::smartToUpper(eventText[0])) {
         //
         // Сформируем правильное представление строки
         //
-        QString correctedText = _eventText;
+        QString correctedText = eventText;
         correctedText[0] = TextHelper::smartToUpper(correctedText[0]);
 
         //
         // Стираем предыдущий введённый текст
         //
         cursor.beginEditBlock();
-        for (int repeats = 0; repeats < _eventText.length(); ++repeats) {
+        for (int repeats = 0; repeats < eventText.length(); ++repeats) {
             cursor.deletePreviousChar();
         }
 
@@ -124,20 +131,20 @@ bool ScriptTextEdit::updateEnteredText(const QString& _eventText)
     // и после курсора нет текста (для ремарки допустима скобка)
     //
     static QRegularExpression endOfSentenceRx;
-    endOfSentenceRx.setPattern(QString("([.]|[?]|[!]|[…]) %1$").arg(_eventText));
+    endOfSentenceRx.setPattern(QString("([.]|[?]|[!]|[…]) %1$").arg(eventText));
     if (cursorBackwardText.contains(endOfSentenceRx) && cursorForwardText.isEmpty()
-        && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
+        && eventText[0] != TextHelper::smartToUpper(eventText[0])) {
         //
         // Сделаем первую букву заглавной
         //
-        QString correctedText = _eventText;
+        QString correctedText = eventText;
         correctedText[0] = TextHelper::smartToUpper(correctedText[0]);
 
         //
         // Стираем предыдущий введённый текст
         //
         cursor.beginEditBlock();
-        for (int repeats = 0; repeats < _eventText.length(); ++repeats) {
+        for (int repeats = 0; repeats < eventText.length(); ++repeats) {
             cursor.deletePreviousChar();
         }
 
@@ -151,7 +158,7 @@ bool ScriptTextEdit::updateEnteredText(const QString& _eventText)
         return true;
     }
 
-    return BaseTextEdit::updateEnteredText(_eventText);
+    return BaseTextEdit::updateEnteredText(_event);
 }
 
 } // namespace Ui

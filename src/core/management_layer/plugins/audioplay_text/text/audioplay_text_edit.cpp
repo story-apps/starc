@@ -606,7 +606,7 @@ void AudioplayTextEdit::keyPressEvent(QKeyEvent* _event)
             _event->ignore();
         }
 
-        updateEnteredText(_event->text());
+        updateEnteredText(_event);
     }
 
     //

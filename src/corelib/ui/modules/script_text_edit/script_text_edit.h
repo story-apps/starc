@@ -31,7 +31,7 @@ protected:
     /**
      * @brief Обрабатываем специфичные ситуации для редактора сценария
      */
-    bool updateEnteredText(const QString& _eventText) override;
+    bool updateEnteredText(const QKeyEvent* _event) override;
 
 private:
     class Implementation;

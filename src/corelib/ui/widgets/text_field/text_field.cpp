@@ -1182,7 +1182,7 @@ void TextField::keyPressEvent(QKeyEvent* _event)
         BaseTextEdit::keyPressEvent(_event);
     }
 
-    updateEnteredText(_event->text());
+    updateEnteredText(_event);
 }
 
 void TextField::changeEvent(QEvent* _event)

@@ -712,15 +712,22 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     return isEventHandled;
 }
 
-bool BaseTextEdit::updateEnteredText(const QString& _eventText)
+bool BaseTextEdit::updateEnteredText(const QKeyEvent* _event)
 {
-    if (_eventText.isEmpty()) {
+    //
+    // Ничего не делаем, если текст пуст,
+    // или нажат хотя бы один из модификаторов делающих нажатие шорткатом
+    //
+    if (_event->text().isEmpty() || _event->modifiers().testFlag(Qt::ControlModifier)
+        || _event->modifiers().testFlag(Qt::AltModifier)
+        || _event->modifiers().testFlag(Qt::MetaModifier)) {
         return false;
     }
 
     //
     // Получим значения
     //
+    const auto eventText = _event->text();
     // ... курсора
     QTextCursor cursor = textCursor();
     // ... блок текста в котором находится курсор
@@ -735,18 +742,18 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     //
     // Определяем необходимость установки верхнего регистра для первого символа блока
     //
-    if (d->capitalizeWords && cursorBackwardText != " " && cursorBackwardText == _eventText
-        && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
+    if (d->capitalizeWords && cursorBackwardText != " " && cursorBackwardText == eventText
+        && eventText[0] != TextHelper::smartToUpper(eventText[0])) {
         //
         // Сформируем правильное представление строки
         //
-        QString correctedText = _eventText;
+        QString correctedText = eventText;
         correctedText[0] = TextHelper::smartToUpper(correctedText[0]);
 
         //
         // Стираем предыдущий введённый текст
         //
-        for (int repeats = 0; repeats < _eventText.length(); ++repeats) {
+        for (int repeats = 0; repeats < eventText.length(); ++repeats) {
             cursor.deletePreviousChar();
         }
 
@@ -764,20 +771,20 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     // и не сокращение
     // и после курсора нет текста (для ремарки допустима скобка)
     //
-    const QString endOfSentancePattern = QString("([.]|[?]|[!]|[…]) %1$").arg(_eventText);
+    const QString endOfSentancePattern = QString("([.]|[?]|[!]|[…]) %1$").arg(eventText);
     if (d->capitalizeWords && cursorBackwardText.contains(QRegularExpression(endOfSentancePattern))
         && !stringEndsWithAbbrev(cursorBackwardText) && cursorForwardText.isEmpty()
-        && _eventText[0] != TextHelper::smartToUpper(_eventText[0])) {
+        && eventText[0] != TextHelper::smartToUpper(eventText[0])) {
         //
         // Сделаем первую букву заглавной
         //
-        QString correctedText = _eventText;
+        QString correctedText = eventText;
         correctedText[0] = TextHelper::smartToUpper(correctedText[0]);
 
         //
         // Стираем предыдущий введённый текст
         //
-        for (int repeats = 0; repeats < _eventText.length(); ++repeats) {
+        for (int repeats = 0; repeats < eventText.length(); ++repeats) {
             cursor.deletePreviousChar();
         }
 
@@ -807,7 +814,7 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
             && right3Characters != TextHelper::smartToUpper(right3Characters)
             && right3Characters.left(2) == TextHelper::smartToUpper(right3Characters.left(2))
             && right3Characters[0].isLetter() && right3Characters[1].isLetter()
-            && _eventText != TextHelper::smartToUpper(_eventText) && !isPreviousCharacterUpper) {
+            && eventText != TextHelper::smartToUpper(eventText) && !isPreviousCharacterUpper) {
             //
             // Сделаем предпоследнюю букву строчной
             //
@@ -835,7 +842,7 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     //
     // Заменяем три точки символом многоточия
     //
-    if (d->replaceThreeDots && _eventText == "." && cursorBackwardText.endsWith("...")) {
+    if (d->replaceThreeDots && eventText == "." && cursorBackwardText.endsWith("...")) {
         //
         // Три последних символа
         //
@@ -852,7 +859,7 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
         //
         // ... двойные кавычки
         //
-        if (_eventText == "\"") {
+        if (eventText == "\"") {
             //
             // Выделим введённый символ
             //
@@ -876,7 +883,7 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
         //
         // ... одинарные кавычки
         //
-        else if (_eventText == "\'") {
+        else if (eventText == "\'") {
             //
             // Выделим введённый символ
             //
@@ -902,7 +909,7 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     //
     // Заменяем два тире символом длинного тире
     //
-    if (d->replaceTwoDashes && _eventText == "-" && cursorBackwardText.endsWith("--")) {
+    if (d->replaceTwoDashes && eventText == "-" && cursorBackwardText.endsWith("--")) {
         //
         // Два последних символа
         //
@@ -915,16 +922,16 @@ bool BaseTextEdit::updateEnteredText(const QString& _eventText)
     //
     // Заменяем i на I для английского
     //
-    if (QLocale().language() == QLocale::English && !_eventText.isEmpty()
-        && (_eventText.front().isPunct() || _eventText.front().isSpace())
-        && cursorBackwardText.leftRef(cursorBackwardText.length() - _eventText.length())
+    if (QLocale().language() == QLocale::English && !eventText.isEmpty()
+        && (eventText.front().isPunct() || eventText.front().isSpace())
+        && cursorBackwardText.leftRef(cursorBackwardText.length() - eventText.length())
                .endsWith(" i")) {
         //
         // Несколько последних символа
         //
         cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor,
-                            2 + _eventText.length());
-        cursor.insertText(QString(" I%1").arg(_eventText));
+                            2 + eventText.length());
+        cursor.insertText(QString(" I%1").arg(eventText));
 
         return true;
     }

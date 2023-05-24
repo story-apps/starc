@@ -95,9 +95,19 @@ public:
     void undoChange(const QByteArray& _undo, const QByteArray& _redo);
 
     /**
+     * @brief Происходит ли в данный момент отмена последнего действия
+     */
+    bool isUndoInProcess() const;
+
+    /**
      * @brief Повторить отменённое действие
      */
     ChangeCursor redo();
+
+    /**
+     * @brief Происходит ли в данный момент повтор последнего действия
+     */
+    bool isRedoInProcess() const;
 
     /**
      * @brief Смержить документ с заданным

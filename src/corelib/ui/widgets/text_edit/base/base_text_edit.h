@@ -100,7 +100,7 @@ protected:
      *
      * @return Был ли изменён текст
      */
-    virtual bool updateEnteredText(const QString& _eventText);
+    virtual bool updateEnteredText(const QKeyEvent* _event);
 
     /**
      * @brief Переопределяем, чтобы обработать кейс с установкой курсора, начало, или конец

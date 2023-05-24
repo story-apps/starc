@@ -1,5 +1,7 @@
 #include "abstract_text_corrector.h"
 
+#include <business_layer/document/text/text_document.h>
+#include <business_layer/model/text/text_model.h>
 #include <business_layer/model/text/text_model_item.h>
 #include <utils/logging.h>
 
@@ -160,15 +162,36 @@ void AbstractTextCorrector::planCorrection(int _position, int _charsRemoved, int
 
 void AbstractTextCorrector::makePlannedCorrection(const QByteArray& _contentHash)
 {
+    //
+    // Проверяем есть ли чего корректировать
+    //
     if (!d->plannedCorrection.isValid) {
         return;
     }
 
+    //
+    // Если по факту нет изменений, делаем только мягкие корректировки с внешним видом и видимостью
+    //
     if (d->lastContent.hash == _contentHash
         && d->lastContent.characterCount == d->document->characterCount()) {
         makeSoftCorrections();
         return;
     }
+
+    //
+    // Если сейчас происходит повтор/отмена последнего действия, то корректировки уже включены туда
+    //
+    if (auto textModel = qobject_cast<BusinessLayer::TextDocument*>(document())->model();
+        textModel->isUndoInProcess() || textModel->isRedoInProcess()) {
+        d->plannedCorrection = {};
+        d->lastContent.hash = _contentHash;
+        d->lastContent.characterCount = d->document->characterCount();
+        return;
+    }
+
+    //
+    // Во всех остальных ситуациях выполняем полные корректировки
+    //
 
     makeCorrections(d->plannedCorrection.position, d->plannedCorrection.lenght);
 
