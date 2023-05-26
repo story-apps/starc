@@ -91,7 +91,7 @@ public:
     /**
      * @brief Обновить видимость блоков в заданном интервале
      */
-    void updateBlocksVisibility(int _from);
+    void updateBlocksVisibility(int _from, int _charsChanged);
 
     /**
      * @brief Очистить все корректировки персонажей
@@ -267,20 +267,23 @@ QTextDocument* AudioplayTextCorrector::Implementation::document() const
     return q->document();
 }
 
-void AudioplayTextCorrector::Implementation::updateBlocksVisibility(int _from)
+void AudioplayTextCorrector::Implementation::updateBlocksVisibility(int _from, int _charsChanged)
 {
     //
     // Пробегаем документ и настраиваем видимые и невидимые блоки в соответствии с шаблоном
     //
     const auto& currentTemplate = TemplatesFacade::audioplayTemplate(q->templateId());
-    TextCursor cursor(document());
-    cursor.setPosition(std::max(0, _from));
+    const auto startPosition = std::max(0, _from);
+    const auto endPosition
+        = _charsChanged > 0 ? (startPosition + _charsChanged) : document()->characterCount();
     bool isTextChanged = false;
 
+    TextCursor cursor(document());
+    cursor.setPosition(startPosition);
     bool isFirstVisibleBlock = cursor.block() == document()->begin();
     bool isFirstBlockAfterInvisible = true;
     auto block = cursor.block();
-    while (block.isValid()) {
+    while (block.isValid() && block.position() < endPosition) {
         const auto blockType = TextBlockStyle::forBlock(block);
 
         //
@@ -1951,9 +1954,7 @@ void AudioplayTextCorrector::makeCorrections(int _position, int _charsChanged)
 
 void AudioplayTextCorrector::makeSoftCorrections(int _position, int _charsChanged)
 {
-    Q_UNUSED(_charsChanged)
-
-    d->updateBlocksVisibility(_position);
+    d->updateBlocksVisibility(_position, _charsChanged);
 }
 
 } // namespace BusinessLayer
