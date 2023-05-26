@@ -1727,6 +1727,7 @@ bool ApplicationManager::Implementation::tryLockProjectOnOpen(const QString& _pa
                     dialog->hideDialog();
                     if (_presedButton.type == Dialog::AcceptButton) {
                         lockFile->removeStaleLockFile();
+                        lockFile.reset();
                         openProject(_path);
                     }
                 });
