@@ -198,10 +198,12 @@ StageplayTextSearchManager::StageplayTextSearchManager(QWidget* _parent,
         d->findText();
         auto cursor = d->textEdit->textCursor();
         int firstCursorPosition = cursor.selectionStart();
-        const int diffBefore
-            = replaceText.startsWith(searchText) ? 0 : replaceText.indexOf(searchText);
-        const int diffAfter
-            = replaceText.size() - replaceText.indexOf(searchText) - searchText.size();
+        const auto caseSensitive
+            = d->toolbar->isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+        const int diffBefore = replaceText.startsWith(searchText, caseSensitive)
+            ? 0
+            : replaceText.indexOf(searchText, 0, caseSensitive);
+        const int diffAfter = replaceText.size() - diffBefore - searchText.size();
         firstCursorPosition += diffBefore;
         cursor.beginEditBlock();
         while (cursor.hasSelection()) {
