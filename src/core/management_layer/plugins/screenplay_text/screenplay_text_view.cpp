@@ -1161,6 +1161,21 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             d->model->updateItem(groupItem);
             d->model->updateNumbering();
         });
+    connect(d->itemParametersView, &CardItemParametersView::tagsChanged, this,
+            [this, findCurrentModelItem](const QVector<QPair<QString, QColor>>& _tags) {
+                auto item = findCurrentModelItem();
+                if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
+                    return;
+                }
+
+                auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+
+                d->model->dictionariesModel()->removeTags(groupItem->tags());
+                d->model->dictionariesModel()->addTags(_tags);
+
+                groupItem->setTags(_tags);
+                d->model->updateItem(groupItem);
+            });
     //
     connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
             [this](const QColor& _color, const QString& _comment) {
