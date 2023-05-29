@@ -3700,7 +3700,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         && versionIndex < aliasedItem->versions().size()) {
         itemForShow = aliasedItem->versions().at(versionIndex);
     }
-    emit downloadDocumentRequested(aliasedItem->uuid());
+    emit downloadDocumentRequested(itemForShow->uuid());
 
     //
     // Определим редактор для отображения
