@@ -226,6 +226,7 @@ void Toggle::paintEvent(QPaintEvent* _event)
         painter.drawEllipse(toggleRect.center(), radius, radius);
         painter.setOpacity(1.0);
     }
+    painter.setBrush(tumblerColor);
     //
     // ... рисуем сам переключатель
     //
