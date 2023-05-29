@@ -55,7 +55,8 @@ signals:
     void insertTextRequested(const QString& _after, const QString& _before);
     void summarizeTextRequested(const QString& _text);
     void translateTextRequested(const QString& _text, const QString& _languageCode);
-    void generateTextRequested(const QString& _prompt, const QString& _promptSuffix);
+    void generateTextRequested(const QString& _promptPrefix, const QString& _prompt,
+                               const QString& _promptSuffix);
 
     /**
      * @brief Пользователь хочет докупить кредитов

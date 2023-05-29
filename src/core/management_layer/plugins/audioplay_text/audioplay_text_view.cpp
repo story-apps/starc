@@ -664,7 +664,7 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
             &AudioplayTextView::summarizeTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
             &AudioplayTextView::translateTextRequested);
-    connect(d->aiAssistantView, &AiAssistantView::generateRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
             &AudioplayTextView::generateTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
             [this](const QString& _text) { d->textEdit->insertPlainText(_text); });

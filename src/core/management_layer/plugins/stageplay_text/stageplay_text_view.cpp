@@ -640,7 +640,7 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
             &StageplayTextView::summarizeTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
             &StageplayTextView::translateTextRequested);
-    connect(d->aiAssistantView, &AiAssistantView::generateRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
             &StageplayTextView::generateTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
             [this](const QString& _text) { d->textEdit->insertPlainText(_text); });

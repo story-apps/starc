@@ -3482,6 +3482,21 @@ void ProjectManager::setGeneratedText(const QString& _generatedText)
     }
 }
 
+void ProjectManager::setGeneratedImage(const QPixmap& _generatedImage)
+{
+    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = plugin->view(d->view.activeModel);
+    } else {
+        view = plugin->secondaryView(d->view.activeModel);
+    }
+
+    if (view != nullptr) {
+        view->setGeneratedImage(_generatedImage);
+    }
+}
+
 QVector<Domain::DocumentChangeObject*> ProjectManager::unsyncedChanges(
     const QUuid& _documentUuid) const
 {
@@ -3839,10 +3854,18 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             connect(documentManager, SIGNAL(translateTextRequested(QString, QString)), this,
                     SIGNAL(translateTextRequested(QString, QString)), Qt::UniqueConnection);
         }
-        if (documentManager->metaObject()->indexOfSignal("generateTextRequested(QString,QString)")
+        if (documentManager->metaObject()->indexOfSignal(
+                "generateTextRequested(QString,QString,QString)")
             != invalidSignalIndex) {
-            connect(documentManager, SIGNAL(generateTextRequested(QString, QString)), this,
-                    SIGNAL(generateTextRequested(QString, QString)), Qt::UniqueConnection);
+            connect(documentManager, SIGNAL(generateTextRequested(QString, QString, QString)), this,
+                    SIGNAL(generateTextRequested(QString, QString, QString)), Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal(
+                "generateImageRequested(QString,QString,QString)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(generateImageRequested(QString, QString, QString)),
+                    this, SIGNAL(generateImageRequested(QString, QString, QString)),
+                    Qt::UniqueConnection);
         }
     }
 

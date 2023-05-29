@@ -178,7 +178,7 @@ Ui::NovelTextView* NovelTextManager::Implementation::createView(
     connect(view, &Ui::NovelTextView::translateTextRequested, q,
             &NovelTextManager::translateTextRequested);
     connect(view, &Ui::NovelTextView::generateTextRequested, q,
-            [this](const QString& _text) { emit q->generateTextRequested(_text, {}); });
+            [this](const QString& _text) { emit q->generateTextRequested({}, _text, {}); });
     connect(view, &Ui::NovelTextView::buyCreditsRequested, q,
             &NovelTextManager::buyCreditsRequested);
 

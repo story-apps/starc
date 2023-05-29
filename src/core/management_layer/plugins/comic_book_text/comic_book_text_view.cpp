@@ -654,7 +654,7 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
             &ComicBookTextView::summarizeTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
             &ComicBookTextView::translateTextRequested);
-    connect(d->aiAssistantView, &AiAssistantView::generateRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
             &ComicBookTextView::generateTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
             [this](const QString& _text) { d->textEdit->insertPlainText(_text); });

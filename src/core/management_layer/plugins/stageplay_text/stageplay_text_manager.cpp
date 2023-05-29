@@ -163,7 +163,7 @@ Ui::StageplayTextView* StageplayTextManager::Implementation::createView(
     connect(view, &Ui::StageplayTextView::translateTextRequested, q,
             &StageplayTextManager::translateTextRequested);
     connect(view, &Ui::StageplayTextView::generateTextRequested, q, [this](const QString& _text) {
-        emit q->generateTextRequested(_text, "write result in fountain format.");
+        emit q->generateTextRequested({}, _text, ". Write result in fountain format.");
     });
     connect(view, &Ui::StageplayTextView::buyCreditsRequested, q,
             &StageplayTextManager::buyCreditsRequested);

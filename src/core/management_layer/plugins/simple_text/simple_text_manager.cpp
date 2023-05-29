@@ -161,7 +161,7 @@ Ui::SimpleTextView* SimpleTextManager::Implementation::createView(
     connect(view, &Ui::SimpleTextView::translateTextRequested, q,
             &SimpleTextManager::translateTextRequested);
     connect(view, &Ui::SimpleTextView::generateTextRequested, q,
-            [this](const QString& _text) { emit q->generateTextRequested(_text, {}); });
+            [this](const QString& _text) { emit q->generateTextRequested({}, _text, {}); });
     connect(view, &Ui::SimpleTextView::buyCreditsRequested, q,
             &SimpleTextManager::buyCreditsRequested);
 

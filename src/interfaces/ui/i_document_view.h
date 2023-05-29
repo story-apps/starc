@@ -4,6 +4,7 @@
 
 class QAction;
 class QModelIndex;
+class QPixmap;
 class QWidget;
 
 namespace Domain {
@@ -101,6 +102,9 @@ public:
     {
     }
     virtual void setGeneratedText(const QString& _text)
+    {
+    }
+    virtual void setGeneratedImage(const QPixmap& _image)
     {
     }
 };

@@ -35,6 +35,7 @@ public:
      */
     QPixmap image() const;
     void setImage(const QPixmap& _image);
+    void cropImage(const QPixmap& _image);
 
     /**
      * @brief Возможность редактирования изображения

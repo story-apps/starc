@@ -1229,7 +1229,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             &ScreenplayTextView::summarizeTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
             &ScreenplayTextView::translateTextRequested);
-    connect(d->aiAssistantView, &AiAssistantView::generateRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
             &ScreenplayTextView::generateTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
             [this](const QString& _text) { d->textEdit->insertPlainText(_text); });

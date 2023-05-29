@@ -192,6 +192,7 @@ public:
     void setSummarizeedText(const QString& _text);
     void setTranslatedText(const QString& _text);
     void setGeneratedText(const QString& _generatedText);
+    void setGeneratedImage(const QPixmap& _generatedImage);
 
 signals:
     /**
@@ -283,7 +284,10 @@ signals:
     void insertTextRequested(const QString& _after, const QString& _before);
     void summarizeTextRequested(const QString& _sourceText);
     void translateTextRequested(const QString& _text, const QString& _languageCode);
-    void generateTextRequested(const QString& _prompt, const QString& _promptSuffix);
+    void generateTextRequested(const QString& _promptPrefix, const QString& _prompt,
+                               const QString& _promptSuffix);
+    void generateImageRequested(const QString& _promptPrefix, const QString& _prompt,
+                                const QString& _promptSuffix);
 
 protected:
     /**

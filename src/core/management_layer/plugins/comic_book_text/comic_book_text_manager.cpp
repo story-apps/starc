@@ -163,7 +163,7 @@ Ui::ComicBookTextView* ComicBookTextManager::Implementation::createView(
     connect(view, &Ui::ComicBookTextView::translateTextRequested, q,
             &ComicBookTextManager::translateTextRequested);
     connect(view, &Ui::ComicBookTextView::generateTextRequested, q, [this](const QString& _text) {
-        emit q->generateTextRequested(_text, "write result in fountain format.");
+        emit q->generateTextRequested({}, _text, ". Write result in fountain format.");
     });
     connect(view, &Ui::ComicBookTextView::buyCreditsRequested, q,
             &ComicBookTextManager::buyCreditsRequested);

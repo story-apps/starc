@@ -1160,7 +1160,7 @@ NovelTextView::NovelTextView(QWidget* _parent)
             &NovelTextView::summarizeTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
             &NovelTextView::translateTextRequested);
-    connect(d->aiAssistantView, &AiAssistantView::generateRequested, this,
+    connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
             &NovelTextView::generateTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
             [this](const QString& _text) { d->textEdit->insertPlainText(_text); });

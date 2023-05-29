@@ -22,6 +22,14 @@ public:
         AtEnd,
     };
 
+    /**
+     * @brief Тип представления генерации контента
+     */
+    enum class GenerationViewType {
+        Text,
+        CharacterInformation,
+    };
+
 public:
     explicit AiAssistantView(QWidget* _parent = nullptr);
     ~AiAssistantView() override;
@@ -33,9 +41,24 @@ public:
     void setReadOnly(bool _readOnly);
 
     /**
+     * @brief Задать видимость кнопок вставки сгенерированного контента во внешний редактор
+     */
+    void setInsertionAvailable(bool _available);
+
+    /**
+     * @brief Задать тип представления генерации контента
+     */
+    void setGenerationViewType(GenerationViewType _type);
+
+    /**
      * @brief Задать подсказку для генерации текста
      */
     void setGenerationPromptHint(const QString& _hint);
+
+    /**
+     * @brief Задать промпт для генерации текста
+     */
+    void setGenerationPrompt(const QString& _prompt);
 
     /**
      * @brief Куда нужно вставлять сгенерированный текст
@@ -91,7 +114,13 @@ signals:
     /**
      * @brief Пользователь хочет сгенерировать текст по запросу
      */
-    void generateRequested(const QString& _text);
+    void generateTextRequested(const QString& _text);
+
+    /**
+     * @brief Пользователь хочет сгенерировать параметры персонажа
+     */
+    void generateCharacterRequested(const QString& _text, bool _personalInfo, bool _physique,
+                                    bool _life, bool _attitude, bool _biography, bool _image);
 
     /**
      * @brief Пользователь хочет вставить заданный текст в редактор

@@ -325,6 +325,11 @@ void ImageCard::setImage(const QPixmap& _image)
     emit imageChanged(d->image.source);
 }
 
+void ImageCard::cropImage(const QPixmap& _image)
+{
+    d->cropImage(_image);
+}
+
 bool ImageCard::isReadOnly() const
 {
     return d->isReadOnly;

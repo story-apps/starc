@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
+#include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/label.h>
@@ -132,15 +133,29 @@ public:
     Button* translateButton = nullptr;
     QHBoxLayout* translateButtonsLayout = nullptr;
 
-    Page* generatePage = nullptr;
-    Body1Label* generatePromptHintLabel = nullptr;
-    TextField* generatePromptText = nullptr;
-    Body2Label* generateInsertLabel = nullptr;
-    RadioButton* generateInsertAtBegin = nullptr;
-    RadioButton* generateInsertAtCursor = nullptr;
-    RadioButton* generateInsertAtEnd = nullptr;
-    Button* generateButton = nullptr;
-    QHBoxLayout* generateButtonsLayout = nullptr;
+    GenerationViewType generationViewType = GenerationViewType::Text;
+
+    Page* generateTextPage = nullptr;
+    Body1Label* generateTextPromptHintLabel = nullptr;
+    TextField* generateTextPromptText = nullptr;
+    Body2Label* generateTextInsertLabel = nullptr;
+    RadioButton* generateTextInsertAtBegin = nullptr;
+    RadioButton* generateTextInsertAtCursor = nullptr;
+    RadioButton* generateTextInsertAtEnd = nullptr;
+    Button* generateTextButton = nullptr;
+    QHBoxLayout* generateTextButtonsLayout = nullptr;
+
+    Page* generateCharacterPage = nullptr;
+    Body1Label* generateCharacterPromptHintLabel = nullptr;
+    TextField* generateCharacterPromptText = nullptr;
+    CheckBox* generateCharacterPersonalInfo = nullptr;
+    CheckBox* generateCharacterPhysique = nullptr;
+    CheckBox* generateCharacterLife = nullptr;
+    CheckBox* generateCharacterAttitude = nullptr;
+    CheckBox* generateCharacterBiography = nullptr;
+    CheckBox* generateCharacterPhoto = nullptr;
+    Button* generateCharacterButton = nullptr;
+    QHBoxLayout* generateCharacterButtonsLayout = nullptr;
 
     Body2Label* availableWordsLabel = nullptr;
     Body2LinkLabel* buyCreditsLabel = nullptr;
@@ -203,15 +218,27 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     , translateButton(new Button(translatePage))
     , translateButtonsLayout(new QHBoxLayout)
     //
-    , generatePage(new Page(pages))
-    , generatePromptHintLabel(new Body1Label(generatePage))
-    , generatePromptText(new TextField(generatePage))
-    , generateInsertLabel(new Body2Label(generatePage))
-    , generateInsertAtBegin(new RadioButton(generatePage))
-    , generateInsertAtCursor(new RadioButton(generatePage))
-    , generateInsertAtEnd(new RadioButton(generatePage))
-    , generateButton(new Button(generatePage))
-    , generateButtonsLayout(new QHBoxLayout)
+    , generateTextPage(new Page(pages))
+    , generateTextPromptHintLabel(new Body1Label(generateTextPage))
+    , generateTextPromptText(new TextField(generateTextPage))
+    , generateTextInsertLabel(new Body2Label(generateTextPage))
+    , generateTextInsertAtBegin(new RadioButton(generateTextPage))
+    , generateTextInsertAtCursor(new RadioButton(generateTextPage))
+    , generateTextInsertAtEnd(new RadioButton(generateTextPage))
+    , generateTextButton(new Button(generateTextPage))
+    , generateTextButtonsLayout(new QHBoxLayout)
+    //
+    , generateCharacterPage(new Page(pages))
+    , generateCharacterPromptHintLabel(new Body1Label(generateCharacterPage))
+    , generateCharacterPromptText(new TextField(generateCharacterPage))
+    , generateCharacterPersonalInfo(new CheckBox(generateCharacterPage))
+    , generateCharacterPhysique(new CheckBox(generateCharacterPage))
+    , generateCharacterLife(new CheckBox(generateCharacterPage))
+    , generateCharacterAttitude(new CheckBox(generateCharacterPage))
+    , generateCharacterBiography(new CheckBox(generateCharacterPage))
+    , generateCharacterPhoto(new CheckBox(generateCharacterPage))
+    , generateCharacterButton(new Button(generateCharacterPage))
+    , generateCharacterButtonsLayout(new QHBoxLayout)
     //
     , availableWordsLabel(new Body2Label(_parent))
     , buyCreditsLabel(new Body2LinkLabel(_parent))
@@ -225,7 +252,8 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     pages->addWidget(insertPage);
     pages->addWidget(summarizePage);
     pages->addWidget(translatePage);
-    pages->addWidget(generatePage);
+    pages->addWidget(generateTextPage);
+    pages->addWidget(generateCharacterPage);
 
     {
         openRephraseButton->setIcon(u8"\U000F0456");
@@ -389,27 +417,55 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     }
 
     {
-        generatePromptText->setEnterMakesNewLine(true);
-        generatePromptText->setWordCount("0/1000");
-        generateInsertAtCursor->setChecked(true);
-        auto insertButtonsGroup = new RadioButtonGroup(generatePage);
-        insertButtonsGroup->add(generateInsertAtBegin);
-        insertButtonsGroup->add(generateInsertAtCursor);
-        insertButtonsGroup->add(generateInsertAtEnd);
-        generateButtonsLayout->setContentsMargins({});
-        generateButtonsLayout->setSpacing(0);
-        generateButtonsLayout->addStretch();
-        generateButtonsLayout->addWidget(generateButton);
+        generateTextPromptText->setEnterMakesNewLine(true);
+        generateTextPromptText->setWordCount("0/1000");
+        generateTextInsertAtCursor->setChecked(true);
+        auto insertButtonsGroup = new RadioButtonGroup(generateTextPage);
+        insertButtonsGroup->add(generateTextInsertAtBegin);
+        insertButtonsGroup->add(generateTextInsertAtCursor);
+        insertButtonsGroup->add(generateTextInsertAtEnd);
+        generateTextButtonsLayout->setContentsMargins({});
+        generateTextButtonsLayout->setSpacing(0);
+        generateTextButtonsLayout->addStretch();
+        generateTextButtonsLayout->addWidget(generateTextButton);
 
 
-        auto layout = generatePage->contentsLayout;
-        layout->addWidget(generatePromptHintLabel);
-        layout->addWidget(generatePromptText);
-        layout->addWidget(generateInsertLabel);
-        layout->addWidget(generateInsertAtBegin);
-        layout->addWidget(generateInsertAtCursor);
-        layout->addWidget(generateInsertAtEnd);
-        layout->addLayout(generateButtonsLayout);
+        auto layout = generateTextPage->contentsLayout;
+        layout->addWidget(generateTextPromptHintLabel);
+        layout->addWidget(generateTextPromptText);
+        layout->addWidget(generateTextInsertLabel);
+        layout->addWidget(generateTextInsertAtBegin);
+        layout->addWidget(generateTextInsertAtCursor);
+        layout->addWidget(generateTextInsertAtEnd);
+        layout->addLayout(generateTextButtonsLayout);
+        layout->addStretch();
+    }
+
+    {
+        generateCharacterPromptText->setEnterMakesNewLine(true);
+        generateCharacterPromptText->setWordCount("0/1000");
+        generateCharacterPersonalInfo->setChecked(true);
+        generateCharacterPhysique->setChecked(true);
+        generateCharacterLife->setChecked(true);
+        generateCharacterAttitude->setChecked(true);
+        generateCharacterBiography->setChecked(true);
+        generateCharacterPhoto->setChecked(true);
+        generateCharacterButtonsLayout->setContentsMargins({});
+        generateCharacterButtonsLayout->setSpacing(0);
+        generateCharacterButtonsLayout->addStretch();
+        generateCharacterButtonsLayout->addWidget(generateCharacterButton);
+
+
+        auto layout = generateCharacterPage->contentsLayout;
+        layout->addWidget(generateCharacterPromptHintLabel);
+        layout->addWidget(generateCharacterPromptText);
+        layout->addWidget(generateCharacterPhoto);
+        layout->addWidget(generateCharacterPersonalInfo);
+        layout->addWidget(generateCharacterPhysique);
+        layout->addWidget(generateCharacterLife);
+        layout->addWidget(generateCharacterAttitude);
+        layout->addWidget(generateCharacterBiography);
+        layout->addLayout(generateCharacterButtonsLayout);
         layout->addStretch();
     }
 
@@ -486,10 +542,21 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
                            qOverload<>(&TextField::setFocus));
     });
     connect(d->openGenerateButton, &Button::clicked, this, [this] {
-        d->generatePromptText->clear();
-        d->pages->setCurrentWidget(d->generatePage);
-        QTimer::singleShot(d->pages->animationDuration(), d->generatePromptText,
-                           qOverload<>(&TextField::setFocus));
+        switch (d->generationViewType) {
+        case GenerationViewType::Text: {
+            d->pages->setCurrentWidget(d->generateTextPage);
+            QTimer::singleShot(d->pages->animationDuration(), d->generateTextPromptText,
+                               qOverload<>(&TextField::setFocus));
+            break;
+        }
+
+        case GenerationViewType::CharacterInformation: {
+            d->pages->setCurrentWidget(d->generateCharacterPage);
+            QTimer::singleShot(d->pages->animationDuration(), d->generateCharacterPromptText,
+                               qOverload<>(&TextField::setFocus));
+            break;
+        }
+        }
     });
     for (auto page : {
              d->rephrasePage,
@@ -498,7 +565,8 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
              d->insertPage,
              d->summarizePage,
              d->translatePage,
-             d->generatePage,
+             d->generateTextPage,
+             d->generateCharacterPage,
          }) {
         connect(page->backButton, &IconButton::clicked, this,
                 [this] { d->pages->setCurrentWidget(d->buttonsPage); });
@@ -607,13 +675,28 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     connect(d->translateInsertButton, &Button::clicked, this,
             [this] { emit insertTextRequested(d->translateResultText->text()); });
     //
-    auto updateGenerateWordCounters = [this, updateWordCounter] {
-        const auto sourceTextWordCount = updateWordCounter(d->generatePromptText);
-        d->generateButton->setEnabled(sourceTextWordCount <= 1000);
+    auto updateGenerateTextWordCounters = [this, updateWordCounter] {
+        const auto sourceTextWordCount = updateWordCounter(d->generateTextPromptText);
+        d->generateTextButton->setEnabled(sourceTextWordCount <= 1000);
     };
-    connect(d->generatePromptText, &TextField::textChanged, this, updateGenerateWordCounters);
-    connect(d->generateButton, &Button::clicked, this,
-            [this] { emit generateRequested(d->generatePromptText->text()); });
+    connect(d->generateTextPromptText, &TextField::textChanged, this,
+            updateGenerateTextWordCounters);
+    connect(d->generateTextButton, &Button::clicked, this,
+            [this] { emit generateTextRequested(d->generateTextPromptText->text()); });
+    //
+    auto updateGenerateCharacterWordCounters = [this, updateWordCounter] {
+        const auto sourceTextWordCount = updateWordCounter(d->generateCharacterPromptText);
+        d->generateCharacterButton->setEnabled(sourceTextWordCount <= 1000);
+    };
+    connect(d->generateCharacterPromptText, &TextField::textChanged, this,
+            updateGenerateCharacterWordCounters);
+    connect(d->generateCharacterButton, &Button::clicked, this, [this] {
+        emit generateCharacterRequested(
+            d->generateCharacterPromptText->text(), d->generateCharacterPersonalInfo->isChecked(),
+            d->generateCharacterPhysique->isChecked(), d->generateCharacterLife->isChecked(),
+            d->generateCharacterAttitude->isChecked(), d->generateCharacterBiography->isChecked(),
+            d->generateCharacterPhoto->isChecked());
+    });
 
     connect(d->buyCreditsLabel, &Body1LinkLabel::clicked, this,
             &AiAssistantView::buyCreditsPressed);
@@ -641,22 +724,67 @@ void AiAssistantView::setReadOnly(bool _readOnly)
              d->insertPage,
              d->summarizePage,
              d->translatePage,
-             d->generatePage,
+             d->generateTextPage,
+             d->generateCharacterPage,
          }) {
         button->setEnabled(!_readOnly);
     }
 }
 
+void AiAssistantView::setInsertionAvailable(bool _available)
+{
+    for (auto button : {
+             d->rephraseInsertButton,
+             d->expandInsertButton,
+             d->shortenInsertButton,
+             d->insertInsertButton,
+             d->summarizeInsertButton,
+             d->translateInsertButton,
+         }) {
+        button->setEnabled(_available);
+    }
+}
+
+void AiAssistantView::setGenerationViewType(GenerationViewType _type)
+{
+    d->generationViewType = _type;
+}
+
 void AiAssistantView::setGenerationPromptHint(const QString& _hint)
 {
-    d->generatePromptHintLabel->setText(_hint);
+    switch (d->generationViewType) {
+    case GenerationViewType::Text: {
+        d->generateTextPromptHintLabel->setText(_hint);
+        break;
+    }
+
+    case GenerationViewType::CharacterInformation: {
+        d->generateCharacterPromptHintLabel->setText(_hint);
+        break;
+    }
+    }
+}
+
+void AiAssistantView::setGenerationPrompt(const QString& _prompt)
+{
+    switch (d->generationViewType) {
+    case GenerationViewType::Text: {
+        d->generateTextPromptText->setText(_prompt);
+        break;
+    }
+
+    case GenerationViewType::CharacterInformation: {
+        d->generateCharacterPromptText->setText(_prompt);
+        break;
+    }
+    }
 }
 
 AiAssistantView::TextInsertPosition AiAssistantView::textInsertPosition() const
 {
-    if (d->generateInsertAtBegin->isChecked()) {
+    if (d->generateTextInsertAtBegin->isChecked()) {
         return TextInsertPosition::AtBeginning;
-    } else if (d->generateInsertAtCursor->isChecked()) {
+    } else if (d->generateTextInsertAtCursor->isChecked()) {
         return TextInsertPosition::AtCursorPosition;
     } else {
         return TextInsertPosition::AtEnd;
@@ -729,7 +857,7 @@ void AiAssistantView::updateTranslations()
              d->insertPage,
              d->summarizePage,
              d->translatePage,
-             d->generatePage,
+             d->generateTextPage,
          }) {
         page->backButton->setToolTip(tr("Go back to list of assistant functions"));
     }
@@ -921,13 +1049,22 @@ void AiAssistantView::updateTranslations()
     d->translateResultText->setLabel(tr("Translated text"));
     d->translateButton->setText(tr("Translate"));
     d->translateInsertButton->setText(tr("Insert"));
-    d->generatePage->titleLabel->setText(tr("Generate"));
-    d->generatePromptText->setLabel(tr("Prompt"));
-    d->generateInsertLabel->setText(tr("Insert result"));
-    d->generateInsertAtBegin->setText(tr("at the beginning of the document"));
-    d->generateInsertAtCursor->setText(tr("at the cursor position"));
-    d->generateInsertAtEnd->setText(tr("at the end of the document"));
-    d->generateButton->setText(tr("Generate"));
+    d->generateTextPage->titleLabel->setText(tr("Generate"));
+    d->generateTextPromptText->setLabel(tr("Prompt"));
+    d->generateTextInsertLabel->setText(tr("Insert result"));
+    d->generateTextInsertAtBegin->setText(tr("at the beginning of the document"));
+    d->generateTextInsertAtCursor->setText(tr("at the cursor position"));
+    d->generateTextInsertAtEnd->setText(tr("at the end of the document"));
+    d->generateTextButton->setText(tr("Generate"));
+    d->generateCharacterPage->titleLabel->setText(tr("Generate"));
+    d->generateCharacterPromptText->setLabel(tr("Prompt"));
+    d->generateCharacterPersonalInfo->setText(tr("Personal info"));
+    d->generateCharacterPhysique->setText(tr("Physique"));
+    d->generateCharacterLife->setText(tr("Life"));
+    d->generateCharacterAttitude->setText(tr("Attitude"));
+    d->generateCharacterBiography->setText(tr("Biography"));
+    d->generateCharacterPhoto->setText(tr("Photo"));
+    d->generateCharacterButton->setText(tr("Generate"));
 
     d->buyCreditsLabel->setText(tr("purchase"));
 }
@@ -965,7 +1102,8 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->insertPage,
              d->summarizePage,
              d->translatePage,
-             d->generatePage,
+             d->generateTextPage,
+             d->generateCharacterPage,
          }) {
         page->contentsLayout->setSpacing(DesignSystem::compactLayout().px16());
 
@@ -974,7 +1112,8 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         page->titleLabel->setBackgroundColor(DesignSystem::color().primary());
         page->titleLabel->setTextColor(DesignSystem::color().onPrimary());
     }
-    d->generatePage->contentsLayout->setSpacing(0);
+    d->generateTextPage->contentsLayout->setSpacing(0);
+    d->generateCharacterPage->contentsLayout->setSpacing(0);
 
     for (auto textField : std::vector<TextField*>{
              d->rephraseSourceText,
@@ -992,7 +1131,8 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->translateSourceText,
              d->translateLanguage,
              d->translateResultText,
-             d->generatePromptText,
+             d->generateTextPromptText,
+             d->generateCharacterPromptText,
          }) {
         textField->setBackgroundColor(DesignSystem::color().onPrimary());
         textField->setTextColor(DesignSystem::color().onPrimary());
@@ -1012,7 +1152,8 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->summarizeInsertButton,
              d->translateButton,
              d->translateInsertButton,
-             d->generateButton,
+             d->generateTextButton,
+             d->generateCharacterButton,
          }) {
         button->setBackgroundColor(DesignSystem::color().accent());
         button->setTextColor(DesignSystem::color().accent());
@@ -1025,7 +1166,8 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->insertButtonsLayout,
              d->summarizeButtonsLayout,
              d->translateButtonsLayout,
-             d->generateButtonsLayout,
+             d->generateTextButtonsLayout,
+             d->generateCharacterButtonsLayout,
          }) {
         buttonsLayout->setContentsMargins(isLeftToRight() ? 0.0 : DesignSystem::layout().px8(), 0.0,
                                           isLeftToRight() ? DesignSystem::layout().px8() : 0.0,
@@ -1033,21 +1175,31 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto widget : std::list<Widget*>{
-             d->generatePromptHintLabel,
-             d->generateInsertLabel,
-             d->generateInsertAtBegin,
-             d->generateInsertAtCursor,
-             d->generateInsertAtEnd,
+             d->generateTextPromptHintLabel,
+             d->generateTextInsertLabel,
+             d->generateTextInsertAtBegin,
+             d->generateTextInsertAtCursor,
+             d->generateTextInsertAtEnd,
+             d->generateCharacterPromptHintLabel,
+             d->generateCharacterPersonalInfo,
+             d->generateCharacterPhysique,
+             d->generateCharacterAttitude,
+             d->generateCharacterLife,
+             d->generateCharacterBiography,
+             d->generateCharacterPhoto,
          }) {
         widget->setBackgroundColor(DesignSystem::color().primary());
         widget->setTextColor(DesignSystem::color().onPrimary());
     }
-    d->generatePromptHintLabel->setContentsMargins(DesignSystem::layout().px24(), 0,
-                                                   DesignSystem::layout().px24(),
-                                                   DesignSystem::compactLayout().px16());
-    d->generateInsertLabel->setContentsMargins(DesignSystem::layout().px24(),
-                                               DesignSystem::compactLayout().px4(),
-                                               DesignSystem::layout().px24(), 0);
+    d->generateTextPromptHintLabel->setContentsMargins(DesignSystem::layout().px24(), 0,
+                                                       DesignSystem::layout().px24(),
+                                                       DesignSystem::compactLayout().px16());
+    d->generateTextInsertLabel->setContentsMargins(DesignSystem::layout().px24(),
+                                                   DesignSystem::compactLayout().px4(),
+                                                   DesignSystem::layout().px24(), 0);
+    d->generateCharacterPromptHintLabel->setContentsMargins(DesignSystem::layout().px24(), 0,
+                                                            DesignSystem::layout().px24(),
+                                                            DesignSystem::compactLayout().px16());
 
     d->availableWordsLabel->setBackgroundColor(DesignSystem::color().primary());
     d->availableWordsLabel->setTextColor(ColorHelper::transparent(

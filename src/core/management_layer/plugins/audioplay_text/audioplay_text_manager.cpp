@@ -166,7 +166,7 @@ Ui::AudioplayTextView* AudioplayTextManager::Implementation::createView(
     connect(view, &Ui::AudioplayTextView::translateTextRequested, q,
             &AudioplayTextManager::translateTextRequested);
     connect(view, &Ui::AudioplayTextView::generateTextRequested, q, [this](const QString& _text) {
-        emit q->generateTextRequested(_text, "write result in fountain format.");
+        emit q->generateTextRequested({}, _text, ". Write result in fountain format.");
     });
     connect(view, &Ui::AudioplayTextView::buyCreditsRequested, q,
             &AudioplayTextManager::buyCreditsRequested);
