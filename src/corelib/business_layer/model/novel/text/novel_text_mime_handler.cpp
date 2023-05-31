@@ -51,8 +51,9 @@ QString NovelTextMimeHandler::removeInvisibleBlocksForTreatment(const QString& _
                 // Некоторые тэги копируем целиком, дойдя до завершающего
                 //
                 const auto tagContent = startTagContent();
-                if (tagContent.startsWith("folder_heading")
-                    || tagContent.startsWith("folder_footer")
+                if (tagContent.startsWith("part_heading") || tagContent.startsWith("part_footer")
+                    || tagContent.startsWith("chapter_heading")
+                    || tagContent.startsWith("chapter_footer")
                     || tagContent.startsWith("scene_heading")
                     || tagContent.startsWith("beat_heading")
                     || tagContent.startsWith("scene_characters")) {
@@ -61,9 +62,10 @@ QString NovelTextMimeHandler::removeInvisibleBlocksForTreatment(const QString& _
                 //
                 // Некоторые тэги просто копируем без поиска завершающего
                 //
-                else if (tagContent.startsWith("?xml") || tagContent.startsWith("document")
-                         || tagContent.startsWith("folder") || tagContent.startsWith("scene")
-                         || tagContent.startsWith("beat") || tagContent.startsWith("content")) {
+                else if (tagContent.startsWith("?xml") || tagContent.startsWith("document ")
+                         || tagContent.startsWith("part ") || tagContent.startsWith("chapter ")
+                         || tagContent.startsWith("scene ") || tagContent.startsWith("beat ")
+                         || tagContent == "content") {
                     correctedMime += _mime.midRef(startTag.from, startTag.to - startTag.from + 1);
                 }
             } else if (endTag.inProcessing) {
@@ -74,8 +76,9 @@ QString NovelTextMimeHandler::removeInvisibleBlocksForTreatment(const QString& _
                 // Некоторые тэги копируем целиком
                 //
                 const auto tagContent = endTaContent();
-                if (tagContent.startsWith("folder_heading")
-                    || tagContent.startsWith("folder_footer")
+                if (tagContent.startsWith("part_heading") || tagContent.startsWith("part_footer")
+                    || tagContent.startsWith("chapter_heading")
+                    || tagContent.startsWith("chapter_footer")
                     || tagContent.startsWith("scene_heading")
                     || tagContent.startsWith("beat_heading")
                     || tagContent.startsWith("scene_characters")) {
@@ -93,9 +96,10 @@ QString NovelTextMimeHandler::removeInvisibleBlocksForTreatment(const QString& _
                 //
                 // Некоторые тэги просто копируем целиком, без учёта начала
                 //
-                else if (tagContent.startsWith("document") || tagContent.startsWith("folder")
-                         || tagContent.startsWith("scene") || tagContent.startsWith("beat")
-                         || tagContent.startsWith("content")) {
+                else if (tagContent.startsWith("?xml") || tagContent.startsWith("document ")
+                         || tagContent.startsWith("part ") || tagContent.startsWith("chapter ")
+                         || tagContent.startsWith("scene ") || tagContent.startsWith("beat ")
+                         || tagContent == "content") {
                     correctedMime += _mime.midRef(endTag.from, endTag.to - endTag.from + 1);
                 }
             }
@@ -151,8 +155,9 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                 // Некоторые тэги копируем целиком, дойдя до завершающего
                 //
                 const auto tagContent = startTagContent();
-                if (tagContent.startsWith("folder_heading")
-                    || tagContent.startsWith("folder_footer")
+                if (tagContent.startsWith("part_heading") || tagContent.startsWith("part_footer")
+                    || tagContent.startsWith("chapter_heading")
+                    || tagContent.startsWith("chapter_footer")
                     || tagContent.startsWith("scene_heading")
                     || tagContent.startsWith("beat_heading")
                     || tagContent.startsWith("scene_characters")) {
@@ -162,12 +167,13 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                 // Некоторые тэги просто копируем без поиска завершающего
                 //
                 else if (tagContent.startsWith("?xml") || tagContent.startsWith("document")
-                         || tagContent.startsWith("folder") || tagContent.startsWith("scene")
-                         || tagContent.startsWith("content")) {
+                         || tagContent.startsWith("part ") || tagContent == QLatin1String("part")
+                         || tagContent.startsWith("chapter") || tagContent.startsWith("scene")
+                         || tagContent == "content") {
                     correctedMime += _mime.midRef(startTag.from, startTag.to - startTag.from + 1);
                 }
                 //
-                // Содержимое битов не будем преобразовывать (это вставка из файла фонтана)
+                // Содержимое битов не будем преобразовывать
                 //
                 else if (tagContent.startsWith("beat")) {
                     correctedMime += _mime.midRef(startTag.from, startTag.to - startTag.from + 1);
@@ -195,8 +201,9 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                 // Некоторые тэги копируем целиком
                 //
                 const auto tagContent = endTaContent();
-                if (tagContent.startsWith("folder_heading")
-                    || tagContent.startsWith("folder_footer")
+                if (tagContent.startsWith("part_heading") || tagContent.startsWith("part_footer")
+                    || tagContent.startsWith("chapter_heading")
+                    || tagContent.startsWith("chapter_footer")
                     || tagContent.startsWith("scene_heading")
                     || tagContent.startsWith("beat_heading")
                     || tagContent.startsWith("scene_characters")) {
@@ -206,8 +213,10 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                 //
                 // Некоторые тэги просто копируем целиком, без учёта начала
                 //
-                else if (tagContent.startsWith("document") || tagContent.startsWith("folder")
-                         || tagContent.startsWith("scene") || tagContent.startsWith("content")) {
+                else if (tagContent.startsWith("?xml") || tagContent.startsWith("document")
+                         || tagContent.startsWith("part ") || tagContent == QLatin1String("part")
+                         || tagContent.startsWith("chapter") || tagContent.startsWith("scene")
+                         || tagContent == "content") {
                     correctedMime += _mime.midRef(endTag.from, endTag.to - endTag.from + 1);
                 }
                 //
@@ -233,10 +242,8 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                         copyWithEndTagAsBeat = false;
                         auto blockXml = _mime.mid(startTag.from, endTag.to - startTag.from + 1);
                         blockXml.replace(tagContent, "beat_heading");
-                        correctedMime
-                            += QString("<beat uuid=\"%1\"><content>%2<action><v><![CDATA[]]></v></"
-                                       "action></content></beat>")
-                                   .arg(QUuid::createUuid().toString(), blockXml);
+                        correctedMime += QString("<beat uuid=\"%1\"><content>%2</content></beat>")
+                                             .arg(QUuid::createUuid().toString(), blockXml);
                     }
                 }
             }
