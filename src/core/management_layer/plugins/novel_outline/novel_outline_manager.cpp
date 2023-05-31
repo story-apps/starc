@@ -149,6 +149,23 @@ Ui::NovelOutlineView* NovelOutlineManager::Implementation::createView(
         textItem->clearBookmark();
         modelForView(view)->updateItem(textItem);
     });
+    //
+    connect(view, &Ui::NovelOutlineView::rephraseTextRequested, q,
+            &NovelOutlineManager::rephraseTextRequested);
+    connect(view, &Ui::NovelOutlineView::expandTextRequested, q,
+            &NovelOutlineManager::expandTextRequested);
+    connect(view, &Ui::NovelOutlineView::shortenTextRequested, q,
+            &NovelOutlineManager::shortenTextRequested);
+    connect(view, &Ui::NovelOutlineView::insertTextRequested, q,
+            &NovelOutlineManager::insertTextRequested);
+    connect(view, &Ui::NovelOutlineView::summarizeTextRequested, q,
+            &NovelOutlineManager::summarizeTextRequested);
+    connect(view, &Ui::NovelOutlineView::translateTextRequested, q,
+            &NovelOutlineManager::translateTextRequested);
+    connect(view, &Ui::NovelOutlineView::generateTextRequested, q,
+            [this](const QString& _text) { emit q->generateTextRequested({}, _text, {}); });
+    connect(view, &Ui::NovelOutlineView::buyCreditsRequested, q,
+            &NovelOutlineManager::buyCreditsRequested);
 
     return view;
 }
@@ -374,6 +391,17 @@ void NovelOutlineManager::setEditingMode(DocumentEditingMode _mode)
         }
 
         viewAndModel.view->setEditingMode(_mode);
+    }
+}
+
+void NovelOutlineManager::setAvailableCredits(int _credits)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setAvailableCredits(_credits);
     }
 }
 

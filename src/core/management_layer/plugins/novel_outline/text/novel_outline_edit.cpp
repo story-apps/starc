@@ -528,6 +528,11 @@ void NovelOutlineEdit::setCurrentModelIndex(const QModelIndex& _index)
     ensureCursorVisible(textCursor);
 }
 
+void NovelOutlineEdit::setVisibleTopLevelItemIndex(const QModelIndex& _index)
+{
+    d->document.setVisibleTopLevelItem(_index);
+}
+
 int NovelOutlineEdit::positionForModelIndex(const QModelIndex& _index)
 {
     return d->document.itemStartPosition(_index);

@@ -1470,8 +1470,8 @@ void NovelTextView::loadViewSettings()
     d->toolbar->setItemIsolationEnabled(isItemIsolationEnabled);
     const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
-    const auto isTextGenerationEnabled = settingsValue(kIsAiAssistantEnabledKey, false).toBool();
-    d->toolbar->setAiAssistantEnabled(isTextGenerationEnabled);
+    const auto isAiAssistantEnabled = settingsValue(kIsAiAssistantEnabledKey, false).toBool();
+    d->toolbar->setAiAssistantEnabled(isAiAssistantEnabled);
     const auto isFastFormatPanelVisible
         = settingsValue(kIsFastFormatPanelVisibleKey, false).toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
