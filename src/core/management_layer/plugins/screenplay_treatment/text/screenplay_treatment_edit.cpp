@@ -41,6 +41,17 @@ using BusinessLayer::TextParagraphType;
 
 namespace Ui {
 
+namespace {
+const QSet<BusinessLayer::TextParagraphType> kEndOfBeatTypes = {
+    BusinessLayer::TextParagraphType::BeatHeading,
+    BusinessLayer::TextParagraphType::SceneHeading,
+    BusinessLayer::TextParagraphType::SequenceHeading,
+    BusinessLayer::TextParagraphType::SequenceFooter,
+    BusinessLayer::TextParagraphType::ActHeading,
+    BusinessLayer::TextParagraphType::ActFooter,
+};
+}
+
 class ScreenplayTreatmentEdit::Implementation
 {
 public:
@@ -1260,8 +1271,7 @@ QMimeData* ScreenplayTreatmentEdit::createMimeDataFromSelection() const
             cursor.movePosition(QTextCursor::NextBlock);
             cursor.movePosition(QTextCursor::EndOfBlock);
 
-            if (BusinessLayer::TextBlockStyle::forBlock(cursor)
-                == BusinessLayer::TextParagraphType::BeatHeading) {
+            if (kEndOfBeatTypes.contains(BusinessLayer::TextBlockStyle::forBlock(cursor))) {
                 cursor.movePosition(QTextCursor::PreviousBlock);
                 cursor.movePosition(QTextCursor::EndOfBlock);
                 break;
@@ -1334,16 +1344,6 @@ void ScreenplayTreatmentEdit::insertFromMimeData(const QMimeData* _source)
     }
 
     //
-    // Вручную разделяем параграфы, если курсор в середине блока
-    //
-    if (!cursor.block().text().isEmpty() && cursor.positionInBlock() > 0
-        && cursor.positionInBlock() < cursor.block().length()) {
-        const auto lastPosition = cursor.position();
-        addParagraph(BusinessLayer::TextParagraphType::BeatHeading);
-        cursor.setPosition(lastPosition);
-    }
-
-    //
     // Переместим курсор в конец бита
     //
     const int invalidPosition = -1;
@@ -1351,12 +1351,14 @@ void ScreenplayTreatmentEdit::insertFromMimeData(const QMimeData* _source)
     if (BusinessLayer::TextBlockStyle::forBlock(cursor)
         == BusinessLayer::TextParagraphType::BeatHeading) {
         do {
-            cursor.movePosition(QTextCursor::NextBlock);
-            if (BusinessLayer::TextBlockStyle::forBlock(cursor)
-                == BusinessLayer::TextParagraphType::BeatHeading) {
-                cursor.movePosition(QTextCursor::PreviousBlock);
+            const auto positionBeforeMove = cursor.position();
+            const auto isCursorMoved = cursor.movePosition(QTextCursor::NextBlock);
+            if (isCursorMoved
+                && kEndOfBeatTypes.contains(BusinessLayer::TextBlockStyle::forBlock(cursor))) {
+                cursor.setPosition(positionBeforeMove);
                 break;
             }
+
             cursor.movePosition(QTextCursor::EndOfBlock);
         } while (!cursor.atEnd());
 
@@ -1367,8 +1369,6 @@ void ScreenplayTreatmentEdit::insertFromMimeData(const QMimeData* _source)
         if (cursor.block().text().isEmpty()) {
             removeCharacterAtPosition = cursor.position();
             cursor.insertText(" ");
-        } else {
-            cursor.movePosition(QTextCursor::EndOfBlock);
         }
     }
 
