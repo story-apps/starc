@@ -240,7 +240,7 @@ void OnboardingNavigator::Implementation::initUiPage()
         return languageItem;
     };
     addLanguage("Azərbaycan", QLocale::Azerbaijani, 95);
-    addLanguage("Беларуский", QLocale::Belarusian, 45);
+    addLanguage("Беларуский", QLocale::Belarusian, 54);
     addLanguage("Català", QLocale::Catalan, 78);
     addLanguage("Dansk", QLocale::Danish, 89);
     addLanguage("Deutsch", QLocale::German, 97);
@@ -249,7 +249,7 @@ void OnboardingNavigator::Implementation::initUiPage()
     addLanguage("Esperanto", QLocale::Esperanto, 9);
     addLanguage("Français", QLocale::French, 58);
     addLanguage("Galego", QLocale::Galician, 62);
-    addLanguage("Hrvatski", QLocale::Croatian, 62);
+    addLanguage("Hrvatski", QLocale::Croatian, 59);
     addLanguage("Indonesian", QLocale::Indonesian, 9);
     addLanguage("Italiano", QLocale::Italian, 52);
     addLanguage("Magyar", QLocale::Hungarian, 32);
@@ -261,7 +261,7 @@ void OnboardingNavigator::Implementation::initUiPage()
     addLanguage("Русский", QLocale::Russian, 100);
     addLanguage("Slovenski", QLocale::Slovenian, 100);
     addLanguage("Tagalog", QLocale::Filipino, 19);
-    addLanguage("Türkçe", QLocale::Turkish, 97);
+    addLanguage("Türkçe", QLocale::Turkish, 99);
     addLanguage("Українська", QLocale::Ukrainian, 100);
     addLanguage("اَلْعَرَبِيَّةُ", QLocale::Arabic, 90);
     addLanguage("فارسی", QLocale::Persian, 63);
@@ -270,7 +270,7 @@ void OnboardingNavigator::Implementation::initUiPage()
     addLanguage("தமிழ்", QLocale::Tamil, 41);
     addLanguage("తెలుగు", QLocale::Telugu, 99);
     addLanguage("汉语", QLocale::Chinese, 5);
-    addLanguage("한국어", QLocale::Korean, 69);
+    addLanguage("한국어", QLocale::Korean, 65);
     uiLanguage->setModel(uiLanguageModel);
     //
     // Выбираем язык в зависимости от того, умеем ли мы в системный
