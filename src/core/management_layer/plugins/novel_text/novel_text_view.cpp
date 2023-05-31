@@ -1337,7 +1337,7 @@ void NovelTextView::setGeneratedText(const QString& _text)
     //
     if (!d->textEdit->textCursor().block().text().isEmpty()) {
         d->textEdit->moveCursor(QTextCursor::EndOfBlock);
-        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
+        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Text);
     }
 
     QElapsedTimer timer;

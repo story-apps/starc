@@ -933,13 +933,13 @@ void ComicBookTextView::setGeneratedText(const QString& _text)
 
     case AiAssistantView::TextInsertPosition::AtCursorPosition: {
         d->textEdit->moveCursor(QTextCursor::EndOfBlock);
-        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
+        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Description);
         break;
     }
 
     case AiAssistantView::TextInsertPosition::AtEnd: {
         d->textEdit->moveCursor(QTextCursor::End);
-        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
+        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Description);
         break;
     }
     }

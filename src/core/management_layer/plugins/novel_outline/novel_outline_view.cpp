@@ -1311,7 +1311,7 @@ void NovelOutlineView::setGeneratedText(const QString& _text)
     //
     if (!d->textEdit->textCursor().block().text().isEmpty()) {
         d->textEdit->moveCursor(QTextCursor::EndOfBlock);
-        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::Action);
+        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::BeatHeading);
     }
 
     QElapsedTimer timer;
@@ -1329,7 +1329,7 @@ void NovelOutlineView::setGeneratedText(const QString& _text)
 
     const auto lines = _text.split('\n', Qt::SkipEmptyParts);
     for (const auto& line : lines) {
-        d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::Text);
+        d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::BeatHeading);
 
         for (int index = 0; index < line.length(); ++index) {
             QCoreApplication::postEvent(
