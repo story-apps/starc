@@ -52,8 +52,8 @@ QString ScreenplayTextMimeHandler::removeInvisibleBlocksForTreatment(const QStri
                 //
                 const auto tagContent = startTagContent();
                 if (tagContent.startsWith("act_heading") || tagContent.startsWith("act_footer")
-                    || tagContent.startsWith("folder_heading")
-                    || tagContent.startsWith("folder_footer")
+                    || tagContent.startsWith("sequence_heading")
+                    || tagContent.startsWith("sequence_footer")
                     || tagContent.startsWith("scene_heading")
                     || tagContent.startsWith("beat_heading")
                     || tagContent.startsWith("scene_characters")) {
@@ -63,7 +63,7 @@ QString ScreenplayTextMimeHandler::removeInvisibleBlocksForTreatment(const QStri
                 // Некоторые тэги просто копируем без поиска завершающего
                 //
                 else if (tagContent.startsWith("?xml") || tagContent.startsWith("document ")
-                         || tagContent.startsWith("act ") || tagContent.startsWith("folder ")
+                         || tagContent.startsWith("act ") || tagContent.startsWith("sequence ")
                          || tagContent.startsWith("scene ") || tagContent.startsWith("beat ")
                          || tagContent == "content") {
                     correctedMime += _mime.midRef(startTag.from, startTag.to - startTag.from + 1);
@@ -77,8 +77,8 @@ QString ScreenplayTextMimeHandler::removeInvisibleBlocksForTreatment(const QStri
                 //
                 const auto tagContent = endTaContent();
                 if (tagContent.startsWith("act_heading") || tagContent.startsWith("act_footer")
-                    || tagContent.startsWith("folder_heading")
-                    || tagContent.startsWith("folder_footer")
+                    || tagContent.startsWith("sequence_heading")
+                    || tagContent.startsWith("sequence_footer")
                     || tagContent.startsWith("scene_heading")
                     || tagContent.startsWith("beat_heading")
                     || tagContent.startsWith("scene_characters")) {
@@ -97,7 +97,7 @@ QString ScreenplayTextMimeHandler::removeInvisibleBlocksForTreatment(const QStri
                 // Некоторые тэги просто копируем целиком, без учёта начала
                 //
                 else if (tagContent.startsWith("?xml") || tagContent.startsWith("document ")
-                         || tagContent.startsWith("act ") || tagContent.startsWith("folder ")
+                         || tagContent.startsWith("act ") || tagContent.startsWith("sequence ")
                          || tagContent.startsWith("scene ") || tagContent.startsWith("beat ")
                          || tagContent == "content") {
                     correctedMime += _mime.midRef(endTag.from, endTag.to - endTag.from + 1);
@@ -156,8 +156,8 @@ QString ScreenplayTextMimeHandler::convertTextBlocksToBeats(const QString& _mime
                 //
                 const auto tagContent = startTagContent();
                 if (tagContent.startsWith("act_heading") || tagContent.startsWith("act_footer")
-                    || tagContent.startsWith("folder_heading")
-                    || tagContent.startsWith("folder_footer")
+                    || tagContent.startsWith("sequence_heading")
+                    || tagContent.startsWith("sequence_footer")
                     || tagContent.startsWith("scene_heading")
                     || tagContent.startsWith("beat_heading")
                     || tagContent.startsWith("scene_characters")) {
@@ -168,7 +168,7 @@ QString ScreenplayTextMimeHandler::convertTextBlocksToBeats(const QString& _mime
                 //
                 else if (tagContent.startsWith("?xml") || tagContent.startsWith("document")
                          || tagContent.startsWith("act ") || tagContent == QLatin1String("act")
-                         || tagContent.startsWith("folder") || tagContent.startsWith("scene")
+                         || tagContent.startsWith("sequence") || tagContent.startsWith("scene")
                          || tagContent == "content") {
                     correctedMime += _mime.midRef(startTag.from, startTag.to - startTag.from + 1);
                 }
@@ -202,8 +202,8 @@ QString ScreenplayTextMimeHandler::convertTextBlocksToBeats(const QString& _mime
                 //
                 const auto tagContent = endTaContent();
                 if (tagContent.startsWith("act_heading") || tagContent.startsWith("act_footer")
-                    || tagContent.startsWith("folder_heading")
-                    || tagContent.startsWith("folder_footer")
+                    || tagContent.startsWith("sequence_heading")
+                    || tagContent.startsWith("sequence_footer")
                     || tagContent.startsWith("scene_heading")
                     || tagContent.startsWith("beat_heading")
                     || tagContent.startsWith("scene_characters")) {
@@ -215,7 +215,7 @@ QString ScreenplayTextMimeHandler::convertTextBlocksToBeats(const QString& _mime
                 //
                 else if (tagContent.startsWith("?xml") || tagContent.startsWith("document")
                          || tagContent.startsWith("act ") || tagContent == QLatin1String("act")
-                         || tagContent.startsWith("folder") || tagContent.startsWith("scene")
+                         || tagContent.startsWith("sequence") || tagContent.startsWith("scene")
                          || tagContent == "content") {
                     correctedMime += _mime.midRef(endTag.from, endTag.to - endTag.from + 1);
                 }
