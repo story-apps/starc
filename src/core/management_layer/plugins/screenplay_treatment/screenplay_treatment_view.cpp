@@ -7,8 +7,12 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_folder_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -16,8 +20,10 @@
 #include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/ai_assistant/ai_assistant_view.h>
 #include <ui/modules/bookmarks/bookmarks_model.h>
 #include <ui/modules/bookmarks/bookmarks_view.h>
+#include <ui/modules/cards/card_item_parameters_view.h>
 #include <ui/modules/comments/comments_model.h>
 #include <ui/modules/comments/comments_toolbar.h>
 #include <ui/modules/comments/comments_view.h>
@@ -28,15 +34,20 @@
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/tab_bar/tab_bar.h>
+#include <ui/widgets/task_bar/task_bar.h>
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/scalable_wrapper/scalable_wrapper.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/measurement_helper.h>
+#include <utils/helpers/text_helper.h>
 #include <utils/helpers/ui_helper.h>
 #include <utils/tools/debouncer.h>
 
 #include <QAction>
+#include <QCoreApplication>
+#include <QElapsedTimer>
 #include <QPointer>
+#include <QRandomGenerator>
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QTimer>
@@ -47,15 +58,22 @@ namespace Ui {
 namespace {
 const int kTypeDataRole = Qt::UserRole + 100;
 
-const int kFastFormatTabIndex = 0;
-const int kCommentsTabIndex = 1;
-const int kBookmarksTabIndex = 2;
+enum {
+    kFastFormatTabIndex = 0,
+    kSceneParametersTabIndex,
+    kCommentsTabIndex,
+    kAiAssistantTabIndex,
+    kBookmarksTabIndex,
+};
 
 const QString kSettingsKey = "screenplay-treatment";
 const QString kScaleFactorKey = kSettingsKey + "/scale-factor";
 const QString kSidebarStateKey = kSettingsKey + "/sidebar-state";
 const QString kIsFastFormatPanelVisibleKey = kSettingsKey + "/is-fast-format-panel-visible";
 const QString kIsCommentsModeEnabledKey = kSettingsKey + "/is-comments-mode-enabled";
+const QString kIsAiAssistantEnabledKey = kSettingsKey + "/is-ai-assistant-enabled";
+const QString kIsItemIsolationEnabledKey = kSettingsKey + "/is-item-isolation-enabled";
+const QString kIsSceneParametersVisibleKey = kSettingsKey + "/is-scene-parameters-visible";
 const QString kIsBookmarksListVisibleKey = kSettingsKey + "/is-bookmarks-list-visible";
 const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 } // namespace
@@ -63,7 +81,7 @@ const QString kSidebarPanelIndexKey = kSettingsKey + "/sidebar-panel-index";
 class ScreenplayTreatmentView::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(ScreenplayTreatmentView* _q);
 
     /**
      * @brief Переконфигурировать представление
@@ -105,6 +123,11 @@ public:
     void updateSideBarVisibility(QWidget* _container);
 
     /**
+     * @brief Отобразить параметры заданной сцены
+     */
+    void showParametersFor(BusinessLayer::TextModelItem* _item);
+
+    /**
      * @brief Добавить редакторскую заметку для текущего выделения
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
@@ -115,6 +138,7 @@ public:
     // Модели
     //
     QPointer<BusinessLayer::ScreenplayTextModel> model;
+    BusinessLayer::TextModelItem* lastSelectedItem = nullptr;
     BusinessLayer::CommentsModel* commentsModel = nullptr;
     BusinessLayer::BookmarksModel* bookmarksModel = nullptr;
 
@@ -146,7 +170,9 @@ public:
     TabBar* sidebarTabs = nullptr;
     StackWidget* sidebarContent = nullptr;
     FastFormatWidget* fastFormatWidget = nullptr;
+    CardItemParametersView* itemParametersView = nullptr;
     CommentsView* commentsView = nullptr;
+    AiAssistantView* aiAssistantView = nullptr;
     BookmarksView* bookmarksView = nullptr;
     //
     Splitter* splitter = nullptr;
@@ -154,6 +180,7 @@ public:
     //
     // Действия опций редактора
     //
+    QAction* showSceneParametersAction = nullptr;
     QAction* showBookmarksAction = nullptr;
 
     /**
@@ -162,26 +189,29 @@ public:
     Debouncer cursorChangeNotificationsDebounser;
 };
 
-ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
-    : commentsModel(new BusinessLayer::CommentsModel(_parent))
-    , bookmarksModel(new BusinessLayer::BookmarksModel(_parent))
-    , textEdit(new ScreenplayTreatmentEdit(_parent))
+ScreenplayTreatmentView::Implementation::Implementation(ScreenplayTreatmentView* _q)
+    : commentsModel(new BusinessLayer::CommentsModel(_q))
+    , bookmarksModel(new BusinessLayer::BookmarksModel(_q))
+    , textEdit(new ScreenplayTreatmentEdit(_q))
     , shortcutsManager(textEdit)
-    , scalableWrapper(new ScalableWrapper(textEdit, _parent))
+    , scalableWrapper(new ScalableWrapper(textEdit, _q))
     , toolbar(new ScreenplayTreatmentEditToolbar(scalableWrapper))
     , searchManager(new BusinessLayer::ScreenplayTreatmentSearchManager(scalableWrapper, textEdit))
-    , toolbarAnimation(new FloatingToolbarAnimator(_parent))
+    , toolbarAnimation(new FloatingToolbarAnimator(_q))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
-    , commentsToolbar(new CommentsToolbar(_parent))
+    , commentsToolbar(new CommentsToolbar(_q))
     , sidebarShadow(new Shadow(Qt::RightEdge, scalableWrapper))
-    , sidebarWidget(new Widget(_parent))
-    , sidebarTabs(new TabBar(_parent))
-    , sidebarContent(new StackWidget(_parent))
-    , fastFormatWidget(new FastFormatWidget(_parent))
-    , commentsView(new CommentsView(_parent))
-    , bookmarksView(new BookmarksView(_parent))
-    , splitter(new Splitter(_parent))
-    , showBookmarksAction(new QAction(_parent))
+    , sidebarWidget(new Widget(_q))
+    , sidebarTabs(new TabBar(_q))
+    , sidebarContent(new StackWidget(_q))
+    , fastFormatWidget(new FastFormatWidget(_q))
+    , itemParametersView(new CardItemParametersView(_q))
+    , commentsView(new CommentsView(_q))
+    , aiAssistantView(new AiAssistantView(_q))
+    , bookmarksView(new BookmarksView(_q))
+    , splitter(new Splitter(_q))
+    , showSceneParametersAction(new QAction(_q))
+    , showBookmarksAction(new QAction(_q))
     , cursorChangeNotificationsDebounser(500)
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
@@ -201,22 +231,35 @@ ScreenplayTreatmentView::Implementation::Implementation(QWidget* _parent)
     sidebarTabs->setFixed(false);
     sidebarTabs->addTab({}); // fastformat
     sidebarTabs->setTabVisible(kFastFormatTabIndex, false);
+    sidebarTabs->addTab({}); // scene parameters
+    sidebarTabs->setTabVisible(kSceneParametersTabIndex, false);
     sidebarTabs->addTab({}); // comments
     sidebarTabs->setTabVisible(kCommentsTabIndex, false);
+    sidebarTabs->addTab({}); // ai assistant
+    sidebarTabs->setTabVisible(kAiAssistantTabIndex, false);
     sidebarTabs->addTab({}); // bookmarks
     sidebarTabs->setTabVisible(kBookmarksTabIndex, false);
     sidebarContent->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     sidebarContent->setAnimationType(StackWidget::AnimationType::Slide);
     sidebarContent->addWidget(fastFormatWidget);
+    sidebarContent->addWidget(itemParametersView);
     sidebarContent->addWidget(commentsView);
+    sidebarContent->addWidget(aiAssistantView);
     sidebarContent->addWidget(bookmarksView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
+    itemParametersView->setNumberingVisible(false);
+    itemParametersView->setStampVisible(false);
+    itemParametersView->hide();
     commentsView->setModel(commentsModel);
     commentsView->hide();
+    aiAssistantView->hide();
     bookmarksView->setModel(bookmarksModel);
     bookmarksView->hide();
 
+    showSceneParametersAction->setCheckable(true);
+    showSceneParametersAction->setIconText(u8"\U000F1A7D");
+    showSceneParametersAction->setSeparator(true);
     showBookmarksAction->setCheckable(true);
     showBookmarksAction->setIconText(u8"\U000F0E16");
 }
@@ -297,6 +340,9 @@ void ScreenplayTreatmentView::Implementation::reconfigureDialoguesNumbersVisibil
 
 void ScreenplayTreatmentView::Implementation::updateOptionsTranslations()
 {
+    showSceneParametersAction->setText(showSceneParametersAction->isChecked()
+                                           ? tr("Hide scene parameters")
+                                           : tr("Show scene parameters"));
     showBookmarksAction->setText(showBookmarksAction->isChecked() ? tr("Hide bookmarks list")
                                                                   : tr("Show bookmarks list"));
 }
@@ -434,7 +480,8 @@ void ScreenplayTreatmentView::Implementation::updateCommentsToolBar()
 void ScreenplayTreatmentView::Implementation::updateSideBarVisibility(QWidget* _container)
 {
     const bool isSidebarShouldBeVisible = toolbar->isFastFormatPanelVisible()
-        || toolbar->isCommentsModeEnabled() || showBookmarksAction->isChecked();
+        || toolbar->isCommentsModeEnabled() || toolbar->isAiAssistantEnabled()
+        || showSceneParametersAction->isChecked() || showBookmarksAction->isChecked();
     if (sidebarWidget->isVisible() == isSidebarShouldBeVisible) {
         return;
     }
@@ -445,6 +492,67 @@ void ScreenplayTreatmentView::Implementation::updateSideBarVisibility(QWidget* _
     if (isSidebarShouldBeVisible && splitter->sizes().constLast() == 0) {
         const auto sideBarWidth = sidebarContent->sizeHint().width();
         splitter->setSizes({ _container->width() - sideBarWidth, sideBarWidth });
+    }
+}
+
+void ScreenplayTreatmentView::Implementation::showParametersFor(BusinessLayer::TextModelItem* _item)
+{
+    if (_item == nullptr
+        || (_item->type() != BusinessLayer::TextModelItemType::Folder
+            && _item->type() != BusinessLayer::TextModelItemType::Group)) {
+        return;
+    }
+
+    //
+    // На время установки данных о другом элемента, блокируем сигналы сайдбара
+    //
+    QSignalBlocker signalBlocker(itemParametersView);
+
+    lastSelectedItem = _item;
+
+    switch (_item->type()) {
+    case BusinessLayer::TextModelItemType::Folder: {
+        itemParametersView->setItemType(Ui::CardItemType::Folder);
+
+        auto folderItem = static_cast<BusinessLayer::TextModelFolderItem*>(lastSelectedItem);
+        itemParametersView->setColor(folderItem->color());
+        itemParametersView->setTitle(folderItem->heading());
+        itemParametersView->setDescription(folderItem->description());
+        itemParametersView->setStamp(folderItem->stamp());
+        break;
+    }
+
+    case BusinessLayer::TextModelItemType::Group: {
+        const auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(lastSelectedItem);
+        if (groupItem->groupType() != BusinessLayer::TextGroupType::Scene) {
+            return;
+        }
+
+        itemParametersView->setItemType(Ui::CardItemType::Scene);
+
+        const auto sceneItem = static_cast<BusinessLayer::ScreenplayTextModelSceneItem*>(groupItem);
+        itemParametersView->setColor(sceneItem->color());
+        itemParametersView->setTitle(sceneItem->title());
+        itemParametersView->setHeading(sceneItem->heading());
+        itemParametersView->setBeats(sceneItem->beats());
+        itemParametersView->setStoryDay(sceneItem->storyDay(),
+                                        model->dictionariesModel()->storyDays());
+        itemParametersView->setStamp(sceneItem->stamp());
+        if (const auto sceneNumber = sceneItem->number(); sceneNumber.has_value()) {
+            itemParametersView->setNumber(sceneNumber->followNumber + sceneNumber->value,
+                                          sceneNumber->isCustom, sceneNumber->isEatNumber,
+                                          sceneNumber->isLocked);
+        } else {
+            itemParametersView->setNumber({}, false, true, false);
+        }
+        itemParametersView->setTags(sceneItem->tags(), model->dictionariesModel()->tags());
+        break;
+    }
+
+    default: {
+        break;
+        ;
+    }
     }
 }
 
@@ -542,6 +650,24 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
                                             d->toolbar->searchIconPosition(), d->toolbar,
                                             d->searchManager->toolbar());
     });
+    connect(d->toolbar, &ScreenplayTreatmentEditToolbar::aiAssistantEnabledChanged, this,
+            [this](bool _enabled) {
+                d->sidebarTabs->setTabVisible(kAiAssistantTabIndex, _enabled);
+                d->aiAssistantView->setVisible(_enabled);
+                if (_enabled) {
+                    d->sidebarTabs->setCurrentTab(kAiAssistantTabIndex);
+                    d->sidebarContent->setCurrentWidget(d->aiAssistantView);
+                }
+                d->updateSideBarVisibility(this);
+            });
+    connect(d->toolbar, &ScreenplayTreatmentEditToolbar::itemIsolationEnabledChanged, this,
+            [this](bool _enabled) {
+                d->textEdit->setVisibleTopLevelItemIndex(_enabled ? d->textEdit->currentModelIndex()
+                                                                  : QModelIndex());
+
+                const bool animate = false;
+                d->textEdit->ensureCursorVisible(d->textEdit->textCursor(), animate);
+            });
     //
     connect(d->searchManager,
             &BusinessLayer::ScreenplayTreatmentSearchManager::hideToolbarRequested, this,
@@ -574,101 +700,6 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
         d->commentsModel->remove({ d->commentsView->currentIndex() });
         d->commentsToolbar->hideToolbar();
     });
-    connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
-            [this](const QColor& _color, const QString& _comment) {
-                d->addReviewMark({}, _color, _comment);
-            });
-    connect(d->commentsView, &CommentsView::changeReviewMarkRequested, this,
-            [this](const QModelIndex& _index, const QString& _comment) {
-                QSignalBlocker blocker(d->commentsView);
-                d->commentsModel->setComment(_index, _comment);
-            });
-    connect(d->commentsView, &CommentsView::addReviewMarkReplyRequested, this,
-            [this](const QModelIndex& _index, const QString& _reply) {
-                QSignalBlocker blocker(d->commentsView);
-                d->commentsModel->addReply(_index, _reply);
-            });
-    connect(d->commentsView, &CommentsView::editReviewMarkReplyRequested, this,
-            [this](const QModelIndex& _index, int _replyIndex, const QString& _reply) {
-                QSignalBlocker blocker(d->commentsView);
-                d->commentsModel->editReply(_index, _replyIndex, _reply);
-            });
-    connect(d->commentsView, &CommentsView::removeReviewMarkReplyRequested, this,
-            [this](const QModelIndex& _index, int _replyIndex) {
-                QSignalBlocker blocker(d->commentsView);
-                d->commentsModel->removeReply(_index, _replyIndex);
-            });
-    connect(d->commentsView, &CommentsView::commentSelected, this,
-            [this](const QModelIndex& _index) {
-                const auto positionHint = d->commentsModel->mapToModel(_index);
-                const auto position = d->textEdit->positionForModelIndex(positionHint.index)
-                    + positionHint.blockPosition;
-                auto cursor = d->textEdit->textCursor();
-                cursor.setPosition(position);
-                d->textEdit->ensureCursorVisible(cursor);
-                d->scalableWrapper->setFocus();
-            });
-    connect(d->commentsView, &CommentsView::markAsDoneRequested, this,
-            [this](const QModelIndexList& _indexes) {
-                QSignalBlocker blocker(d->commentsView);
-                d->commentsModel->markAsDone(_indexes);
-            });
-    connect(d->commentsView, &CommentsView::markAsUndoneRequested, this,
-            [this](const QModelIndexList& _indexes) {
-                QSignalBlocker blocker(d->commentsView);
-                d->commentsModel->markAsUndone(_indexes);
-            });
-    connect(d->commentsView, &CommentsView::removeRequested, this,
-            [this](const QModelIndexList& _indexes) {
-                QSignalBlocker blocker(d->commentsView);
-                d->commentsModel->remove(_indexes);
-            });
-    //
-    connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
-            &ScreenplayTreatmentView::createBookmarkRequested);
-    connect(d->bookmarksView, &BookmarksView::changeBookmarkRequested, this,
-            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
-                emit changeBookmarkRequested(d->bookmarksModel->mapToModel(_index), _text, _color);
-            });
-    connect(d->bookmarksView, &BookmarksView::bookmarkSelected, this,
-            [this](const QModelIndex& _index) {
-                const auto index = d->bookmarksModel->mapToModel(_index);
-                const auto position = d->textEdit->positionForModelIndex(index);
-                auto cursor = d->textEdit->textCursor();
-                cursor.setPosition(position);
-                d->textEdit->ensureCursorVisible(cursor);
-                d->scalableWrapper->setFocus();
-            });
-    connect(d->bookmarksView, &BookmarksView::removeRequested, this,
-            [this](const QModelIndexList& _indexes) {
-                QSignalBlocker blocker(d->commentsView);
-                d->bookmarksModel->remove(_indexes);
-            });
-    //
-    connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this](int _currentIndex) {
-        switch (_currentIndex) {
-        case kFastFormatTabIndex: {
-            d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
-            break;
-        }
-        case kCommentsTabIndex: {
-            d->sidebarContent->setCurrentWidget(d->commentsView);
-            break;
-        }
-        case kBookmarksTabIndex: {
-            d->sidebarContent->setCurrentWidget(d->bookmarksView);
-            break;
-        }
-        }
-    });
-    //
-    connect(d->fastFormatWidget, &FastFormatWidget::paragraphTypeChanged, this,
-            [this](const QModelIndex& _index) {
-                const auto type = static_cast<BusinessLayer::TextParagraphType>(
-                    _index.data(kTypeDataRole).toInt());
-                d->textEdit->setCurrentParagraphType(type);
-                d->scalableWrapper->setFocus();
-            });
     //
     connect(d->scalableWrapper->verticalScrollBar(), &QScrollBar::valueChanged, this,
             [this] { d->updateCommentsToolBar(); });
@@ -682,11 +713,30 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
         },
         Qt::QueuedConnection);
     //
-    auto handleCursorPositionChanged = [this] {
+    auto findCurrentModelItem = [this]() -> BusinessLayer::TextModelItem* {
+        if (d->model.isNull()) {
+            return nullptr;
+        }
+
+        const auto currentModelIndex = this->currentModelIndex();
+        if (!currentModelIndex.isValid()) {
+            return nullptr;
+        }
+
+        auto currentItem = d->model->itemForIndex(currentModelIndex.parent());
+        if (currentItem->type() == BusinessLayer::TextModelItemType::Group
+            && static_cast<BusinessLayer::TextGroupType>(currentItem->subtype())
+                == BusinessLayer::TextGroupType::Beat) {
+            currentItem = currentItem->parent();
+        }
+        return currentItem;
+    };
+    auto handleCursorPositionChanged = [this, findCurrentModelItem] {
         //
         // Обновим состояние панелей форматов
         //
         d->updateToolBarCurrentParagraphTypeName();
+
         //
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
@@ -694,6 +744,15 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
         if (hasFocus()) {
             emit currentModelIndexChanged(screenplayModelIndex);
         }
+
+        //
+        // Отобразим параметры сцены
+        //
+        auto currentItem = findCurrentModelItem();
+        if (currentItem != nullptr && currentItem != d->lastSelectedItem) {
+            d->showParametersFor(currentItem);
+        }
+
         //
         // Если необходимо выберем соответствующий комментарий
         //
@@ -701,11 +760,13 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
         const auto commentModelIndex
             = d->commentsModel->mapFromModel(screenplayModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
+
         //
         // Выберем закладку, если курсор в блоке с закладкой
         //
         const auto bookmarkModelIndex = d->bookmarksModel->mapFromModel(screenplayModelIndex);
         d->bookmarksView->setCurrentIndex(bookmarkModelIndex);
+
         //
         // Запланируем уведомление внешних клиентов о смене позиции курсора
         //
@@ -762,6 +823,402 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
     connect(d->textEdit, &ScreenplayTreatmentEdit::showBookmarksRequested, d->showBookmarksAction,
             &QAction::toggle);
     //
+    connect(d->sidebarTabs, &TabBar::currentIndexChanged, this, [this](int _currentIndex) {
+        switch (_currentIndex) {
+        case kFastFormatTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
+            break;
+        }
+        case kSceneParametersTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->itemParametersView);
+            break;
+        }
+        case kCommentsTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->commentsView);
+            break;
+        }
+        case kAiAssistantTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->aiAssistantView);
+            break;
+        }
+        case kBookmarksTabIndex: {
+            d->sidebarContent->setCurrentWidget(d->bookmarksView);
+            break;
+        }
+        }
+    });
+    //
+    connect(d->fastFormatWidget, &FastFormatWidget::paragraphTypeChanged, this,
+            [this](const QModelIndex& _index) {
+                const auto type = static_cast<BusinessLayer::TextParagraphType>(
+                    _index.data(kTypeDataRole).toInt());
+                d->textEdit->setCurrentParagraphType(type);
+                d->scalableWrapper->setFocus();
+            });
+    //
+    connect(d->itemParametersView, &CardItemParametersView::colorChanged, this,
+            [this, findCurrentModelItem](const QColor& _color) {
+                auto item = findCurrentModelItem();
+                if (item == nullptr) {
+                    return;
+                }
+
+                switch (item->type()) {
+                case BusinessLayer::TextModelItemType::Folder: {
+                    auto folderItem = static_cast<BusinessLayer::TextModelFolderItem*>(item);
+                    folderItem->setColor(_color);
+                    break;
+                }
+
+                case BusinessLayer::TextModelItemType::Group: {
+                    auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+                    groupItem->setColor(_color);
+                    break;
+                }
+
+                default: {
+                    Q_ASSERT(false);
+                }
+                }
+
+                d->model->updateItem(item);
+            });
+    connect(d->itemParametersView, &CardItemParametersView::titleChanged, this,
+            [this, findCurrentModelItem](const QString& _title) {
+                auto item = findCurrentModelItem();
+                if (item == nullptr) {
+                    return;
+                }
+
+                switch (item->type()) {
+                case BusinessLayer::TextModelItemType::Folder: {
+                    auto textItem
+                        = static_cast<BusinessLayer::TextModelTextItem*>(item->childAt(0));
+                    textItem->setText(_title);
+                    item = textItem;
+                    break;
+                }
+
+                case BusinessLayer::TextModelItemType::Group: {
+                    auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+                    groupItem->setTitle(_title);
+                    break;
+                }
+
+                default: {
+                    Q_ASSERT(false);
+                }
+                }
+
+                d->model->updateItem(item);
+            });
+    connect(d->itemParametersView, &CardItemParametersView::headingChanged, this,
+            [this, findCurrentModelItem](const QString& _heading) {
+                auto item = findCurrentModelItem();
+                if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
+                    return;
+                }
+
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item->childAt(0));
+                textItem->setText(_heading);
+                d->model->updateItem(textItem);
+            });
+    connect(d->itemParametersView, &CardItemParametersView::descriptionChanged, this,
+            [this, findCurrentModelItem](const QString& _description) {
+                auto item = findCurrentModelItem();
+                if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Folder) {
+                    return;
+                }
+
+                auto folderItem = static_cast<BusinessLayer::TextModelFolderItem*>(item);
+                folderItem->setDescription(_description);
+                d->model->updateItem(folderItem);
+            });
+    connect(d->itemParametersView, &CardItemParametersView::beatAdded, this,
+            [this, findCurrentModelItem](int _beatIndex) {
+                auto item = findCurrentModelItem();
+                if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
+                    return;
+                }
+
+                //
+                // Определим элемент бита, после которого нужно вставить новый
+                //
+                int currentBeatIndex = 0;
+                for (int childIndex = 1; childIndex < item->childCount(); ++childIndex) {
+                    auto childItem = item->childAt(childIndex);
+                    if (childItem->type() != BusinessLayer::TextModelItemType::Group) {
+                        continue;
+                    }
+
+                    if (currentBeatIndex != _beatIndex - 1) {
+                        ++currentBeatIndex;
+                        continue;
+                    }
+
+                    //
+                    // ... и вставляем новый бит после обнаруженного
+                    //
+                    auto beatHeadingItem = d->model->createTextItem();
+                    beatHeadingItem->setParagraphType(
+                        BusinessLayer::TextParagraphType::BeatHeading);
+                    auto beatItem = d->model->createGroupItem(BusinessLayer::TextGroupType::Beat);
+                    beatItem->appendItems({ beatHeadingItem });
+                    d->model->insertItem(beatItem, childItem);
+                    break;
+                }
+            });
+    connect(
+        d->itemParametersView, &CardItemParametersView::beatChanged, this,
+        [this, findCurrentModelItem](int _beatIndex, const QString& _beat) {
+            auto item = findCurrentModelItem();
+            if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
+                return;
+            }
+
+            //
+            // Определим элемент изменяемого бита
+            //
+            int currentBeatIndex = 0;
+            BusinessLayer::TextModelTextItem* beatHeadingItem = nullptr;
+            for (int childIndex = 1; childIndex < item->childCount(); ++childIndex) {
+                auto child = item->childAt(childIndex);
+                if (child->type() != BusinessLayer::TextModelItemType::Group) {
+                    continue;
+                }
+
+                if (currentBeatIndex != _beatIndex) {
+                    ++currentBeatIndex;
+                    continue;
+                }
+
+                beatHeadingItem = static_cast<BusinessLayer::TextModelTextItem*>(child->childAt(0));
+                break;
+            }
+            //
+            // Если не удалось найти бит (обычно это происходит в ситуации когда не было ни
+            // одного бита в сцене, и пользователь добавляет описание на карточку
+            //
+            if (beatHeadingItem == nullptr) {
+                beatHeadingItem = d->model->createTextItem();
+                beatHeadingItem->setParagraphType(BusinessLayer::TextParagraphType::BeatHeading);
+                auto beatItem = d->model->createGroupItem(BusinessLayer::TextGroupType::Beat);
+                beatItem->appendItems({ beatHeadingItem });
+                d->model->appendItem(beatItem, item);
+            }
+            //
+            // Обновляем текст заголовка бита
+            //
+            beatHeadingItem->setText(_beat);
+            d->model->updateItem(beatHeadingItem);
+        });
+    connect(d->itemParametersView, &CardItemParametersView::beatRemoved, this,
+            [this, findCurrentModelItem](int _beatIndex) {
+                auto item = findCurrentModelItem();
+                if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
+                    return;
+                }
+
+                //
+                // Определим элемент бита, который нужно удалить
+                //
+                int currentBeatIndex = 0;
+                for (int childIndex = 1; childIndex < item->childCount(); ++childIndex) {
+                    auto beatItem = item->childAt(childIndex);
+                    if (beatItem->type() != BusinessLayer::TextModelItemType::Group) {
+                        continue;
+                    }
+
+                    if (currentBeatIndex != _beatIndex) {
+                        ++currentBeatIndex;
+                        continue;
+                    }
+
+                    //
+                    // ... извлечём всех детей и перенесём их по назначению
+                    //
+                    if (beatItem->hasChildren() && beatItem->childCount() > 1) {
+                        QVector<BusinessLayer::TextModelItem*> beatChildren;
+                        while (beatItem->childCount() > 1) {
+                            auto beatChildItem = beatItem->childAt(1);
+                            d->model->takeItem(beatChildItem);
+                            beatChildren.append(beatChildItem);
+                        }
+
+                        const int beatItemIndex = beatItem->parent()->rowOfChild(beatItem);
+                        if (beatItemIndex == 0) {
+                            d->model->prependItems(beatChildren);
+                        } else {
+                            auto beforeBeatItem = beatItem->parent()->childAt(beatItemIndex - 1);
+                            Q_ASSERT(beforeBeatItem);
+                            if (beforeBeatItem->type() == BusinessLayer::TextModelItemType::Group) {
+                                d->model->appendItems(beatChildren, beforeBeatItem);
+                            } else {
+                                d->model->insertItems(beatChildren, beforeBeatItem);
+                            }
+                        }
+                    }
+
+                    //
+                    // ... и удалим его
+                    //
+                    d->model->removeItem(beatItem);
+                    break;
+                }
+            });
+    connect(d->itemParametersView, &CardItemParametersView::storyDayChanged, this,
+            [this, findCurrentModelItem](const QString& _storyDay) {
+                auto item = findCurrentModelItem();
+                if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
+                    return;
+                }
+
+                auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+
+                d->model->dictionariesModel()->removeStoryDay(groupItem->storyDay());
+                d->model->dictionariesModel()->addStoryDay(_storyDay);
+                //
+                groupItem->setStoryDay(_storyDay);
+                d->model->updateItem(groupItem);
+            });
+    connect(
+        d->itemParametersView, &CardItemParametersView::numberChanged, this,
+        [this, findCurrentModelItem](const QString& _number, bool _isCustom, bool _isEatNumber) {
+            auto item = findCurrentModelItem();
+            if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
+                return;
+            }
+
+            auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+            if (_isCustom) {
+                groupItem->setCustomNumber(_number, _isEatNumber);
+            } else {
+                groupItem->resetNumber();
+            }
+            d->model->updateItem(groupItem);
+        });
+    connect(d->itemParametersView, &CardItemParametersView::tagsChanged, this,
+            [this, findCurrentModelItem](const QVector<QPair<QString, QColor>>& _tags) {
+                auto item = findCurrentModelItem();
+                if (item == nullptr || item->type() != BusinessLayer::TextModelItemType::Group) {
+                    return;
+                }
+
+                auto groupItem = static_cast<BusinessLayer::TextModelGroupItem*>(item);
+
+                d->model->dictionariesModel()->removeTags(groupItem->tags());
+                d->model->dictionariesModel()->addTags(_tags);
+
+                groupItem->setTags(_tags);
+                d->model->updateItem(groupItem);
+            });
+    //
+    connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
+            [this](const QColor& _color, const QString& _comment) {
+                d->addReviewMark({}, _color, _comment);
+            });
+    connect(d->commentsView, &CommentsView::changeReviewMarkRequested, this,
+            [this](const QModelIndex& _index, const QString& _comment) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->setComment(_index, _comment);
+            });
+    connect(d->commentsView, &CommentsView::addReviewMarkReplyRequested, this,
+            [this](const QModelIndex& _index, const QString& _reply) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->addReply(_index, _reply);
+            });
+    connect(d->commentsView, &CommentsView::editReviewMarkReplyRequested, this,
+            [this](const QModelIndex& _index, int _replyIndex, const QString& _reply) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->editReply(_index, _replyIndex, _reply);
+            });
+    connect(d->commentsView, &CommentsView::removeReviewMarkReplyRequested, this,
+            [this](const QModelIndex& _index, int _replyIndex) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->removeReply(_index, _replyIndex);
+            });
+    connect(d->commentsView, &CommentsView::commentSelected, this,
+            [this](const QModelIndex& _index) {
+                const auto positionHint = d->commentsModel->mapToModel(_index);
+
+                if (d->toolbar->isItemIsolationEnabled()) {
+                    d->textEdit->setVisibleTopLevelItemIndex(positionHint.index);
+                }
+
+                const auto position = d->textEdit->positionForModelIndex(positionHint.index)
+                    + positionHint.blockPosition;
+                auto cursor = d->textEdit->textCursor();
+                cursor.setPosition(position);
+                d->textEdit->ensureCursorVisible(cursor);
+                d->scalableWrapper->setFocus();
+            });
+    connect(d->commentsView, &CommentsView::markAsDoneRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->markAsDone(_indexes);
+            });
+    connect(d->commentsView, &CommentsView::markAsUndoneRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->markAsUndone(_indexes);
+            });
+    connect(d->commentsView, &CommentsView::removeRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->remove(_indexes);
+            });
+    //
+    connect(d->aiAssistantView, &AiAssistantView::rephraseRequested, this,
+            &ScreenplayTreatmentView::rephraseTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::expandRequested, this,
+            &ScreenplayTreatmentView::expandTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::shortenRequested, this,
+            &ScreenplayTreatmentView::shortenTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::insertRequested, this,
+            &ScreenplayTreatmentView::insertTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::summarizeRequested, this,
+            &ScreenplayTreatmentView::summarizeTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
+            &ScreenplayTreatmentView::translateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
+            &ScreenplayTreatmentView::generateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
+            [this](const QString& _text) { d->textEdit->insertPlainText(_text); });
+    connect(d->aiAssistantView, &AiAssistantView::buyCreditsPressed, this,
+            &ScreenplayTreatmentView::buyCreditsRequested);
+    //
+    connect(d->bookmarksView, &BookmarksView::addBookmarkRequested, this,
+            &ScreenplayTreatmentView::createBookmarkRequested);
+    connect(d->bookmarksView, &BookmarksView::changeBookmarkRequested, this,
+            [this](const QModelIndex& _index, const QString& _text, const QColor& _color) {
+                emit changeBookmarkRequested(d->bookmarksModel->mapToModel(_index), _text, _color);
+            });
+    connect(d->bookmarksView, &BookmarksView::bookmarkSelected, this,
+            [this](const QModelIndex& _index) {
+                const auto index = d->bookmarksModel->mapToModel(_index);
+                const auto position = d->textEdit->positionForModelIndex(index);
+                auto cursor = d->textEdit->textCursor();
+                cursor.setPosition(position);
+                d->textEdit->ensureCursorVisible(cursor);
+                d->scalableWrapper->setFocus();
+            });
+    connect(d->bookmarksView, &BookmarksView::removeRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->bookmarksModel->remove(_indexes);
+            });
+    //
+    connect(d->showSceneParametersAction, &QAction::toggled, this, [this](bool _checked) {
+        d->updateOptionsTranslations();
+        d->sidebarTabs->setTabVisible(kSceneParametersTabIndex, _checked);
+        d->itemParametersView->setVisible(_checked);
+        if (_checked) {
+            d->sidebarTabs->setCurrentTab(kSceneParametersTabIndex);
+            d->sidebarContent->setCurrentWidget(d->itemParametersView);
+        }
+        d->updateSideBarVisibility(this);
+    });
+    //
     connect(d->showBookmarksAction, &QAction::toggled, this, [this](bool _checked) {
         d->updateOptionsTranslations();
         d->sidebarTabs->setTabVisible(kBookmarksTabIndex, _checked);
@@ -795,6 +1252,7 @@ void ScreenplayTreatmentView::toggleFullScreen(bool _isFullScreen)
 QVector<QAction*> ScreenplayTreatmentView::options() const
 {
     return {
+        d->showSceneParametersAction,
         d->showBookmarksAction,
     };
 }
@@ -805,7 +1263,9 @@ void ScreenplayTreatmentView::setEditingMode(ManagementLayer::DocumentEditingMod
     d->textEdit->setReadOnly(readOnly);
     d->toolbar->setReadOnly(readOnly);
     d->searchManager->setReadOnly(readOnly);
+    d->itemParametersView->setReadOnly(readOnly);
     d->commentsView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
+    d->aiAssistantView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->bookmarksView->setReadOnly(readOnly);
     const auto enabled = !readOnly;
     d->shortcutsManager.setEnabled(enabled);
@@ -819,7 +1279,129 @@ void ScreenplayTreatmentView::setCursors(const QVector<Domain::CursorInfo>& _cur
 
 void ScreenplayTreatmentView::setCurrentModelIndex(const QModelIndex& _index)
 {
+    if (d->toolbar->isItemIsolationEnabled()) {
+        d->textEdit->setVisibleTopLevelItemIndex(_index);
+    }
+
     d->textEdit->setCurrentModelIndex(_index);
+}
+
+void ScreenplayTreatmentView::setAvailableCredits(int _credits)
+{
+    d->aiAssistantView->setAvailableWords(_credits);
+}
+
+void ScreenplayTreatmentView::setRephrasedText(const QString& _text)
+{
+    d->aiAssistantView->setRephraseResult(_text);
+}
+
+void ScreenplayTreatmentView::setExpandedText(const QString& _text)
+{
+    d->aiAssistantView->setExpandResult(_text);
+}
+
+void ScreenplayTreatmentView::setShortenedText(const QString& _text)
+{
+    d->aiAssistantView->setShortenResult(_text);
+}
+
+void ScreenplayTreatmentView::setInsertedText(const QString& _text)
+{
+    d->aiAssistantView->setInsertResult(_text);
+}
+
+void ScreenplayTreatmentView::setSummarizedText(const QString& _text)
+{
+    d->aiAssistantView->setSummarizeResult(_text);
+}
+
+void ScreenplayTreatmentView::setTranslatedText(const QString& _text)
+{
+    d->aiAssistantView->setTransateResult(_text);
+}
+
+void ScreenplayTreatmentView::setGeneratedText(const QString& _text)
+{
+    const QLatin1String textWritingTaskKey("text-writing-task");
+    TaskBar::addTask(textWritingTaskKey);
+    TaskBar::setTaskTitle(textWritingTaskKey, tr("Writing text"));
+
+    //
+    // Отключим отображение всплывающих подсказок
+    //
+    d->textEdit->setCompleterActive(false);
+
+    //
+    // Переходим в конец позицию вставки, а затем переводим его на новую строку, или сдвигаем
+    // последующий текст, чтобы помещать текст в новом блоке
+    //
+    switch (d->aiAssistantView->textInsertPosition()) {
+    case AiAssistantView::TextInsertPosition::AtBeginning: {
+        d->textEdit->moveCursor(QTextCursor::Start);
+        d->textEdit->addParagraph(d->textEdit->currentParagraphType());
+        d->textEdit->moveCursor(QTextCursor::Start);
+        break;
+    }
+
+    case AiAssistantView::TextInsertPosition::AtCursorPosition: {
+        d->textEdit->moveCursor(QTextCursor::EndOfBlock);
+        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::BeatHeading);
+        break;
+    }
+
+    case AiAssistantView::TextInsertPosition::AtEnd: {
+        d->textEdit->moveCursor(QTextCursor::End);
+        d->textEdit->addParagraph(BusinessLayer::TextParagraphType::BeatHeading);
+        break;
+    }
+    }
+
+    QElapsedTimer timer;
+    int progress = 0;
+    auto waitForNextOperation = [&timer, &progress, maximum = _text.length(), textWritingTaskKey] {
+        timer.restart();
+        const auto delay = QRandomGenerator::global()->bounded(10, 60);
+        while (!timer.hasExpired(delay)) {
+            QCoreApplication::processEvents();
+        }
+
+        ++progress;
+        TaskBar::setTaskProgress(textWritingTaskKey, progress * 100 / static_cast<qreal>(maximum));
+    };
+
+    auto lines = _text.split('\n', Qt::SkipEmptyParts);
+    for (auto& line : lines) {
+        if (line == TextHelper::smartToUpper(line) && line.contains('.')
+            && (line.contains('-') || line.contains("–"))) {
+            d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::SceneHeading);
+        } else {
+            d->textEdit->setCurrentParagraphType(BusinessLayer::TextParagraphType::BeatHeading);
+        }
+
+        for (int index = 0; index < line.length(); ++index) {
+            QCoreApplication::postEvent(d->textEdit,
+                                        new QKeyEvent(QEvent::KeyPress, Qt::Key_unknown,
+                                                      Qt::NoModifier, line.mid(index, 1)));
+            QCoreApplication::postEvent(d->textEdit,
+                                        new QKeyEvent(QEvent::KeyRelease, Qt::Key_unknown,
+                                                      Qt::NoModifier, line.mid(index, 1)));
+            waitForNextOperation();
+        }
+
+        QCoreApplication::postEvent(
+            d->textEdit, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
+        QCoreApplication::postEvent(
+            d->textEdit, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Return, Qt::NoModifier));
+        waitForNextOperation();
+    }
+
+    //
+    // Возвращаем возможность использования всплывающих подсказок
+    //
+    d->textEdit->setCompleterActive(true);
+
+    TaskBar::finishTask(textWritingTaskKey);
 }
 
 void ScreenplayTreatmentView::reconfigure(const QStringList& _changedSettingsKeys)
@@ -916,13 +1498,20 @@ void ScreenplayTreatmentView::loadViewSettings()
     const auto scaleFactor = settingsValue(kScaleFactorKey, 1.0).toReal();
     d->scalableWrapper->setZoomRange(scaleFactor);
 
-    const auto isBookmarksListVisible = settingsValue(kIsBookmarksListVisibleKey, false).toBool();
-    d->showBookmarksAction->setChecked(isBookmarksListVisible);
+    const auto isItemIsolationEnabled = settingsValue(kIsItemIsolationEnabledKey, false).toBool();
+    d->toolbar->setItemIsolationEnabled(isItemIsolationEnabled);
     const auto isCommentsModeEnabled = settingsValue(kIsCommentsModeEnabledKey, false).toBool();
     d->toolbar->setCommentsModeEnabled(isCommentsModeEnabled);
+    const auto isAiAssistantEnabled = settingsValue(kIsAiAssistantEnabledKey, false).toBool();
+    d->toolbar->setAiAssistantEnabled(isAiAssistantEnabled);
     const auto isFastFormatPanelVisible
         = settingsValue(kIsFastFormatPanelVisibleKey, false).toBool();
     d->toolbar->setFastFormatPanelVisible(isFastFormatPanelVisible);
+    const auto isSceneParametersVisible
+        = settingsValue(kIsSceneParametersVisibleKey, false).toBool();
+    d->showSceneParametersAction->setChecked(isSceneParametersVisible);
+    const auto isBookmarksListVisible = settingsValue(kIsBookmarksListVisibleKey, false).toBool();
+    d->showBookmarksAction->setChecked(isBookmarksListVisible);
     const auto sidebarPanelIndex = settingsValue(kSidebarPanelIndexKey, 0).toInt();
     d->sidebarTabs->setCurrentTab(sidebarPanelIndex);
 
@@ -938,6 +1527,9 @@ void ScreenplayTreatmentView::saveViewSettings()
 
     setSettingsValue(kIsFastFormatPanelVisibleKey, d->toolbar->isFastFormatPanelVisible());
     setSettingsValue(kIsCommentsModeEnabledKey, d->toolbar->isCommentsModeEnabled());
+    setSettingsValue(kIsAiAssistantEnabledKey, d->toolbar->isAiAssistantEnabled());
+    setSettingsValue(kIsItemIsolationEnabledKey, d->toolbar->isItemIsolationEnabled());
+    setSettingsValue(kIsSceneParametersVisibleKey, d->showSceneParametersAction->isChecked());
     setSettingsValue(kIsBookmarksListVisibleKey, d->showBookmarksAction->isChecked());
     setSettingsValue(kSidebarPanelIndexKey, d->sidebarTabs->currentTab());
 
@@ -976,6 +1568,16 @@ void ScreenplayTreatmentView::setModel(BusinessLayer::ScreenplayTextModel* _mode
         connect(d->model->informationModel(),
                 &BusinessLayer::ScreenplayInformationModel::showDialoguesNumbersChanged, this,
                 [this] { d->reconfigureDialoguesNumbersVisibility(); });
+
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::dataChanged, this,
+                [this](const QModelIndex& _topLeft) {
+                    auto updatedItem = d->model->itemForIndex(_topLeft);
+                    if (updatedItem != d->lastSelectedItem) {
+                        return;
+                    }
+
+                    d->showParametersFor(updatedItem);
+                });
     }
 
     d->textEdit->setCursors({});
@@ -1045,10 +1647,27 @@ void ScreenplayTreatmentView::resizeEvent(QResizeEvent* _event)
 void ScreenplayTreatmentView::updateTranslations()
 {
     d->sidebarTabs->setTabName(kFastFormatTabIndex, tr("Formatting"));
+    d->sidebarTabs->setTabName(kSceneParametersTabIndex, tr("Scene parameters"));
     d->sidebarTabs->setTabName(kCommentsTabIndex, tr("Comments"));
+    d->sidebarTabs->setTabName(kAiAssistantTabIndex, tr("AI assistant"));
     d->sidebarTabs->setTabName(kBookmarksTabIndex, tr("Bookmarks"));
 
+    d->aiAssistantView->setGenerationPromptHint(
+        tr("Start prompt from something like \"Write a novel about ...\", or \"Write a chapter "
+           "about ...\""));
+
     d->updateOptionsTranslations();
+
+    //
+    // Обновить список форматов в выпадающем меню
+    //
+    const auto withModelReinitialization = false;
+    d->reconfigureTemplate(withModelReinitialization);
+    //
+    // ... и текст текущего формата
+    //
+    d->currentParagraphType = BusinessLayer::TextParagraphType::Undefined;
+    d->updateToolBarCurrentParagraphTypeName();
 }
 
 void ScreenplayTreatmentView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

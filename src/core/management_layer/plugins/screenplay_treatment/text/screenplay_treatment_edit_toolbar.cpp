@@ -27,6 +27,8 @@ public:
     QAction* fastFormatAction = nullptr;
     QAction* searchAction = nullptr;
     QAction* commentsAction = nullptr;
+    QAction* aiAssistantAction = nullptr;
+    QAction* isolationAction = nullptr;
 
     CardPopupWithTree* popup = nullptr;
 };
@@ -38,6 +40,8 @@ ScreenplayTreatmentEditToolbar::Implementation::Implementation(QWidget* _parent)
     , fastFormatAction(new QAction)
     , searchAction(new QAction)
     , commentsAction(new QAction)
+    , aiAssistantAction(new QAction(_parent))
+    , isolationAction(new QAction(_parent))
     , popup(new CardPopupWithTree(_parent))
 {
 }
@@ -48,13 +52,18 @@ void ScreenplayTreatmentEditToolbar::Implementation::showPopup(
     const auto width = Ui::DesignSystem::floatingToolBar().spacing() * 2
         + _parent->actionCustomWidth(paragraphTypeAction);
 
-    const auto left = QPoint(Ui::DesignSystem::floatingToolBar().shadowMargins().left()
-                                 + Ui::DesignSystem::floatingToolBar().margins().left()
-                                 + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
-                                 + Ui::DesignSystem::floatingToolBar().spacing()
-                                 - Ui::DesignSystem::card().shadowMargins().left(),
-                             _parent->rect().bottom()
-                                 - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
+    const auto left = QPoint(
+        _parent->isLeftToRight() ? (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+                                    + Ui::DesignSystem::floatingToolBar().margins().left()
+                                    + Ui::DesignSystem::floatingToolBar().iconSize().width() * 2
+                                    + Ui::DesignSystem::floatingToolBar().spacing() * 1
+                                    - Ui::DesignSystem::card().shadowMargins().left())
+                                 : (Ui::DesignSystem::floatingToolBar().shadowMargins().left()
+                                    + Ui::DesignSystem::floatingToolBar().margins().left()
+                                    + Ui::DesignSystem::floatingToolBar().iconSize().width() * 4
+                                    + Ui::DesignSystem::floatingToolBar().spacing() * 3
+                                    - Ui::DesignSystem::card().shadowMargins().left()),
+        _parent->rect().bottom() - Ui::DesignSystem::floatingToolBar().shadowMargins().bottom());
     const auto position = _parent->mapToGlobal(left)
         + QPointF(Ui::DesignSystem::textField().margins().left(),
                   -Ui::DesignSystem::textField().margins().bottom());
@@ -114,6 +123,22 @@ ScreenplayTreatmentEditToolbar::ScreenplayTreatmentEditToolbar(QWidget* _parent)
             &ScreenplayTreatmentEditToolbar::updateTranslations);
     connect(d->commentsAction, &QAction::toggled, this,
             &ScreenplayTreatmentEditToolbar::commentsModeEnabledChanged);
+
+    d->aiAssistantAction->setIconText(u8"\U000F0068");
+    d->aiAssistantAction->setCheckable(true);
+    addAction(d->aiAssistantAction);
+    connect(d->aiAssistantAction, &QAction::toggled, this,
+            &ScreenplayTreatmentEditToolbar::updateTranslations);
+    connect(d->aiAssistantAction, &QAction::toggled, this,
+            &ScreenplayTreatmentEditToolbar::aiAssistantEnabledChanged);
+
+    d->isolationAction->setIconText(u8"\U000F0EFF");
+    d->isolationAction->setCheckable(true);
+    addAction(d->isolationAction);
+    connect(d->isolationAction, &QAction::toggled, this,
+            &ScreenplayTreatmentEditToolbar::updateTranslations);
+    connect(d->isolationAction, &QAction::toggled, this,
+            &ScreenplayTreatmentEditToolbar::itemIsolationEnabledChanged);
 
     connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
             [this](const QModelIndex& _index) { emit paragraphTypeChanged(_index); });
@@ -226,6 +251,26 @@ void ScreenplayTreatmentEditToolbar::setCommentsModeEnabled(bool _enabled)
     d->commentsAction->setChecked(_enabled);
 }
 
+bool ScreenplayTreatmentEditToolbar::isAiAssistantEnabled() const
+{
+    return d->aiAssistantAction->isChecked();
+}
+
+void ScreenplayTreatmentEditToolbar::setAiAssistantEnabled(bool _enabled)
+{
+    d->aiAssistantAction->setChecked(_enabled);
+}
+
+bool ScreenplayTreatmentEditToolbar::isItemIsolationEnabled() const
+{
+    return d->isolationAction->isChecked();
+}
+
+void ScreenplayTreatmentEditToolbar::setItemIsolationEnabled(bool _enabled)
+{
+    d->isolationAction->setChecked(_enabled);
+}
+
 bool ScreenplayTreatmentEditToolbar::canAnimateHoverOut() const
 {
     return !d->popup->isVisible();
@@ -251,6 +296,11 @@ void ScreenplayTreatmentEditToolbar::updateTranslations()
             QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     d->commentsAction->setToolTip(d->commentsAction->isChecked() ? tr("Disable review mode")
                                                                  : tr("Enable review mode"));
+    d->aiAssistantAction->setToolTip(d->aiAssistantAction->isChecked() ? tr("Disable AI assistant")
+                                                                       : tr("Enable AI assistant"));
+    d->isolationAction->setToolTip(d->isolationAction->isChecked()
+                                       ? tr("Disable structure items isolation mode")
+                                       : tr("Enable structure items isolation mode"));
 }
 
 void ScreenplayTreatmentEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

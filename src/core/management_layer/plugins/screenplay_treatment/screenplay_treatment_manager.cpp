@@ -150,6 +150,23 @@ Ui::ScreenplayTreatmentView* ScreenplayTreatmentManager::Implementation::createV
         textItem->clearBookmark();
         modelForView(view)->updateItem(textItem);
     });
+    //
+    connect(view, &Ui::ScreenplayTreatmentView::rephraseTextRequested, q,
+            &ScreenplayTreatmentManager::rephraseTextRequested);
+    connect(view, &Ui::ScreenplayTreatmentView::expandTextRequested, q,
+            &ScreenplayTreatmentManager::expandTextRequested);
+    connect(view, &Ui::ScreenplayTreatmentView::shortenTextRequested, q,
+            &ScreenplayTreatmentManager::shortenTextRequested);
+    connect(view, &Ui::ScreenplayTreatmentView::insertTextRequested, q,
+            &ScreenplayTreatmentManager::insertTextRequested);
+    connect(view, &Ui::ScreenplayTreatmentView::summarizeTextRequested, q,
+            &ScreenplayTreatmentManager::summarizeTextRequested);
+    connect(view, &Ui::ScreenplayTreatmentView::translateTextRequested, q,
+            &ScreenplayTreatmentManager::translateTextRequested);
+    connect(view, &Ui::ScreenplayTreatmentView::generateTextRequested, q,
+            [this](const QString& _text) { emit q->generateTextRequested({}, _text, {}); });
+    connect(view, &Ui::ScreenplayTreatmentView::buyCreditsRequested, q,
+            &ScreenplayTreatmentManager::buyCreditsRequested);
 
     return view;
 }
@@ -375,6 +392,17 @@ void ScreenplayTreatmentManager::setEditingMode(DocumentEditingMode _mode)
         }
 
         viewAndModel.view->setEditingMode(_mode);
+    }
+}
+
+void ScreenplayTreatmentManager::setAvailableCredits(int _credits)
+{
+    for (auto& viewAndModel : d->allViews) {
+        if (viewAndModel.view.isNull()) {
+            continue;
+        }
+
+        viewAndModel.view->setAvailableCredits(_credits);
     }
 }
 
