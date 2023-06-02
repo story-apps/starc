@@ -27,14 +27,22 @@ void TextTranslateHelper::translate(const QString& _text, const QString& _source
     connect(
         request,
         static_cast<void (NetworkRequest::*)(QByteArray, QUrl)>(&NetworkRequest::downloadComplete),
-        this, [this, _sourceLanguage](const QByteArray& _response) {
+        this, [this, _text, _sourceLanguage](const QByteArray& _response) {
             const auto translationsJson = QJsonDocument::fromJson(_response).object();
             if (translationsJson.isEmpty() || !translationsJson.contains("sentences")) {
+                //
+                // FIXME: что делать, если перевод завершился неудачно?
+                //
+                emit textTranslated({}, {});
                 return;
             }
 
             const auto sentencesJson = translationsJson["sentences"].toArray();
             if (sentencesJson.isEmpty()) {
+                //
+                // FIXME: что делать, если перевод завершился неудачно?
+                //
+                emit textTranslated({}, {});
                 return;
             }
 
