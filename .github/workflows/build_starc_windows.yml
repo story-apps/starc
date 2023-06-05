@@ -1,7 +1,7 @@
 name: Build Starc for Windows
 
 env:
-  APP_VERSION: 0.5.3a
+  APP_VERSION: 0.5.4
 
 on:
   push:
