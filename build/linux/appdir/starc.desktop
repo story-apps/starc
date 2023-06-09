@@ -5,6 +5,6 @@ Type=Application
 Icon=starc
 Categories=Office;
 Exec=starc %f
-MimeType=application/x-starc-project;
+MimeType=application/x-starc;
 Name=Story Architect
 GenericName=Storywriting software
