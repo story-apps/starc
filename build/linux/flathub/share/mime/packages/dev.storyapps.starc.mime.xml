@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <mime-type type="application/x-starc">
+        <sub-class-of type="application/x-sqlite3"/>
+        <comment>Story Architect project file</comment>
+        <glob pattern="*.starc"/>
+        <icon name="dev.storyapps.starc"/>
+        <generic-icon name="dev.storyapps.starc"/>
+    </mime-type>
+</mime-info>
