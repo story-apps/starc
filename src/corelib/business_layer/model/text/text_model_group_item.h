@@ -46,7 +46,7 @@ public:
         /**
          * @brief Необходимо ли захватывать номер группы, если пользователь задал другой номер
          */
-        bool isEatNumber = true;
+        bool isEatNumber = false;
 
         /**
          * @brief Зафиксирован ли номер сцены

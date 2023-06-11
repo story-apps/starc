@@ -136,7 +136,7 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
     autoNumbering->setChecked(true);
     customNumber->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     customNumber->hide();
-    eatNumber->setChecked(true);
+    eatNumber->setChecked(false);
     eatNumber->hide();
     addTagButton->setIcon(u8"\U000F0415");
     tags->setRootIsDecorated(false);
