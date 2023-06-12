@@ -169,7 +169,8 @@ private:
     //
     void setComicBookEditorDefaultTemplate(const QString& _templateId);
     void setComicBookEditorShowDialogueNumber(bool _show);
-    void setComicBookEditorUseCharactersFromText(bool _use);
+    void setComicBookEditorSaveItemsFromText(bool _use);
+    void setComicBookEditorShowHints(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void setComicBookEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setComicBookNavigatorShowSceneText(bool _show, int _lines);
@@ -181,7 +182,8 @@ private:
     //
     void setAudioplayEditorDefaultTemplate(const QString& _templateId);
     void setAudioplayEditorShowBlockNumber(bool _show, bool _continued);
-    void setAudioplayEditorUseCharactersFromText(bool _use);
+    void setAudioplayEditorSaveItemsFromText(bool _use);
+    void setAudioplayEditorShowHints(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void setAudioplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setAudioplayNavigatorShowSceneNumber(bool _show);
@@ -196,7 +198,8 @@ private:
     void setStageplayAvailable(bool _available);
     //
     void setStageplayEditorDefaultTemplate(const QString& _templateId);
-    void setStageplayEditorUseCharactersFromText(bool _use);
+    void setStageplayEditorSaveItemsFromText(bool _use);
+    void setStageplayEditorShowHints(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void setStageplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setStageplayNavigatorShowSceneNumber(bool _show);

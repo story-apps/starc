@@ -349,7 +349,11 @@ public:
     ComboBox* comicBookEditorDefaultTemplate = nullptr;
     IconButton* comicBookEditorDefaultTemplateOptions = nullptr;
     CheckBox* comicBookEditorShowDialogueNumber = nullptr;
-    CheckBox* comicBookEditorUseCharactersFromText = nullptr;
+    CheckBox* comicBookEditorSaveItemsFromText = nullptr;
+    CheckBox* comicBookEditorShowHintsForAllItems = nullptr;
+    CheckBox* comicBookEditorShowHintsForPrimaryItems = nullptr;
+    CheckBox* comicBookEditorShowHintsForSecondaryItems = nullptr;
+    CheckBox* comicBookEditorShowHintsForTertiaryItems = nullptr;
     CheckBox* comicBookEditorShowCharacterSuggestionsInEmptyBlock = nullptr;
     //
     // ... Comic book navigator
@@ -378,7 +382,11 @@ public:
     IconButton* audioplayEditorDefaultTemplateOptions = nullptr;
     CheckBox* audioplayEditorShowBlockNumber = nullptr;
     CheckBox* audioplayEditorContinueBlockNumbers = nullptr;
-    CheckBox* audioplayEditorUseCharactersFromText = nullptr;
+    CheckBox* audioplayEditorSaveItemsFromText = nullptr;
+    CheckBox* audioplayEditorShowHintsForAllItems = nullptr;
+    CheckBox* audioplayEditorShowHintsForPrimaryItems = nullptr;
+    CheckBox* audioplayEditorShowHintsForSecondaryItems = nullptr;
+    CheckBox* audioplayEditorShowHintsForTertiaryItems = nullptr;
     CheckBox* audioplayEditorShowCharacterSuggestionsInEmptyBlock = nullptr;
     //
     // ... Audioplay navigator
@@ -413,7 +421,11 @@ public:
     H6Label* stageplayEditorTitle = nullptr;
     ComboBox* stageplayEditorDefaultTemplate = nullptr;
     IconButton* stageplayEditorDefaultTemplateOptions = nullptr;
-    CheckBox* stageplayEditorUseCharactersFromText = nullptr;
+    CheckBox* stageplayEditorSaveItemsFromText = nullptr;
+    CheckBox* stageplayEditorShowHintsForAllItems = nullptr;
+    CheckBox* stageplayEditorShowHintsForPrimaryItems = nullptr;
+    CheckBox* stageplayEditorShowHintsForSecondaryItems = nullptr;
+    CheckBox* stageplayEditorShowHintsForTertiaryItems = nullptr;
     CheckBox* stageplayEditorShowCharacterSuggestionsInEmptyBlock = nullptr;
     //
     // ... Stageplay navigator
@@ -590,7 +602,11 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , comicBookEditorDefaultTemplate(new ComboBox(comicBookCard))
     , comicBookEditorDefaultTemplateOptions(new IconButton(comicBookCard))
     , comicBookEditorShowDialogueNumber(new CheckBox(comicBookCard))
-    , comicBookEditorUseCharactersFromText(new CheckBox(comicBookCard))
+    , comicBookEditorSaveItemsFromText(new CheckBox(screenplayCard))
+    , comicBookEditorShowHintsForAllItems(new CheckBox(screenplayCard))
+    , comicBookEditorShowHintsForPrimaryItems(new CheckBox(screenplayCard))
+    , comicBookEditorShowHintsForSecondaryItems(new CheckBox(screenplayCard))
+    , comicBookEditorShowHintsForTertiaryItems(new CheckBox(screenplayCard))
     , comicBookEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(comicBookCard))
     , comicBookNavigatorTitle(new H6Label(comicBookCard))
     , comicBookNavigatorShowSceneText(new CheckBox(comicBookCard))
@@ -609,7 +625,11 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , audioplayEditorDefaultTemplateOptions(new IconButton(audioplayCard))
     , audioplayEditorShowBlockNumber(new CheckBox(audioplayCard))
     , audioplayEditorContinueBlockNumbers(new CheckBox(audioplayCard))
-    , audioplayEditorUseCharactersFromText(new CheckBox(audioplayCard))
+    , audioplayEditorSaveItemsFromText(new CheckBox(screenplayCard))
+    , audioplayEditorShowHintsForAllItems(new CheckBox(screenplayCard))
+    , audioplayEditorShowHintsForPrimaryItems(new CheckBox(screenplayCard))
+    , audioplayEditorShowHintsForSecondaryItems(new CheckBox(screenplayCard))
+    , audioplayEditorShowHintsForTertiaryItems(new CheckBox(screenplayCard))
     , audioplayEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(audioplayCard))
     , audioplayNavigatorTitle(new H6Label(audioplayCard))
     , audioplayNavigatorShowSceneNumber(new CheckBox(audioplayCard))
@@ -631,7 +651,11 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , stageplayEditorTitle(new H6Label(stageplayCard))
     , stageplayEditorDefaultTemplate(new ComboBox(stageplayCard))
     , stageplayEditorDefaultTemplateOptions(new IconButton(stageplayCard))
-    , stageplayEditorUseCharactersFromText(new CheckBox(stageplayCard))
+    , stageplayEditorSaveItemsFromText(new CheckBox(screenplayCard))
+    , stageplayEditorShowHintsForAllItems(new CheckBox(screenplayCard))
+    , stageplayEditorShowHintsForPrimaryItems(new CheckBox(screenplayCard))
+    , stageplayEditorShowHintsForSecondaryItems(new CheckBox(screenplayCard))
+    , stageplayEditorShowHintsForTertiaryItems(new CheckBox(screenplayCard))
     , stageplayEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(stageplayCard))
     , stageplayNavigatorTitle(new H6Label(stageplayCard))
     , stageplayNavigatorShowSceneNumber(new CheckBox(stageplayCard))
@@ -1120,7 +1144,16 @@ void SettingsView::Implementation::initComicBookCard()
         comicBookCardLayout->addLayout(layout, itemIndex++, 0);
     }
     comicBookCardLayout->addWidget(comicBookEditorShowDialogueNumber, itemIndex++, 0);
-    comicBookCardLayout->addWidget(comicBookEditorUseCharactersFromText, itemIndex++, 0);
+    screenplayCardLayout->addWidget(comicBookEditorSaveItemsFromText, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(comicBookEditorShowHintsForAllItems);
+        layout->addWidget(comicBookEditorShowHintsForPrimaryItems);
+        layout->addWidget(comicBookEditorShowHintsForSecondaryItems);
+        layout->addWidget(comicBookEditorShowHintsForTertiaryItems);
+        layout->addStretch();
+        comicBookCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     comicBookCardLayout->addWidget(comicBookEditorShowCharacterSuggestionsInEmptyBlock, itemIndex++,
                                    0);
     //
@@ -1197,7 +1230,16 @@ void SettingsView::Implementation::initAudioplayCard()
         layout->addStretch();
         audioplayCardLayout->addLayout(layout, itemIndex++, 0);
     }
-    audioplayCardLayout->addWidget(audioplayEditorUseCharactersFromText, itemIndex++, 0);
+    audioplayCardLayout->addWidget(audioplayEditorSaveItemsFromText, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(audioplayEditorShowHintsForAllItems);
+        layout->addWidget(audioplayEditorShowHintsForPrimaryItems);
+        layout->addWidget(audioplayEditorShowHintsForSecondaryItems);
+        layout->addWidget(audioplayEditorShowHintsForTertiaryItems);
+        layout->addStretch();
+        audioplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     audioplayCardLayout->addWidget(audioplayEditorShowCharacterSuggestionsInEmptyBlock, itemIndex++,
                                    0);
     //
@@ -1276,7 +1318,16 @@ void SettingsView::Implementation::initStageplayCard()
         layout->addWidget(stageplayEditorDefaultTemplateOptions);
         stageplayCardLayout->addLayout(layout, itemIndex++, 0);
     }
-    stageplayCardLayout->addWidget(stageplayEditorUseCharactersFromText, itemIndex++, 0);
+    stageplayCardLayout->addWidget(stageplayEditorSaveItemsFromText, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(stageplayEditorShowHintsForAllItems);
+        layout->addWidget(stageplayEditorShowHintsForPrimaryItems);
+        layout->addWidget(stageplayEditorShowHintsForSecondaryItems);
+        layout->addWidget(stageplayEditorShowHintsForTertiaryItems);
+        layout->addStretch();
+        stageplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     stageplayCardLayout->addWidget(stageplayEditorShowCharacterSuggestionsInEmptyBlock, itemIndex++,
                                    0);
     //
@@ -2024,7 +2075,11 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->comicBookEditorDefaultTemplate,
                  d->comicBookEditorDefaultTemplateOptions,
                  d->comicBookEditorShowDialogueNumber,
-                 d->comicBookEditorUseCharactersFromText,
+                 d->screenplayEditorSaveItemsFromText,
+                 d->screenplayEditorShowHintsForAllItems,
+                 d->screenplayEditorShowHintsForPrimaryItems,
+                 d->screenplayEditorShowHintsForSecondaryItems,
+                 d->screenplayEditorShowHintsForTertiaryItems,
                  d->comicBookEditorShowCharacterSuggestionsInEmptyBlock,
                  d->comicBookNavigatorTitle,
                  d->comicBookNavigatorShowSceneText,
@@ -2088,6 +2143,26 @@ SettingsView::SettingsView(QWidget* _parent)
         d->contextMenu->setActions(actions);
         d->contextMenu->showContextMenu(QCursor::pos());
     });
+    connect(d->comicBookEditorShowHintsForAllItems, &CheckBox::checkedChanged, this,
+            [this](bool _checked) {
+                if (_checked) {
+                    d->comicBookEditorShowHintsForPrimaryItems->setChecked(false);
+                    d->comicBookEditorShowHintsForSecondaryItems->setChecked(false);
+                    d->comicBookEditorShowHintsForTertiaryItems->setChecked(false);
+                }
+            });
+    auto comicBookEditorCorrectShowHintsForAllItems = [this](bool _checked) {
+        if (_checked) {
+            d->comicBookEditorShowHintsForAllItems->setChecked(false);
+        }
+    };
+    connect(d->comicBookEditorShowHintsForPrimaryItems, &CheckBox::checkedChanged, this,
+            comicBookEditorCorrectShowHintsForAllItems);
+    connect(d->comicBookEditorShowHintsForSecondaryItems, &CheckBox::checkedChanged, this,
+            comicBookEditorCorrectShowHintsForAllItems);
+    connect(d->comicBookEditorShowHintsForTertiaryItems, &CheckBox::checkedChanged, this,
+            comicBookEditorCorrectShowHintsForAllItems);
+    //
     connect(d->comicBookEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
             [this](const QModelIndex& _index) {
                 emit comicBookEditorDefaultTemplateChanged(
@@ -2095,8 +2170,23 @@ SettingsView::SettingsView(QWidget* _parent)
             });
     connect(d->comicBookEditorShowDialogueNumber, &CheckBox::checkedChanged, this,
             &SettingsView::comicBookEditorShowDialogueNumberChanged);
-    connect(d->comicBookEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
-            &SettingsView::comicBookEditorUseCharactersFromTextChanged);
+    connect(d->comicBookEditorSaveItemsFromText, &CheckBox::checkedChanged, this,
+            &SettingsView::comicBookEditorSaveItemsFromTextChanged);
+    auto notifyComicBookEditorShowHintsChanged = [this] {
+        emit comicBookEditorShowHintsChanged(
+            d->comicBookEditorShowHintsForAllItems->isChecked(),
+            d->comicBookEditorShowHintsForPrimaryItems->isChecked(),
+            d->comicBookEditorShowHintsForSecondaryItems->isChecked(),
+            d->comicBookEditorShowHintsForTertiaryItems->isChecked());
+    };
+    connect(d->comicBookEditorShowHintsForAllItems, &CheckBox::checkedChanged, this,
+            notifyComicBookEditorShowHintsChanged);
+    connect(d->comicBookEditorShowHintsForPrimaryItems, &CheckBox::checkedChanged, this,
+            notifyComicBookEditorShowHintsChanged);
+    connect(d->comicBookEditorShowHintsForSecondaryItems, &CheckBox::checkedChanged, this,
+            notifyComicBookEditorShowHintsChanged);
+    connect(d->comicBookEditorShowHintsForTertiaryItems, &CheckBox::checkedChanged, this,
+            notifyComicBookEditorShowHintsChanged);
     connect(d->comicBookEditorShowCharacterSuggestionsInEmptyBlock, &CheckBox::checkedChanged, this,
             &SettingsView::comicBookEditorShowCharacterSuggestionsInEmptyBlockChanged);
     //
@@ -2149,7 +2239,11 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->audioplayEditorDefaultTemplateOptions,
                  d->audioplayEditorShowBlockNumber,
                  d->audioplayEditorContinueBlockNumbers,
-                 d->audioplayEditorUseCharactersFromText,
+                 d->audioplayEditorSaveItemsFromText,
+                 d->audioplayEditorShowHintsForAllItems,
+                 d->audioplayEditorShowHintsForPrimaryItems,
+                 d->audioplayEditorShowHintsForSecondaryItems,
+                 d->audioplayEditorShowHintsForTertiaryItems,
                  d->audioplayEditorShowCharacterSuggestionsInEmptyBlock,
                  d->audioplayNavigatorTitle,
                  d->audioplayNavigatorShowSceneNumber,
@@ -2220,6 +2314,25 @@ SettingsView::SettingsView(QWidget* _parent)
     });
     connect(d->audioplayEditorShowBlockNumber, &CheckBox::checkedChanged,
             d->audioplayEditorContinueBlockNumbers, &CheckBox::setEnabled);
+    connect(d->audioplayEditorShowHintsForAllItems, &CheckBox::checkedChanged, this,
+            [this](bool _checked) {
+                if (_checked) {
+                    d->audioplayEditorShowHintsForPrimaryItems->setChecked(false);
+                    d->audioplayEditorShowHintsForSecondaryItems->setChecked(false);
+                    d->audioplayEditorShowHintsForTertiaryItems->setChecked(false);
+                }
+            });
+    auto audioplayEditorCorrectShowHintsForAllItems = [this](bool _checked) {
+        if (_checked) {
+            d->audioplayEditorShowHintsForAllItems->setChecked(false);
+        }
+    };
+    connect(d->audioplayEditorShowHintsForPrimaryItems, &CheckBox::checkedChanged, this,
+            audioplayEditorCorrectShowHintsForAllItems);
+    connect(d->audioplayEditorShowHintsForSecondaryItems, &CheckBox::checkedChanged, this,
+            audioplayEditorCorrectShowHintsForAllItems);
+    connect(d->audioplayEditorShowHintsForTertiaryItems, &CheckBox::checkedChanged, this,
+            audioplayEditorCorrectShowHintsForAllItems);
     //
     connect(d->audioplayEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
             [this](const QModelIndex& _index) {
@@ -2235,8 +2348,23 @@ SettingsView::SettingsView(QWidget* _parent)
             notifyAudioplayEditorShowSceneNumbersChanged);
     connect(d->audioplayEditorContinueBlockNumbers, &CheckBox::checkedChanged, this,
             notifyAudioplayEditorShowSceneNumbersChanged);
-    connect(d->audioplayEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
-            &SettingsView::audioplayEditorUseCharactersFromTextChanged);
+    connect(d->audioplayEditorSaveItemsFromText, &CheckBox::checkedChanged, this,
+            &SettingsView::audioplayEditorSaveItemsFromTextChanged);
+    auto notifyAudioplayEditorShowHintsChanged = [this] {
+        emit audioplayEditorShowHintsChanged(
+            d->audioplayEditorShowHintsForAllItems->isChecked(),
+            d->audioplayEditorShowHintsForPrimaryItems->isChecked(),
+            d->audioplayEditorShowHintsForSecondaryItems->isChecked(),
+            d->audioplayEditorShowHintsForTertiaryItems->isChecked());
+    };
+    connect(d->audioplayEditorShowHintsForAllItems, &CheckBox::checkedChanged, this,
+            notifyAudioplayEditorShowHintsChanged);
+    connect(d->audioplayEditorShowHintsForPrimaryItems, &CheckBox::checkedChanged, this,
+            notifyAudioplayEditorShowHintsChanged);
+    connect(d->audioplayEditorShowHintsForSecondaryItems, &CheckBox::checkedChanged, this,
+            notifyAudioplayEditorShowHintsChanged);
+    connect(d->audioplayEditorShowHintsForTertiaryItems, &CheckBox::checkedChanged, this,
+            notifyAudioplayEditorShowHintsChanged);
     connect(d->audioplayEditorShowCharacterSuggestionsInEmptyBlock, &CheckBox::checkedChanged, this,
             &SettingsView::audioplayEditorShowCharacterSuggestionsInEmptyBlockChanged);
     //
@@ -2299,7 +2427,11 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->stageplayEditorTitle,
                  d->stageplayEditorDefaultTemplate,
                  d->stageplayEditorDefaultTemplateOptions,
-                 d->stageplayEditorUseCharactersFromText,
+                 d->stageplayEditorSaveItemsFromText,
+                 d->stageplayEditorShowHintsForAllItems,
+                 d->stageplayEditorShowHintsForPrimaryItems,
+                 d->stageplayEditorShowHintsForSecondaryItems,
+                 d->stageplayEditorShowHintsForTertiaryItems,
                  d->stageplayEditorShowCharacterSuggestionsInEmptyBlock,
                  d->stageplayNavigatorTitle,
                  d->stageplayNavigatorShowSceneNumber,
@@ -2364,14 +2496,48 @@ SettingsView::SettingsView(QWidget* _parent)
         d->contextMenu->setActions(actions);
         d->contextMenu->showContextMenu(QCursor::pos());
     });
+    connect(d->stageplayEditorShowHintsForAllItems, &CheckBox::checkedChanged, this,
+            [this](bool _checked) {
+                if (_checked) {
+                    d->stageplayEditorShowHintsForPrimaryItems->setChecked(false);
+                    d->stageplayEditorShowHintsForSecondaryItems->setChecked(false);
+                    d->stageplayEditorShowHintsForTertiaryItems->setChecked(false);
+                }
+            });
+    auto stageplayEditorCorrectShowHintsForAllItems = [this](bool _checked) {
+        if (_checked) {
+            d->stageplayEditorShowHintsForAllItems->setChecked(false);
+        }
+    };
+    connect(d->stageplayEditorShowHintsForPrimaryItems, &CheckBox::checkedChanged, this,
+            stageplayEditorCorrectShowHintsForAllItems);
+    connect(d->stageplayEditorShowHintsForSecondaryItems, &CheckBox::checkedChanged, this,
+            stageplayEditorCorrectShowHintsForAllItems);
+    connect(d->stageplayEditorShowHintsForTertiaryItems, &CheckBox::checkedChanged, this,
+            stageplayEditorCorrectShowHintsForAllItems);
     //
     connect(d->stageplayEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
             [this](const QModelIndex& _index) {
                 emit stageplayEditorDefaultTemplateChanged(
                     _index.data(BusinessLayer::TemplatesFacade::kTemplateIdRole).toString());
             });
-    connect(d->stageplayEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
-            &SettingsView::stageplayEditorUseCharactersFromTextChanged);
+    connect(d->stageplayEditorSaveItemsFromText, &CheckBox::checkedChanged, this,
+            &SettingsView::stageplayEditorSaveItemsFromTextChanged);
+    auto notifyStageplayEditorShowHintsChanged = [this] {
+        emit stageplayEditorShowHintsChanged(
+            d->stageplayEditorShowHintsForAllItems->isChecked(),
+            d->stageplayEditorShowHintsForPrimaryItems->isChecked(),
+            d->stageplayEditorShowHintsForSecondaryItems->isChecked(),
+            d->stageplayEditorShowHintsForTertiaryItems->isChecked());
+    };
+    connect(d->stageplayEditorShowHintsForAllItems, &CheckBox::checkedChanged, this,
+            notifyStageplayEditorShowHintsChanged);
+    connect(d->stageplayEditorShowHintsForPrimaryItems, &CheckBox::checkedChanged, this,
+            notifyStageplayEditorShowHintsChanged);
+    connect(d->stageplayEditorShowHintsForSecondaryItems, &CheckBox::checkedChanged, this,
+            notifyStageplayEditorShowHintsChanged);
+    connect(d->stageplayEditorShowHintsForTertiaryItems, &CheckBox::checkedChanged, this,
+            notifyStageplayEditorShowHintsChanged);
     connect(d->stageplayEditorShowCharacterSuggestionsInEmptyBlock, &CheckBox::checkedChanged, this,
             &SettingsView::stageplayEditorShowCharacterSuggestionsInEmptyBlockChanged);
     //
@@ -3030,9 +3196,18 @@ void SettingsView::setComicBookEditorShowDialogueNumber(bool _show)
     d->comicBookEditorShowDialogueNumber->setChecked(_show);
 }
 
-void SettingsView::setComicBookEditorUseCharactersFromText(bool _use)
+void SettingsView::setComicBookEditorSaveItemsFromText(bool _save)
 {
-    d->comicBookEditorUseCharactersFromText->setChecked(_use);
+    d->comicBookEditorSaveItemsFromText->setChecked(_save);
+}
+
+void SettingsView::setComicBookEditorShowHints(bool _all, bool _primary, bool _secondary,
+                                              bool _tertiary)
+{
+     d->comicBookEditorShowHintsForAllItems->setChecked(_all);
+    d->comicBookEditorShowHintsForPrimaryItems->setChecked(_primary);
+    d->comicBookEditorShowHintsForSecondaryItems->setChecked(_secondary);
+    d->comicBookEditorShowHintsForTertiaryItems->setChecked(_tertiary);
 }
 
 void SettingsView::setComicBookEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
@@ -3079,9 +3254,18 @@ void SettingsView::setAudioplayEditorShowBlockNumber(bool _show, bool _continue)
     d->audioplayEditorShowBlockNumber->setChecked(_show);
 }
 
-void SettingsView::setAudioplayEditorUseCharactersFromText(bool _use)
+void SettingsView::setAudioplayEditorSaveItemsFromText(bool _save)
 {
-    d->audioplayEditorUseCharactersFromText->setChecked(_use);
+    d->audioplayEditorSaveItemsFromText->setChecked(_save);
+}
+
+void SettingsView::setAudioplayEditorShowHints(bool _all, bool _primary, bool _secondary,
+                                               bool _tertiary)
+{
+    d->audioplayEditorShowHintsForAllItems->setChecked(_all);
+    d->audioplayEditorShowHintsForPrimaryItems->setChecked(_primary);
+    d->audioplayEditorShowHintsForSecondaryItems->setChecked(_secondary);
+    d->audioplayEditorShowHintsForTertiaryItems->setChecked(_tertiary);
 }
 
 void SettingsView::setAudioplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
@@ -3137,9 +3321,18 @@ void SettingsView::setStageplayEditorDefaultTemplate(const QString& _templateId)
     }
 }
 
-void SettingsView::setStageplayEditorUseCharactersFromText(bool _use)
+void SettingsView::setStageplayEditorSaveItemsFromText(bool _save)
 {
-    d->stageplayEditorUseCharactersFromText->setChecked(_use);
+    d->stageplayEditorSaveItemsFromText->setChecked(_save);
+}
+
+void SettingsView::setStageplayEditorShowHints(bool _all, bool _primary, bool _secondary,
+                                               bool _tertiary)
+{
+    d->stageplayEditorShowHintsForAllItems->setChecked(_all);
+    d->stageplayEditorShowHintsForPrimaryItems->setChecked(_primary);
+    d->stageplayEditorShowHintsForSecondaryItems->setChecked(_secondary);
+    d->stageplayEditorShowHintsForTertiaryItems->setChecked(_tertiary);
 }
 
 void SettingsView::setStageplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
@@ -3447,7 +3640,7 @@ void SettingsView::updateTranslations()
         tr("Automatically correct screenplay text on page breaks"));
     d->screenplayEditorSaveItemsFromText->setText(tr("Save characters & locations on typing"));
     d->screenplayEditorShowHintsForAllItems->setText(
-        tr("Show hints for all characters and locations, or only for"));
+        tr("Show hints for all characters & locations, or only for"));
     d->screenplayEditorShowHintsForPrimaryItems->setText(tr("primary"));
     d->screenplayEditorShowHintsForSecondaryItems->setText(tr("secondary"));
     d->screenplayEditorShowHintsForTertiaryItems->setText(tr("tertiary"));
@@ -3502,8 +3695,12 @@ void SettingsView::updateTranslations()
     d->comicBookEditorDefaultTemplateOptions->setToolTip(
         tr("Available actions for the selected template"));
     d->comicBookEditorShowDialogueNumber->setText(tr("Show dialogue number"));
-    d->comicBookEditorUseCharactersFromText->setText(
-        tr("Show hints for major & related to a current story characters only"));
+    d->comicBookEditorSaveItemsFromText->setText(tr("Save characters on typing"));
+    d->comicBookEditorShowHintsForAllItems->setText(
+        tr("Show hints for all characters, or only for"));
+    d->comicBookEditorShowHintsForPrimaryItems->setText(tr("primary"));
+    d->comicBookEditorShowHintsForSecondaryItems->setText(tr("secondary"));
+    d->comicBookEditorShowHintsForTertiaryItems->setText(tr("tertiary"));
     d->comicBookEditorShowCharacterSuggestionsInEmptyBlock->setText(
         tr("Show characters suggestions in empty paragraph"));
     d->comicBookNavigatorTitle->setText(tr("Navigator"));
@@ -3522,8 +3719,12 @@ void SettingsView::updateTranslations()
         tr("Available actions for the selected template"));
     d->audioplayEditorShowBlockNumber->setText(tr("Show block numbers"));
     d->audioplayEditorContinueBlockNumbers->setText(tr("Continue block numbers through document"));
-    d->audioplayEditorUseCharactersFromText->setText(
-        tr("Show hints for major & related to a current story characters only"));
+    d->audioplayEditorSaveItemsFromText->setText(tr("Save characters on typing"));
+    d->audioplayEditorShowHintsForAllItems->setText(
+        tr("Show hints for all characters, or only for"));
+    d->audioplayEditorShowHintsForPrimaryItems->setText(tr("primary"));
+    d->audioplayEditorShowHintsForSecondaryItems->setText(tr("secondary"));
+    d->audioplayEditorShowHintsForTertiaryItems->setText(tr("tertiary"));
     d->audioplayEditorShowCharacterSuggestionsInEmptyBlock->setText(
         tr("Show characters suggestions in empty paragraph"));
     d->audioplayNavigatorTitle->setText(tr("Audioplay navigator"));
@@ -3547,8 +3748,12 @@ void SettingsView::updateTranslations()
     d->stageplayEditorDefaultTemplate->setLabel(tr("Default template"));
     d->stageplayEditorDefaultTemplateOptions->setToolTip(
         tr("Available actions for the selected template"));
-    d->stageplayEditorUseCharactersFromText->setText(
-        tr("Show hints for major & related to a current story characters only"));
+    d->stageplayEditorSaveItemsFromText->setText(tr("Save characters on typing"));
+    d->stageplayEditorShowHintsForAllItems->setText(
+        tr("Show hints for all characters, or only for"));
+    d->stageplayEditorShowHintsForPrimaryItems->setText(tr("primary"));
+    d->stageplayEditorShowHintsForSecondaryItems->setText(tr("secondary"));
+    d->stageplayEditorShowHintsForTertiaryItems->setText(tr("tertiary"));
     d->stageplayEditorShowCharacterSuggestionsInEmptyBlock->setText(
         tr("Show characters suggestions in empty paragraph"));
     d->stageplayNavigatorTitle->setText(tr("Stageplay navigator"));
@@ -3752,18 +3957,30 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayDurationByCharactersIncludingSpaces,
              //
              d->comicBookEditorShowDialogueNumber,
-             d->comicBookEditorUseCharactersFromText,
+             d->comicBookEditorSaveItemsFromText,
+             d->comicBookEditorShowHintsForAllItems,
+             d->comicBookEditorShowHintsForPrimaryItems,
+             d->comicBookEditorShowHintsForSecondaryItems,
+             d->comicBookEditorShowHintsForTertiaryItems,
              d->comicBookEditorShowCharacterSuggestionsInEmptyBlock,
              d->comicBookNavigatorShowSceneText,
              //
              d->audioplayEditorShowBlockNumber,
              d->audioplayEditorContinueBlockNumbers,
-             d->audioplayEditorUseCharactersFromText,
+             d->audioplayEditorSaveItemsFromText,
+             d->audioplayEditorShowHintsForAllItems,
+             d->audioplayEditorShowHintsForPrimaryItems,
+             d->audioplayEditorShowHintsForSecondaryItems,
+             d->audioplayEditorShowHintsForTertiaryItems,
              d->audioplayEditorShowCharacterSuggestionsInEmptyBlock,
              d->audioplayNavigatorShowSceneNumber,
              d->audioplayNavigatorShowSceneText,
              //
-             d->stageplayEditorUseCharactersFromText,
+             d->stageplayEditorSaveItemsFromText,
+             d->stageplayEditorShowHintsForAllItems,
+             d->stageplayEditorShowHintsForPrimaryItems,
+             d->stageplayEditorShowHintsForSecondaryItems,
+             d->stageplayEditorShowHintsForTertiaryItems,
              d->stageplayEditorShowCharacterSuggestionsInEmptyBlock,
              d->stageplayNavigatorShowSceneNumber,
              d->stageplayNavigatorShowSceneText,

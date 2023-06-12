@@ -110,7 +110,8 @@ public:
     //
     void setComicBookEditorDefaultTemplate(const QString& _templateId);
     void setComicBookEditorShowDialogueNumber(bool _show);
-    void setComicBookEditorUseCharactersFromText(bool _use);
+    void setComicBookEditorSaveItemsFromText(bool _save);
+    void setComicBookEditorShowHints(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void setComicBookEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setComicBookNavigatorShowSceneText(bool _show, int _lines);
@@ -122,7 +123,8 @@ public:
     //
     void setAudioplayEditorDefaultTemplate(const QString& _templateId);
     void setAudioplayEditorShowBlockNumber(bool _show, bool _continue);
-    void setAudioplayEditorUseCharactersFromText(bool _use);
+    void setAudioplayEditorSaveItemsFromText(bool _save);
+    void setAudioplayEditorShowHints(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void setAudioplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setAudioplayNavigatorShowSceneNumber(bool _show);
@@ -137,7 +139,8 @@ public:
     void setStageplayAvailable(bool _available);
     //
     void setStageplayEditorDefaultTemplate(const QString& _templateId);
-    void setStageplayEditorUseCharactersFromText(bool _use);
+    void setStageplayEditorSaveItemsFromText(bool _save);
+    void setStageplayEditorShowHints(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void setStageplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     //
     void setStageplayNavigatorShowSceneNumber(bool _show);
@@ -206,7 +209,8 @@ signals:
     void screenplayEditorContinueDialogueChanged(bool _continue);
     void screenplayEditorCorrectTextOnPageBreaksChanged(bool _correct);
     void screenplayEditorSaveItemsFromTextChanged(bool _save);
-    void screenplayEditorShowHintsChanged(bool _all, bool _primary, bool _secondary, bool _tertiary);
+    void screenplayEditorShowHintsChanged(bool _all, bool _primary, bool _secondary,
+                                          bool _tertiary);
     void screenplayEditorShowCharacterSuggestionsInEmptyBlockChanged(bool _show);
     void screenplayEditorUseOpenBracketInDialogueForParentheticalChanged(bool _use);
     //
@@ -233,7 +237,8 @@ signals:
     //
     void comicBookEditorDefaultTemplateChanged(const QString& _templateId);
     void comicBookEditorShowDialogueNumberChanged(bool _show);
-    void comicBookEditorUseCharactersFromTextChanged(bool _use);
+    void comicBookEditorSaveItemsFromTextChanged(bool _save);
+    void comicBookEditorShowHintsChanged(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void comicBookEditorShowCharacterSuggestionsInEmptyBlockChanged(bool _show);
     //
     void comicBookNavigatorShowSceneTextChanged(bool _show, int _lines);
@@ -245,7 +250,8 @@ signals:
     //
     void audioplayEditorDefaultTemplateChanged(const QString& _templateId);
     void audioplayEditorShowBlockNumberChanged(bool _show, bool _continue);
-    void audioplayEditorUseCharactersFromTextChanged(bool _use);
+    void audioplayEditorSaveItemsFromTextChanged(bool _save);
+    void audioplayEditorShowHintsChanged(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void audioplayEditorShowCharacterSuggestionsInEmptyBlockChanged(bool _show);
     //
     void audioplayNavigatorShowSceneNumberChanged(bool _show);
@@ -261,7 +267,8 @@ signals:
     //
     void stageplayEditorDefaultTemplateChanged(const QString& _templateId);
     void stageplayEditorShowBlockNumberChanged(bool _show, bool _continue);
-    void stageplayEditorUseCharactersFromTextChanged(bool _use);
+    void stageplayEditorSaveItemsFromTextChanged(bool _save);
+    void stageplayEditorShowHintsChanged(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void stageplayEditorShowCharacterSuggestionsInEmptyBlockChanged(bool _show);
     //
     void stageplayNavigatorShowSceneNumberChanged(bool _show);

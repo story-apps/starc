@@ -526,9 +526,9 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsScreenplayEditorContinueDialogueKey, true);
         defaultValues.insert(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey, true);
         defaultValues.insert(kComponentsScreenplayEditorSaveItemsFromTextKey, true);
-        defaultValues.insert(kComponentsScreenplayEditorShowHintsForAllItemsKey, false);
-        defaultValues.insert(kComponentsScreenplayEditorShowHintsForPrimaryItemsKey, true);
-        defaultValues.insert(kComponentsScreenplayEditorShowHintsForSecondaryItemsKey, true);
+        defaultValues.insert(kComponentsScreenplayEditorShowHintsForAllItemsKey, true);
+        defaultValues.insert(kComponentsScreenplayEditorShowHintsForPrimaryItemsKey, false);
+        defaultValues.insert(kComponentsScreenplayEditorShowHintsForSecondaryItemsKey, false);
         defaultValues.insert(kComponentsScreenplayEditorShowHintsForTertiaryItemsKey, false);
         defaultValues.insert(kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey,
                              true);
@@ -691,7 +691,11 @@ SettingsStorage::Implementation::Implementation()
         //
         defaultValues.insert(kComponentsComicBookEditorDefaultTemplateKey, "world");
         defaultValues.insert(kComponentsComicBookEditorShowDialogueNumberKey, true);
-        defaultValues.insert(kComponentsComicBookEditorUseMainItemsKey, true);
+        defaultValues.insert(kComponentsComicBookEditorSaveItemsFromTextKey, true);
+        defaultValues.insert(kComponentsComicBookEditorShowHintsForAllItemsKey, true);
+        defaultValues.insert(kComponentsComicBookEditorShowHintsForPrimaryItemsKey, false);
+        defaultValues.insert(kComponentsComicBookEditorShowHintsForSecondaryItemsKey, false);
+        defaultValues.insert(kComponentsComicBookEditorShowHintsForTertiaryItemsKey, false);
         defaultValues.insert(kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey,
                              false);
         //
@@ -815,7 +819,11 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsAudioplayEditorDefaultTemplateKey, "bbc_scene");
         defaultValues.insert(kComponentsAudioplayEditorShowBlockNumbersKey, false);
         defaultValues.insert(kComponentsAudioplayEditorContinueBlockNumbersKey, true);
-        defaultValues.insert(kComponentsAudioplayEditorUseMainItemsKey, true);
+        defaultValues.insert(kComponentsAudioplayEditorSaveItemsFromTextKey, true);
+        defaultValues.insert(kComponentsAudioplayEditorShowHintsForAllItemsKey, true);
+        defaultValues.insert(kComponentsAudioplayEditorShowHintsForPrimaryItemsKey, false);
+        defaultValues.insert(kComponentsAudioplayEditorShowHintsForSecondaryItemsKey, false);
+        defaultValues.insert(kComponentsAudioplayEditorShowHintsForTertiaryItemsKey, false);
         defaultValues.insert(kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey,
                              false);
         //
@@ -946,7 +954,11 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsStageplayAvailableKey, true);
         //
         defaultValues.insert(kComponentsStageplayEditorDefaultTemplateKey, "bbc");
-        defaultValues.insert(kComponentsStageplayEditorUseMainItemsKey, true);
+        defaultValues.insert(kComponentsStageplayEditorSaveItemsFromTextKey, true);
+        defaultValues.insert(kComponentsStageplayEditorShowHintsForAllItemsKey, true);
+        defaultValues.insert(kComponentsStageplayEditorShowHintsForPrimaryItemsKey, false);
+        defaultValues.insert(kComponentsStageplayEditorShowHintsForSecondaryItemsKey, false);
+        defaultValues.insert(kComponentsStageplayEditorShowHintsForTertiaryItemsKey, false);
         defaultValues.insert(kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey,
                              false);
         //

@@ -262,8 +262,16 @@ void SettingsManager::Implementation::loadComicBookSettings()
     BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(defaultTemplate);
     view->setComicBookEditorShowDialogueNumber(
         settingsValue(DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey).toBool());
-    view->setComicBookEditorUseCharactersFromText(
-        settingsValue(DataStorageLayer::kComponentsComicBookEditorUseMainItemsKey).toBool());
+    view->setComicBookEditorSaveItemsFromText(
+        settingsValue(DataStorageLayer::kComponentsComicBookEditorSaveItemsFromTextKey).toBool());
+    view->setComicBookEditorShowHints(
+        settingsValue(DataStorageLayer::kComponentsComicBookEditorShowHintsForAllItemsKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsComicBookEditorShowHintsForPrimaryItemsKey)
+            .toBool(),
+        settingsValue(DataStorageLayer::kComponentsComicBookEditorShowHintsForSecondaryItemsKey)
+            .toBool(),
+        settingsValue(DataStorageLayer::kComponentsComicBookEditorShowHintsForTertiaryItemsKey)
+            .toBool());
     view->setComicBookEditorShowCharacterSuggestionsInEmptyBlock(
         settingsValue(
             DataStorageLayer::kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey)
@@ -286,8 +294,16 @@ void SettingsManager::Implementation::loadAudioplaySettings()
         settingsValue(DataStorageLayer::kComponentsAudioplayEditorShowBlockNumbersKey).toBool(),
         settingsValue(DataStorageLayer::kComponentsAudioplayEditorContinueBlockNumbersKey)
             .toBool());
-    view->setAudioplayEditorUseCharactersFromText(
-        settingsValue(DataStorageLayer::kComponentsAudioplayEditorUseMainItemsKey).toBool());
+    view->setAudioplayEditorSaveItemsFromText(
+        settingsValue(DataStorageLayer::kComponentsAudioplayEditorSaveItemsFromTextKey).toBool());
+    view->setAudioplayEditorShowHints(
+        settingsValue(DataStorageLayer::kComponentsAudioplayEditorShowHintsForAllItemsKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsAudioplayEditorShowHintsForPrimaryItemsKey)
+            .toBool(),
+        settingsValue(DataStorageLayer::kComponentsAudioplayEditorShowHintsForSecondaryItemsKey)
+            .toBool(),
+        settingsValue(DataStorageLayer::kComponentsAudioplayEditorShowHintsForTertiaryItemsKey)
+            .toBool());
     view->setAudioplayEditorShowCharacterSuggestionsInEmptyBlock(
         settingsValue(
             DataStorageLayer::kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey)
@@ -313,8 +329,16 @@ void SettingsManager::Implementation::loadStageplaySettings()
         = settingsValue(DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey).toString();
     view->setStageplayEditorDefaultTemplate(defaultTemplate);
     BusinessLayer::TemplatesFacade::setDefaultStageplayTemplate(defaultTemplate);
-    view->setStageplayEditorUseCharactersFromText(
-        settingsValue(DataStorageLayer::kComponentsStageplayEditorUseMainItemsKey).toBool());
+    view->setStageplayEditorSaveItemsFromText(
+        settingsValue(DataStorageLayer::kComponentsStageplayEditorSaveItemsFromTextKey).toBool());
+    view->setStageplayEditorShowHints(
+        settingsValue(DataStorageLayer::kComponentsStageplayEditorShowHintsForAllItemsKey).toBool(),
+        settingsValue(DataStorageLayer::kComponentsStageplayEditorShowHintsForPrimaryItemsKey)
+            .toBool(),
+        settingsValue(DataStorageLayer::kComponentsStageplayEditorShowHintsForSecondaryItemsKey)
+            .toBool(),
+        settingsValue(DataStorageLayer::kComponentsStageplayEditorShowHintsForTertiaryItemsKey)
+            .toBool());
     view->setStageplayEditorShowCharacterSuggestionsInEmptyBlock(
         settingsValue(
             DataStorageLayer::kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey)
@@ -660,8 +684,10 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setComicBookEditorDefaultTemplate);
     connect(d->view, &Ui::SettingsView::comicBookEditorShowDialogueNumberChanged, this,
             &SettingsManager::setComicBookEditorShowDialogueNumber);
-    connect(d->view, &Ui::SettingsView::comicBookEditorUseCharactersFromTextChanged, this,
-            &SettingsManager::setComicBookEditorUseCharactersFromText);
+    connect(d->view, &Ui::SettingsView::screenplayEditorSaveItemsFromTextChanged, this,
+            &SettingsManager::setComicBookEditorSaveItemsFromText);
+    connect(d->view, &Ui::SettingsView::screenplayEditorShowHintsChanged, this,
+            &SettingsManager::setComicBookEditorShowHints);
     connect(d->view, &Ui::SettingsView::comicBookEditorShowCharacterSuggestionsInEmptyBlockChanged,
             this, &SettingsManager::setComicBookEditorShowCharacterSuggestionsInEmptyBlock);
     //
@@ -677,8 +703,10 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setAudioplayEditorDefaultTemplate);
     connect(d->view, &Ui::SettingsView::audioplayEditorShowBlockNumberChanged, this,
             &SettingsManager::setAudioplayEditorShowBlockNumber);
-    connect(d->view, &Ui::SettingsView::audioplayEditorUseCharactersFromTextChanged, this,
-            &SettingsManager::setAudioplayEditorUseCharactersFromText);
+    connect(d->view, &Ui::SettingsView::screenplayEditorSaveItemsFromTextChanged, this,
+            &SettingsManager::setAudioplayEditorSaveItemsFromText);
+    connect(d->view, &Ui::SettingsView::screenplayEditorShowHintsChanged, this,
+            &SettingsManager::setAudioplayEditorShowHints);
     connect(d->view, &Ui::SettingsView::audioplayEditorShowCharacterSuggestionsInEmptyBlockChanged,
             this, &SettingsManager::setAudioplayEditorShowCharacterSuggestionsInEmptyBlock);
     //
@@ -699,8 +727,10 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     //
     connect(d->view, &Ui::SettingsView::stageplayEditorDefaultTemplateChanged, this,
             &SettingsManager::setStageplayEditorDefaultTemplate);
-    connect(d->view, &Ui::SettingsView::stageplayEditorUseCharactersFromTextChanged, this,
-            &SettingsManager::setStageplayEditorUseCharactersFromText);
+    connect(d->view, &Ui::SettingsView::screenplayEditorSaveItemsFromTextChanged, this,
+            &SettingsManager::setStageplayEditorSaveItemsFromText);
+    connect(d->view, &Ui::SettingsView::screenplayEditorShowHintsChanged, this,
+            &SettingsManager::setStageplayEditorShowHints);
     connect(d->view, &Ui::SettingsView::stageplayEditorShowCharacterSuggestionsInEmptyBlockChanged,
             this, &SettingsManager::setStageplayEditorShowCharacterSuggestionsInEmptyBlock);
     //
@@ -1734,10 +1764,28 @@ void SettingsManager::setComicBookEditorShowDialogueNumber(bool _show)
         { DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey });
 }
 
-void SettingsManager::setComicBookEditorUseCharactersFromText(bool _use)
+void SettingsManager::setComicBookEditorSaveItemsFromText(bool _use)
 {
-    setSettingsValue(DataStorageLayer::kComponentsComicBookEditorUseMainItemsKey, _use);
-    emit comicBookEditorChanged({ DataStorageLayer::kComponentsComicBookEditorUseMainItemsKey });
+    setSettingsValue(DataStorageLayer::kComponentsComicBookEditorSaveItemsFromTextKey, _use);
+    emit screenplayEditorChanged(
+        { DataStorageLayer::kComponentsComicBookEditorSaveItemsFromTextKey });
+}
+
+void SettingsManager::setComicBookEditorShowHints(bool _all, bool _primary, bool _secondary,
+                                                  bool _tertiary)
+{
+    setSettingsValue(DataStorageLayer::kComponentsComicBookEditorShowHintsForAllItemsKey, _all);
+    setSettingsValue(DataStorageLayer::kComponentsComicBookEditorShowHintsForPrimaryItemsKey,
+                     _primary);
+    setSettingsValue(DataStorageLayer::kComponentsComicBookEditorShowHintsForSecondaryItemsKey,
+                     _secondary);
+    setSettingsValue(DataStorageLayer::kComponentsComicBookEditorShowHintsForTertiaryItemsKey,
+                     _tertiary);
+    emit screenplayEditorChanged(
+        { DataStorageLayer::kComponentsComicBookEditorShowHintsForAllItemsKey,
+          DataStorageLayer::kComponentsComicBookEditorShowHintsForPrimaryItemsKey,
+          DataStorageLayer::kComponentsComicBookEditorShowHintsForSecondaryItemsKey,
+          DataStorageLayer::kComponentsComicBookEditorShowHintsForTertiaryItemsKey });
 }
 
 void SettingsManager::setComicBookEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
@@ -1777,10 +1825,28 @@ void SettingsManager::setAudioplayEditorShowBlockNumber(bool _show, bool _contin
           DataStorageLayer::kComponentsAudioplayEditorContinueBlockNumbersKey });
 }
 
-void SettingsManager::setAudioplayEditorUseCharactersFromText(bool _use)
+void SettingsManager::setAudioplayEditorSaveItemsFromText(bool _use)
 {
-    setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorUseMainItemsKey, _use);
-    emit audioplayEditorChanged({ DataStorageLayer::kComponentsAudioplayEditorUseMainItemsKey });
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorSaveItemsFromTextKey, _use);
+    emit screenplayEditorChanged(
+        { DataStorageLayer::kComponentsAudioplayEditorSaveItemsFromTextKey });
+}
+
+void SettingsManager::setAudioplayEditorShowHints(bool _all, bool _primary, bool _secondary,
+                                                  bool _tertiary)
+{
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorShowHintsForAllItemsKey, _all);
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorShowHintsForPrimaryItemsKey,
+                     _primary);
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorShowHintsForSecondaryItemsKey,
+                     _secondary);
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorShowHintsForTertiaryItemsKey,
+                     _tertiary);
+    emit screenplayEditorChanged(
+        { DataStorageLayer::kComponentsAudioplayEditorShowHintsForAllItemsKey,
+          DataStorageLayer::kComponentsAudioplayEditorShowHintsForPrimaryItemsKey,
+          DataStorageLayer::kComponentsAudioplayEditorShowHintsForSecondaryItemsKey,
+          DataStorageLayer::kComponentsAudioplayEditorShowHintsForTertiaryItemsKey });
 }
 
 void SettingsManager::setAudioplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
@@ -1828,10 +1894,28 @@ void SettingsManager::setStageplayEditorDefaultTemplate(const QString& _template
     emit stageplayEditorChanged({ DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey });
 }
 
-void SettingsManager::setStageplayEditorUseCharactersFromText(bool _use)
+void SettingsManager::setStageplayEditorSaveItemsFromText(bool _use)
 {
-    setSettingsValue(DataStorageLayer::kComponentsStageplayEditorUseMainItemsKey, _use);
-    emit stageplayEditorChanged({ DataStorageLayer::kComponentsStageplayEditorUseMainItemsKey });
+    setSettingsValue(DataStorageLayer::kComponentsStageplayEditorSaveItemsFromTextKey, _use);
+    emit screenplayEditorChanged(
+        { DataStorageLayer::kComponentsStageplayEditorSaveItemsFromTextKey });
+}
+
+void SettingsManager::setStageplayEditorShowHints(bool _all, bool _primary, bool _secondary,
+                                                  bool _tertiary)
+{
+    setSettingsValue(DataStorageLayer::kComponentsStageplayEditorShowHintsForAllItemsKey, _all);
+    setSettingsValue(DataStorageLayer::kComponentsStageplayEditorShowHintsForPrimaryItemsKey,
+                     _primary);
+    setSettingsValue(DataStorageLayer::kComponentsStageplayEditorShowHintsForSecondaryItemsKey,
+                     _secondary);
+    setSettingsValue(DataStorageLayer::kComponentsStageplayEditorShowHintsForTertiaryItemsKey,
+                     _tertiary);
+    emit screenplayEditorChanged(
+        { DataStorageLayer::kComponentsStageplayEditorShowHintsForAllItemsKey,
+          DataStorageLayer::kComponentsStageplayEditorShowHintsForPrimaryItemsKey,
+          DataStorageLayer::kComponentsStageplayEditorShowHintsForSecondaryItemsKey,
+          DataStorageLayer::kComponentsStageplayEditorShowHintsForTertiaryItemsKey });
 }
 
 void SettingsManager::setStageplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)

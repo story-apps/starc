@@ -498,8 +498,18 @@ void AudioplayTextModel::updateRuntimeDictionariesIfNeeded()
 
 void AudioplayTextModel::updateRuntimeDictionaries()
 {
-    const bool useMainItems
-        = settingsValue(DataStorageLayer::kComponentsAudioplayEditorUseMainItemsKey).toBool();
+    const bool showHintsForAllItems
+        = settingsValue(DataStorageLayer::kComponentsAudioplayEditorShowHintsForAllItemsKey)
+              .toBool();
+    const bool showHintsForPrimaryItems
+        = settingsValue(DataStorageLayer::kComponentsAudioplayEditorShowHintsForPrimaryItemsKey)
+              .toBool();
+    const bool showHintsForSecondaryItems
+        = settingsValue(DataStorageLayer::kComponentsAudioplayEditorShowHintsForSecondaryItemsKey)
+              .toBool();
+    const bool showHintsForTertiaryItems
+        = settingsValue(DataStorageLayer::kComponentsAudioplayEditorShowHintsForTertiaryItemsKey)
+              .toBool();
 
     //
     // В противном случае, собираем персонажей из текста
@@ -545,9 +555,35 @@ void AudioplayTextModel::updateRuntimeDictionaries()
     //
     for (int row = 0; row < d->charactersModel->rowCount(); ++row) {
         const auto character = d->charactersModel->character(row);
-        if (useMainItems && character->storyRole() == CharacterStoryRole::Undefined) {
-            continue;
+
+        //
+        // ... фильтруем по ролям, если необходимо
+        //
+        if (!showHintsForAllItems) {
+            bool skipCharacter = true;
+            switch (character->storyRole()) {
+            case CharacterStoryRole::Primary: {
+                skipCharacter = !showHintsForPrimaryItems;
+                break;
+            }
+            case CharacterStoryRole::Secondary: {
+                skipCharacter = !showHintsForSecondaryItems;
+                break;
+            }
+            case CharacterStoryRole::Tertiary: {
+                skipCharacter = !showHintsForTertiaryItems;
+                break;
+            }
+            default: {
+                break;
+            }
+            }
+
+            if (skipCharacter) {
+                continue;
+            }
         }
+
         characters.insert(character->name());
     }
     //

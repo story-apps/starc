@@ -293,8 +293,16 @@ const QString kComponentsComicBookEditorDefaultTemplateKey
     = kComponentsComicBookEditorKey + QStringLiteral("/default-template");
 const QString kComponentsComicBookEditorShowDialogueNumberKey
     = kComponentsComicBookEditorKey + QStringLiteral("/show-dialogue-number");
-const QString kComponentsComicBookEditorUseMainItemsKey
-    = kComponentsComicBookEditorKey + QStringLiteral("/use-characters-from-text");
+const QString kComponentsComicBookEditorSaveItemsFromTextKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/save-items-from-text");
+const QString kComponentsComicBookEditorShowHintsForAllItemsKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/show-hints-for-all-items");
+const QString kComponentsComicBookEditorShowHintsForPrimaryItemsKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/show-hints-for-primary-items");
+const QString kComponentsComicBookEditorShowHintsForSecondaryItemsKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/show-hints-for-secondary-items");
+const QString kComponentsComicBookEditorShowHintsForTertiaryItemsKey
+    = kComponentsComicBookEditorKey + QStringLiteral("/show-hints-for-tertiary-items");
 const QString kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey
     = kComponentsComicBookEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
 const QString kComponentsComicBookEditorShortcutsKey
@@ -319,8 +327,16 @@ const QString kComponentsAudioplayEditorShowBlockNumbersKey
     = kComponentsAudioplayEditorKey + QStringLiteral("/show-block-numbers");
 const QString kComponentsAudioplayEditorContinueBlockNumbersKey
     = kComponentsAudioplayEditorKey + QStringLiteral("/continue-block-numbers");
-const QString kComponentsAudioplayEditorUseMainItemsKey
-    = kComponentsAudioplayEditorKey + QStringLiteral("/use-characters-from-text");
+const QString kComponentsAudioplayEditorSaveItemsFromTextKey
+    = kComponentsAudioplayEditorKey + QStringLiteral("/save-items-from-text");
+const QString kComponentsAudioplayEditorShowHintsForAllItemsKey
+    = kComponentsAudioplayEditorKey + QStringLiteral("/show-hints-for-all-items");
+const QString kComponentsAudioplayEditorShowHintsForPrimaryItemsKey
+    = kComponentsAudioplayEditorKey + QStringLiteral("/show-hints-for-primary-items");
+const QString kComponentsAudioplayEditorShowHintsForSecondaryItemsKey
+    = kComponentsAudioplayEditorKey + QStringLiteral("/show-hints-for-secondary-items");
+const QString kComponentsAudioplayEditorShowHintsForTertiaryItemsKey
+    = kComponentsAudioplayEditorKey + QStringLiteral("/show-hints-for-tertiary-items");
 const QString kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey
     = kComponentsAudioplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
 const QString kComponentsAudioplayEditorShortcutsKey
@@ -350,8 +366,16 @@ const QString kComponentsStageplayAvailableKey
 const QString kComponentsStageplayEditorKey = kComponentsStageplayKey + QStringLiteral("/editor");
 const QString kComponentsStageplayEditorDefaultTemplateKey
     = kComponentsStageplayEditorKey + QStringLiteral("/default-template");
-const QString kComponentsStageplayEditorUseMainItemsKey
-    = kComponentsStageplayEditorKey + QStringLiteral("/use-characters-from-text");
+const QString kComponentsStageplayEditorSaveItemsFromTextKey
+    = kComponentsStageplayEditorKey + QStringLiteral("/save-items-from-text");
+const QString kComponentsStageplayEditorShowHintsForAllItemsKey
+    = kComponentsStageplayEditorKey + QStringLiteral("/show-hints-for-all-items");
+const QString kComponentsStageplayEditorShowHintsForPrimaryItemsKey
+    = kComponentsStageplayEditorKey + QStringLiteral("/show-hints-for-primary-items");
+const QString kComponentsStageplayEditorShowHintsForSecondaryItemsKey
+    = kComponentsStageplayEditorKey + QStringLiteral("/show-hints-for-secondary-items");
+const QString kComponentsStageplayEditorShowHintsForTertiaryItemsKey
+    = kComponentsStageplayEditorKey + QStringLiteral("/show-hints-for-tertiary-items");
 const QString kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey
     = kComponentsStageplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
 const QString kComponentsStageplayEditorShortcutsKey
