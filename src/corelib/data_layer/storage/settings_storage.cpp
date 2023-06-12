@@ -525,7 +525,7 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersOnRightKey, true);
         defaultValues.insert(kComponentsScreenplayEditorContinueDialogueKey, true);
         defaultValues.insert(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey, true);
-        defaultValues.insert(kComponentsScreenplayEditorUseCharactersFromTextKey, true);
+        defaultValues.insert(kComponentsScreenplayEditorUseMainItemsKey, true);
         defaultValues.insert(kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey,
                              true);
         defaultValues.insert(kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey,
@@ -687,7 +687,7 @@ SettingsStorage::Implementation::Implementation()
         //
         defaultValues.insert(kComponentsComicBookEditorDefaultTemplateKey, "world");
         defaultValues.insert(kComponentsComicBookEditorShowDialogueNumberKey, true);
-        defaultValues.insert(kComponentsComicBookEditorUseCharactersFromTextKey, true);
+        defaultValues.insert(kComponentsComicBookEditorUseMainItemsKey, true);
         defaultValues.insert(kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey,
                              false);
         //
@@ -811,7 +811,7 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsAudioplayEditorDefaultTemplateKey, "bbc_scene");
         defaultValues.insert(kComponentsAudioplayEditorShowBlockNumbersKey, false);
         defaultValues.insert(kComponentsAudioplayEditorContinueBlockNumbersKey, true);
-        defaultValues.insert(kComponentsAudioplayEditorUseCharactersFromTextKey, true);
+        defaultValues.insert(kComponentsAudioplayEditorUseMainItemsKey, true);
         defaultValues.insert(kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey,
                              false);
         //
@@ -942,7 +942,7 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsStageplayAvailableKey, true);
         //
         defaultValues.insert(kComponentsStageplayEditorDefaultTemplateKey, "bbc");
-        defaultValues.insert(kComponentsStageplayEditorUseCharactersFromTextKey, true);
+        defaultValues.insert(kComponentsStageplayEditorUseMainItemsKey, true);
         defaultValues.insert(kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey,
                              false);
         //

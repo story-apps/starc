@@ -1464,12 +1464,10 @@ void CharacterModel::setDialogues(const QVector<CharacterDialogues>& _dialogues)
     d->dialogues = _dialogues;
     emit dialoguesChanged(d->dialogues);
 }
-
 void CharacterModel::updateDialogues()
 {
     emit dialoguesUpdateRequested();
 }
-
 void CharacterModel::initImageWrapper()
 {
     connect(imageWrapper(), &AbstractImageWrapper::imageUpdated, this,

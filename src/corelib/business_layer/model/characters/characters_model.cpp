@@ -173,8 +173,9 @@ CharacterModel* CharactersModel::character(const QUuid& _uuid) const
 
 CharacterModel* CharactersModel::character(const QString& _name) const
 {
+    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
     for (const auto character : std::as_const(d->characterModels)) {
-        if (character->name() == _name) {
+        if (character->name() == nameCorrected) {
             return character;
         }
     }
@@ -194,8 +195,9 @@ CharacterModel* CharactersModel::character(int _row) const
 QVector<CharacterModel*> CharactersModel::characters(const QString& _name) const
 {
     QVector<CharacterModel*> characters;
+    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
     for (const auto character : std::as_const(d->characterModels)) {
-        if (character->name() == _name) {
+        if (character->name() == nameCorrected) {
             characters.append(character);
         }
     }

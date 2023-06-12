@@ -233,7 +233,8 @@ void StructureModel::setProjectName(const QString& _name)
 }
 
 QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name,
-                                        const QModelIndex& _parent, const QByteArray& _content)
+                                        const QModelIndex& _parent, const QByteArray& _content,
+                                        bool _visible)
 {
     //
     // ATTENTION: В ProjectManager::addScreenplay есть копипаста отсюда, быть внимательным при
@@ -242,11 +243,10 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
 
     using namespace Domain;
 
-    auto createItem = [](DocumentObjectType _type, const QString& _name) {
+    auto createItem = [_visible](DocumentObjectType _type, const QString& _name) {
         auto uuid = QUuid::createUuid();
-        const auto visible = true;
         const auto readOnly = false;
-        return new StructureModelItem(uuid, _type, _name, {}, visible, readOnly);
+        return new StructureModelItem(uuid, _type, _name, {}, _visible, readOnly);
     };
 
     auto parentItem = itemForIndex(_parent);

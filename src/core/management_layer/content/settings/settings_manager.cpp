@@ -179,7 +179,7 @@ void SettingsManager::Implementation::loadScreenplaySettings()
         settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)
             .toBool());
     view->setScreenplayEditorUseCharactersFromText(
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorUseCharactersFromTextKey)
+        settingsValue(DataStorageLayer::kComponentsScreenplayEditorUseMainItemsKey)
             .toBool());
     view->setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(
         settingsValue(
@@ -255,7 +255,7 @@ void SettingsManager::Implementation::loadComicBookSettings()
     view->setComicBookEditorShowDialogueNumber(
         settingsValue(DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey).toBool());
     view->setComicBookEditorUseCharactersFromText(
-        settingsValue(DataStorageLayer::kComponentsComicBookEditorUseCharactersFromTextKey)
+        settingsValue(DataStorageLayer::kComponentsComicBookEditorUseMainItemsKey)
             .toBool());
     view->setComicBookEditorShowCharacterSuggestionsInEmptyBlock(
         settingsValue(
@@ -280,7 +280,7 @@ void SettingsManager::Implementation::loadAudioplaySettings()
         settingsValue(DataStorageLayer::kComponentsAudioplayEditorContinueBlockNumbersKey)
             .toBool());
     view->setAudioplayEditorUseCharactersFromText(
-        settingsValue(DataStorageLayer::kComponentsAudioplayEditorUseCharactersFromTextKey)
+        settingsValue(DataStorageLayer::kComponentsAudioplayEditorUseMainItemsKey)
             .toBool());
     view->setAudioplayEditorShowCharacterSuggestionsInEmptyBlock(
         settingsValue(
@@ -308,7 +308,7 @@ void SettingsManager::Implementation::loadStageplaySettings()
     view->setStageplayEditorDefaultTemplate(defaultTemplate);
     BusinessLayer::TemplatesFacade::setDefaultStageplayTemplate(defaultTemplate);
     view->setStageplayEditorUseCharactersFromText(
-        settingsValue(DataStorageLayer::kComponentsStageplayEditorUseCharactersFromTextKey)
+        settingsValue(DataStorageLayer::kComponentsStageplayEditorUseMainItemsKey)
             .toBool());
     view->setStageplayEditorShowCharacterSuggestionsInEmptyBlock(
         settingsValue(
@@ -1560,9 +1560,9 @@ void SettingsManager::setScreenplayEditorCorrectTextOnPageBreaks(bool _correct)
 
 void SettingsManager::setScreenplayEditorUseCharactersFromText(bool _use)
 {
-    setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorUseCharactersFromTextKey, _use);
+    setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorUseMainItemsKey, _use);
     emit screenplayEditorChanged(
-        { DataStorageLayer::kComponentsScreenplayEditorUseCharactersFromTextKey });
+        { DataStorageLayer::kComponentsScreenplayEditorUseMainItemsKey });
 }
 
 void SettingsManager::setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
@@ -1712,9 +1712,9 @@ void SettingsManager::setComicBookEditorShowDialogueNumber(bool _show)
 
 void SettingsManager::setComicBookEditorUseCharactersFromText(bool _use)
 {
-    setSettingsValue(DataStorageLayer::kComponentsComicBookEditorUseCharactersFromTextKey, _use);
+    setSettingsValue(DataStorageLayer::kComponentsComicBookEditorUseMainItemsKey, _use);
     emit comicBookEditorChanged(
-        { DataStorageLayer::kComponentsComicBookEditorUseCharactersFromTextKey });
+        { DataStorageLayer::kComponentsComicBookEditorUseMainItemsKey });
 }
 
 void SettingsManager::setComicBookEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
@@ -1756,9 +1756,9 @@ void SettingsManager::setAudioplayEditorShowBlockNumber(bool _show, bool _contin
 
 void SettingsManager::setAudioplayEditorUseCharactersFromText(bool _use)
 {
-    setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorUseCharactersFromTextKey, _use);
+    setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorUseMainItemsKey, _use);
     emit audioplayEditorChanged(
-        { DataStorageLayer::kComponentsAudioplayEditorUseCharactersFromTextKey });
+        { DataStorageLayer::kComponentsAudioplayEditorUseMainItemsKey });
 }
 
 void SettingsManager::setAudioplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
@@ -1808,9 +1808,9 @@ void SettingsManager::setStageplayEditorDefaultTemplate(const QString& _template
 
 void SettingsManager::setStageplayEditorUseCharactersFromText(bool _use)
 {
-    setSettingsValue(DataStorageLayer::kComponentsStageplayEditorUseCharactersFromTextKey, _use);
+    setSettingsValue(DataStorageLayer::kComponentsStageplayEditorUseMainItemsKey, _use);
     emit stageplayEditorChanged(
-        { DataStorageLayer::kComponentsStageplayEditorUseCharactersFromTextKey });
+        { DataStorageLayer::kComponentsStageplayEditorUseMainItemsKey });
 }
 
 void SettingsManager::setStageplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)

@@ -198,7 +198,7 @@ const QString kComponentsScreenplayEditorContinueDialogueKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/continue-dialogue");
 const QString kComponentsScreenplayEditorCorrectTextOnPageBreaksKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/correct-text-on-page-breaks");
-const QString kComponentsScreenplayEditorUseCharactersFromTextKey
+const QString kComponentsScreenplayEditorUseMainItemsKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/use-characters-from-text");
 const QString kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
@@ -285,7 +285,7 @@ const QString kComponentsComicBookEditorDefaultTemplateKey
     = kComponentsComicBookEditorKey + QStringLiteral("/default-template");
 const QString kComponentsComicBookEditorShowDialogueNumberKey
     = kComponentsComicBookEditorKey + QStringLiteral("/show-dialogue-number");
-const QString kComponentsComicBookEditorUseCharactersFromTextKey
+const QString kComponentsComicBookEditorUseMainItemsKey
     = kComponentsComicBookEditorKey + QStringLiteral("/use-characters-from-text");
 const QString kComponentsComicBookEditorShowCharacterSuggestionsInEmptyBlockKey
     = kComponentsComicBookEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
@@ -311,7 +311,7 @@ const QString kComponentsAudioplayEditorShowBlockNumbersKey
     = kComponentsAudioplayEditorKey + QStringLiteral("/show-block-numbers");
 const QString kComponentsAudioplayEditorContinueBlockNumbersKey
     = kComponentsAudioplayEditorKey + QStringLiteral("/continue-block-numbers");
-const QString kComponentsAudioplayEditorUseCharactersFromTextKey
+const QString kComponentsAudioplayEditorUseMainItemsKey
     = kComponentsAudioplayEditorKey + QStringLiteral("/use-characters-from-text");
 const QString kComponentsAudioplayEditorShowCharacterSuggestionsInEmptyBlockKey
     = kComponentsAudioplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
@@ -342,7 +342,7 @@ const QString kComponentsStageplayAvailableKey
 const QString kComponentsStageplayEditorKey = kComponentsStageplayKey + QStringLiteral("/editor");
 const QString kComponentsStageplayEditorDefaultTemplateKey
     = kComponentsStageplayEditorKey + QStringLiteral("/default-template");
-const QString kComponentsStageplayEditorUseCharactersFromTextKey
+const QString kComponentsStageplayEditorUseMainItemsKey
     = kComponentsStageplayEditorKey + QStringLiteral("/use-characters-from-text");
 const QString kComponentsStageplayEditorShowCharacterSuggestionsInEmptyBlockKey
     = kComponentsStageplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");

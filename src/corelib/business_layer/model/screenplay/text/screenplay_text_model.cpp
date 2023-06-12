@@ -77,8 +77,8 @@ public:
     /**
      * @brief Справочники, которые строятся в рантайме
      */
-    QStringListModel* charactersModelFromText = nullptr;
-    QStringListModel* locationsModelFromText = nullptr;
+    QStringListModel* charactersListModel = nullptr;
+    QStringListModel* locationsListModel = nullptr;
 
     /**
      * @brief Количество страниц
@@ -238,6 +238,7 @@ void ScreenplayTextModel::setCharactersModel(CharactersModel* _model)
     }
 
     d->charactersModel = _model;
+    d->needUpdateRuntimeDictionaries = true;
 
     connect(d->charactersModel, &CharactersModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });
@@ -250,8 +251,8 @@ CharactersModel* ScreenplayTextModel::charactersModel() const
 
 QAbstractItemModel* ScreenplayTextModel::charactersList() const
 {
-    if (d->charactersModelFromText != nullptr) {
-        return d->charactersModelFromText;
+    if (d->charactersListModel != nullptr) {
+        return d->charactersListModel;
     }
 
     return d->charactersModel;
@@ -447,6 +448,7 @@ void ScreenplayTextModel::setLocationsModel(LocationsModel* _model)
     }
 
     d->locationsModel = _model;
+    d->needUpdateRuntimeDictionaries = true;
 
     connect(d->locationsModel, &LocationsModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });
@@ -459,8 +461,8 @@ LocationsModel* ScreenplayTextModel::locationsModel() const
 
 QAbstractItemModel* ScreenplayTextModel::locationsList() const
 {
-    if (d->locationsModelFromText != nullptr) {
-        return d->locationsModelFromText;
+    if (d->locationsListModel != nullptr) {
+        return d->locationsListModel;
     }
 
     return d->locationsModel;
@@ -710,7 +712,7 @@ void ScreenplayTextModel::updateNumbering()
                         //
                         // ... но при необходимости переводим счётчик номеров сцен
                         //
-                        if (groupItem->number()->isEatNumber) {
+                        if (!groupItem->number()->isEatNumber) {
                             ++sceneNumber;
                         }
                     }
@@ -830,43 +832,26 @@ void ScreenplayTextModel::updateRuntimeDictionariesIfNeeded()
 
 void ScreenplayTextModel::updateRuntimeDictionaries()
 {
-    const bool useCharactersFromText
-        = settingsValue(DataStorageLayer::kComponentsScreenplayEditorUseCharactersFromTextKey)
-              .toBool();
+    const bool useMainItems
+        = settingsValue(DataStorageLayer::kComponentsScreenplayEditorUseMainItemsKey).toBool();
 
     //
-    // Если нет необходимости собирать персонажей из текста
-    //
-    if (!useCharactersFromText) {
-        //
-        // ... удалим старый список, если он был создан
-        //
-        if (d->charactersModelFromText != nullptr) {
-            d->charactersModelFromText->deleteLater();
-            d->charactersModelFromText = nullptr;
-        }
-        if (d->locationsModelFromText != nullptr) {
-            d->locationsModelFromText->deleteLater();
-            d->locationsModelFromText = nullptr;
-        }
-        //
-        // ... и далее ничего не делаем
-        //
-        return;
-    }
-
-    //
-    // В противном случае, собираем персонажей из текста
+    // Формируем списки персонажей и локаций
     //
     QSet<QString> characters;
-    std::function<void(const TextModelItem*)> findCharactersInText;
-    findCharactersInText = [&findCharactersInText, &characters](const TextModelItem* _item) {
+    QSet<QString> locations;
+
+    //
+    // Если нужно собирать персонажей и локации из текста
+    //
+    std::function<void(const TextModelItem*)> findInText;
+    findInText = [&findInText, &characters, &locations](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
             case TextModelItemType::Folder:
             case TextModelItemType::Group: {
-                findCharactersInText(childItem);
+                findInText(childItem);
                 break;
             }
 
@@ -874,6 +859,10 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
                 auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
 
                 switch (textItem->paragraphType()) {
+                case TextParagraphType::SceneHeading: {
+                    locations.insert(ScreenplaySceneHeadingParser::location(textItem->text()));
+                    break;
+                }
                 case TextParagraphType::SceneCharacters: {
                     const auto sceneCharacters
                         = ScreenplaySceneCharactersParser::characters(textItem->text());
@@ -882,12 +871,10 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
                     }
                     break;
                 }
-
                 case TextParagraphType::Character: {
                     characters.insert(ScreenplayCharacterParser::name(textItem->text()));
                     break;
                 }
-
                 default: {
                     break;
                 }
@@ -901,73 +888,55 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
             }
         }
     };
-    findCharactersInText(d->rootItem());
+    findInText(d->rootItem());
     characters.remove({});
+    locations.remove({});
+
     //
-    // ... не забываем приаттачить всех персонажей, у кого определена роль в истории
+    // ... не забываем приаттачить персонажей из общей модели
     //
     for (int row = 0; row < d->charactersModel->rowCount(); ++row) {
         const auto character = d->charactersModel->character(row);
-        if (character->storyRole() != CharacterStoryRole::Undefined) {
-            characters.insert(character->name());
+
+        //
+        // ... если нужно показывать только ключевых персонажей, исключаем тех у кого роль не задана
+        //
+        if (useMainItems && character->storyRole() == CharacterStoryRole::Undefined) {
+            continue;
         }
+
+        characters.insert(character->name());
     }
     //
-    // ... создаём (при необходимости) и наполняем модель
+    // ... создаём (при необходимости) и наполняем модель персонажей
     //
-    if (d->charactersModelFromText == nullptr) {
-        d->charactersModelFromText = new QStringListModel(this);
+    if (d->charactersListModel == nullptr) {
+        d->charactersListModel = new QStringListModel(this);
     }
-    d->charactersModelFromText->setStringList(characters.values());
+    d->charactersListModel->setStringList(characters.values());
 
     //
-    // Собираем локации из текста
-    //
-    QSet<QString> locations;
-    std::function<void(const TextModelItem*)> findLocationsInText;
-    findLocationsInText = [&findLocationsInText, &locations](const TextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case TextModelItemType::Folder:
-            case TextModelItemType::Group: {
-                findLocationsInText(childItem);
-                break;
-            }
-
-            case TextModelItemType::Text: {
-                auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-
-                if (textItem->paragraphType() == TextParagraphType::SceneHeading) {
-                    locations.insert(ScreenplaySceneHeadingParser::location(textItem->text()));
-                }
-
-                break;
-            }
-
-            default:
-                break;
-            }
-        }
-    };
-    findLocationsInText(d->rootItem());
-    locations.remove({});
-    //
-    // ... не забываем приаттачить всех персонажей, у кого определена роль в истории
+    // ... не забываем приаттачить персонажей из общей модели
     //
     for (int row = 0; row < d->locationsModel->rowCount(); ++row) {
         const auto location = d->locationsModel->location(row);
-        if (location->storyRole() != LocationStoryRole::Undefined) {
-            locations.insert(location->name());
+
+        //
+        // ... если нужно показывать только ключевые локации, исключаем те у кого роль не задана
+        //
+        if (useMainItems && location->storyRole() == LocationStoryRole::Undefined) {
+            continue;
         }
+
+        locations.insert(location->name());
     }
     //
-    // ... создаём (при необходимости) и наполняем модель
+    // ... создаём (при необходимости) и наполняем модель локаций
     //
-    if (d->locationsModelFromText == nullptr) {
-        d->locationsModelFromText = new QStringListModel(this);
+    if (d->locationsListModel == nullptr) {
+        d->locationsListModel = new QStringListModel(this);
     }
-    d->locationsModelFromText->setStringList(locations.values());
+    d->locationsListModel->setStringList(locations.values());
 }
 
 void ScreenplayTextModel::initEmptyDocument()

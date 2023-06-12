@@ -46,7 +46,8 @@ public:
      * @brief Добавить документ
      */
     QModelIndex addDocument(Domain::DocumentObjectType _type, const QString& _name = {},
-                            const QModelIndex& _parent = {}, const QByteArray& _content = {});
+                            const QModelIndex& _parent = {}, const QByteArray& _content = {},
+                            bool _visible = true);
 
     /**
      * @brief Добавить элемент в начало

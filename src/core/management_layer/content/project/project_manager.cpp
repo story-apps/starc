@@ -163,6 +163,15 @@ public:
                                 Domain::DocumentObjectType _documentType,
                                 const QString& _documentName, const QByteArray& _content = {});
 
+    /**
+     * @brief Задать видимость документа
+     */
+    void setDocumentVisible(BusinessLayer::AbstractModel* _model, Domain::DocumentObjectType _type,
+                            bool _visible);
+
+    /**
+     * @brief Получить реальную модель, если в индексе элемент-алиас
+     */
     BusinessLayer::StructureModelItem* aliasedItemForIndex(const QModelIndex& _index);
 
     /**
@@ -732,8 +741,43 @@ void ProjectManager::Implementation::addDocumentToContainer(
         const auto itemIndex = projectStructureModel->index(itemRow, 0);
         const auto item = projectStructureModel->itemForIndex(itemIndex);
         if (item->type() == _containerType) {
-            projectStructureModel->addDocument(_documentType, _documentName, itemIndex, _content);
+            //
+            // Документ будет вставлен в контейнер, только если контейнер доступен для изменения
+            //
+            const bool isCanBeStored = isProjectOwner
+                || editingPermissions.value(item->uuid(), DocumentEditingMode::Read)
+                    == DocumentEditingMode::Edit;
+            if (isCanBeStored) {
+                projectStructureModel->addDocument(_documentType, _documentName, itemIndex,
+                                                   _content);
+            }
             break;
+        }
+    }
+}
+
+void ProjectManager::Implementation::setDocumentVisible(BusinessLayer::AbstractModel* _model,
+                                                        Domain::DocumentObjectType _type,
+                                                        bool _visible)
+{
+    auto item = projectStructureModel->itemForUuid(_model->document()->uuid());
+
+    //
+    // Если нужно настроить видимость самого элемента
+    //
+    if (item->type() == _type) {
+        projectStructureModel->setItemVisible(item, _visible);
+        return;
+    }
+
+    //
+    // Либо настраиваем видимость одного из вложенных элементов
+    //
+    for (int childIndex = 0; childIndex < item->childCount(); ++childIndex) {
+        auto childItem = item->childAt(childIndex);
+        if (childItem->type() == _type) {
+            projectStructureModel->setItemVisible(childItem, _visible);
+            return;
         }
     }
 }
@@ -2222,119 +2266,111 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                                           Domain::DocumentObjectType::World, _name, _content);
             });
     //
-    auto setDocumentVisible = [this](BusinessLayer::AbstractModel* _screenplayModel,
-                                     Domain::DocumentObjectType _type, bool _visible) {
-        auto screenplayItem
-            = d->projectStructureModel->itemForUuid(_screenplayModel->document()->uuid());
-        for (int childIndex = 0; childIndex < screenplayItem->childCount(); ++childIndex) {
-            auto childItem = screenplayItem->childAt(childIndex);
-            if (childItem->type() == _type) {
-                d->projectStructureModel->setItemVisible(childItem, _visible);
-                break;
-            }
-        }
-    };
     connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTitlePageVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplayTitlePage,
-                                   _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplayTitlePage,
+                                      _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::screenplaySynopsisVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplaySynopsis,
-                                   _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplaySynopsis,
+                                      _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTreatmentVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplayTreatment,
-                                   _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplayTreatment,
+                                      _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTextVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplayText, _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplayText, _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::screenplayStatisticsVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplayStatistics,
-                                   _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplayStatistics,
+                                      _visible);
             });
     //
     connect(&d->modelsFacade, &ProjectModelsFacade::comicBookTitlePageVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::ComicBookTitlePage,
-                                   _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ComicBookTitlePage,
+                                      _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::comicBookSynopsisVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::ComicBookSynopsis, _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ComicBookSynopsis,
+                                      _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::comicBookTextVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::ComicBookText, _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ComicBookText, _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::comicBookStatisticsVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::ComicBookStatistics,
-                                   _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ComicBookStatistics,
+                                      _visible);
             });
     //
     connect(&d->modelsFacade, &ProjectModelsFacade::audioplayTitlePageVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::AudioplayTitlePage,
-                                   _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::AudioplayTitlePage,
+                                      _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::audioplaySynopsisVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::AudioplaySynopsis, _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::AudioplaySynopsis,
+                                      _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::audioplayTextVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::AudioplayText, _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::AudioplayText, _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::audioplayStatisticsVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::AudioplayStatistics,
-                                   _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::AudioplayStatistics,
+                                      _visible);
             });
     //
     connect(&d->modelsFacade, &ProjectModelsFacade::stageplayTitlePageVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::StageplayTitlePage,
-                                   _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::StageplayTitlePage,
+                                      _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::stageplaySynopsisVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::StageplaySynopsis, _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::StageplaySynopsis,
+                                      _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::stageplayTextVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::StageplayText, _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::StageplayText, _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::stageplayStatisticsVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::StageplayStatistics,
-                                   _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::StageplayStatistics,
+                                      _visible);
             });
     //
     connect(&d->modelsFacade, &ProjectModelsFacade::novelTitlePageVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::NovelTitlePage, _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::NovelTitlePage, _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::novelSynopsisVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::NovelSynopsis, _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::NovelSynopsis, _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::novelOutlineVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::NovelOutline, _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::NovelOutline, _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::novelTextVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::NovelText, _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::NovelText, _visible);
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::novelStatisticsVisibilityChanged, this,
-            [setDocumentVisible](BusinessLayer::AbstractModel* _model, bool _visible) {
-                setDocumentVisible(_model, Domain::DocumentObjectType::NovelStatistics, _visible);
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::NovelStatistics,
+                                      _visible);
             });
     //
     connect(&d->modelsFacade, &ProjectModelsFacade::emptyRecycleBinRequested, this,

@@ -340,6 +340,10 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(
                 modelFor(Domain::DocumentObjectType::Locations));
             screenplayModel->setLocationsModel(locationsModel);
+            //
+            // ... обновим словари рантайма
+            //
+            screenplayModel->updateRuntimeDictionariesIfNeeded();
 
             model = screenplayModel;
             break;
@@ -485,6 +489,10 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
                 modelFor(Domain::DocumentObjectType::Characters));
             comicBookModel->setCharactersModel(charactersModel);
+            //
+            // ... обновим словари рантайма
+            //
+            comicBookModel->updateRuntimeDictionariesIfNeeded();
 
             model = comicBookModel;
             break;
@@ -624,6 +632,10 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
                 modelFor(Domain::DocumentObjectType::Characters));
             audioplayModel->setCharactersModel(charactersModel);
+            //
+            // ... обновим словари рантайма
+            //
+            audioplayModel->updateRuntimeDictionariesIfNeeded();
 
             model = audioplayModel;
             break;
@@ -758,6 +770,10 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
                 modelFor(Domain::DocumentObjectType::Characters));
             stageplayModel->setCharactersModel(charactersModel);
+            //
+            // ... обновим словари рантайма
+            //
+            stageplayModel->updateRuntimeDictionariesIfNeeded();
 
             model = stageplayModel;
             break;

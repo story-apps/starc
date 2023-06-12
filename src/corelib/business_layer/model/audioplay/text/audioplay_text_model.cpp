@@ -244,6 +244,7 @@ void AudioplayTextModel::setCharactersModel(CharactersModel* _model)
     }
 
     d->charactersModel = _model;
+    d->needUpdateRuntimeDictionaries = true;
 
     connect(d->charactersModel, &CharactersModel::contentsChanged, this,
             [this] { d->needUpdateRuntimeDictionaries = true; });
@@ -497,39 +498,21 @@ void AudioplayTextModel::updateRuntimeDictionariesIfNeeded()
 
 void AudioplayTextModel::updateRuntimeDictionaries()
 {
-    const bool useCharactersFromText
-        = settingsValue(DataStorageLayer::kComponentsAudioplayEditorUseCharactersFromTextKey)
-              .toBool();
-
-    //
-    // Если нет необходимости собирать персонажей из текста
-    //
-    if (!useCharactersFromText) {
-        //
-        // ... удалим старый список, если он был создан
-        //
-        if (d->charactersModelFromText != nullptr) {
-            d->charactersModelFromText->deleteLater();
-            d->charactersModelFromText = nullptr;
-        }
-        //
-        // ... и далее ничего не делаем
-        //
-        return;
-    }
+    const bool useMainItems
+        = settingsValue(DataStorageLayer::kComponentsAudioplayEditorUseMainItemsKey).toBool();
 
     //
     // В противном случае, собираем персонажей из текста
     //
     QSet<QString> characters;
-    std::function<void(const TextModelItem*)> findCharactersInText;
-    findCharactersInText = [&findCharactersInText, &characters](const TextModelItem* _item) {
+    std::function<void(const TextModelItem*)> findInText;
+    findInText = [&findInText, &characters](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
             case TextModelItemType::Folder:
             case TextModelItemType::Group: {
-                findCharactersInText(childItem);
+                findInText(childItem);
                 break;
             }
 
@@ -555,16 +538,17 @@ void AudioplayTextModel::updateRuntimeDictionaries()
             }
         }
     };
-    findCharactersInText(d->rootItem());
+    findInText(d->rootItem());
     characters.remove({});
     //
     // ... не забываем приаттачить всех персонажей, у кого определена роль в истории
     //
     for (int row = 0; row < d->charactersModel->rowCount(); ++row) {
         const auto character = d->charactersModel->character(row);
-        if (character->storyRole() != CharacterStoryRole::Undefined) {
-            characters.insert(character->name());
+        if (useMainItems && character->storyRole() == CharacterStoryRole::Undefined) {
+            continue;
         }
+        characters.insert(character->name());
     }
     //
     // ... создаём (при необходимости) и наполняем модель
