@@ -198,8 +198,16 @@ const QString kComponentsScreenplayEditorContinueDialogueKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/continue-dialogue");
 const QString kComponentsScreenplayEditorCorrectTextOnPageBreaksKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/correct-text-on-page-breaks");
-const QString kComponentsScreenplayEditorUseMainItemsKey
-    = kComponentsScreenplayEditorKey + QStringLiteral("/use-characters-from-text");
+const QString kComponentsScreenplayEditorSaveItemsFromTextKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/save-items-from-text");
+const QString kComponentsScreenplayEditorShowHintsForAllItemsKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/show-hints-for-all-items");
+const QString kComponentsScreenplayEditorShowHintsForPrimaryItemsKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/show-hints-for-primary-items");
+const QString kComponentsScreenplayEditorShowHintsForSecondaryItemsKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/show-hints-for-secondary-items");
+const QString kComponentsScreenplayEditorShowHintsForTertiaryItemsKey
+    = kComponentsScreenplayEditorKey + QStringLiteral("/show-hints-for-tertiary-items");
 const QString kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey
     = kComponentsScreenplayEditorKey + QStringLiteral("/show-characters-hints-in-empty-blocks");
 const QString kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey

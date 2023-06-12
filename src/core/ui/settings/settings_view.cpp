@@ -286,7 +286,11 @@ public:
     CheckBox* screenplayEditorShowDialogueNumber = nullptr;
     CheckBox* screenplayEditorContinueDialogue = nullptr;
     CheckBox* screenplayEditorCorrectTextOnPageBreaks = nullptr;
-    CheckBox* screenplayEditorUseCharactersFromText = nullptr;
+    CheckBox* screenplayEditorSaveItemsFromText = nullptr;
+    CheckBox* screenplayEditorShowHintsForAllItems = nullptr;
+    CheckBox* screenplayEditorShowHintsForPrimaryItems = nullptr;
+    CheckBox* screenplayEditorShowHintsForSecondaryItems = nullptr;
+    CheckBox* screenplayEditorShowHintsForTertiaryItems = nullptr;
     CheckBox* screenplayEditorShowCharacterSuggestionsInEmptyBlock = nullptr;
     CheckBox* screenplayEditorUseOpenBracketInDialogueForParenthetical = nullptr;
     //
@@ -538,7 +542,11 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , screenplayEditorShowDialogueNumber(new CheckBox(screenplayCard))
     , screenplayEditorContinueDialogue(new CheckBox(screenplayCard))
     , screenplayEditorCorrectTextOnPageBreaks(new CheckBox(screenplayCard))
-    , screenplayEditorUseCharactersFromText(new CheckBox(screenplayCard))
+    , screenplayEditorSaveItemsFromText(new CheckBox(screenplayCard))
+    , screenplayEditorShowHintsForAllItems(new CheckBox(screenplayCard))
+    , screenplayEditorShowHintsForPrimaryItems(new CheckBox(screenplayCard))
+    , screenplayEditorShowHintsForSecondaryItems(new CheckBox(screenplayCard))
+    , screenplayEditorShowHintsForTertiaryItems(new CheckBox(screenplayCard))
     , screenplayEditorShowCharacterSuggestionsInEmptyBlock(new CheckBox(screenplayCard))
     , screenplayEditorUseOpenBracketInDialogueForParenthetical(new CheckBox(screenplayCard))
     , screenplayNavigatorTitle(new H6Label(screenplayCard))
@@ -972,7 +980,16 @@ void SettingsView::Implementation::initScreenplayCard()
     screenplayCardLayout->addWidget(screenplayEditorShowDialogueNumber, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorContinueDialogue, itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorCorrectTextOnPageBreaks, itemIndex++, 0);
-    screenplayCardLayout->addWidget(screenplayEditorUseCharactersFromText, itemIndex++, 0);
+    screenplayCardLayout->addWidget(screenplayEditorSaveItemsFromText, itemIndex++, 0);
+    {
+        auto layout = makeLayout();
+        layout->addWidget(screenplayEditorShowHintsForAllItems);
+        layout->addWidget(screenplayEditorShowHintsForPrimaryItems);
+        layout->addWidget(screenplayEditorShowHintsForSecondaryItems);
+        layout->addWidget(screenplayEditorShowHintsForTertiaryItems);
+        layout->addStretch();
+        screenplayCardLayout->addLayout(layout, itemIndex++, 0);
+    }
     screenplayCardLayout->addWidget(screenplayEditorShowCharacterSuggestionsInEmptyBlock,
                                     itemIndex++, 0);
     screenplayCardLayout->addWidget(screenplayEditorUseOpenBracketInDialogueForParenthetical,
@@ -1639,7 +1656,11 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->screenplayEditorShowDialogueNumber,
                  d->screenplayEditorContinueDialogue,
                  d->screenplayEditorCorrectTextOnPageBreaks,
-                 d->screenplayEditorUseCharactersFromText,
+                 d->screenplayEditorSaveItemsFromText,
+                 d->screenplayEditorShowHintsForAllItems,
+                 d->screenplayEditorShowHintsForPrimaryItems,
+                 d->screenplayEditorShowHintsForSecondaryItems,
+                 d->screenplayEditorShowHintsForTertiaryItems,
                  d->screenplayEditorShowCharacterSuggestionsInEmptyBlock,
                  d->screenplayEditorUseOpenBracketInDialogueForParenthetical,
                  d->screenplayNavigatorTitle,
@@ -1755,6 +1776,25 @@ SettingsView::SettingsView(QWidget* _parent)
             screenplayEditorCorrectShownSceneNumber);
     connect(d->screenplayEditorShowSceneNumberOnRight, &CheckBox::checkedChanged, this,
             screenplayEditorCorrectShownSceneNumber);
+    connect(d->screenplayEditorShowHintsForAllItems, &CheckBox::checkedChanged, this,
+            [this](bool _checked) {
+                if (_checked) {
+                    d->screenplayEditorShowHintsForPrimaryItems->setChecked(false);
+                    d->screenplayEditorShowHintsForSecondaryItems->setChecked(false);
+                    d->screenplayEditorShowHintsForTertiaryItems->setChecked(false);
+                }
+            });
+    auto screenplayEditorCorrectShowHintsForAllItems = [this](bool _checked) {
+        if (_checked) {
+            d->screenplayEditorShowHintsForAllItems->setChecked(false);
+        }
+    };
+    connect(d->screenplayEditorShowHintsForPrimaryItems, &CheckBox::checkedChanged, this,
+            screenplayEditorCorrectShowHintsForAllItems);
+    connect(d->screenplayEditorShowHintsForSecondaryItems, &CheckBox::checkedChanged, this,
+            screenplayEditorCorrectShowHintsForAllItems);
+    connect(d->screenplayEditorShowHintsForTertiaryItems, &CheckBox::checkedChanged, this,
+            screenplayEditorCorrectShowHintsForAllItems);
     //
     connect(d->screenplayEditorDefaultTemplate, &ComboBox::currentIndexChanged, this,
             [this](const QModelIndex& _index) {
@@ -1779,8 +1819,23 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::screenplayEditorContinueDialogueChanged);
     connect(d->screenplayEditorCorrectTextOnPageBreaks, &CheckBox::checkedChanged, this,
             &SettingsView::screenplayEditorCorrectTextOnPageBreaksChanged);
-    connect(d->screenplayEditorUseCharactersFromText, &CheckBox::checkedChanged, this,
-            &SettingsView::screenplayEditorUseCharactersFromTextChanged);
+    connect(d->screenplayEditorSaveItemsFromText, &CheckBox::checkedChanged, this,
+            &SettingsView::screenplayEditorSaveItemsFromTextChanged);
+    auto notifyScreenplayEditorShowHintsChanged = [this] {
+        emit screenplayEditorShowHintsChanged(
+            d->screenplayEditorShowHintsForAllItems->isChecked(),
+            d->screenplayEditorShowHintsForPrimaryItems->isChecked(),
+            d->screenplayEditorShowHintsForSecondaryItems->isChecked(),
+            d->screenplayEditorShowHintsForTertiaryItems->isChecked());
+    };
+    connect(d->screenplayEditorShowHintsForAllItems, &CheckBox::checkedChanged, this,
+            notifyScreenplayEditorShowHintsChanged);
+    connect(d->screenplayEditorShowHintsForPrimaryItems, &CheckBox::checkedChanged, this,
+            notifyScreenplayEditorShowHintsChanged);
+    connect(d->screenplayEditorShowHintsForSecondaryItems, &CheckBox::checkedChanged, this,
+            notifyScreenplayEditorShowHintsChanged);
+    connect(d->screenplayEditorShowHintsForTertiaryItems, &CheckBox::checkedChanged, this,
+            notifyScreenplayEditorShowHintsChanged);
     connect(d->screenplayEditorShowCharacterSuggestionsInEmptyBlock, &CheckBox::checkedChanged,
             this, &SettingsView::screenplayEditorShowCharacterSuggestionsInEmptyBlockChanged);
     connect(d->screenplayEditorUseOpenBracketInDialogueForParenthetical, &CheckBox::checkedChanged,
@@ -2821,9 +2876,18 @@ void SettingsView::setScreenplayEditorCorrectTextOnPageBreaks(bool _correct)
     d->screenplayEditorCorrectTextOnPageBreaks->setChecked(_correct);
 }
 
-void SettingsView::setScreenplayEditorUseCharactersFromText(bool _use)
+void SettingsView::setScreenplayEditorSaveItemsFromText(bool _save)
 {
-    d->screenplayEditorUseCharactersFromText->setChecked(_use);
+    d->screenplayEditorSaveItemsFromText->setChecked(_save);
+}
+
+void SettingsView::setScreenplayEditorShowHints(bool _all, bool _primary, bool _secondary,
+                                                bool _tertiary)
+{
+    d->screenplayEditorShowHintsForAllItems->setChecked(_all);
+    d->screenplayEditorShowHintsForPrimaryItems->setChecked(_primary);
+    d->screenplayEditorShowHintsForSecondaryItems->setChecked(_secondary);
+    d->screenplayEditorShowHintsForTertiaryItems->setChecked(_tertiary);
 }
 
 void SettingsView::setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show)
@@ -3381,8 +3445,12 @@ void SettingsView::updateTranslations()
         tr("Add a continuation (CONT'D) to dialogues separated by an action"));
     d->screenplayEditorCorrectTextOnPageBreaks->setText(
         tr("Automatically correct screenplay text on page breaks"));
-    d->screenplayEditorUseCharactersFromText->setText(
-        tr("Show hints for major & related to a current story characters and locations only"));
+    d->screenplayEditorSaveItemsFromText->setText(tr("Save characters & locations on typing"));
+    d->screenplayEditorShowHintsForAllItems->setText(
+        tr("Show hints for all characters and locations, or only for"));
+    d->screenplayEditorShowHintsForPrimaryItems->setText(tr("primary"));
+    d->screenplayEditorShowHintsForSecondaryItems->setText(tr("secondary"));
+    d->screenplayEditorShowHintsForTertiaryItems->setText(tr("tertiary"));
     d->screenplayEditorShowCharacterSuggestionsInEmptyBlock->setText(
         tr("Show characters suggestions in empty paragraph"));
     d->screenplayEditorUseOpenBracketInDialogueForParenthetical->setText(
@@ -3669,7 +3737,11 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->screenplayEditorShowDialogueNumber,
              d->screenplayEditorContinueDialogue,
              d->screenplayEditorCorrectTextOnPageBreaks,
-             d->screenplayEditorUseCharactersFromText,
+             d->screenplayEditorSaveItemsFromText,
+             d->screenplayEditorShowHintsForAllItems,
+             d->screenplayEditorShowHintsForPrimaryItems,
+             d->screenplayEditorShowHintsForSecondaryItems,
+             d->screenplayEditorShowHintsForTertiaryItems,
              d->screenplayEditorShowCharacterSuggestionsInEmptyBlock,
              d->screenplayEditorUseOpenBracketInDialogueForParenthetical,
              d->screenplayNavigatorShowBeats,

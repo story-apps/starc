@@ -525,7 +525,11 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsScreenplayEditorShowSceneNumbersOnRightKey, true);
         defaultValues.insert(kComponentsScreenplayEditorContinueDialogueKey, true);
         defaultValues.insert(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey, true);
-        defaultValues.insert(kComponentsScreenplayEditorUseMainItemsKey, true);
+        defaultValues.insert(kComponentsScreenplayEditorSaveItemsFromTextKey, true);
+        defaultValues.insert(kComponentsScreenplayEditorShowHintsForAllItemsKey, false);
+        defaultValues.insert(kComponentsScreenplayEditorShowHintsForPrimaryItemsKey, true);
+        defaultValues.insert(kComponentsScreenplayEditorShowHintsForSecondaryItemsKey, true);
+        defaultValues.insert(kComponentsScreenplayEditorShowHintsForTertiaryItemsKey, false);
         defaultValues.insert(kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey,
                              true);
         defaultValues.insert(kComponentsScreenplayEditorUseOpenBracketInDialogueForParentheticalKey,

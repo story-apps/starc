@@ -82,7 +82,8 @@ public:
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorContinueDialogue(bool _continue);
     void setScreenplayEditorCorrectTextOnPageBreaks(bool _correct);
-    void setScreenplayEditorUseCharactersFromText(bool _use);
+    void setScreenplayEditorSaveItemsFromText(bool _save);
+    void setScreenplayEditorShowHints(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     void setScreenplayEditorUseOpenBracketInDialogueForParenthetical(bool _use);
     //
@@ -204,7 +205,8 @@ signals:
     void screenplayEditorShowDialogueNumberChanged(bool _show);
     void screenplayEditorContinueDialogueChanged(bool _continue);
     void screenplayEditorCorrectTextOnPageBreaksChanged(bool _correct);
-    void screenplayEditorUseCharactersFromTextChanged(bool _use);
+    void screenplayEditorSaveItemsFromTextChanged(bool _save);
+    void screenplayEditorShowHintsChanged(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void screenplayEditorShowCharacterSuggestionsInEmptyBlockChanged(bool _show);
     void screenplayEditorUseOpenBracketInDialogueForParentheticalChanged(bool _use);
     //

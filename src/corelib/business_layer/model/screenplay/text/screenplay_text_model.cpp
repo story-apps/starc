@@ -832,8 +832,18 @@ void ScreenplayTextModel::updateRuntimeDictionariesIfNeeded()
 
 void ScreenplayTextModel::updateRuntimeDictionaries()
 {
-    const bool useMainItems
-        = settingsValue(DataStorageLayer::kComponentsScreenplayEditorUseMainItemsKey).toBool();
+    const bool showHintsForAllItems
+        = settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowHintsForAllItemsKey)
+              .toBool();
+    const bool showHintsForPrimaryItems
+        = settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowHintsForPrimaryItemsKey)
+              .toBool();
+    const bool showHintsForSecondaryItems
+        = settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowHintsForSecondaryItemsKey)
+              .toBool();
+    const bool showHintsForTertiaryItems
+        = settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowHintsForTertiaryItemsKey)
+              .toBool();
 
     //
     // Формируем списки персонажей и локаций
@@ -899,10 +909,31 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
         const auto character = d->charactersModel->character(row);
 
         //
-        // ... если нужно показывать только ключевых персонажей, исключаем тех у кого роль не задана
+        // ... фильтруем по ролям, если необходимо
         //
-        if (useMainItems && character->storyRole() == CharacterStoryRole::Undefined) {
-            continue;
+        if (!showHintsForAllItems) {
+            bool skipCharacter = true;
+            switch (character->storyRole()) {
+            case CharacterStoryRole::Primary: {
+                skipCharacter = !showHintsForPrimaryItems;
+                break;
+            }
+            case CharacterStoryRole::Secondary: {
+                skipCharacter = !showHintsForSecondaryItems;
+                break;
+            }
+            case CharacterStoryRole::Tertiary: {
+                skipCharacter = !showHintsForTertiaryItems;
+                break;
+            }
+            default: {
+                break;
+            }
+            }
+
+            if (skipCharacter) {
+                continue;
+            }
         }
 
         characters.insert(character->name());
@@ -922,10 +953,31 @@ void ScreenplayTextModel::updateRuntimeDictionaries()
         const auto location = d->locationsModel->location(row);
 
         //
-        // ... если нужно показывать только ключевые локации, исключаем те у кого роль не задана
+        // ... фильтруем по ролям, если необходимо
         //
-        if (useMainItems && location->storyRole() == LocationStoryRole::Undefined) {
-            continue;
+        if (!showHintsForAllItems) {
+            bool skipLocation = true;
+            switch (location->storyRole()) {
+            case LocationStoryRole::Primary: {
+                skipLocation = !showHintsForPrimaryItems;
+                break;
+            }
+            case LocationStoryRole::Secondary: {
+                skipLocation = !showHintsForSecondaryItems;
+                break;
+            }
+            case LocationStoryRole::Tertiary: {
+                skipLocation = !showHintsForTertiaryItems;
+                break;
+            }
+            default: {
+                break;
+            }
+            }
+
+            if (skipLocation) {
+                continue;
+            }
         }
 
         locations.insert(location->name());

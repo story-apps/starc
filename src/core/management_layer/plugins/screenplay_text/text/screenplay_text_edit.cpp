@@ -19,6 +19,8 @@
 #include <business_layer/model/text/text_model_group_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 #include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
@@ -338,6 +340,12 @@ QAbstractItemModel* ScreenplayTextEdit::characters() const
 
 void ScreenplayTextEdit::createCharacter(const QString& _name)
 {
+    if (const bool saveItemsFromText
+        = settingsValue(DataStorageLayer::kComponentsScreenplayEditorSaveItemsFromTextKey).toBool();
+        !saveItemsFromText) {
+        return;
+    }
+
     if (d->model == nullptr) {
         return;
     }
@@ -356,6 +364,12 @@ QAbstractItemModel* ScreenplayTextEdit::locations() const
 
 void ScreenplayTextEdit::createLocation(const QString& _name)
 {
+    if (const bool saveItemsFromText
+        = settingsValue(DataStorageLayer::kComponentsScreenplayEditorSaveItemsFromTextKey).toBool();
+        !saveItemsFromText) {
+        return;
+    }
+
     if (d->model == nullptr) {
         return;
     }

@@ -141,7 +141,8 @@ private:
     void setScreenplayEditorShowDialogueNumber(bool _show);
     void setScreenplayEditorContinueDialogue(bool _continue);
     void setScreenplayEditorCorrectTextOnPageBreaks(bool _correct);
-    void setScreenplayEditorUseCharactersFromText(bool _use);
+    void setScreenplayEditorSaveItemsFromText(bool _use);
+    void setScreenplayEditorShowHints(bool _all, bool _primary, bool _secondary, bool _tertiary);
     void setScreenplayEditorShowCharacterSuggestionsInEmptyBlock(bool _show);
     void setScreenplayEditorUseOpenBracketInDialogueForParenthetical(bool _use);
     //
