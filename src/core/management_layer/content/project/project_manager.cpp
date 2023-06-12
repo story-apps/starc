@@ -744,7 +744,7 @@ void ProjectManager::Implementation::addDocumentToContainer(
             //
             // Документ будет вставлен в контейнер, только если контейнер доступен для изменения
             //
-            const bool isCanBeStored = isProjectOwner
+            const bool isCanBeStored = isProjectOwner || editingMode == DocumentEditingMode::Edit
                 || editingPermissions.value(item->uuid(), DocumentEditingMode::Read)
                     == DocumentEditingMode::Edit;
             if (isCanBeStored) {
