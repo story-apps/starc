@@ -1212,7 +1212,6 @@ void SettingsStorage::setValue(const QString& _key, const QVariant& _value,
     //
     if (_settingsPlace == SettingsPlace::Application) {
         d->appSettings.setValue(_key.toUtf8().toHex(), _value);
-        d->appSettings.sync();
     } else {
         MapperFacade::settingsMapper()->setValue(_key, _value.toString());
     }
