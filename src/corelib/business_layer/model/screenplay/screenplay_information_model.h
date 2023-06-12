@@ -102,6 +102,20 @@ public:
     void setShowDialoguesNumbers(bool _show);
     Q_SIGNAL void showDialoguesNumbersChanged(bool _show);
 
+    /**
+     * @brief Список персонажей отсортированных в порядке важном для разбивки этого сценария
+     */
+    QVector<QString> charactersOrder() const;
+    void setCharactersOrder(const QVector<QString>& _characters);
+    Q_SIGNAL void charactersOrderChanged(const QVector<QString>& _characters);
+
+    /**
+     * @brief Список локаций отсортированных в порядке важном для разбивки этого сценария
+     */
+    QVector<QString> locationsOrder() const;
+    void setLocationsOrder(const QVector<QString>& _locations);
+    Q_SIGNAL void locationsOrderChanged(const QVector<QString>& _locations);
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

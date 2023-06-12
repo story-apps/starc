@@ -41,6 +41,8 @@ const QLatin1String kShowSceneNumbersKey("show_scenes_numbers");
 const QLatin1String kShowSceneNumbersOnLeftKey("show_scenes_numbers_on_left");
 const QLatin1String kShowScenesNumbersOnRightKey("show_scenes_numbers_on_right");
 const QLatin1String kShowDialoguesNumbersKey("show_dialogues_numbers");
+const QLatin1String kCharactersOrderKey("characters_order");
+const QLatin1String kLocationsOrderKey("locations_order");
 } // namespace
 
 class ScreenplayInformationModel::Implementation
@@ -54,6 +56,7 @@ public:
     bool treatmentVisible = true;
     bool screenplayTextVisible = true;
     bool screenplayStatisticsVisible = true;
+
     QString header;
     bool printHeaderOnTitlePage = false;
     QString footer;
@@ -67,6 +70,9 @@ public:
     bool showSceneNumbersOnLeft = false;
     bool showSceneNumbersOnRight = false;
     bool showDialoguesNumbers = false;
+
+    QVector<QString> charactersOrder;
+    QVector<QString> locationsOrder;
 };
 
 
@@ -98,6 +104,8 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
             kShowSceneNumbersOnLeftKey,
             kShowScenesNumbersOnRightKey,
             kShowDialoguesNumbersKey,
+            kCharactersOrderKey,
+            kLocationsOrderKey,
         },
         _parent)
     , d(new Implementation)
@@ -143,6 +151,10 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
     connect(this, &ScreenplayInformationModel::showSceneNumbersOnRightChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::showDialoguesNumbersChanged, this,
+            &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::charactersOrderChanged, this,
+            &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::locationsOrderChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
 }
 
@@ -513,6 +525,36 @@ void ScreenplayInformationModel::setShowDialoguesNumbers(bool _show)
     emit showDialoguesNumbersChanged(d->showDialoguesNumbers);
 }
 
+QVector<QString> ScreenplayInformationModel::charactersOrder() const
+{
+    return d->charactersOrder;
+}
+
+void ScreenplayInformationModel::setCharactersOrder(const QVector<QString>& _characters)
+{
+    if (d->charactersOrder == _characters) {
+        return;
+    }
+
+    d->charactersOrder = _characters;
+    emit charactersOrderChanged(d->charactersOrder);
+}
+
+QVector<QString> ScreenplayInformationModel::locationsOrder() const
+{
+    return d->locationsOrder;
+}
+
+void ScreenplayInformationModel::setLocationsOrder(const QVector<QString>& _locations)
+{
+    if (d->locationsOrder == _locations) {
+        return;
+    }
+
+    d->locationsOrder = _locations;
+    emit locationsOrderChanged(d->locationsOrder);
+}
+
 void ScreenplayInformationModel::initDocument()
 {
     if (document() == nullptr) {
@@ -568,6 +610,10 @@ void ScreenplayInformationModel::initDocument()
         = documentNode.firstChildElement(kShowScenesNumbersOnRightKey).text() == "true";
     d->showDialoguesNumbers
         = documentNode.firstChildElement(kShowDialoguesNumbersKey).text() == "true";
+    d->charactersOrder
+        = documentNode.firstChildElement(kCharactersOrderKey).text().split(",").toVector();
+    d->locationsOrder
+        = documentNode.firstChildElement(kLocationsOrderKey).text().split(",").toVector();
 }
 
 void ScreenplayInformationModel::clearDocument()
@@ -612,6 +658,8 @@ QByteArray ScreenplayInformationModel::toXml() const
     writeBoolTag(kShowSceneNumbersOnLeftKey, d->showSceneNumbersOnLeft);
     writeBoolTag(kShowScenesNumbersOnRightKey, d->showSceneNumbersOnRight);
     writeBoolTag(kShowDialoguesNumbersKey, d->showDialoguesNumbers);
+    writeTag(kCharactersOrderKey, d->charactersOrder.toList().join(','));
+    writeTag(kLocationsOrderKey, d->locationsOrder.toList().join(','));
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }
@@ -651,6 +699,14 @@ ChangeCursor ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
             _setter(node.text().toInt());
         }
     };
+    auto setVector
+        = [&documentNode](const QString& _key, std::function<void(const QVector<QString>&)> _setter,
+                          char _separator) {
+              const auto node = documentNode.firstChildElement(_key);
+              if (!node.isNull()) {
+                  _setter(node.text().split(_separator).toVector());
+              }
+          };
     using M = ScreenplayInformationModel;
     const auto _1 = std::placeholders::_1;
     setText(kNameKey, std::bind(&M::setName, this, _1));
@@ -675,6 +731,8 @@ ChangeCursor ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
     setBool(kShowSceneNumbersOnLeftKey, std::bind(&M::setShowSceneNumbersOnLeft, this, _1));
     setBool(kShowScenesNumbersOnRightKey, std::bind(&M::setShowSceneNumbersOnRight, this, _1));
     setBool(kShowDialoguesNumbersKey, std::bind(&M::setShowDialoguesNumbers, this, _1));
+    setVector(kCharactersOrderKey, std::bind(&M::setCharactersOrder, this, _1), ',');
+    setVector(kLocationsOrderKey, std::bind(&M::setLocationsOrder, this, _1), ',');
 
     return {};
 }

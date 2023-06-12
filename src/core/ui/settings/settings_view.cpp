@@ -3202,9 +3202,9 @@ void SettingsView::setComicBookEditorSaveItemsFromText(bool _save)
 }
 
 void SettingsView::setComicBookEditorShowHints(bool _all, bool _primary, bool _secondary,
-                                              bool _tertiary)
+                                               bool _tertiary)
 {
-     d->comicBookEditorShowHintsForAllItems->setChecked(_all);
+    d->comicBookEditorShowHintsForAllItems->setChecked(_all);
     d->comicBookEditorShowHintsForPrimaryItems->setChecked(_primary);
     d->comicBookEditorShowHintsForSecondaryItems->setChecked(_secondary);
     d->comicBookEditorShowHintsForTertiaryItems->setChecked(_tertiary);
