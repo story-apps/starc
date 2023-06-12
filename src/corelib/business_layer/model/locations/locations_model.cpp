@@ -173,8 +173,9 @@ LocationModel* LocationsModel::location(const QUuid& _uuid) const
 
 LocationModel* LocationsModel::location(const QString& _name) const
 {
+    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
     for (const auto location : std::as_const(d->locationModels)) {
-        if (location->name() == _name) {
+        if (location->name() == nameCorrected) {
             return location;
         }
     }
@@ -194,8 +195,9 @@ LocationModel* LocationsModel::location(int _row) const
 QVector<LocationModel*> LocationsModel::locations(const QString& _name) const
 {
     QVector<LocationModel*> locations;
+    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
     for (const auto location : std::as_const(d->locationModels)) {
-        if (location->name() == _name) {
+        if (location->name() == nameCorrected) {
             locations.append(location);
         }
     }
