@@ -424,6 +424,13 @@ void AccountView::setAccountInfo(const Domain::AccountInfo& _account)
         break;
     }
 
+    case Domain::SubscriptionType::Studio: {
+        d->subscriptionTitle->setText(tr("STUDIO version"));
+        d->subscriptionEnds = subscription.end;
+        d->updateSubscriptionEndsLabel();
+        break;
+    }
+
     default: {
         break;
     }

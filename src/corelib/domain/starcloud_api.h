@@ -38,7 +38,7 @@ enum class SubscriptionType {
     ProLifetime = 1100,
     TeamMonthly = 2000,
     TeamLifetime = 2100,
-    Corporate = 10000,
+    Studio = 10000,
 
     //
     // Подписки на конкретные модули (для коммерческих клиентов и для внутреннего использования)

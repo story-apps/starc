@@ -31,6 +31,7 @@ public:
      */
     void updateProSubtitleLabel();
     void updateTeamSubtitleLabel();
+    void updateStudioSubtitleLabel();
     void updateCreditsSubtitleLabel();
 
 
@@ -38,6 +39,7 @@ public:
     quint64 cloudStorageSizeUsed = 0;
     QDateTime proSubscriptionEnds;
     QDateTime teamSubscriptionEnds;
+    QDateTime studioSubscriptionEnds;
     int creditsAvailable = 0;
 
     Tree* tree = nullptr;
@@ -59,6 +61,12 @@ public:
     Subtitle2Label* teamSubtitle = nullptr;
     Button* tryTeamButton = nullptr;
     Button* renewTeamSubscriptionButton = nullptr;
+
+    IconsMidLabel* studioTitleIcon = nullptr;
+    ButtonLabel* studioTitle = nullptr;
+    ProgressBar* studioSpaceStats = nullptr;
+    Subtitle2Label* studioSpaceInfo = nullptr;
+    Subtitle2Label* studioSubtitle = nullptr;
 
     IconsMidLabel* creditsTitleIcon = nullptr;
     ButtonLabel* creditsTitle = nullptr;
@@ -90,6 +98,12 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     , tryTeamButton(new Button(_parent))
     , renewTeamSubscriptionButton(new Button(_parent))
     //
+    , studioTitleIcon(new IconsMidLabel(_parent))
+    , studioTitle(new ButtonLabel(_parent))
+    , studioSpaceStats(new ProgressBar(_parent))
+    , studioSpaceInfo(new Subtitle2Label(_parent))
+    , studioSubtitle(new Subtitle2Label(_parent))
+    //
     , creditsTitleIcon(new IconsMidLabel(_parent))
     , creditsTitle(new ButtonLabel(_parent))
     , creditsSubtitle(new Subtitle2Label(_parent))
@@ -113,6 +127,7 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
 
     proTitleIcon->setIcon(u8"\U000F18BC");
     teamTitleIcon->setIcon(u8"\U000F015F");
+    studioTitleIcon->setIcon(u8"\U000F0381");
     creditsTitleIcon->setIcon(u8"\U000F133C");
 
     logoutButton->setIcon(u8"\U000F0343");
@@ -140,6 +155,22 @@ void AccountNavigator::Implementation::updateTeamSubtitleLabel()
         teamSubscriptionEnds.isNull()
             ? tr("Lifetime access")
             : tr("Active until %1").arg(teamSubscriptionEnds.toString("dd.MM.yyyy")));
+}
+
+void AccountNavigator::Implementation::updateStudioSubtitleLabel()
+{
+    if (cloudStorageSize > 0) {
+        studioSpaceStats->setProgress(cloudStorageSizeUsed / static_cast<qreal>(cloudStorageSize));
+        const qreal divider = 1024. * 1024. * 1024.;
+        studioSpaceInfo->setText(
+            tr("Used %1 GB from %2 GB")
+                .arg(QString::number(static_cast<qreal>(cloudStorageSizeUsed) / divider, 'f', 2),
+                     QString::number(static_cast<qreal>(cloudStorageSize) / divider, 'f', 2)));
+    }
+    studioSubtitle->setText(
+        studioSubscriptionEnds.isNull()
+            ? tr("Lifetime access")
+            : tr("Active until %1").arg(studioSubscriptionEnds.toString("dd.MM.yyyy")));
 }
 
 void AccountNavigator::Implementation::updateCreditsSubtitleLabel()
@@ -189,6 +220,18 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
     d->layout->addWidget(d->teamSubtitle, row++, 2);
     d->layout->addWidget(d->tryTeamButton, row++, 2);
     d->layout->addWidget(d->renewTeamSubscriptionButton, row++, 2);
+    //
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(d->studioTitleIcon);
+        layout->addWidget(d->studioTitle, 1);
+        d->layout->addLayout(layout, row++, 2);
+    }
+    d->layout->addWidget(d->studioSpaceStats, row++, 2);
+    d->layout->addWidget(d->studioSpaceInfo, row++, 2);
+    d->layout->addWidget(d->studioSubtitle, row++, 2);
     //
     {
         auto layout = new QHBoxLayout;
@@ -255,19 +298,28 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
     //
     d->freeTitle->show();
     d->freeSubtitle->show();
+    //
     d->proTitleIcon->show();
     d->proTitle->show();
-    //
     d->proSubtitle->hide();
     d->tryProButton->hide();
     d->upgradeToProLifetimeButton->hide();
     d->renewProSubscriptionButton->hide();
     //
+    d->teamTitleIcon->show();
+    d->teamTitle->show();
     d->teamSpaceStats->hide();
     d->teamSpaceInfo->hide();
     d->teamSubtitle->hide();
     d->tryTeamButton->hide();
     d->renewTeamSubscriptionButton->hide();
+    //
+    d->studioTitleIcon->hide();
+    d->studioTitle->hide();
+    d->studioSubtitle->hide();
+    d->studioSpaceStats->hide();
+    d->studioSpaceInfo->hide();
+    d->studioSubtitle->hide();
 
     //
     // А потом показываем, в зависимости от активных подписок и доступных опций
@@ -276,8 +328,7 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
     d->cloudStorageSizeUsed = _account.cloudStorageSizeUsed;
     for (const auto& subscription : _account.subscriptions) {
         switch (subscription.type) {
-        case Domain::SubscriptionType::Free:
-        case Domain::SubscriptionType::Corporate: {
+        case Domain::SubscriptionType::Free: {
             break;
         }
 
@@ -291,6 +342,7 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         case Domain::SubscriptionType::ProLifetime: {
             d->freeTitle->hide();
             d->freeSubtitle->hide();
+            //
             d->proSubscriptionEnds = {};
             d->updateProSubtitleLabel();
             d->proSubtitle->show();
@@ -311,11 +363,37 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
             d->freeSubtitle->hide();
             d->proTitleIcon->hide();
             d->proTitle->hide();
+            //
             d->teamSubscriptionEnds = {};
             d->updateTeamSubtitleLabel();
             d->teamSpaceStats->show();
             d->teamSpaceInfo->show();
             d->teamSubtitle->show();
+            break;
+        }
+
+        case Domain::SubscriptionType::Studio: {
+            d->freeTitle->hide();
+            d->freeSubtitle->hide();
+            d->proTitle->hide();
+            d->proSubtitle->hide();
+            d->proTitleIcon->hide();
+            d->proTitle->hide();
+            d->teamTitleIcon->hide();
+            d->teamTitle->hide();
+            d->teamSubtitle->hide();
+            d->teamSpaceStats->hide();
+            d->teamSpaceInfo->hide();
+            d->teamSubtitle->hide();
+            //
+            d->studioSubscriptionEnds = subscription.end;
+            d->updateStudioSubtitleLabel();
+            d->studioTitleIcon->show();
+            d->studioTitle->show();
+            d->studioSubtitle->show();
+            d->studioSpaceStats->show();
+            d->studioSpaceInfo->show();
+            d->studioSubtitle->show();
             break;
         }
         }
@@ -375,6 +453,8 @@ void AccountNavigator::updateTranslations()
     d->updateTeamSubtitleLabel();
     d->tryTeamButton->setText(tr("Try for free"));
     d->renewTeamSubscriptionButton->setText(tr("Renew"));
+    d->studioTitle->setText(tr("STUDIO version"));
+    d->updateStudioSubtitleLabel();
     d->creditsTitle->setText(tr("Credits for Ai tools"));
     d->buyCreditsButton->setText(tr("Buy credits"));
     d->logoutButton->setText(tr("Logout"));
@@ -395,6 +475,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto icon : {
              d->proTitleIcon,
              d->teamTitleIcon,
+             d->studioTitleIcon,
              d->creditsTitleIcon,
          }) {
         icon->setBackgroundColor(Ui::DesignSystem::color().primary());
@@ -409,6 +490,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->freeTitle,
              d->proTitle,
              d->teamTitle,
+             d->studioTitle,
              d->creditsTitle,
          }) {
         title->setBackgroundColor(Ui::DesignSystem::color().primary());
@@ -428,6 +510,8 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->proSubtitle,
              d->teamSpaceInfo,
              d->teamSubtitle,
+             d->studioSpaceInfo,
+             d->studioSubtitle,
              d->creditsSubtitle,
          }) {
         subtitle->setBackgroundColor(Ui::DesignSystem::color().primary());
@@ -451,6 +535,10 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->teamSpaceStats->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->teamSpaceStats->setContentsMargins(
+        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::compactLayout().px16(),
+        Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px4());
+    d->studioSpaceStats->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->studioSpaceStats->setContentsMargins(
         Ui::DesignSystem::layout().px16(), Ui::DesignSystem::compactLayout().px16(),
         Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px4());
 
