@@ -181,6 +181,11 @@ struct AccountInfo {
     int credits = 0;
     QVector<PaymentOption> paymentOptions;
     QVector<SessionInfo> sessions;
+
+    bool isValid() const
+    {
+        return !email.isEmpty();
+    }
 };
 
 /**
