@@ -65,6 +65,7 @@ SOURCES += \
     management_layer/plugins_builder.cpp \
     ui/about_application_dialog.cpp \
     ui/account/account_navigator.cpp \
+    ui/account/account_teams_view.cpp \
     ui/account/account_tool_bar.cpp \
     ui/account/account_view.cpp \
     ui/account/collaborators_tool_bar.cpp \
@@ -73,6 +74,7 @@ SOURCES += \
     ui/account/purchase_dialog.cpp \
     ui/account/purchase_dialog_option.cpp \
     ui/account/session_widget.cpp \
+    ui/account/team_dialog.cpp \
     ui/application_style.cpp \
     ui/application_view.cpp \
     ui/crash_report_dialog.cpp \
@@ -140,6 +142,7 @@ HEADERS += \
     management_layer/plugins_builder.h \
     ui/about_application_dialog.h \
     ui/account/account_navigator.h \
+    ui/account/account_teams_view.h \
     ui/account/account_tool_bar.h \
     ui/account/account_view.h \
     ui/account/collaborators_tool_bar.h \
@@ -148,6 +151,7 @@ HEADERS += \
     ui/account/purchase_dialog.h \
     ui/account/purchase_dialog_option.h \
     ui/account/session_widget.h \
+    ui/account/team_dialog.h \
     ui/application_style.h \
     ui/application_view.h \
     ui/crash_report_dialog.h \

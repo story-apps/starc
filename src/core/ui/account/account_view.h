@@ -1,10 +1,11 @@
 #pragma once
 
-#include <ui/widgets/widget/widget.h>
+#include <ui/widgets/stack_widget/stack_widget.h>
 
 namespace Domain {
 struct SessionInfo;
 struct AccountInfo;
+struct TeamInfo;
 } // namespace Domain
 
 
@@ -13,13 +14,23 @@ namespace Ui {
 /**
  * @brief Представление с данными личного кабинета
  */
-class AccountView : public Widget
+class AccountView : public StackWidget
 {
     Q_OBJECT
 
 public:
     explicit AccountView(QWidget* _parent = nullptr);
     ~AccountView() override;
+
+    /**
+     * @brief Показать страницу с параметрами аккаунта
+     */
+    void showAccountPage();
+
+    /**
+     * @brief Показать страницу с параметрами команд
+     */
+    void showTeamPage();
 
     //
     // По возможности сфокусировать на экране заданный виджет
@@ -78,6 +89,18 @@ public:
      */
     void setSessions(const QVector<Domain::SessionInfo>& _sessions);
 
+    //
+
+    /**
+     * @brief Задать список команд пользоватля
+     */
+    void setAccountTeams(const QVector<Domain::TeamInfo>& _teams);
+
+    /**
+     * @brief Выбрать заданную команду
+     */
+    void showTeam(int _teamId);
+
 signals:
     /**
      * @brief Пользователь изменил своё имя
@@ -114,9 +137,22 @@ signals:
     void activatePromocodePressed(const QString& _promocode);
 
     /**
-     * @brief ПОльзователь хочет завершить заданную сессию
+     * @brief Пользователь хочет завершить заданную сессию
      */
     void terminateSessionRequested(const QString& _sessionKey);
+
+    //
+
+    /**
+     * @brief Пользователь хочет добавить участника в коменду
+     */
+    void addMemberRequested(int _teamId, const QString& _email, const QString& _nameForTeam,
+                            const QColor& _color);
+
+    /**
+     * @brief Пользователь хочет отписать соавтора от проекта
+     */
+    void removeMemberRequested(int _teamId, const QString& _email);
 
 protected:
     /**

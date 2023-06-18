@@ -90,9 +90,9 @@ public:
     ImageLabel* accountAvatar = nullptr;
     Button* accountChangeAvatarButton = nullptr;
     TextField* accountName = nullptr;
-    Debouncer changeNameDebouncer{ 500 };
+    Debouncer accountChangeNameDebouncer{ 500 };
     TextField* accountDescription = nullptr;
-    Debouncer changeDescriptionDebouncer{ 500 };
+    Debouncer accountChangeDescriptionDebouncer{ 500 };
     CheckBox* accountSubscription = nullptr;
     Button* accountContinueButton = nullptr;
     Domain::AccountInfo accountInfo;
@@ -594,21 +594,22 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
 
         dlg->showDialog();
     });
-    connect(d->accountName, &TextField::textChanged, &d->changeNameDebouncer,
+    connect(d->accountName, &TextField::textChanged, &d->accountChangeNameDebouncer,
             &Debouncer::orderWork);
-    connect(&d->changeNameDebouncer, &Debouncer::gotWork, this, [this, notifyAccountChanged] {
-        if (d->accountName->text().isEmpty()) {
-            d->accountName->setError(tr("Username can't be empty, please fill it"));
-            return;
-        }
+    connect(&d->accountChangeNameDebouncer, &Debouncer::gotWork, this,
+            [this, notifyAccountChanged] {
+                if (d->accountName->text().isEmpty()) {
+                    d->accountName->setError(tr("Username can't be empty, please fill it"));
+                    return;
+                }
 
-        d->accountName->setError({});
-        d->accountInfo.name = d->accountName->text();
-        notifyAccountChanged();
-    });
-    connect(d->accountDescription, &TextField::textChanged, &d->changeDescriptionDebouncer,
+                d->accountName->setError({});
+                d->accountInfo.name = d->accountName->text();
+                notifyAccountChanged();
+            });
+    connect(d->accountDescription, &TextField::textChanged, &d->accountChangeDescriptionDebouncer,
             &Debouncer::orderWork);
-    connect(&d->changeDescriptionDebouncer, &Debouncer::gotWork, this,
+    connect(&d->accountChangeDescriptionDebouncer, &Debouncer::gotWork, this,
             [this, notifyAccountChanged] {
                 d->accountInfo.description = d->accountDescription->text();
                 notifyAccountChanged();
@@ -694,11 +695,15 @@ void OnboardingNavigator::setAccountInfo(const Domain::AccountInfo& _accountInfo
     d->accountInfo = _accountInfo;
 
     d->updateAccountAvatar();
-    auto signalBlocker = QSignalBlocker(d->accountName);
-    d->accountName->setText(d->accountInfo.name);
-    signalBlocker = QSignalBlocker(d->accountDescription);
-    d->accountDescription->setText(d->accountInfo.description);
-    signalBlocker = QSignalBlocker(d->accountSubscription);
+    if (!d->accountChangeNameDebouncer.hasPendingWork()) {
+        const auto signalBlocker = QSignalBlocker(d->accountName);
+        d->accountName->setText(d->accountInfo.name);
+    }
+    if (!d->accountChangeDescriptionDebouncer.hasPendingWork()) {
+        const auto signalBlocker = QSignalBlocker(d->accountDescription);
+        d->accountDescription->setText(d->accountInfo.description);
+    }
+    const auto signalBlocker = QSignalBlocker(d->accountSubscription);
     d->accountSubscription->setChecked(d->accountInfo.newsletterSubscribed);
 
     if (currentWidget() != d->accountPage) {

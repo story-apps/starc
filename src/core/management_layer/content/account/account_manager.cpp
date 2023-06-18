@@ -6,6 +6,7 @@
 #include <ui/account/account_view.h>
 #include <ui/account/login_dialog.h>
 #include <ui/account/purchase_dialog.h>
+#include <ui/account/team_dialog.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
@@ -19,7 +20,13 @@ namespace ManagementLayer {
 
 namespace {
 constexpr int kInvalidConfirmationCodeLength = -1;
+
+QByteArray avatarData(const QPixmap& _avatar)
+{
+    return ImageHelper::bytesFromImage(
+        _avatar.scaled(288, 288, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 }
+} // namespace
 
 class AccountManager::Implementation
 {
@@ -32,6 +39,7 @@ public:
     void initToolBarConnections();
     void initNavigatorConnections();
     void initViewConnections();
+    void initCrossConnections();
 
     /**
      * @brief Инициилизировать диалог авторизации
@@ -66,6 +74,11 @@ public:
      * @brief Таймер проверки окончания подписки (срабатывает в момент завершения подписки)
      */
     QTimer subscriptionEndsTimer;
+
+    /**
+     * @brief Команды пользователя
+     */
+    QVector<Domain::TeamInfo> accountTeams;
 };
 
 AccountManager::Implementation::Implementation(AccountManager* _q, QWidget* _parent)
@@ -82,6 +95,7 @@ AccountManager::Implementation::Implementation(AccountManager* _q, QWidget* _par
     initToolBarConnections();
     initNavigatorConnections();
     initViewConnections();
+    initCrossConnections();
 
     subscriptionEndsTimer.setSingleShot(true);
     connect(&subscriptionEndsTimer, &QTimer::timeout, q, &AccountManager::askAccountInfoRequested);
@@ -90,6 +104,14 @@ AccountManager::Implementation::Implementation(AccountManager* _q, QWidget* _par
 void AccountManager::Implementation::initToolBarConnections()
 {
     connect(toolBar, &Ui::AccountToolBar::backPressed, q, &AccountManager::closeAccountRequested);
+    connect(toolBar, &Ui::AccountToolBar::accountPressed, q, [this] {
+        navigator->showAccountPage();
+        view->showAccountPage();
+    });
+    connect(toolBar, &Ui::AccountToolBar::teamPressed, q, [this] {
+        navigator->showTeamPage();
+        view->showTeamPage();
+    });
 }
 
 void AccountManager::Implementation::initNavigatorConnections()
@@ -112,6 +134,119 @@ void AccountManager::Implementation::initNavigatorConnections()
     connect(navigator, &Ui::AccountNavigator::logoutPressed, q, [this] {
         q->clearAccountInfo();
         emit q->logoutRequested();
+    });
+    //
+    connect(navigator, &Ui::AccountNavigator::createTeamPressed, q, [this] {
+        auto dialog = new Ui::TeamDialog(view->topLevelWidget());
+        dialog->setDialogType(Ui::TeamDialog::DialogType::CreateNew);
+        connect(dialog, &Ui::TeamDialog::savePressed, view, [this, dialog] {
+            if (dialog->teamName().isEmpty()) {
+                dialog->setTeamNameError(tr("The team should have a name"));
+                return;
+            }
+
+            //
+            // Отправляем уведомление о создании новой команды
+            //
+            emit q->createTeamRequested(dialog->teamName(), dialog->teamDescription(),
+                                        avatarData(dialog->teamAvatar()));
+
+            dialog->hideDialog();
+        });
+        connect(dialog, &Ui::TeamDialog::disappeared, dialog, &Ui::TeamDialog::deleteLater);
+
+        //
+        // Отображаем диалог
+        //
+        dialog->showDialog();
+    });
+    connect(navigator, &Ui::AccountNavigator::editTeamPressed, q, [this](int _teamId) {
+        Domain::TeamInfo team;
+        for (const auto& accountTeam : std::as_const(accountTeams)) {
+            if (accountTeam.id == _teamId) {
+                team = accountTeam;
+                break;
+            }
+        }
+        if (!team.isValid()) {
+            return;
+        }
+
+        auto dialog = new Ui::TeamDialog(view->topLevelWidget());
+        dialog->setDialogType(Ui::TeamDialog::DialogType::Edit);
+        dialog->setTeamName(team.name);
+        dialog->setteamDescription(team.description);
+        dialog->setTeamAvatar(ImageHelper::imageFromBytes(team.avatar));
+        connect(dialog, &Ui::TeamDialog::savePressed, view, [this, team, dialog] {
+            if (dialog->teamName().isEmpty()) {
+                dialog->setTeamNameError(tr("The team should have a name"));
+                return;
+            }
+
+            //
+            // Отправляем уведомление об обновлении команды
+            //
+            emit q->updateTeamRequested(team.id, dialog->teamName(), dialog->teamDescription(),
+                                        avatarData(dialog->teamAvatar()));
+
+            dialog->hideDialog();
+        });
+        connect(dialog, &Ui::TeamDialog::disappeared, dialog, &Ui::TeamDialog::deleteLater);
+
+        //
+        // Отображаем диалог
+        //
+        dialog->showDialog();
+    });
+    connect(navigator, &Ui::AccountNavigator::removeTeamPressed, q, [this](int _teamId) {
+        auto dialog = new Dialog(view->topLevelWidget());
+        constexpr int cancelButtonId = 0;
+        constexpr int removeButtonId = 1;
+        dialog->showDialog({}, tr("Do you really want to remove this team?"),
+                           { { cancelButtonId, tr("No"), Dialog::RejectButton },
+                             { removeButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
+        connect(dialog, &Dialog::finished, q,
+                [this, _teamId, cancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                    dialog->hideDialog();
+
+                    //
+                    // Пользователь передумал выходить
+                    //
+                    if (_buttonInfo.id == cancelButtonId) {
+                        return;
+                    }
+                    //
+                    // Если таки хочет, то уведомляем, чтобы отписаться от
+                    // команды на сервере
+                    //
+                    emit q->removeTeamRequested(_teamId);
+                });
+        connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+    });
+    connect(navigator, &Ui::AccountNavigator::exitTeamPressed, q, [this](int _teamId) {
+        auto dialog = new Dialog(view->topLevelWidget());
+        constexpr int cancelButtonId = 0;
+        constexpr int exitButtonId = 1;
+        dialog->showDialog({}, tr("Do you really want to leave this team?"),
+                           { { cancelButtonId, tr("No"), Dialog::RejectButton },
+                             { exitButtonId, tr("Yes, leave"), Dialog::AcceptButton } });
+        connect(dialog, &Dialog::finished, q,
+                [this, _teamId, cancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
+                    dialog->hideDialog();
+
+                    //
+                    // Пользователь передумал выходить
+                    //
+                    if (_buttonInfo.id == cancelButtonId) {
+                        return;
+                    }
+                    //
+                    // Если таки хочет, то уведомляем, чтобы отписаться от
+                    // команды на сервере
+                    //
+                    emit q->exitFromTeamRequested(_teamId);
+                });
+        connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
     });
 }
 
@@ -143,8 +278,7 @@ void AccountManager::Implementation::initViewConnections()
     connect(view, &Ui::AccountView::avatarChanged, q,
             [this, notifyUpdateAccountInfoRequested](const QPixmap& _avatar) {
                 if (!_avatar.isNull()) {
-                    accountInfo.avatar = ImageHelper::bytesFromImage(
-                        _avatar.scaled(288, 288, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                    accountInfo.avatar = avatarData(_avatar);
                 } else {
                     accountInfo.avatar = {};
                 }
@@ -162,6 +296,19 @@ void AccountManager::Implementation::initViewConnections()
 
     connect(view, &Ui::AccountView::terminateSessionRequested, q,
             &AccountManager::terminateSessionRequested);
+
+    connect(view, &Ui::AccountView::addMemberRequested, q,
+            [this](int _teamId, const QString& _email, const QString& _nameForTeam) {
+                constexpr int memberRole = 1;
+                emit q->addMemberRequested(_teamId, _email, _nameForTeam, memberRole);
+            });
+    connect(view, &Ui::AccountView::removeMemberRequested, q,
+            &AccountManager::removeMemberRequested);
+}
+
+void AccountManager::Implementation::initCrossConnections()
+{
+    connect(navigator, &Ui::AccountNavigator::teamSelected, view, &Ui::AccountView::showTeam);
 }
 
 void AccountManager::Implementation::initLoginDialog()
@@ -548,6 +695,52 @@ void AccountManager::showPromocodeActivationMessage(const QString& _message)
 void AccountManager::setPromocodeError(const QString& _error)
 {
     d->view->setPromocodeError(_error);
+}
+
+void AccountManager::setAccountTeams(const QVector<Domain::TeamInfo>& _teams)
+{
+    d->accountTeams = _teams;
+
+    d->navigator->setAccountTeams(d->accountTeams);
+    d->view->setAccountTeams(d->accountTeams);
+}
+
+void AccountManager::addAccountTeam(const Domain::TeamInfo& _team)
+{
+    for (auto& team : d->accountTeams) {
+        if (team.id == _team.id) {
+            updateAccountTeam(_team);
+            return;
+        }
+    }
+
+    d->accountTeams.append(_team);
+
+    d->navigator->setAccountTeams(d->accountTeams);
+    d->view->setAccountTeams(d->accountTeams);
+}
+
+void AccountManager::updateAccountTeam(const Domain::TeamInfo& _team)
+{
+    for (auto& team : d->accountTeams) {
+        if (team.id == _team.id) {
+            team = _team;
+            break;
+        }
+    }
+
+    d->navigator->setAccountTeams(d->accountTeams);
+    d->view->setAccountTeams(d->accountTeams);
+}
+
+void AccountManager::removeAccountTeam(int _teamId)
+{
+    d->accountTeams.erase(std::remove_if(
+        d->accountTeams.begin(), d->accountTeams.end(),
+        [_teamId](const Domain::TeamInfo& _accountTeam) { return _accountTeam.id == _teamId; }));
+
+    d->navigator->setAccountTeams(d->accountTeams);
+    d->view->setAccountTeams(d->accountTeams);
 }
 
 } // namespace ManagementLayer

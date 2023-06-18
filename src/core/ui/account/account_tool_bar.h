@@ -21,7 +21,22 @@ signals:
      */
     void backPressed();
 
+    /**
+     * @brief Пользователь переключился в режим аккаунта
+     */
+    void accountPressed();
+
+    /**
+     * @brief Пользователь переключился в режим команд
+     */
+    void teamPressed();
+
 protected:
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
+
     /**
      * @brief Обновляем виджет при изменении дизайн системы
      */

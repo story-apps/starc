@@ -5,6 +5,7 @@
 namespace Domain {
 struct PaymentOption;
 struct AccountInfo;
+struct TeamInfo;
 } // namespace Domain
 
 
@@ -94,6 +95,29 @@ public:
      */
     void setPromocodeError(const QString& _error);
 
+    //
+
+    /**
+     * @brief Задать список команд пользоватля
+     */
+    void setAccountTeams(const QVector<Domain::TeamInfo>& _teams);
+
+    /**
+     * @brief Добавить команду пользователя
+     */
+    void addAccountTeam(const Domain::TeamInfo& _team);
+
+    /**
+     * @brief Обновить команду пользователя
+     */
+    void updateAccountTeam(const Domain::TeamInfo& _team);
+
+    /**
+     * @brief Удалить команду пользователя
+     */
+    void removeAccountTeam(int _teamId);
+
+
 signals:
     //
     // Диалог авторизации
@@ -159,6 +183,43 @@ signals:
      * @brief Пользователь хочет активировать промокод
      */
     void activatePromocodeRequested(const QString& _promocode);
+
+    //
+    // Работа с командами
+    //
+
+    /**
+     * @brief Пользователь хочет создать команду
+     */
+    void createTeamRequested(const QString& _name, const QString& _description,
+                             const QByteArray& _avatar);
+
+    /**
+     * @brief Пользователь хочет изменить информацию о команде
+     */
+    void updateTeamRequested(int _teamId, const QString& _name, const QString& _description,
+                             const QByteArray& _avatar);
+
+    /**
+     * @brief Пользоваталь хочет удалить команду
+     */
+    void removeTeamRequested(int _teamId);
+
+    /**
+     * @brief Пользователь хочет выйти из команды
+     */
+    void exitFromTeamRequested(int _teamId);
+
+    /**
+     * @brief Пользователь хочет добавить участника в коменду
+     */
+    void addMemberRequested(int _teamId, const QString& _email, const QString& _nameForTeam,
+                            int _role);
+
+    /**
+     * @brief Пользователь хочет отписать соавтора от проекта
+     */
+    void removeMemberRequested(int _teamId, const QString& _email);
 
 private:
     class Implementation;

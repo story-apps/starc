@@ -1,5 +1,6 @@
 #include "account_view.h"
 
+#include "account_teams_view.h"
 #include "session_widget.h"
 
 #include <domain/starcloud_api.h>
@@ -40,7 +41,12 @@ public:
     void updateSubscriptionEndsLabel();
 
 
-    QScrollArea* content = nullptr;
+    //
+    // Страница аккаунта
+    //
+
+    Widget* accountPage = nullptr;
+    QScrollArea* accountContent = nullptr;
     QVariantAnimation scrollAnimation;
 
     QVariantAnimation colorAnimation;
@@ -79,11 +85,19 @@ public:
 
     H5Label* sessionsTitle = nullptr;
     QVector<SessionWidget*> sessions;
+
+    //
+    // Страница команд
+    //
+
+    AccountTeamsView* teamPage = nullptr;
 };
 
 AccountView::Implementation::Implementation(QWidget* _parent)
-    : content(new QScrollArea(_parent))
-    , accountInfo(new Card(_parent))
+    : accountPage(new Widget(_parent))
+    //
+    , accountContent(new QScrollArea(accountPage))
+    , accountInfo(new Card(accountPage))
     , accountInfoLayout(new QGridLayout)
     , accountTitle(new H6Label(accountInfo))
     , name(new TextField(accountInfo))
@@ -91,7 +105,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , newsletterSubscription(new CheckBox(accountInfo))
     , avatar(new ImageCard(accountInfo))
     //
-    , subscriptionInfo(new Card(_parent))
+    , subscriptionInfo(new Card(accountPage))
     , subscriptionInfoLayout(new QGridLayout)
     , subscriptionTitle(new H6Label(subscriptionInfo))
     , subscriptionEndsLabel(new Subtitle2Label(subscriptionInfo))
@@ -104,20 +118,23 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , subscriptionUpgradeToPro(new Button(subscriptionInfo))
     , subscriptionUpgradeToTeam(new Button(subscriptionInfo))
     //
-    , promocodeInfo(new Card(_parent))
+    , promocodeInfo(new Card(accountPage))
     , promocodeInfoLayout(new QGridLayout)
     , promocodeName(new TextField(promocodeInfo))
     , activatePromocode(new Button(promocodeInfo))
     //
-    , sessionsTitle(new H5Label(_parent))
+    , sessionsTitle(new H5Label(accountPage))
+    //
+    //
+    , teamPage(new AccountTeamsView(_parent))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
     palette.setColor(QPalette::Window, Qt::transparent);
-    content->setPalette(palette);
-    content->setFrameShape(QFrame::NoFrame);
-    content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    content->setVerticalScrollBar(new ScrollBar);
+    accountContent->setPalette(palette);
+    accountContent->setFrameShape(QFrame::NoFrame);
+    accountContent->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    accountContent->setVerticalScrollBar(new ScrollBar);
     scrollAnimation.setEasingCurve(QEasingCurve::OutQuad);
     scrollAnimation.setDuration(180);
     colorAnimation.setEasingCurve(QEasingCurve::InBack);
@@ -173,23 +190,29 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     promocodeInfoLayout->setColumnStretch(0, 1);
     promocodeInfo->setContentLayout(promocodeInfoLayout);
 
-    auto contentWidget = new QWidget;
-    content->setWidget(contentWidget);
-    content->setWidgetResizable(true);
-    auto layout = new QGridLayout;
-    layout->setContentsMargins({});
-    layout->setSpacing(0);
+    auto accountContentWidget = new QWidget;
+    accountContent->setWidget(accountContentWidget);
+    accountContent->setWidgetResizable(true);
+    auto accountContentLayout = new QGridLayout;
+    accountContentLayout->setContentsMargins({});
+    accountContentLayout->setSpacing(0);
     row = 0;
-    layout->addWidget(accountInfo, row, 0, 1, 2);
-    layout->addWidget(avatar, row++, 2, 3, 1, Qt::AlignTop);
-    layout->addWidget(subscriptionInfo, row++, 0, 1, 2);
-    layout->addWidget(promocodeInfo, row++, 0, 1, 2);
-    layout->addWidget(sessionsTitle, row++, 0, 1, 2);
+    accountContentLayout->addWidget(accountInfo, row, 0, 1, 2);
+    accountContentLayout->addWidget(avatar, row++, 2, 3, 1, Qt::AlignTop);
+    accountContentLayout->addWidget(subscriptionInfo, row++, 0, 1, 2);
+    accountContentLayout->addWidget(promocodeInfo, row++, 0, 1, 2);
+    accountContentLayout->addWidget(sessionsTitle, row++, 0, 1, 2);
     ++row; // оставляем строку для сессий
-    layout->setRowStretch(row, 1);
-    layout->setColumnStretch(0, 1);
-    layout->setColumnStretch(1, 1);
-    contentWidget->setLayout(layout);
+    accountContentLayout->setRowStretch(row, 1);
+    accountContentLayout->setColumnStretch(0, 1);
+    accountContentLayout->setColumnStretch(1, 1);
+    accountContentWidget->setLayout(accountContentLayout);
+
+    auto accountLayout = new QVBoxLayout;
+    accountLayout->setContentsMargins({});
+    accountLayout->setSpacing(0);
+    accountLayout->addWidget(accountContent);
+    accountPage->setLayout(accountLayout);
 }
 
 void AccountView::Implementation::scrollToTitle(AbstractLabel* title)
@@ -198,12 +221,12 @@ void AccountView::Implementation::scrollToTitle(AbstractLabel* title)
     const QRect defaultMicroFocus
         = title->QWidget::inputMethodQuery(Qt::ImCursorRectangle).toRect();
     QRect focusRect = (microFocus != defaultMicroFocus)
-        ? QRect(title->mapTo(content->widget(), microFocus.topLeft()), microFocus.size())
-        : QRect(title->mapTo(content->widget(), QPoint(0, 0)), title->size());
+        ? QRect(title->mapTo(accountContent->widget(), microFocus.topLeft()), microFocus.size())
+        : QRect(title->mapTo(accountContent->widget(), QPoint(0, 0)), title->size());
 
     focusRect.adjust(-50, -50, 50, 50);
 
-    scrollAnimation.setStartValue(content->verticalScrollBar()->value());
+    scrollAnimation.setStartValue(accountContent->verticalScrollBar()->value());
     scrollAnimation.setEndValue(focusRect.top());
     scrollAnimation.start();
 
@@ -230,19 +253,17 @@ void AccountView::Implementation::updateSubscriptionEndsLabel()
 
 
 AccountView::AccountView(QWidget* _parent)
-    : Widget(_parent)
+    : StackWidget(_parent)
     , d(new Implementation(this))
 {
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->setContentsMargins({});
-    layout->setSpacing(0);
-    layout->addWidget(d->content);
-    setLayout(layout);
+    setAnimationType(StackWidget::AnimationType::FadeThrough);
+    setCurrentWidget(d->accountPage);
+    addWidget(d->teamPage);
 
 
     connect(&d->scrollAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) {
-                d->content->verticalScrollBar()->setValue(_value.toInt());
+                d->accountContent->verticalScrollBar()->setValue(_value.toInt());
             });
     connect(&d->colorAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) {
@@ -298,9 +319,27 @@ AccountView::AccountView(QWidget* _parent)
 
         emit activatePromocodePressed(d->promocodeName->text());
     });
+
+    //
+    // Команды
+    //
+    connect(d->teamPage, &AccountTeamsView::addMemberPressed, this,
+            &AccountView::addMemberRequested);
+    connect(d->teamPage, &AccountTeamsView::removeMemberPressed, this,
+            &AccountView::removeMemberRequested);
 }
 
 AccountView::~AccountView() = default;
+
+void AccountView::showAccountPage()
+{
+    setCurrentWidget(d->accountPage);
+}
+
+void AccountView::showTeamPage()
+{
+    setCurrentWidget(d->teamPage);
+}
 
 void AccountView::showAccount()
 {
@@ -341,7 +380,7 @@ void AccountView::setEmail(const QString& _email)
 
 void AccountView::setName(const QString& _name)
 {
-    if (d->name->text() == _name) {
+    if (d->changeNameDebouncer.hasPendingWork() || d->name->text() == _name) {
         return;
     }
 
@@ -351,7 +390,7 @@ void AccountView::setName(const QString& _name)
 
 void AccountView::setDescription(const QString& _description)
 {
-    if (d->description->text() == _description) {
+    if (d->changeDescriptionDebouncer.hasPendingWork() || d->description->text() == _description) {
         return;
     }
 
@@ -510,6 +549,8 @@ void AccountView::setAccountInfo(const Domain::AccountInfo& _account)
         }
         }
     }
+
+    d->teamPage->setAccountInfo(_account);
 }
 
 void AccountView::clearPromocode()
@@ -529,11 +570,11 @@ void AccountView::setSessions(const QVector<Domain::SessionInfo>& _sessions)
         d->sessions.takeLast()->deleteLater();
     }
 
-    auto layout = qobject_cast<QGridLayout*>(d->content->widget()->layout());
+    auto layout = qobject_cast<QGridLayout*>(d->accountContent->widget()->layout());
     int row = layout->rowCount() - 2;
     int column = 0;
     for (const auto& sessionInfo : _sessions) {
-        auto sessionWidget = new SessionWidget(d->content->widget());
+        auto sessionWidget = new SessionWidget(d->accountContent->widget());
         sessionWidget->setSessionInfo(sessionInfo);
         if (_sessions.size() == 1) {
             sessionWidget->hideTerminateButton();
@@ -562,6 +603,16 @@ void AccountView::setSessions(const QVector<Domain::SessionInfo>& _sessions)
     }
 }
 
+void AccountView::setAccountTeams(const QVector<Domain::TeamInfo>& _teams)
+{
+    d->teamPage->setTeams(_teams);
+}
+
+void AccountView::showTeam(int _teamId)
+{
+    d->teamPage->showTeam(_teamId);
+}
+
 void AccountView::updateTranslations()
 {
     d->name->setLabel(tr("Your name"));
@@ -587,11 +638,18 @@ void AccountView::updateTranslations()
 
 void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
-    Widget::designSystemChangeEvent(_event);
+    StackWidget::designSystemChangeEvent(_event);
 
     setBackgroundColor(DesignSystem::color().surface());
 
-    d->content->widget()->layout()->setContentsMargins(
+    for (auto page : std::vector<Widget*>{
+             d->accountPage,
+             d->teamPage,
+         }) {
+        page->setBackgroundColor(DesignSystem::color().surface());
+    }
+
+    d->accountContent->widget()->layout()->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px24(),
                   Ui::DesignSystem::compactLayout().topContentMargin(),
                   Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())

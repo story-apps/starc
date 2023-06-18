@@ -3436,7 +3436,7 @@ protected:
     // property members:
     bool mAutoSqueeze;
 
-    // non-property memebers:
+    // non-property members:
     QVector<DataType> mData;
     int mPreallocSize;
     int mPreallocIteration;

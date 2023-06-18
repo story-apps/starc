@@ -2802,6 +2802,7 @@ void ApplicationManager::initConnections()
                 }
                 d->cloudServiceManager->askNotifications();
                 d->cloudServiceManager->askProjects();
+                d->cloudServiceManager->askTeams();
                 d->cloudServiceManager->askSessionStatistics(
                     d->writingSessionManager->sessionStatisticsLastSyncDateTime());
 
@@ -2892,6 +2893,30 @@ void ApplicationManager::initConnections()
             Ui::AvatarGenerator::instance(), &Ui::AvatarGenerator::setAvatar);
 
     //
+    // Команды
+    //
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::teamsReceived,
+            d->accountManager.data(), &AccountManager::setAccountTeams);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::teamCreated,
+            d->accountManager.data(), &AccountManager::addAccountTeam);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::teamUpdated,
+            d->accountManager.data(), &AccountManager::updateAccountTeam);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::teamRemoved,
+            d->accountManager.data(), &AccountManager::removeAccountTeam);
+    connect(d->accountManager.data(), &AccountManager::createTeamRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::createTeam);
+    connect(d->accountManager.data(), &AccountManager::updateTeamRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::updateTeam);
+    connect(d->accountManager.data(), &AccountManager::removeTeamRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::removeTeam);
+    connect(d->accountManager.data(), &AccountManager::exitFromTeamRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::exitFormTeam);
+    connect(d->accountManager.data(), &AccountManager::addMemberRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::addTeamMember);
+    connect(d->accountManager.data(), &AccountManager::removeMemberRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::removeTeamMember);
+
+    //
     // Проекты
     //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::projectsReceived,
@@ -2949,8 +2974,8 @@ void ApplicationManager::initConnections()
                    const QHash<QUuid, int>& _permissions) {
                 Q_UNUSED(_color)
                 const auto accountRole = _role;
-                d->cloudServiceManager->addCollaborator(d->projectsManager->currentProject().id(),
-                                                        _email, accountRole, _permissions);
+                d->cloudServiceManager->addProjectCollaborator(
+                    d->projectsManager->currentProject().id(), _email, accountRole, _permissions);
             });
     connect(d->projectManager.data(), &ProjectManager::projectCollaboratorUpdateRequested,
             d->projectsManager.data(),
@@ -2958,12 +2983,12 @@ void ApplicationManager::initConnections()
                    const QHash<QUuid, int>& _permissions) {
                 Q_UNUSED(_color)
                 const auto accountRole = _role;
-                d->cloudServiceManager->updateCollaborator(
+                d->cloudServiceManager->updateProjectCollaborator(
                     d->projectsManager->currentProject().id(), _email, accountRole, _permissions);
             });
     connect(d->projectManager.data(), &ProjectManager::projectCollaboratorRemoveRequested,
             d->projectsManager.data(), [this](const QString& _email) {
-                d->cloudServiceManager->removeCollaborator(
+                d->cloudServiceManager->removeProjectCollaborator(
                     d->projectsManager->currentProject().id(), _email);
             });
     connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,

@@ -7,6 +7,8 @@
 
 namespace Domain {
 
+const int kInvalidId = -1;
+
 /**
  * @brief Тип уведомления
  */
@@ -189,6 +191,48 @@ struct AccountInfo {
 };
 
 /**
+ * @brief Участник команды
+ */
+struct TeamMemberInfo {
+    QString name;
+    QString email;
+    int role = 0;
+    bool hasAccessToAllProjects = true;
+    bool allowGrantAccessToProjects = true;
+    QString nameForTeam;
+    QColor color;
+};
+
+inline bool operator==(const TeamMemberInfo& _lhs, const TeamMemberInfo& _rhs)
+{
+    return _lhs.name == _rhs.name && _lhs.email == _rhs.email && _lhs.role == _rhs.role
+        && _lhs.hasAccessToAllProjects == _rhs.hasAccessToAllProjects
+        && _lhs.allowGrantAccessToProjects == _rhs.allowGrantAccessToProjects
+        && _lhs.nameForTeam == _rhs.nameForTeam && _lhs.color == _rhs.color;
+}
+
+/**
+ * @brief Информация о команде
+ */
+struct TeamInfo {
+    int id = kInvalidId;
+    QString name;
+    QString description;
+    QByteArray avatar;
+    int teamRole = 0;
+    bool hasAccessToAllProjects = true;
+    bool allowGrantAccessToProjects = true;
+    QString nameForTeam;
+    QColor color;
+    QVector<TeamMemberInfo> members;
+
+    bool isValid() const
+    {
+        return id != kInvalidId;
+    }
+};
+
+/**
  * @brief Соавторы проекта
  */
 struct ProjectCollaboratorInfo {
@@ -209,7 +253,7 @@ inline bool operator==(const ProjectCollaboratorInfo& _lhs, const ProjectCollabo
  * @brief Информация о проекте
  */
 struct ProjectInfo {
-    int id = 0;
+    int id = kInvalidId;
     QString name;
     QString logline;
     QByteArray poster;
