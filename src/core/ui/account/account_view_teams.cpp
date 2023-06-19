@@ -1,4 +1,6 @@
-#include "account_teams_view.h"
+#include "account_view_teams.h"
+
+#include "account_view_teams_sidebar.h"
 
 #include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
@@ -8,6 +10,7 @@
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/task_bar/task_bar.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <ui/widgets/tree/tree.h>
@@ -33,10 +36,10 @@ enum {
 };
 } // namespace
 
-class AccountTeamsView::Implementation
+class AccountViewTeams::Implementation
 {
 public:
-    explicit Implementation(AccountTeamsView* _q);
+    explicit Implementation(AccountViewTeams* _q);
 
     /**
      * @brief Обновить высоту списка участников команды
@@ -49,11 +52,12 @@ public:
     void showInvitationNotification(const QString& _email);
 
 
-    AccountTeamsView* q = nullptr;
+    AccountViewTeams* q = nullptr;
 
     Domain::AccountInfo accountInfo;
     QVector<Domain::TeamInfo> teams;
     int currentTeamId = kInvalidId;
+    QVector<Domain::TeamMemberInfo> currentTeamMembers;
 
     Widget* teamPage = nullptr;
     QScrollArea* teamPageContent = nullptr;
@@ -73,9 +77,13 @@ public:
     QStandardItemModel* membersModel = nullptr;
 
     ContextMenu* membersContextMenu = nullptr;
+
+    AccountViewTeamsSidebar* sidebar = nullptr;
+
+    Splitter* splitter = nullptr;
 };
 
-AccountTeamsView::Implementation::Implementation(AccountTeamsView* _q)
+AccountViewTeams::Implementation::Implementation(AccountViewTeams* _q)
     : q(_q)
     , teamPage(new Widget(_q))
     , teamPageContent(new QScrollArea(_q))
@@ -92,6 +100,8 @@ AccountTeamsView::Implementation::Implementation(AccountTeamsView* _q)
     , members(new Tree(membersCard))
     , membersModel(new QStandardItemModel(members))
     , membersContextMenu(new ContextMenu(members))
+    , sidebar(new AccountViewTeamsSidebar(_q))
+    , splitter(new Splitter(_q))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -154,14 +164,16 @@ AccountTeamsView::Implementation::Implementation(AccountTeamsView* _q)
     layout->setSpacing(0);
     layout->addWidget(teamPageContent);
     teamPage->setLayout(layout);
+
+    splitter->setWidgets(teamPage, sidebar);
 }
 
-void AccountTeamsView::Implementation::updateMembersListHeight()
+void AccountViewTeams::Implementation::updateMembersListHeight()
 {
     members->setFixedHeight(members->viewportSizeHint().height());
 }
 
-void AccountTeamsView::Implementation::showInvitationNotification(const QString& _email)
+void AccountViewTeams::Implementation::showInvitationNotification(const QString& _email)
 {
     TaskBar::addTask(_email);
     TaskBar::setTaskTitle(_email, tr("Invitation sent to the %1").arg(_email));
@@ -181,13 +193,13 @@ void AccountTeamsView::Implementation::showInvitationNotification(const QString&
 // ****
 
 
-AccountTeamsView::AccountTeamsView(QWidget* _parent)
+AccountViewTeams::AccountViewTeams(QWidget* _parent)
     : StackWidget(_parent)
     , d(new Implementation(this))
 {
     setFocusPolicy(Qt::StrongFocus);
 
-    setCurrentWidget(d->teamPage);
+    setCurrentWidget(d->splitter);
 
     auto removeMemberAction = new QAction(d->membersContextMenu);
     removeMemberAction->setIconText(u8"\U000F01B4");
@@ -214,6 +226,9 @@ AccountTeamsView::AccountTeamsView(QWidget* _parent)
         d->showInvitationNotification(email);
 
         emit addMemberPressed(d->currentTeamId, email, nameForTeam, {});
+    });
+    connect(d->members, &Tree::currentIndexChanged, this, [this](const QModelIndex& _index) {
+        d->sidebar->setTeamMember(d->currentTeamMembers.at(_index.row()));
     });
     connect(d->members, &Tree::customContextMenuRequested, this, [this] {
         if (d->currentTeamId == kInvalidId) {
@@ -243,16 +258,22 @@ AccountTeamsView::AccountTeamsView(QWidget* _parent)
                     }
                 }
             });
+    connect(d->sidebar, &AccountViewTeamsSidebar::teamMemberChanged, this,
+            [this](const QString& _email, const QString& _nameForTeam, int _role,
+                   bool _hasAccessToAllProjects, bool _allowGrantAccessToProjects) {
+                emit changeMemberRequested(d->currentTeamId, _email, _nameForTeam, _role,
+                                           _hasAccessToAllProjects, _allowGrantAccessToProjects);
+            });
 }
 
-AccountTeamsView::~AccountTeamsView() = default;
+AccountViewTeams::~AccountViewTeams() = default;
 
-void AccountTeamsView::setAccountInfo(const Domain::AccountInfo& _accountInfo)
+void AccountViewTeams::setAccountInfo(const Domain::AccountInfo& _accountInfo)
 {
     d->accountInfo = _accountInfo;
 }
 
-void AccountTeamsView::setTeams(const QVector<Domain::TeamInfo>& _teams)
+void AccountViewTeams::setTeams(const QVector<Domain::TeamInfo>& _teams)
 {
     d->teams = _teams;
 
@@ -261,7 +282,7 @@ void AccountTeamsView::setTeams(const QVector<Domain::TeamInfo>& _teams)
     }
 }
 
-void AccountTeamsView::showEmptyPage(bool _canCreateTeam)
+void AccountViewTeams::showEmptyPage(bool _canCreateTeam)
 {
     //
     // TODO
@@ -270,9 +291,16 @@ void AccountTeamsView::showEmptyPage(bool _canCreateTeam)
     d->currentTeamId = kInvalidId;
 }
 
-void AccountTeamsView::showTeam(int _teamId)
+void AccountViewTeams::showTeam(int _teamId)
 {
+    const auto isTeamChanged = d->currentTeamId != _teamId || !d->members->currentIndex().isValid();
+    const auto memberToSelectRow = isTeamChanged ? 0 : d->members->currentIndex().row();
+    if (!isTeamChanged) {
+        d->members->blockSignals(true);
+    }
+
     d->currentTeamId = _teamId;
+    d->currentTeamMembers.clear();
 
     if (d->teams.isEmpty()) {
         return;
@@ -307,12 +335,19 @@ void AccountTeamsView::showTeam(int _teamId)
         const auto isOwner = team.teamRole == 0;
         d->addMemberCard->setVisible(isOwner);
         //
-        // ... и управления командой
+        // ... управления командой
         //
         d->members->setContextMenuPolicy(isOwner ? Qt::CustomContextMenu : Qt::NoContextMenu);
+        //
+        // ... и управления параметрами участников
+        //
+        d->sidebar->setEnabled(isOwner);
+        d->sidebar->setVisible(isOwner);
+        d->splitter->setSizes(isOwner ? QVector<int>{ 7, 2 } : QVector<int>{ 1, 0 });
 
         break;
     }
+    d->currentTeamMembers = members;
 
     d->membersModel->clear();
     auto nameItem = [](const Domain::TeamMemberInfo& _member) {
@@ -324,7 +359,6 @@ void AccountTeamsView::showTeam(int _teamId)
         auto item = new QStandardItem(displayName);
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         item->setData(AvatarGenerator::avatar(_member.name, _member.email), Qt::DecorationRole);
-        item->setData(_member.email, Qt::UserRole);
         return item;
     };
     auto roleItem = [](const Domain::TeamMemberInfo& _member) {
@@ -359,9 +393,14 @@ void AccountTeamsView::showTeam(int _teamId)
     d->members->headerView()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
     d->updateMembersListHeight();
+
+    d->members->setCurrentIndex(d->membersModel->index(memberToSelectRow, 0));
+    if (!isTeamChanged) {
+        d->members->blockSignals(false);
+    }
 }
 
-void AccountTeamsView::updateTranslations()
+void AccountViewTeams::updateTranslations()
 {
     d->addMemberTitle->setText(tr("Invite the team"));
     d->addMemberSubtitle->setText(tr("Add people who you’d like to join the team"));
@@ -372,7 +411,7 @@ void AccountTeamsView::updateTranslations()
     d->membersContextMenu->actions().at(kRemoveActionIndex)->setText(tr("Remove"));
 }
 
-void AccountTeamsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void AccountViewTeams::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     StackWidget::designSystemChangeEvent(_event);
 
@@ -424,6 +463,8 @@ void AccountTeamsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->membersContextMenu->setBackgroundColor(DesignSystem::color().background());
     d->membersContextMenu->setTextColor(DesignSystem::color().onBackground());
+
+    d->splitter->setBackgroundColor(DesignSystem::color().background());
 
     d->updateMembersListHeight();
 }

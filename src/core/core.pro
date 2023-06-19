@@ -65,9 +65,10 @@ SOURCES += \
     management_layer/plugins_builder.cpp \
     ui/about_application_dialog.cpp \
     ui/account/account_navigator.cpp \
-    ui/account/account_teams_view.cpp \
     ui/account/account_tool_bar.cpp \
     ui/account/account_view.cpp \
+    ui/account/account_view_teams.cpp \
+    ui/account/account_view_teams_sidebar.cpp \
     ui/account/collaborators_tool_bar.cpp \
     ui/account/connection_status_tool_bar.cpp \
     ui/account/login_dialog.cpp \
@@ -142,9 +143,10 @@ HEADERS += \
     management_layer/plugins_builder.h \
     ui/about_application_dialog.h \
     ui/account/account_navigator.h \
-    ui/account/account_teams_view.h \
     ui/account/account_tool_bar.h \
     ui/account/account_view.h \
+    ui/account/account_view_teams.h \
+    ui/account/account_view_teams_sidebar.h \
     ui/account/collaborators_tool_bar.h \
     ui/account/connection_status_tool_bar.h \
     ui/account/login_dialog.h \

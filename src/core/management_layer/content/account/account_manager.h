@@ -217,6 +217,13 @@ signals:
                             int _role);
 
     /**
+     * @brief Пользователь хочет изменить параметры участника
+     */
+    void changeMemberRequested(int _teamId, const QString& _email, const QString& _nameForTeam,
+                               int _role, bool _hasAccessToAllProjects,
+                               bool _allowGrantAccessToProjects);
+
+    /**
      * @brief Пользователь хочет отписать соавтора от проекта
      */
     void removeMemberRequested(int _teamId, const QString& _email);

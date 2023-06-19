@@ -10,13 +10,13 @@ struct TeamInfo;
 
 namespace Ui {
 
-class AccountTeamsView : public StackWidget
+class AccountViewTeams : public StackWidget
 {
     Q_OBJECT
 
 public:
-    explicit AccountTeamsView(QWidget* _parent = nullptr);
-    ~AccountTeamsView() override;
+    explicit AccountViewTeams(QWidget* _parent = nullptr);
+    ~AccountViewTeams() override;
 
     /**
      * @brief Задать информацию об аккаунте пользователя
@@ -44,6 +44,13 @@ signals:
      */
     void addMemberPressed(int _teamId, const QString& _email, const QString& _nameForTeam,
                           const QColor& _color);
+
+    /**
+     * @brief Параметры участника изменены
+     */
+    void changeMemberRequested(int _teamId, const QString& _email, const QString& _nameForTeam,
+                               int _role, bool _hasAccessToAllProjects,
+                               bool _allowGrantAccessToProjects);
 
     /**
      * @brief Пользователь хочет отписать соавтора от проекта

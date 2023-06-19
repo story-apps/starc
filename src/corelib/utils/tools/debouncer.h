@@ -7,7 +7,7 @@
 
 /**
  * @brief Класс для введения задержки между запросом некоторого действия и реализацией самого
- * действия К примеру, для избежания флуда пользователями интерфейса
+ *        действия К примеру, для избежания флуда пользователями интерфейса
  */
 class CORE_LIBRARY_EXPORT Debouncer : public QObject
 {
@@ -20,6 +20,11 @@ public:
     explicit Debouncer(int _delayInMs, QObject* _parent = nullptr);
 
     /**
+     * @brief Задать возможность принятия новых действий
+     */
+    void setAcceptWorkOrders(bool _accept);
+
+    /**
      * @brief Задать задержку
      */
     void setDelay(int _delayInMs);
@@ -28,6 +33,11 @@ public:
      * @brief Заказать некоторое действие, этот слот принимает сигналы от пользователя
      */
     void orderWork();
+
+    /**
+     * @brief Выполнить заказанное действие не дожидаясь завершения таймера
+     */
+    void forceWork();
 
     /**
      * @brief Прервать ожидание заказанного действия
@@ -53,5 +63,13 @@ signals:
     void gotWork();
 
 private:
+    /**
+     * @brief Принимаются ли заказы на новые действия
+     */
+    bool m_isAcceptWorkOrders = true;
+
+    /**
+     * @brief Таймер для осуществления задержки
+     */
     QTimer m_timer;
 };

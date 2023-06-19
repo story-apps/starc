@@ -446,6 +446,9 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
                 d->teamsMember->setCurrentIndex({});
                 emit teamSelected(_currentIndex.data(kTeamIdRole).toInt());
             });
+    connect(d->teamsOwner, &Tree::doubleClicked, this, [this](const QModelIndex& _index) {
+        emit editTeamPressed(_index.data(kTeamIdRole).toInt());
+    });
     connect(d->teamsOwner, &Tree::customContextMenuRequested, this, [this] {
         d->teamsContextMenu->actions().at(kEditTeamAction)->setVisible(true);
         d->teamsContextMenu->actions().at(kRemoveTeamAction)->setVisible(true);

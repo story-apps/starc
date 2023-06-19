@@ -1,6 +1,6 @@
 #include "account_view.h"
 
-#include "account_teams_view.h"
+#include "account_view_teams.h"
 #include "session_widget.h"
 
 #include <domain/starcloud_api.h>
@@ -90,7 +90,7 @@ public:
     // Страница команд
     //
 
-    AccountTeamsView* teamPage = nullptr;
+    AccountViewTeams* teamPage = nullptr;
 };
 
 AccountView::Implementation::Implementation(QWidget* _parent)
@@ -126,7 +126,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , sessionsTitle(new H5Label(accountPage))
     //
     //
-    , teamPage(new AccountTeamsView(_parent))
+    , teamPage(new AccountViewTeams(_parent))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -323,9 +323,11 @@ AccountView::AccountView(QWidget* _parent)
     //
     // Команды
     //
-    connect(d->teamPage, &AccountTeamsView::addMemberPressed, this,
+    connect(d->teamPage, &AccountViewTeams::addMemberPressed, this,
             &AccountView::addMemberRequested);
-    connect(d->teamPage, &AccountTeamsView::removeMemberPressed, this,
+    connect(d->teamPage, &AccountViewTeams::changeMemberRequested, this,
+            &AccountView::changeMemberRequested);
+    connect(d->teamPage, &AccountViewTeams::removeMemberPressed, this,
             &AccountView::removeMemberRequested);
 }
 

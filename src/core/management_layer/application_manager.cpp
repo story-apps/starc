@@ -2913,6 +2913,8 @@ void ApplicationManager::initConnections()
             d->cloudServiceManager.data(), &CloudServiceManager::exitFormTeam);
     connect(d->accountManager.data(), &AccountManager::addMemberRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::addTeamMember);
+    connect(d->accountManager.data(), &AccountManager::changeMemberRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::updateTeamMember);
     connect(d->accountManager.data(), &AccountManager::removeMemberRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::removeTeamMember);
 

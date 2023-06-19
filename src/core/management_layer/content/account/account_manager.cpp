@@ -302,6 +302,8 @@ void AccountManager::Implementation::initViewConnections()
                 constexpr int memberRole = 1;
                 emit q->addMemberRequested(_teamId, _email, _nameForTeam, memberRole);
             });
+    connect(view, &Ui::AccountView::changeMemberRequested, q,
+            &AccountManager::changeMemberRequested);
     connect(view, &Ui::AccountView::removeMemberRequested, q,
             &AccountManager::removeMemberRequested);
 }
