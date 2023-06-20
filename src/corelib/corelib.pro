@@ -262,6 +262,11 @@ SOURCES += \
     ui/modules/bookmarks/bookmark_dialog.cpp \
     ui/modules/bookmarks/bookmarks_model.cpp \
     ui/modules/bookmarks/bookmarks_view.cpp \
+    ui/modules/cards/abstract_card_item.cpp \
+    ui/modules/cards/card_container_item.cpp \
+    ui/modules/cards/card_item.cpp \
+    ui/modules/cards/cards_graphics_scene.cpp \
+    ui/modules/cards/cards_graphics_view.cpp \
     ui/modules/character_image_card/character_image_card.cpp \
     ui/modules/comments/add_comment_view.cpp \
     ui/modules/comments/comment_delegate.cpp \
@@ -581,6 +586,11 @@ HEADERS += \
     ui/modules/bookmarks/bookmark_dialog.h \
     ui/modules/bookmarks/bookmarks_model.h \
     ui/modules/bookmarks/bookmarks_view.h \
+    ui/modules/cards/abstract_card_item.h \
+    ui/modules/cards/card_container_item.h \
+    ui/modules/cards/card_item.h \
+    ui/modules/cards/cards_graphics_scene.h \
+    ui/modules/cards/cards_graphics_view.h \
     ui/modules/character_image_card/character_image_card.h \
     ui/modules/comments/add_comment_view.h \
     ui/modules/comments/comment_delegate.h \
