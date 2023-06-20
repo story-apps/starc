@@ -330,21 +330,22 @@ QVariant AbstractCardItem::itemChange(GraphicsItemChange change, const QVariant&
 {
     switch (change) {
     case QGraphicsItem::ItemScenePositionHasChanged: {
-        for (auto iter = d->embeddedCards.begin(); iter != d->embeddedCards.end(); ++iter) {
-            auto item = iter.key();
-            if (item == scene()->mouseGrabberItem()) {
-                continue;
-            }
+        //        for (auto iter = d->embeddedCards.begin(); iter != d->embeddedCards.end(); ++iter)
+        //        {
+        //            auto item = iter.key();
+        //            if (item == scene()->mouseGrabberItem()) {
+        //                continue;
+        //            }
 
-            auto itemPosDelta = iter.value();
-            item->setPos(pos() + itemPosDelta);
+        //            auto itemPosDelta = iter.value();
+        //            item->setPos(pos() + itemPosDelta);
 
-            auto container = d->container;
-            while (container != nullptr) {
-                container->update();
-                container = container->container();
-            }
-        }
+        //            auto container = d->container;
+        //            while (container != nullptr) {
+        //                container->update();
+        //                container = container->container();
+        //            }
+        //        }
 
         emit d->cardsScene()->itemChanged(d->modelItemIndex);
 
