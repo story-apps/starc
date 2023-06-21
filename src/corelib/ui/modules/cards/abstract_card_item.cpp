@@ -6,6 +6,7 @@
 #include <QModelIndex>
 #include <QParallelAnimationGroup>
 #include <QSequentialAnimationGroup>
+#include <QSet>
 #include <QVariantAnimation>
 
 
@@ -15,11 +16,6 @@ class AbstractCardItem::Implementation
 {
 public:
     explicit Implementation(AbstractCardItem* _q);
-
-    /**
-     * @brief Обновить положения вложенных карточек
-     */
-    void updateEmbeddedCardsPositions();
 
     /**
      * @brief Получить указатель на сцену
@@ -36,9 +32,9 @@ public:
     QModelIndex modelItemIndex;
 
     /**
-     * @brief Готова ли данная карточка к вложению другой
+     * @brief Состояние карточки относительно перемещаемой
      */
-    bool isReadyForEmbed = false;
+    InsertionState insertionState = InsertionState::Empty;
 
     /**
      * @brief Контейнер, в который карточка должна быть вложена при отпускании
@@ -54,18 +50,6 @@ public:
 AbstractCardItem::Implementation::Implementation(AbstractCardItem* _q)
     : q(_q)
 {
-}
-
-void AbstractCardItem::Implementation::updateEmbeddedCardsPositions()
-{
-    for (auto iter = embeddedCards.begin(); iter != embeddedCards.end(); ++iter) {
-        if (!iter.key()->isVisible()) {
-            continue;
-        }
-
-        iter.key()->d->updateEmbeddedCardsPositions();
-        iter.value() = iter.key()->pos() - q->pos();
-    }
 }
 
 CardsGraphicsScene* AbstractCardItem::Implementation::cardsScene() const
@@ -139,6 +123,21 @@ bool AbstractCardItem::isContainerOf(AbstractCardItem* _card) const
     return false;
 }
 
+AbstractCardItem::InsertionState AbstractCardItem::insertionState() const
+{
+    return d->insertionState;
+}
+
+void AbstractCardItem::setInsertionState(InsertionState _state)
+{
+    if (d->insertionState == _state) {
+        return;
+    }
+
+    d->insertionState = _state;
+    update();
+}
+
 bool AbstractCardItem::isOpened() const
 {
     return false;
@@ -164,8 +163,7 @@ void AbstractCardItem::setContainer(AbstractCardItem* _container)
     // Если карточка должна была быть вложена в другой контейнер, то сбрасываем ему флаг вложения
     //
     if (d->container != nullptr) {
-        d->container->setReadyForEmbed(false);
-        d->container->takeChild(this);
+        d->container->unembedCard(this);
     }
 
     //
@@ -177,25 +175,26 @@ void AbstractCardItem::setContainer(AbstractCardItem* _container)
     // Если новый контейнер задан, установим ему флаг вложения
     //
     if (d->container != nullptr) {
-        d->container->setReadyForEmbed(this == scene()->mouseGrabberItem());
-        d->container->appendChild(this);
+        d->container->embedCard(this);
     }
 }
 
-void AbstractCardItem::appendChild(AbstractCardItem* _child)
+void AbstractCardItem::embedCard(AbstractCardItem* _child)
 {
     if (d->embeddedCards.contains(_child)) {
         return;
     }
+
     d->embeddedCards[_child] = _child->pos() - pos();
+    updateEmbeddedCardsPositions();
 }
 
-void AbstractCardItem::takeChild(AbstractCardItem* _child)
+void AbstractCardItem::unembedCard(AbstractCardItem* _child)
 {
     d->embeddedCards.remove(_child);
 }
 
-QList<AbstractCardItem*> AbstractCardItem::children() const
+QList<AbstractCardItem*> AbstractCardItem::embeddedCards() const
 {
     return d->embeddedCards.keys();
 }
@@ -203,6 +202,18 @@ QList<AbstractCardItem*> AbstractCardItem::children() const
 int AbstractCardItem::childCount() const
 {
     return d->embeddedCards.size();
+}
+
+void AbstractCardItem::updateEmbeddedCardsPositions()
+{
+    for (auto iter = d->embeddedCards.begin(); iter != d->embeddedCards.end(); ++iter) {
+        if (!iter.key()->isVisible()) {
+            continue;
+        }
+
+        iter.key()->updateEmbeddedCardsPositions();
+        iter.value() = iter.key()->pos() - pos();
+    }
 }
 
 bool AbstractCardItem::isFilterAccepted(const QString& _text, bool _caseSensitive,
@@ -219,25 +230,6 @@ void AbstractCardItem::init()
 {
 }
 
-bool AbstractCardItem::isReadyForEmbed() const
-{
-    return d->isReadyForEmbed;
-}
-
-void AbstractCardItem::setReadyForEmbed(bool _isReady)
-{
-    if (!isContainer()) {
-        return;
-    }
-
-    if (d->isReadyForEmbed == _isReady) {
-        return;
-    }
-
-    d->isReadyForEmbed = _isReady;
-    update();
-}
-
 void AbstractCardItem::mousePressEvent(QGraphicsSceneMouseEvent* _event)
 {
     QGraphicsRectItem::mousePressEvent(_event);
@@ -245,7 +237,7 @@ void AbstractCardItem::mousePressEvent(QGraphicsSceneMouseEvent* _event)
     //
     // Обновляем положения, т.к. из-за анимаций или изенения состояния папок они могли измениться
     //
-    d->updateEmbeddedCardsPositions();
+    updateEmbeddedCardsPositions();
 }
 
 void AbstractCardItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
@@ -256,7 +248,7 @@ void AbstractCardItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
     // Сбрасываем флаг вставки в контейнер, если он задан
     //
     if (d->container != nullptr) {
-        d->container->setReadyForEmbed(false);
+        d->container->setInsertionState(InsertionState::Empty);
     }
 
     //
@@ -322,7 +314,7 @@ void AbstractCardItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
     // Делаем отложенный вызов, чтобы mouseGrabber сцены освободился
     //
     QMetaObject::invokeMethod(
-        scene(), [this] { emit d->cardsScene()->itemChanged(d->modelItemIndex); },
+        scene(), [this] { emit d->cardsScene()->itemDropped(d->modelItemIndex); },
         Qt::QueuedConnection);
 }
 
@@ -330,24 +322,27 @@ QVariant AbstractCardItem::itemChange(GraphicsItemChange change, const QVariant&
 {
     switch (change) {
     case QGraphicsItem::ItemScenePositionHasChanged: {
-        //        for (auto iter = d->embeddedCards.begin(); iter != d->embeddedCards.end(); ++iter)
-        //        {
-        //            auto item = iter.key();
-        //            if (item == scene()->mouseGrabberItem()) {
-        //                continue;
-        //            }
+        //
+        // Если пользователь перемещает карточку руками, то двигаем и все вложенные карточки
+        // NOTE: а когда карточки будут двигаться алгоритмом, он и должен задавать их позиции
+        //
+        if (d->cardsScene()->mouseGrabberItems().contains(this)) {
+            for (auto embeddedCard = d->embeddedCards.begin();
+                 embeddedCard != d->embeddedCards.end(); ++embeddedCard) {
+                auto card = embeddedCard.key();
 
-        //            auto itemPosDelta = iter.value();
-        //            item->setPos(pos() + itemPosDelta);
+                auto itemPosDelta = embeddedCard.value();
+                card->setPos(pos() + itemPosDelta);
 
-        //            auto container = d->container;
-        //            while (container != nullptr) {
-        //                container->update();
-        //                container = container->container();
-        //            }
-        //        }
+                auto container = d->container;
+                while (container != nullptr) {
+                    container->update();
+                    container = container->container();
+                }
+            }
+        }
 
-        emit d->cardsScene()->itemChanged(d->modelItemIndex);
+        emit d->cardsScene()->itemMoved(d->modelItemIndex);
 
         break;
     }

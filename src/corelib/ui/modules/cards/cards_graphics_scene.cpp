@@ -111,7 +111,7 @@ void CardsGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent* _event)
             = [this, &addCardWithChildrenToMoveList](AbstractCardItem* _card) {
                   d->mouseGrabberItems.insert(_card);
 
-                  const auto children = _card->children();
+                  const auto children = _card->embeddedCards();
                   for (auto child : children) {
                       addCardWithChildrenToMoveList(child);
                   }

@@ -120,7 +120,7 @@ protected:
     /**
      * @brief Создать новую карточку на базе элемента модели
      */
-    virtual AbstractCardItem* createCardFor(const QModelIndex& _index) const;
+    virtual AbstractCardItem* createCardFor(const QModelIndex& _index) const = 0;
 
     /**
      * @brief Перенастраиваем виджет при обновлении дизайн системы

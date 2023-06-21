@@ -36,6 +36,18 @@ public:
     bool isContainerOf(AbstractCardItem* _card) const;
 
     /**
+     * @brief Состояние карточки относительно перемещаемой в данный момент
+     */
+    enum class InsertionState {
+        Empty,
+        InsertBefore,
+        InsertAfter,
+        InsertInside,
+    };
+    InsertionState insertionState() const;
+    void setInsertionState(InsertionState _state);
+
+    /**
      * @brief Открыта ли карточка
      */
     virtual bool isOpened() const;
@@ -54,10 +66,15 @@ public:
     /**
      * @brief Управление вложенными карточками
      */
-    void appendChild(AbstractCardItem* _child);
-    void takeChild(AbstractCardItem* _child);
-    QList<AbstractCardItem*> children() const;
+    void embedCard(AbstractCardItem* _child);
+    void unembedCard(AbstractCardItem* _child);
+    QList<AbstractCardItem*> embeddedCards() const;
     int childCount() const;
+
+    /**
+     * @brief Обновить положения вложенных карточек
+     */
+    void updateEmbeddedCardsPositions();
 
     /**
      * @brief Подходит ли карточка под условия фильтра
@@ -69,13 +86,6 @@ protected:
      * @brief Инициилизировать карточку после установки элемента модели в неё
      */
     virtual void init();
-
-    /**
-     * @brief Готова ли карточка принимать вложение другой карточки
-     * @note Обычно это лишь отобраажается визуально для пользователя
-     */
-    bool isReadyForEmbed() const;
-    void setReadyForEmbed(bool _isReady);
 
     /**
      * @brief При захвате карточки обновляем значения положений вложенных карточек

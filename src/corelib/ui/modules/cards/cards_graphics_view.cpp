@@ -1,7 +1,6 @@
 #include "cards_graphics_view.h"
 
-#include "card_container_item.h"
-#include "card_item.h"
+#include "abstract_card_item.h"
 #include "cards_graphics_scene.h"
 
 #include <include/custom_events.h>
@@ -97,6 +96,17 @@ public:
     QPointer<QAbstractItemModel> model;
     QVector<AbstractCardItem*> cardsItems;
     QHash<void*, AbstractCardItem*> modelItemsToCards;
+
+    struct {
+        int row = -1;
+        QModelIndex parent;
+
+        bool isValid() const
+        {
+            return row >= 0;
+        }
+    } moveTarget;
+    QSet<AbstractCardItem*> movedCards;
 
     bool cardsAnimationsAvailable = true;
     QHash<QGraphicsRectItem*, QPointer<QVariantAnimation>> cardsAnimations;
@@ -200,10 +210,14 @@ AbstractCardItem* CardsGraphicsView::Implementation::insertCard(const QModelInde
             return nullptr;
         }
 
+        //
+        // Настроим исходное положение
+        //
+        card->setContainer(modelItemsToCards.value(_index.parent().internalPointer()));
         card->setPos(kInvalidPosition);
         card->setRect({ card->scenePos(), QSizeF{ 1, 1 } });
-        modelItemsToCards.insert(_index.internalPointer(), card);
         scene->addItem(card);
+        modelItemsToCards.insert(_index.internalPointer(), card);
     }
     //
     // А если была, то будем лишь корректировать её положение в списке карточек
@@ -223,7 +237,7 @@ AbstractCardItem* CardsGraphicsView::Implementation::insertCard(const QModelInde
             //
             std::function<void(AbstractCardItem*)> removeChildren;
             removeChildren = [this, &removeChildren](AbstractCardItem* _card) {
-                const auto children = _card->children();
+                const auto children = _card->embeddedCards();
                 for (auto child : children) {
                     cardsItems.removeAll(child);
                     removeChildren(child);
@@ -280,7 +294,7 @@ void CardsGraphicsView::Implementation::removeItem(AbstractCardItem* _item)
         return;
     }
 
-    if (scene->mouseGrabberItems().contains(_item)) {
+    if (movedCards.contains(_item)) {
         return;
     }
 
@@ -493,8 +507,8 @@ void CardsGraphicsView::Implementation::reorderCardInRows(const QModelIndex& _in
 
 void CardsGraphicsView::Implementation::reorderCardInColumns(const QModelIndex& _index)
 {
-    auto currentCard = modelItemsToCards.value(_index.internalPointer());
-    if (currentCard == nullptr) {
+    auto movedCard = modelItemsToCards.value(_index.internalPointer());
+    if (movedCard == nullptr) {
         return;
     }
 
@@ -516,7 +530,7 @@ void CardsGraphicsView::Implementation::reorderCardInColumns(const QModelIndex& 
     //
     // Определим место, куда перемещена карточка
     //
-    const QRectF movedCardRect = niceCardRect(currentCard);
+    const QRectF movedCardRect = niceCardRect(movedCard);
     const qreal movedCardLeft = movedCardRect.x();
     const auto movedCardCenterX = movedCardRect.center().x();
     const qreal movedCardRight = movedCardRect.right();
@@ -528,14 +542,30 @@ void CardsGraphicsView::Implementation::reorderCardInColumns(const QModelIndex& 
     //
     AbstractCardItem* containerCard = nullptr;
     AbstractCardItem* previousCard = nullptr;
+    bool needToClearInsertionState = false;
     for (auto card : std::as_const(cardsItems)) {
         //
         // Пропускаем саму двигаемую карточку, невидимые и вложенные карточки
         //
-        if (!card->isVisible() || card == currentCard || currentCard->isContainerOf(card)) {
+        if (!card->isVisible() || card == movedCard || movedCard->isContainerOf(card)) {
             continue;
         }
 
+        //
+        // Снимаем признак вложения с карточек, т.к. текущая карточка двигается
+        //
+        card->setInsertionState(AbstractCardItem::InsertionState::Empty);
+
+        //
+        // Если осталось только снять статус вставки, то дальше не идём
+        //
+        if (needToClearInsertionState) {
+            continue;
+        }
+
+        //
+        // Определим параметры проверяемой карточки, чтобы сравнить с двигаемой
+        //
         const QRectF cardRect = niceCardRect(card);
         const qreal cardLeft = cardRect.x();
         const qreal cardRight = cardRect.right();
@@ -583,7 +613,7 @@ void CardsGraphicsView::Implementation::reorderCardInColumns(const QModelIndex& 
             //
             // Карточка вкладывается в последний контейнер, область которого она пересекает
             //
-            if (card->canBeEmbedded() && card->isContainer()
+            if (movedCard->canBeEmbedded() && card->isContainer()
                 && movedCardRect.intersects(cardRect)) {
                 containerCard = card;
             }
@@ -602,9 +632,10 @@ void CardsGraphicsView::Implementation::reorderCardInColumns(const QModelIndex& 
                 continue;
             }
             //
-            // ... либо прерываем поиск
+            // ... либо прерываем поиск и только снимаем статус вставки с оставшихся карточек
             //
-            break;
+            needToClearInsertionState = true;
+            continue;
         }
     }
 
@@ -620,57 +651,98 @@ void CardsGraphicsView::Implementation::reorderCardInColumns(const QModelIndex& 
     //    }
 
     //
-    // Перемещаем карточку
+    // Определим позицию вставки
     //
-    currentCard->setContainer(containerCard);
-
-    //
-    // Поместить в самое начало
+    // ... поместить в самое начало
     //
     if (containerCard == nullptr && previousCard == nullptr) {
-        //        model->moveItem(_index->modelItem(), nullptr, nullptr);
-        model->moveRow(_index.parent(), _index.row(), {}, 0);
+        moveTarget = { 0, {} };
     }
     //
-    // Поместить после previousCard внутрь того же родителя
+    // ... поместить после previousCard внутрь того же родителя
     //
     else if (containerCard == nullptr) {
-        //        model->moveItem(_index->modelItem(), previousCard->modelItem(), nullptr);
-        model->moveRow(_index.parent(), _index.row(), previousCard->modelItemIndex().parent(),
-                       previousCard->modelItemIndex().row() + 1);
+        moveTarget
+            = { previousCard->modelItemIndex().row() + 1, previousCard->modelItemIndex().parent() };
     }
     //
-    // Поместить внутрь containerCard
+    // ... поместить внутрь containerCard
     //
     else {
         //
-        // ... в начало (2 элемента - это начальный и конечный блок папки)
+        // ... в начало
         //
-        if ((previousCard == containerCard && containerCard->isOpened())
-            //|| containerCard->modelItem()->childCount() == 2
-        ) {
-            //            model->moveItem(_index->modelItem(),
-            //            containerCard->modelItem()->childAt(0), containerCard->modelItem());
-            model->moveRow(_index.parent(), _index.row(), containerCard->modelItemIndex(), 0);
+        if ((previousCard == containerCard && containerCard->isOpened())) {
+            moveTarget = { 1, containerCard->modelItemIndex() };
         }
         //
         // ... после previousCard
         //
         else if (previousCard->modelItemIndex().parent() == containerCard->modelItemIndex()) {
-            //            model->moveItem(_index->modelItem(),
-            //            previousCard->modelItem(),containerCard->modelItem());
-            model->moveRow(_index.parent(), _index.row(), previousCard->modelItemIndex().parent(),
-                           previousCard->modelItemIndex().row() + 1);
+            moveTarget
+                = { previousCard->modelItemIndex().row() + 1, containerCard->modelItemIndex() };
         }
         //
         // ... в конец (но перед закрывающим папку блоком)
         //
         else {
-            //            model->moveItem(_index->modelItem(),containerCard->modelItem()->childAt(containerCard->modelItem()->childCount()
-            //            - 2),containerCard->modelItem());
-            model->moveRow(_index.parent(), _index.row(), containerCard->modelItemIndex(),
-                           containerCard->childCount());
+            moveTarget = { model->rowCount(containerCard->modelItemIndex()) - 2,
+                           containerCard->modelItemIndex() };
         }
+    }
+
+    //
+    // Подсветим контейнер, в который будет вставлена карточка
+    //
+    if (containerCard != nullptr) {
+        containerCard->setInsertionState(AbstractCardItem::InsertionState::InsertInside);
+    }
+
+    //
+    // Если карточка остаётся на месте, ничего не делаем
+    //
+    if (moveTarget.row == _index.row() && moveTarget.parent == _index.parent()) {
+        return;
+    }
+
+    //
+    // А если карточка перемещается в другое место, то установим статусы вставки для соседних
+    //
+    if (previousCard != nullptr && previousCard != containerCard) {
+        previousCard->setInsertionState(AbstractCardItem::InsertionState::InsertAfter);
+        previousCard->updateEmbeddedCardsPositions();
+    }
+    //
+    // .. и найдём карточку, следующую за местом вставки
+    //
+    AbstractCardItem* nextCard = nullptr;
+    if (previousCard == nullptr) {
+        for (auto card : std::as_const(cardsItems)) {
+            if (card != movedCard) {
+                nextCard = card;
+                break;
+            }
+        }
+    } else {
+        const auto previousCardIndex = previousCard->modelItemIndex();
+        const auto searchParent
+            = previousCard == containerCard ? previousCardIndex : previousCardIndex.parent();
+        const auto searchStartFromRow
+            = previousCard == containerCard ? 1 : previousCardIndex.row() + 1;
+        for (int row = searchStartFromRow; row < model->rowCount(searchParent); ++row) {
+            const auto nextCardIndex = model->index(row, 0, searchParent);
+            if (nextCardIndex == _index) {
+                continue;
+            }
+
+            nextCard = modelItemsToCards.value(nextCardIndex.internalPointer());
+            break;
+        }
+    }
+    //
+    if (nextCard != nullptr) {
+        nextCard->setInsertionState(AbstractCardItem::InsertionState::InsertBefore);
+        nextCard->updateEmbeddedCardsPositions();
     }
 }
 
@@ -790,7 +862,7 @@ void CardsGraphicsView::Implementation::reorderCardsInRows()
             //
             // ... если он не перемещается, то скорректируем его размер по последнему из детей
             //
-            if (!scene->mouseGrabberItems().contains(containerCard)) {
+            if (!movedCards.contains(containerCard)) {
                 auto folderRect = containerCard->rect();
                 auto folderY = containerCard->pos().y();
                 QPointer<QVariantAnimation>& moveAnimation = cardsAnimations[containerCard];
@@ -836,7 +908,7 @@ void CardsGraphicsView::Implementation::reorderCardsInRows()
         //
         // ... собственно корректируем размер карточки, если её сейчас не таскают конечно же
         //
-        if (!scene->mouseGrabberItems().contains(card)) {
+        if (!movedCards.contains(card)) {
             auto cardRect = card->rect();
             if (isFullWidth) {
                 //
@@ -874,7 +946,7 @@ void CardsGraphicsView::Implementation::reorderCardsInRows()
             ? (x + cardsOptions.size.width() + xDelta + widthDelta - card->boundingRect().width())
             : x;
         const QPointF newItemPosition(xCorrected, y);
-        if (!scene->mouseGrabberItems().contains(card) && card->pos() != newItemPosition) {
+        if (!movedCards.contains(card) && card->pos() != newItemPosition) {
             const QRectF itemRect(card->pos(), card->boundingRect().size());
             const QRectF newItemRect(newItemPosition, card->boundingRect().size());
             if (cardsAnimationsAvailable && scene->isActive()
@@ -919,7 +991,7 @@ void CardsGraphicsView::Implementation::reorderCardsInRows()
         //
         // ... расположим карточки, чтобы никто не пропадал под родителем
         //
-        card->setZValue((scene->mouseGrabberItems().contains(card)) ? z + cardsItems.size() : z);
+        card->setZValue((movedCards.contains(card)) ? z + cardsItems.size() : z);
         //
         // ... и корректируем координаты для позиционирования следующих элементов
         //
@@ -950,7 +1022,7 @@ void CardsGraphicsView::Implementation::reorderCardsInRows()
         //
         // ... если он не перемещается, то скорректируем его размер по последнему из детей
         //
-        if (!scene->mouseGrabberItems().contains(containerCard)) {
+        if (!movedCards.contains(containerCard)) {
             auto folderRect = containerCard->rect();
             auto folderY = containerCard->pos().y();
             QPointer<QVariantAnimation>& moveAnimation = cardsAnimations[containerCard];
@@ -974,8 +1046,6 @@ void CardsGraphicsView::Implementation::reorderCardsInRows()
 
 void CardsGraphicsView::Implementation::reorderCardsInColumns()
 {
-    scene->update();
-
     QSignalBlocker signalBlocker(scene);
 
     //
@@ -1006,22 +1076,38 @@ void CardsGraphicsView::Implementation::reorderCardsInColumns()
         return view->mapToScene(view->viewport()->geometry()).boundingRect();
     }();
 
-
+    //
+    // Определим ширину экрана и расположение первой карточки в колонке
+    //
     const qreal sceneRectWidth
         = std::max(Ui::DesignSystem::projectCard().margins().left() + cardsOptions.size.width()
                        + Ui::DesignSystem::projectCard().margins().right(),
                    viewRect.width());
     const auto isLeftToRight = q->isLeftToRight();
-    qreal firstCardInRowX = [this, isLeftToRight, sceneRectWidth]() {
+    qreal firstCardInColumnX = [this, isLeftToRight, sceneRectWidth]() {
         return isLeftToRight ? Ui::DesignSystem::projectCard().margins().left()
                              : sceneRectWidth - Ui::DesignSystem::projectCard().margins().right()
                 - cardsOptions.size.width();
     }();
 
     //
+    // Метод определения отступа для карточки, если рядом с ней будет происходить вставка
+    //
+    const auto yInsertStateDelta = [](AbstractCardItem* _card) {
+        if (_card->insertionState() == AbstractCardItem::InsertionState::InsertAfter) {
+            return -Ui::DesignSystem::layout().px(6);
+        } else if (_card->insertionState() == AbstractCardItem::InsertionState::InsertBefore) {
+            return Ui::DesignSystem::layout().px(6);
+        } else {
+            return 0.0;
+        }
+    };
+
+    //
     // Проходим все элементы (они упорядочены так, как должны идти элементы в сценарии
     //
     qreal y = Ui::DesignSystem::projectCard().margins().top();
+    qreal yDelta = 0.0;
     qreal z = scene->firstZValue();
     qreal lastItemHeight = 0.0;
     qreal lastItemWidth = 0.0;
@@ -1034,6 +1120,11 @@ void CardsGraphicsView::Implementation::reorderCardsInColumns()
             || (card->container() != nullptr && !card->container()->isOpened())) {
             continue;
         }
+
+        //
+        // Если карточка рядом со смещаемой, добавляем дополнительное смещение по y
+        //
+        yDelta += yInsertStateDelta(card);
 
         //
         // Если закончили вставлять карточки в родителя
@@ -1049,22 +1140,24 @@ void CardsGraphicsView::Implementation::reorderCardsInColumns()
             //
             // ... если он не перемещается, то скорректируем его размер по последнему из детей
             //
-            if (!scene->mouseGrabberItems().contains(containerCard)) {
-                auto folderRect = containerCard->rect();
-                auto folderY = containerCard->pos().y();
+            if (!movedCards.contains(containerCard)) {
+                auto containerRect = containerCard->rect();
+                auto containerY = containerCard->pos().y();
                 QPointer<QVariantAnimation>& moveAnimation = cardsAnimations[containerCard];
                 if (!moveAnimation.isNull()
                     && moveAnimation->state() == QVariantAnimation::Running) {
-                    folderY = moveAnimation->endValue().toPointF().y();
+                    containerY = moveAnimation->endValue().toPointF().y();
                 }
-                folderRect.setBottom(y - cardsOptions.spacing - folderY
-                                     + Ui::DesignSystem::layout().px12());
-                containerCard->setRect(folderRect);
+                containerRect.setBottom(y - cardsOptions.spacing - containerY
+                                        + yInsertStateDelta(containerCard)
+                                        + Ui::DesignSystem::layout().px12());
+                containerCard->setRect(containerRect);
             }
             //
             // ... корректируем координаты для дальнейшей компоновки
             //
             y += Ui::DesignSystem::layout().px12();
+            yDelta -= yInsertStateDelta(containerCard);
             lastItemWidth = containerCard->boundingRect().width();
 
             //
@@ -1104,7 +1197,7 @@ void CardsGraphicsView::Implementation::reorderCardsInColumns()
         //
         // ... собственно корректируем размер карточки, если её сейчас не таскают конечно же
         //
-        if (!scene->mouseGrabberItems().contains(card)) {
+        if (!movedCards.contains(card)) {
             auto cardRect = card->rect();
             if (isFullWidth) {
                 //
@@ -1123,24 +1216,24 @@ void CardsGraphicsView::Implementation::reorderCardsInColumns()
         // Если входим в акт
         //
         if (isAct || isActClosed) {
-            firstCardInRowX += (isLeftToRight ? 1 : -1) * (lastItemWidth + cardsOptions.spacing);
+            firstCardInColumnX += (isLeftToRight ? 1 : -1) * (lastItemWidth + cardsOptions.spacing);
             if (!isAct && isActClosed) {
-                firstCardInRowX -= Ui::DesignSystem::layout().px(48);
+                firstCardInColumnX -= Ui::DesignSystem::layout().px(48);
             } else if (isAct && !isActClosed) {
-                firstCardInRowX += Ui::DesignSystem::layout().px(48);
+                firstCardInColumnX += Ui::DesignSystem::layout().px(48);
             }
             y = Ui::DesignSystem::projectCard().margins().top();
         }
         //
         // Определим положение карточки
         //
-        const auto x = firstCardInRowX - xDelta;
+        const auto x = firstCardInColumnX - xDelta;
         //
         // ... позиционируем карточку, если она не перемещается в данный момент
         //     и новая позиция отличается от текущей
         //
-        const QPointF newItemPosition(x, y);
-        if (!scene->mouseGrabberItems().contains(card) && card->pos() != newItemPosition) {
+        QPointF newItemPosition(x, y + yDelta);
+        if (!movedCards.contains(card) && card->pos() != newItemPosition) {
             const QRectF itemRect(card->pos(), card->boundingRect().size());
             const QRectF newItemRect(newItemPosition, card->boundingRect().size());
             if (cardsAnimationsAvailable && scene->isActive()
@@ -1186,7 +1279,7 @@ void CardsGraphicsView::Implementation::reorderCardsInColumns()
         //
         // ... расположим карточки, чтобы никто не пропадал под родителем
         //
-        card->setZValue((scene->mouseGrabberItems().contains(card)) ? z + cardsItems.size() : z);
+        card->setZValue((movedCards.contains(card)) ? z + cardsItems.size() : z);
         //
         // ... и корректируем координаты для позиционирования следующих элементов
         //
@@ -1196,6 +1289,10 @@ void CardsGraphicsView::Implementation::reorderCardsInColumns()
             lastItemHeight = card->boundingRect().height();
         }
         y += lastItemHeight + cardsOptions.spacing;
+
+        if (!card->isContainer()) {
+            yDelta -= yInsertStateDelta(card);
+        }
 
         lastItemWidth = card->boundingRect().width();
 
@@ -1208,21 +1305,22 @@ void CardsGraphicsView::Implementation::reorderCardsInColumns()
         //
         // Уберём его из списка родителей
         //
-        auto folderItem = containersStack.pop();
-        auto folderCard = modelItemsToCards[folderItem.internalPointer()];
+        auto containerItem = containersStack.pop();
+        auto containerCard = modelItemsToCards[containerItem.internalPointer()];
         //
         // ... если он не перемещается, то скорректируем его размер по последнему из детей
         //
-        if (!scene->mouseGrabberItems().contains(folderCard)) {
-            auto folderRect = folderCard->rect();
-            auto folderY = folderCard->pos().y();
-            QPointer<QVariantAnimation>& moveAnimation = cardsAnimations[folderCard];
+        if (!movedCards.contains(containerCard)) {
+            auto containerRect = containerCard->rect();
+            auto containerY = containerCard->pos().y();
+            QPointer<QVariantAnimation>& moveAnimation = cardsAnimations[containerCard];
             if (!moveAnimation.isNull() && moveAnimation->state() == QVariantAnimation::Running) {
-                folderY = moveAnimation->endValue().toPointF().y();
+                containerY = moveAnimation->endValue().toPointF().y();
             }
-            folderRect.setBottom(y - cardsOptions.spacing - folderY
-                                 + Ui::DesignSystem::layout().px12());
-            folderCard->setRect(folderRect);
+            containerRect.setBottom(y - cardsOptions.spacing - containerY
+                                    + yInsertStateDelta(containerCard)
+                                    + Ui::DesignSystem::layout().px12());
+            containerCard->setRect(containerRect);
         }
         //
         // ... корректируем координаты для дальнейшей компоновки
@@ -1265,7 +1363,9 @@ CardsGraphicsView::CardsGraphicsView(CardsGraphicsScene* _scene, QWidget* _paren
     });
     connect(d->scene, &CardsGraphicsScene::itemDoubleClicked, this,
             &CardsGraphicsView::itemDoubleClicked);
-    connect(d->scene, &CardsGraphicsScene::itemChanged, this, [this](const QModelIndex& _index) {
+    connect(d->scene, &CardsGraphicsScene::itemMoved, this, [this](const QModelIndex& _index) {
+        d->movedCards = d->scene->mouseGrabberItems();
+
         if (d->model->rowCount(_index) > 0) {
             std::function<void(const QModelIndex&, bool)> updateChildrenVisibility;
             updateChildrenVisibility = [this, &updateChildrenVisibility](const QModelIndex& _index,
@@ -1292,6 +1392,26 @@ CardsGraphicsView::CardsGraphicsView(CardsGraphicsScene* _scene, QWidget* _paren
 
         d->reorderCard(_index);
         emit itemChanged(_index);
+    });
+    connect(d->scene, &CardsGraphicsScene::itemDropped, this, [this](const QModelIndex& _index) {
+        if (d->moveTarget.isValid()
+            && (d->moveTarget.row != _index.row() || d->moveTarget.parent != _index.parent())) {
+            auto movedCard = d->modelItemsToCards.value(_index.internalPointer());
+            auto container = d->modelItemsToCards.value(d->moveTarget.parent.internalPointer());
+            movedCard->setContainer(container);
+
+            d->model->moveRow(_index.parent(), _index.row(), d->moveTarget.parent,
+                              d->moveTarget.row);
+
+            for (auto card : std::as_const(d->cardsItems)) {
+                card->setInsertionState(AbstractCardItem::InsertionState::Empty);
+            }
+        }
+
+        d->moveTarget = {};
+        d->movedCards.clear();
+
+        d->reorderCards();
     });
 }
 
@@ -1377,9 +1497,9 @@ void CardsGraphicsView::setModel(QAbstractItemModel* _model)
     }
 
     d->scene->clear();
-    d->cardsItems.clear();
     d->cardsAnimations.clear();
     d->modelItemsToCards.clear();
+    d->cardsItems.clear();
     d->model = _model;
 
     if (d->model == nullptr) {
@@ -1396,8 +1516,6 @@ void CardsGraphicsView::setModel(QAbstractItemModel* _model)
         }
 
         d->reorderCards();
-
-        d->scene->fitToContents();
 
         //
         // Корректируем размер сцены, добавляя небольшую прокрутку по сторонам,
@@ -1426,8 +1544,6 @@ void CardsGraphicsView::setModel(QAbstractItemModel* _model)
         d->scene->clear();
         d->cardsAnimations.clear();
         d->modelItemsToCards.clear();
-
-        qDeleteAll(d->cardsItems);
         d->cardsItems.clear();
     });
     connect(d->model, &QAbstractItemModel::modelReset, this, loadModelContent);
@@ -1513,7 +1629,7 @@ QModelIndex CardsGraphicsView::selectedCardItemIndex() const
 
 void CardsGraphicsView::selectCardItemIndex(const QModelIndex& _index)
 {
-    if (!d->scene->mouseGrabberItems().isEmpty()) {
+    if (!d->movedCards.isEmpty()) {
         return;
     }
 
@@ -1587,19 +1703,6 @@ bool CardsGraphicsView::excludeFromFlatIndex(const QModelIndex& _index) const
 {
     Q_UNUSED(_index)
     return false;
-}
-
-AbstractCardItem* CardsGraphicsView::createCardFor(const QModelIndex& _index) const
-{
-    AbstractCardItem* card = nullptr;
-    if (_index.flags().testFlag(Qt::ItemIsDropEnabled)) {
-        card = new CardContainerItem;
-    } else {
-        card = new CardItem;
-    }
-    card->setModelItemIndex(_index);
-
-    return card;
 }
 
 bool CardsGraphicsView::event(QEvent* _event)

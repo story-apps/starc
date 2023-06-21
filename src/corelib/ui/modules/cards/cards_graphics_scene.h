@@ -44,9 +44,14 @@ signals:
     void itemDoubleClicked(const QModelIndex& _index);
 
     /**
-     * @brief Пользователь изменил параметры акта
+     * @brief Пользователь изменил параметры карточки
      */
-    void itemChanged(const QModelIndex& _index);
+    void itemMoved(const QModelIndex& _index);
+
+    /**
+     * @brief Пользователь отпустил карточку
+     */
+    void itemDropped(const QModelIndex& _index);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* _event) override;

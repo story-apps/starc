@@ -917,6 +917,20 @@ Qt::DropActions TextModel::supportedDropActions() const
     return Qt::MoveAction;
 }
 
+bool TextModel::moveRows(const QModelIndex& _sourceParent, int _sourceRow, int _count,
+                         const QModelIndex& _destinationParent, int _destinationRow)
+{
+    Q_ASSERT(_count == 1);
+    TextModelItem* item = itemForIndex(index(_sourceRow, 0, _sourceParent));
+    TextModelItem* afterSiblingItem = nullptr;
+    if (_destinationRow != 0) {
+        afterSiblingItem = itemForIndex(index(_destinationRow - 1, 0, _destinationParent));
+    }
+    TextModelItem* parentItem = itemForIndex(_destinationParent);
+    moveItem(item, afterSiblingItem, parentItem);
+    return true;
+}
+
 QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition,
                                      const QModelIndex& _to, int _toPosition, bool _clearUuid) const
 {

@@ -99,6 +99,9 @@ public:
     QMimeData* mimeData(const QModelIndexList& _indexes) const override;
     Qt::DropActions supportedDragActions() const override;
     Qt::DropActions supportedDropActions() const override;
+    //! Реализация стандартных операций
+    bool moveRows(const QModelIndex& _sourceParent, int _sourceRow, int _count,
+                  const QModelIndex& _destinationParent, int _destinationRow) override;
     /** @} */
 
     /**
