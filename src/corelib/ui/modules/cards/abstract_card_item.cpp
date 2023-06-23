@@ -236,7 +236,15 @@ void AbstractCardItem::dropToContainer(AbstractCardItem* _container)
     group->addAnimation(zAnimation);
     group->addAnimation(moveToBottomAnimation);
     QObject::connect(group, &QSequentialAnimationGroup::finished, group, [this] {
-        setVisible(false);
+        std::function<void(AbstractCardItem * _card)> hideRecursively;
+        hideRecursively = [&hideRecursively](AbstractCardItem* _card) {
+            const auto children = _card->embeddedCards();
+            for (auto child : children) {
+                hideRecursively(child);
+            }
+            _card->setVisible(false);
+        };
+        hideRecursively(this);
         setScale(1.0);
     });
     group->start(QAbstractAnimation::DeleteWhenStopped);
