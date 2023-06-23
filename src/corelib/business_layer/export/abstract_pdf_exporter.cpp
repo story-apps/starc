@@ -92,15 +92,17 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
                                  - TextHelper::fineLineSpacing(block.charFormat().font()));
             }
 
+            if (blockRect.top() >= pageYPos) {
+                q->printBlockDecorations(_painter, pageYPos, _body, paragraphType, blockRect, block,
+                                         _exportOptions);
+            }
+
             if (blockRect.bottom()
                 > pageYPos + _body.height()
                     - MeasurementHelper::mmToPx(
                         q->documentTemplate(_exportOptions).pageMargins().bottom())) {
                 break;
             }
-
-            q->printBlockDecorations(_painter, pageYPos, _body, paragraphType, blockRect, block,
-                                     _exportOptions);
 
             block = block.next();
         }
