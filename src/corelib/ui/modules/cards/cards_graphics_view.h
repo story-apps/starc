@@ -13,7 +13,7 @@ class CardsGraphicsScene;
 /**
  * @brief Представление сцены отношений персонажей
  */
-class CardsGraphicsView : public ScalableGraphicsView
+class CORE_LIBRARY_EXPORT CardsGraphicsView : public ScalableGraphicsView
 {
     Q_OBJECT
 

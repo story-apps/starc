@@ -2,12 +2,14 @@
 
 #include <QGraphicsScene>
 
+#include <corelib_global.h>
+
 
 namespace Ui {
 
 class AbstractCardItem;
 
-class CardsGraphicsScene : public QGraphicsScene
+class CORE_LIBRARY_EXPORT CardsGraphicsScene : public QGraphicsScene
 {
     Q_OBJECT
 

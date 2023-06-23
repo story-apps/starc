@@ -2,13 +2,15 @@
 
 #include <QGraphicsRectItem>
 
+#include <corelib_global.h>
+
 
 namespace Ui {
 
 /**
  * @brief Абстврактный класс карточки
  */
-class AbstractCardItem : public QGraphicsRectItem
+class CORE_LIBRARY_EXPORT AbstractCardItem : public QGraphicsRectItem
 {
 public:
     explicit AbstractCardItem(QGraphicsItem* _parent = nullptr);
