@@ -179,6 +179,69 @@ void AbstractCardItem::setContainer(AbstractCardItem* _container)
     }
 }
 
+void AbstractCardItem::dropToContainer(AbstractCardItem* _container)
+{
+    setContainer(_container);
+
+    if (d->container == nullptr || d->container->isOpened()) {
+        return;
+    }
+
+    //
+    // Если задан контейнер и он закрыт, то проигрываем анимацию вложения карточки внутрь контейнера
+    //
+    constexpr int duration = 200;
+    auto scaleAnimation = new QVariantAnimation;
+    scaleAnimation->setDuration(duration);
+    scaleAnimation->setEasingCurve(QEasingCurve::OutQuart);
+    scaleAnimation->setStartValue(scale());
+    scaleAnimation->setEndValue((d->container->boundingRect().width() * 0.8)
+                                / boundingRect().width());
+    QObject::connect(scaleAnimation, &QVariantAnimation::valueChanged, scaleAnimation,
+                     [this](const QVariant& _value) { setScale(_value.toReal()); });
+    auto moveToTopAnimation = new QVariantAnimation;
+    moveToTopAnimation->setDuration(duration);
+    moveToTopAnimation->setEasingCurve(QEasingCurve::OutQuart);
+    moveToTopAnimation->setStartValue(pos());
+    moveToTopAnimation->setEndValue(
+        d->container->pos()
+        - QPointF(-0.1 * d->container->boundingRect().width(),
+                  boundingRect().height()
+                      - ((1 - scaleAnimation->endValue().toReal()) / 2.0)
+                          * boundingRect().height()));
+    QObject::connect(moveToTopAnimation, &QVariantAnimation::valueChanged, moveToTopAnimation,
+                     [this](const QVariant& _value) { setPos(_value.toPointF()); });
+    auto zAnimation = new QVariantAnimation;
+    zAnimation->setDuration(1);
+    zAnimation->setStartValue(d->container->zValue());
+    zAnimation->setEndValue(d->container->zValue() - 0.001);
+    QObject::connect(zAnimation, &QVariantAnimation::valueChanged, zAnimation,
+                     [this](const QVariant& _value) { setZValue(_value.toReal()); });
+    auto moveToBottomAnimation = new QVariantAnimation;
+    moveToBottomAnimation->setDuration(duration);
+    moveToBottomAnimation->setEasingCurve(QEasingCurve::InQuad);
+    moveToBottomAnimation->setStartValue(moveToTopAnimation->endValue().toPointF());
+    moveToBottomAnimation->setEndValue(d->container->pos()
+                                       + QPointF(0.1 * d->container->boundingRect().width(),
+                                                 0.1 * d->container->boundingRect().height()));
+    QObject::connect(moveToBottomAnimation, &QVariantAnimation::valueChanged, moveToBottomAnimation,
+                     [this](const QVariant& _value) { setPos(_value.toPointF()); });
+
+    auto moveToTopGroup = new QParallelAnimationGroup;
+    moveToTopGroup->addAnimation(scaleAnimation);
+    moveToTopGroup->addAnimation(moveToTopAnimation);
+    auto group = new QSequentialAnimationGroup;
+    group->addPause(100);
+    group->addAnimation(moveToTopGroup);
+    group->addAnimation(zAnimation);
+    group->addAnimation(moveToBottomAnimation);
+    QObject::connect(group, &QSequentialAnimationGroup::finished, group, [this] {
+        setVisible(false);
+        setScale(1.0);
+    });
+    group->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
 void AbstractCardItem::embedCard(AbstractCardItem* _child)
 {
     if (d->embeddedCards.contains(_child)) {
@@ -186,7 +249,6 @@ void AbstractCardItem::embedCard(AbstractCardItem* _child)
     }
 
     d->embeddedCards[_child] = _child->pos() - pos();
-    updateEmbeddedCardsPositions();
 }
 
 void AbstractCardItem::unembedCard(AbstractCardItem* _child)
@@ -245,76 +307,16 @@ void AbstractCardItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
     QGraphicsRectItem::mouseReleaseEvent(_event);
 
     //
-    // Сбрасываем флаг вставки в контейнер, если он задан
-    //
-    if (d->container != nullptr) {
-        d->container->setInsertionState(InsertionState::Empty);
-    }
-
-    //
-    // Если задан контейнер и он закрыт, то проигрываем анимацию вложения карточки внутрь контейнера
-    //
-    if (d->container != nullptr && !d->container->isOpened()) {
-        constexpr int duration = 200;
-        auto scaleAnimation = new QVariantAnimation;
-        scaleAnimation->setDuration(duration);
-        scaleAnimation->setEasingCurve(QEasingCurve::OutQuart);
-        scaleAnimation->setStartValue(scale());
-        scaleAnimation->setEndValue((d->container->boundingRect().width() * 0.8)
-                                    / boundingRect().width());
-        QObject::connect(scaleAnimation, &QVariantAnimation::valueChanged, scaleAnimation,
-                         [this](const QVariant& _value) { setScale(_value.toReal()); });
-        auto moveToTopAnimation = new QVariantAnimation;
-        moveToTopAnimation->setDuration(duration);
-        moveToTopAnimation->setEasingCurve(QEasingCurve::OutQuart);
-        moveToTopAnimation->setStartValue(pos());
-        moveToTopAnimation->setEndValue(
-            d->container->pos()
-            - QPointF(-0.1 * d->container->boundingRect().width(),
-                      boundingRect().height()
-                          - ((1 - scaleAnimation->endValue().toReal()) / 2.0)
-                              * boundingRect().height()));
-        QObject::connect(moveToTopAnimation, &QVariantAnimation::valueChanged, moveToTopAnimation,
-                         [this](const QVariant& _value) { setPos(_value.toPointF()); });
-        auto zAnimation = new QVariantAnimation;
-        zAnimation->setDuration(1);
-        zAnimation->setStartValue(d->container->zValue());
-        zAnimation->setEndValue(d->container->zValue() - 0.001);
-        QObject::connect(zAnimation, &QVariantAnimation::valueChanged, zAnimation,
-                         [this](const QVariant& _value) { setZValue(_value.toReal()); });
-        auto moveToBottomAnimation = new QVariantAnimation;
-        moveToBottomAnimation->setDuration(duration);
-        moveToBottomAnimation->setEasingCurve(QEasingCurve::InQuad);
-        moveToBottomAnimation->setStartValue(moveToTopAnimation->endValue().toPointF());
-        moveToBottomAnimation->setEndValue(d->container->pos()
-                                           + QPointF(0.1 * d->container->boundingRect().width(),
-                                                     0.1 * d->container->boundingRect().height()));
-        QObject::connect(moveToBottomAnimation, &QVariantAnimation::valueChanged,
-                         moveToBottomAnimation,
-                         [this](const QVariant& _value) { setPos(_value.toPointF()); });
-
-        auto moveToTopGroup = new QParallelAnimationGroup;
-        moveToTopGroup->addAnimation(scaleAnimation);
-        moveToTopGroup->addAnimation(moveToTopAnimation);
-        auto group = new QSequentialAnimationGroup;
-        group->addPause(100);
-        group->addAnimation(moveToTopGroup);
-        group->addAnimation(zAnimation);
-        group->addAnimation(moveToBottomAnimation);
-        QObject::connect(group, &QSequentialAnimationGroup::finished, group, [this] {
-            setVisible(false);
-            setScale(1.0);
-        });
-        group->start(QAbstractAnimation::DeleteWhenStopped);
-    }
-
-    //
     // Возвращаем карточку на место
     //
     // Делаем отложенный вызов, чтобы mouseGrabber сцены освободился
     //
     QMetaObject::invokeMethod(
-        scene(), [this] { emit d->cardsScene()->itemDropped(d->modelItemIndex); },
+        scene(),
+        [this] {
+            emit d->cardsScene()->itemChanged(d->modelItemIndex);
+            emit d->cardsScene()->itemDropped(d->modelItemIndex);
+        },
         Qt::QueuedConnection);
 }
 

@@ -62,6 +62,7 @@ public:
      */
     AbstractCardItem* container() const;
     void setContainer(AbstractCardItem* _container);
+    void dropToContainer(AbstractCardItem* _container);
 
     /**
      * @brief Управление вложенными карточками

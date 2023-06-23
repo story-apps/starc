@@ -44,7 +44,12 @@ signals:
     void itemDoubleClicked(const QModelIndex& _index);
 
     /**
-     * @brief Пользователь изменил параметры карточки
+     * @brief Пользователь изменил карточку
+     */
+    void itemChanged(const QModelIndex& _index);
+
+    /**
+     * @brief Пользователь подвинул карточку
      */
     void itemMoved(const QModelIndex& _index);
 
