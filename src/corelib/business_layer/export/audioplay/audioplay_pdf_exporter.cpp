@@ -40,6 +40,10 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
 {
     const auto& exportTemplate = documentTemplate(_exportOptions);
     const auto& exportOptions = static_cast<const AudioplayExportOptions&>(_exportOptions);
+    //
+    // FIXME: проверить в разных системах и разобраться какое тут должно быть значение
+    //
+    const auto firstBlockYDelta = 9;
 
     //
     // Покажем номер блока, если необходимо
@@ -71,7 +75,8 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                             MeasurementHelper::mmToPx(exportTemplate.pageMargins().left()),
                             _blockRect.top() <= _pageYPos
                                 ? (_pageYPos
-                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
+                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
+                                   + firstBlockYDelta)
                                 : _blockRect.top(),
                             numberDelta, TextHelper::fineLineSpacing(_painter->font()));
                     } else {
@@ -80,7 +85,8 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                             0,
                             _blockRect.top() <= _pageYPos
                                 ? (_pageYPos
-                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
+                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
+                                   + firstBlockYDelta)
                                 : _blockRect.top(),
                             MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
                                 - distanceBetweenSceneNumberAndText,
@@ -93,7 +99,8 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                                 + _body.width() - numberDelta,
                             _blockRect.top() <= _pageYPos
                                 ? (_pageYPos
-                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
+                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
+                                   + firstBlockYDelta)
                                 : _blockRect.top(),
                             numberDelta, TextHelper::fineLineSpacing(_painter->font()));
                     } else {
@@ -103,7 +110,8 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                                 + _body.width() + distanceBetweenSceneNumberAndText,
                             _blockRect.top() <= _pageYPos
                                 ? (_pageYPos
-                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
+                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
+                                   + firstBlockYDelta)
                                 : _blockRect.top(),
                             MeasurementHelper::mmToPx(exportTemplate.pageMargins().right())
                                 - distanceBetweenSceneNumberAndText,
@@ -134,7 +142,8 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                 MeasurementHelper::mmToPx(exportTemplate.pageMargins().left()
                                           + characterBlockStyle.marginsOnHalfPage().left()),
                 _blockRect.top() <= _pageYPos
-                    ? (_pageYPos + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
+                    ? (_pageYPos + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
+                       + firstBlockYDelta)
                     : _blockRect.top(),
                 _block.blockFormat().leftMargin()
                     - MeasurementHelper::mmToPx(characterBlockStyle.marginsOnHalfPage().left()),

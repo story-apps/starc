@@ -92,11 +92,33 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
                                  - TextHelper::fineLineSpacing(block.charFormat().font()));
             }
 
-            if (blockRect.top() >= pageYPos) {
+            //
+            // Рисуем декорации только в том случае, если на текущую страницу помещается первая
+            // строка блока, либо если блок должен был начаться на предыдущей странице,
+            // но туда не влезла даже одна строка
+            //
+            const bool isFirstLineCanBePlacedAtCurrentPage = (blockRect.top() > pageYPos)
+                && (pageYPos + _body.height()
+                        - MeasurementHelper::mmToPx(
+                            q->documentTemplate(_exportOptions).pageMargins().bottom())
+                        - blockRect.top()
+                    >= block.blockFormat().lineHeight());
+            const bool isBlockStartedOnPreviousPage = blockRect.top() < pageYPos;
+            const bool isFirstLinePlacedAtPreviousPage = (blockRect.top() < pageYPos)
+                && (pageYPos
+                        - MeasurementHelper::mmToPx(
+                            q->documentTemplate(_exportOptions).pageMargins().bottom())
+                        - blockRect.top()
+                    >= block.blockFormat().lineHeight());
+            if (isFirstLineCanBePlacedAtCurrentPage
+                || (isBlockStartedOnPreviousPage && !isFirstLinePlacedAtPreviousPage)) {
                 q->printBlockDecorations(_painter, pageYPos, _body, paragraphType, blockRect, block,
                                          _exportOptions);
             }
 
+            //
+            // Если блок должен быть отрисован на следующей странице прерываем отрисовку декораций
+            //
             if (blockRect.bottom()
                 > pageYPos + _body.height()
                     - MeasurementHelper::mmToPx(
