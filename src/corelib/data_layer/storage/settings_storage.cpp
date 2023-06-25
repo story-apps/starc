@@ -113,6 +113,7 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kApplicationSmartQuotesKey, false);
     defaultValues.insert(kApplicationReplaceTwoDashesWithEmDashKey, false);
     defaultValues.insert(kApplicationAvoidMultipleSpacesKey, false);
+
     defaultValues.insert(kProjectTypeKey, 0);
     defaultValues.insert(kProjectSaveFolderKey,
                          QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)

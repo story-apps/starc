@@ -60,6 +60,11 @@ signals:
     void themeChanged(Ui::ApplicationTheme _theme);
 
     /**
+     * @brief Пользователь хочет использовать кастомную тему с заданным ХЭШем
+     */
+    void useCustomThemeRequested(QString _themeHash);
+
+    /**
      * @brief Пользователь изменил масштаб интерфейса
      */
     void scaleFactorChanged(qreal _scaleFactor);

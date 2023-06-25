@@ -91,7 +91,6 @@ const QString kApplicationReplaceTwoDashesWithEmDashKey
 const QString kApplicationAvoidMultipleSpacesKey = kApplicationGroupKey + "/avoid-multiple-spaces";
 // список недавних проектов
 const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
-
 //
 // Аккаунт
 //

@@ -2523,6 +2523,11 @@ void ApplicationManager::initConnections()
             [this](QLocale::Language _language) { d->setTranslation(_language); });
     connect(d->onboardingManager.data(), &OnboardingManager::themeChanged, this,
             [this](Ui::ApplicationTheme _theme) { d->setDesignSystemTheme(_theme); });
+    connect(d->onboardingManager.data(), &OnboardingManager::useCustomThemeRequested, this,
+            [this](QString _themeHash) {
+                d->setDesignSystemTheme(Ui::ApplicationTheme::Custom);
+                d->setDesignSystemCustomThemeColors(Ui::DesignSystem::Color(_themeHash));
+            });
     connect(d->onboardingManager.data(), &OnboardingManager::scaleFactorChanged, this,
             [this](qreal _scaleFactor) {
                 d->setDesignSystemScaleFactor(_scaleFactor);
@@ -2533,6 +2538,10 @@ void ApplicationManager::initConnections()
         setSettingsValue(DataStorageLayer::kApplicationLanguagedKey, QLocale::system().language());
         setSettingsValue(DataStorageLayer::kApplicationThemeKey,
                          static_cast<int>(Ui::DesignSystem::theme()));
+        if (Ui::DesignSystem::theme() == Ui::ApplicationTheme::Custom) {
+            setSettingsValue(DataStorageLayer::kApplicationCustomThemeColorsKey,
+                             Ui::DesignSystem::color().toString());
+        }
         setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey,
                          Ui::DesignSystem::scaleFactor());
 
