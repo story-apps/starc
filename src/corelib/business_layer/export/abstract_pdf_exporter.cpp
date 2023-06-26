@@ -97,19 +97,31 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
             // строка блока, либо если блок должен был начаться на предыдущей странице,
             // но туда не влезла даже одна строка
             //
+            const auto blockLineHeight = TextHelper::fineLineSpacing(block.charFormat().font()) -
+            //
+            // FIXME: почему-то высота строки у рендера в PDF как будто чуть меньше высоты строки
+            //        при ручном проссчёте, поэтому уменьшаем тут чутка, чтобы корректно рассчитать
+            //        кейсы, когда первая строка таки влезает
+            //
+#ifdef Q_OS_LINUX
+                2
+#else
+                0
+#endif
+                ;
             const bool isFirstLineCanBePlacedAtCurrentPage = (blockRect.top() > pageYPos)
                 && (pageYPos + _body.height()
                         - MeasurementHelper::mmToPx(
                             q->documentTemplate(_exportOptions).pageMargins().bottom())
                         - blockRect.top()
-                    >= block.blockFormat().lineHeight());
+                    >= blockLineHeight);
             const bool isBlockStartedOnPreviousPage = blockRect.top() < pageYPos;
             const bool isFirstLinePlacedAtPreviousPage = (blockRect.top() < pageYPos)
                 && (pageYPos
                         - MeasurementHelper::mmToPx(
                             q->documentTemplate(_exportOptions).pageMargins().bottom())
                         - blockRect.top()
-                    >= block.blockFormat().lineHeight());
+                    >= blockLineHeight);
             if (isFirstLineCanBePlacedAtCurrentPage
                 || (isBlockStartedOnPreviousPage && !isFirstLinePlacedAtPreviousPage)) {
                 q->printBlockDecorations(_painter, pageYPos, _body, paragraphType, blockRect, block,

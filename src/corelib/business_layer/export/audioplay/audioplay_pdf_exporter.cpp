@@ -43,7 +43,13 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
     //
     // FIXME: проверить в разных системах и разобраться какое тут должно быть значение
     //
-    const auto firstBlockYDelta = 9;
+    const auto firstBlockYDelta =
+#ifdef Q_OS_LINUX
+        9
+#else
+        0
+#endif
+        ;
 
     //
     // Покажем номер блока, если необходимо
