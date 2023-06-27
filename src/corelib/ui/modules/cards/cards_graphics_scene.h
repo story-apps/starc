@@ -41,9 +41,19 @@ public:
 
 signals:
     /**
+     * @brief Пользователь сделал клик на элементе
+     */
+    void itemClicked(const QModelIndex& _index);
+
+    /**
      * @brief Пользователь сделал двойной клик на элементе
      */
     void itemDoubleClicked(const QModelIndex& _index);
+
+    /**
+     * @brief Пользователь вызвал контекстное меню карточки
+     */
+    void itemContextMenuRequested(const QModelIndex& _index);
 
     /**
      * @brief Пользователь изменил карточку

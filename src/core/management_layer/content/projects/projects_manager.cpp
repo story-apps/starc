@@ -511,13 +511,13 @@ void ProjectsManager::saveProjects()
     for (int projectIndex = 0; projectIndex < d->projects->rowCount(); ++projectIndex) {
         const auto& project = d->projects->projectAt(projectIndex);
         QJsonObject projectJson;
-        if (project.isRemote()) {
-            projectJson["id"] = project.id();
-            projectJson["is_owner"] = project.isOwner();
-            projectJson["role"] = static_cast<int>(project.editingMode());
+        if (project->isRemote()) {
+            projectJson["id"] = project->id();
+            projectJson["is_owner"] = project->isOwner();
+            projectJson["role"] = static_cast<int>(project->editingMode());
 
             QJsonArray permissionsJson;
-            const auto permissions = project.editingPermissions();
+            const auto permissions = project->editingPermissions();
             for (auto iter = permissions.begin(); iter != permissions.end(); ++iter) {
                 QJsonObject documentAccess;
                 documentAccess["uuid"] = iter.key().toString();
@@ -526,14 +526,14 @@ void ProjectsManager::saveProjects()
             }
             projectJson["permissions"] = permissionsJson;
         }
-        projectJson["type"] = static_cast<int>(project.type());
-        projectJson["uuid"] = project.uuid().toString();
-        projectJson["name"] = project.name();
-        projectJson["logline"] = project.logline();
-        projectJson["path"] = project.path();
-        projectJson["poster_path"] = project.posterPath();
-        projectJson["last_edit_time"] = project.lastEditTime().toString(Qt::ISODateWithMs);
-        projectJson["can_ask"] = project.canAskAboutSwitch();
+        projectJson["type"] = static_cast<int>(project->type());
+        projectJson["uuid"] = project->uuid().toString();
+        projectJson["name"] = project->name();
+        projectJson["logline"] = project->logline();
+        projectJson["path"] = project->path();
+        projectJson["poster_path"] = project->posterPath();
+        projectJson["last_edit_time"] = project->lastEditTime().toString(Qt::ISODateWithMs);
+        projectJson["can_ask"] = project->canAskAboutSwitch();
         projectsJson.append(projectJson);
     }
     setSettingsValue(DataStorageLayer::kApplicationProjectsKey,
@@ -682,20 +682,20 @@ void ProjectsManager::setCloudProjects(const QVector<Domain::ProjectInfo>& _proj
     //
     for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
         const auto& project = d->projects->projectAt(projectRow);
-        if (project.isLocal()) {
+        if (project->isLocal()) {
             continue;
         }
 
         bool hideProject = true;
         for (int index = 0; index < _projects.size(); ++index) {
-            if (project.id() == _projects.at(index).id) {
+            if (project->id() == _projects.at(index).id) {
                 hideProject = false;
                 break;
             }
         }
 
         if (hideProject) {
-            d->projects->remove(project);
+            d->projects->remove(*project);
             --projectRow;
         }
     }
@@ -720,8 +720,8 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     //
     for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
         const auto& project = d->projects->projectAt(projectRow);
-        if (project.id() == _projectInfo.id) {
-            cloudProject = project;
+        if (project->id() == _projectInfo.id) {
+            cloudProject = *project;
             break;
         }
     }
@@ -843,8 +843,8 @@ void ProjectsManager::setCurrentProject(const QString& _path, const QString& _re
     //
     for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
         const auto& project = d->projects->projectAt(projectRow);
-        if (project.path() == projectPath) {
-            newCurrentProject = project;
+        if (project->path() == projectPath) {
+            newCurrentProject = *project;
             break;
         }
     }
@@ -887,8 +887,8 @@ void ProjectsManager::setCurrentProject(int _projectId)
     QString newCurrentProjectPath;
     for (auto index = 0; index < d->projects->rowCount(); ++index) {
         const auto& project = d->projects->projectAt(index);
-        if (project.isRemote() && project.id() == _projectId) {
-            newCurrentProjectPath = project.path();
+        if (project->isRemote() && project->id() == _projectId) {
+            newCurrentProjectPath = project->path();
             break;
         }
     }
@@ -992,8 +992,8 @@ Project ProjectsManager::project(const QString& _path) const
 {
     for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
         const auto& project = d->projects->projectAt(projectRow);
-        if (project.path() == _path) {
-            return project;
+        if (project->path() == _path) {
+            return *project;
         }
     }
     return {};
@@ -1007,8 +1007,8 @@ Project ProjectsManager::project(int _id) const
 
     for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
         const auto& project = d->projects->projectAt(projectRow);
-        if (project.id() == _id) {
-            return project;
+        if (project->id() == _id) {
+            return *project;
         }
     }
     return {};
@@ -1018,8 +1018,8 @@ void ProjectsManager::hideProject(const QString& _path)
 {
     for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
         const auto& project = d->projects->projectAt(projectRow);
-        if (project.path() == _path) {
-            d->projects->remove(project);
+        if (project->path() == _path) {
+            d->projects->remove(*project);
             break;
         }
     }
@@ -1033,8 +1033,8 @@ void ProjectsManager::hideProject(int _id)
 
     for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
         const auto& project = d->projects->projectAt(projectRow);
-        if (project.id() == _id) {
-            d->projects->remove(project);
+        if (project->id() == _id) {
+            d->projects->remove(*project);
             break;
         }
     }
@@ -1048,9 +1048,9 @@ void ProjectsManager::removeProject(int _id)
 
     for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
         const auto& project = d->projects->projectAt(projectRow);
-        if (project.id() == _id) {
-            QFile::remove(project.path());
-            d->projects->remove(project);
+        if (project->id() == _id) {
+            QFile::remove(project->path());
+            d->projects->remove(*project);
             break;
         }
     }

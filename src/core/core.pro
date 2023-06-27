@@ -101,7 +101,8 @@ SOURCES += \
     ui/project/project_tree_delegate.cpp \
     ui/project/project_view.cpp \
     ui/projects/create_project_dialog.cpp \
-    ui/projects/projects_cards.cpp \
+    ui/projects/project_card.cpp \
+    ui/projects/projects_cards_graphics_view.cpp \
     ui/projects/projects_navigator.cpp \
     ui/projects/projects_tool_bar.cpp \
     ui/projects/projects_view.cpp \
@@ -179,7 +180,8 @@ HEADERS += \
     ui/project/project_tree_delegate.h \
     ui/project/project_view.h \
     ui/projects/create_project_dialog.h \
-    ui/projects/projects_cards.h \
+    ui/projects/project_card.h \
+    ui/projects/projects_cards_graphics_view.h \
     ui/projects/projects_navigator.h \
     ui/projects/projects_tool_bar.h \
     ui/projects/projects_view.h \

@@ -1,7 +1,8 @@
 #include "projects_view.h"
 
-#include "projects_cards.h"
+#include "projects_cards_graphics_view.h"
 
+#include <management_layer/content/projects/project.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
@@ -55,7 +56,7 @@ public:
     H6Label* emptyPageTitleLabel = nullptr;
     Button* emptyPageCreateProjectButton = nullptr;
 
-    ProjectsCards* projectsPage = nullptr;
+    ProjectsCardsGraphicsView* projectsPage = nullptr;
 };
 
 ProjectsView::Implementation::Implementation(ProjectsView* _parent)
@@ -64,7 +65,7 @@ ProjectsView::Implementation::Implementation(ProjectsView* _parent)
     , emptyPage(new Widget(_parent))
     , emptyPageTitleLabel(new H6Label(emptyPage))
     , emptyPageCreateProjectButton(new Button(emptyPage))
-    , projectsPage(new ProjectsCards(_parent))
+    , projectsPage(new ProjectsCardsGraphicsView(_parent))
 {
     toolbar->setCurtain(true);
 
@@ -99,6 +100,12 @@ void ProjectsView::Implementation::updateEmptyPageUi()
 void ProjectsView::Implementation::initProjectsPage()
 {
     projectsPage->hide();
+    projectsPage->setScaleAvailable(false);
+    projectsPage->setCardsRowView(true);
+    projectsPage->setCardsInRow(-1);
+    projectsPage->setCardsRatio(2);
+    projectsPage->setCardsSize(60);
+    projectsPage->setCardsSpacing(33);
 }
 
 void ProjectsView::Implementation::updateProjectsPageUi()
@@ -142,11 +149,13 @@ ProjectsView::ProjectsView(QWidget* _parent)
     connect(d->emptyPageCreateProjectButton, &Button::clicked, this,
             &ProjectsView::createProjectPressed);
 
-    connect(d->projectsPage, &ProjectsCards::hideRequested, this, &ProjectsView::showEmptyPage);
-    connect(d->projectsPage, &ProjectsCards::showRequested, this, &ProjectsView::showProjectsPage);
-    connect(d->projectsPage, &ProjectsCards::openProjectRequested, this,
+    connect(d->projectsPage, &ProjectsCardsGraphicsView::hideRequested, this,
+            &ProjectsView::showEmptyPage);
+    connect(d->projectsPage, &ProjectsCardsGraphicsView::showRequested, this,
+            &ProjectsView::showProjectsPage);
+    connect(d->projectsPage, &ProjectsCardsGraphicsView::openProjectRequested, this,
             &ProjectsView::openProjectRequested);
-    connect(d->projectsPage, &ProjectsCards::projectContextMenuRequested, this,
+    connect(d->projectsPage, &ProjectsCardsGraphicsView::projectContextMenuRequested, this,
             &ProjectsView::projectContextMenuRequested);
 
     showEmptyPage();
@@ -156,7 +165,7 @@ ProjectsView::~ProjectsView() = default;
 
 void ProjectsView::setProjects(ManagementLayer::ProjectsModel* _projects)
 {
-    d->projectsPage->setProjects(_projects);
+    d->projectsPage->setModel(_projects);
 }
 
 void ProjectsView::showEmptyPage()

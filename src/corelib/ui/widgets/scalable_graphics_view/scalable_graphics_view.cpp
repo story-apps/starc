@@ -38,6 +38,15 @@ ScalableGraphicsView::ScalableGraphicsView(QWidget* _parent)
     grabGesture(Qt::SwipeGesture);
 }
 
+void ScalableGraphicsView::setScaleAvailable(bool _available)
+{
+    if (m_isScaleAvailable == _available) {
+        return;
+    }
+
+    m_isScaleAvailable = _available;
+}
+
 void ScalableGraphicsView::zoomIn()
 {
     scaleView(qreal(0.05));
@@ -366,6 +375,10 @@ void ScalableGraphicsView::mouseReleaseEvent(QMouseEvent* _event)
 
 void ScalableGraphicsView::scaleView(qreal _factor)
 {
+    if (!m_isScaleAvailable) {
+        return;
+    }
+
     scale(1 + _factor, 1 + _factor);
     emit scaleChanged();
 }

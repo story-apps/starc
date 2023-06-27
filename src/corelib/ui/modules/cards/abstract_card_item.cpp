@@ -2,11 +2,14 @@
 
 #include "cards_graphics_scene.h"
 
+#include <QApplication>
+#include <QElapsedTimer>
 #include <QGraphicsScene>
 #include <QModelIndex>
 #include <QParallelAnimationGroup>
 #include <QSequentialAnimationGroup>
 #include <QSet>
+#include <QStyleHints>
 #include <QVariantAnimation>
 
 
@@ -45,6 +48,11 @@ public:
      * @brief Позиции карточек относительно контейнера и собственно карточки
      */
     QHash<AbstractCardItem*, QPointF> embeddedCards;
+
+    /**
+     * @brief Таймер для отслеживания клика на элементе
+     */
+    QElapsedTimer clickTimer;
 };
 
 AbstractCardItem::Implementation::Implementation(AbstractCardItem* _q)
@@ -308,11 +316,22 @@ void AbstractCardItem::mousePressEvent(QGraphicsSceneMouseEvent* _event)
     // Обновляем положения, т.к. из-за анимаций или изенения состояния папок они могли измениться
     //
     updateEmbeddedCardsPositions();
+
+    //
+    // Запускаем таймер клика
+    //
+    d->clickTimer.start();
 }
 
 void AbstractCardItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
 {
     QGraphicsRectItem::mouseReleaseEvent(_event);
+
+    //
+    // Если мышь отпустили меньше чем через 40 мсек, то считаем что это был клик
+    //
+    const int clickTimerMaxDelay = QApplication::styleHints()->mouseDoubleClickInterval();
+    const auto needToEmitClickSingal = !d->clickTimer.hasExpired(clickTimerMaxDelay);
 
     //
     // Возвращаем карточку на место
@@ -321,7 +340,10 @@ void AbstractCardItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
     //
     QMetaObject::invokeMethod(
         scene(),
-        [this] {
+        [this, needToEmitClickSingal] {
+            if (needToEmitClickSingal) {
+                emit d->cardsScene()->itemClicked(d->modelItemIndex);
+            }
             emit d->cardsScene()->itemChanged(d->modelItemIndex);
             emit d->cardsScene()->itemDropped(d->modelItemIndex);
         },

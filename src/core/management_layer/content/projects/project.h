@@ -168,6 +168,8 @@ bool operator==(const Project& _lhs, const Project& _rhs);
  */
 class ProjectsModel : public QAbstractListModel
 {
+    Q_OBJECT
+
 public:
     explicit ProjectsModel(QObject* _parent = nullptr);
     ~ProjectsModel() override;
@@ -175,7 +177,8 @@ public:
     /**
      * @brief Получить проект по заданному индексу
      */
-    const Project& projectAt(int _row) const;
+    Project* projectAt(int _row) const;
+    Project* projectForIndex(const QModelIndex& _index) const;
 
     /**
      * @brief Добавить новый проект в конец списка
@@ -200,7 +203,7 @@ public:
     /**
      * @brief Перенести @p _moved проект после @p _insertAfter
      */
-    bool moveProject(const Project& _moved, const Project& _insertAfter);
+    void moveProject(Project* _item, Project* _afterSiblingItem, Project* _parentItem);
 
     /**
      * @brief Уведомить клиентов о том, что проект изменился
@@ -215,8 +218,12 @@ public:
     /**
      * @brief Переопределяем методы для собственной реализации модели
      */
+    QModelIndex index(int _row, int _column = 0, const QModelIndex& _parent = {}) const override;
     int rowCount(const QModelIndex& _parent = {}) const override;
     QVariant data(const QModelIndex& _index, int _role = Qt::DisplayRole) const override;
+    bool moveRows(const QModelIndex& _sourceParent, int _sourceRow, int _count,
+                  const QModelIndex& _destinationParent, int _destinationRow) override;
+
 
 private:
     class Implementation;

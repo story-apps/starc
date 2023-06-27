@@ -53,6 +53,11 @@ public:
     void removeItem(AbstractCardItem* _item);
 
     /**
+     * @brief Уведомить клиентов, если нужно изменить видимость списка проектов
+     */
+    void notifyVisibleChange();
+
+    /**
      * @brief Определить новую позицию для заданной карточки
      */
     void reorderCard(const QModelIndex& _index);
@@ -163,16 +168,10 @@ int CardsGraphicsView::Implementation::flatCardIndex(const QModelIndex& _index) 
     std::function<bool(const QModelIndex&)> findFlatIndex;
     findFlatIndex = [this, _index, &flatIndex, &findFlatIndex](const QModelIndex& _itemIndex) {
         //
-        // Считаем все элементы, в которых есть дети
+        // Считаем все элементы, которые не исключены
         //
-        if (model->hasChildren(_itemIndex)) {
+        if (!q->excludeFromFlatIndex(_itemIndex)) {
             ++flatIndex;
-            //
-            // ... при необходимости исключаем некоторых детей
-            //
-            if (q->excludeFromFlatIndex(_itemIndex)) {
-                --flatIndex;
-            }
         }
 
         for (int childRow = 0; childRow < model->rowCount(_itemIndex); ++childRow) {
@@ -317,6 +316,15 @@ void CardsGraphicsView::Implementation::removeItem(AbstractCardItem* _item)
     cardsAnimations.remove(_item);
     delete _item;
     _item = nullptr;
+}
+
+void CardsGraphicsView::Implementation::notifyVisibleChange()
+{
+    if (model->rowCount() == 0 && q->isVisible()) {
+        emit q->hideRequested();
+    } else if (model->rowCount() > 0 && q->isHidden()) {
+        emit q->showRequested();
+    }
 }
 
 void CardsGraphicsView::Implementation::reorderCard(const QModelIndex& _index)
@@ -1687,6 +1695,11 @@ void CardsGraphicsView::setModel(QAbstractItemModel* _model)
                 },
                 Qt::QueuedConnection);
         }
+
+        //
+        // При необходимости посылаем запрос на отображение
+        //
+        d->notifyVisibleChange();
     };
 
     //
@@ -1725,7 +1738,15 @@ void CardsGraphicsView::setModel(QAbstractItemModel* _model)
                     }
                 }
 
+                //
+                // Корректируем положение карточек
+                //
                 d->reorderCards();
+
+                //
+                // При необходимости посылаем запрос на отображение
+                //
+                d->notifyVisibleChange();
             });
     connect(d->model, &QAbstractItemModel::rowsAboutToBeRemoved, this,
             [this](const QModelIndex& _parent, int _first, int _last) {
@@ -1758,6 +1779,69 @@ void CardsGraphicsView::setModel(QAbstractItemModel* _model)
                     d->modelItemsToCards[index.internalPointer()]->setModelItemIndex(index);
                 }
 
+                //
+                // Корректируем положение карточек
+                //
+                d->reorderCards();
+
+                //
+                // При необходимости посылаем запрос на отображение
+                //
+                d->notifyVisibleChange();
+            });
+    connect(d->model, &QAbstractItemModel::rowsAboutToBeMoved, this,
+            [this](const QModelIndex& _sourceParent, int _first, int _last) {
+                //
+                // Удаляем перемещаемые карточки
+                //
+                for (int row = _last; row >= _first; --row) {
+                    const auto itemIndex = d->model->index(row, 0, _sourceParent);
+                    auto cardIter = d->modelItemsToCards.find(itemIndex.internalPointer());
+                    if (cardIter == d->modelItemsToCards.end()) {
+                        continue;
+                    }
+
+                    d->removeItem(cardIter.value());
+                }
+            });
+    connect(d->model, &QAbstractItemModel::rowsMoved, this,
+            [this](const QModelIndex& _sourceParent, int _first, int _last,
+                   const QModelIndex& _destination, int _destinationRow) {
+                //
+                // Смещаем индексы модели идущих за удалёнными карточками элементов того же уровня
+                //
+                const auto firstRemovedItemIndex = d->model->index(_first, 0, _sourceParent);
+                for (int row = firstRemovedItemIndex.row(); row < d->model->rowCount(_sourceParent);
+                     ++row) {
+                    const auto index = d->model->index(row, 0, _sourceParent);
+                    if (!d->modelItemsToCards.contains(index.internalPointer())) {
+                        continue;
+                    }
+
+                    d->modelItemsToCards[index.internalPointer()]->setModelItemIndex(index);
+                }
+
+                //
+                // Вставляем перемещённые карточки
+                //
+                auto containerCard = d->modelItemsToCards.value(_destination.internalPointer());
+                const auto destinationCorrected
+                    = _destinationRow < _first ? _destinationRow : _destinationRow - 1;
+                for (int row = destinationCorrected; row <= _destinationRow + (_last - _first);
+                     ++row) {
+                    const bool isVisible = containerCard == nullptr || containerCard->isOpened();
+                    auto card = d->insertCard(d->model->index(row, 0, _destination), isVisible);
+                    if (card != nullptr) {
+                        if (containerCard != nullptr) {
+                            card->setContainer(containerCard);
+                        }
+                        card->update();
+                    }
+                }
+
+                //
+                // Корректируем положение карточек
+                //
                 d->reorderCards();
             });
 
@@ -1878,7 +1962,9 @@ void CardsGraphicsView::resizeEvent(QResizeEvent* _event)
 {
     ScalableGraphicsView::resizeEvent(_event);
 
+    d->cardsAnimationsAvailable = false;
     d->reorderCards();
+    d->cardsAnimationsAvailable = true;
 }
 
 void CardsGraphicsView::keyPressEvent(QKeyEvent* _event)

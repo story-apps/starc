@@ -18,6 +18,11 @@ public:
     explicit ScalableGraphicsView(QWidget* _parent = nullptr);
 
     /**
+     * @brief Задать доступность возможности изменения масштаба
+     */
+    void setScaleAvailable(bool _available);
+
+    /**
      * @brief Методы масштабирования
      */
     /** @{ */
@@ -103,9 +108,9 @@ private:
 
 private:
     /**
-     * @brief Можно ли изменять содержимое
+     * @brief Можно ли масштабировать содержимое
      */
-    bool m_isReadOnly = false;
+    bool m_isScaleAvailable = true;
 
     /**
      * @brief Последняя позиция мыши в момент скроллинга полотна

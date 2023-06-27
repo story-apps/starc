@@ -55,8 +55,9 @@ void CardsGraphicsScene::fitToContents()
     for (auto item : items) {
         const QRectF movedItemRect(item->scenePos(), item->boundingRect().size());
 
-        const auto epsilon = views().isEmpty() ? Ui::DesignSystem::layout().px62()
-                                               : views().constFirst()->screen()->size().width();
+        const auto epsilon = 0;
+        views().isEmpty() ? Ui::DesignSystem::layout().px62()
+                          : views().constFirst()->screen()->size().width();
         if (movedItemRect.left() < newSceneRect.left()
             || std::abs(newSceneRect.left() - movedItemRect.left()) < epsilon) {
             newSceneRect.setLeft(movedItemRect.left() - epsilon);
@@ -117,6 +118,10 @@ void CardsGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent* _event)
                   }
               };
         addCardWithChildrenToMoveList(movedCard);
+
+        if (_event->button() == Qt::RightButton) {
+            emit itemContextMenuRequested(movedCard->modelItemIndex());
+        }
     }
 }
 
