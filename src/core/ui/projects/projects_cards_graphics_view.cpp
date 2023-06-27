@@ -11,6 +11,9 @@ namespace Ui {
 ProjectsCardsGraphicsView::ProjectsCardsGraphicsView(QWidget* _parent)
     : CardsGraphicsView(new CardsGraphicsScene(_parent), _parent)
 {
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setAdditionalScrollingAvailable(false);
+
     auto cardsScene = qobject_cast<CardsGraphicsScene*>(scene());
     connect(cardsScene, &CardsGraphicsScene::itemClicked, this, [this](const QModelIndex& _index) {
         const auto projectsModel = qobject_cast<ManagementLayer::ProjectsModel*>(model());

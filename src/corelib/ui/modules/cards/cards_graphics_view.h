@@ -27,6 +27,11 @@ public:
     void setBackgroundColor(const QColor& _color);
 
     /**
+     * @brief Добавлять дополнительную прокрутку
+     */
+    void setAdditionalScrollingAvailable(bool _available);
+
+    /**
      * @brief Задать способ компоновки карточек
      */
     void setCardsRowView(bool _isRowView);

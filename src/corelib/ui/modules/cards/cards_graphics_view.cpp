@@ -1582,6 +1582,11 @@ void CardsGraphicsView::setBackgroundColor(const QColor& _color)
     scene()->setBackgroundBrush(_color);
 }
 
+void CardsGraphicsView::setAdditionalScrollingAvailable(bool _available)
+{
+    d->scene->setAdditionalScrollingAvailable(_available);
+}
+
 void CardsGraphicsView::setCardsRowView(bool _isRowView)
 {
     if (d->cardsOptions.isRowView == _isRowView) {
@@ -1963,7 +1968,7 @@ void CardsGraphicsView::resizeEvent(QResizeEvent* _event)
     ScalableGraphicsView::resizeEvent(_event);
 
     d->cardsAnimationsAvailable = false;
-    d->reorderCards();
+    d->reorderCardsImpl();
     d->cardsAnimationsAvailable = true;
 }
 

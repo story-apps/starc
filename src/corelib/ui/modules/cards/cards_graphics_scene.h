@@ -24,6 +24,11 @@ public:
     void setReadOnly(bool _readOnly);
 
     /**
+     * @brief Добавлять дополнительную прокрутку
+     */
+    void setAdditionalScrollingAvailable(bool _available);
+
+    /**
      * @brief Скорректировать размер, чтобы влезли все элементы
      */
     void fitToContents();
