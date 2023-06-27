@@ -2,10 +2,9 @@
 
 #include <ui/modules/cards/cards_graphics_view.h>
 
-namespace ManagementLayer {
+namespace BusinessLayer {
 class Project;
-class ProjectsModel;
-} // namespace ManagementLayer
+} // namespace BusinessLayer
 
 
 namespace Ui {
@@ -24,12 +23,12 @@ signals:
     /**
      * @brief Пользователь хочет открыть выбранный проект
      */
-    void openProjectRequested(const ManagementLayer::Project& _project);
+    void openProjectRequested(const BusinessLayer::Project& _project);
 
     /**
      * @brief Запрос на отображение контекстного меню проекта
      */
-    void projectContextMenuRequested(const ManagementLayer::Project& _project);
+    void projectContextMenuRequested(const BusinessLayer::Project& _project);
 
 protected:
     /**

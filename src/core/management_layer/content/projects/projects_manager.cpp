@@ -1,6 +1,7 @@
 #include "projects_manager.h"
 
 #include "project.h"
+#include "projects_model.h"
 
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
@@ -54,9 +55,10 @@ public:
     bool isConnected = false;
     bool isUserAuthorized = false;
     bool canCreateCloudProject = false;
+    QVector<Domain::TeamInfo> teamsForProjects;
 
-    ProjectsModel* projects = nullptr;
-    Project currentProject;
+    BusinessLayer::ProjectsModel* projects = nullptr;
+    BusinessLayer::Project currentProject;
 
     QWidget* topLevelWidget = nullptr;
 
@@ -73,7 +75,7 @@ public:
 };
 
 ProjectsManager::Implementation::Implementation(QWidget* _parent)
-    : projects(new ProjectsModel(_parent))
+    : projects(new BusinessLayer::ProjectsModel(_parent))
     , topLevelWidget(_parent)
     , toolBar(new Ui::ProjectsToolBar(_parent))
     , navigator(new Ui::ProjectsNavigator(_parent))
@@ -104,7 +106,7 @@ QString ProjectsManager::Implementation::newProjectPath(const QString& _projectN
 {
     const auto projectPathPrefix
         = _projectPath + "/" + PlatformHelper::systemSavebleFileName(_projectName);
-    auto projectPath = projectPathPrefix + Project::extension();
+    auto projectPath = projectPathPrefix + BusinessLayer::Project::extension();
     //
     // Ситуация, что файл с таким названием уже существует крайне редка, хотя и
     // гипотетически возможна
@@ -115,7 +117,8 @@ QString ProjectsManager::Implementation::newProjectPath(const QString& _projectN
         //     не пересекались
         //
         projectPath = projectPathPrefix + "_"
-            + QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss") + Project::extension();
+            + QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss")
+            + BusinessLayer::Project::extension();
     }
 
     return projectPath;
@@ -147,7 +150,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->view, &Ui::ProjectsView::openProjectPressed, this,
             &ProjectsManager::openProjectRequested);
     connect(d->view, &Ui::ProjectsView::openProjectRequested, this,
-            [this](const Project& _project) {
+            [this](const BusinessLayer::Project& _project) {
                 if (_project.isLocal()) {
                     emit openLocalProjectRequested(_project.path());
                 } else {
@@ -156,7 +159,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
             });
     connect(
         d->view, &Ui::ProjectsView::projectContextMenuRequested, this,
-        [this](const Project& _project) {
+        [this](const BusinessLayer::Project& _project) {
             QVector<QAction*> actions;
             //
             // Действия над локальным проектом
@@ -212,7 +215,8 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                     // Если проект может быть создан в облаке, то делаем это
                     //
                     else {
-                        emit createCloudProjectRequested(_project.name(), _project.path());
+                        emit createCloudProjectRequested(_project.name(), _project.path(),
+                                                         Domain::kInvalidId);
                     }
                 });
                 actions.append(moveToCloudAction);
@@ -463,7 +467,7 @@ void ProjectsManager::loadProjects()
     const auto projectsJson
         = QJsonDocument::fromJson(QByteArray::fromHex(projectsData.toByteArray()));
 
-    QVector<Project> projects;
+    QVector<BusinessLayer::Project> projects;
     for (const auto projectJsonValue : projectsJson.array()) {
         const auto projectJson = projectJsonValue.toObject();
 
@@ -476,7 +480,7 @@ void ProjectsManager::loadProjects()
             continue;
         }
 
-        Project project;
+        BusinessLayer::Project project;
         if (isRemote) {
             project.setId(projectJson["id"].toInt());
             project.setOwner(projectJson["is_owner"].toBool());
@@ -491,7 +495,7 @@ void ProjectsManager::loadProjects()
             }
             project.setEditingPermissions(permissions);
         }
-        project.setType(static_cast<ProjectType>(projectJson["type"].toInt()));
+        project.setType(static_cast<BusinessLayer::ProjectType>(projectJson["type"].toInt()));
         project.setUuid(projectJson["uuid"].toString());
         project.setName(projectJson["name"].toString());
         project.setLogline(projectJson["logline"].toString());
@@ -556,7 +560,7 @@ void ProjectsManager::setConnected(bool _connected)
 
     if (!d->createProjectDialog.isNull()) {
         d->createProjectDialog->configureCloudProjectCreationAbility(
-            d->isConnected, d->isUserAuthorized, d->canCreateCloudProject);
+            d->isConnected, d->isUserAuthorized, d->canCreateCloudProject, d->teamsForProjects);
     }
 }
 
@@ -570,7 +574,22 @@ void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized,
 
     if (!d->createProjectDialog.isNull()) {
         d->createProjectDialog->configureCloudProjectCreationAbility(
-            d->isConnected, d->isUserAuthorized, d->canCreateCloudProject);
+            d->isConnected, d->isUserAuthorized, d->canCreateCloudProject, d->teamsForProjects);
+    }
+}
+
+void ProjectsManager::setTeams(const QVector<Domain::TeamInfo>& _teams)
+{
+    d->teamsForProjects.clear();
+    for (const auto& team : _teams) {
+        if (team.teamRole == 0) {
+            d->teamsForProjects.append(team);
+        }
+    }
+
+    if (!d->createProjectDialog.isNull()) {
+        d->createProjectDialog->configureCloudProjectCreationAbility(
+            d->isConnected, d->isUserAuthorized, d->canCreateCloudProject, d->teamsForProjects);
     }
 }
 
@@ -594,7 +613,7 @@ void ProjectsManager::createProject()
     d->createProjectDialog->setImportFolder(
         settingsValue(DataStorageLayer::kProjectImportFolderKey).toString());
     d->createProjectDialog->configureCloudProjectCreationAbility(
-        d->isConnected, d->isUserAuthorized, d->canCreateCloudProject);
+        d->isConnected, d->isUserAuthorized, d->canCreateCloudProject, d->teamsForProjects);
 
     //
     // Настраиваем соединения диалога
@@ -634,7 +653,8 @@ void ProjectsManager::createProject()
                                              d->createProjectDialog->importFilePath());
         } else {
             emit createCloudProjectRequested(d->createProjectDialog->projectName(),
-                                             d->createProjectDialog->importFilePath());
+                                             d->createProjectDialog->importFilePath(),
+                                             d->createProjectDialog->teamId());
         }
         d->createProjectDialog->hideDialog();
     });
@@ -713,7 +733,7 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     //
     // Определим, находится ли устанавливаемый проект уже в списке, или это новый
     //
-    Project cloudProject;
+    BusinessLayer::Project cloudProject;
 
     //
     // Проверяем находится ли проект в списке недавно используемых
@@ -735,10 +755,10 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
                    DataStorageLayer::StorageFacade::settingsStorage()->accountEmail());
     QDir::root().mkpath(projectDir);
     const auto projectPath = QDir::toNativeSeparators(
-        cloudProject.path().isEmpty()
-            ? QString("%1/%2.%3")
-                  .arg(projectDir, QString::number(_projectInfo.id), Project::extension())
-            : cloudProject.path());
+        cloudProject.path().isEmpty() ? QString("%1/%2.%3")
+                                            .arg(projectDir, QString::number(_projectInfo.id),
+                                                 BusinessLayer::Project::extension())
+                                      : cloudProject.path());
 
     //
     // Если текущий пользователь является владельцем проекта
@@ -785,12 +805,12 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     //
     // Если проект не нашёлся в списке недавних, добавляем в начало
     //
-    if (cloudProject.type() == ProjectType::Invalid) {
+    if (cloudProject.type() == BusinessLayer::ProjectType::Invalid) {
         //
         // Определим параметры проекта
         //
         cloudProject.setId(_projectInfo.id);
-        cloudProject.setType(ProjectType::Cloud);
+        cloudProject.setType(BusinessLayer::ProjectType::Cloud);
         cloudProject.setPath(projectPath);
         cloudProject.setRealPath(projectPath);
 
@@ -836,7 +856,7 @@ void ProjectsManager::setCurrentProject(const QString& _path, const QString& _re
     //
     // Определим, находится ли устанавливаемый проект уже в списке, или это новый
     //
-    Project newCurrentProject;
+    BusinessLayer::Project newCurrentProject;
 
     //
     // Проверяем находится ли проект в списке недавно используемых
@@ -858,14 +878,15 @@ void ProjectsManager::setCurrentProject(const QString& _path, const QString& _re
     //
     // Если проект не нашёлся в списке недавних, добавляем в начало
     //
-    if (newCurrentProject.type() == ProjectType::Invalid) {
+    if (newCurrentProject.type() == BusinessLayer::ProjectType::Invalid) {
         QFileInfo fileInfo(projectPath);
 
         //
         // Определим параметры проекта
         //
-        newCurrentProject.setType(projectPath == projectRealPath ? ProjectType::Local
-                                                                 : ProjectType::LocalShadow);
+        newCurrentProject.setType(projectPath == projectRealPath
+                                      ? BusinessLayer::ProjectType::Local
+                                      : BusinessLayer::ProjectType::LocalShadow);
         newCurrentProject.setName(fileInfo.completeBaseName());
         newCurrentProject.setPath(projectPath);
         newCurrentProject.setLastEditTime(fileInfo.lastModified());
@@ -978,7 +999,7 @@ void ProjectsManager::closeCurrentProject()
     //
     // Для теневого проекта, удаляем временный файл
     //
-    if (d->currentProject.type() == ProjectType::LocalShadow) {
+    if (d->currentProject.type() == BusinessLayer::ProjectType::LocalShadow) {
         QFile::remove(d->currentProject.realPath());
     }
 
@@ -988,7 +1009,7 @@ void ProjectsManager::closeCurrentProject()
     d->currentProject = {};
 }
 
-Project ProjectsManager::project(const QString& _path) const
+BusinessLayer::Project ProjectsManager::project(const QString& _path) const
 {
     for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
         const auto& project = d->projects->projectAt(projectRow);
@@ -999,7 +1020,7 @@ Project ProjectsManager::project(const QString& _path) const
     return {};
 }
 
-Project ProjectsManager::project(int _id) const
+BusinessLayer::Project ProjectsManager::project(int _id) const
 {
     if (_id == -1) {
         return {};
@@ -1056,7 +1077,7 @@ void ProjectsManager::removeProject(int _id)
     }
 }
 
-const Project& ProjectsManager::currentProject() const
+const BusinessLayer::Project& ProjectsManager::currentProject() const
 {
     return d->currentProject;
 }

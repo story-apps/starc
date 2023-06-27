@@ -3,6 +3,7 @@
 #include "project_card.h"
 
 #include <management_layer/content/projects/project.h>
+#include <management_layer/content/projects/projects_model.h>
 #include <ui/modules/cards/cards_graphics_scene.h>
 
 
@@ -16,13 +17,13 @@ ProjectsCardsGraphicsView::ProjectsCardsGraphicsView(QWidget* _parent)
 
     auto cardsScene = qobject_cast<CardsGraphicsScene*>(scene());
     connect(cardsScene, &CardsGraphicsScene::itemClicked, this, [this](const QModelIndex& _index) {
-        const auto projectsModel = qobject_cast<ManagementLayer::ProjectsModel*>(model());
+        const auto projectsModel = qobject_cast<BusinessLayer::ProjectsModel*>(model());
         const auto project = projectsModel->projectForIndex(_index);
         emit openProjectRequested(*project);
     });
     connect(cardsScene, &CardsGraphicsScene::itemContextMenuRequested, this,
             [this](const QModelIndex& _index) {
-                const auto projectsModel = qobject_cast<ManagementLayer::ProjectsModel*>(model());
+                const auto projectsModel = qobject_cast<BusinessLayer::ProjectsModel*>(model());
                 const auto project = projectsModel->projectForIndex(_index);
                 emit projectContextMenuRequested(*project);
             });

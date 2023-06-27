@@ -227,7 +227,8 @@ public:
     void createProject();
     void createLocalProject(const QString& _projectName, const QString& _projectPath,
                             const QString& _importFilePath);
-    void createRemoteProject(const QString& _projectName, const QString& _importFilePath);
+    void createRemoteProject(const QString& _projectName, const QString& _importFilePath,
+                             int _teamId);
 
     /**
      * @brief Открыть проект по заданному пути
@@ -1271,7 +1272,7 @@ void ApplicationManager::Implementation::saveChanges()
     //
     // Если работает с теневым проектом, то экспортируем его при сохранении
     //
-    if (projectsManager->currentProject().type() == ProjectType::LocalShadow) {
+    if (projectsManager->currentProject().type() == BusinessLayer::ProjectType::LocalShadow) {
         exportManager->exportDocument(projectManager->firstScriptModel(),
                                       projectsManager->currentProject().path());
     }
@@ -1381,7 +1382,7 @@ void ApplicationManager::Implementation::saveAs()
     // Для теневых проектов добавляем расширение старка, чтобы пользователя не пугал вопрос о
     // перезаписи основного файла
     //
-    case ProjectType::LocalShadow: {
+    case BusinessLayer::ProjectType::LocalShadow: {
         projectPath += "." + ExtensionHelper::starc();
         break;
     }
@@ -1390,14 +1391,14 @@ void ApplicationManager::Implementation::saveAs()
     // Для удаленных проектов используем имя проекта + id проекта
     // и сохраняем в папку вновь создаваемых проектов
     //
-    case ProjectType::Cloud: {
+    case BusinessLayer::ProjectType::Cloud: {
         const auto projectsFolderPath
             = settingsValue(DataStorageLayer::kProjectSaveFolderKey).toString();
         projectPath = projectsFolderPath + QDir::separator()
             + QString("%1 [%2]%3")
                   .arg(currentProject.name())
                   .arg(currentProject.id())
-                  .arg(Project::extension());
+                  .arg(BusinessLayer::Project::extension());
         break;
     }
 
@@ -1423,8 +1424,8 @@ void ApplicationManager::Implementation::saveAs()
     //
     // Установим расширение, если не задано
     //
-    if (!saveAsProjectFilePath.endsWith(Project::extension())) {
-        saveAsProjectFilePath.append(Project::extension());
+    if (!saveAsProjectFilePath.endsWith(BusinessLayer::Project::extension())) {
+        saveAsProjectFilePath.append(BusinessLayer::Project::extension());
     }
 
     //
@@ -1558,7 +1559,8 @@ void ApplicationManager::Implementation::createLocalProject(const QString& _proj
 
 #ifdef CLOUD_SERVICE_MANAGER
 void ApplicationManager::Implementation::createRemoteProject(const QString& _projectName,
-                                                             const QString& _importFilePath)
+                                                             const QString& _importFilePath,
+                                                             int _teamId)
 {
     //
     // Закроем текущий проект
@@ -1619,7 +1621,7 @@ void ApplicationManager::Implementation::createRemoteProject(const QString& _pro
     //
     // Создаём новый проект в облаке
     //
-    cloudServiceManager->createProject(_projectName);
+    cloudServiceManager->createProject(_projectName, _teamId);
 }
 #endif
 
@@ -1813,7 +1815,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     //
     // Для локальных проектов доступных только для чтения, покажем соответствующее уведомление
     //
-    if (currentProject.type() != ProjectType::Cloud && currentProject.isReadOnly()) {
+    if (currentProject.type() != BusinessLayer::ProjectType::Cloud && currentProject.isReadOnly()) {
         StandardDialog::information(
             applicationView, {},
             tr("A file you are trying to open does not have write permissions. Check out file "
@@ -1821,7 +1823,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
                "in a read-only mode."));
     }
 
-    if (currentProject.type() == ProjectType::LocalShadow) {
+    if (currentProject.type() == BusinessLayer::ProjectType::LocalShadow) {
         //
         // Покажем диалог с предупреждением о том, что не все функции могут работать и предложим
         // сохранить в формате старка
@@ -2896,7 +2898,10 @@ void ApplicationManager::initConnections()
     // Команды
     //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::teamsReceived,
-            d->accountManager.data(), &AccountManager::setAccountTeams);
+            [this](const QVector<Domain::TeamInfo>& _teams) {
+                d->accountManager->setAccountTeams(_teams);
+                d->projectsManager->setTeams(_teams);
+            });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::teamCreated,
             d->accountManager.data(), &AccountManager::addAccountTeam);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::teamUpdated,
@@ -2946,8 +2951,8 @@ void ApplicationManager::initConnections()
                 d->projectsManager->removeProject(_projectId);
             });
     connect(d->projectsManager.data(), &ProjectsManager::createCloudProjectRequested, this,
-            [this](const QString& _projectName, const QString& _importFilePath) {
-                d->createRemoteProject(_projectName, _importFilePath);
+            [this](const QString& _projectName, const QString& _importFilePath, int _teamId) {
+                d->createRemoteProject(_projectName, _importFilePath, _teamId);
             });
     connect(d->projectsManager.data(), &ProjectsManager::openCloudProjectRequested, this,
             [this](int _id, const QString& _path) {

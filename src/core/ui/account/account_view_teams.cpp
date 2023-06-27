@@ -29,8 +29,6 @@
 namespace Ui {
 
 namespace {
-constexpr int kInvalidId = -1;
-
 enum {
     kRemoveActionIndex = 0,
 };
@@ -56,7 +54,7 @@ public:
 
     Domain::AccountInfo accountInfo;
     QVector<Domain::TeamInfo> teams;
-    int currentTeamId = kInvalidId;
+    int currentTeamId = Domain::kInvalidId;
     QVector<Domain::TeamMemberInfo> currentTeamMembers;
 
     Widget* teamPage = nullptr;
@@ -209,7 +207,7 @@ AccountViewTeams::AccountViewTeams(QWidget* _parent)
     connect(d->email, &TextField::enterPressed, d->addMemberButton, &Button::click);
     connect(d->nameForTeam, &TextField::enterPressed, d->addMemberButton, &Button::click);
     connect(d->addMemberButton, &Button::clicked, this, [this] {
-        if (d->currentTeamId == kInvalidId) {
+        if (d->currentTeamId == Domain::kInvalidId) {
             return;
         }
 
@@ -231,7 +229,7 @@ AccountViewTeams::AccountViewTeams(QWidget* _parent)
         d->sidebar->setTeamMember(d->currentTeamMembers.at(_index.row()));
     });
     connect(d->members, &Tree::customContextMenuRequested, this, [this] {
-        if (d->currentTeamId == kInvalidId) {
+        if (d->currentTeamId == Domain::kInvalidId) {
             return;
         }
 
@@ -277,7 +275,7 @@ void AccountViewTeams::setTeams(const QVector<Domain::TeamInfo>& _teams)
 {
     d->teams = _teams;
 
-    if (d->currentTeamId != kInvalidId) {
+    if (d->currentTeamId != Domain::kInvalidId) {
         showTeam(d->currentTeamId);
     }
 }
@@ -288,7 +286,7 @@ void AccountViewTeams::showEmptyPage(bool _canCreateTeam)
     // TODO
     //
 
-    d->currentTeamId = kInvalidId;
+    d->currentTeamId = Domain::kInvalidId;
 }
 
 void AccountViewTeams::showTeam(int _teamId)

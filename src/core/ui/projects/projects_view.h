@@ -2,10 +2,10 @@
 
 #include <ui/widgets/stack_widget/stack_widget.h>
 
-namespace ManagementLayer {
+namespace BusinessLayer {
 class Project;
 class ProjectsModel;
-} // namespace ManagementLayer
+} // namespace BusinessLayer
 
 
 namespace Ui {
@@ -24,7 +24,7 @@ public:
     /**
      * @brief Задать список проектов
      */
-    void setProjects(ManagementLayer::ProjectsModel* _projects);
+    void setProjects(BusinessLayer::ProjectsModel* _projects);
 
     /**
      * @brief Показать страницу без проектов
@@ -50,12 +50,12 @@ signals:
     /**
      * @brief Пользователь хочет открыть выбранный проект
      */
-    void openProjectRequested(const ManagementLayer::Project& _project);
+    void openProjectRequested(const BusinessLayer::Project& _project);
 
     /**
      * @brief Запрос на отображение контекстного меню проекта
      */
-    void projectContextMenuRequested(const ManagementLayer::Project& _project);
+    void projectContextMenuRequested(const BusinessLayer::Project& _project);
 
 protected:
     /**

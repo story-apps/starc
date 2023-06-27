@@ -1832,7 +1832,7 @@ void CardsGraphicsView::setModel(QAbstractItemModel* _model)
                 auto containerCard = d->modelItemsToCards.value(_destination.internalPointer());
                 const auto destinationCorrected
                     = _destinationRow < _first ? _destinationRow : _destinationRow - 1;
-                for (int row = destinationCorrected; row <= _destinationRow + (_last - _first);
+                for (int row = destinationCorrected; row <= destinationCorrected + (_last - _first);
                      ++row) {
                     const bool isVisible = containerCard == nullptr || containerCard->isOpened();
                     auto card = d->insertCard(d->model->index(row, 0, _destination), isVisible);

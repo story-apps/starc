@@ -2,7 +2,7 @@
 
 #include "projects_cards_graphics_view.h"
 
-#include <management_layer/content/projects/project.h>
+#include <management_layer/content/projects/projects_model.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
@@ -163,7 +163,7 @@ ProjectsView::ProjectsView(QWidget* _parent)
 
 ProjectsView::~ProjectsView() = default;
 
-void ProjectsView::setProjects(ManagementLayer::ProjectsModel* _projects)
+void ProjectsView::setProjects(BusinessLayer::ProjectsModel* _projects)
 {
     d->projectsPage->setModel(_projects);
 }

@@ -58,6 +58,7 @@ SOURCES += \
     management_layer/content/project/project_models_facade.cpp \
     management_layer/content/projects/project.cpp \
     management_layer/content/projects/projects_manager.cpp \
+    management_layer/content/projects/projects_model.cpp \
     management_layer/content/settings/settings_manager.cpp \
     management_layer/content/settings/template_options_manager.cpp \
     management_layer/content/writing_session/writing_session_manager.cpp \
@@ -102,6 +103,7 @@ SOURCES += \
     ui/project/project_view.cpp \
     ui/projects/create_project_dialog.cpp \
     ui/projects/project_card.cpp \
+    ui/projects/project_team_card.cpp \
     ui/projects/projects_cards_graphics_view.cpp \
     ui/projects/projects_navigator.cpp \
     ui/projects/projects_tool_bar.cpp \
@@ -137,6 +139,7 @@ HEADERS += \
     management_layer/content/project/project_models_facade.h \
     management_layer/content/projects/project.h \
     management_layer/content/projects/projects_manager.h \
+    management_layer/content/projects/projects_model.h \
     management_layer/content/settings/settings_manager.h \
     management_layer/content/settings/template_options_manager.h \
     management_layer/content/writing_session/writing_session_manager.h \
@@ -181,6 +184,7 @@ HEADERS += \
     ui/project/project_view.h \
     ui/projects/create_project_dialog.h \
     ui/projects/project_card.h \
+    ui/projects/project_team_card.h \
     ui/projects/projects_cards_graphics_view.h \
     ui/projects/projects_navigator.h \
     ui/projects/projects_tool_bar.h \

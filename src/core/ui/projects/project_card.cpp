@@ -2,6 +2,7 @@
 
 #include <interfaces/management_layer/i_document_manager.h>
 #include <management_layer/content/projects/project.h>
+#include <management_layer/content/projects/projects_model.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/animations/click_animation.h>
 #include <utils/helpers/color_helper.h>
@@ -31,7 +32,7 @@ public:
     /**
      * @brief Элемент с данными о проекте
      */
-    ManagementLayer::Project* project = nullptr;
+    BusinessLayer::Project* project = nullptr;
 
     /**
      * @brief  Декорации тени при наведении
@@ -257,8 +258,8 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
                           backgroundRect.bottom() - DesignSystem::layout().px24() * 2,
                           DesignSystem::layout().px24() * 2, DesignSystem::layout().px24() * 2);
     _painter->drawText(iconRect, Qt::AlignCenter,
-                       d->project->type() == ManagementLayer::ProjectType::Cloud ? u8"\U000F0163"
-                                                                                 : u8"\U000F0322");
+                       d->project->type() == BusinessLayer::ProjectType::Cloud ? u8"\U000F0163"
+                                                                               : u8"\U000F0322");
 
     //
     // Декорация
@@ -277,7 +278,7 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
 
 void ProjectCard::init()
 {
-    auto model = qobject_cast<const ManagementLayer::ProjectsModel*>(modelItemIndex().model());
+    auto model = qobject_cast<const BusinessLayer::ProjectsModel*>(modelItemIndex().model());
     Q_ASSERT(model);
 
     d->project = model->projectForIndex(modelItemIndex());

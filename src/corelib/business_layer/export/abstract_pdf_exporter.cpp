@@ -104,7 +104,7 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
             //        кейсы, когда первая строка таки влезает
             //
 #ifdef Q_OS_WINDOWS
-                5
+                3
 #else
                 2
 #endif

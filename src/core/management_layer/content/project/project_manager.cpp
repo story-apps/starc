@@ -2547,7 +2547,7 @@ void ProjectManager::checkAvailabilityToEdit()
     d->pluginsBuilder.checkAvailabilityToEdit();
 }
 
-void ProjectManager::loadCurrentProject(const Project& _project)
+void ProjectManager::loadCurrentProject(const BusinessLayer::Project& _project)
 {
     //
     // Загружаем структуру
@@ -2597,7 +2597,7 @@ void ProjectManager::loadCurrentProject(const Project& _project)
     restoreCurrentProjectState(_project.path());
 }
 
-void ProjectManager::updateCurrentProject(const Project& _project)
+void ProjectManager::updateCurrentProject(const BusinessLayer::Project& _project)
 {
     d->projectPath = _project.path();
     d->isProjectRemote = _project.isRemote();

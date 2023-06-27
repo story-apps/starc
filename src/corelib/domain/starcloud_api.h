@@ -261,6 +261,7 @@ struct ProjectInfo {
     QHash<QUuid, int> accountPermissions;
     QDateTime lastEditTime;
     QVector<ProjectCollaboratorInfo> collaborators;
+    int teamId = kInvalidId;
 };
 
 /**

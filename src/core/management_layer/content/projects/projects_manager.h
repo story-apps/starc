@@ -5,12 +5,15 @@
 namespace Domain {
 enum class SubscriptionType;
 struct ProjectInfo;
+struct TeamInfo;
 } // namespace Domain
+
+namespace BusinessLayer {
+class Project;
+}
 
 
 namespace ManagementLayer {
-
-class Project;
 
 /**
  * @brief Менеджер экрана со списком проектов
@@ -57,6 +60,11 @@ public:
      */
     void setProjectsInCloudCanBeCreated(bool _authorized,
                                         Domain::SubscriptionType _subscritionType);
+
+    /**
+     * @brief Список команд пользователя
+     */
+    void setTeams(const QVector<Domain::TeamInfo>& _teams);
 
     /**
      * @brief Создать проект
@@ -134,8 +142,8 @@ public:
     /**
      * @brief Получить проект
      */
-    Project project(const QString& _path) const;
-    Project project(int _id) const;
+    BusinessLayer::Project project(const QString& _path) const;
+    BusinessLayer::Project project(int _id) const;
 
     /**
      * @brief Скрыть проект
@@ -151,7 +159,7 @@ public:
     /**
      * @brief Получить текущий проект
      */
-    const Project& currentProject() const;
+    const BusinessLayer::Project& currentProject() const;
 
 signals:
     /**
@@ -183,7 +191,8 @@ signals:
     /**
      * @brief Пользователь хочет создать проект в облаке
      */
-    void createCloudProjectRequested(const QString& _projectName, const QString& _importFilePath);
+    void createCloudProjectRequested(const QString& _projectName, const QString& _importFilePath,
+                                     int _teamId);
 
     /**
      * @brief Пользователь хочет открыть проект

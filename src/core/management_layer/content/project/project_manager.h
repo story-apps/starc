@@ -5,6 +5,7 @@
 
 namespace BusinessLayer {
 class AbstractModel;
+class Project;
 class StructureModelItem;
 } // namespace BusinessLayer
 
@@ -19,7 +20,6 @@ struct DocumentInfo;
 namespace ManagementLayer {
 
 enum class DocumentEditingMode;
-class Project;
 class PluginsBuilder;
 
 /**
@@ -74,8 +74,8 @@ public:
     /**
      * @brief Загрузить данные текущего проекта
      */
-    void loadCurrentProject(const Project& _project);
-    void updateCurrentProject(const Project& _project);
+    void loadCurrentProject(const BusinessLayer::Project& _project);
+    void updateCurrentProject(const BusinessLayer::Project& _project);
     void restoreCurrentProjectState(const QString& _path);
 
     /**
