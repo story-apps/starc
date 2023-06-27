@@ -44,8 +44,15 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
     // FIXME: проверить в разных системах и разобраться какое тут должно быть значение
     //
     const auto firstBlockYDelta =
-#ifdef Q_OS_LINUX
+#ifdef Q_OS_WINDOWS
+        1.5
+#else
         9
+#endif
+        ;
+    const auto notFirstBlockYDelta =
+#ifdef Q_OS_WINDOWS
+        -1
 #else
         0
 #endif
@@ -83,7 +90,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                                 ? (_pageYPos
                                    + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
                                    + firstBlockYDelta)
-                                : _blockRect.top(),
+                                : _blockRect.top() + notFirstBlockYDelta,
                             numberDelta, TextHelper::fineLineSpacing(_painter->font()));
                     } else {
                         const int distanceBetweenSceneNumberAndText = 10;
@@ -93,7 +100,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                                 ? (_pageYPos
                                    + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
                                    + firstBlockYDelta)
-                                : _blockRect.top(),
+                                : _blockRect.top() + notFirstBlockYDelta,
                             MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
                                 - distanceBetweenSceneNumberAndText,
                             TextHelper::fineLineSpacing(_painter->font()));
@@ -107,7 +114,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                                 ? (_pageYPos
                                    + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
                                    + firstBlockYDelta)
-                                : _blockRect.top(),
+                                : _blockRect.top() + notFirstBlockYDelta,
                             numberDelta, TextHelper::fineLineSpacing(_painter->font()));
                     } else {
                         const int distanceBetweenSceneNumberAndText = 10;
@@ -118,7 +125,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                                 ? (_pageYPos
                                    + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
                                    + firstBlockYDelta)
-                                : _blockRect.top(),
+                                : _blockRect.top() + notFirstBlockYDelta,
                             MeasurementHelper::mmToPx(exportTemplate.pageMargins().right())
                                 - distanceBetweenSceneNumberAndText,
                             TextHelper::fineLineSpacing(_painter->font()));
@@ -150,7 +157,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                 _blockRect.top() <= _pageYPos
                     ? (_pageYPos + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
                        + firstBlockYDelta)
-                    : _blockRect.top(),
+                    : _blockRect.top() + notFirstBlockYDelta,
                 _block.blockFormat().leftMargin()
                     - MeasurementHelper::mmToPx(characterBlockStyle.marginsOnHalfPage().left()),
                 TextHelper::fineLineSpacing(_painter->font()));

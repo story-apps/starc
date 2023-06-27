@@ -103,10 +103,10 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
             //        при ручном проссчёте, поэтому уменьшаем тут чутка, чтобы корректно рассчитать
             //        кейсы, когда первая строка таки влезает
             //
-#ifdef Q_OS_LINUX
-                2
+#ifdef Q_OS_WINDOWS
+                5
 #else
-                0
+                2
 #endif
                 ;
             const bool isFirstLineCanBePlacedAtCurrentPage = (blockRect.top() > pageYPos)
