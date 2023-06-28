@@ -1144,7 +1144,7 @@ void SettingsView::Implementation::initComicBookCard()
         comicBookCardLayout->addLayout(layout, itemIndex++, 0);
     }
     comicBookCardLayout->addWidget(comicBookEditorShowDialogueNumber, itemIndex++, 0);
-    screenplayCardLayout->addWidget(comicBookEditorSaveItemsFromText, itemIndex++, 0);
+    comicBookCardLayout->addWidget(comicBookEditorSaveItemsFromText, itemIndex++, 0);
     {
         auto layout = makeLayout();
         layout->addWidget(comicBookEditorShowHintsForAllItems);
