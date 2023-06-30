@@ -2887,10 +2887,12 @@ void ApplicationManager::initConnections()
         d->menuView->setSignInVisible(true);
         d->menuView->setAccountVisible(false);
         d->projectManager->checkAvailabilityToEdit();
-        if (d->projectsManager->currentProject()->isRemote()) {
+        if (d->projectsManager->currentProject() != nullptr
+            && d->projectsManager->currentProject()->isRemote()) {
             d->closeCurrentProject();
             d->showProjects();
         }
+        d->projectsManager->setTeams({});
         d->projectsManager->setCloudProjects({});
         d->projectsManager->setProjectsInCloudCanBeCreated(false, Domain::SubscriptionType::Free);
     });
