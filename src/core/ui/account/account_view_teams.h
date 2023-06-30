@@ -19,6 +19,11 @@ public:
     ~AccountViewTeams() override;
 
     /**
+     * @brief Скорректировать интерфейс в зависимости от того есть ли подключение к серверу
+     */
+    void setConnected(bool _connected);
+
+    /**
      * @brief Задать информацию об аккаунте пользователя
      */
     void setAccountInfo(const Domain::AccountInfo& _accountInfo);

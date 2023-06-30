@@ -125,7 +125,7 @@ public:
     /**
      * @brief Обновить информацию о том, может ли пользователь использовать платные редакторы
      */
-    void checkAvailabilityToEdit() const;
+    void checkAvailabilityToEdit(bool _projectInTeam) const;
 
     /**
      * @brief Задать режим работы с документами

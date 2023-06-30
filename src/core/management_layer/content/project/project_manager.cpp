@@ -318,6 +318,11 @@ public:
     bool isProjectOwner = true;
 
     /**
+     * @brief Находится ли проект в команде
+     */
+    bool isProjectInTeam = false;
+
+    /**
      * @brief Текущий режим редактирования документов
      */
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
@@ -2544,7 +2549,7 @@ void ProjectManager::reconfigureNovelNavigator()
 
 void ProjectManager::checkAvailabilityToEdit()
 {
-    d->pluginsBuilder.checkAvailabilityToEdit();
+    d->pluginsBuilder.checkAvailabilityToEdit(d->isProjectInTeam);
 }
 
 void ProjectManager::loadCurrentProject(BusinessLayer::ProjectsModelProjectItem* _project)
@@ -2567,6 +2572,11 @@ void ProjectManager::loadCurrentProject(BusinessLayer::ProjectsModelProjectItem*
     // Сохраняем параметры проекта для дальнейшего использования
     //
     updateCurrentProject(_project);
+
+    //
+    // Настраиваем доступность модулей для открываемого проекта
+    //
+    checkAvailabilityToEdit();
 
     //
     // Загружаем информацию о проекте
@@ -2602,6 +2612,7 @@ void ProjectManager::updateCurrentProject(BusinessLayer::ProjectsModelProjectIte
     d->projectPath = _project->path();
     d->isProjectRemote = _project->isRemote();
     d->isProjectOwner = _project->isOwner();
+    d->isProjectInTeam = _project->teamId() != Domain::kInvalidId;
     d->editingMode = _project->editingMode();
     d->editingPermissions = _project->editingPermissions();
     d->pluginsBuilder.setEditingMode(d->editingMode);

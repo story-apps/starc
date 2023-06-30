@@ -278,6 +278,11 @@ public:
     QHash<QString, ManagementLayer::IDocumentManager*> plugins;
 
     /**
+     * @brief Находится ли текущий проект в команде
+     */
+    bool isProjectInTeam = false;
+
+    /**
      * @brief Текущий режим работы редакторов
      */
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
@@ -291,6 +296,9 @@ public:
 Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
     const QString& _mimeType, BusinessLayer::AbstractModel* _model, ViewType _type)
 {
+    //
+    // Если плагин ещё не был загружен, загружаем его
+    //
     if (!plugins.contains(_mimeType)) {
         //
         // Смотрим папку с данными приложения на компе
@@ -356,11 +364,17 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
         plugins.insert(_mimeType, plugin);
     }
 
+    //
+    // Получим плагин для нужного типа редактора
+    //
     auto plugin = plugins.value(_mimeType);
     if (plugin == nullptr) {
         return nullptr;
     }
 
+    //
+    // Получим представление (при необходимости новое будет создано)
+    //
     Ui::IDocumentView* view = nullptr;
     switch (_type) {
     case Primary: {
@@ -378,8 +392,17 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
         break;
     }
     }
+
+    //
+    // Настроим доступность для редактирования в плагине
+    //
+    plugin->checkAvailabilityToEdit(isProjectInTeam);
+    //
+    // ... а также режим работы для самого представления и доступные кредиты для работы с ИИ
+    //
     view->setEditingMode(editingMode);
     view->setAvailableCredits(availableCredits);
+
     return view;
 }
 
@@ -852,10 +875,15 @@ void PluginsBuilder::reconfigureNovelNavigator() const
     reconfigurePlugin(kNovelTextNavigatorMime, {});
 }
 
-void PluginsBuilder::checkAvailabilityToEdit() const
+void PluginsBuilder::checkAvailabilityToEdit(bool _projectInTeam) const
 {
+    if (d->isProjectInTeam == _projectInTeam) {
+        return;
+    }
+
+    d->isProjectInTeam = _projectInTeam;
     for (auto plugin : std::as_const(d->plugins)) {
-        plugin->checkAvailabilityToEdit();
+        plugin->checkAvailabilityToEdit(d->isProjectInTeam);
 
         //
         // После того, как обновили доступность плагинов, нужно обновить их возможность к

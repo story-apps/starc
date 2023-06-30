@@ -493,6 +493,9 @@ void AccountNavigator::setConnected(bool _connected)
     d->tryTeamButton->setEnabled(_connected);
     d->renewTeamSubscriptionButton->setEnabled(_connected);
     d->buyCreditsButton->setEnabled(_connected);
+    //
+    d->teamsOwner->setContextMenuPolicy(_connected ? Qt::CustomContextMenu : Qt::NoContextMenu);
+    d->addTeamButton->setEnabled(_connected);
 }
 
 void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)

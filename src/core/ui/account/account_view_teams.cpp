@@ -266,6 +266,12 @@ AccountViewTeams::AccountViewTeams(QWidget* _parent)
 
 AccountViewTeams::~AccountViewTeams() = default;
 
+void AccountViewTeams::setConnected(bool _connected)
+{
+    d->addMemberCard->setEnabled(_connected);
+    d->sidebar->setEnabled(_connected);
+}
+
 void AccountViewTeams::setAccountInfo(const Domain::AccountInfo& _accountInfo)
 {
     d->accountInfo = _accountInfo;

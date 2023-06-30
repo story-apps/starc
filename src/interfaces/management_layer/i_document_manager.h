@@ -94,7 +94,7 @@ public:
      * @brief Перепроверить воможность редактирования
      * @note Актуально для платных плагинов
      */
-    virtual void checkAvailabilityToEdit()
+    virtual void checkAvailabilityToEdit(bool)
     {
     }
 

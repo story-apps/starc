@@ -343,6 +343,7 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(
     //
     d->localProject->hide();
     d->cloudProject->hide();
+    d->projectTeam->hide();
     //
     // ... и настроим подсказки
     //

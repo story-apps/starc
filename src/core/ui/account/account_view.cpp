@@ -373,6 +373,8 @@ void AccountView::setConnected(bool _connected)
     d->subscriptionUpgradeToTeam->setEnabled(_connected);
     d->promocodeName->setEnabled(_connected);
     d->activatePromocode->setEnabled(_connected);
+    //
+    d->teamPage->setConnected(_connected);
 }
 
 void AccountView::setEmail(const QString& _email)
