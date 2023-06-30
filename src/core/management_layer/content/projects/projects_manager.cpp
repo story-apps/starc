@@ -1,7 +1,8 @@
 #include "projects_manager.h"
 
-#include "project.h"
 #include "projects_model.h"
+#include "projects_model_project_item.h"
+#include "projects_model_team_item.h"
 
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
@@ -58,7 +59,7 @@ public:
     QVector<Domain::TeamInfo> teamsForProjects;
 
     BusinessLayer::ProjectsModel* projects = nullptr;
-    BusinessLayer::Project currentProject;
+    BusinessLayer::ProjectsModelProjectItem* currentProject = nullptr;
 
     QWidget* topLevelWidget = nullptr;
 
@@ -106,7 +107,7 @@ QString ProjectsManager::Implementation::newProjectPath(const QString& _projectN
 {
     const auto projectPathPrefix
         = _projectPath + "/" + PlatformHelper::systemSavebleFileName(_projectName);
-    auto projectPath = projectPathPrefix + BusinessLayer::Project::extension();
+    auto projectPath = projectPathPrefix + BusinessLayer::ProjectsModelProjectItem::extension();
     //
     // Ситуация, что файл с таким названием уже существует крайне редка, хотя и
     // гипотетически возможна
@@ -118,7 +119,7 @@ QString ProjectsManager::Implementation::newProjectPath(const QString& _projectN
         //
         projectPath = projectPathPrefix + "_"
             + QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss")
-            + BusinessLayer::Project::extension();
+            + BusinessLayer::ProjectsModelProjectItem::extension();
     }
 
     return projectPath;
@@ -150,21 +151,21 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
     connect(d->view, &Ui::ProjectsView::openProjectPressed, this,
             &ProjectsManager::openProjectRequested);
     connect(d->view, &Ui::ProjectsView::openProjectRequested, this,
-            [this](const BusinessLayer::Project& _project) {
-                if (_project.isLocal()) {
-                    emit openLocalProjectRequested(_project.path());
+            [this](BusinessLayer::ProjectsModelProjectItem* _project) {
+                if (_project->isLocal()) {
+                    emit openLocalProjectRequested(_project->path());
                 } else {
-                    emit openCloudProjectRequested(_project.id(), _project.path());
+                    emit openCloudProjectRequested(_project->id(), _project->path());
                 }
             });
     connect(
         d->view, &Ui::ProjectsView::projectContextMenuRequested, this,
-        [this](const BusinessLayer::Project& _project) {
+        [this](BusinessLayer::ProjectsModelProjectItem* _project) {
             QVector<QAction*> actions;
             //
             // Действия над локальным проектом
             //
-            if (_project.isLocal()) {
+            if (_project->isLocal()) {
                 auto moveToCloudAction = new QAction;
                 moveToCloudAction->setIconText(u8"\U000F0167");
                 moveToCloudAction->setText(tr("Move to the cloud"));
@@ -215,7 +216,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                     // Если проект может быть создан в облаке, то делаем это
                     //
                     else {
-                        emit createCloudProjectRequested(_project.name(), _project.path(),
+                        emit createCloudProjectRequested(_project->name(), _project->path(),
                                                          Domain::kInvalidId);
                     }
                 });
@@ -226,7 +227,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                 showInFolderAction->setIconText(u8"\U000F178A");
                 showInFolderAction->setText(tr("Show in folder"));
                 connect(showInFolderAction, &QAction::triggered, this,
-                        [_project] { PlatformHelper::showInGraphicalShell(_project.path()); });
+                        [_project] { PlatformHelper::showInGraphicalShell(_project->path()); });
                 actions.append(showInFolderAction);
                 //
                 auto hideFromRecentAction = new QAction;
@@ -255,7 +256,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                                 //
                                 // Если таки хочет, то скрываем проект
                                 //
-                                d->projects->remove(_project);
+                                d->projects->removeItem(_project);
                             });
                     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
                 });
@@ -290,8 +291,8 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                                 if (currentProject() == _project) {
                                     emit closeCurrentProjectRequested();
                                 }
-                                d->projects->remove(_project);
-                                QFile::remove(_project.path());
+                                d->projects->removeItem(_project);
+                                QFile::remove(_project->path());
                             });
                     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
                 });
@@ -304,13 +305,14 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                 //
                 // Если пользователь может изменть проект
                 //
-                if (_project.editingMode() == DocumentEditingMode::Edit) {
+                if (_project->editingMode() == DocumentEditingMode::Edit) {
                     auto saveLocallyAction = new QAction;
                     saveLocallyAction->setIconText(u8"\U000F0162");
                     saveLocallyAction->setText(tr("Save to local file"));
                     connect(saveLocallyAction, &QAction::triggered, this, [this, _project] {
-                        emit createLocalProjectRequested(
-                            _project.name(), d->newProjectPath(_project.name()), _project.path());
+                        emit createLocalProjectRequested(_project->name(),
+                                                         d->newProjectPath(_project->name()),
+                                                         _project->path());
                     });
                     actions.append(saveLocallyAction);
                 }
@@ -318,7 +320,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                 //
                 // Если пользователь владеет проектом
                 //
-                if (_project.isOwner()) {
+                if (_project->isOwner()) {
                     auto removeProjectAction = new QAction;
                     removeProjectAction->setSeparator(!actions.isEmpty());
                     removeProjectAction->setIconText(u8"\U000F01B4");
@@ -346,7 +348,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                                     // Если таки хочет, то уведомляем, чтобы удалить проект на
                                     // сервере
                                     //
-                                    emit removeCloudProjectRequested(_project.id());
+                                    emit removeCloudProjectRequested(_project->id());
                                 });
                         connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
                     });
@@ -384,7 +386,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                                     // Если таки хочет, то уведомляем, чтобы отписаться от
                                     // проекта на сервере
                                     //
-                                    emit unsubscribeFromCloudProjectRequested(_project.id());
+                                    emit unsubscribeFromCloudProjectRequested(_project->id());
                                 });
                         connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
                     });
@@ -401,22 +403,22 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
             menu->showContextMenu(QCursor::pos());
         });
     connect(&d->cloudProjectChangeDebouncer, &Debouncer::gotWork, this, [this] {
-        if (!d->currentProject.isRemote()) {
+        if (!d->currentProject->isRemote()) {
             return;
         }
 
-        const auto name = d->isCloudProjectNameChanged ? d->currentProject.name() : QString();
+        const auto name = d->isCloudProjectNameChanged ? d->currentProject->name() : QString();
         const auto logline
-            = d->isCloudProjectLoglineChnaged ? d->currentProject.logline() : QString();
+            = d->isCloudProjectLoglineChnaged ? d->currentProject->logline() : QString();
         const auto cover = d->isCloudProjectCoverChnaged
-            ? ImageHelper::bytesFromImage(d->currentProject.poster())
+            ? ImageHelper::bytesFromImage(d->currentProject->poster())
             : QByteArray();
 
         d->isCloudProjectCoverChnaged = false;
         d->isCloudProjectLoglineChnaged = false;
         d->isCloudProjectCoverChnaged = false;
 
-        emit updateCloudProjectRequested(d->currentProject.id(), name, logline, cover);
+        emit updateCloudProjectRequested(d->currentProject->id(), name, logline, cover);
     });
 
     connect(d->navigator, &Ui::ProjectsNavigator::helpPressed, this, [] {
@@ -467,61 +469,97 @@ void ProjectsManager::loadProjects()
     const auto projectsJson
         = QJsonDocument::fromJson(QByteArray::fromHex(projectsData.toByteArray()));
 
-    QVector<BusinessLayer::Project> projects;
-    for (const auto projectJsonValue : projectsJson.array()) {
-        const auto projectJson = projectJsonValue.toObject();
-
+    auto readProject = [](const QJsonObject& _json) -> BusinessLayer::ProjectsModelItem* {
         //
         // Если локальный файл проекта удалили, то не добавляем его в список недавних проектов
         //
-        const auto isRemote = projectJson.contains("id");
-        const auto projectPath = projectJson["path"].toString();
+        const auto isRemote = _json.contains("id");
+        const auto projectPath = _json["path"].toString();
         if (!isRemote && !QFileInfo::exists(projectPath)) {
-            continue;
+            return nullptr;
         }
 
-        BusinessLayer::Project project;
+        auto project = new BusinessLayer::ProjectsModelProjectItem;
         if (isRemote) {
-            project.setId(projectJson["id"].toInt());
-            project.setOwner(projectJson["is_owner"].toBool());
-            project.setEditingMode(static_cast<DocumentEditingMode>(projectJson["role"].toInt()));
+            project->setId(_json["id"].toInt());
+            project->setOwner(_json["is_owner"].toBool());
+            project->setEditingMode(static_cast<DocumentEditingMode>(_json["role"].toInt()));
 
             QHash<QUuid, DocumentEditingMode> permissions;
-            const auto permissionsJson = projectJson["permissions"].toArray();
+            const auto permissionsJson = _json["permissions"].toArray();
             for (const auto& documentAccessJson : permissionsJson) {
                 const auto documentAccess = documentAccessJson.toObject();
                 permissions[documentAccess["uuid"].toString()]
                     = static_cast<DocumentEditingMode>(documentAccess["role"].toInt());
             }
-            project.setEditingPermissions(permissions);
+            project->setEditingPermissions(permissions);
         }
-        project.setType(static_cast<BusinessLayer::ProjectType>(projectJson["type"].toInt()));
-        project.setUuid(projectJson["uuid"].toString());
-        project.setName(projectJson["name"].toString());
-        project.setLogline(projectJson["logline"].toString());
-        project.setPath(projectJson["path"].toString());
-        project.setPosterPath(projectJson["poster_path"].toString());
-        project.setLastEditTime(
-            QDateTime::fromString(projectJson["last_edit_time"].toString(), Qt::ISODateWithMs));
-        project.setCanAskAboutSwitch(projectJson["can_ask"].toBool());
-        projects.append(project);
+        project->setProjectType(static_cast<BusinessLayer::ProjectType>(_json["type"].toInt()));
+        project->setUuid(_json["uuid"].toString());
+        project->setName(_json["name"].toString());
+        project->setLogline(_json["logline"].toString());
+        project->setPath(_json["path"].toString());
+        project->setPosterPath(_json["poster_path"].toString());
+        project->setLastEditTime(
+            QDateTime::fromString(_json["last_edit_time"].toString(), Qt::ISODateWithMs));
+        project->setCanAskAboutSwitch(_json["can_ask"].toBool());
+        return project;
+    };
+
+    QVector<BusinessLayer::ProjectsModelItem*> teamsAndProjects;
+    for (const auto& itemJsonValue : projectsJson.array()) {
+        const auto itemJson = itemJsonValue.toObject();
+
+        //
+        // Команда
+        //
+        if (itemJson.contains("is_team") && itemJson["is_team"].toBool() == true) {
+            auto team = new BusinessLayer::ProjectsModelTeamItem;
+            team->setId(itemJson["id"].toInt());
+            team->setName(itemJson["name"].toString());
+            team->setDescription(itemJson["description"].toString());
+            team->setOpened(itemJson["is_opened"].toBool());
+            for (const auto& projectJsonValue : itemJson["projects"].toArray()) {
+                const auto projectJson = projectJsonValue.toObject();
+                auto project = readProject(projectJson);
+                if (project == nullptr) {
+                    continue;
+                }
+                team->appendItem(project);
+            }
+            teamsAndProjects.append(team);
+            continue;
+        }
+
+        //
+        // Проект
+        //
+        auto project = readProject(itemJson);
+        if (project == nullptr) {
+            continue;
+        }
+        teamsAndProjects.append(project);
     }
-    d->projects->append(projects);
+    d->projects->appendItems(teamsAndProjects);
 }
 
 void ProjectsManager::saveProjects()
 {
-    QJsonArray projectsJson;
-    for (int projectIndex = 0; projectIndex < d->projects->rowCount(); ++projectIndex) {
-        const auto& project = d->projects->projectAt(projectIndex);
+    auto projectItemJson = [](BusinessLayer::ProjectsModelItem* _item) {
+        if (_item->type() != BusinessLayer::ProjectsModelItemType::Project) {
+            return QJsonObject();
+        }
+
+        const auto projectItem = static_cast<BusinessLayer::ProjectsModelProjectItem*>(_item);
         QJsonObject projectJson;
-        if (project->isRemote()) {
-            projectJson["id"] = project->id();
-            projectJson["is_owner"] = project->isOwner();
-            projectJson["role"] = static_cast<int>(project->editingMode());
+        projectJson["is_team"] = false;
+        if (projectItem->isRemote()) {
+            projectJson["id"] = projectItem->id();
+            projectJson["is_owner"] = projectItem->isOwner();
+            projectJson["role"] = static_cast<int>(projectItem->editingMode());
 
             QJsonArray permissionsJson;
-            const auto permissions = project->editingPermissions();
+            const auto permissions = projectItem->editingPermissions();
             for (auto iter = permissions.begin(); iter != permissions.end(); ++iter) {
                 QJsonObject documentAccess;
                 documentAccess["uuid"] = iter.key().toString();
@@ -530,15 +568,46 @@ void ProjectsManager::saveProjects()
             }
             projectJson["permissions"] = permissionsJson;
         }
-        projectJson["type"] = static_cast<int>(project->type());
-        projectJson["uuid"] = project->uuid().toString();
-        projectJson["name"] = project->name();
-        projectJson["logline"] = project->logline();
-        projectJson["path"] = project->path();
-        projectJson["poster_path"] = project->posterPath();
-        projectJson["last_edit_time"] = project->lastEditTime().toString(Qt::ISODateWithMs);
-        projectJson["can_ask"] = project->canAskAboutSwitch();
-        projectsJson.append(projectJson);
+        projectJson["type"] = static_cast<int>(projectItem->projectType());
+        projectJson["uuid"] = projectItem->uuid().toString();
+        projectJson["name"] = projectItem->name();
+        projectJson["logline"] = projectItem->logline();
+        projectJson["path"] = projectItem->path();
+        projectJson["poster_path"] = projectItem->posterPath();
+        projectJson["last_edit_time"] = projectItem->lastEditTime().toString(Qt::ISODateWithMs);
+        projectJson["can_ask"] = projectItem->canAskAboutSwitch();
+        return projectJson;
+    };
+
+    QJsonArray projectsJson;
+    for (int row = 0; row < d->projects->rowCount(); ++row) {
+        const auto itemIndex = d->projects->index(row);
+        const auto item = d->projects->itemForIndex(itemIndex);
+        if (item->type() == BusinessLayer::ProjectsModelItemType::Project) {
+            projectsJson.append(projectItemJson(item));
+            continue;
+        }
+
+        if (item->type() != BusinessLayer::ProjectsModelItemType::Team) {
+            continue;
+        }
+
+        const auto teamItem = static_cast<BusinessLayer::ProjectsModelTeamItem*>(item);
+        QJsonObject teamJson;
+        teamJson["is_team"] = true;
+        teamJson["id"] = teamItem->id();
+        teamJson["name"] = teamItem->name();
+        teamJson["description"] = teamItem->description();
+        teamJson["is_opened"] = teamItem->isOpened();
+        QJsonArray teamProjectsJson;
+        for (int childRow = 0; childRow < d->projects->rowCount(itemIndex); ++childRow) {
+            const auto childItemIndex = d->projects->index(childRow, 0, itemIndex);
+            const auto childItem = d->projects->itemForIndex(childItemIndex);
+            Q_ASSERT(childItem->type() == BusinessLayer::ProjectsModelItemType::Project);
+            teamProjectsJson.append(projectItemJson(childItem));
+        }
+        teamJson["projects"] = teamProjectsJson;
+        projectsJson.append(teamJson);
     }
     setSettingsValue(DataStorageLayer::kApplicationProjectsKey,
                      QJsonDocument(projectsJson).toJson(QJsonDocument::Compact).toHex());
@@ -546,12 +615,12 @@ void ProjectsManager::saveProjects()
 
 void ProjectsManager::saveChanges()
 {
-    if (!d->currentProject.isValid()) {
+    if (d->currentProject == nullptr) {
         return;
     }
 
-    d->currentProject.setLastEditTime(QDateTime::currentDateTime());
-    d->projects->updateProject(d->currentProject);
+    d->currentProject->setLastEditTime(QDateTime::currentDateTime());
+    d->projects->updateItem(d->currentProject);
 }
 
 void ProjectsManager::setConnected(bool _connected)
@@ -580,16 +649,101 @@ void ProjectsManager::setProjectsInCloudCanBeCreated(bool _authorized,
 
 void ProjectsManager::setTeams(const QVector<Domain::TeamInfo>& _teams)
 {
+    //
+    // Формируем список команд, в которых пользователь может размещать проекты
+    //
     d->teamsForProjects.clear();
     for (const auto& team : _teams) {
         if (team.teamRole == 0) {
             d->teamsForProjects.append(team);
         }
     }
-
+    //
+    // ... и конфигурируем диалог создания проектов
+    //
     if (!d->createProjectDialog.isNull()) {
         d->createProjectDialog->configureCloudProjectCreationAbility(
             d->isConnected, d->isUserAuthorized, d->canCreateCloudProject, d->teamsForProjects);
+    }
+
+    //
+    // Убираем из закешированного списка команды, которых более нет для текущего аккаунта
+    //
+    for (int row = 0; row < d->projects->rowCount(); ++row) {
+        const auto itemIndex = d->projects->index(row);
+        const auto item = d->projects->itemForIndex(itemIndex);
+        if (item->type() != BusinessLayer::ProjectsModelItemType::Team) {
+            continue;
+        }
+
+        auto projectTeam = static_cast<BusinessLayer::ProjectsModelTeamItem*>(item);
+        bool hideTeam = true;
+        for (const auto& team : _teams) {
+            if (projectTeam->id() == team.id) {
+                hideTeam = false;
+                break;
+            }
+        }
+        if (hideTeam) {
+            d->projects->removeItem(projectTeam);
+            --row;
+        }
+    }
+
+    //
+    // Добавляем в список проектов команды, которых там ещё нет
+    //
+    for (const auto& team : _teams) {
+        addOrUpdateTeam(team);
+    }
+}
+
+void ProjectsManager::addOrUpdateTeam(const Domain::TeamInfo& _teamInfo)
+{
+    bool hasTeam = false;
+    //
+    //  Проходим все верхнеуровневые элементы
+    //
+    for (int row = 0; row < d->projects->rowCount(); ++row) {
+        const auto itemIndex = d->projects->index(row);
+        const auto item = d->projects->itemForIndex(itemIndex);
+        if (item->type() != BusinessLayer::ProjectsModelItemType::Team) {
+            continue;
+        }
+
+        auto projectTeam = static_cast<BusinessLayer::ProjectsModelTeamItem*>(item);
+        if (projectTeam->id() == _teamInfo.id) {
+            projectTeam->setTeamInfo(_teamInfo);
+            d->projects->updateItem(projectTeam);
+            hasTeam = true;
+            break;
+        }
+    }
+
+    //
+    // ... если команды не нашлось, то нужно создать
+    //
+    if (!hasTeam) {
+        auto projectTeam = new BusinessLayer::ProjectsModelTeamItem;
+        projectTeam->setTeamInfo(_teamInfo);
+        d->projects->prependItem(projectTeam);
+    }
+}
+
+void ProjectsManager::hideTeam(int _id)
+{
+    for (int row = 0; row < d->projects->rowCount(); ++row) {
+        const auto itemIndex = d->projects->index(row);
+        const auto item = d->projects->itemForIndex(itemIndex);
+        if (item->type() != BusinessLayer::ProjectsModelItemType::Team) {
+            continue;
+        }
+
+        auto projectTeam = static_cast<BusinessLayer::ProjectsModelTeamItem*>(item);
+        if (projectTeam->id() == _id) {
+            d->projects->removeItem(projectTeam);
+            return;
+        }
     }
 }
 
@@ -697,26 +851,51 @@ void ProjectsManager::openProject()
 
 void ProjectsManager::setCloudProjects(const QVector<Domain::ProjectInfo>& _projects)
 {
+    auto removeProjectIfNeeded
+        = [this, _projects](BusinessLayer::ProjectsModelProjectItem* _project) {
+              if (_project->isLocal()) {
+                  return false;
+              }
+
+              bool hideProject = true;
+              for (const auto& project : _projects) {
+                  if (_project->id() == project.id) {
+                      hideProject = false;
+                      break;
+                  }
+              }
+
+              if (hideProject) {
+                  d->projects->removeItem(_project);
+                  return true;
+              }
+
+              return false;
+          };
+
     //
     // Убираем из закешированного списка проекты, которых более нет для текущего аккаунта
     //
-    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
-        const auto& project = d->projects->projectAt(projectRow);
-        if (project->isLocal()) {
+    for (int row = 0; row < d->projects->rowCount(); ++row) {
+        const auto itemIndex = d->projects->index(row);
+        const auto item = d->projects->itemForIndex(itemIndex);
+        if (item->type() == BusinessLayer::ProjectsModelItemType::Team) {
+            for (auto childRow = 0; childRow < d->projects->rowCount(itemIndex); ++childRow) {
+                const auto childItemIndex = d->projects->index(childRow, 0, itemIndex);
+                const auto childItem = d->projects->itemForIndex(childItemIndex);
+                auto project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(childItem);
+                const auto isProjectRemoved = removeProjectIfNeeded(project);
+                if (isProjectRemoved) {
+                    --childRow;
+                }
+            }
             continue;
         }
 
-        bool hideProject = true;
-        for (int index = 0; index < _projects.size(); ++index) {
-            if (project->id() == _projects.at(index).id) {
-                hideProject = false;
-                break;
-            }
-        }
-
-        if (hideProject) {
-            d->projects->remove(*project);
-            --projectRow;
+        auto project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(item);
+        const auto isProjectRemoved = removeProjectIfNeeded(project);
+        if (isProjectRemoved) {
+            --row;
         }
     }
 
@@ -733,17 +912,76 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     //
     // Определим, находится ли устанавливаемый проект уже в списке, или это новый
     //
-    BusinessLayer::Project cloudProject;
+    BusinessLayer::ProjectsModelTeamItem* projectTeam = nullptr;
+    BusinessLayer::ProjectsModelProjectItem* cloudProject = nullptr;
+
+    //
+    // Если проект в команде
+    //
+    if (_projectInfo.teamId != Domain::kInvalidId) {
+        //
+        // ... ищем созданную команду
+        //
+        for (int row = 0; row < d->projects->rowCount(); ++row) {
+            const auto itemIndex = d->projects->index(row);
+            const auto item = d->projects->itemForIndex(itemIndex);
+            if (item->type() != BusinessLayer::ProjectsModelItemType::Team) {
+                continue;
+            }
+
+            auto team = static_cast<BusinessLayer::ProjectsModelTeamItem*>(item);
+            if (team->id() == _projectInfo.teamId) {
+                projectTeam = team;
+                break;
+            }
+        }
+
+        //
+        // ... если команды не нашлось, то нужно создать
+        //
+        if (projectTeam == nullptr) {
+            projectTeam = new BusinessLayer::ProjectsModelTeamItem;
+            projectTeam->setId(_projectInfo.teamId);
+            d->projects->prependItem(projectTeam);
+        }
+    }
+
 
     //
     // Проверяем находится ли проект в списке недавно используемых
     //
-    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
-        const auto& project = d->projects->projectAt(projectRow);
+    for (int row = 0; row < d->projects->rowCount(); ++row) {
+        const auto itemIndex = d->projects->index(row);
+        const auto item = d->projects->itemForIndex(itemIndex);
+        if (item->type() == BusinessLayer::ProjectsModelItemType::Team) {
+            for (auto childRow = 0; childRow < d->projects->rowCount(itemIndex); ++childRow) {
+                const auto childItemIndex = d->projects->index(childRow, 0, itemIndex);
+                const auto childItem = d->projects->itemForIndex(childItemIndex);
+                auto project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(childItem);
+                if (project->id() == _projectInfo.id) {
+                    cloudProject = project;
+                    break;
+                }
+            }
+
+            if (cloudProject != nullptr) {
+                break;
+            }
+
+            continue;
+        }
+
+        auto project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(item);
         if (project->id() == _projectInfo.id) {
-            cloudProject = *project;
+            cloudProject = project;
             break;
         }
+    }
+    //
+    // ... если не нашли, то создадим новый
+    //
+    if (cloudProject == nullptr) {
+        cloudProject = new BusinessLayer::ProjectsModelProjectItem;
     }
 
     //
@@ -755,41 +993,43 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
                    DataStorageLayer::StorageFacade::settingsStorage()->accountEmail());
     QDir::root().mkpath(projectDir);
     const auto projectPath = QDir::toNativeSeparators(
-        cloudProject.path().isEmpty() ? QString("%1/%2.%3")
-                                            .arg(projectDir, QString::number(_projectInfo.id),
-                                                 BusinessLayer::Project::extension())
-                                      : cloudProject.path());
+        cloudProject->path().isEmpty()
+            ? QString("%1/%2.%3")
+                  .arg(projectDir, QString::number(_projectInfo.id),
+                       BusinessLayer::ProjectsModelProjectItem::extension())
+            : cloudProject->path());
 
     //
     // Если текущий пользователь является владельцем проекта
     //
     if (_projectInfo.accountRole == 0) {
-        cloudProject.setOwner(true);
-        cloudProject.setEditingMode(DocumentEditingMode::Edit);
-        cloudProject.clearEditingPermissions();
+        cloudProject->setOwner(true);
+        cloudProject->setEditingMode(DocumentEditingMode::Edit);
+        cloudProject->clearEditingPermissions();
     }
     //
     // В противном случае
     //
     else {
-        cloudProject.setOwner(false);
-        cloudProject.setEditingMode(static_cast<DocumentEditingMode>(_projectInfo.accountRole - 1));
+        cloudProject->setOwner(false);
+        cloudProject->setEditingMode(
+            static_cast<DocumentEditingMode>(_projectInfo.accountRole - 1));
         QHash<QUuid, DocumentEditingMode> permissions;
         for (auto iter = _projectInfo.accountPermissions.begin();
              iter != _projectInfo.accountPermissions.end(); ++iter) {
             permissions[iter.key()] = static_cast<DocumentEditingMode>(iter.value() - 1);
         }
-        cloudProject.setEditingPermissions(permissions);
+        cloudProject->setEditingPermissions(permissions);
     }
     //
     // Обновим параметры проекта
     //
-    cloudProject.setName(_projectInfo.name);
-    cloudProject.setLogline(_projectInfo.logline);
-    cloudProject.setLastEditTime(_projectInfo.lastEditTime);
+    cloudProject->setName(_projectInfo.name);
+    cloudProject->setLogline(_projectInfo.logline);
+    cloudProject->setLastEditTime(_projectInfo.lastEditTime);
     if (!_projectInfo.poster.isNull()) {
         if (_projectInfo.poster.isEmpty()) {
-            cloudProject.setPosterPath({});
+            cloudProject->setPosterPath({});
         } else {
             const auto posterPath = d->projectPosterPath(projectPath);
             QFile posterFile(posterPath);
@@ -797,39 +1037,39 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
                 posterFile.write(_projectInfo.poster);
                 posterFile.close();
             }
-            cloudProject.setPosterPath(posterPath);
+            cloudProject->setPosterPath(posterPath);
         }
     }
-    cloudProject.setCollaborators(_projectInfo.collaborators);
+    cloudProject->setCollaborators(_projectInfo.collaborators);
 
     //
     // Если проект не нашёлся в списке недавних, добавляем в начало
     //
-    if (cloudProject.type() == BusinessLayer::ProjectType::Invalid) {
+    if (cloudProject->projectType() == BusinessLayer::ProjectType::Invalid) {
         //
         // Определим параметры проекта
         //
-        cloudProject.setId(_projectInfo.id);
-        cloudProject.setType(BusinessLayer::ProjectType::Cloud);
-        cloudProject.setPath(projectPath);
-        cloudProject.setRealPath(projectPath);
+        cloudProject->setId(_projectInfo.id);
+        cloudProject->setProjectType(BusinessLayer::ProjectType::Cloud);
+        cloudProject->setPath(projectPath);
+        cloudProject->setRealPath(projectPath);
 
         //
         // Добавляем проект в список
         //
-        d->projects->prepend(cloudProject);
+        d->projects->prependItem(cloudProject, projectTeam);
     }
     //
     // А если нашёлся, то обновим его параметры
     //
     else {
-        d->projects->updateProject(cloudProject);
+        d->projects->updateItem(cloudProject);
     }
 
     //
     // При необходимости также обновим текущий проект
     //
-    if (d->currentProject.id() == cloudProject.id()) {
+    if (d->currentProject != nullptr && d->currentProject->id() == cloudProject->id()) {
         d->currentProject = cloudProject;
     }
 }
@@ -856,45 +1096,67 @@ void ProjectsManager::setCurrentProject(const QString& _path, const QString& _re
     //
     // Определим, находится ли устанавливаемый проект уже в списке, или это новый
     //
-    BusinessLayer::Project newCurrentProject;
+    BusinessLayer::ProjectsModelProjectItem* newCurrentProject = nullptr;
 
     //
     // Проверяем находится ли проект в списке недавно используемых
     //
-    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
-        const auto& project = d->projects->projectAt(projectRow);
+    for (int row = 0; row < d->projects->rowCount(); ++row) {
+        const auto itemIndex = d->projects->index(row);
+        const auto item = d->projects->itemForIndex(itemIndex);
+        if (item->type() == BusinessLayer::ProjectsModelItemType::Team) {
+            for (int childRow = 0; childRow < d->projects->rowCount(itemIndex); ++childRow) {
+                const auto childItemIndex = d->projects->index(childRow, 0, itemIndex);
+                const auto childItem = d->projects->itemForIndex(childItemIndex);
+                auto project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(childItem);
+                if (project->path() == projectPath) {
+                    newCurrentProject = project;
+                    break;
+                }
+            }
+
+            if (newCurrentProject != nullptr) {
+                break;
+            }
+            continue;
+        }
+
+        auto project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(item);
         if (project->path() == projectPath) {
-            newCurrentProject = *project;
+            newCurrentProject = project;
             break;
         }
+    }
+    if (newCurrentProject == nullptr) {
+        newCurrentProject = new BusinessLayer::ProjectsModelProjectItem;
     }
 
     //
     // Всегда обновляем реальный путь, т.к. для теневых проектов он будет изменён при повторном
     // открытии
     //
-    newCurrentProject.setRealPath(projectRealPath);
+    newCurrentProject->setRealPath(projectRealPath);
 
     //
     // Если проект не нашёлся в списке недавних, добавляем в начало
     //
-    if (newCurrentProject.type() == BusinessLayer::ProjectType::Invalid) {
+    if (newCurrentProject->projectType() == BusinessLayer::ProjectType::Invalid) {
         QFileInfo fileInfo(projectPath);
 
         //
         // Определим параметры проекта
         //
-        newCurrentProject.setType(projectPath == projectRealPath
-                                      ? BusinessLayer::ProjectType::Local
-                                      : BusinessLayer::ProjectType::LocalShadow);
-        newCurrentProject.setName(fileInfo.completeBaseName());
-        newCurrentProject.setPath(projectPath);
-        newCurrentProject.setLastEditTime(fileInfo.lastModified());
+        newCurrentProject->setProjectType(projectPath == projectRealPath
+                                              ? BusinessLayer::ProjectType::Local
+                                              : BusinessLayer::ProjectType::LocalShadow);
+        newCurrentProject->setName(fileInfo.completeBaseName());
+        newCurrentProject->setPath(projectPath);
+        newCurrentProject->setLastEditTime(fileInfo.lastModified());
 
         //
         // Добавляем проект в список
         //
-        d->projects->prepend(newCurrentProject);
+        d->projects->prependItem(newCurrentProject);
     }
 
     //
@@ -906,8 +1168,28 @@ void ProjectsManager::setCurrentProject(const QString& _path, const QString& _re
 void ProjectsManager::setCurrentProject(int _projectId)
 {
     QString newCurrentProjectPath;
-    for (auto index = 0; index < d->projects->rowCount(); ++index) {
-        const auto& project = d->projects->projectAt(index);
+    for (auto row = 0; row < d->projects->rowCount(); ++row) {
+        const auto itemIndex = d->projects->index(row);
+        const auto item = d->projects->itemForIndex(itemIndex);
+        if (item->type() == BusinessLayer::ProjectsModelItemType::Team) {
+            for (int childRow = 0; childRow < d->projects->rowCount(itemIndex); ++childRow) {
+                const auto childItemIndex = d->projects->index(childRow, 0, itemIndex);
+                const auto childItem = d->projects->itemForIndex(childItemIndex);
+                auto project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(childItem);
+                if (project->isRemote() && project->id() == _projectId) {
+                    newCurrentProjectPath = project->path();
+                    break;
+                }
+            }
+
+            if (!newCurrentProjectPath.isEmpty()) {
+                break;
+            }
+
+            continue;
+        }
+
+        auto project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(item);
         if (project->isRemote() && project->id() == _projectId) {
             newCurrentProjectPath = project->path();
             break;
@@ -927,16 +1209,16 @@ void ProjectsManager::setCurrentProject(int _projectId)
 
 void ProjectsManager::setCurrentProjectUuid(const QUuid& _uuid)
 {
-    d->currentProject.setUuid(_uuid);
-    d->projects->updateProject(d->currentProject);
+    d->currentProject->setUuid(_uuid);
+    d->projects->updateItem(d->currentProject);
 }
 
 void ProjectsManager::setCurrentProjectName(const QString& _name)
 {
-    d->currentProject.setName(_name);
-    d->projects->updateProject(d->currentProject);
+    d->currentProject->setName(_name);
+    d->projects->updateItem(d->currentProject);
 
-    if (d->currentProject.isRemote()) {
+    if (d->currentProject->isRemote()) {
         d->isCloudProjectNameChanged = true;
         d->cloudProjectChangeDebouncer.orderWork();
     }
@@ -944,10 +1226,10 @@ void ProjectsManager::setCurrentProjectName(const QString& _name)
 
 void ProjectsManager::setCurrentProjectLogline(const QString& _logline)
 {
-    d->currentProject.setLogline(_logline);
-    d->projects->updateProject(d->currentProject);
+    d->currentProject->setLogline(_logline);
+    d->projects->updateItem(d->currentProject);
 
-    if (d->currentProject.isRemote()) {
+    if (d->currentProject->isRemote()) {
         d->isCloudProjectLoglineChnaged = true;
         d->cloudProjectChangeDebouncer.orderWork();
     }
@@ -956,17 +1238,17 @@ void ProjectsManager::setCurrentProjectLogline(const QString& _logline)
 void ProjectsManager::setCurrentProjectCover(const QPixmap& _cover)
 {
     if (_cover.isNull()) {
-        d->currentProject.setPosterPath({});
-        d->projects->updateProject(d->currentProject);
+        d->currentProject->setPosterPath({});
+        d->projects->updateItem(d->currentProject);
     } else {
-        const auto posterPath = d->projectPosterPath(d->currentProject.path());
+        const auto posterPath = d->projectPosterPath(d->currentProject->path());
         _cover.save(posterPath, "PNG");
 
-        d->currentProject.setPosterPath(posterPath);
-        d->projects->updateProject(d->currentProject);
+        d->currentProject->setPosterPath(posterPath);
+        d->projects->updateItem(d->currentProject);
     }
 
-    if (d->currentProject.isRemote()) {
+    if (d->currentProject->isRemote()) {
         d->isCloudProjectCoverChnaged = true;
         d->cloudProjectChangeDebouncer.orderWork();
     }
@@ -974,14 +1256,14 @@ void ProjectsManager::setCurrentProjectCover(const QPixmap& _cover)
 
 void ProjectsManager::setCurrentProjectNeverAskAboutSwitch()
 {
-    d->currentProject.setCanAskAboutSwitch(false);
-    d->projects->updateProject(d->currentProject);
+    d->currentProject->setCanAskAboutSwitch(false);
+    d->projects->updateItem(d->currentProject);
 }
 
 void ProjectsManager::setCurrentProjectCanBeSynced(bool _can)
 {
-    d->currentProject.setCanBeSynced(_can);
-    d->projects->updateProject(d->currentProject);
+    d->currentProject->setCanBeSynced(_can);
+    d->projects->updateItem(d->currentProject);
 }
 
 void ProjectsManager::closeCurrentProject()
@@ -999,8 +1281,8 @@ void ProjectsManager::closeCurrentProject()
     //
     // Для теневого проекта, удаляем временный файл
     //
-    if (d->currentProject.type() == BusinessLayer::ProjectType::LocalShadow) {
-        QFile::remove(d->currentProject.realPath());
+    if (d->currentProject->projectType() == BusinessLayer::ProjectType::LocalShadow) {
+        QFile::remove(d->currentProject->realPath());
     }
 
     //
@@ -1009,75 +1291,98 @@ void ProjectsManager::closeCurrentProject()
     d->currentProject = {};
 }
 
-BusinessLayer::Project ProjectsManager::project(const QString& _path) const
+BusinessLayer::ProjectsModelProjectItem* ProjectsManager::project(const QString& _path) const
 {
-    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
-        const auto& project = d->projects->projectAt(projectRow);
+    for (auto row = 0; row < d->projects->rowCount(); ++row) {
+        const auto itemIndex = d->projects->index(row);
+        const auto item = d->projects->itemForIndex(itemIndex);
+        if (item->type() == BusinessLayer::ProjectsModelItemType::Team) {
+            for (int childRow = 0; childRow < d->projects->rowCount(itemIndex); ++childRow) {
+                const auto childItemIndex = d->projects->index(childRow, 0, itemIndex);
+                const auto childItem = d->projects->itemForIndex(childItemIndex);
+                auto project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(childItem);
+                if (project->path() == _path) {
+                    return project;
+                }
+            }
+
+            continue;
+        }
+
+        auto project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(item);
         if (project->path() == _path) {
-            return *project;
+            return project;
+            break;
         }
     }
+
     return {};
 }
 
-BusinessLayer::Project ProjectsManager::project(int _id) const
+BusinessLayer::ProjectsModelProjectItem* ProjectsManager::project(int _id) const
 {
-    if (_id == -1) {
+    if (_id == Domain::kInvalidId) {
         return {};
     }
 
-    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
-        const auto& project = d->projects->projectAt(projectRow);
+    for (auto row = 0; row < d->projects->rowCount(); ++row) {
+        const auto itemIndex = d->projects->index(row);
+        const auto item = d->projects->itemForIndex(itemIndex);
+        if (item->type() == BusinessLayer::ProjectsModelItemType::Team) {
+            for (int childRow = 0; childRow < d->projects->rowCount(itemIndex); ++childRow) {
+                const auto childItemIndex = d->projects->index(childRow, 0, itemIndex);
+                const auto childItem = d->projects->itemForIndex(childItemIndex);
+                auto project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(childItem);
+                if (project->id() == _id) {
+                    return project;
+                }
+            }
+
+            continue;
+        }
+
+        auto project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(item);
         if (project->id() == _id) {
-            return *project;
+            return project;
+            break;
         }
     }
+
     return {};
 }
 
 void ProjectsManager::hideProject(const QString& _path)
 {
-    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
-        const auto& project = d->projects->projectAt(projectRow);
-        if (project->path() == _path) {
-            d->projects->remove(*project);
-            break;
-        }
+    auto project = this->project(_path);
+    if (project == nullptr) {
+        return;
     }
+
+    d->projects->removeItem(project);
 }
 
 void ProjectsManager::hideProject(int _id)
 {
-    if (_id == -1) {
+    auto project = this->project(_id);
+    if (project == nullptr) {
         return;
     }
 
-    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
-        const auto& project = d->projects->projectAt(projectRow);
-        if (project->id() == _id) {
-            d->projects->remove(*project);
-            break;
-        }
-    }
+    d->projects->removeItem(project);
 }
 
 void ProjectsManager::removeProject(int _id)
 {
-    if (_id == -1) {
+    auto project = this->project(_id);
+    if (project == nullptr) {
         return;
     }
 
-    for (int projectRow = 0; projectRow < d->projects->rowCount(); ++projectRow) {
-        const auto& project = d->projects->projectAt(projectRow);
-        if (project->id() == _id) {
-            QFile::remove(project->path());
-            d->projects->remove(*project);
-            break;
-        }
-    }
+    QFile::remove(project->path());
+    d->projects->removeItem(project);
 }
 
-const BusinessLayer::Project& ProjectsManager::currentProject() const
+BusinessLayer::ProjectsModelProjectItem* ProjectsManager::currentProject() const
 {
     return d->currentProject;
 }

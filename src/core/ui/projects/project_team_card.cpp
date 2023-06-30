@@ -1,8 +1,7 @@
 #include "project_team_card.h"
 
-#include <business_layer/model/screenplay/text/screenplay_text_model.h>
-#include <business_layer/model/screenplay/text/screenplay_text_model_folder_item.h>
-#include <business_layer/templates/text_template.h>
+#include <management_layer/content/projects/projects_model.h>
+#include <management_layer/content/projects/projects_model_team_item.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/animations/click_animation.h>
 #include <utils/helpers/color_helper.h>
@@ -29,9 +28,9 @@ public:
     ProjectTeamCard* q = nullptr;
 
     /**
-     * @brief Элемент с данными папки
+     * @brief Элемент с данными команды
      */
-    BusinessLayer::ScreenplayTextModelFolderItem* sequenceItem = nullptr;
+    BusinessLayer::ProjectsModelTeamItem* teamItem = nullptr;
 
     /**
      * @brief  Декорации при клике
@@ -72,12 +71,12 @@ int ProjectTeamCard::type() const
 qreal ProjectTeamCard::headerHeight() const
 {
     qreal descriptionHeight = 0.0;
-    if (isOpened() && !d->sequenceItem->description().isEmpty()) {
+    if (isOpened() && !d->teamItem->description().isEmpty()) {
         const QRectF backgroundRect
             = rect().marginsRemoved(Ui::DesignSystem::card().shadowMargins());
         const auto availableWidth = backgroundRect.width() - Ui::DesignSystem::layout().px16() * 2;
         descriptionHeight
-            = std::min(TextHelper::heightForWidth(d->sequenceItem->description().simplified(),
+            = std::min(TextHelper::heightForWidth(d->teamItem->description().simplified(),
                                                   Ui::DesignSystem::font().body2(), availableWidth),
                        TextHelper::fineLineSpacing(Ui::DesignSystem::font().body2()) * 3)
             + Ui::DesignSystem::layout().px8();
@@ -94,21 +93,20 @@ bool ProjectTeamCard::isContainer() const
 
 bool ProjectTeamCard::isOpened() const
 {
-    return d->sequenceItem->cardInfo().isOpened;
+    return d->teamItem->isOpened();
 }
 
 void ProjectTeamCard::init()
 {
-    auto model = qobject_cast<const BusinessLayer::ScreenplayTextModel*>(modelItemIndex().model());
+    auto model = qobject_cast<const BusinessLayer::ProjectsModel*>(modelItemIndex().model());
     Q_ASSERT(model);
 
     auto item = model->itemForIndex(modelItemIndex());
     Q_ASSERT(item);
-    Q_ASSERT(item->type() == BusinessLayer::TextModelItemType::Folder);
+    Q_ASSERT(item->type() == BusinessLayer::ProjectsModelItemType::Team);
 
-    d->sequenceItem = static_cast<BusinessLayer::ScreenplayTextModelFolderItem*>(item);
-    Q_ASSERT(d->sequenceItem);
-    Q_ASSERT(d->sequenceItem->folderType() == BusinessLayer::TextFolderType::Sequence);
+    d->teamItem = static_cast<BusinessLayer::ProjectsModelTeamItem*>(item);
+    Q_ASSERT(d->teamItem);
 }
 
 void ProjectTeamCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _option,
@@ -128,8 +126,7 @@ void ProjectTeamCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* 
     auto backgroundPixmap = QPixmap(backgroundRect.size().toSize());
     const auto backgroundColor = insertionState() == InsertionState::InsertInside
         ? Ui::DesignSystem::color().accent()
-        : (d->sequenceItem->color().isValid() ? d->sequenceItem->color()
-                                              : Ui::DesignSystem::color().background());
+        : Ui::DesignSystem::color().background();
     backgroundPixmap.fill(Qt::transparent);
     QPainter backgroundImagePainter(&backgroundPixmap);
     backgroundImagePainter.setRenderHint(QPainter::Antialiasing);
@@ -152,12 +149,11 @@ void ProjectTeamCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* 
     decorationTriangle.lineTo(decorationWidth - borderRadius, decorationHeight);
     decorationTriangle.lineTo(decorationWidth - borderRadius, 0.0);
     backgroundImagePainter.drawPath(decorationTriangle);
-    if (!d->sequenceItem->cardInfo().isOpened) {
+    if (!d->teamItem->isOpened()) {
         //
-        // ... рисуем вложения папки, при подсчётах учитываем, что в папках всегда вложены как
-        //     минимум 2 элемента - это заголовок и окончание папки
+        // ... рисуем вложения папки,
         //
-        if (d->sequenceItem->childCount() >= 4) {
+        if (d->teamItem->childCount() >= 2) {
             backgroundImagePainter.setBrush(backgroundColor.darker(114));
             backgroundImagePainter.drawRoundedRect(
                 QRectF(
@@ -166,7 +162,7 @@ void ProjectTeamCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* 
                            backgroundPixmap.height() - Ui::DesignSystem::layout().px(58))),
                 borderRadius, borderRadius);
         }
-        if (d->sequenceItem->childCount() >= 3) {
+        if (d->teamItem->childCount() >= 1) {
             backgroundImagePainter.setBrush(backgroundColor.darker(107));
             backgroundImagePainter.drawRoundedRect(
                 QRectF(
@@ -226,8 +222,7 @@ void ProjectTeamCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* 
     //
     const auto textColor = insertionState() == InsertionState::InsertInside
         ? Ui::DesignSystem::color().onAccent()
-        : (d->sequenceItem->color().isValid() ? ColorHelper::contrasted(backgroundColor)
-                                              : Ui::DesignSystem::color().onBackground());
+        : Ui::DesignSystem::color().onBackground();
     _painter->setPen(textColor);
     _painter->setFont(Ui::DesignSystem::font().iconsMid());
     const QSizeF iconSize(
@@ -239,38 +234,59 @@ void ProjectTeamCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* 
                 backgroundRect.top() + decorationHeight + Ui::DesignSystem::layout().px(13)),
         iconSize);
     _painter->drawText(iconRect, Qt::AlignCenter,
-                       d->sequenceItem->cardInfo().isOpened
-                           ? u8"\U000F035D"
-                           : (isLeftToRight ? u8"\U000F035F" : u8"\U000F035E"));
+                       d->teamItem->isOpened() ? u8"\U000F035D"
+                                               : (isLeftToRight ? u8"\U000F035F" : u8"\U000F035E"));
+
+    //
+    // Аватар
+    //
+    QPixmap avatar;
+    if (!d->teamItem->avatar().isEmpty()) {
+        avatar = ImageHelper::makeAvatar(ImageHelper::imageFromBytes(d->teamItem->avatar()),
+                                         Ui::DesignSystem::treeOneLineItem().iconSize().toSize());
+    } else {
+        avatar = ImageHelper::makeAvatar(d->teamItem->name(), Ui::DesignSystem::font().body1(),
+                                         DesignSystem::treeOneLineItem().iconSize().toSize(),
+                                         Qt::white);
+    }
+    const auto heightDelta = DesignSystem::treeOneLineItem().iconSize().height()
+        - TextHelper::fineLineSpacing(_painter->font());
+    const QRectF avatarRect(
+        isLeftToRight ? iconRect.right() + Ui::DesignSystem::layout().px8()
+                      : backgroundRect.left() + Ui::DesignSystem::layout().px16(),
+        backgroundRect.top() + decorationHeight + Ui::DesignSystem::layout().px12() - heightDelta,
+        DesignSystem::treeOneLineItem().iconSize().width(),
+        DesignSystem::treeOneLineItem().iconSize().height());
+    _painter->drawPixmap(avatarRect, avatar, avatar.rect());
 
     //
     // Заголовок или название
     //
     _painter->setFont(Ui::DesignSystem::font().subtitle2());
     const QRectF headerRect(
-        isLeftToRight ? iconRect.right() + Ui::DesignSystem::layout().px8()
+        isLeftToRight ? avatarRect.right() + Ui::DesignSystem::layout().px8()
                       : backgroundRect.left() + Ui::DesignSystem::layout().px16(),
         backgroundRect.top() + decorationHeight + Ui::DesignSystem::layout().px12(),
         backgroundRect.width() - Ui::DesignSystem::layout().px16() * 2 - iconSize.width()
-            - Ui::DesignSystem::layout().px8(),
+            - Ui::DesignSystem::layout().px8() * 2 - avatarRect.width(),
         TextHelper::fineLineSpacing(_painter->font()));
     _painter->drawText(
         headerRect, Qt::AlignLeft | Qt::AlignVCenter,
-        TextHelper::elidedText(d->sequenceItem->heading(), _painter->font(), headerRect.width()));
+        TextHelper::elidedText(d->teamItem->name(), _painter->font(), headerRect.width()));
 
     //
     // Описание
     //
-    if (!d->sequenceItem->description().isEmpty()) {
+    if (!d->teamItem->description().isEmpty()) {
         _painter->setFont(Ui::DesignSystem::font().body2());
 
         qreal descriptionHeight = 0.0;
         qreal descriptionY = 0.0;
         const auto descriptionWidth
             = backgroundRect.width() - Ui::DesignSystem::layout().px16() * 2;
-        if (d->sequenceItem->cardInfo().isOpened) {
+        if (d->teamItem->isOpened()) {
             descriptionHeight = std::min(
-                TextHelper::heightForWidth(d->sequenceItem->description().simplified(),
+                TextHelper::heightForWidth(d->teamItem->description().simplified(),
                                            Ui::DesignSystem::font().body2(), descriptionWidth),
                 TextHelper::fineLineSpacing(Ui::DesignSystem::font().body2()) * 3);
             descriptionY = headerRect.bottom() + Ui::DesignSystem::layout().px8();
@@ -283,7 +299,7 @@ void ProjectTeamCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* 
         QRectF descriptionRect(backgroundRect.left() + Ui::DesignSystem::layout().px16(),
                                descriptionY, descriptionWidth, descriptionHeight);
         const QString descriptionCorrected = TextHelper::elidedText(
-            d->sequenceItem->description().simplified(), _painter->font(), descriptionRect);
+            d->teamItem->description().simplified(), _painter->font(), descriptionRect);
         _painter->drawText(descriptionRect, Qt::AlignLeft | Qt::TextWordWrap, descriptionCorrected);
     }
 
@@ -332,9 +348,7 @@ void ProjectTeamCard::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
                                   backgroundRect.top() + decorationHeight),
                           iconSizeWithMargins);
     if (iconRect.contains(_event->pos())) {
-        auto cardInfo = d->sequenceItem->cardInfo();
-        cardInfo.isOpened = !cardInfo.isOpened;
-        d->sequenceItem->setCardInfo(cardInfo);
+        d->teamItem->setOpened(!d->teamItem->isOpened());
 
         prepareGeometryChange();
         update();
@@ -345,9 +359,7 @@ void ProjectTeamCard::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* _event)
 {
     AbstractCardItem::mouseDoubleClickEvent(_event);
 
-    auto cardInfo = d->sequenceItem->cardInfo();
-    cardInfo.isOpened = !cardInfo.isOpened;
-    d->sequenceItem->setCardInfo(cardInfo);
+    d->teamItem->setOpened(!d->teamItem->isOpened());
 
     prepareGeometryChange();
     update();

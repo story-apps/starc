@@ -6,8 +6,8 @@
 #include "content/notifications/notifications_manager.h"
 #include "content/onboarding/onboarding_manager.h"
 #include "content/project/project_manager.h"
-#include "content/projects/project.h"
 #include "content/projects/projects_manager.h"
+#include "content/projects/projects_model_project_item.h"
 #include "content/settings/settings_manager.h"
 #include "content/writing_session/writing_session_manager.h"
 #include "plugins_builder.h"
@@ -1160,7 +1160,7 @@ void ApplicationManager::Implementation::setDesignSystemDensity(int _density)
 
 void ApplicationManager::Implementation::updateWindowTitle()
 {
-    if (!projectsManager->currentProject().isValid()) {
+    if (projectsManager->currentProject() == nullptr) {
         applicationView->setWindowTitle("Story Architect");
         return;
     }
@@ -1173,8 +1173,8 @@ void ApplicationManager::Implementation::updateWindowTitle()
                                             ""
 #endif
                                             )
-                                        .arg(projectsManager->currentProject().name(),
-                                             (projectsManager->currentProject().isReadOnly()
+                                        .arg(projectsManager->currentProject()->name(),
+                                             (projectsManager->currentProject()->isReadOnly()
                                                   ? QString("- %1").arg(tr("Read only"))
                                                   : "")));
 
@@ -1272,9 +1272,10 @@ void ApplicationManager::Implementation::saveChanges()
     //
     // Если работает с теневым проектом, то экспортируем его при сохранении
     //
-    if (projectsManager->currentProject().type() == BusinessLayer::ProjectType::LocalShadow) {
+    if (projectsManager->currentProject()->projectType()
+        == BusinessLayer::ProjectType::LocalShadow) {
         exportManager->exportDocument(projectManager->firstScriptModel(),
-                                      projectsManager->currentProject().path());
+                                      projectsManager->currentProject()->path());
     }
 
     //
@@ -1287,17 +1288,18 @@ void ApplicationManager::Implementation::saveChanges()
     //
     if (settingsValue(DataStorageLayer::kApplicationSaveBackupsKey).toBool()) {
         QString baseBackupName;
-        const auto& currentProject = projectsManager->currentProject();
-        if (currentProject.isRemote()) {
+        const auto currentProject = projectsManager->currentProject();
+        if (currentProject->isRemote()) {
             //
             // Для удаленных проектов имя бекапа - имя проекта + id проекта
             // В случае, если имя удаленного проекта изменилось, то бэкапы со старым именем
             // останутся навсегда
             //
-            baseBackupName = QString("%1 [%2]").arg(currentProject.name()).arg(currentProject.id());
+            baseBackupName
+                = QString("%1 [%2]").arg(currentProject->name()).arg(currentProject->id());
         }
         QFuture<void> future = QtConcurrent::run(
-            BackupBuilder::save, projectsManager->currentProject().path(),
+            BackupBuilder::save, projectsManager->currentProject()->path(),
             settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString(),
             baseBackupName, settingsValue(DataStorageLayer::kApplicationBackupsQtyKey).toInt());
     }
@@ -1323,7 +1325,7 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
     //
     // Если проект облачный, то сохраняем без вопросов
     //
-    if (projectsManager->currentProject().isRemote()) {
+    if (projectsManager->currentProject()->isRemote()) {
         saveChanges();
         _callback();
         return;
@@ -1375,9 +1377,9 @@ void ApplicationManager::Implementation::saveAs()
     //
     // Изначально высвечивается текущее имя проекта
     //
-    const auto& currentProject = projectsManager->currentProject();
-    QString projectPath = currentProject.path();
-    switch (currentProject.type()) {
+    const auto currentProject = projectsManager->currentProject();
+    QString projectPath = currentProject->path();
+    switch (currentProject->projectType()) {
     //
     // Для теневых проектов добавляем расширение старка, чтобы пользователя не пугал вопрос о
     // перезаписи основного файла
@@ -1396,9 +1398,9 @@ void ApplicationManager::Implementation::saveAs()
             = settingsValue(DataStorageLayer::kProjectSaveFolderKey).toString();
         projectPath = projectsFolderPath + QDir::separator()
             + QString("%1 [%2]%3")
-                  .arg(currentProject.name())
-                  .arg(currentProject.id())
-                  .arg(BusinessLayer::Project::extension());
+                  .arg(currentProject->name())
+                  .arg(currentProject->id())
+                  .arg(BusinessLayer::ProjectsModelProjectItem::extension());
         break;
     }
 
@@ -1424,14 +1426,14 @@ void ApplicationManager::Implementation::saveAs()
     //
     // Установим расширение, если не задано
     //
-    if (!saveAsProjectFilePath.endsWith(BusinessLayer::Project::extension())) {
-        saveAsProjectFilePath.append(BusinessLayer::Project::extension());
+    if (!saveAsProjectFilePath.endsWith(BusinessLayer::ProjectsModelProjectItem::extension())) {
+        saveAsProjectFilePath.append(BusinessLayer::ProjectsModelProjectItem::extension());
     }
 
     //
     // Если пользователь указал тот же путь, ничего не делаем
     //
-    if (saveAsProjectFilePath == currentProject.path()) {
+    if (saveAsProjectFilePath == currentProject->path()) {
         return;
     }
 
@@ -1446,7 +1448,7 @@ void ApplicationManager::Implementation::saveAs()
     //
     // ... скопируем текущую базу в указанный файл
     //
-    const auto isCopied = QFile::copy(currentProject.realPath(), saveAsProjectFilePath);
+    const auto isCopied = QFile::copy(currentProject->realPath(), saveAsProjectFilePath);
     if (!isCopied) {
         StandardDialog::information(
             applicationView, tr("Saving error"),
@@ -1589,7 +1591,7 @@ void ApplicationManager::Implementation::createRemoteProject(const QString& _pro
                       if (_importFilePath.endsWith(ExtensionHelper::starc())) {
                           const auto project = projectsManager->project(_projectInfo.id);
                           QFile::copy(QDir::toNativeSeparators(_importFilePath),
-                                      QDir::toNativeSeparators(project.realPath()));
+                                      QDir::toNativeSeparators(project->realPath()));
                       }
 
                       //
@@ -1600,7 +1602,7 @@ void ApplicationManager::Implementation::createRemoteProject(const QString& _pro
                       //
                       // ... заблокируем открытие файла в другом приложении
                       //
-                      if (!tryLockProject(projectsManager->currentProject().path())) {
+                      if (!tryLockProject(projectsManager->currentProject()->path())) {
                           return;
                       }
                       //
@@ -1637,12 +1639,13 @@ bool ApplicationManager::Implementation::openProject(const QString& _path)
         return false;
     }
 
-    if (projectsManager->project(_path).isLocal() && !QFileInfo::exists(_path)) {
+    if (projectsManager->project(_path)->isLocal() && !QFileInfo::exists(_path)) {
         projectsManager->hideProject(_path);
         return false;
     }
 
-    if (projectsManager->currentProject().path() == _path) {
+    if (projectsManager->currentProject() != nullptr
+        && projectsManager->currentProject()->path() == _path) {
         showProject();
         return false;
     }
@@ -1754,8 +1757,8 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     //
     // Настроим меню
     //
-    const auto& currentProject = projectsManager->currentProject();
-    menuView->setProjectTitle(currentProject.name());
+    const auto currentProject = projectsManager->currentProject();
+    menuView->setProjectTitle(currentProject->name());
     menuView->setProjectActionsVisible(true);
 
     //
@@ -1783,7 +1786,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     // Загрузим данные текущего проекта
     //
     projectManager->loadCurrentProject(currentProject);
-    menuView->setImportAvailable(currentProject.editingMode() == DocumentEditingMode::Edit);
+    menuView->setImportAvailable(currentProject->editingMode() == DocumentEditingMode::Edit);
 
     //
     // Восстанавливаем тип проекта по-умолчанию для будущих свершений
@@ -1802,7 +1805,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
         // ... а после импорта пробуем повторно восстановить состояние,
         //     особенно актуально для кейса с теневым проектом
         //
-        projectManager->restoreCurrentProjectState(currentProject.path());
+        projectManager->restoreCurrentProjectState(currentProject->path());
     }
 
     //
@@ -1815,7 +1818,8 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     //
     // Для локальных проектов доступных только для чтения, покажем соответствующее уведомление
     //
-    if (currentProject.type() != BusinessLayer::ProjectType::Cloud && currentProject.isReadOnly()) {
+    if (currentProject->projectType() != BusinessLayer::ProjectType::Cloud
+        && currentProject->isReadOnly()) {
         StandardDialog::information(
             applicationView, {},
             tr("A file you are trying to open does not have write permissions. Check out file "
@@ -1823,17 +1827,17 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
                "in a read-only mode."));
     }
 
-    if (currentProject.type() == BusinessLayer::ProjectType::LocalShadow) {
+    if (currentProject->projectType() == BusinessLayer::ProjectType::LocalShadow) {
         //
         // Покажем диалог с предупреждением о том, что не все функции могут работать и предложим
         // сохранить в формате старка
         //
-        if (currentProject.canAskAboutSwitch()) {
+        if (currentProject->canAskAboutSwitch()) {
             const int kNeverAskAgainButtonId = 0;
             const int kKeepButtonId = 1;
             const int kYesButtonId = 2;
             Dialog* informationDialog = new Dialog(applicationView);
-            const auto projectFileSuffix = QFileInfo(currentProject.path()).suffix().toUpper();
+            const auto projectFileSuffix = QFileInfo(currentProject->path()).suffix().toUpper();
             informationDialog->showDialog(
                 tr("Do you want continue to use .%1 file format?").arg(projectFileSuffix),
                 tr("Some project data cannot be saved in .%1 format. We recommend you to use Story "
@@ -1871,12 +1875,12 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
                                  //
                                  const auto project = projectsManager->currentProject();
                                  const QString projectPath
-                                     = project.path() + "." + ExtensionHelper::starc();
-                                 createLocalProject(project.name(), projectPath, project.path());
+                                     = project->path() + "." + ExtensionHelper::starc();
+                                 createLocalProject(project->name(), projectPath, project->path());
                                  //
                                  // ... скрываем текущий из списка недавних
                                  //
-                                 projectsManager->hideProject(project.path());
+                                 projectsManager->hideProject(project->path());
                              });
             QObject::connect(informationDialog, &Dialog::disappeared, informationDialog,
                              &Dialog::deleteLater);
@@ -1901,11 +1905,11 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     //
     // Для облачных проектов делаем синхронизацию офлайн изменений
     //
-    if (currentProject.isRemote()) {
+    if (currentProject->isRemote()) {
         projectsManager->setCurrentProjectCanBeSynced(true);
         const auto unsyncedDocuments = projectManager->unsyncedDocuments();
         for (const auto document : unsyncedDocuments) {
-            cloudServiceManager->openDocument(projectsManager->currentProject().id(), document);
+            cloudServiceManager->openDocument(projectsManager->currentProject()->id(), document);
         }
     }
 #endif
@@ -1913,14 +1917,14 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     //
     // Запускаем писательскую сессию
     //
-    writingSessionManager->startSession(currentProject.uuid(), currentProject.name());
+    writingSessionManager->startSession(currentProject->uuid(), currentProject->name());
 }
 
 void ApplicationManager::Implementation::closeCurrentProject()
 {
     Log::info("Closing current project");
 
-    if (!projectsManager->currentProject().isValid()) {
+    if (projectsManager->currentProject() == nullptr) {
         Log::warning("Current project is not valid. Skip closing.");
         return;
     }
@@ -1937,11 +1941,11 @@ void ApplicationManager::Implementation::closeCurrentProject()
     // Порядок важен
     //
 #ifdef CLOUD_SERVICE_MANAGER
-    if (projectsManager->currentProject().isRemote()) {
-        cloudServiceManager->closeProject(projectsManager->currentProject().id());
+    if (projectsManager->currentProject()->isRemote()) {
+        cloudServiceManager->closeProject(projectsManager->currentProject()->id());
     }
 #endif
-    projectManager->closeCurrentProject(projectsManager->currentProject().path());
+    projectManager->closeCurrentProject(projectsManager->currentProject()->path());
     projectsManager->closeCurrentProject();
 
     menuView->setProjectActionsVisible(false);
@@ -2563,7 +2567,7 @@ void ApplicationManager::initConnections()
             [this] { d->openProject(); });
     connect(d->projectsManager.data(), &ProjectsManager::openLocalProjectRequested, this,
             [this](const QString& _path) {
-                if (d->projectsManager->currentProject().path() == _path) {
+                if (d->projectsManager->currentProject()->path() == _path) {
                     d->showProject();
                     return;
                 }
@@ -2803,16 +2807,17 @@ void ApplicationManager::initConnections()
                     d->menuView->closeMenu();
                 }
                 d->cloudServiceManager->askNotifications();
-                d->cloudServiceManager->askProjects();
                 d->cloudServiceManager->askTeams();
+                d->cloudServiceManager->askProjects();
                 d->cloudServiceManager->askSessionStatistics(
                     d->writingSessionManager->sessionStatisticsLastSyncDateTime());
 
                 //
                 // Если поймали подключение и сейчас работаем с облачным проектом
                 //
-                if (d->projectsManager->currentProject().isRemote()) {
-                    const auto currentProjectId = d->projectsManager->currentProject().id();
+                if (d->projectsManager->currentProject() != nullptr
+                    && d->projectsManager->currentProject()->isRemote()) {
+                    const auto currentProjectId = d->projectsManager->currentProject()->id();
                     //
                     // ... то синхронизируем все документы, у которых есть офлайн правки
                     //
@@ -2881,7 +2886,7 @@ void ApplicationManager::initConnections()
         d->menuView->setSignInVisible(true);
         d->menuView->setAccountVisible(false);
         d->projectManager->checkAvailabilityToEdit();
-        if (d->projectsManager->currentProject().isRemote()) {
+        if (d->projectsManager->currentProject()->isRemote()) {
             d->closeCurrentProject();
             d->showProjects();
         }
@@ -2897,17 +2902,26 @@ void ApplicationManager::initConnections()
     //
     // Команды
     //
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::teamsReceived,
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::teamsReceived, this,
             [this](const QVector<Domain::TeamInfo>& _teams) {
                 d->accountManager->setAccountTeams(_teams);
                 d->projectsManager->setTeams(_teams);
             });
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::teamCreated,
-            d->accountManager.data(), &AccountManager::addAccountTeam);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::teamUpdated,
-            d->accountManager.data(), &AccountManager::updateAccountTeam);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::teamRemoved,
-            d->accountManager.data(), &AccountManager::removeAccountTeam);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::teamCreated, this,
+            [this](const Domain::TeamInfo& _team) {
+                d->accountManager->addAccountTeam(_team);
+                d->projectsManager->addOrUpdateTeam(_team);
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::teamUpdated, this,
+            [this](const Domain::TeamInfo& _team) {
+                d->accountManager->updateAccountTeam(_team);
+                d->projectsManager->addOrUpdateTeam(_team);
+            });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::teamRemoved, this,
+            [this](int _id) {
+                d->accountManager->removeAccountTeam(_id);
+                d->projectsManager->hideTeam(_id);
+            });
     connect(d->accountManager.data(), &AccountManager::createTeamRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::createTeam);
     connect(d->accountManager.data(), &AccountManager::updateTeamRequested,
@@ -2929,20 +2943,23 @@ void ApplicationManager::initConnections()
     connect(d->cloudServiceManager.data(), &CloudServiceManager::projectsReceived,
             d->projectsManager.data(), [this](const QVector<Domain::ProjectInfo>& _projects) {
                 d->projectsManager->setCloudProjects(_projects);
-                if (d->projectsManager->currentProject().isRemote()) {
+                if (d->projectsManager->currentProject() != nullptr
+                    && d->projectsManager->currentProject()->isRemote()) {
                     d->projectManager->updateCurrentProject(d->projectsManager->currentProject());
                 }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::projectUpdated, this,
             [this](const Domain::ProjectInfo& _projectInfo) {
                 d->projectsManager->addOrUpdateCloudProject(_projectInfo);
-                if (_projectInfo.id == d->projectsManager->currentProject().id()) {
+                if (d->projectsManager->currentProject() != nullptr
+                    && _projectInfo.id == d->projectsManager->currentProject()->id()) {
                     d->projectManager->updateCurrentProject(d->projectsManager->currentProject());
                 }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::projectRemoved,
             d->projectsManager.data(), [this](int _projectId) {
-                if (d->projectsManager->currentProject().id() == _projectId) {
+                if (d->projectsManager->currentProject() != nullptr
+                    && d->projectsManager->currentProject()->id() == _projectId) {
                     d->closeCurrentProject();
                     d->markChangesSaved(true);
                     d->updateWindowTitle();
@@ -2956,7 +2973,8 @@ void ApplicationManager::initConnections()
             });
     connect(d->projectsManager.data(), &ProjectsManager::openCloudProjectRequested, this,
             [this](int _id, const QString& _path) {
-                if (d->projectsManager->currentProject().id() == _id) {
+                if (d->projectsManager->currentProject() != nullptr
+                    && d->projectsManager->currentProject()->id() == _id) {
                     d->showProject();
                     return;
                 }
@@ -2982,7 +3000,7 @@ void ApplicationManager::initConnections()
                 Q_UNUSED(_color)
                 const auto accountRole = _role;
                 d->cloudServiceManager->addProjectCollaborator(
-                    d->projectsManager->currentProject().id(), _email, accountRole, _permissions);
+                    d->projectsManager->currentProject()->id(), _email, accountRole, _permissions);
             });
     connect(d->projectManager.data(), &ProjectManager::projectCollaboratorUpdateRequested,
             d->projectsManager.data(),
@@ -2991,12 +3009,12 @@ void ApplicationManager::initConnections()
                 Q_UNUSED(_color)
                 const auto accountRole = _role;
                 d->cloudServiceManager->updateProjectCollaborator(
-                    d->projectsManager->currentProject().id(), _email, accountRole, _permissions);
+                    d->projectsManager->currentProject()->id(), _email, accountRole, _permissions);
             });
     connect(d->projectManager.data(), &ProjectManager::projectCollaboratorRemoveRequested,
             d->projectsManager.data(), [this](const QString& _email) {
                 d->cloudServiceManager->removeProjectCollaborator(
-                    d->projectsManager->currentProject().id(), _email);
+                    d->projectsManager->currentProject()->id(), _email);
             });
     connect(d->projectsManager.data(), &ProjectsManager::removeCloudProjectRequested, this,
             [this](int _id) { d->cloudServiceManager->removeProject(_id); });
@@ -3009,13 +3027,13 @@ void ApplicationManager::initConnections()
         // Если проект уже в состоянии проблем синхронизации, то не показываем диалог вновь,
         // чтобы не поймать эффект множественного наложения диалогов
         //
-        if (!currentProject.canBeSynced()) {
+        if (!currentProject->canBeSynced()) {
             return;
         }
 
         d->projectsManager->setCurrentProjectCanBeSynced(false);
 
-        if (currentProject.isOwner()) {
+        if (currentProject->isOwner()) {
             auto dialog = new Dialog(d->applicationView);
             const int kCancelButtonId = 0;
             const int kAcceptButtonId = 1;
@@ -3056,16 +3074,16 @@ void ApplicationManager::initConnections()
     connect(d->projectManager.data(), &ProjectManager::structureModelChanged, this,
             [this](BusinessLayer::AbstractModel* _model) {
                 const auto& currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote() || !currentProject.canBeSynced()) {
+                if (!currentProject->isRemote() || !currentProject->canBeSynced()) {
                     return;
                 }
 
-                d->cloudServiceManager->openDocument(currentProject.id(), _model->document());
+                d->cloudServiceManager->openDocument(currentProject->id(), _model->document());
             });
     connect(d->projectManager.data(), &ProjectManager::downloadDocumentRequested, this,
             [this](const QUuid& _documentUuid) {
                 const auto& currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote() || !currentProject.canBeSynced()
+                if (!currentProject->isRemote() || !currentProject->canBeSynced()
                     || _documentUuid.isNull()) {
                     return;
                 }
@@ -3079,7 +3097,7 @@ void ApplicationManager::initConnections()
                     = d->projectManager->connectedDocuments(_documentUuid);
                     !connectedDocuments.isEmpty()) {
                     for (const auto& connectedDocumentUuid : connectedDocuments) {
-                        d->cloudServiceManager->openDocument(currentProject.id(),
+                        d->cloudServiceManager->openDocument(currentProject->id(),
                                                              connectedDocumentUuid);
                     }
                 }
@@ -3088,13 +3106,13 @@ void ApplicationManager::initConnections()
                 // Если документ не удалось вытащить из базы, значит он ещё не был синхронизирован
                 //
                 if (document == nullptr) {
-                    d->cloudServiceManager->openDocument(currentProject.id(), _documentUuid);
+                    d->cloudServiceManager->openDocument(currentProject->id(), _documentUuid);
                 }
                 //
                 // А если есть, то значит его инстанс уже есть в базе и его надо обновить
                 //
                 else {
-                    d->cloudServiceManager->openDocument(currentProject.id(), document);
+                    d->cloudServiceManager->openDocument(currentProject->id(), document);
                 }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentReceived,
@@ -3104,14 +3122,14 @@ void ApplicationManager::initConnections()
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
             [this](BusinessLayer::AbstractModel* _model) {
                 const auto& currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote() || !currentProject.canBeSynced()) {
+                if (!currentProject->isRemote() || !currentProject->canBeSynced()) {
                     return;
                 }
 
                 //
                 // Запросить отправку изменений
                 //
-                d->cloudServiceManager->startDocumentChange(currentProject.id(),
+                d->cloudServiceManager->startDocumentChange(currentProject->id(),
                                                             _model->document()->uuid());
 
                 //
@@ -3122,7 +3140,7 @@ void ApplicationManager::initConnections()
     connect(d->projectManager.data(), &ProjectManager::uploadDocumentRequested, this,
             [this](const QUuid& _documentUuid, bool _isNewDocument) {
                 const auto& currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote() || !currentProject.canBeSynced()) {
+                if (!currentProject->isRemote() || !currentProject->canBeSynced()) {
                     return;
                 }
 
@@ -3131,19 +3149,20 @@ void ApplicationManager::initConnections()
                 //
                 if (_isNewDocument) {
                     d->cloudServiceManager->openDocument(
-                        currentProject.id(), d->projectManager->documentToSync(_documentUuid));
+                        currentProject->id(), d->projectManager->documentToSync(_documentUuid));
                 }
                 //
                 // В противном случае, запросим отправку изменений
                 //
                 else {
-                    d->cloudServiceManager->startDocumentChange(currentProject.id(), _documentUuid);
+                    d->cloudServiceManager->startDocumentChange(currentProject->id(),
+                                                                _documentUuid);
                 }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChangeAllowed, this,
             [this](const QUuid& _documentUuid) {
                 const auto& currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote() || !currentProject.canBeSynced()) {
+                if (!currentProject->isRemote() || !currentProject->canBeSynced()) {
                     return;
                 }
 
@@ -3152,7 +3171,7 @@ void ApplicationManager::initConnections()
                 //
                 const auto changes = d->projectManager->unsyncedChanges(_documentUuid);
                 if (!changes.isEmpty()) {
-                    d->cloudServiceManager->pushDocumentChange(currentProject.id(), _documentUuid,
+                    d->cloudServiceManager->pushDocumentChange(currentProject->id(), _documentUuid,
                                                                changes);
                 }
                 //
@@ -3160,7 +3179,7 @@ void ApplicationManager::initConnections()
                 //
                 else if (auto document = d->projectManager->documentToSync(_documentUuid);
                          document != nullptr) {
-                    d->cloudServiceManager->pushDocumentChange(currentProject.id(), _documentUuid,
+                    d->cloudServiceManager->pushDocumentChange(currentProject->id(), _documentUuid,
                                                                document->content());
                 }
             });
@@ -3169,11 +3188,11 @@ void ApplicationManager::initConnections()
     connect(d->projectManager.data(), &ProjectManager::documentRemoved, this,
             [this](const QUuid& _documentUuid) {
                 const auto& currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote() || !currentProject.canBeSynced()) {
+                if (!currentProject->isRemote() || !currentProject->canBeSynced()) {
                     return;
                 }
 
-                d->cloudServiceManager->removeDocument(currentProject.id(), _documentUuid);
+                d->cloudServiceManager->removeDocument(currentProject->id(), _documentUuid);
             });
 
     //
@@ -3182,18 +3201,18 @@ void ApplicationManager::initConnections()
     connect(d->projectManager.data(), &ProjectManager::cursorChanged, this,
             [this](const QUuid& _documentUuid, const QByteArray& _cursorData) {
                 const auto currentProject = d->projectsManager->currentProject();
-                if (!currentProject.isRemote() || !currentProject.canBeSynced()) {
+                if (!currentProject->isRemote() || !currentProject->canBeSynced()) {
                     return;
                 }
 
-                d->cloudServiceManager->updateCursor(currentProject.id(), _documentUuid,
+                d->cloudServiceManager->updateCursor(currentProject->id(), _documentUuid,
                                                      _cursorData);
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::cursorsChanged, this,
             [this](int _projectId, const QUuid& _documentUuid,
                    const QVector<Domain::CursorInfo>& _cursors) {
                 if (const auto currentProject = d->projectsManager->currentProject();
-                    currentProject.isRemote() && currentProject.id() == _projectId) {
+                    currentProject->isRemote() && currentProject->id() == _projectId) {
                     d->projectManager->setCursors(_documentUuid, _cursors);
                 }
             });

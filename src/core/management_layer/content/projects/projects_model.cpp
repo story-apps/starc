@@ -1,6 +1,7 @@
 #include "projects_model.h"
 
-#include "project.h"
+#include "projects_model_item.h"
+#include "projects_model_project_item.h"
 
 
 namespace BusinessLayer {
@@ -8,184 +9,306 @@ namespace BusinessLayer {
 class ProjectsModel::Implementation
 {
 public:
-    QVector<Project*> projects;
+    Implementation();
+
+
+    QVector<ProjectsModelProjectItem*> projects;
+
+    /**
+     * @brief Корневой элемент дерева
+     */
+    QScopedPointer<ProjectsModelItem> rootItem;
 };
 
+ProjectsModel::Implementation::Implementation()
+    : rootItem(new ProjectsModelItem)
+{
+}
 
-// **
+
+// ****
 
 
 ProjectsModel::ProjectsModel(QObject* _parent)
-    : QAbstractListModel(_parent)
+    : QAbstractItemModel(_parent)
     , d(new Implementation)
 {
 }
 
-ProjectsModel::~ProjectsModel()
+ProjectsModel::~ProjectsModel() = default;
+
+void ProjectsModel::appendItem(ProjectsModelItem* _item, ProjectsModelItem* _parentItem)
 {
-    qDeleteAll(d->projects);
-    d->projects.clear();
+    appendItems({ _item }, _parentItem);
 }
 
-Project* ProjectsModel::projectAt(int _row) const
+void ProjectsModel::appendItems(const QVector<ProjectsModelItem*>& _items,
+                                ProjectsModelItem* _parentItem)
 {
-    Q_ASSERT(_row >= 0 && _row < d->projects.size());
-    return d->projects.at(_row);
-}
-
-Project* ProjectsModel::projectForIndex(const QModelIndex& _index) const
-{
-    return projectAt(_index.row());
-}
-
-void ProjectsModel::append(const Project& _project)
-{
-    beginInsertRows({}, d->projects.size(), d->projects.size());
-    d->projects.append(new Project(_project));
-    endInsertRows();
-}
-
-void ProjectsModel::append(const QVector<Project>& _projects)
-{
-    if (_projects.isEmpty()) {
+    if (_items.isEmpty()) {
         return;
     }
 
-    beginInsertRows({}, d->projects.size(), d->projects.size() + _projects.size() - 1);
-    for (const auto& project : _projects) {
-        d->projects.append(new Project(project));
+    if (_parentItem == nullptr) {
+        _parentItem = d->rootItem.data();
     }
+
+    const QModelIndex parentIndex = indexForItem(_parentItem);
+    const int fromItemRow = _parentItem->childCount();
+    const int toItemRow = fromItemRow + _items.size() - 1;
+    beginInsertRows(parentIndex, fromItemRow, toItemRow);
+    _parentItem->appendItems({ _items.begin(), _items.end() });
     endInsertRows();
+
+    updateItem(_parentItem);
 }
 
-void ProjectsModel::prepend(const Project& _project)
+void ProjectsModel::prependItem(ProjectsModelItem* _item, ProjectsModelItem* _parentItem)
 {
-    beginInsertRows({}, 0, 0);
-    d->projects.prepend(new Project(_project));
-    endInsertRows();
+    prependItems({ _item }, _parentItem);
 }
 
-void ProjectsModel::remove(const Project& _project)
+void ProjectsModel::prependItems(const QVector<ProjectsModelItem*>& _items,
+                                 ProjectsModelItem* _parentItem)
 {
-    if (d->projects.isEmpty()) {
+    if (_items.isEmpty()) {
         return;
     }
 
-    for (int projectIndex = 0; projectIndex < d->projects.size(); ++projectIndex) {
-        if (*d->projects[projectIndex] == _project) {
-            beginRemoveRows({}, projectIndex, projectIndex);
-            auto project = d->projects.takeAt(projectIndex);
-            delete project;
-            project = nullptr;
-            endRemoveRows();
-            break;
-        }
+    if (_parentItem == nullptr) {
+        _parentItem = d->rootItem.data();
     }
+
+    const QModelIndex parentIndex = indexForItem(_parentItem);
+    beginInsertRows(parentIndex, 0, _items.size() - 1);
+    _parentItem->prependItems({ _items.begin(), _items.end() });
+    endInsertRows();
+
+    updateItem(_parentItem);
 }
 
-void ProjectsModel::moveProject(Project* _item, Project* _afterSiblingItem, Project* _parentItem)
+void ProjectsModel::insertItem(ProjectsModelItem* _item, ProjectsModelItem* _afterSiblingItem)
 {
-    Q_UNUSED(_parentItem)
+    insertItems({ _item }, _afterSiblingItem);
+}
 
+void ProjectsModel::insertItems(const QVector<ProjectsModelItem*>& _items,
+                                ProjectsModelItem* _afterSiblingItem)
+{
+    if (_items.isEmpty()) {
+        return;
+    }
+
+    if (_afterSiblingItem == nullptr || _afterSiblingItem->parent() == nullptr) {
+        return;
+    }
+
+    auto parentItem = _afterSiblingItem->parent();
+    const QModelIndex parentIndex = indexForItem(parentItem);
+    const int fromItemRow = parentItem->rowOfChild(_afterSiblingItem) + 1;
+    const int toItemRow = fromItemRow + _items.size() - 1;
+    beginInsertRows(parentIndex, fromItemRow, toItemRow);
+    parentItem->insertItems(fromItemRow, { _items.begin(), _items.end() });
+    endInsertRows();
+
+    updateItem(parentItem);
+}
+
+void ProjectsModel::takeItem(ProjectsModelItem* _item)
+{
+    takeItems(_item, _item, _item->parent());
+}
+
+void ProjectsModel::takeItems(ProjectsModelItem* _fromItem, ProjectsModelItem* _toItem,
+                              ProjectsModelItem* _parentItem)
+{
+    if (_fromItem == nullptr || _toItem == nullptr || _fromItem->parent() != _toItem->parent()) {
+        return;
+    }
+
+    if (_parentItem == nullptr) {
+        _parentItem = d->rootItem.data();
+    }
+
+    if (!_parentItem->hasChild(_fromItem) || !_parentItem->hasChild(_toItem)) {
+        return;
+    }
+
+    const QModelIndex parentIndex = indexForItem(_fromItem).parent();
+    const int fromItemRow = _parentItem->rowOfChild(_fromItem);
+    const int toItemRow = _parentItem->rowOfChild(_toItem);
+    Q_ASSERT(fromItemRow <= toItemRow);
+    beginRemoveRows(parentIndex, fromItemRow, toItemRow);
+    _parentItem->takeItems(fromItemRow, toItemRow);
+    endRemoveRows();
+
+    updateItem(_parentItem);
+}
+
+void ProjectsModel::removeItem(ProjectsModelItem* _item)
+{
+    removeItems(_item, _item);
+}
+
+void ProjectsModel::removeItems(ProjectsModelItem* _fromItem, ProjectsModelItem* _toItem)
+{
+    if (_fromItem == nullptr || _fromItem->parent() == nullptr || _toItem == nullptr
+        || _toItem->parent() == nullptr || _fromItem->parent() != _toItem->parent()) {
+        return;
+    }
+
+    auto parentItem = _fromItem->parent();
+    const QModelIndex parentIndex = indexForItem(_fromItem).parent();
+    const int fromItemRow = parentItem->rowOfChild(_fromItem);
+    const int toItemRow = parentItem->rowOfChild(_toItem);
+    Q_ASSERT(fromItemRow <= toItemRow);
+    beginRemoveRows(parentIndex, fromItemRow, toItemRow);
+    parentItem->removeItems(fromItemRow, toItemRow);
+    endRemoveRows();
+
+    updateItem(parentItem);
+}
+
+void ProjectsModel::moveItem(ProjectsModelItem* _item, ProjectsModelItem* _afterSiblingItem,
+                             ProjectsModelItem* _parentItem)
+{
     //
-    // Попытка переметить тот же самый проект
+    // Попытка переметить тот же самый элемент
     //
     if (_item == _afterSiblingItem) {
         return;
     }
 
-    const int kInvalidIndex = -1;
-
     //
-    // Перемещаемого проекта нет в списке
+    // Элемент не принадлежит модели
     //
-    const int movedProjectIndex = d->projects.indexOf(_item);
-    if (movedProjectIndex == kInvalidIndex) {
+    const auto itemIndex = indexForItem(_item);
+    if (!itemIndex.isValid()) {
         return;
     }
 
     //
-    // Проект перемещается в самое начало
+    // Определим родителя, если не задан и его индекс
+    //
+    if (_parentItem == nullptr) {
+        _parentItem
+            = _afterSiblingItem != nullptr ? _afterSiblingItem->parent() : d->rootItem.data();
+    }
+
+    //
+    // Перемещение в самое начало
     //
     if (_afterSiblingItem == nullptr) {
         //
-        // Проект и так уже самый первый
+        // Если элемент и так самый первый
         //
-        if (movedProjectIndex == 0) {
+        if (_item->parent() == _parentItem && itemIndex.row() == 0) {
             return;
         }
 
-        beginMoveRows({}, movedProjectIndex, movedProjectIndex, {}, 0);
-        d->projects.move(movedProjectIndex, 0);
-        endMoveRows();
+        takeItem(_item);
+        prependItem(_item, _parentItem);
         return;
     }
 
     //
-    // Проект перемещается внутри списка
+    // Перемещение внутри списка
     //
-    const int insertAfterProjectIndex = d->projects.indexOf(_afterSiblingItem);
-
-    //
-    // Проекта, после которого нужно вставить, нет в в списке
-    //
-    if (insertAfterProjectIndex == kInvalidIndex) {
+    const auto afterSiblingItemIndex = indexForItem(_afterSiblingItem);
+    if (!afterSiblingItemIndex.isValid()) {
         return;
     }
-
     //
-    // Проекты и так уже идут друг за другом
+    // ... если элементы и так идут друг за другом
     //
-    if ((movedProjectIndex - 1) == insertAfterProjectIndex) {
+    if (afterSiblingItemIndex.parent() == itemIndex.parent()
+        && afterSiblingItemIndex.row() == itemIndex.row() - 1) {
         return;
     }
-
     //
-    // Перемещаем
+    // ... собственно перемещение
     //
-    beginMoveRows({}, movedProjectIndex, movedProjectIndex, {}, insertAfterProjectIndex + 1);
-    d->projects.move(movedProjectIndex,
-                     movedProjectIndex > insertAfterProjectIndex ? insertAfterProjectIndex + 1
-                                                                 : insertAfterProjectIndex);
-    endMoveRows();
+    takeItem(_item);
+    insertItem(_item, _afterSiblingItem);
 }
 
-void ProjectsModel::updateProject(const Project& _project)
+void ProjectsModel::updateItem(ProjectsModelItem* _item)
 {
-    for (int projectIndex = 0; projectIndex < d->projects.size(); ++projectIndex) {
-        if (projectAt(projectIndex)->path() == _project.path()) {
-            *d->projects[projectIndex] = _project;
-            emit dataChanged(index(projectIndex), index(projectIndex));
-            break;
-        }
+    if (_item == nullptr || !_item->isChanged()) {
+        return;
+    }
+
+    const QModelIndex indexForUpdate = indexForItem(_item);
+    emit dataChanged(indexForUpdate, indexForUpdate);
+    _item->setChanged(false);
+
+    if (_item->parent() != nullptr) {
+        updateItem(_item->parent());
     }
 }
 
 bool ProjectsModel::isEmpty() const
 {
-    return d->projects.isEmpty();
+    return rowCount() == 0;
 }
 
 QModelIndex ProjectsModel::index(int _row, int _column, const QModelIndex& _parent) const
 {
-    if (_parent.isValid()) {
+    if (_row < 0 || _row > rowCount(_parent) || _column < 0 || _column > columnCount(_parent)
+        || (_parent.isValid() && (_parent.column() != 0))) {
         return {};
     }
 
-    if (_row < 0 || _row >= rowCount(_parent)) {
+    auto parentItem = itemForIndex(_parent);
+    Q_ASSERT(parentItem);
+
+    auto indexItem = parentItem->childAt(_row);
+    if (indexItem == nullptr) {
         return {};
     }
 
-    return createIndex(_row, _column, d->projects[_row]);
+    return createIndex(_row, _column, indexItem);
+}
+
+QModelIndex ProjectsModel::parent(const QModelIndex& _child) const
+{
+    if (!_child.isValid()) {
+        return {};
+    }
+
+    auto childItem = itemForIndex(_child);
+    auto parentItem = childItem->parent();
+    if (parentItem == nullptr || parentItem == d->rootItem.data()) {
+        return {};
+    }
+
+    auto grandParentItem = parentItem->parent();
+    if (grandParentItem == nullptr) {
+        return {};
+    }
+
+    const auto row = grandParentItem->rowOfChild(parentItem);
+    return createIndex(row, 0, parentItem);
+}
+
+int ProjectsModel::columnCount(const QModelIndex& _parent) const
+{
+    Q_UNUSED(_parent)
+    return 1;
 }
 
 int ProjectsModel::rowCount(const QModelIndex& _parent) const
 {
-    if (_parent.isValid()) {
+    if (_parent.isValid() && _parent.column() != 0) {
         return 0;
     }
 
-    return d->projects.size();
+    auto item = itemForIndex(_parent);
+    if (item == nullptr) {
+        return 0;
+    }
+
+    return item->childCount();
 }
 
 QVariant ProjectsModel::data(const QModelIndex& _index, int _role) const
@@ -194,27 +317,58 @@ QVariant ProjectsModel::data(const QModelIndex& _index, int _role) const
         return {};
     }
 
-    const int projectIndex = _index.row();
-    if (projectIndex < 0 || projectIndex >= d->projects.size()) {
+    auto item = itemForIndex(_index);
+    if (item == nullptr) {
         return {};
     }
 
-    const auto project = d->projects.at(projectIndex);
-    return project->data(_role);
+    return item->data(_role);
 }
 
 bool ProjectsModel::moveRows(const QModelIndex& _sourceParent, int _sourceRow, int _count,
                              const QModelIndex& _destinationParent, int _destinationRow)
 {
     Q_ASSERT(_count == 1);
-    Project* item = projectForIndex(index(_sourceRow, 0, _sourceParent));
-    Project* afterSiblingItem = nullptr;
+    ProjectsModelItem* item = itemForIndex(index(_sourceRow, 0, _sourceParent));
+    ProjectsModelItem* afterSiblingItem = nullptr;
     if (_destinationRow != 0) {
-        afterSiblingItem = projectForIndex(index(_destinationRow - 1, 0, _destinationParent));
+        afterSiblingItem = itemForIndex(index(_destinationRow - 1, 0, _destinationParent));
     }
-    Project* parentItem = nullptr; // projectForIndex(_destinationParent);
-    moveProject(item, afterSiblingItem, parentItem);
+    ProjectsModelItem* parentItem = itemForIndex(_destinationParent);
+    moveItem(item, afterSiblingItem, parentItem);
     return true;
+}
+
+ProjectsModelItem* ProjectsModel::itemForIndex(const QModelIndex& _index) const
+{
+    if (!_index.isValid()) {
+        return d->rootItem.data();
+    }
+
+    auto item = static_cast<ProjectsModelItem*>(_index.internalPointer());
+    if (item == nullptr) {
+        return d->rootItem.data();
+    }
+
+    return item;
+}
+
+QModelIndex ProjectsModel::indexForItem(ProjectsModelItem* _item) const
+{
+    if (_item == nullptr) {
+        return {};
+    }
+
+    int row = 0;
+    QModelIndex parent;
+    if (_item->hasParent() && _item->parent()->hasParent()) {
+        row = _item->parent()->rowOfChild(_item);
+        parent = indexForItem(_item->parent());
+    } else {
+        row = d->rootItem->rowOfChild(_item);
+    }
+
+    return index(row, 0, parent);
 }
 
 } // namespace BusinessLayer

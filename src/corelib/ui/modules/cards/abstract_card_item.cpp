@@ -294,11 +294,11 @@ void AbstractCardItem::updateEmbeddedCardsPositions()
     }
 }
 
-bool AbstractCardItem::isFilterAccepted(const QString& _text, bool _caseSensitive,
+bool AbstractCardItem::isFilterAccepted(const QString& _text, bool _isCaseSensitive,
                                         int _filterType) const
 {
     Q_UNUSED(_text)
-    Q_UNUSED(_caseSensitive)
+    Q_UNUSED(_isCaseSensitive)
     Q_UNUSED(_filterType)
 
     return false;

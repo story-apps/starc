@@ -82,7 +82,8 @@ public:
     /**
      * @brief Подходит ли карточка под условия фильтра
      */
-    virtual bool isFilterAccepted(const QString& _text, bool _caseSensitive, int _filterType) const;
+    virtual bool isFilterAccepted(const QString& _text, bool _isCaseSensitive,
+                                  int _filterType) const;
 
 protected:
     /**

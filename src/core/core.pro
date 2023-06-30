@@ -56,9 +56,11 @@ SOURCES += \
     management_layer/content/onboarding/onboarding_manager.cpp \
     management_layer/content/project/project_manager.cpp \
     management_layer/content/project/project_models_facade.cpp \
-    management_layer/content/projects/project.cpp \
     management_layer/content/projects/projects_manager.cpp \
     management_layer/content/projects/projects_model.cpp \
+    management_layer/content/projects/projects_model_item.cpp \
+    management_layer/content/projects/projects_model_project_item.cpp \
+    management_layer/content/projects/projects_model_team_item.cpp \
     management_layer/content/settings/settings_manager.cpp \
     management_layer/content/settings/template_options_manager.cpp \
     management_layer/content/writing_session/writing_session_manager.cpp \
@@ -137,9 +139,11 @@ HEADERS += \
     management_layer/content/onboarding/onboarding_manager.h \
     management_layer/content/project/project_manager.h \
     management_layer/content/project/project_models_facade.h \
-    management_layer/content/projects/project.h \
     management_layer/content/projects/projects_manager.h \
     management_layer/content/projects/projects_model.h \
+    management_layer/content/projects/projects_model_item.h \
+    management_layer/content/projects/projects_model_project_item.h \
+    management_layer/content/projects/projects_model_team_item.h \
     management_layer/content/settings/settings_manager.h \
     management_layer/content/settings/template_options_manager.h \
     management_layer/content/writing_session/writing_session_manager.h \

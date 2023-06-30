@@ -3,6 +3,7 @@
 #include "projects_cards_graphics_view.h"
 
 #include <management_layer/content/projects/projects_model.h>
+#include <management_layer/content/projects/projects_model_project_item.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>

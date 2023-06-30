@@ -1,4 +1,4 @@
-#include "project.h"
+#include "projects_model_project_item.h"
 
 #include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
@@ -11,7 +11,7 @@
 
 namespace BusinessLayer {
 
-class Project::Implementation
+class ProjectsModelProjectItem::Implementation
 {
 public:
     ProjectType type = ProjectType::Invalid;
@@ -36,61 +36,64 @@ public:
 
 // **
 
-QString Project::extension()
+QString ProjectsModelProjectItem::extension()
 {
     return ".starc";
 }
 
 
-Project::Project()
-    : d(new Implementation)
+ProjectsModelProjectItem::ProjectsModelProjectItem()
+    : ProjectsModelItem()
+    , d(new Implementation)
 {
 }
 
-Project::Project(const Project& _other)
-    : d(new Implementation(*_other.d))
+ProjectsModelProjectItem::ProjectsModelProjectItem(const ProjectsModelProjectItem& _other)
+    : ProjectsModelItem()
+    , d(new Implementation(*_other.d))
 {
 }
 
-Project::~Project() = default;
+ProjectsModelProjectItem::~ProjectsModelProjectItem() = default;
 
-const Project& Project::operator=(const Project& _other)
+const ProjectsModelProjectItem& ProjectsModelProjectItem::operator=(
+    const ProjectsModelProjectItem& _other)
 {
     d.reset(new Implementation(*_other.d));
     return *this;
 }
 
-bool Project::isValid() const
+ProjectsModelItemType ProjectsModelProjectItem::type() const
 {
-    return d->type != ProjectType::Invalid;
+    return ProjectsModelItemType::Project;
 }
 
-bool Project::isLocal() const
+bool ProjectsModelProjectItem::isLocal() const
 {
     return d->type == ProjectType::Local || d->type == ProjectType::LocalShadow;
 }
 
-bool Project::isRemote() const
+bool ProjectsModelProjectItem::isRemote() const
 {
     return d->type == ProjectType::Cloud;
 }
 
-ProjectType Project::type() const
+ProjectType ProjectsModelProjectItem::projectType() const
 {
     return d->type;
 }
 
-void Project::setType(ProjectType _type)
+void ProjectsModelProjectItem::setProjectType(ProjectType _type)
 {
     d->type = _type;
 }
 
-QString Project::path() const
+QString ProjectsModelProjectItem::path() const
 {
     return d->path;
 }
 
-void Project::setPath(const QString& _path)
+void ProjectsModelProjectItem::setPath(const QString& _path)
 {
     d->path = _path;
 
@@ -101,17 +104,17 @@ void Project::setPath(const QString& _path)
     }
 }
 
-QString Project::realPath() const
+QString ProjectsModelProjectItem::realPath() const
 {
     return d->realPath;
 }
 
-void Project::setRealPath(const QString& _path)
+void ProjectsModelProjectItem::setRealPath(const QString& _path)
 {
     d->realPath = _path;
 }
 
-const QPixmap& Project::poster() const
+const QPixmap& ProjectsModelProjectItem::poster() const
 {
     if (d->poster.isNull()) {
         d->poster.load(d->posterPath);
@@ -124,12 +127,12 @@ const QPixmap& Project::poster() const
     return d->poster;
 }
 
-QString Project::posterPath() const
+QString ProjectsModelProjectItem::posterPath() const
 {
     return d->posterPath;
 }
 
-void Project::setPosterPath(const QString& _path)
+void ProjectsModelProjectItem::setPosterPath(const QString& _path)
 {
     if (d->posterPath == _path) {
         return;
@@ -143,37 +146,37 @@ void Project::setPosterPath(const QString& _path)
     d->poster = {};
 }
 
-QUuid Project::uuid() const
+QUuid ProjectsModelProjectItem::uuid() const
 {
     return d->uuid;
 }
 
-void Project::setUuid(const QUuid& _uuid)
+void ProjectsModelProjectItem::setUuid(const QUuid& _uuid)
 {
     d->uuid = _uuid;
 }
 
-QString Project::name() const
+QString ProjectsModelProjectItem::name() const
 {
     return d->name;
 }
 
-void Project::setName(const QString& _name)
+void ProjectsModelProjectItem::setName(const QString& _name)
 {
     d->name = _name;
 }
 
-QString Project::logline() const
+QString ProjectsModelProjectItem::logline() const
 {
     return d->logline;
 }
 
-void Project::setLogline(const QString& _logline)
+void ProjectsModelProjectItem::setLogline(const QString& _logline)
 {
     d->logline = _logline;
 }
 
-QString Project::displayLastEditTime() const
+QString ProjectsModelProjectItem::displayLastEditTime() const
 {
     switch (d->lastEditTime.daysTo(QDateTime::currentDateTime())) {
     case 0: {
@@ -192,138 +195,108 @@ QString Project::displayLastEditTime() const
     }
 }
 
-QDateTime Project::lastEditTime() const
+QDateTime ProjectsModelProjectItem::lastEditTime() const
 {
     return d->lastEditTime;
 }
 
-void Project::setLastEditTime(const QDateTime& _time)
+void ProjectsModelProjectItem::setLastEditTime(const QDateTime& _time)
 {
     d->lastEditTime = _time;
 }
 
-bool Project::canAskAboutSwitch() const
+bool ProjectsModelProjectItem::canAskAboutSwitch() const
 {
     return d->canAskAboutSwitch;
 }
 
-void Project::setCanAskAboutSwitch(bool _can)
+void ProjectsModelProjectItem::setCanAskAboutSwitch(bool _can)
 {
     d->canAskAboutSwitch = _can;
 }
 
-bool Project::canBeSynced() const
+bool ProjectsModelProjectItem::canBeSynced() const
 {
     return d->canBeSynced;
 }
 
-void Project::setCanBeSynced(bool _can)
+void ProjectsModelProjectItem::setCanBeSynced(bool _can)
 {
     d->canBeSynced = _can;
 }
 
-int Project::id() const
+int ProjectsModelProjectItem::id() const
 {
     return d->id;
 }
 
-void Project::setId(int _id)
+void ProjectsModelProjectItem::setId(int _id)
 {
     d->id = _id;
 }
 
-bool Project::isOwner() const
+bool ProjectsModelProjectItem::isOwner() const
 {
     return d->isOwner;
 }
 
-void Project::setOwner(bool _isOwner)
+void ProjectsModelProjectItem::setOwner(bool _isOwner)
 {
     d->isOwner = _isOwner;
 }
 
-ManagementLayer::DocumentEditingMode Project::editingMode() const
+ManagementLayer::DocumentEditingMode ProjectsModelProjectItem::editingMode() const
 {
     return d->editingMode;
 }
 
-void Project::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
+void ProjectsModelProjectItem::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
 {
     d->editingMode = _mode;
 }
 
-bool Project::isReadOnly() const
+bool ProjectsModelProjectItem::isReadOnly() const
 {
     return d->editingMode == ManagementLayer::DocumentEditingMode::Read;
 }
 
-QHash<QUuid, ManagementLayer::DocumentEditingMode> Project::editingPermissions() const
+QHash<QUuid, ManagementLayer::DocumentEditingMode> ProjectsModelProjectItem::editingPermissions()
+    const
 {
     return d->editingPermissions;
 }
 
-void Project::setEditingPermissions(
+void ProjectsModelProjectItem::setEditingPermissions(
     const QHash<QUuid, ManagementLayer::DocumentEditingMode>& _permissions)
 {
     d->editingPermissions = _permissions;
 }
 
-void Project::clearEditingPermissions()
+void ProjectsModelProjectItem::clearEditingPermissions()
 {
     d->editingPermissions.clear();
 }
 
-QVector<Domain::ProjectCollaboratorInfo> Project::collaborators() const
+QVector<Domain::ProjectCollaboratorInfo> ProjectsModelProjectItem::collaborators() const
 {
     return d->collaborators;
 }
 
-void Project::setCollaborators(const QVector<Domain::ProjectCollaboratorInfo>& _collaborators)
+void ProjectsModelProjectItem::setCollaborators(
+    const QVector<Domain::ProjectCollaboratorInfo>& _collaborators)
 {
     d->collaborators = _collaborators;
 }
 
-QVariant Project::data(int _role) const
-{
-    switch (_role) {
-    case ProjectDataRole::Type: {
-        return static_cast<int>(type());
-    }
-
-    case ProjectDataRole::Path: {
-        return path();
-    }
-
-    case ProjectDataRole::PosterPath: {
-        return posterPath();
-    }
-
-    case ProjectDataRole::Name: {
-        return name();
-    }
-
-    case ProjectDataRole::Logline: {
-        return logline();
-    }
-
-    case ProjectDataRole::LastEditTime: {
-        return lastEditTime();
-    }
-
-    default: {
-        return {};
-    }
-    }
-}
-
-bool operator==(const Project& _lhs, const Project& _rhs)
+bool operator==(const ProjectsModelProjectItem& _lhs, const ProjectsModelProjectItem& _rhs)
 {
     if (!_lhs.uuid().isNull() && !_rhs.uuid().isNull()) {
         return _lhs.uuid() == _rhs.uuid();
     }
 
-    return _lhs.type() == _rhs.type() && _lhs.path() == _rhs.path() && _lhs.name() == _rhs.name()
-        && _lhs.logline() == _rhs.logline() && _lhs.lastEditTime() == _rhs.lastEditTime();
+    return _lhs.projectType() == _rhs.projectType() && _lhs.path() == _rhs.path()
+        && _lhs.name() == _rhs.name() && _lhs.logline() == _rhs.logline()
+        && _lhs.lastEditTime() == _rhs.lastEditTime();
 }
 
 } // namespace BusinessLayer

@@ -1,14 +1,19 @@
 #pragma once
 
-#include <QAbstractListModel>
+#include "projects_model_item.h"
 
+class QDateTime;
+class QPixmap;
+class QUuid;
 
 namespace Domain {
 struct ProjectCollaboratorInfo;
 }
+
 namespace ManagementLayer {
 enum class DocumentEditingMode;
 }
+
 
 namespace BusinessLayer {
 
@@ -23,21 +28,9 @@ enum class ProjectType {
 };
 
 /**
- * @brief Роли для данных проекта в модели
- */
-enum ProjectDataRole {
-    Type,
-    Path,
-    PosterPath,
-    Name,
-    Logline,
-    LastEditTime,
-};
-
-/**
  * @brief Файл проекта
  */
-class Project
+class ProjectsModelProjectItem : public ProjectsModelItem
 {
 public:
     /**
@@ -46,23 +39,23 @@ public:
     static QString extension();
 
 public:
-    Project();
-    Project(const Project& _other);
-    const Project& operator=(const Project& _other);
-    ~Project();
+    ProjectsModelProjectItem();
+    ProjectsModelProjectItem(const ProjectsModelProjectItem& _other);
+    const ProjectsModelProjectItem& operator=(const ProjectsModelProjectItem& _other);
+    ~ProjectsModelProjectItem();
 
     /**
-     * @brief Валиден ли проект
+     * @brief Тип элемента модели
      */
-    bool isValid() const;
+    ProjectsModelItemType type() const override;
 
     /**
      * @brief Тип проекта
      */
     bool isLocal() const;
     bool isRemote() const;
-    ProjectType type() const;
-    void setType(ProjectType _type);
+    ProjectType projectType() const;
+    void setProjectType(ProjectType _type);
 
     /**
      * @brief Путь к исходному файлу проекта
@@ -153,16 +146,11 @@ public:
     QVector<Domain::ProjectCollaboratorInfo> collaborators() const;
     void setCollaborators(const QVector<Domain::ProjectCollaboratorInfo>& _collaborators);
 
-    /**
-     * @brief Получить данные по роли из модели
-     */
-    QVariant data(int _role) const;
-
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
 
-bool operator==(const Project& _lhs, const Project& _rhs);
+bool operator==(const ProjectsModelProjectItem& _lhs, const ProjectsModelProjectItem& _rhs);
 
 } // namespace BusinessLayer

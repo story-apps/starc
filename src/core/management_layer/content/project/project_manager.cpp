@@ -35,7 +35,7 @@
 #include <include/custom_events.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <interfaces/ui/i_document_view.h>
-#include <management_layer/content/projects/project.h>
+#include <management_layer/content/projects/projects_model_project_item.h>
 #include <management_layer/plugins_builder.h>
 #include <ui/abstract_navigator.h>
 #include <ui/account/collaborators_tool_bar.h>
@@ -2547,7 +2547,7 @@ void ProjectManager::checkAvailabilityToEdit()
     d->pluginsBuilder.checkAvailabilityToEdit();
 }
 
-void ProjectManager::loadCurrentProject(const BusinessLayer::Project& _project)
+void ProjectManager::loadCurrentProject(BusinessLayer::ProjectsModelProjectItem* _project)
 {
     //
     // Загружаем структуру
@@ -2581,7 +2581,7 @@ void ProjectManager::loadCurrentProject(const BusinessLayer::Project& _project)
         // инфомации о проекте и структуре, чтобы эта информация сразу попала в облако, а не была
         // заменена на пустую
         //
-        projectInformationModel->setName(_project.name());
+        projectInformationModel->setName(_project->name());
         projectInformationModel->saveChanges();
         d->projectStructureModel->saveChanges();
     } else {
@@ -2594,26 +2594,26 @@ void ProjectManager::loadCurrentProject(const BusinessLayer::Project& _project)
     //
     // Восстанавливаем состояние проекта
     //
-    restoreCurrentProjectState(_project.path());
+    restoreCurrentProjectState(_project->path());
 }
 
-void ProjectManager::updateCurrentProject(const BusinessLayer::Project& _project)
+void ProjectManager::updateCurrentProject(BusinessLayer::ProjectsModelProjectItem* _project)
 {
-    d->projectPath = _project.path();
-    d->isProjectRemote = _project.isRemote();
-    d->isProjectOwner = _project.isOwner();
-    d->editingMode = _project.editingMode();
-    d->editingPermissions = _project.editingPermissions();
+    d->projectPath = _project->path();
+    d->isProjectRemote = _project->isRemote();
+    d->isProjectOwner = _project->isOwner();
+    d->editingMode = _project->editingMode();
+    d->editingPermissions = _project->editingPermissions();
     d->pluginsBuilder.setEditingMode(d->editingMode);
     d->projectStructureProxyModel->setItemsFilter(d->editingPermissions.keys());
     d->navigator->setReadOnly(d->editingMode != DocumentEditingMode::Edit);
 
-    d->projectStructureModel->setProjectName(_project.name());
+    d->projectStructureModel->setProjectName(_project->name());
 
     auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(
         d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
             Domain::DocumentObjectType::Project)));
-    projectInformationModel->setCollaborators(_project.collaborators());
+    projectInformationModel->setCollaborators(_project->collaborators());
 }
 
 void ProjectManager::restoreCurrentProjectState(const QString& _path)

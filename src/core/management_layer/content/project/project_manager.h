@@ -5,7 +5,7 @@
 
 namespace BusinessLayer {
 class AbstractModel;
-class Project;
+class ProjectsModelProjectItem;
 class StructureModelItem;
 } // namespace BusinessLayer
 
@@ -74,8 +74,8 @@ public:
     /**
      * @brief Загрузить данные текущего проекта
      */
-    void loadCurrentProject(const BusinessLayer::Project& _project);
-    void updateCurrentProject(const BusinessLayer::Project& _project);
+    void loadCurrentProject(BusinessLayer::ProjectsModelProjectItem* _project);
+    void updateCurrentProject(BusinessLayer::ProjectsModelProjectItem* _project);
     void restoreCurrentProjectState(const QString& _path);
 
     /**

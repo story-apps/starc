@@ -97,6 +97,7 @@ void AbstractModelItem::insertItems(int _index, const QVector<AbstractModelItem*
 void AbstractModelItem::removeItem(AbstractModelItem* _item)
 {
     const auto itemIndex = rowOfChild(_item);
+
     removeItems(itemIndex, itemIndex);
 }
 

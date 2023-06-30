@@ -3,7 +3,7 @@
 #include <ui/widgets/stack_widget/stack_widget.h>
 
 namespace BusinessLayer {
-class Project;
+class ProjectsModelProjectItem;
 class ProjectsModel;
 } // namespace BusinessLayer
 
@@ -50,12 +50,12 @@ signals:
     /**
      * @brief Пользователь хочет открыть выбранный проект
      */
-    void openProjectRequested(const BusinessLayer::Project& _project);
+    void openProjectRequested(BusinessLayer::ProjectsModelProjectItem* _project);
 
     /**
      * @brief Запрос на отображение контекстного меню проекта
      */
-    void projectContextMenuRequested(const BusinessLayer::Project& _project);
+    void projectContextMenuRequested(BusinessLayer::ProjectsModelProjectItem* _project);
 
 protected:
     /**

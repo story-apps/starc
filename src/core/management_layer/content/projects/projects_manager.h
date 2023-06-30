@@ -9,7 +9,7 @@ struct TeamInfo;
 } // namespace Domain
 
 namespace BusinessLayer {
-class Project;
+class ProjectsModelProjectItem;
 }
 
 
@@ -65,6 +65,16 @@ public:
      * @brief Список команд пользователя
      */
     void setTeams(const QVector<Domain::TeamInfo>& _teams);
+
+    /**
+     * @brief Добавить облачный проект
+     */
+    void addOrUpdateTeam(const Domain::TeamInfo& _teamInfo);
+
+    /**
+     * @brief Скрыть команду
+     */
+    void hideTeam(int _id);
 
     /**
      * @brief Создать проект
@@ -142,8 +152,8 @@ public:
     /**
      * @brief Получить проект
      */
-    BusinessLayer::Project project(const QString& _path) const;
-    BusinessLayer::Project project(int _id) const;
+    BusinessLayer::ProjectsModelProjectItem* project(const QString& _path) const;
+    BusinessLayer::ProjectsModelProjectItem* project(int _id) const;
 
     /**
      * @brief Скрыть проект
@@ -159,7 +169,7 @@ public:
     /**
      * @brief Получить текущий проект
      */
-    const BusinessLayer::Project& currentProject() const;
+    BusinessLayer::ProjectsModelProjectItem* currentProject() const;
 
 signals:
     /**
