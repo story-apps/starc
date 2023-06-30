@@ -28,6 +28,17 @@ public:
     virtual qreal headerHeight() const;
 
     /**
+     * @brief Является ли элемент верхнеуровневым (акты)
+     */
+    virtual bool isTopLevel() const;
+
+    /**
+     * @brief Может ли карточка быть расположена после заданной
+     * @note Если _previousCard == nullptr, то это проверка на помещение в самое начало модели
+     */
+    virtual bool canBePlacedAfter(AbstractCardItem* _previousCard);
+
+    /**
      * @brief Является ли карточка контейнером
      */
     virtual bool isContainer() const;
@@ -57,7 +68,7 @@ public:
     /**
      * @brief Может ли карточка быть вложена в контейнер
      */
-    virtual bool canBeEmbedded() const;
+    virtual bool canBeEmbedded(AbstractCardItem* _container) const;
 
     /**
      * @brief Контейнер, в который карточка вложена

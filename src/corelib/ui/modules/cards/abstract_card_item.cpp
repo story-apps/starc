@@ -101,6 +101,17 @@ qreal AbstractCardItem::headerHeight() const
     return 0;
 }
 
+bool AbstractCardItem::isTopLevel() const
+{
+    return false;
+}
+
+bool AbstractCardItem::canBePlacedAfter(AbstractCardItem* _previousCard)
+{
+    Q_UNUSED(_previousCard)
+    return true;
+}
+
 bool AbstractCardItem::isContainer() const
 {
     return false;
@@ -151,8 +162,9 @@ bool AbstractCardItem::isOpened() const
     return false;
 }
 
-bool AbstractCardItem::canBeEmbedded() const
+bool AbstractCardItem::canBeEmbedded(AbstractCardItem* _container) const
 {
+    Q_UNUSED(_container)
     return true;
 }
 

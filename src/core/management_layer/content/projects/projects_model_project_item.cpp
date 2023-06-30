@@ -26,7 +26,8 @@ public:
     QDateTime lastEditTime;
     bool canAskAboutSwitch = true;
     bool canBeSynced = true;
-    int id = -1;
+    int id = Domain::kInvalidId;
+    int teamId = Domain::kInvalidId;
     bool isOwner = true;
     ManagementLayer::DocumentEditingMode editingMode = ManagementLayer::DocumentEditingMode::Edit;
     QHash<QUuid, ManagementLayer::DocumentEditingMode> editingPermissions;
@@ -233,6 +234,16 @@ int ProjectsModelProjectItem::id() const
 void ProjectsModelProjectItem::setId(int _id)
 {
     d->id = _id;
+}
+
+int ProjectsModelProjectItem::teamId() const
+{
+    return d->teamId;
+}
+
+void ProjectsModelProjectItem::setTeamId(int _id)
+{
+    d->teamId = _id;
 }
 
 bool ProjectsModelProjectItem::isOwner() const

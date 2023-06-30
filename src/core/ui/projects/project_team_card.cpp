@@ -68,6 +68,11 @@ int ProjectTeamCard::type() const
     return Type;
 }
 
+BusinessLayer::ProjectsModelTeamItem* ProjectTeamCard::teamItem() const
+{
+    return d->teamItem;
+}
+
 qreal ProjectTeamCard::headerHeight() const
 {
     qreal descriptionHeight = 0.0;
@@ -94,6 +99,12 @@ bool ProjectTeamCard::isContainer() const
 bool ProjectTeamCard::isOpened() const
 {
     return d->teamItem->isOpened();
+}
+
+bool ProjectTeamCard::canBeEmbedded(AbstractCardItem* _container) const
+{
+    Q_UNUSED(_container)
+    return false;
 }
 
 void ProjectTeamCard::init()

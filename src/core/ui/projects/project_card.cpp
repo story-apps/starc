@@ -1,8 +1,12 @@
 #include "project_card.h"
 
+#include "project_team_card.h"
+
+#include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <management_layer/content/projects/projects_model.h>
 #include <management_layer/content/projects/projects_model_project_item.h>
+#include <management_layer/content/projects/projects_model_team_item.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/animations/click_animation.h>
 #include <utils/helpers/color_helper.h>
@@ -87,6 +91,54 @@ ProjectCard::~ProjectCard()
 int ProjectCard::type() const
 {
     return Type;
+}
+
+BusinessLayer::ProjectsModelProjectItem* ProjectCard::project() const
+{
+    return d->project;
+}
+
+bool ProjectCard::canBePlacedAfter(AbstractCardItem* _previousCard)
+{
+    //
+    // Если проект в коменде, то его нельзя вытащить на самый верх
+    //
+    if (_previousCard == nullptr && d->project->teamId() != Domain::kInvalidId) {
+        return false;
+    }
+
+    if (const auto projectCard = qgraphicsitem_cast<ProjectCard*>(_previousCard);
+        projectCard != nullptr) {
+        //
+        // Проект нельзя разместить после проекта из другой команды (внутри другой команды)
+        //
+        if (projectCard->project()->teamId() != d->project->teamId()) {
+            return false;
+        }
+    } else {
+        //
+        // Проект нельзя разместить после команды (в руте), если он уже внутри какой-либо команды
+        //
+        if (d->project->teamId() != Domain::kInvalidId) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool ProjectCard::canBeEmbedded(AbstractCardItem* _container) const
+{
+    //
+    // Проект можно перемещать только в рамках его команды
+    //
+    const auto teamCard = qgraphicsitem_cast<ProjectTeamCard*>(_container);
+    Q_ASSERT(teamCard);
+    if (teamCard->teamItem()->id() == d->project->teamId()) {
+        return true;
+    }
+
+    return false;
 }
 
 void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _option,

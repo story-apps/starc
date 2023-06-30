@@ -2567,7 +2567,8 @@ void ApplicationManager::initConnections()
             [this] { d->openProject(); });
     connect(d->projectsManager.data(), &ProjectsManager::openLocalProjectRequested, this,
             [this](const QString& _path) {
-                if (d->projectsManager->currentProject()->path() == _path) {
+                if (d->projectsManager->currentProject() != nullptr
+                    && d->projectsManager->currentProject()->path() == _path) {
                     d->showProject();
                     return;
                 }

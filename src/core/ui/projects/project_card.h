@@ -2,6 +2,11 @@
 
 #include <ui/modules/cards/abstract_card_item.h>
 
+namespace BusinessLayer {
+class ProjectsModelProjectItem;
+}
+
+
 namespace Ui {
 
 /**
@@ -18,6 +23,21 @@ public:
      */
     enum { Type = UserType + 10 };
     int type() const override;
+
+    /**
+     * @brief Проект
+     */
+    BusinessLayer::ProjectsModelProjectItem* project() const;
+
+    /**
+     * @brief Может ли карточка быть расположена после заданной
+     */
+    bool canBePlacedAfter(AbstractCardItem* _previousCard) override;
+
+    /**
+     * @brief Может ли карточка быть вложена в контейнер
+     */
+    bool canBeEmbedded(AbstractCardItem* _container) const override;
 
     /**
      * @brief Отрисовка карточки

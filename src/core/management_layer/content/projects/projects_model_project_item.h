@@ -120,6 +120,12 @@ public:
     void setId(int _id);
 
     /**
+     * @brief Идентификатор команды проекта
+     */
+    int teamId() const;
+    void setTeamId(int _id);
+
+    /**
      * @brief Является ли текущий пользователь владельцем проекта
      */
     bool isOwner() const;

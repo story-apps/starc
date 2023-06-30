@@ -482,6 +482,7 @@ void ProjectsManager::loadProjects()
         auto project = new BusinessLayer::ProjectsModelProjectItem;
         if (isRemote) {
             project->setId(_json["id"].toInt());
+            project->setId(_json["team_id"].toInt());
             project->setOwner(_json["is_owner"].toBool());
             project->setEditingMode(static_cast<DocumentEditingMode>(_json["role"].toInt()));
 
@@ -555,6 +556,7 @@ void ProjectsManager::saveProjects()
         projectJson["is_team"] = false;
         if (projectItem->isRemote()) {
             projectJson["id"] = projectItem->id();
+            projectJson["team_id"] = projectItem->teamId();
             projectJson["is_owner"] = projectItem->isOwner();
             projectJson["role"] = static_cast<int>(projectItem->editingMode());
 
@@ -1050,6 +1052,7 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
         // Определим параметры проекта
         //
         cloudProject->setId(_projectInfo.id);
+        cloudProject->setTeamId(_projectInfo.teamId);
         cloudProject->setProjectType(BusinessLayer::ProjectType::Cloud);
         cloudProject->setPath(projectPath);
         cloudProject->setRealPath(projectPath);

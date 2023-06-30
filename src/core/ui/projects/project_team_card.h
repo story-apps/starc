@@ -2,6 +2,10 @@
 
 #include <ui/modules/cards/abstract_card_item.h>
 
+namespace BusinessLayer {
+class ProjectsModelTeamItem;
+}
+
 
 namespace Ui {
 
@@ -20,6 +24,11 @@ public:
     int type() const override;
 
     /**
+     * @brief Команда
+     */
+    BusinessLayer::ProjectsModelTeamItem* teamItem() const;
+
+    /**
      * @brief Высота заголовка
      */
     qreal headerHeight() const override;
@@ -33,6 +42,11 @@ public:
      * @brief Открыта ли карточка
      */
     bool isOpened() const override;
+
+    /**
+     * @brief Может ли карточка быть вложена в контейнер
+     */
+    bool canBeEmbedded(AbstractCardItem* _container) const override;
 
 protected:
     /**
