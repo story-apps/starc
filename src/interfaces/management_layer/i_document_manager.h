@@ -12,6 +12,7 @@ class IDocumentView;
 }
 
 class QObject;
+class QUuid;
 class QWidget;
 
 namespace ManagementLayer {
@@ -102,6 +103,13 @@ public:
      * @brief Задать режим редактирования документа
      */
     virtual void setEditingMode(DocumentEditingMode)
+    {
+    }
+
+    /**
+     * @brief Задать режим редактирования конкретных документов
+     */
+    virtual void setEditingPermissions(const QHash<QUuid, DocumentEditingMode>&)
     {
     }
 

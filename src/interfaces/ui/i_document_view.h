@@ -48,7 +48,7 @@ public:
     /**
      * @brief Задать параметры проекта
      */
-    virtual void setProjectInfo(bool _isRemote, bool _isOwner)
+    virtual void setProjectInfo(bool _isRemote, bool _isOwner, bool _allowGrantAccessToProject)
     {
     }
 

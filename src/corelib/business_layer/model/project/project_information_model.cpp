@@ -31,6 +31,7 @@ public:
     StructureModel* structureModel = nullptr;
 
     QVector<Domain::ProjectCollaboratorInfo> collaborators;
+    QVector<Domain::TeamMemberInfo> teammates;
 };
 
 
@@ -163,6 +164,21 @@ void ProjectInformationModel::setCollaborators(
 
     d->collaborators = _collaborators;
     emit collaboratorsChanged(d->collaborators);
+}
+
+QVector<Domain::TeamMemberInfo> ProjectInformationModel::teammates() const
+{
+    return d->teammates;
+}
+
+void ProjectInformationModel::setTeammates(const QVector<Domain::TeamMemberInfo>& _teammates)
+{
+    if (d->teammates == _teammates) {
+        return;
+    }
+
+    d->teammates = _teammates;
+    emit teammatesChanged(d->teammates);
 }
 
 void ProjectInformationModel::initImageWrapper()

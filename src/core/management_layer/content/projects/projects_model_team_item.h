@@ -4,7 +4,8 @@
 
 namespace Domain {
 struct TeamInfo;
-}
+struct TeamMemberInfo;
+} // namespace Domain
 
 
 namespace BusinessLayer {
@@ -51,6 +52,16 @@ public:
      */
     QByteArray avatar() const;
     void setAvatar(const QByteArray& _avatar);
+
+    /**
+     * @brief Может ли пользователь предоставлять доступ к документам проекта
+     */
+    bool allowGrantAccessToProject() const;
+
+    /**
+     * @brief Участники команды
+     */
+    QVector<Domain::TeamMemberInfo> members() const;
 
     /**
      * @brief Открыта ли команда в представлении

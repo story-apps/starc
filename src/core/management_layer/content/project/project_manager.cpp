@@ -36,6 +36,7 @@
 #include <interfaces/management_layer/i_document_manager.h>
 #include <interfaces/ui/i_document_view.h>
 #include <management_layer/content/projects/projects_model_project_item.h>
+#include <management_layer/content/projects/projects_model_team_item.h>
 #include <management_layer/plugins_builder.h>
 #include <ui/abstract_navigator.h>
 #include <ui/account/collaborators_tool_bar.h>
@@ -323,6 +324,11 @@ public:
     bool isProjectInTeam = false;
 
     /**
+     * @brief Может ли пользователь расшаривать доступ к документам проекта
+     */
+    bool allowGrantAccessToProject = true;
+
+    /**
      * @brief Текущий режим редактирования документов
      */
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
@@ -539,7 +545,6 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         connect(createNewVersion, &QAction::triggered, topLevelWidget,
                 [this, currentItemIndex] { this->createNewVersion(currentItemIndex); });
         menuActions.append(createNewVersion);
-
         isDocumentActionAdded = true;
     }
 
@@ -553,6 +558,18 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         connect(openInNewWindow, &QAction::triggered, topLevelWidget,
                 [this] { this->openCurrentDocumentInNewWindow(); });
         menuActions.append(openInNewWindow);
+        isDocumentActionAdded = true;
+    }
+
+    //
+    // Документы облачного проекта можно расшарить
+    //
+    if (isProjectRemote && allowGrantAccessToProject) {
+        auto shareAccess = new QAction(tr("Share access"));
+        shareAccess->setSeparator(!menuActions.isEmpty());
+        shareAccess->setIconText(u8"\U000F0010");
+        connect(shareAccess, &QAction::triggered, topLevelWidget, [this] {});
+        menuActions.append(shareAccess);
         isDocumentActionAdded = true;
     }
 
@@ -2609,13 +2626,20 @@ void ProjectManager::loadCurrentProject(BusinessLayer::ProjectsModelProjectItem*
 
 void ProjectManager::updateCurrentProject(BusinessLayer::ProjectsModelProjectItem* _project)
 {
+    const auto projectTeam = _project->teamId() != Domain::kInvalidId
+        ? static_cast<BusinessLayer::ProjectsModelTeamItem*>(_project->parent())
+        : nullptr;
+
     d->projectPath = _project->path();
     d->isProjectRemote = _project->isRemote();
     d->isProjectOwner = _project->isOwner();
     d->isProjectInTeam = _project->teamId() != Domain::kInvalidId;
+    d->allowGrantAccessToProject
+        = d->isProjectOwner || (projectTeam != nullptr && projectTeam->allowGrantAccessToProject());
     d->editingMode = _project->editingMode();
     d->editingPermissions = _project->editingPermissions();
     d->pluginsBuilder.setEditingMode(d->editingMode);
+    d->pluginsBuilder.setEditingPermissions(d->editingPermissions);
     d->projectStructureProxyModel->setItemsFilter(d->editingPermissions.keys());
     d->navigator->setReadOnly(d->editingMode != DocumentEditingMode::Edit);
 
@@ -2625,6 +2649,9 @@ void ProjectManager::updateCurrentProject(BusinessLayer::ProjectsModelProjectIte
         d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
             Domain::DocumentObjectType::Project)));
     projectInformationModel->setCollaborators(_project->collaborators());
+    if (projectTeam != nullptr) {
+        projectInformationModel->setTeammates(projectTeam->members());
+    }
 }
 
 void ProjectManager::restoreCurrentProjectState(const QString& _path)
@@ -3793,7 +3820,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         return;
     }
     Log::trace("Set project info");
-    view->setProjectInfo(d->isProjectRemote, d->isProjectOwner);
+    view->setProjectInfo(d->isProjectRemote, d->isProjectOwner, d->allowGrantAccessToProject);
     Log::trace("Set editing mode");
     view->setEditingMode(d->documentEditingMode(itemForShow));
     Log::trace("Set document versions");

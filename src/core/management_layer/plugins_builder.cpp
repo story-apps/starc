@@ -288,6 +288,11 @@ public:
     DocumentEditingMode editingMode = DocumentEditingMode::Edit;
 
     /**
+     * @brief Права доступа к конкретным документам
+     */
+    QHash<QUuid, DocumentEditingMode> editingPermissions;
+
+    /**
      * @brief Количество кредитов доступных для использования с ИИ инструментами
      */
     int availableCredits = 0;
@@ -397,6 +402,8 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
     // Настроим доступность для редактирования в плагине
     //
     plugin->checkAvailabilityToEdit(isProjectInTeam);
+    plugin->setEditingMode(editingMode);
+    plugin->setEditingPermissions(editingPermissions);
     //
     // ... а также режим работы для самого представления и доступные кредиты для работы с ИИ
     //
@@ -902,6 +909,18 @@ void PluginsBuilder::setEditingMode(DocumentEditingMode _mode) const
     d->editingMode = _mode;
     for (auto plugin : std::as_const(d->plugins)) {
         plugin->setEditingMode(d->editingMode);
+    }
+}
+
+void PluginsBuilder::setEditingPermissions(const QHash<QUuid, DocumentEditingMode>& _permissions) const
+{
+    if (d->editingPermissions == _permissions) {
+        return;
+    }
+
+    d->editingPermissions = _permissions;
+    for (auto plugin : std::as_const(d->plugins)) {
+        plugin->setEditingPermissions(d->editingPermissions);
     }
 }
 

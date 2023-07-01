@@ -112,11 +112,11 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     //
     // Настроим завершателя
     //
+    d->completer->setFilterMode(_filterMode);
     d->completer->setModel(_model);
     d->completer->setModelSorting(QCompleter::UnsortedModel);
     d->completer->setCaseSensitivity(Qt::CaseInsensitive);
     d->completer->setCompletionPrefix(_completionPrefix);
-    d->completer->setFilterMode(_filterMode);
 
     //
     // Если в модели для дополнения нет элементов, или она уже полностью дополнена

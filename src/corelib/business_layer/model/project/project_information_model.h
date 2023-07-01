@@ -5,7 +5,8 @@
 
 namespace Domain {
 struct ProjectCollaboratorInfo;
-}
+struct TeamMemberInfo;
+} // namespace Domain
 
 namespace BusinessLayer {
 class StructureModel;
@@ -40,6 +41,10 @@ public:
     void setCollaborators(const QVector<Domain::ProjectCollaboratorInfo>& _collaborators);
     Q_SIGNAL void collaboratorsChanged(
         const QVector<Domain::ProjectCollaboratorInfo>& _collaborators);
+
+    QVector<Domain::TeamMemberInfo> teammates() const;
+    void setTeammates(const QVector<Domain::TeamMemberInfo>& _teammates);
+    Q_SIGNAL void teammatesChanged(const QVector<Domain::TeamMemberInfo>& _teammates);
 
 signals:
     /**

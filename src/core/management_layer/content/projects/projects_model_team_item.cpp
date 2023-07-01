@@ -93,6 +93,16 @@ void ProjectsModelTeamItem::setAvatar(const QByteArray& _avatar)
     setChanged(true);
 }
 
+bool ProjectsModelTeamItem::allowGrantAccessToProject() const
+{
+    return d->teamInfo.allowGrantAccessToProjects;
+}
+
+QVector<Domain::TeamMemberInfo> ProjectsModelTeamItem::members() const
+{
+    return d->teamInfo.members;
+}
+
 bool ProjectsModelTeamItem::isOpened() const
 {
     return d->isOpened;

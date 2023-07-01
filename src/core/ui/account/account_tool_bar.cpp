@@ -26,7 +26,7 @@ AccountToolBar::AccountToolBar(QWidget* _parent)
     auto accountAction = new QAction(this);
     accountAction->setCheckable(true);
     accountAction->setChecked(true);
-    accountAction->setIconText(u8"\U000F0004");
+    accountAction->setIconText(u8"\U000F0013");
     addAction(accountAction);
     connect(accountAction, &QAction::toggled, this, [this](bool _checked) {
         if (_checked) {
@@ -36,7 +36,7 @@ AccountToolBar::AccountToolBar(QWidget* _parent)
 
     auto teamAction = new QAction(this);
     teamAction->setCheckable(true);
-    teamAction->setIconText(u8"\U000F000E");
+    teamAction->setIconText(u8"\U000f0b58");
     addAction(teamAction);
     connect(teamAction, &QAction::toggled, this, [this](bool _checked) {
         if (_checked) {
