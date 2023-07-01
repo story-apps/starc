@@ -43,6 +43,7 @@ const QString kWorldsMapMime = QStringLiteral("application/x-starc/editor/worlds
 const QString kWorldEditorMime = QStringLiteral("application/x-starc/editor/world/information");
 const QString kWorldNavigatorMime = QStringLiteral("application/x-starc/navigator/world/information");
 //
+const QString kSimpleTextFolderEditorMime = QStringLiteral("application/x-starc/editor/folder/text");
 const QString kSimpleTextEditorMime = QStringLiteral("application/x-starc/editor/text/text");
 const QString kSimpleTextNavigatorMime = QStringLiteral("application/x-starc/navigator/text/text");
 //
@@ -176,7 +177,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         { "application/x-starc/document/worlds",  { { kWorldsMapMime, u8"\U000F01E7" } } },
         { "application/x-starc/document/world",   { { kWorldEditorMime, u8"\U000F01E7" } } },
         //
-        { "application/x-starc/document/folder",     { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
+        { "application/x-starc/document/folder",     { { kSimpleTextFolderEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/text",       { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/images-gallery",  { { kImagesGalleryMime, u8"\U000F02F9" } } },
         //,
@@ -192,6 +193,7 @@ const QHash<QString, QString> kMimeToPlugin
     = { { "application/x-starc/editor/project/information", "*projectinformationplugin*" },
         { "application/x-starc/editor/project/collaborators", "*projectcollaboratorsplugin*" },
         //
+        { kSimpleTextFolderEditorMime, "*simpletextplugin*" },
         { kSimpleTextEditorMime, "*simpletextplugin*" },
         { kSimpleTextNavigatorMime, "*simpletextstructureplugin*" },
         //
@@ -912,7 +914,8 @@ void PluginsBuilder::setEditingMode(DocumentEditingMode _mode) const
     }
 }
 
-void PluginsBuilder::setEditingPermissions(const QHash<QUuid, DocumentEditingMode>& _permissions) const
+void PluginsBuilder::setEditingPermissions(
+    const QHash<QUuid, DocumentEditingMode>& _permissions) const
 {
     if (d->editingPermissions == _permissions) {
         return;
