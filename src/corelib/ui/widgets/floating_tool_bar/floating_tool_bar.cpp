@@ -496,7 +496,7 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
 
             return ColorHelper::transparent(
                 action->isChecked() ? Ui::DesignSystem::color().accent() : textColor(),
-                action->isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity());
+                isEnabled() && action->isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity());
         }();
         painter.setPen(penColor);
 

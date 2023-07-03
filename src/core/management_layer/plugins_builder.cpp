@@ -30,6 +30,8 @@ enum ViewType {
  * @brief Майм-типы плагинов
  */
 
+const QString kProjectCollaboratorsMime = QStringLiteral("application/x-starc/editor/project/collaborators");
+
 const QString kCharactersRelationsMime = QStringLiteral("application/x-starc/editor/characters/relations");
 const QString kCharacterEditorMime = QStringLiteral("application/x-starc/editor/character/information");
 const QString kCharacterNavigatorMime = QStringLiteral("application/x-starc/navigator/character/information");
@@ -119,7 +121,7 @@ const QHash<QString, QString> kEditorToNavigator
  */
 const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
     = { { "application/x-starc/document/project",    { { "application/x-starc/editor/project/information", u8"\U000f02fd" },
-                                                       { "application/x-starc/editor/project/collaborators", u8"\U000f0b58" } } },
+                                                       { kProjectCollaboratorsMime, u8"\U000f0b58" } } },
         //
         { "application/x-starc/document/screenplay", { { "application/x-starc/editor/screenplay/information", u8"\U000f02fd" },
                                                        { "application/x-starc/editor/screenplay/parameters", u8"\U000f0493" } } },
@@ -191,7 +193,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
  */
 const QHash<QString, QString> kMimeToPlugin
     = { { "application/x-starc/editor/project/information", "*projectinformationplugin*" },
-        { "application/x-starc/editor/project/collaborators", "*projectcollaboratorsplugin*" },
+        { kProjectCollaboratorsMime, "*projectcollaboratorsplugin*" },
         //
         { kSimpleTextFolderEditorMime, "*simpletextplugin*" },
         { kSimpleTextEditorMime, "*simpletextplugin*" },
@@ -443,8 +445,7 @@ QVector<PluginsBuilder::EditorInfo> PluginsBuilder::editorsInfoFor(const QString
     if (!_isProjectRemote) {
         editors.erase(std::remove_if(editors.begin(), editors.end(),
                                      [](const auto& _editorInfo) {
-                                         return _editorInfo.mimeType
-                                             == "application/x-starc/editor/project/collaborators";
+                                         return _editorInfo.mimeType == kProjectCollaboratorsMime;
                                      }),
                       editors.end());
     }
@@ -459,7 +460,7 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
         = { { "application/x-starc/document/project",
               { { "application/x-starc/editor/project/information",
                   QApplication::translate("ProjectPluginsBuilder", "Information about project") },
-                { "application/x-starc/editor/project/collaborators",
+                { kProjectCollaboratorsMime,
                   QApplication::translate("ProjectPluginsBuilder", "Project collaborators") } } },
             //
             { "application/x-starc/document/screenplay",
@@ -945,6 +946,12 @@ void PluginsBuilder::resetModels() const
         plugin->saveSettings();
         plugin->resetModels();
     }
+}
+
+Ui::IDocumentView* PluginsBuilder::projectCollaboratorsView(
+    BusinessLayer::AbstractModel* _model) const
+{
+    return d->activatePlugin(kProjectCollaboratorsMime, _model, Primary);
 }
 
 } // namespace ManagementLayer

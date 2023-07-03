@@ -181,6 +181,11 @@ void ProjectView::showEditor(QWidget* _widget)
     setCurrentWidget(d->documentEditorPage);
 }
 
+void ProjectView::addEditor(QWidget* _widget)
+{
+    d->documentEditor->addWidget(_widget);
+}
+
 void ProjectView::setActive(bool _active)
 {
     d->overlayOpacityAnimation.stop();

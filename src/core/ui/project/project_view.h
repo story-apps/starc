@@ -41,6 +41,11 @@ public:
     void showEditor(QWidget* _widget);
 
     /**
+     * @brief Добавить заданный редактор без отображения
+     */
+    void addEditor(QWidget* _widget);
+
+    /**
      * @brief Активно ли представление в данный момент
      */
     void setActive(bool _active);

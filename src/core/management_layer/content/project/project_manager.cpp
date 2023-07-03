@@ -447,33 +447,30 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         auto findAllCharacters = new QAction(tr("Find all characters"));
         findAllCharacters->setIconText(u8"\U000F0016");
         findAllCharacters->setEnabled(enabled);
-        connect(findAllCharacters, &QAction::triggered, topLevelWidget,
-                [this] { this->findAllCharacters(); });
+        connect(findAllCharacters, &QAction::triggered, q, [this] { this->findAllCharacters(); });
         menuActions.append(findAllCharacters);
         //
         auto addCharacter = new QAction(tr("Add character"));
         addCharacter->setIconText(u8"\U000F0014");
-        connect(addCharacter, &QAction::triggered, topLevelWidget, [this] { this->addDocument(); });
+        connect(addCharacter, &QAction::triggered, q, [this] { this->addDocument(); });
         menuActions.append(addCharacter);
     } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
         auto findAllLocations = new QAction(tr("Find all locations"));
         findAllLocations->setIconText(u8"\U000F13B0");
         findAllLocations->setEnabled(enabled);
-        connect(findAllLocations, &QAction::triggered, topLevelWidget,
-                [this] { this->findAllLocations(); });
+        connect(findAllLocations, &QAction::triggered, q, [this] { this->findAllLocations(); });
         menuActions.append(findAllLocations);
         //
         auto addLocation = new QAction(tr("Add location"));
         addLocation->setIconText(u8"\U000F0975");
-        connect(addLocation, &QAction::triggered, topLevelWidget, [this] { this->addDocument(); });
+        connect(addLocation, &QAction::triggered, q, [this] { this->addDocument(); });
         menuActions.append(addLocation);
     } else if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
         if (currentItem->hasChildren()) {
             auto emptyRecycleBin = new QAction(tr("Empty recycle bin"));
             emptyRecycleBin->setIconText(u8"\U000f05e8");
             emptyRecycleBin->setEnabled(enabled);
-            connect(emptyRecycleBin, &QAction::triggered, topLevelWidget,
-                    [this] { this->emptyRecycleBin(); });
+            connect(emptyRecycleBin, &QAction::triggered, q, [this] { this->emptyRecycleBin(); });
             menuActions.append(emptyRecycleBin);
         }
     }
@@ -484,14 +481,14 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         auto addFolder = new QAction(tr("Add folder"));
         addFolder->setIconText(u8"\U000F0257");
         addFolder->setEnabled(enabled);
-        connect(addFolder, &QAction::triggered, topLevelWidget,
+        connect(addFolder, &QAction::triggered, q,
                 [this] { this->addDocument(Domain::DocumentObjectType::Folder); });
         menuActions.append(addFolder);
         //
         auto addDocument = new QAction(tr("Add document"));
         addDocument->setIconText(u8"\U000F0415");
         addDocument->setEnabled(enabled);
-        connect(addDocument, &QAction::triggered, topLevelWidget, [this] { this->addDocument(); });
+        connect(addDocument, &QAction::triggered, q, [this] { this->addDocument(); });
         menuActions.append(addDocument);
 
         const QSet<Domain::DocumentObjectType> cantBeRemovedItems = {
@@ -527,7 +524,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
             removeDocument->setSeparator(true);
             removeDocument->setIconText(u8"\U000f01b4");
             removeDocument->setEnabled(enabled);
-            connect(removeDocument, &QAction::triggered, topLevelWidget,
+            connect(removeDocument, &QAction::triggered, q,
                     [this, currentItemIndex] { this->removeDocument(currentItemIndex); });
             menuActions.append(removeDocument);
         }
@@ -542,7 +539,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         createNewVersion->setSeparator(true);
         createNewVersion->setIconText(u8"\U000F00FB");
         createNewVersion->setEnabled(enabled);
-        connect(createNewVersion, &QAction::triggered, topLevelWidget,
+        connect(createNewVersion, &QAction::triggered, q,
                 [this, currentItemIndex] { this->createNewVersion(currentItemIndex); });
         menuActions.append(createNewVersion);
         isDocumentActionAdded = true;
@@ -555,7 +552,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         auto openInNewWindow = new QAction(tr("Open in new window"));
         openInNewWindow->setSeparator(!isDocumentActionAdded && !menuActions.isEmpty());
         openInNewWindow->setIconText(u8"\U000F03CC");
-        connect(openInNewWindow, &QAction::triggered, topLevelWidget,
+        connect(openInNewWindow, &QAction::triggered, q,
                 [this] { this->openCurrentDocumentInNewWindow(); });
         menuActions.append(openInNewWindow);
         isDocumentActionAdded = true;
@@ -564,13 +561,66 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     //
     // Документы облачного проекта можно расшарить
     //
-    if (isProjectRemote && allowGrantAccessToProject) {
-        auto shareAccess = new QAction(tr("Share access"));
-        shareAccess->setSeparator(!menuActions.isEmpty());
-        shareAccess->setIconText(u8"\U000F0010");
-        connect(shareAccess, &QAction::triggered, topLevelWidget, [this] {});
-        menuActions.append(shareAccess);
-        isDocumentActionAdded = true;
+    if (isProjectRemote && allowGrantAccessToProject && _index.isValid()
+        && currentItem->type() != Domain::DocumentObjectType::RecycleBin) {
+        QModelIndex documentIndexToShare;
+        const auto documentUuidToShare = [currentItem, _index, &documentIndexToShare] {
+            switch (currentItem->type()) {
+            case Domain::DocumentObjectType::Character:
+            case Domain::DocumentObjectType::Location:
+            case Domain::DocumentObjectType::World:
+            case Domain::DocumentObjectType::AudioplayTitlePage:
+            case Domain::DocumentObjectType::AudioplaySynopsis:
+            case Domain::DocumentObjectType::AudioplayText:
+            case Domain::DocumentObjectType::AudioplayStatistics:
+            case Domain::DocumentObjectType::ComicBookTitlePage:
+            case Domain::DocumentObjectType::ComicBookSynopsis:
+            case Domain::DocumentObjectType::ComicBookText:
+            case Domain::DocumentObjectType::ComicBookStatistics:
+            case Domain::DocumentObjectType::NovelTitlePage:
+            case Domain::DocumentObjectType::NovelSynopsis:
+            case Domain::DocumentObjectType::NovelOutline:
+            case Domain::DocumentObjectType::NovelText:
+            case Domain::DocumentObjectType::NovelStatistics:
+            case Domain::DocumentObjectType::ScreenplayTitlePage:
+            case Domain::DocumentObjectType::ScreenplaySynopsis:
+            case Domain::DocumentObjectType::ScreenplayTreatment:
+            case Domain::DocumentObjectType::ScreenplayText:
+            case Domain::DocumentObjectType::ScreenplayStatistics:
+            case Domain::DocumentObjectType::StageplayTitlePage:
+            case Domain::DocumentObjectType::StageplaySynopsis:
+            case Domain::DocumentObjectType::StageplayText:
+            case Domain::DocumentObjectType::StageplayStatistics: {
+                documentIndexToShare = _index.parent();
+                return currentItem->parent()->uuid();
+            }
+            default: {
+                documentIndexToShare = _index;
+                return currentItem->uuid();
+            }
+            }
+        }();
+        //
+        // ... если пользователь владелец, или может изменять этот документ
+        //
+        if ((isProjectOwner || editingMode == DocumentEditingMode::Edit
+             || editingPermissions.value(documentUuidToShare, DocumentEditingMode::Read)
+                 == DocumentEditingMode::Edit)) {
+            auto shareAccess = new QAction(tr("Share access"));
+            shareAccess->setSeparator(!menuActions.isEmpty());
+            shareAccess->setIconText(u8"\U000F0010");
+            connect(shareAccess, &QAction::triggered, q, [this, documentIndexToShare] {
+                auto projectCollaboratorsView = pluginsBuilder.projectCollaboratorsView(
+                    modelsFacade.modelFor(Domain::DocumentObjectType::Project));
+                view.left->addEditor(projectCollaboratorsView->asQWidget());
+
+                QMetaObject::invokeMethod(projectCollaboratorsView->asQWidget(),
+                                          "configureDocumentAccessPressed",
+                                          Q_ARG(QModelIndex, documentIndexToShare));
+            });
+            menuActions.append(shareAccess);
+            isDocumentActionAdded = true;
+        }
     }
 
     navigator->setContextMenuActions(menuActions);

@@ -148,6 +148,11 @@ public:
      */
     void resetModels() const;
 
+    //
+    // Методы доступа в конкретные плагины
+    //
+    Ui::IDocumentView* projectCollaboratorsView(BusinessLayer::AbstractModel* _model) const;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
