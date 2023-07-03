@@ -8,5 +8,5 @@ Exec=starc %f
 MimeType=application/x-starc;
 Name=Story Architect
 GenericName=Storywriting Software
-Comment=Intuitive writing app with smart features and a streamlined process for film, TV and more.
-Keywords=starc screenplay screenwriting playwriting
+Comment=Intuitive writing app with smart features and a streamlined process for film, TV, radio, stage and more.
+Keywords=starc screenplay comicbook audiodrama stageplay novel writing
