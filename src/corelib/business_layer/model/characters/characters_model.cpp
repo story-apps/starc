@@ -100,6 +100,9 @@ void CharactersModel::addCharacterModel(CharacterModel* _characterModel)
     beginInsertRows({}, itemRowIndex, itemRowIndex);
     d->characterModels.append(_characterModel);
     endInsertRows();
+
+    connect(_characterModel, &CharacterModel::nameChanged, this,
+            &CharactersModel::updateDocumentContent);
 }
 
 void CharactersModel::removeCharacterModel(CharacterModel* _characterModel)
@@ -116,6 +119,9 @@ void CharactersModel::removeCharacterModel(CharacterModel* _characterModel)
     beginRemoveRows({}, itemRowIndex, itemRowIndex);
     d->characterModels.remove(itemRowIndex);
     endRemoveRows();
+
+    disconnect(_characterModel, &CharacterModel::nameChanged, this,
+               &CharactersModel::updateDocumentContent);
 }
 
 void CharactersModel::createCharacter(const QString& _name, const QByteArray& _content)

@@ -98,6 +98,9 @@ void LocationsModel::addLocationModel(LocationModel* _locationModel)
     beginInsertRows({}, itemRowIndex, itemRowIndex);
     d->locationModels.append(_locationModel);
     endInsertRows();
+
+    connect(_locationModel, &LocationModel::nameChanged, this,
+            &LocationsModel::updateDocumentContent);
 }
 
 void LocationsModel::removeLocationModel(LocationModel* _locationModel)
@@ -114,6 +117,9 @@ void LocationsModel::removeLocationModel(LocationModel* _locationModel)
     beginRemoveRows({}, itemRowIndex, itemRowIndex);
     d->locationModels.remove(itemRowIndex);
     endRemoveRows();
+
+    disconnect(_locationModel, &LocationModel::nameChanged, this,
+               &LocationsModel::updateDocumentContent);
 }
 
 void LocationsModel::createLocation(const QString& _name, const QByteArray& _content)
