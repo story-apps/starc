@@ -57,6 +57,9 @@ public:
     int currentTeamId = Domain::kInvalidId;
     QVector<Domain::TeamMemberInfo> currentTeamMembers;
 
+    Widget* emptyPage = nullptr;
+    Body1Label* emptyPageTitle = nullptr;
+
     Widget* teamPage = nullptr;
     QScrollArea* teamPageContent = nullptr;
 
@@ -83,6 +86,8 @@ public:
 
 AccountViewTeams::Implementation::Implementation(AccountViewTeams* _q)
     : q(_q)
+    , emptyPage(new Widget(_q))
+    , emptyPageTitle(new Body1Label(emptyPage))
     , teamPage(new Widget(_q))
     , teamPageContent(new QScrollArea(_q))
     , addMemberCard(new Card(_q))
@@ -101,6 +106,16 @@ AccountViewTeams::Implementation::Implementation(AccountViewTeams* _q)
     , sidebar(new AccountViewTeamsSidebar(_q))
     , splitter(new Splitter(_q))
 {
+    emptyPageTitle->setAlignment(Qt::AlignCenter);
+    auto emptyPageLayout = new QVBoxLayout;
+    emptyPageLayout->setContentsMargins({});
+    emptyPageLayout->setSpacing(0);
+    emptyPageLayout->addStretch();
+    emptyPageLayout->addWidget(emptyPageTitle);
+    emptyPageLayout->addStretch();
+    emptyPage->setLayout(emptyPageLayout);
+
+
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
     palette.setColor(QPalette::Window, Qt::transparent);
@@ -197,7 +212,8 @@ AccountViewTeams::AccountViewTeams(QWidget* _parent)
 {
     setFocusPolicy(Qt::StrongFocus);
 
-    setCurrentWidget(d->splitter);
+    setCurrentWidget(d->emptyPage);
+    addWidget(d->splitter);
 
     auto removeMemberAction = new QAction(d->membersContextMenu);
     removeMemberAction->setIconText(u8"\U000F01B4");
@@ -286,13 +302,11 @@ void AccountViewTeams::setTeams(const QVector<Domain::TeamInfo>& _teams)
     }
 }
 
-void AccountViewTeams::showEmptyPage(bool _canCreateTeam)
+void AccountViewTeams::showEmptyPage()
 {
-    //
-    // TODO
-    //
-
     d->currentTeamId = Domain::kInvalidId;
+
+    setCurrentWidget(d->emptyPage);
 }
 
 void AccountViewTeams::showTeam(int _teamId)
@@ -402,10 +416,13 @@ void AccountViewTeams::showTeam(int _teamId)
     if (!isTeamChanged) {
         d->members->blockSignals(false);
     }
+
+    setCurrentWidget(d->splitter);
 }
 
 void AccountViewTeams::updateTranslations()
 {
+    d->emptyPageTitle->setText(tr("Here will be a list of your teammates."));
     d->addMemberTitle->setText(tr("Invite the team"));
     d->addMemberSubtitle->setText(tr("Add people who you’d like to join the team"));
     d->email->setLabel(tr("Email"));
@@ -420,6 +437,7 @@ void AccountViewTeams::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     StackWidget::designSystemChangeEvent(_event);
 
     setBackgroundColor(DesignSystem::color().surface());
+    d->emptyPage->setBackgroundColor(DesignSystem::color().surface());
     d->teamPage->setBackgroundColor(DesignSystem::color().surface());
 
     d->teamPageContent->widget()->layout()->setContentsMargins(
@@ -432,6 +450,7 @@ void AccountViewTeams::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     auto labelMargins = DesignSystem::label().margins().toMargins();
     for (auto label : std::vector<Widget*>{
+             d->emptyPageTitle,
              d->addMemberTitle,
              d->addMemberSubtitle,
              d->membersTitle,
@@ -440,6 +459,7 @@ void AccountViewTeams::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         label->setTextColor(DesignSystem::color().onBackground());
         label->setContentsMargins(labelMargins);
     }
+    d->emptyPageTitle->setBackgroundColor(DesignSystem::color().surface());
     labelMargins.setTop(DesignSystem::compactLayout().px(32));
     d->membersTitle->setContentsMargins(labelMargins);
     labelMargins.setTop(0);

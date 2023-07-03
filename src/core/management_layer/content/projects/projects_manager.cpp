@@ -291,8 +291,8 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                                 if (currentProject() == _project) {
                                     emit closeCurrentProjectRequested();
                                 }
-                                d->projects->removeItem(_project);
                                 QFile::remove(_project->path());
+                                d->projects->removeItem(_project);
                             });
                     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
                 });

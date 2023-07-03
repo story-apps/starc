@@ -36,7 +36,7 @@ public:
     /**
      * @brief Показать пустую страницу с возможностью, или без создавать новую команду
      */
-    void showEmptyPage(bool _canCreateTeam);
+    void showEmptyPage();
 
     /**
      * @brief Показать параметры выбранной команды

@@ -610,6 +610,10 @@ void AccountView::setSessions(const QVector<Domain::SessionInfo>& _sessions)
 void AccountView::setAccountTeams(const QVector<Domain::TeamInfo>& _teams)
 {
     d->teamPage->setTeams(_teams);
+
+    if (_teams.isEmpty()) {
+        d->teamPage->showEmptyPage();
+    }
 }
 
 void AccountView::showTeam(int _teamId)
