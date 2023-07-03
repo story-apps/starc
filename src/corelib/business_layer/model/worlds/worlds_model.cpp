@@ -92,6 +92,8 @@ void WorldsModel::addWorldModel(WorldModel* _worldModel)
     beginInsertRows({}, itemRowIndex, itemRowIndex);
     d->worldModels.append(_worldModel);
     endInsertRows();
+
+    connect(_worldModel, &WorldModel::nameChanged, this, &WorldsModel::updateDocumentContent);
 }
 
 void WorldsModel::removeWorldModel(WorldModel* _worldModel)
@@ -108,6 +110,8 @@ void WorldsModel::removeWorldModel(WorldModel* _worldModel)
     beginRemoveRows({}, itemRowIndex, itemRowIndex);
     d->worldModels.remove(itemRowIndex);
     endRemoveRows();
+
+    disconnect(_worldModel, &WorldModel::nameChanged, this, &WorldsModel::updateDocumentContent);
 }
 
 void WorldsModel::createWorld(const QString& _name, const QByteArray& _content)

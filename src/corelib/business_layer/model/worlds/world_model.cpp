@@ -268,15 +268,16 @@ const QString& WorldModel::name() const
 
 void WorldModel::setName(const QString& _name)
 {
-    if (d->name == _name) {
+    const auto newName = _name.simplified();
+    if (d->name == newName) {
         return;
     }
 
     const auto oldName = d->name;
-    d->name = _name;
+    d->name = newName;
 
     emit documentNameChanged(d->name);
-    emit nameChanged(_name, oldName);
+    emit nameChanged(d->name, oldName);
 }
 
 QString WorldModel::documentName() const
