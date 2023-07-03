@@ -243,7 +243,7 @@ void OnboardingNavigator::Implementation::initUiPage()
     addLanguage("Беларуский", QLocale::Belarusian, 54);
     addLanguage("Català", QLocale::Catalan, 78);
     addLanguage("Dansk", QLocale::Danish, 89);
-    addLanguage("Deutsch", QLocale::German, 97);
+    addLanguage("Deutsch", QLocale::German, 100);
     auto englishItem = addLanguage("English", QLocale::English, 100);
     addLanguage("Español", QLocale::Spanish, 75);
     addLanguage("Esperanto", QLocale::Esperanto, 9);
@@ -268,7 +268,7 @@ void OnboardingNavigator::Implementation::initUiPage()
     addLanguage("עִבְרִית", QLocale::Hebrew, 93);
     addLanguage("हिन्दी", QLocale::Hindi, 32);
     addLanguage("தமிழ்", QLocale::Tamil, 41);
-    addLanguage("తెలుగు", QLocale::Telugu, 99);
+    addLanguage("తెలుగు", QLocale::Telugu, 100);
     addLanguage("汉语", QLocale::Chinese, 5);
     addLanguage("한국어", QLocale::Korean, 65);
     uiLanguage->setModel(uiLanguageModel);
