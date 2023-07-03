@@ -18,6 +18,7 @@
         <keyword>audio play</keyword>
         <keyword>radio drama</keyword>
         <keyword>radio play</keyword>
+        <keyword>podcast</keyword>
         <keyword>stageplay</keyword>
         <keyword>stage play</keyword>
         <keyword>stage</keyword>
@@ -102,6 +103,7 @@
         </screenshot>
     </screenshots>
     <releases>
+        <release version="0.5.4" date="2023-07-03"/>
         <release version="0.5.3a" date="2023-06-05"/>
         <release version="0.5.3" date="2023-05-31"/>
         <release version="0.5.2" date="2023-05-16"/>
