@@ -256,6 +256,9 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                                 //
                                 // Если таки хочет, то скрываем проект
                                 //
+                                if (currentProject() == _project) {
+                                    emit closeCurrentProjectRequested();
+                                }
                                 d->projects->removeItem(_project);
                             });
                     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
