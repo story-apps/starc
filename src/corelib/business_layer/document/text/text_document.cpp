@@ -1022,7 +1022,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
             //
             // Если удаляется изолированный элемент, то сбросим изоляцию
             //
-            if (d->corrector->visibleTopLevelItem() == item) {
+            if (d->corrector != nullptr && d->corrector->visibleTopLevelItem() == item) {
                 d->corrector->setVisibleTopLevelItem(nullptr);
             }
 
@@ -2332,7 +2332,7 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 //
                 // Если удаляется изолированный элемент, то сбросим изоляцию
                 //
-                if (d->corrector->visibleTopLevelItem() == itemParent) {
+                if (d->corrector != nullptr && d->corrector->visibleTopLevelItem() == itemParent) {
                     d->corrector->setVisibleTopLevelItem(nullptr);
                 }
 
