@@ -449,6 +449,11 @@ void CardItemParametersView::setBeats(const QVector<QString>& _beats)
     // Помещаем биты в поля
     //
     if (_beats.isEmpty()) {
+        //
+        // Если в элементе нет битов, то блокируем редактор бита, чтобы предотвратить испускание
+        // сигнала о том, что бит изменился, т.к. это приведёт к созданию пустого бита внутри сцены
+        //
+        QSignalBlocker signalBlocker(d->beats.constFirst());
         d->beats.constFirst()->clear();
         return;
     }
