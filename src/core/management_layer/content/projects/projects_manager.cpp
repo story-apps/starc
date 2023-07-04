@@ -485,7 +485,7 @@ void ProjectsManager::loadProjects()
         auto project = new BusinessLayer::ProjectsModelProjectItem;
         if (isRemote) {
             project->setId(_json["id"].toInt());
-            project->setId(_json["team_id"].toInt());
+            project->setTeamId(_json["team_id"].toInt());
             project->setOwner(_json["is_owner"].toBool());
             project->setEditingMode(static_cast<DocumentEditingMode>(_json["role"].toInt()));
 
