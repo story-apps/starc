@@ -5,6 +5,7 @@ SUBDIRS = \
     audioplay_parameters \
     audioplay_text \
     audioplay_text_structure \
+    audioplay_statistics_structure \
     character_information_structure \
     comic_book_information \
     comic_book_parameters \

@@ -72,6 +72,7 @@ const QString kAudioplayTitlePageEditorMime = QStringLiteral("application/x-star
 const QString kAudioplayTextEditorMime = QStringLiteral("application/x-starc/editor/audioplay/text");
 const QString kAudioplayTextNavigatorMime = QStringLiteral("application/x-starc/navigator/audioplay/text");
 const QString kAudioplayStatisticsViewMime = QStringLiteral("application/x-starc/view/audioplay/statistics");
+const QString kAudioplayStatisticsNavigatorMime = QStringLiteral("application/x-starc/navigator/audioplay/statistics");
 //
 const QString kStageplayInformationViewMime = QStringLiteral("application/x-starc/view/stageplay/information");
 const QString kStageplayParametersViewMime = QStringLiteral("application/x-starc/view/stageplay/parameters");
@@ -108,6 +109,7 @@ const QHash<QString, QString> kEditorToNavigator
         { kScreenplayStatisticsViewMime, kScreenplayStatisticsNavigatorMime },
         { kComicBookTextEditorMime, kComicBookTextNavigatorMime },
         { kAudioplayTextEditorMime, kAudioplayTextNavigatorMime },
+        { kAudioplayStatisticsViewMime, kAudioplayStatisticsNavigatorMime },
         { kStageplayTextEditorMime, kStageplayTextNavigatorMime },
         { kNovelOutlineEditorMime, kNovelOutlineNavigatorMime },
         { kNovelOutlineCardsMime, kNovelTextNavigatorMime },
@@ -226,6 +228,7 @@ const QHash<QString, QString> kMimeToPlugin
         { kAudioplayTextEditorMime, "*audioplaytextplugin*" },
         { kAudioplayTextNavigatorMime, "*audioplaytextstructureplugin*" },
         { kAudioplayStatisticsViewMime, "*audioplaystatisticsplugin*" },
+        { kAudioplayStatisticsNavigatorMime, "*audioplaystatisticsstructureplugin*" },
         //
         { kStageplayInformationViewMime, "*stageplayinformationplugin*" },
         { kStageplayParametersViewMime, "*stageplayparametersplugin*" },

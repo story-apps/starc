@@ -1,7 +1,5 @@
 #include "screenplay_text_block_parser.h"
 
-#include <business_layer/templates/screenplay_template.h>
-#include <business_layer/templates/templates_facade.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QRegularExpression>

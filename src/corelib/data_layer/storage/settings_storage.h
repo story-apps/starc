@@ -357,6 +357,11 @@ const QString kComponentsAudioplayDurationByWordsWordsKey
     = kComponentsAudioplayDurationKey + QStringLiteral("/by-words-characters");
 const QString kComponentsAudioplayDurationByWordsDurationKey
     = kComponentsAudioplayDurationKey + QStringLiteral("/by-words-duration");
+// ... статистика
+const QString kComponentsAudioplayStatisticsKey
+    = kComponentsAudioplayKey + QStringLiteral("/statistics");
+const QString kComponentsAudioplayStatisticsSplitterStateKey
+    = kComponentsAudioplayStatisticsKey + QStringLiteral("/splitter-state");
 //
 // пьеса
 const QString kComponentsStageplayKey = kComponentsGroupKey + QStringLiteral("/stageplay");

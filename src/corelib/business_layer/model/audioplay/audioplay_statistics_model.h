@@ -5,7 +5,16 @@
 
 namespace BusinessLayer {
 
+class AudioplayCastReport;
+class AudioplayDialoguesReport;
+class AudioplayGenderReport;
+class AudioplayLocationReport;
+class AudioplaySceneReport;
 class AudioplaySummaryReport;
+//
+class AudioplayCharactersActivityPlot;
+class AudioplayStructureAnalysisPlot;
+//
 class AudioplayTextModel;
 
 /**
@@ -27,6 +36,7 @@ public:
     /**
      * @brief Задать модель текста сценария
      */
+    AudioplayTextModel* textModel() const;
     void setAudioplayTextModel(AudioplayTextModel* _model);
 
     /**
@@ -38,6 +48,50 @@ public:
      * @brief Суммарный отчёт по сценарию
      */
     const AudioplaySummaryReport& summaryReport() const;
+
+    /**
+     * @brief Отчёт по сценам
+     */
+    const AudioplaySceneReport& sceneReport() const;
+    void setSceneReportParameters(int _sortBy);
+
+    /**
+     * @brief Отчёт по локациям
+     */
+    const AudioplayLocationReport& locationReport() const;
+    void setLocationReportParameters(int _sortBy);
+
+    /**
+     * @brief Отчёт по персонажам
+     */
+    const AudioplayCastReport& castReport() const;
+    void setCastReportParameters(int _sortBy);
+
+    /**
+     * @brief Отчёт по репликам
+     */
+    const AudioplayDialoguesReport& dialoguesReport() const;
+    void setDialoguesReportParameters(const QVector<QString>& _visibleCharacters);
+
+    /**
+     * @brief Гнедерный анализ
+     */
+    const AudioplayGenderReport& genderReport() const;
+
+    /**
+     * @brief График структурного анализа
+     */
+    const AudioplayStructureAnalysisPlot& structureAnalysisPlot() const;
+    void setStructureAnalysisPlotParameters(bool _sceneDuration, bool _actionDuration,
+                                            bool _dialoguesDuration, bool _charactersCount,
+                                            bool _dialoguesCount);
+
+    /**
+     * @brief График активности персонажей
+     */
+    const AudioplayCharactersActivityPlot& charactersActivityPlot() const;
+    void setCharactersActivityPlotParameters(const QVector<QString>& _visibleCharacters);
+
 
 protected:
     /**
