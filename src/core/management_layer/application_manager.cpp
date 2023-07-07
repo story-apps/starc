@@ -3166,7 +3166,8 @@ void ApplicationManager::initConnections()
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChangeAllowed, this,
             [this](const QUuid& _documentUuid) {
                 const auto& currentProject = d->projectsManager->currentProject();
-                if (!currentProject->isRemote() || !currentProject->canBeSynced()) {
+                if (currentProject != nullptr
+                    && (!currentProject->isRemote() || !currentProject->canBeSynced())) {
                     return;
                 }
 
