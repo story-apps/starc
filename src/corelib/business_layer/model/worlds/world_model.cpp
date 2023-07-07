@@ -277,7 +277,7 @@ void WorldModel::setName(const QString& _name)
     d->name = newName;
 
     emit documentNameChanged(d->name);
-    emit nameChanged(d->name, oldName);
+    emit nameChanged(newName, oldName);
 }
 
 QString WorldModel::documentName() const
