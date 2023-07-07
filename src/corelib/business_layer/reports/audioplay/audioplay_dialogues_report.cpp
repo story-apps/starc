@@ -316,6 +316,11 @@ QVector<QString> AudioplayDialoguesReport::characters() const
     return d->characters;
 }
 
+void AudioplayDialoguesReport::saveToPdf(const QString& _fileName) const
+{
+
+}
+
 void AudioplayDialoguesReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;

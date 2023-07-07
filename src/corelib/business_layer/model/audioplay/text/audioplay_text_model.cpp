@@ -104,6 +104,7 @@ void AudioplayTextModel::Implementation::updateNumbering()
                     q->updateItemForRoles(groupItem, { TextModelGroupItem::GroupNumberRole });
                 }
                 ++sceneNumber;
+                groupItem->prepareNumberText("#");
                 break;
             }
 

@@ -98,6 +98,7 @@ void StageplayTextModel::Implementation::updateNumbering()
                 if (groupItem->setNumber(sceneNumber, {})) {
                     ++sceneNumber;
                 }
+                groupItem->prepareNumberText("#");
                 break;
             }
 

@@ -101,8 +101,11 @@ void SimpleTextModel::Implementation::updateNumbering()
             switch (childItem->type()) {
             case TextModelItemType::Group: {
                 updateChildNumbering(childItem);
-                auto chapterItem = static_cast<SimpleTextModelChapterItem*>(childItem);
-                chapterItem->setNumber(sceneNumber++, {});
+                auto groupItem = static_cast<TextModelGroupItem*>(childItem);
+                if (groupItem->setNumber(sceneNumber, {})) {
+                    ++sceneNumber;
+                }
+                groupItem->prepareNumberText("#");
                 break;
             }
 
