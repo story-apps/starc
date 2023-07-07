@@ -353,14 +353,12 @@ void AudioplayCastReport::saveToPdf(const QString& _fileName) const
     tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_None);
     tableFormat.setColumnWidthConstraints({
         QTextLength{ QTextLength::PercentageLength, 52 },
-        QTextLength{ QTextLength::PercentageLength, 16 },
-        QTextLength{ QTextLength::PercentageLength, 16 },
-        QTextLength{ QTextLength::PercentageLength, 16 },
     });
     const auto beforeTablePosition = cursor.position();
     cursor.insertTable(castModel()->rowCount() + 1, castModel()->columnCount(), tableFormat);
     cursor.setPosition(beforeTablePosition);
     cursor.movePosition(QTextCursor::NextBlock);
+    cursor.beginEditBlock();
     //
     for (int column = 0; column < castModel()->columnCount(); ++column) {
         QTextTableCellFormat cellFormat;
@@ -385,6 +383,7 @@ void AudioplayCastReport::saveToPdf(const QString& _fileName) const
             cursor.movePosition(QTextCursor::NextBlock);
         }
     }
+    cursor.endEditBlock();
 
     //
     // Печатаем

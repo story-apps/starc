@@ -394,6 +394,7 @@ void AudioplayGenderReport::saveToPdf(const QString& _fileName) const
     // Формируем отчёт
     //
     QTextCursor cursor(&report);
+    cursor.beginEditBlock();
     QTextCharFormat titleFormat;
     auto titleFont = report.defaultFont();
     titleFont.setBold(true);
@@ -533,6 +534,7 @@ void AudioplayGenderReport::saveToPdf(const QString& _fileName) const
             cursor.movePosition(QTextCursor::NextBlock);
         }
     }
+    cursor.endEditBlock();
 
 
     //

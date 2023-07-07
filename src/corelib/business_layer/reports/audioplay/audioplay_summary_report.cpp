@@ -344,6 +344,7 @@ void AudioplaySummaryReport::saveToPdf(const QString& _fileName) const
     // Формируем отчёт
     //
     QTextCursor cursor(&report);
+    cursor.beginEditBlock();
     QTextCharFormat titleFormat;
     auto titleFont = report.defaultFont();
     titleFont.setBold(true);
@@ -351,21 +352,22 @@ void AudioplaySummaryReport::saveToPdf(const QString& _fileName) const
     cursor.setCharFormat(titleFormat);
     cursor.insertText(QString("%1 - %2").arg(
         d->audioplayModel->informationModel()->name(),
-        QCoreApplication::translate("BusinessLayer::AudioplayCastReport", "Summary report")));
+        QCoreApplication::translate("BusinessLayer::AudioplaySummaryReport", "Summary report")));
     cursor.insertBlock();
     cursor.insertBlock();
 
-    cursor.insertText(QCoreApplication::translate("BusinessLayer::AudioplayCastReport", "Duration")
-                      + ": " + TimeHelper::toString(duration()));
+    cursor.insertText(
+        QCoreApplication::translate("BusinessLayer::AudioplaySummaryReport", "Duration") + ": "
+        + TimeHelper::toString(duration()));
     cursor.insertBlock();
-    cursor.insertText(QCoreApplication::translate("BusinessLayer::AudioplayCastReport", "Pages")
+    cursor.insertText(QCoreApplication::translate("BusinessLayer::AudioplaySummaryReport", "Pages")
                       + ": " + QString::number(pagesCount()));
     cursor.insertBlock();
-    cursor.insertText(QCoreApplication::translate("BusinessLayer::AudioplayCastReport", "Words")
+    cursor.insertText(QCoreApplication::translate("BusinessLayer::AudioplaySummaryReport", "Words")
                       + ": " + QString::number(wordsCount()));
     cursor.insertBlock();
     cursor.insertText(
-        QCoreApplication::translate("BusinessLayer::AudioplayCastReport",
+        QCoreApplication::translate("BusinessLayer::AudioplaySummaryReport",
                                     "Characters with/without spaces")
         + ": "
         + QString("%1/%2").arg(charactersCount().withSpaces).arg(charactersCount().withoutSpaces));
@@ -377,9 +379,6 @@ void AudioplaySummaryReport::saveToPdf(const QString& _fileName) const
     tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_None);
     tableFormat.setColumnWidthConstraints({
         QTextLength{ QTextLength::PercentageLength, 52 },
-        QTextLength{ QTextLength::PercentageLength, 16 },
-        QTextLength{ QTextLength::PercentageLength, 16 },
-        QTextLength{ QTextLength::PercentageLength, 16 },
     });
     auto beforeTablePosition = cursor.position();
     cursor.insertTable(textInfoModel()->rowCount() + 1, textInfoModel()->columnCount(),
@@ -447,8 +446,7 @@ void AudioplaySummaryReport::saveToPdf(const QString& _fileName) const
             cursor.movePosition(QTextCursor::NextBlock);
         }
     }
-    cursor.insertBlock();
-    cursor.insertBlock();
+    cursor.endEditBlock();
 
 
     //

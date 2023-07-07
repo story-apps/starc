@@ -14,6 +14,8 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QCoreApplication>
+#include <QPdfWriter>
+#include <QPointer>
 #include <QRegularExpression>
 #include <QStandardItemModel>
 
@@ -24,6 +26,11 @@ namespace BusinessLayer {
 class ScreenplayGenderReport::Implementation
 {
 public:
+    /**
+     * @brief Модель аудиопостановки
+     */
+    QPointer<ScreenplayTextModel> screenplayModel;
+
     int bechdelTest = 0;
     int reverseBeckdelTest = 0;
 
@@ -49,8 +56,8 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
         return;
     }
 
-    auto screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
-    if (screenplayModel == nullptr) {
+    d->screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
+    if (d->screenplayModel == nullptr) {
         return;
     }
 
@@ -77,7 +84,7 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
     //
     QString rxPattern;
-    auto charactersModel = screenplayModel->charactersList();
+    auto charactersModel = d->screenplayModel->charactersList();
     for (int index = 0; index < charactersModel->rowCount(); ++index) {
         auto characterName = charactersModel->index(index, 0).data().toString();
         if (!rxPattern.isEmpty()) {
@@ -96,10 +103,10 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     //
     // Соберём список персонажей
     //
-    for (int index = 0; index < screenplayModel->charactersList()->rowCount(); ++index) {
+    for (int index = 0; index < d->screenplayModel->charactersList()->rowCount(); ++index) {
         const auto characterName
-            = screenplayModel->charactersList()->index(index, 0).data().toString();
-        if (const auto character = screenplayModel->character(characterName)) {
+            = d->screenplayModel->charactersList()->index(index, 0).data().toString();
+        if (const auto character = d->screenplayModel->character(characterName)) {
             switch (character->gender()) {
             case 0: {
                 male.insert(character->name());
@@ -256,7 +263,7 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
             }
         }
     };
-    includeInReport(screenplayModel->itemForIndex({}));
+    includeInReport(d->screenplayModel->itemForIndex({}));
     //
     // ... и последняя сцена
     //
@@ -385,6 +392,208 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     }
 }
 
+int ScreenplayGenderReport::bechdelTest() const
+{
+    return d->bechdelTest;
+}
+
+int ScreenplayGenderReport::reverseBechdelTest() const
+{
+    return d->reverseBeckdelTest;
+}
+
+QAbstractItemModel* ScreenplayGenderReport::scenesInfoModel() const
+{
+    return d->scenesInfoModel.data();
+}
+
+QAbstractItemModel* ScreenplayGenderReport::dialoguesInfoModel() const
+{
+    return d->dialoguesInfoModel.data();
+}
+
+QAbstractItemModel* ScreenplayGenderReport::charactersInfoModel() const
+{
+    return d->charactersInfoModel.data();
+}
+
+void ScreenplayGenderReport::saveToPdf(const QString& _fileName) const
+{
+    const auto& exportTemplate
+        = TemplatesFacade::screenplayTemplate(d->screenplayModel->informationModel()->templateId());
+
+    //
+    // Настраиваем документ
+    //
+    PageTextEdit textEdit;
+    textEdit.setUsePageMode(true);
+    textEdit.setPageSpacing(0);
+    QTextDocument report;
+    report.setDefaultFont(exportTemplate.defaultFont());
+    textEdit.setDocument(&report);
+    //
+    // ... параметры страницы
+    //
+    textEdit.setPageFormat(exportTemplate.pageSizeId());
+    textEdit.setPageMarginsMm(exportTemplate.pageMargins());
+    textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());
+
+    //
+    // Формируем отчёт
+    //
+    QTextCursor cursor(&report);
+    cursor.beginEditBlock();
+    QTextCharFormat titleFormat;
+    auto titleFont = report.defaultFont();
+    titleFont.setBold(true);
+    titleFormat.setFont(titleFont);
+    cursor.setCharFormat(titleFormat);
+    cursor.insertText(
+        QString("%1 - %2").arg(d->screenplayModel->informationModel()->name(),
+                               QCoreApplication::translate("BusinessLayer::ScreenplayCastReport",
+                                                           "Gender analysis report")));
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+    auto testResult = [](int _passedTimes) {
+        return _passedTimes == 0
+            ? QCoreApplication::translate("BusinessLayer::ScreenplayGenderReport", "Does not pass")
+            : QCoreApplication::translate("BusinessLayer::ScreenplayGenderReport",
+                                          "Passed %n time(s)", "", _passedTimes);
+    };
+    cursor.insertText(
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Bechdel test") + ": "
+        + testResult(bechdelTest()));
+    cursor.insertBlock();
+    cursor.insertText(
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Reverse Bechdel test")
+        + ": " + testResult(reverseBechdelTest()));
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+    QTextTableFormat tableFormat;
+    tableFormat.setBorder(0);
+    tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 68 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+    });
+    auto beforeTablePosition = cursor.position();
+    cursor.insertTable(charactersInfoModel()->rowCount() + 1, charactersInfoModel()->columnCount(),
+                       tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    //
+    for (int column = 0; column < charactersInfoModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(charactersInfoModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < charactersInfoModel()->rowCount(); ++row) {
+        for (int column = 0; column < charactersInfoModel()->columnCount(); ++column) {
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            cursor.insertText(charactersInfoModel()->index(row, column).data().toString());
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 68 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+    });
+    beforeTablePosition = cursor.position();
+    cursor.insertTable(dialoguesInfoModel()->rowCount() + 1, dialoguesInfoModel()->columnCount(),
+                       tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    //
+    for (int column = 0; column < dialoguesInfoModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(dialoguesInfoModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < dialoguesInfoModel()->rowCount(); ++row) {
+        for (int column = 0; column < dialoguesInfoModel()->columnCount(); ++column) {
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            cursor.insertText(dialoguesInfoModel()->index(row, column).data().toString());
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 68 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+    });
+    beforeTablePosition = cursor.position();
+    cursor.insertTable(scenesInfoModel()->rowCount() + 1, scenesInfoModel()->columnCount(),
+                       tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    //
+    for (int column = 0; column < scenesInfoModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(scenesInfoModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < scenesInfoModel()->rowCount(); ++row) {
+        for (int column = 0; column < scenesInfoModel()->columnCount(); ++column) {
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            cursor.insertText(scenesInfoModel()->index(row, column).data().toString());
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+    cursor.endEditBlock();
+
+
+    //
+    // Печатаем
+    //
+    QPdfWriter printer(_fileName);
+    printer.setPageSize(QPageSize(exportTemplate.pageSizeId()));
+    printer.setPageMargins({});
+    report.print(&printer);
+}
+
 void ScreenplayGenderReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;
@@ -481,31 +690,6 @@ void ScreenplayGenderReport::saveToXlsx(const QString& _fileName) const
     }
 
     xlsx.saveAs(_fileName);
-}
-
-int ScreenplayGenderReport::bechdelTest() const
-{
-    return d->bechdelTest;
-}
-
-int ScreenplayGenderReport::reverseBechdelTest() const
-{
-    return d->reverseBeckdelTest;
-}
-
-QAbstractItemModel* ScreenplayGenderReport::scenesInfoModel() const
-{
-    return d->scenesInfoModel.data();
-}
-
-QAbstractItemModel* ScreenplayGenderReport::dialoguesInfoModel() const
-{
-    return d->dialoguesInfoModel.data();
-}
-
-QAbstractItemModel* ScreenplayGenderReport::charactersInfoModel() const
-{
-    return d->charactersInfoModel.data();
 }
 
 } // namespace BusinessLayer

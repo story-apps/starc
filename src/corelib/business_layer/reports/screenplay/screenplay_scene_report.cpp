@@ -17,6 +17,8 @@
 #include <utils/helpers/time_helper.h>
 
 #include <QCoreApplication>
+#include <QPdfWriter>
+#include <QPointer>
 #include <QRegularExpression>
 #include <QStandardItemModel>
 
@@ -28,9 +30,19 @@ class ScreenplaySceneReport::Implementation
 {
 public:
     /**
+     * @brief Модель аудиопостановки
+     */
+    QPointer<ScreenplayTextModel> screenplayModel;
+
+    /**
      * @brief Модель сцен
      */
     QScopedPointer<QStandardItemModel> sceneModel;
+
+    /**
+     * @brief Необходимо ли отображать персонажей
+     */
+    bool showCharacters = true;
 
     /**
      * @brief Тип сортировки
@@ -55,8 +67,8 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
         return;
     }
 
-    auto screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
-    if (screenplayModel == nullptr) {
+    d->screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
+    if (d->screenplayModel == nullptr) {
         return;
     }
 
@@ -96,7 +108,7 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
     //
     QString rxPattern;
-    auto charactersModel = screenplayModel->charactersList();
+    auto charactersModel = d->screenplayModel->charactersList();
     for (int index = 0; index < charactersModel->rowCount(); ++index) {
         auto characterName = charactersModel->index(index, 0).data().toString();
         if (!rxPattern.isEmpty()) {
@@ -116,7 +128,7 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
     // Подготовим текстовый документ, для определения страниц сцен
     //
     const auto& screenplayTemplate
-        = TemplatesFacade::screenplayTemplate(screenplayModel->informationModel()->templateId());
+        = TemplatesFacade::screenplayTemplate(d->screenplayModel->informationModel()->templateId());
     PageTextEdit screenplayTextEdit;
     screenplayTextEdit.setUsePageMode(true);
     screenplayTextEdit.setPageSpacing(0);
@@ -125,7 +137,7 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
     ScreenplayTextDocument screenplayDocument;
     screenplayTextEdit.setDocument(&screenplayDocument);
     const bool kCanChangeModel = false;
-    screenplayDocument.setModel(screenplayModel, kCanChangeModel);
+    screenplayDocument.setModel(d->screenplayModel, kCanChangeModel);
     QTextCursor screenplayCursor(&screenplayDocument);
     auto textItemPage = [&screenplayTextEdit, &screenplayDocument,
                          &screenplayCursor](TextModelTextItem* _item) {
@@ -233,7 +245,7 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
             }
         }
     };
-    includeInReport(screenplayModel->itemForIndex({}));
+    includeInReport(d->screenplayModel->itemForIndex({}));
     if (lastScene.page != invalidPage) {
         scenes.append(lastScene);
     }
@@ -302,20 +314,24 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
     } else {
         d->sceneModel->clear();
     }
-    const auto titleBackgroundColor = QVariant::fromValue(ColorHelper::transparent(
-        Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::elevationEndOpacity()));
+    const auto titleBackgroundColor = d->showCharacters
+        ? QVariant::fromValue(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
+                                                       Ui::DesignSystem::elevationEndOpacity()))
+        : QVariant();
     for (const auto& scene : scenes) {
         auto sceneItem = createModelItem(scene.name, titleBackgroundColor);
-        for (const auto& character : scene.characters) {
-            auto characterItem = createModelItem(
-                QString("%1 (%2)").arg(character.name, QString::number(character.totalDialogues)));
-            if (character.isFirstAppearance) {
-                characterItem->setData(u8"\U000F09DE", Qt::DecorationRole);
-                characterItem->setData(Ui::DesignSystem::color().accent(),
-                                       Qt::DecorationPropertyRole);
+        if (d->showCharacters) {
+            for (const auto& character : scene.characters) {
+                auto characterItem = createModelItem(QString("%1 (%2)").arg(
+                    character.name, QString::number(character.totalDialogues)));
+                if (character.isFirstAppearance) {
+                    characterItem->setData(u8"\U000F09DE", Qt::DecorationRole);
+                    characterItem->setData(Ui::DesignSystem::color().accent(),
+                                           Qt::DecorationPropertyRole);
+                }
+                sceneItem->appendRow({ characterItem, createModelItem({}), createModelItem({}),
+                                       createModelItem({}), createModelItem({}) });
             }
-            sceneItem->appendRow({ characterItem, createModelItem({}), createModelItem({}),
-                                   createModelItem({}), createModelItem({}) });
         }
 
         d->sceneModel->appendRow({
@@ -347,6 +363,131 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
         4, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplaySceneReport", "Duration"),
         Qt::DisplayRole);
+}
+
+void ScreenplaySceneReport::setParameters(bool _showCharacters, int _sortBy)
+{
+    d->showCharacters = _showCharacters;
+    d->sortBy = _sortBy;
+}
+
+QAbstractItemModel* ScreenplaySceneReport::sceneModel() const
+{
+    return d->sceneModel.data();
+}
+
+void ScreenplaySceneReport::saveToPdf(const QString& _fileName) const
+{
+    const auto& exportTemplate
+        = TemplatesFacade::screenplayTemplate(d->screenplayModel->informationModel()->templateId());
+
+    //
+    // Настраиваем документ
+    //
+    PageTextEdit textEdit;
+    textEdit.setUsePageMode(true);
+    textEdit.setPageSpacing(0);
+    QTextDocument report;
+    report.setDefaultFont(exportTemplate.defaultFont());
+    textEdit.setDocument(&report);
+    //
+    // ... параметры страницы
+    //
+    textEdit.setPageFormat(exportTemplate.pageSizeId());
+    textEdit.setPageMarginsMm(exportTemplate.pageMargins());
+    textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());
+
+    //
+    // Формируем отчёт
+    //
+    QTextCursor cursor(&report);
+    QTextCharFormat titleFormat;
+    auto titleFont = report.defaultFont();
+    titleFont.setBold(true);
+    titleFormat.setFont(titleFont);
+    cursor.setCharFormat(titleFormat);
+    cursor.insertText(QString("%1 - %2").arg(
+        d->screenplayModel->informationModel()->name(),
+        QCoreApplication::translate("BusinessLayer::ScreenplaySceneReport", "Scene report")));
+    cursor.insertBlock();
+    cursor.insertBlock();
+    QTextTableFormat tableFormat;
+    tableFormat.setBorder(0);
+    tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 60 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+    });
+    const auto beforeTablePosition = cursor.position();
+    cursor.insertTable(sceneModel()->rowCount() + 1, sceneModel()->columnCount(), tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    cursor.beginEditBlock();
+    //
+    for (int column = 0; column < sceneModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(sceneModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < sceneModel()->rowCount(); ++row) {
+        const auto sceneIndex = sceneModel()->index(row, 0);
+        for (int column = 0; column < sceneModel()->columnCount(); ++column) {
+            const auto hasCharacters = sceneModel()->rowCount(sceneIndex) > 0;
+
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            QTextCharFormat textFormat = cursor.blockCharFormat();
+            textFormat.setFontWeight(hasCharacters ? QFont::Weight::Bold : QFont::Weight::Normal);
+            cursor.insertText(sceneModel()->index(row, column).data().toString(), textFormat);
+
+            //
+            // Для первой колонки добавляем список персонажей
+            //
+            if (column == 0 && d->showCharacters) {
+                cursor.insertText({ QChar::LineSeparator });
+                for (int childRow = 0; childRow < sceneModel()->rowCount(sceneIndex); ++childRow) {
+                    const auto childIndex = sceneModel()->index(childRow, 0, sceneIndex);
+                    textFormat = cursor.blockCharFormat();
+                    textFormat.setFontUnderline(!childIndex.data(Qt::DecorationRole).isNull());
+                    //
+                    // ... убираем пробел между именем персонажа и открывающей скобкой, чтобы в
+                    //     отчёте она не переносилась на новую строку отдельно от имени
+                    //
+                    auto character = childIndex.data().toString();
+                    character = character.replace(" (", "(");
+                    cursor.insertText(character, textFormat);
+                    cursor.insertText(", ", cursor.blockCharFormat());
+                }
+                if (hasCharacters) {
+                    cursor.insertText({ QChar::LineSeparator });
+                }
+            }
+
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+    cursor.endEditBlock();
+
+    //
+    // Печатаем
+    //
+    QPdfWriter printer(_fileName);
+    printer.setPageSize(QPageSize(exportTemplate.pageSizeId()));
+    printer.setPageMargins({});
+    report.print(&printer);
 }
 
 void ScreenplaySceneReport::saveToXlsx(const QString& _fileName) const
@@ -398,16 +539,6 @@ void ScreenplaySceneReport::saveToXlsx(const QString& _fileName) const
     }
 
     xlsx.saveAs(_fileName);
-}
-
-void ScreenplaySceneReport::setParameters(int _sortBy)
-{
-    d->sortBy = _sortBy;
-}
-
-QAbstractItemModel* ScreenplaySceneReport::sceneModel() const
-{
-    return d->sceneModel.data();
 }
 
 } // namespace BusinessLayer

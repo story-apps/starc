@@ -22,19 +22,21 @@ public:
     void build(QAbstractItemModel* _model) override;
 
     /**
-     * @brief Сохранить отчёт в файл
-     */
-    void saveToXlsx(const QString& _fileName) const override;
-
-    /**
      * @brief Задать параметры отчёта
      */
-    void setParameters(int _sortBy);
+    void setParameters(bool _showCharacters, int _sortBy);
 
     /**
      * @brief Получить информацию о сценах
      */
     QAbstractItemModel* sceneModel() const;
+
+protected:
+    /**
+     * @brief Сохранить отчёт в файл
+     */
+    void saveToPdf(const QString& _fileName) const override;
+    void saveToXlsx(const QString& _fileName) const override;
 
 private:
     class Implementation;

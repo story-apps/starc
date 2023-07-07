@@ -82,9 +82,9 @@ const ScreenplaySceneReport& ScreenplayStatisticsModel::sceneReport() const
     return d->sceneReport;
 }
 
-void ScreenplayStatisticsModel::setSceneReportParameters(int _sortBy)
+void ScreenplayStatisticsModel::setSceneReportParameters(bool _showCharacters, int _sortBy)
 {
-    d->sceneReport.setParameters(_sortBy);
+    d->sceneReport.setParameters(_showCharacters, _sortBy);
     d->sceneReport.build(d->textModel);
 }
 
@@ -93,9 +93,9 @@ const ScreenplayLocationReport& ScreenplayStatisticsModel::locationReport() cons
     return d->locationReport;
 }
 
-void ScreenplayStatisticsModel::setLocationReportParameters(int _sortBy)
+void ScreenplayStatisticsModel::setLocationReportParameters(bool _extendedView, int _sortBy)
 {
-    d->locationReport.setParameters(_sortBy);
+    d->locationReport.setParameters(_extendedView, _sortBy);
     d->locationReport.build(d->textModel);
 }
 
@@ -104,9 +104,10 @@ const ScreenplayCastReport& ScreenplayStatisticsModel::castReport() const
     return d->castReport;
 }
 
-void ScreenplayStatisticsModel::setCastReportParameters(int _sortBy)
+void ScreenplayStatisticsModel::setCastReportParameters(bool _showDetails, bool _showWords,
+                                                        int _sortBy)
 {
-    d->castReport.setParameters(_sortBy);
+    d->castReport.setParameters(_showDetails, _showWords, _sortBy);
     d->castReport.build(d->textModel);
 }
 

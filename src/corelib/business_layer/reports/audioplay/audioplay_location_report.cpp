@@ -19,7 +19,6 @@
 #include <QCoreApplication>
 #include <QPdfWriter>
 #include <QPointer>
-#include <QRegularExpression>
 #include <QStandardItemModel>
 
 #include <set>
@@ -427,6 +426,7 @@ void AudioplayLocationReport::saveToPdf(const QString& _fileName) const
                        locationModel()->columnCount(), tableFormat);
     cursor.setPosition(beforeTablePosition);
     cursor.movePosition(QTextCursor::NextBlock);
+    cursor.beginEditBlock();
     //
     for (int column = 0; column < locationModel()->columnCount(); ++column) {
         QTextTableCellFormat cellFormat;
@@ -500,6 +500,7 @@ void AudioplayLocationReport::saveToPdf(const QString& _fileName) const
             cursor.movePosition(QTextCursor::NextBlock);
         }
     }
+    cursor.endEditBlock();
 
     //
     // Печатаем

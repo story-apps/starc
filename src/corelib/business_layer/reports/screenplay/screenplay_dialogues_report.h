@@ -22,11 +22,6 @@ public:
     void build(QAbstractItemModel* _model) override;
 
     /**
-     * @brief Сохранить отчёт в файл
-     */
-    void saveToXlsx(const QString& _fileName) const override;
-
-    /**
      * @brief Задать параметры отчёта
      */
     void setParameters(const QVector<QString>& _characters);
@@ -40,6 +35,13 @@ public:
      * @brief Получить список персонажей из отчёта
      */
     QVector<QString> characters() const;
+
+protected:
+    /**
+     * @brief Сохранить отчёт в файл
+     */
+    void saveToPdf(const QString& _fileName) const override;
+    void saveToXlsx(const QString& _fileName) const override;
 
 private:
     class Implementation;

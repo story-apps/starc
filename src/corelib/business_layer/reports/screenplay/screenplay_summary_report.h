@@ -24,11 +24,6 @@ public:
     void build(QAbstractItemModel* _model) override;
 
     /**
-     * @brief Сохранить отчёт в файл
-     */
-    void saveToXlsx(const QString& _fileName) const override;
-
-    /**
      * @brief Длительность сценария
      */
     std::chrono::milliseconds duration() const;
@@ -73,6 +68,13 @@ public:
      * @brief Получить информацию о персонажах
      */
     QAbstractItemModel* charactersInfoModel() const;
+
+protected:
+    /**
+     * @brief Сохранить отчёт в файл
+     */
+    void saveToPdf(const QString& _fileName) const override;
+    void saveToXlsx(const QString& _fileName) const override;
 
 private:
     class Implementation;

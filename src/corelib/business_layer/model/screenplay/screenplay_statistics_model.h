@@ -53,19 +53,19 @@ public:
      * @brief Отчёт по сценам
      */
     const ScreenplaySceneReport& sceneReport() const;
-    void setSceneReportParameters(int _sortBy);
+    void setSceneReportParameters(bool _showCharacters, int _sortBy);
 
     /**
      * @brief Отчёт по локациям
      */
     const ScreenplayLocationReport& locationReport() const;
-    void setLocationReportParameters(int _sortBy);
+    void setLocationReportParameters(bool _extendedView, int _sortBy);
 
     /**
      * @brief Отчёт по персонажам
      */
     const ScreenplayCastReport& castReport() const;
-    void setCastReportParameters(int _sortBy);
+    void setCastReportParameters(bool _showDetails, bool _showWords, int _sortBy);
 
     /**
      * @brief Отчёт по репликам

@@ -14,6 +14,8 @@
 #include <utils/helpers/time_helper.h>
 
 #include <QCoreApplication>
+#include <QPdfWriter>
+#include <QPointer>
 #include <QRegularExpression>
 #include <QStandardItemModel>
 
@@ -24,6 +26,11 @@ namespace BusinessLayer {
 class ScreenplaySummaryReport::Implementation
 {
 public:
+    /**
+     * @brief Модель сценария
+     */
+    QPointer<ScreenplayTextModel> screenplayModel;
+
     std::chrono::milliseconds duration;
     int pagesCount = 0;
     int wordsCount = 0;
@@ -52,8 +59,8 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
         return;
     }
 
-    auto screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
-    if (screenplayModel == nullptr) {
+    d->screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
+    if (d->screenplayModel == nullptr) {
         return;
     }
 
@@ -85,7 +92,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
     //
     QString rxPattern;
-    auto charactersModel = screenplayModel->charactersList();
+    auto charactersModel = d->screenplayModel->charactersList();
     for (int index = 0; index < charactersModel->rowCount(); ++index) {
         auto characterName = charactersModel->index(index, 0).data().toString();
         if (!rxPattern.isEmpty()) {
@@ -195,7 +202,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
             }
         }
     };
-    includeInReport(screenplayModel->itemForIndex({}));
+    includeInReport(d->screenplayModel->itemForIndex({}));
 
     //
     // Формируем отчёт
@@ -214,10 +221,10 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
     // ... сводка
     //
     {
-        d->duration = screenplayModel->duration();
-        d->pagesCount = [screenplayModel] {
+        d->duration = d->screenplayModel->duration();
+        d->pagesCount = [this] {
             const auto& screenplayTemplate = TemplatesFacade::screenplayTemplate(
-                screenplayModel->informationModel()->templateId());
+                d->screenplayModel->informationModel()->templateId());
 
             PageTextEdit textEdit;
             textEdit.setUsePageMode(true);
@@ -228,7 +235,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
             textEdit.setDocument(&screenplayDocument);
 
             const bool kCanChangeModel = false;
-            screenplayDocument.setModel(screenplayModel, kCanChangeModel);
+            screenplayDocument.setModel(d->screenplayModel, kCanChangeModel);
 
             return screenplayDocument.pageCount();
         }();
@@ -465,6 +472,262 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
     }
 }
 
+std::chrono::milliseconds ScreenplaySummaryReport::duration() const
+{
+    return d->duration;
+}
+
+int ScreenplaySummaryReport::pagesCount() const
+{
+    return d->pagesCount;
+}
+
+int ScreenplaySummaryReport::wordsCount() const
+{
+    return d->wordsCount;
+}
+
+ScreenplaySummaryReport::CharactersCount ScreenplaySummaryReport::charactersCount() const
+{
+    return d->charactersCount;
+}
+
+QAbstractItemModel* ScreenplaySummaryReport::textInfoModel() const
+{
+    return d->textInfoModel.data();
+}
+
+QAbstractItemModel* ScreenplaySummaryReport::scenesInfoModel() const
+{
+    return d->scenesInfoModel.data();
+}
+
+QAbstractItemModel* ScreenplaySummaryReport::locationsInfoModel() const
+{
+    return d->locationsInfoModel.data();
+}
+
+QAbstractItemModel* ScreenplaySummaryReport::charactersInfoModel() const
+{
+    return d->charactersInfoModel.data();
+}
+
+void ScreenplaySummaryReport::saveToPdf(const QString& _fileName) const
+{
+    const auto& exportTemplate
+        = TemplatesFacade::screenplayTemplate(d->screenplayModel->informationModel()->templateId());
+
+    //
+    // Настраиваем документ
+    //
+    PageTextEdit textEdit;
+    textEdit.setUsePageMode(true);
+    textEdit.setPageSpacing(0);
+    QTextDocument report;
+    report.setDefaultFont(exportTemplate.defaultFont());
+    textEdit.setDocument(&report);
+    //
+    // ... параметры страницы
+    //
+    textEdit.setPageFormat(exportTemplate.pageSizeId());
+    textEdit.setPageMarginsMm(exportTemplate.pageMargins());
+    textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());
+
+    //
+    // Формируем отчёт
+    //
+    QTextCursor cursor(&report);
+    cursor.beginEditBlock();
+    QTextCharFormat titleFormat;
+    auto titleFont = report.defaultFont();
+    titleFont.setBold(true);
+    titleFormat.setFont(titleFont);
+    cursor.setCharFormat(titleFormat);
+    cursor.insertText(QString("%1 - %2").arg(
+        d->screenplayModel->informationModel()->name(),
+        QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Summary report")));
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+    cursor.insertText(
+        QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Duration") + ": "
+        + TimeHelper::toString(duration()));
+    cursor.insertBlock();
+    cursor.insertText(QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Pages")
+                      + ": " + QString::number(pagesCount()));
+    cursor.insertBlock();
+    cursor.insertText(QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Words")
+                      + ": " + QString::number(wordsCount()));
+    cursor.insertBlock();
+    cursor.insertText(
+        QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport",
+                                    "Characters with/without spaces")
+        + ": "
+        + QString("%1/%2").arg(charactersCount().withSpaces).arg(charactersCount().withoutSpaces));
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+    QTextTableFormat tableFormat;
+    tableFormat.setBorder(0);
+    tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 52 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+    });
+    auto beforeTablePosition = cursor.position();
+    cursor.insertTable(textInfoModel()->rowCount() + 1, textInfoModel()->columnCount(),
+                       tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    //
+    for (int column = 0; column < textInfoModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(textInfoModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < textInfoModel()->rowCount(); ++row) {
+        for (int column = 0; column < textInfoModel()->columnCount(); ++column) {
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            cursor.insertText(textInfoModel()->index(row, column).data().toString());
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 68 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+    });
+    beforeTablePosition = cursor.position();
+    cursor.insertTable(scenesInfoModel()->rowCount() + 1, scenesInfoModel()->columnCount(),
+                       tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    //
+    for (int column = 0; column < scenesInfoModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(scenesInfoModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < scenesInfoModel()->rowCount(); ++row) {
+        for (int column = 0; column < scenesInfoModel()->columnCount(); ++column) {
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            cursor.insertText(scenesInfoModel()->index(row, column).data().toString());
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 68 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+    });
+    beforeTablePosition = cursor.position();
+    cursor.insertTable(locationsInfoModel()->rowCount() + 1, locationsInfoModel()->columnCount(),
+                       tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    //
+    for (int column = 0; column < locationsInfoModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(locationsInfoModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < locationsInfoModel()->rowCount(); ++row) {
+        for (int column = 0; column < locationsInfoModel()->columnCount(); ++column) {
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            cursor.insertText(locationsInfoModel()->index(row, column).data().toString());
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 68 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+    });
+    beforeTablePosition = cursor.position();
+    cursor.insertTable(charactersInfoModel()->rowCount() + 1, charactersInfoModel()->columnCount(),
+                       tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    //
+    for (int column = 0; column < charactersInfoModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(charactersInfoModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < charactersInfoModel()->rowCount(); ++row) {
+        for (int column = 0; column < charactersInfoModel()->columnCount(); ++column) {
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            cursor.insertText(charactersInfoModel()->index(row, column).data().toString());
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+    cursor.endEditBlock();
+
+
+    //
+    // Печатаем
+    //
+    QPdfWriter printer(_fileName);
+    printer.setPageSize(QPageSize(exportTemplate.pageSizeId()));
+    printer.setPageMargins({});
+    report.print(&printer);
+}
+
 void ScreenplaySummaryReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;
@@ -583,46 +846,6 @@ void ScreenplaySummaryReport::saveToXlsx(const QString& _fileName) const
     }
 
     xlsx.saveAs(_fileName);
-}
-
-std::chrono::milliseconds ScreenplaySummaryReport::duration() const
-{
-    return d->duration;
-}
-
-int ScreenplaySummaryReport::pagesCount() const
-{
-    return d->pagesCount;
-}
-
-int ScreenplaySummaryReport::wordsCount() const
-{
-    return d->wordsCount;
-}
-
-ScreenplaySummaryReport::CharactersCount ScreenplaySummaryReport::charactersCount() const
-{
-    return d->charactersCount;
-}
-
-QAbstractItemModel* ScreenplaySummaryReport::textInfoModel() const
-{
-    return d->textInfoModel.data();
-}
-
-QAbstractItemModel* ScreenplaySummaryReport::scenesInfoModel() const
-{
-    return d->scenesInfoModel.data();
-}
-
-QAbstractItemModel* ScreenplaySummaryReport::locationsInfoModel() const
-{
-    return d->locationsInfoModel.data();
-}
-
-QAbstractItemModel* ScreenplaySummaryReport::charactersInfoModel() const
-{
-    return d->charactersInfoModel.data();
 }
 
 } // namespace BusinessLayer

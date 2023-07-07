@@ -395,7 +395,7 @@ void AudioplaySceneReport::saveToPdf(const QString& _fileName) const
     cursor.setCharFormat(titleFormat);
     cursor.insertText(QString("%1 - %2").arg(
         d->audioplayModel->informationModel()->name(),
-        QCoreApplication::translate("BusinessLayer::AudioplayCastReport", "Scene report")));
+        QCoreApplication::translate("BusinessLayer::AudioplaySceneReport", "Scene report")));
     cursor.insertBlock();
     cursor.insertBlock();
     QTextTableFormat tableFormat;
@@ -412,6 +412,7 @@ void AudioplaySceneReport::saveToPdf(const QString& _fileName) const
     cursor.insertTable(sceneModel()->rowCount() + 1, sceneModel()->columnCount(), tableFormat);
     cursor.setPosition(beforeTablePosition);
     cursor.movePosition(QTextCursor::NextBlock);
+    cursor.beginEditBlock();
     //
     for (int column = 0; column < sceneModel()->columnCount(); ++column) {
         QTextTableCellFormat cellFormat;
@@ -448,7 +449,13 @@ void AudioplaySceneReport::saveToPdf(const QString& _fileName) const
                     const auto childIndex = sceneModel()->index(childRow, 0, sceneIndex);
                     textFormat = cursor.blockCharFormat();
                     textFormat.setFontUnderline(!childIndex.data(Qt::DecorationRole).isNull());
-                    cursor.insertText(childIndex.data().toString(), textFormat);
+                    //
+                    // ... убираем пробел между именем персонажа и открывающей скобкой, чтобы в
+                    //     отчёте она не переносилась на новую строку отдельно от имени
+                    //
+                    auto character = childIndex.data().toString();
+                    character = character.replace(" (", "(");
+                    cursor.insertText(character, textFormat);
                     cursor.insertText(", ", cursor.blockCharFormat());
                 }
                 if (hasCharacters) {
@@ -459,6 +466,7 @@ void AudioplaySceneReport::saveToPdf(const QString& _fileName) const
             cursor.movePosition(QTextCursor::NextBlock);
         }
     }
+    cursor.endEditBlock();
 
     //
     // Печатаем

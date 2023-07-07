@@ -13,10 +13,13 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/model_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/time_helper.h>
 
 #include <QCoreApplication>
+#include <QPdfWriter>
+#include <QPointer>
 #include <QRegularExpression>
 #include <QStandardItemModel>
 
@@ -28,6 +31,11 @@ namespace BusinessLayer {
 class ScreenplayDialoguesReport::Implementation
 {
 public:
+    /**
+     * @brief Модель аудиопостановки
+     */
+    QPointer<ScreenplayTextModel> screenplayModel;
+
     /**
      * @brief Модель реплик
      */
@@ -57,8 +65,8 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
         return;
     }
 
-    auto screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
-    if (screenplayModel == nullptr) {
+    d->screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
+    if (d->screenplayModel == nullptr) {
         return;
     }
 
@@ -89,7 +97,7 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
     // Подготовим текстовый документ, для определения страниц сцен
     //
     const auto& screenplayTemplate
-        = TemplatesFacade::screenplayTemplate(screenplayModel->informationModel()->templateId());
+        = TemplatesFacade::screenplayTemplate(d->screenplayModel->informationModel()->templateId());
     PageTextEdit screenplayTextEdit;
     screenplayTextEdit.setUsePageMode(true);
     screenplayTextEdit.setPageSpacing(0);
@@ -98,7 +106,7 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
     ScreenplayTextDocument screenplayDocument;
     screenplayTextEdit.setDocument(&screenplayDocument);
     const bool kCanChangeModel = false;
-    screenplayDocument.setModel(screenplayModel, kCanChangeModel);
+    screenplayDocument.setModel(d->screenplayModel, kCanChangeModel);
     QTextCursor screenplayCursor(&screenplayDocument);
     auto textItemPage = [&screenplayTextEdit, &screenplayDocument,
                          &screenplayCursor](TextModelTextItem* _item) {
@@ -217,7 +225,7 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
             }
         }
     };
-    includeInReport(screenplayModel->itemForIndex({}));
+    includeInReport(d->screenplayModel->itemForIndex({}));
     if (lastScene.page != invalidPage) {
         scenes.append(lastScene);
     }
@@ -281,7 +289,7 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
     //
     d->dialoguesModel->setHeaderData(
         0, Qt::Horizontal,
-        QCoreApplication::translate("BusinessLayer::ScreenplayDialoguesReport", "Character"),
+        QCoreApplication::translate("BusinessLayer::ScreenplayDialoguesReport", "Scene/character"),
         Qt::DisplayRole);
     d->dialoguesModel->setHeaderData(
         1, Qt::Horizontal,
@@ -299,6 +307,148 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
     //
     d->characters = { characters.begin(), characters.end() };
     std::sort(d->characters.begin(), d->characters.end());
+}
+
+void ScreenplayDialoguesReport::setParameters(const QVector<QString>& _characters)
+{
+    d->visibleCharacters = _characters;
+}
+
+QAbstractItemModel* ScreenplayDialoguesReport::dialoguesModel() const
+{
+    return d->dialoguesModel.data();
+}
+
+QVector<QString> ScreenplayDialoguesReport::characters() const
+{
+    return d->characters;
+}
+
+void ScreenplayDialoguesReport::saveToPdf(const QString& _fileName) const
+{
+    const auto& exportTemplate
+        = TemplatesFacade::screenplayTemplate(d->screenplayModel->informationModel()->templateId());
+
+    //
+    // Настраиваем документ
+    //
+    PageTextEdit textEdit;
+    textEdit.setUsePageMode(true);
+    textEdit.setPageSpacing(0);
+    QTextDocument report;
+    report.setDefaultFont(exportTemplate.defaultFont());
+    textEdit.setDocument(&report);
+    //
+    // ... параметры страницы
+    //
+    textEdit.setPageFormat(exportTemplate.pageSizeId());
+    textEdit.setPageMarginsMm(exportTemplate.pageMargins());
+    textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());
+
+    //
+    // Формируем отчёт
+    //
+    QTextCursor cursor(&report);
+    QTextCharFormat titleFormat;
+    auto titleFont = report.defaultFont();
+    titleFont.setBold(true);
+    titleFormat.setFont(titleFont);
+    cursor.setCharFormat(titleFormat);
+    cursor.insertText(QString("%1 - %2").arg(
+        d->screenplayModel->informationModel()->name(),
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Dialogue report")));
+    cursor.insertBlock();
+    cursor.insertBlock();
+    QTextTableFormat tableFormat;
+    tableFormat.setBorder(0);
+    tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 25 },
+        QTextLength{ QTextLength::PercentageLength, 50 },
+        QTextLength{ QTextLength::PercentageLength, 15 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+    });
+    const auto beforeTablePosition = cursor.position();
+    cursor.insertTable(ModelHelper::recursiveRowCount(dialoguesModel()) + 1,
+                       dialoguesModel()->columnCount(), tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    cursor.beginEditBlock();
+    //
+    for (int column = 0; column < dialoguesModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(dialoguesModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < dialoguesModel()->rowCount(); ++row) {
+        const auto sceneIndex = dialoguesModel()->index(row, 0);
+        const auto hasChildren = dialoguesModel()->rowCount(sceneIndex) > 0;
+
+        for (int column = 0; column < dialoguesModel()->columnCount(); ++column) {
+            if (column == 0) {
+                QTextTableCellFormat cellFormat;
+                cellFormat.setTableCellColumnSpan(4);
+                cursor.mergeBlockCharFormat(cellFormat);
+            }
+            if (column > 0) {
+                cursor.movePosition(QTextCursor::NextBlock);
+                continue;
+            }
+
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 2 ? Qt::AlignRight : Qt::AlignLeft);
+            cursor.setBlockFormat(blockFormat);
+            QTextCharFormat textFormat = cursor.blockCharFormat();
+            textFormat.setFontWeight(hasChildren ? QFont::Weight::Bold : QFont::Weight::Normal);
+            if (row > 0) {
+                cursor.insertText({ QChar::LineSeparator });
+            }
+            cursor.insertText(dialoguesModel()->index(row, column).data().toString(), textFormat);
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+
+        //
+        // Добавляем детали
+        //
+        for (int childRow = 0; childRow < dialoguesModel()->rowCount(sceneIndex); ++childRow) {
+            for (int childColumn = 0; childColumn < dialoguesModel()->columnCount();
+                 ++childColumn) {
+                QTextBlockFormat blockFormat = cursor.blockFormat();
+                blockFormat.setAlignment(childColumn == 2 ? Qt::AlignRight : Qt::AlignLeft);
+                cursor.setBlockFormat(blockFormat);
+                auto textFormat = cursor.blockCharFormat();
+                cursor.insertText(
+                    dialoguesModel()->index(childRow, childColumn, sceneIndex).data().toString(),
+                    textFormat);
+                cursor.movePosition(QTextCursor::NextBlock);
+            }
+        }
+
+        if (hasChildren) {
+            cursor.movePosition(QTextCursor::PreviousBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock);
+            cursor.insertText({ QChar::LineSeparator });
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+    cursor.endEditBlock();
+
+    //
+    // Печатаем
+    //
+    QPdfWriter printer(_fileName);
+    printer.setPageSize(QPageSize(exportTemplate.pageSizeId()));
+    printer.setPageMargins({});
+    report.print(&printer);
 }
 
 void ScreenplayDialoguesReport::saveToXlsx(const QString& _fileName) const
@@ -348,21 +498,6 @@ void ScreenplayDialoguesReport::saveToXlsx(const QString& _fileName) const
     }
 
     xlsx.saveAs(_fileName);
-}
-
-void ScreenplayDialoguesReport::setParameters(const QVector<QString>& _characters)
-{
-    d->visibleCharacters = _characters;
-}
-
-QAbstractItemModel* ScreenplayDialoguesReport::dialoguesModel() const
-{
-    return d->dialoguesModel.data();
-}
-
-QVector<QString> ScreenplayDialoguesReport::characters() const
-{
-    return d->characters;
 }
 
 } // namespace BusinessLayer

@@ -12,6 +12,8 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QCoreApplication>
+#include <QPdfWriter>
+#include <QPointer>
 #include <QRegularExpression>
 #include <QStandardItemModel>
 
@@ -22,9 +24,24 @@ class ScreenplayCastReport::Implementation
 {
 public:
     /**
+     * @brief Модель аудиопостановки
+     */
+    QPointer<ScreenplayTextModel> screenplayModel;
+
+    /**
      * @brief Модель персонажей
      */
     QScopedPointer<QStandardItemModel> castModel;
+
+    /**
+     * @brief Нужно ли показывать расширенную стату по сценам
+     */
+    bool showSceneDetails = true;
+
+    /**
+     * @brief Нужно ли показывать стату по словам
+     */
+    bool showWords = false;
 
     /**
      * @brief Порядок сортировки
@@ -49,8 +66,8 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
         return;
     }
 
-    auto screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
-    if (screenplayModel == nullptr) {
+    d->screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
+    if (d->screenplayModel == nullptr) {
         return;
     }
 
@@ -78,7 +95,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
     //
     QString rxPattern;
-    auto charactersModel = screenplayModel->charactersList();
+    auto charactersModel = d->screenplayModel->charactersList();
     for (int index = 0; index < charactersModel->rowCount(); ++index) {
         auto characterName = charactersModel->index(index, 0).data().toString();
         if (!rxPattern.isEmpty()) {
@@ -239,7 +256,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
             }
         }
     };
-    includeInReport(screenplayModel->itemForIndex({}));
+    includeInReport(d->screenplayModel->itemForIndex({}));
 
     //
     // Формируем отчёт
@@ -357,6 +374,108 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
         5, Qt::Horizontal,
         QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Total scenes"),
         Qt::DisplayRole);
+
+    if (!d->showSceneDetails) {
+        d->castModel->removeColumn(4);
+        d->castModel->removeColumn(3);
+    }
+    if (!d->showWords) {
+        d->castModel->removeColumn(1);
+    }
+}
+
+void ScreenplayCastReport::setParameters(bool _showSceneDetails, bool _showWords, int _sortBy)
+{
+    d->showSceneDetails = _showSceneDetails;
+    d->showWords = _showWords;
+    d->sortBy = _sortBy;
+}
+
+QAbstractItemModel* ScreenplayCastReport::castModel() const
+{
+    return d->castModel.data();
+}
+
+void ScreenplayCastReport::saveToPdf(const QString& _fileName) const
+{
+    const auto& exportTemplate
+        = TemplatesFacade::screenplayTemplate(d->screenplayModel->informationModel()->templateId());
+
+    //
+    // Настраиваем документ
+    //
+    PageTextEdit textEdit;
+    textEdit.setUsePageMode(true);
+    textEdit.setPageSpacing(0);
+    QTextDocument report;
+    report.setDefaultFont(exportTemplate.defaultFont());
+    textEdit.setDocument(&report);
+    //
+    // ... параметры страницы
+    //
+    textEdit.setPageFormat(exportTemplate.pageSizeId());
+    textEdit.setPageMarginsMm(exportTemplate.pageMargins());
+    textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());
+
+    //
+    // Формируем отчёт
+    //
+    QTextCursor cursor(&report);
+    QTextCharFormat titleFormat;
+    auto titleFont = report.defaultFont();
+    titleFont.setBold(true);
+    titleFormat.setFont(titleFont);
+    cursor.setCharFormat(titleFormat);
+    cursor.insertText(QString("%1 - %2").arg(
+        d->screenplayModel->informationModel()->name(),
+        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Cast report")));
+    cursor.insertBlock();
+    cursor.insertBlock();
+    QTextTableFormat tableFormat;
+    tableFormat.setBorder(0);
+    tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength,
+                     d->showSceneDetails ? 34. : (d->showWords ? 50. : 66.) },
+    });
+    const auto beforeTablePosition = cursor.position();
+    cursor.insertTable(castModel()->rowCount() + 1, castModel()->columnCount(), tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    cursor.beginEditBlock();
+    //
+    for (int column = 0; column < castModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(castModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < castModel()->rowCount(); ++row) {
+        for (int column = 0; column < castModel()->columnCount(); ++column) {
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            cursor.insertText(castModel()->index(row, column).data().toString());
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+    cursor.endEditBlock();
+
+    //
+    // Печатаем
+    //
+    QPdfWriter printer(_fileName);
+    printer.setPageSize(QPageSize(exportTemplate.pageSizeId()));
+    printer.setPageMargins({});
+    report.print(&printer);
 }
 
 void ScreenplayCastReport::saveToXlsx(const QString& _fileName) const
@@ -387,16 +506,6 @@ void ScreenplayCastReport::saveToXlsx(const QString& _fileName) const
     }
 
     xlsx.saveAs(_fileName);
-}
-
-void ScreenplayCastReport::setParameters(int _sortBy)
-{
-    d->sortBy = _sortBy;
-}
-
-QAbstractItemModel* ScreenplayCastReport::castModel() const
-{
-    return d->castModel.data();
 }
 
 } // namespace BusinessLayer

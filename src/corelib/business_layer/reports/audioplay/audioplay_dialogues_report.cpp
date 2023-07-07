@@ -365,6 +365,7 @@ void AudioplayDialoguesReport::saveToPdf(const QString& _fileName) const
                        dialoguesModel()->columnCount(), tableFormat);
     cursor.setPosition(beforeTablePosition);
     cursor.movePosition(QTextCursor::NextBlock);
+    cursor.beginEditBlock();
     //
     for (int column = 0; column < dialoguesModel()->columnCount(); ++column) {
         QTextTableCellFormat cellFormat;
@@ -431,6 +432,7 @@ void AudioplayDialoguesReport::saveToPdf(const QString& _fileName) const
             cursor.movePosition(QTextCursor::NextBlock);
         }
     }
+    cursor.endEditBlock();
 
     //
     // Печатаем
