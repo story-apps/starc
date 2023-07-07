@@ -350,7 +350,32 @@ void AudioplayGenderReport::build(QAbstractItemModel* _model)
     }
 }
 
-void AudioplayGenderReport::saveToFile(const QString& _fileName) const
+int AudioplayGenderReport::bechdelTest() const
+{
+    return d->bechdelTest;
+}
+
+int AudioplayGenderReport::reverseBechdelTest() const
+{
+    return d->reverseBeckdelTest;
+}
+
+QAbstractItemModel* AudioplayGenderReport::scenesInfoModel() const
+{
+    return d->scenesInfoModel.data();
+}
+
+QAbstractItemModel* AudioplayGenderReport::dialoguesInfoModel() const
+{
+    return d->dialoguesInfoModel.data();
+}
+
+QAbstractItemModel* AudioplayGenderReport::charactersInfoModel() const
+{
+    return d->charactersInfoModel.data();
+}
+
+void AudioplayGenderReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;
     QXlsx::Format headerFormat;
@@ -446,31 +471,6 @@ void AudioplayGenderReport::saveToFile(const QString& _fileName) const
     }
 
     xlsx.saveAs(_fileName);
-}
-
-int AudioplayGenderReport::bechdelTest() const
-{
-    return d->bechdelTest;
-}
-
-int AudioplayGenderReport::reverseBechdelTest() const
-{
-    return d->reverseBeckdelTest;
-}
-
-QAbstractItemModel* AudioplayGenderReport::scenesInfoModel() const
-{
-    return d->scenesInfoModel.data();
-}
-
-QAbstractItemModel* AudioplayGenderReport::dialoguesInfoModel() const
-{
-    return d->dialoguesInfoModel.data();
-}
-
-QAbstractItemModel* AudioplayGenderReport::charactersInfoModel() const
-{
-    return d->charactersInfoModel.data();
 }
 
 } // namespace BusinessLayer

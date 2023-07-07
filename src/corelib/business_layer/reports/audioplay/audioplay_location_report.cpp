@@ -350,7 +350,17 @@ void AudioplayLocationReport::build(QAbstractItemModel* _model)
         Qt::DisplayRole);
 }
 
-void AudioplayLocationReport::saveToFile(const QString& _fileName) const
+void AudioplayLocationReport::setParameters(int _sortBy)
+{
+    d->sortBy = _sortBy;
+}
+
+QAbstractItemModel* AudioplayLocationReport::locationModel() const
+{
+    return d->locationModel.data();
+}
+
+void AudioplayLocationReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;
     QXlsx::Format headerFormat;
@@ -408,16 +418,6 @@ void AudioplayLocationReport::saveToFile(const QString& _fileName) const
     }
 
     xlsx.saveAs(_fileName);
-}
-
-void AudioplayLocationReport::setParameters(int _sortBy)
-{
-    d->sortBy = _sortBy;
-}
-
-QAbstractItemModel* AudioplayLocationReport::locationModel() const
-{
-    return d->locationModel.data();
 }
 
 } // namespace BusinessLayer

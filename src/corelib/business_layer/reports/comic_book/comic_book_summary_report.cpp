@@ -225,7 +225,7 @@ void ComicBookSummaryReport::build(QAbstractItemModel* _model)
     }
 }
 
-void ComicBookSummaryReport::saveToFile(const QString& _fileName) const
+void ComicBookSummaryReport::saveToXlsx(const QString& _fileName) const
 {
     Q_UNUSED(_fileName)
 }

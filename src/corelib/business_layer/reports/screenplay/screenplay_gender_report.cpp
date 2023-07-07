@@ -369,7 +369,7 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     }
 }
 
-void ScreenplayGenderReport::saveToFile(const QString& _fileName) const
+void ScreenplayGenderReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;
     QXlsx::Format headerFormat;

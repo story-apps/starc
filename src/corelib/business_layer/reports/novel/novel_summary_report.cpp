@@ -220,7 +220,7 @@ void NovelSummaryReport::build(QAbstractItemModel* _model)
     }
 }
 
-void NovelSummaryReport::saveToFile(const QString& _fileName) const
+void NovelSummaryReport::saveToXlsx(const QString& _fileName) const
 {
     Q_UNUSED(_fileName)
 }

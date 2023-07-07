@@ -350,7 +350,7 @@ void ScreenplayLocationReport::build(QAbstractItemModel* _model)
         Qt::DisplayRole);
 }
 
-void ScreenplayLocationReport::saveToFile(const QString& _fileName) const
+void ScreenplayLocationReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;
     QXlsx::Format headerFormat;

@@ -22,7 +22,16 @@ public:
     /**
      * @brief Сохранить отчёт в файл
      */
-    virtual void saveToFile(const QString& _fileName) const = 0;
+    void saveToFile(const QString& _filename) const;
+
+protected:
+    /**
+     * @brief Сохранить отчёт в файл конкретного формата
+     */
+    virtual void saveToPdf(const QString& _fileName) const
+    {
+    }
+    virtual void saveToXlsx(const QString& _fileName) const = 0;
 };
 
 } // namespace BusinessLayer

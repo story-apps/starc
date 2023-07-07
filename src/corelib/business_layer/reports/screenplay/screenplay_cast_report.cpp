@@ -359,7 +359,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
         Qt::DisplayRole);
 }
 
-void ScreenplayCastReport::saveToFile(const QString& _fileName) const
+void ScreenplayCastReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;
     QXlsx::Format headerFormat;

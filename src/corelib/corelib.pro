@@ -220,6 +220,7 @@ SOURCES += \
     business_layer/plots/audioplay/audioplay_structure_analysis_plot.cpp \
     business_layer/plots/screenplay/screenplay_characters_activity_plot.cpp \
     business_layer/plots/screenplay/screenplay_structure_analysis_plot.cpp \
+    business_layer/reports/abstract_report.cpp \
     business_layer/reports/audioplay/audioplay_cast_report.cpp \
     business_layer/reports/audioplay/audioplay_dialogues_report.cpp \
     business_layer/reports/audioplay/audioplay_gender_report.cpp \

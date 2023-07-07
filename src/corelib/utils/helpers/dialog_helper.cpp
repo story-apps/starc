@@ -167,5 +167,8 @@ QString DialogHelper::filtersForSceneImage()
 
 QString DialogHelper::filtersForReport()
 {
-    return xlsxFilter();
+    QString filters = pdfFilter();
+    filters.append(";;");
+    filters.append(xlsxFilter());
+    return filters;
 }

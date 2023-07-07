@@ -301,7 +301,22 @@ void AudioplayDialoguesReport::build(QAbstractItemModel* _model)
     std::sort(d->characters.begin(), d->characters.end());
 }
 
-void AudioplayDialoguesReport::saveToFile(const QString& _fileName) const
+void AudioplayDialoguesReport::setParameters(const QVector<QString>& _characters)
+{
+    d->visibleCharacters = _characters;
+}
+
+QAbstractItemModel* AudioplayDialoguesReport::dialoguesModel() const
+{
+    return d->dialoguesModel.data();
+}
+
+QVector<QString> AudioplayDialoguesReport::characters() const
+{
+    return d->characters;
+}
+
+void AudioplayDialoguesReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;
     QXlsx::Format headerFormat;
@@ -347,21 +362,6 @@ void AudioplayDialoguesReport::saveToFile(const QString& _fileName) const
     }
 
     xlsx.saveAs(_fileName);
-}
-
-void AudioplayDialoguesReport::setParameters(const QVector<QString>& _characters)
-{
-    d->visibleCharacters = _characters;
-}
-
-QAbstractItemModel* AudioplayDialoguesReport::dialoguesModel() const
-{
-    return d->dialoguesModel.data();
-}
-
-QVector<QString> AudioplayDialoguesReport::characters() const
-{
-    return d->characters;
 }
 
 } // namespace BusinessLayer

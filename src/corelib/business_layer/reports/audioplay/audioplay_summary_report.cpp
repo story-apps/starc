@@ -1,5 +1,6 @@
 #include "audioplay_summary_report.h"
 
+#include <3rd_party/qtxlsxwriter/xlsxdocument.h>
 #include <business_layer/document/audioplay/text/audioplay_text_document.h>
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
@@ -8,6 +9,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/helpers/time_helper.h>
 
 #include <QCoreApplication>
 #include <QStandardItemModel>
@@ -317,11 +319,6 @@ void AudioplaySummaryReport::build(QAbstractItemModel* _model)
     }
 }
 
-void AudioplaySummaryReport::saveToFile(const QString& _fileName) const
-{
-    Q_UNUSED(_fileName);
-}
-
 std::chrono::milliseconds AudioplaySummaryReport::duration() const
 {
     return d->duration;
@@ -350,6 +347,92 @@ QAbstractItemModel* AudioplaySummaryReport::textInfoModel() const
 QAbstractItemModel* AudioplaySummaryReport::charactersInfoModel() const
 {
     return d->charactersInfoModel.data();
+}
+
+void AudioplaySummaryReport::saveToXlsx(const QString& _fileName) const
+{
+    QXlsx::Document xlsx;
+    QXlsx::Format headerFormat;
+    headerFormat.setFontBold(true);
+
+    constexpr int firstRow = 1;
+    constexpr int firstColumn = 1;
+    int reportRow = firstRow;
+    auto writeTitle = [&xlsx, &headerFormat, &reportRow](const QString& _text) {
+        xlsx.write(reportRow++, 1, _text, headerFormat);
+        ++reportRow;
+    };
+    auto writeHeader = [&xlsx, &headerFormat, &reportRow](int _column, const QVariant& _text) {
+        xlsx.write(reportRow, _column, _text, headerFormat);
+    };
+    auto writeText = [&xlsx, &reportRow](int _column, const QVariant& _text) {
+        xlsx.write(reportRow, _column, _text);
+    };
+
+    //
+    // Сводка
+    //
+    writeTitle(QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport",
+                                           "Summary statistics"));
+    int reportColumn = firstColumn;
+    writeHeader(reportColumn++,
+                QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Duration"));
+    writeText(reportColumn, TimeHelper::toString(duration()));
+    ++reportRow;
+    reportColumn = firstColumn;
+    writeHeader(reportColumn++,
+                QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Pages"));
+    writeText(reportColumn, QString::number(pagesCount()));
+    ++reportRow;
+    reportColumn = firstColumn;
+    writeHeader(reportColumn++,
+                QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Words"));
+    writeText(reportColumn, QString::number(wordsCount()));
+    ++reportRow;
+    reportColumn = firstColumn;
+    writeHeader(reportColumn++,
+                QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport",
+                                            "Characters with/without spaces"));
+    writeText(
+        reportColumn,
+        QString("%1/%2").arg(charactersCount().withSpaces).arg(charactersCount().withoutSpaces));
+
+    //
+    // Статистика по тексту
+    //
+    reportRow += 2;
+    writeTitle(
+        QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport", "Text statistics"));
+    for (int column = firstColumn; column < firstColumn + textInfoModel()->columnCount();
+         ++column) {
+        writeHeader(column, textInfoModel()->headerData(column - firstColumn, Qt::Horizontal));
+    }
+    for (int row = 0; row < textInfoModel()->rowCount(); ++row) {
+        ++reportRow;
+        for (int column = firstColumn; column < firstColumn + 4; ++column) {
+            writeText(column, textInfoModel()->index(row, column - firstColumn).data());
+        }
+    }
+
+    //
+    // Статистика по персонажам
+    //
+    reportRow += 2;
+    writeTitle(QCoreApplication::translate("BusinessLayer::ScreenplaySummaryReport",
+                                           "Characters statistics"));
+    for (int column = firstColumn; column < firstColumn + charactersInfoModel()->columnCount();
+         ++column) {
+        writeHeader(column,
+                    charactersInfoModel()->headerData(column - firstColumn, Qt::Horizontal));
+    }
+    for (int row = 0; row < charactersInfoModel()->rowCount(); ++row) {
+        ++reportRow;
+        for (int column = firstColumn; column < firstColumn + 3; ++column) {
+            writeText(column, charactersInfoModel()->index(row, column - firstColumn).data());
+        }
+    }
+
+    xlsx.saveAs(_fileName);
 }
 
 } // namespace BusinessLayer

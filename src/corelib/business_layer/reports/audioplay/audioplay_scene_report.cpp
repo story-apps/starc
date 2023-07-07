@@ -336,7 +336,17 @@ void AudioplaySceneReport::build(QAbstractItemModel* _model)
         Qt::DisplayRole);
 }
 
-void AudioplaySceneReport::saveToFile(const QString& _fileName) const
+void AudioplaySceneReport::setParameters(int _sortBy)
+{
+    d->sortBy = _sortBy;
+}
+
+QAbstractItemModel* AudioplaySceneReport::sceneModel() const
+{
+    return d->sceneModel.data();
+}
+
+void AudioplaySceneReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;
     QXlsx::Format headerFormat;
@@ -385,16 +395,6 @@ void AudioplaySceneReport::saveToFile(const QString& _fileName) const
     }
 
     xlsx.saveAs(_fileName);
-}
-
-void AudioplaySceneReport::setParameters(int _sortBy)
-{
-    d->sortBy = _sortBy;
-}
-
-QAbstractItemModel* AudioplaySceneReport::sceneModel() const
-{
-    return d->sceneModel.data();
 }
 
 } // namespace BusinessLayer

@@ -465,7 +465,7 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
     }
 }
 
-void ScreenplaySummaryReport::saveToFile(const QString& _fileName) const
+void ScreenplaySummaryReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;
     QXlsx::Format headerFormat;

@@ -301,7 +301,7 @@ void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
     std::sort(d->characters.begin(), d->characters.end());
 }
 
-void ScreenplayDialoguesReport::saveToFile(const QString& _fileName) const
+void ScreenplayDialoguesReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;
     QXlsx::Format headerFormat;

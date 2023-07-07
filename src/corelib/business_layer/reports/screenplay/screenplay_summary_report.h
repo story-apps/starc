@@ -26,7 +26,7 @@ public:
     /**
      * @brief Сохранить отчёт в файл
      */
-    void saveToFile(const QString& _fileName) const override;
+    void saveToXlsx(const QString& _fileName) const override;
 
     /**
      * @brief Длительность сценария
