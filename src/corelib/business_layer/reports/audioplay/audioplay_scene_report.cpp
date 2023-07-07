@@ -17,6 +17,8 @@
 #include <utils/helpers/time_helper.h>
 
 #include <QCoreApplication>
+#include <QPdfWriter>
+#include <QPointer>
 #include <QRegularExpression>
 #include <QStandardItemModel>
 
@@ -28,9 +30,19 @@ class AudioplaySceneReport::Implementation
 {
 public:
     /**
+     * @brief Модель аудиопостановки
+     */
+    QPointer<AudioplayTextModel> audioplayModel;
+
+    /**
      * @brief Модель сцен
      */
     QScopedPointer<QStandardItemModel> sceneModel;
+
+    /**
+     * @brief Необходимо ли отображать персонажей
+     */
+    bool showCharacters = true;
 
     /**
      * @brief Тип сортировки
@@ -55,8 +67,8 @@ void AudioplaySceneReport::build(QAbstractItemModel* _model)
         return;
     }
 
-    auto audioplayModel = qobject_cast<AudioplayTextModel*>(_model);
-    if (audioplayModel == nullptr) {
+    d->audioplayModel = qobject_cast<AudioplayTextModel*>(_model);
+    if (d->audioplayModel == nullptr) {
         return;
     }
 
@@ -96,7 +108,7 @@ void AudioplaySceneReport::build(QAbstractItemModel* _model)
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
     //
     QString rxPattern;
-    auto charactersModel = audioplayModel->charactersList();
+    auto charactersModel = d->audioplayModel->charactersList();
     for (int index = 0; index < charactersModel->rowCount(); ++index) {
         auto characterName = charactersModel->index(index, 0).data().toString();
         if (!rxPattern.isEmpty()) {
@@ -116,7 +128,7 @@ void AudioplaySceneReport::build(QAbstractItemModel* _model)
     // Подготовим текстовый документ, для определения страниц сцен
     //
     const auto& audioplayTemplate
-        = TemplatesFacade::audioplayTemplate(audioplayModel->informationModel()->templateId());
+        = TemplatesFacade::audioplayTemplate(d->audioplayModel->informationModel()->templateId());
     PageTextEdit audioplayTextEdit;
     audioplayTextEdit.setUsePageMode(true);
     audioplayTextEdit.setPageSpacing(0);
@@ -125,7 +137,7 @@ void AudioplaySceneReport::build(QAbstractItemModel* _model)
     AudioplayTextDocument audioplayDocument;
     audioplayTextEdit.setDocument(&audioplayDocument);
     const bool kCanChangeModel = false;
-    audioplayDocument.setModel(audioplayModel, kCanChangeModel);
+    audioplayDocument.setModel(d->audioplayModel, kCanChangeModel);
     QTextCursor audioplayCursor(&audioplayDocument);
     auto textItemPage = [&audioplayTextEdit, &audioplayDocument,
                          &audioplayCursor](TextModelTextItem* _item) {
@@ -220,7 +232,7 @@ void AudioplaySceneReport::build(QAbstractItemModel* _model)
             }
         }
     };
-    includeInReport(audioplayModel->itemForIndex({}));
+    includeInReport(d->audioplayModel->itemForIndex({}));
     if (lastScene.page != invalidPage) {
         scenes.append(lastScene);
     }
@@ -289,20 +301,24 @@ void AudioplaySceneReport::build(QAbstractItemModel* _model)
     } else {
         d->sceneModel->clear();
     }
-    const auto titleBackgroundColor = QVariant::fromValue(ColorHelper::transparent(
-        Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::elevationEndOpacity()));
+    const auto titleBackgroundColor = d->showCharacters
+        ? QVariant::fromValue(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
+                                                       Ui::DesignSystem::elevationEndOpacity()))
+        : QVariant();
     for (const auto& scene : scenes) {
         auto sceneItem = createModelItem(scene.name, titleBackgroundColor);
-        for (const auto& character : scene.characters) {
-            auto characterItem = createModelItem(
-                QString("%1 (%2)").arg(character.name, QString::number(character.totalDialogues)));
-            if (character.isFirstAppearance) {
-                characterItem->setData(u8"\U000F09DE", Qt::DecorationRole);
-                characterItem->setData(Ui::DesignSystem::color().accent(),
-                                       Qt::DecorationPropertyRole);
+        if (d->showCharacters) {
+            for (const auto& character : scene.characters) {
+                auto characterItem = createModelItem(QString("%1 (%2)").arg(
+                    character.name, QString::number(character.totalDialogues)));
+                if (character.isFirstAppearance) {
+                    characterItem->setData(u8"\U000F09DE", Qt::DecorationRole);
+                    characterItem->setData(Ui::DesignSystem::color().accent(),
+                                           Qt::DecorationPropertyRole);
+                }
+                sceneItem->appendRow({ characterItem, createModelItem({}), createModelItem({}),
+                                       createModelItem({}), createModelItem({}) });
             }
-            sceneItem->appendRow({ characterItem, createModelItem({}), createModelItem({}),
-                                   createModelItem({}), createModelItem({}) });
         }
 
         d->sceneModel->appendRow({
@@ -336,14 +352,121 @@ void AudioplaySceneReport::build(QAbstractItemModel* _model)
         Qt::DisplayRole);
 }
 
-void AudioplaySceneReport::setParameters(int _sortBy)
+void AudioplaySceneReport::setParameters(bool _showCharacters, int _sortBy)
 {
+    d->showCharacters = _showCharacters;
     d->sortBy = _sortBy;
 }
 
 QAbstractItemModel* AudioplaySceneReport::sceneModel() const
 {
     return d->sceneModel.data();
+}
+
+void AudioplaySceneReport::saveToPdf(const QString& _fileName) const
+{
+    const auto& exportTemplate
+        = TemplatesFacade::audioplayTemplate(d->audioplayModel->informationModel()->templateId());
+
+    //
+    // Настраиваем документ
+    //
+    PageTextEdit textEdit;
+    textEdit.setUsePageMode(true);
+    textEdit.setPageSpacing(0);
+    QTextDocument report;
+    report.setDefaultFont(exportTemplate.defaultFont());
+    textEdit.setDocument(&report);
+    //
+    // ... параметры страницы
+    //
+    textEdit.setPageFormat(exportTemplate.pageSizeId());
+    textEdit.setPageMarginsMm(exportTemplate.pageMargins());
+    textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());
+
+    //
+    // Формируем отчёт
+    //
+    QTextCursor cursor(&report);
+    QTextCharFormat titleFormat;
+    auto titleFont = report.defaultFont();
+    titleFont.setBold(true);
+    titleFormat.setFont(titleFont);
+    cursor.setCharFormat(titleFormat);
+    cursor.insertText(QString("%1 - %2").arg(
+        d->audioplayModel->informationModel()->name(),
+        QCoreApplication::translate("BusinessLayer::AudioplayCastReport", "Scene report")));
+    cursor.insertBlock();
+    cursor.insertBlock();
+    QTextTableFormat tableFormat;
+    tableFormat.setBorder(0);
+    tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 60 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+    });
+    const auto beforeTablePosition = cursor.position();
+    cursor.insertTable(sceneModel()->rowCount() + 1, sceneModel()->columnCount(), tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    //
+    for (int column = 0; column < sceneModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(sceneModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < sceneModel()->rowCount(); ++row) {
+        const auto sceneIndex = sceneModel()->index(row, 0);
+        for (int column = 0; column < sceneModel()->columnCount(); ++column) {
+            const auto hasCharacters = sceneModel()->rowCount(sceneIndex) > 0;
+
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            QTextCharFormat textFormat = cursor.blockCharFormat();
+            textFormat.setFontWeight(hasCharacters ? QFont::Weight::Bold : QFont::Weight::Normal);
+            cursor.insertText(sceneModel()->index(row, column).data().toString(), textFormat);
+
+            //
+            // Для первой колонки добавляем список персонажей
+            //
+            if (column == 0 && d->showCharacters) {
+                cursor.insertText({ QChar::LineSeparator });
+                for (int childRow = 0; childRow < sceneModel()->rowCount(sceneIndex); ++childRow) {
+                    const auto childIndex = sceneModel()->index(childRow, 0, sceneIndex);
+                    textFormat = cursor.blockCharFormat();
+                    textFormat.setFontUnderline(!childIndex.data(Qt::DecorationRole).isNull());
+                    cursor.insertText(childIndex.data().toString(), textFormat);
+                    cursor.insertText(", ", cursor.blockCharFormat());
+                }
+                if (hasCharacters) {
+                    cursor.insertText({ QChar::LineSeparator });
+                }
+            }
+
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+
+    //
+    // Печатаем
+    //
+    QPdfWriter printer(_fileName);
+    printer.setPageSize(QPageSize(exportTemplate.pageSizeId()));
+    printer.setPageMargins({});
+    report.print(&printer);
 }
 
 void AudioplaySceneReport::saveToXlsx(const QString& _fileName) const

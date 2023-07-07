@@ -50,6 +50,7 @@ protected:
     /**
      * @brief Сохранить отчёт в файл
      */
+    void saveToPdf(const QString& _fileName) const override;
     void saveToXlsx(const QString& _fileName) const override;
 
 private:

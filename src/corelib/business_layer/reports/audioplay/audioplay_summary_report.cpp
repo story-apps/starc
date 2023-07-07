@@ -8,54 +8,27 @@
 #include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/time_helper.h>
 
 #include <QCoreApplication>
+#include <QPdfWriter>
+#include <QPointer>
 #include <QStandardItemModel>
 
 #include <set>
 
 namespace BusinessLayer {
 
-namespace {
-
-QColor makeColor(int _index)
-{
-    const int kMax = 9;
-    while (_index > kMax) {
-        _index = _index % kMax;
-    }
-    switch (_index) {
-    default:
-    case 0:
-        return "#41AEFF";
-    case 1:
-        return "#B2E82A";
-    case 2:
-        return "#1E844F";
-    case 3:
-        return "#3D2AA7";
-    case 4:
-        return "#E64C4D";
-    case 5:
-        return "#F8B50D";
-    case 6:
-        return "#A245E0";
-    case 7:
-        return "#41D089";
-    case 8:
-        return "#6843FE";
-    case 9:
-        return "#EB0E4D";
-    }
-}
-
-} // namespace
-
 class AudioplaySummaryReport::Implementation
 {
 public:
+    /**
+     * @brief Модель аудиопостановки
+     */
+    QPointer<AudioplayTextModel> audioplayModel;
+
     std::chrono::milliseconds duration;
     int pagesCount = 0;
     int wordsCount = 0;
@@ -171,8 +144,8 @@ void AudioplaySummaryReport::build(QAbstractItemModel* _model)
                   }
               }
           };
-    auto audioplayModel = static_cast<AudioplayTextModel*>(_model);
-    includeInReport(audioplayModel->itemForIndex({}));
+    d->audioplayModel = static_cast<AudioplayTextModel*>(_model);
+    includeInReport(d->audioplayModel->itemForIndex({}));
 
     //
     // Формируем отчёт
@@ -191,10 +164,10 @@ void AudioplaySummaryReport::build(QAbstractItemModel* _model)
     // ... сводка
     //
     {
-        d->duration = audioplayModel->duration();
-        d->pagesCount = [audioplayModel] {
+        d->duration = d->audioplayModel->duration();
+        d->pagesCount = [this] {
             const auto& audioplayTemplate = TemplatesFacade::audioplayTemplate(
-                audioplayModel->informationModel()->templateId());
+                d->audioplayModel->informationModel()->templateId());
 
             PageTextEdit textEdit;
             textEdit.setUsePageMode(true);
@@ -205,7 +178,7 @@ void AudioplaySummaryReport::build(QAbstractItemModel* _model)
             textEdit.setDocument(&audioplayDocument);
 
             const bool kCanChangeModel = false;
-            audioplayDocument.setModel(audioplayModel, kCanChangeModel);
+            audioplayDocument.setModel(d->audioplayModel, kCanChangeModel);
 
             return audioplayDocument.pageCount();
         }();
@@ -229,7 +202,7 @@ void AudioplaySummaryReport::build(QAbstractItemModel* _model)
 
             auto paragraphItem = createModelItem(toDisplayString(paragraphType));
             paragraphItem->setData(u8"\U000F0766", Qt::DecorationRole);
-            paragraphItem->setData(makeColor(index), Qt::DecorationPropertyRole);
+            paragraphItem->setData(ColorHelper::forNumber(index), Qt::DecorationPropertyRole);
 
             d->textInfoModel->appendRow(
                 { paragraphItem, createModelItem(QString::number(paragraphCounters.words)),
@@ -287,7 +260,7 @@ void AudioplaySummaryReport::build(QAbstractItemModel* _model)
                                          &totalCount, &index](const QString& _name, int _count) {
             auto characterItem = createModelItem(_name);
             characterItem->setData(u8"\U000F0766", Qt::DecorationRole);
-            characterItem->setData(makeColor(index++), Qt::DecorationPropertyRole);
+            characterItem->setData(ColorHelper::forNumber(index++), Qt::DecorationPropertyRole);
 
             d->charactersInfoModel->appendRow(
                 { characterItem, createModelItem(QString::number(_count)),
@@ -300,9 +273,6 @@ void AudioplaySummaryReport::build(QAbstractItemModel* _model)
         addCharacterItemToReport(QCoreApplication::translate(
                                      "BusinessLogic::AudioplaySummaryReport", "About 10 dialogues"),
                                  speakAbout10);
-        addCharacterItemToReport(
-            QCoreApplication::translate("BusinessLogic::AudioplaySummaryReport", "Nonspeaking"),
-            nonspeaking);
         //
         d->charactersInfoModel->setHeaderData(
             0, Qt::Horizontal,
@@ -347,6 +317,147 @@ QAbstractItemModel* AudioplaySummaryReport::textInfoModel() const
 QAbstractItemModel* AudioplaySummaryReport::charactersInfoModel() const
 {
     return d->charactersInfoModel.data();
+}
+
+void AudioplaySummaryReport::saveToPdf(const QString& _fileName) const
+{
+    const auto& exportTemplate
+        = TemplatesFacade::audioplayTemplate(d->audioplayModel->informationModel()->templateId());
+
+    //
+    // Настраиваем документ
+    //
+    PageTextEdit textEdit;
+    textEdit.setUsePageMode(true);
+    textEdit.setPageSpacing(0);
+    QTextDocument report;
+    report.setDefaultFont(exportTemplate.defaultFont());
+    textEdit.setDocument(&report);
+    //
+    // ... параметры страницы
+    //
+    textEdit.setPageFormat(exportTemplate.pageSizeId());
+    textEdit.setPageMarginsMm(exportTemplate.pageMargins());
+    textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());
+
+    //
+    // Формируем отчёт
+    //
+    QTextCursor cursor(&report);
+    QTextCharFormat titleFormat;
+    auto titleFont = report.defaultFont();
+    titleFont.setBold(true);
+    titleFormat.setFont(titleFont);
+    cursor.setCharFormat(titleFormat);
+    cursor.insertText(QString("%1 - %2").arg(
+        d->audioplayModel->informationModel()->name(),
+        QCoreApplication::translate("BusinessLayer::AudioplayCastReport", "Summary report")));
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+    cursor.insertText(QCoreApplication::translate("BusinessLayer::AudioplayCastReport", "Duration")
+                      + ": " + TimeHelper::toString(duration()));
+    cursor.insertBlock();
+    cursor.insertText(QCoreApplication::translate("BusinessLayer::AudioplayCastReport", "Pages")
+                      + ": " + QString::number(pagesCount()));
+    cursor.insertBlock();
+    cursor.insertText(QCoreApplication::translate("BusinessLayer::AudioplayCastReport", "Words")
+                      + ": " + QString::number(wordsCount()));
+    cursor.insertBlock();
+    cursor.insertText(
+        QCoreApplication::translate("BusinessLayer::AudioplayCastReport",
+                                    "Characters with/without spaces")
+        + ": "
+        + QString("%1/%2").arg(charactersCount().withSpaces).arg(charactersCount().withoutSpaces));
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+    QTextTableFormat tableFormat;
+    tableFormat.setBorder(0);
+    tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 52 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+    });
+    auto beforeTablePosition = cursor.position();
+    cursor.insertTable(textInfoModel()->rowCount() + 1, textInfoModel()->columnCount(),
+                       tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    //
+    for (int column = 0; column < textInfoModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(textInfoModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < textInfoModel()->rowCount(); ++row) {
+        for (int column = 0; column < textInfoModel()->columnCount(); ++column) {
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            cursor.insertText(textInfoModel()->index(row, column).data().toString());
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 68 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+        QTextLength{ QTextLength::PercentageLength, 16 },
+    });
+    beforeTablePosition = cursor.position();
+    cursor.insertTable(charactersInfoModel()->rowCount() + 1, charactersInfoModel()->columnCount(),
+                       tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    //
+    for (int column = 0; column < charactersInfoModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(charactersInfoModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < charactersInfoModel()->rowCount(); ++row) {
+        for (int column = 0; column < charactersInfoModel()->columnCount(); ++column) {
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            cursor.insertText(charactersInfoModel()->index(row, column).data().toString());
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+    cursor.insertBlock();
+    cursor.insertBlock();
+
+
+    //
+    // Печатаем
+    //
+    QPdfWriter printer(_fileName);
+    printer.setPageSize(QPageSize(exportTemplate.pageSizeId()));
+    printer.setPageMargins({});
+    report.print(&printer);
 }
 
 void AudioplaySummaryReport::saveToXlsx(const QString& _fileName) const

@@ -2,6 +2,8 @@
 
 #include <corelib_global.h>
 
+class QAbstractItemModel;
+
 namespace BusinessLayer {
 class SimpleTextModel;
 }
@@ -13,6 +15,11 @@ class SimpleTextModel;
 class CORE_LIBRARY_EXPORT ModelHelper
 {
 public:
+    /**
+     * @brief Получить количество всех строк в таблице, включая вложенные
+     */
+    static int recursiveRowCount(QAbstractItemModel* _model);
+
     /**
      * @brief Инициилизировать модель титульной страницы
      */

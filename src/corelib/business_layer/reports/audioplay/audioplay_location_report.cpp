@@ -12,10 +12,13 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/model_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/time_helper.h>
 
 #include <QCoreApplication>
+#include <QPdfWriter>
+#include <QPointer>
 #include <QRegularExpression>
 #include <QStandardItemModel>
 
@@ -27,9 +30,19 @@ class AudioplayLocationReport::Implementation
 {
 public:
     /**
+     * @brief Модель аудиопостановки
+     */
+    QPointer<AudioplayTextModel> audioplayModel;
+
+    /**
      * @brief Модель локаций
      */
     QScopedPointer<QStandardItemModel> locationModel;
+
+    /**
+     * @brief Нужно ли отображать детали по сценам
+     */
+    bool extendedView = true;
 
     /**
      * @brief Порядок сортировки
@@ -54,8 +67,8 @@ void AudioplayLocationReport::build(QAbstractItemModel* _model)
         return;
     }
 
-    auto audioplayModel = qobject_cast<AudioplayTextModel*>(_model);
-    if (audioplayModel == nullptr) {
+    d->audioplayModel = qobject_cast<AudioplayTextModel*>(_model);
+    if (d->audioplayModel == nullptr) {
         return;
     }
 
@@ -110,7 +123,7 @@ void AudioplayLocationReport::build(QAbstractItemModel* _model)
     // Подготовим текстовый документ, для определения страниц сцен
     //
     const auto& audioplayTemplate
-        = TemplatesFacade::audioplayTemplate(audioplayModel->informationModel()->templateId());
+        = TemplatesFacade::audioplayTemplate(d->audioplayModel->informationModel()->templateId());
     PageTextEdit audioplayTextEdit;
     audioplayTextEdit.setUsePageMode(true);
     audioplayTextEdit.setPageSpacing(0);
@@ -119,7 +132,7 @@ void AudioplayLocationReport::build(QAbstractItemModel* _model)
     AudioplayTextDocument audioplayDocument;
     audioplayTextEdit.setDocument(&audioplayDocument);
     const bool kCanChangeModel = false;
-    audioplayDocument.setModel(audioplayModel, kCanChangeModel);
+    audioplayDocument.setModel(d->audioplayModel, kCanChangeModel);
     QTextCursor audioplayCursor(&audioplayDocument);
     auto textItemPage = [&audioplayTextEdit, &audioplayDocument,
                          &audioplayCursor](TextModelTextItem* _item) {
@@ -197,7 +210,7 @@ void AudioplayLocationReport::build(QAbstractItemModel* _model)
             }
         }
     };
-    includeInReport(audioplayModel->itemForIndex({}));
+    includeInReport(d->audioplayModel->itemForIndex({}));
     if (!lastLocation.name.isEmpty()) {
         locations[lastLocation.name] = lastLocation;
     }
@@ -279,44 +292,47 @@ void AudioplayLocationReport::build(QAbstractItemModel* _model)
     } else {
         d->locationModel->clear();
     }
-    const auto titleBackgroundColor = QVariant::fromValue(ColorHelper::transparent(
-        Ui::DesignSystem::color().onBackground(), Ui::DesignSystem::elevationEndOpacity()));
+    const auto titleBackgroundColor = d->extendedView
+        ? QVariant::fromValue(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
+                                                       Ui::DesignSystem::elevationEndOpacity()))
+        : QVariant();
     for (const auto& locationData : locationsSorted) {
         //
         // ... локация
         //
-        const auto locationName = locationData.first;
         const auto& location = locationData.second;
         auto locationItem = createModelItem(location.name, titleBackgroundColor);
-        //
-        // ... время
-        //
-        auto sceneTimeNames = location.sceneTimes.keys();
-        std::sort(sceneTimeNames.begin(), sceneTimeNames.end());
-        for (const auto& sceneTimeName : sceneTimeNames) {
-            const auto sceneTime = location.sceneTimes[sceneTimeName];
-            auto sceneTimeItem
-                = createModelItem(sceneTime.name.isEmpty() ? QCoreApplication::translate(
-                                      "BusinessLayer::AudioplayLocationReport", "NOT SET")
-                                                           : sceneTime.name);
+        if (d->extendedView) {
+            //
+            // ... время
+            //
+            auto sceneTimeNames = location.sceneTimes.keys();
+            std::sort(sceneTimeNames.begin(), sceneTimeNames.end());
+            for (const auto& sceneTimeName : sceneTimeNames) {
+                const auto sceneTime = location.sceneTimes[sceneTimeName];
+                auto sceneTimeItem = createModelItem(
+                    sceneTime.name.isEmpty() ? QCoreApplication::translate(
+                        "BusinessLayer::AudioplayLocationReport", "SCENE TIME NOT SET")
+                                             : sceneTime.name);
 
-            for (const auto& scene : sceneTime.scenes) {
-                sceneTimeItem->appendRow({
-                    createModelItem(scene.name),
-                    createModelItem(scene.number),
-                    createModelItem(QString::number(scene.page)),
+                for (const auto& scene : sceneTime.scenes) {
+                    sceneTimeItem->appendRow({
+                        createModelItem(scene.name),
+                        createModelItem(scene.number),
+                        createModelItem(QString::number(scene.page)),
+                        createModelItem({}),
+                        createModelItem(TimeHelper::toString(scene.duration)),
+                    });
+                }
+
+                locationItem->appendRow({
+                    sceneTimeItem,
                     createModelItem({}),
-                    createModelItem(TimeHelper::toString(scene.duration)),
+                    createModelItem({}),
+                    createModelItem(QString::number(sceneTime.scenes.size())),
+                    createModelItem(TimeHelper::toString(sceneTime.duration())),
                 });
             }
-
-            locationItem->appendRow({
-                sceneTimeItem,
-                createModelItem({}),
-                createModelItem({}),
-                createModelItem(QString::number(sceneTime.scenes.size())),
-                createModelItem(TimeHelper::toString(sceneTime.duration())),
-            });
         }
 
         d->locationModel->appendRow({
@@ -350,14 +366,148 @@ void AudioplayLocationReport::build(QAbstractItemModel* _model)
         Qt::DisplayRole);
 }
 
-void AudioplayLocationReport::setParameters(int _sortBy)
+void AudioplayLocationReport::setParameters(bool _extendedView, int _sortBy)
 {
+    d->extendedView = _extendedView;
     d->sortBy = _sortBy;
 }
 
 QAbstractItemModel* AudioplayLocationReport::locationModel() const
 {
     return d->locationModel.data();
+}
+
+void AudioplayLocationReport::saveToPdf(const QString& _fileName) const
+{
+    const auto& exportTemplate
+        = TemplatesFacade::audioplayTemplate(d->audioplayModel->informationModel()->templateId());
+
+    //
+    // Настраиваем документ
+    //
+    PageTextEdit textEdit;
+    textEdit.setUsePageMode(true);
+    textEdit.setPageSpacing(0);
+    QTextDocument report;
+    report.setDefaultFont(exportTemplate.defaultFont());
+    textEdit.setDocument(&report);
+    //
+    // ... параметры страницы
+    //
+    textEdit.setPageFormat(exportTemplate.pageSizeId());
+    textEdit.setPageMarginsMm(exportTemplate.pageMargins());
+    textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());
+
+    //
+    // Формируем отчёт
+    //
+    QTextCursor cursor(&report);
+    QTextCharFormat titleFormat;
+    auto titleFont = report.defaultFont();
+    titleFont.setBold(true);
+    titleFormat.setFont(titleFont);
+    cursor.setCharFormat(titleFormat);
+    cursor.insertText(QString("%1 - %2").arg(
+        d->audioplayModel->informationModel()->name(),
+        QCoreApplication::translate("BusinessLayer::AudioplayCastReport", "Scene report")));
+    cursor.insertBlock();
+    cursor.insertBlock();
+    QTextTableFormat tableFormat;
+    tableFormat.setBorder(0);
+    tableFormat.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+    tableFormat.setColumnWidthConstraints({
+        QTextLength{ QTextLength::PercentageLength, 60 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+        QTextLength{ QTextLength::PercentageLength, 10 },
+    });
+    const auto beforeTablePosition = cursor.position();
+    cursor.insertTable(ModelHelper::recursiveRowCount(locationModel()) + 1,
+                       locationModel()->columnCount(), tableFormat);
+    cursor.setPosition(beforeTablePosition);
+    cursor.movePosition(QTextCursor::NextBlock);
+    //
+    for (int column = 0; column < locationModel()->columnCount(); ++column) {
+        QTextTableCellFormat cellFormat;
+        cellFormat.setBottomBorder(1);
+        cellFormat.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        cellFormat.setBottomBorderStyle(QTextFrameFormat::BorderStyle_Solid);
+        cellFormat.setBottomBorderBrush(Qt::black);
+        cursor.mergeBlockCharFormat(cellFormat);
+        QTextBlockFormat blockFormat = cursor.blockFormat();
+        blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+        cursor.setBlockFormat(blockFormat);
+        cursor.insertText(locationModel()->headerData(column, Qt::Horizontal).toString());
+
+        cursor.movePosition(QTextCursor::NextBlock);
+    }
+    for (int row = 0; row < locationModel()->rowCount(); ++row) {
+        const auto sceneIndex = locationModel()->index(row, 0);
+        const auto hasChildren = locationModel()->rowCount(sceneIndex) > 0;
+
+        for (int column = 0; column < locationModel()->columnCount(); ++column) {
+            QTextBlockFormat blockFormat = cursor.blockFormat();
+            blockFormat.setAlignment(column == 0 ? Qt::AlignLeft : Qt::AlignRight);
+            cursor.setBlockFormat(blockFormat);
+            QTextCharFormat textFormat = cursor.blockCharFormat();
+            textFormat.setFontWeight(hasChildren ? QFont::Weight::Bold : QFont::Weight::Normal);
+            cursor.insertText(locationModel()->index(row, column).data().toString(), textFormat);
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+
+        //
+        // Добавляем детали
+        //
+        if (d->extendedView) {
+            for (int childRow = 0; childRow < locationModel()->rowCount(sceneIndex); ++childRow) {
+                const auto childIndex = locationModel()->index(childRow, 0, sceneIndex);
+                for (int childColumn = 0; childColumn < locationModel()->columnCount();
+                     ++childColumn) {
+                    QTextBlockFormat blockFormat = cursor.blockFormat();
+                    blockFormat.setAlignment(childColumn == 0 ? Qt::AlignLeft : Qt::AlignRight);
+                    cursor.setBlockFormat(blockFormat);
+                    auto textFormat = cursor.blockCharFormat();
+                    textFormat.setUnderlineStyle(QTextCharFormat::SingleUnderline);
+                    cursor.insertText(
+                        locationModel()->index(childRow, childColumn, sceneIndex).data().toString(),
+                        textFormat);
+                    cursor.movePosition(QTextCursor::NextBlock);
+                }
+
+                for (int grandChildRow = 0; grandChildRow < locationModel()->rowCount(childIndex);
+                     ++grandChildRow) {
+                    for (int grandChildColumn = 0;
+                         grandChildColumn < locationModel()->columnCount(); ++grandChildColumn) {
+                        QTextBlockFormat blockFormat = cursor.blockFormat();
+                        blockFormat.setAlignment(grandChildColumn == 0 ? Qt::AlignLeft
+                                                                       : Qt::AlignRight);
+                        cursor.setBlockFormat(blockFormat);
+                        const auto grandChildIndex
+                            = locationModel()->index(grandChildRow, grandChildColumn, childIndex);
+                        auto textFormat = cursor.blockCharFormat();
+                        cursor.insertText(grandChildIndex.data().toString(), textFormat);
+                        cursor.movePosition(QTextCursor::NextBlock);
+                    }
+                }
+            }
+        }
+
+        if (hasChildren) {
+            cursor.movePosition(QTextCursor::PreviousBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock);
+            cursor.insertText({ QChar::LineSeparator });
+            cursor.movePosition(QTextCursor::NextBlock);
+        }
+    }
+
+    //
+    // Печатаем
+    //
+    QPdfWriter printer(_fileName);
+    printer.setPageSize(QPageSize(exportTemplate.pageSizeId()));
+    printer.setPageMargins({});
+    report.print(&printer);
 }
 
 void AudioplayLocationReport::saveToXlsx(const QString& _fileName) const

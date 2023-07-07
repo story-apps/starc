@@ -48,4 +48,5 @@ public:
      * @brief Получить список фильтров файлов, в которые можно сохранять содержимое отчёта
      */
     static QString filtersForReport();
+    static QString filtersForPlot();
 };

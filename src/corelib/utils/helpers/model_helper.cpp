@@ -22,6 +22,22 @@
 using namespace BusinessLayer;
 
 
+int ModelHelper::recursiveRowCount(QAbstractItemModel* _model)
+{
+    int count = 0;
+    std::function<void(const QModelIndex&)> recursiveCount;
+    recursiveCount = [_model, &count, &recursiveCount](const QModelIndex& _parent) {
+        for (int row = 0; row < _model->rowCount(_parent); ++row) {
+            const auto index = _model->index(row, 0, _parent);
+            ++count;
+
+            recursiveCount(index);
+        }
+    };
+    recursiveCount({});
+    return count;
+}
+
 void ModelHelper::initTitlePageModel(BusinessLayer::SimpleTextModel* _model)
 {
     if (_model == nullptr || _model->rowCount() != 1) {

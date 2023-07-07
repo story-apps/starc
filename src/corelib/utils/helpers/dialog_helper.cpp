@@ -172,3 +172,8 @@ QString DialogHelper::filtersForReport()
     filters.append(xlsxFilter());
     return filters;
 }
+
+QString DialogHelper::filtersForPlot()
+{
+    return xlsxFilter();
+}

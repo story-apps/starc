@@ -82,9 +82,9 @@ const AudioplaySceneReport& AudioplayStatisticsModel::sceneReport() const
     return d->sceneReport;
 }
 
-void AudioplayStatisticsModel::setSceneReportParameters(int _sortBy)
+void AudioplayStatisticsModel::setSceneReportParameters(bool _showCharacters, int _sortBy)
 {
-    d->sceneReport.setParameters(_sortBy);
+    d->sceneReport.setParameters(_showCharacters, _sortBy);
     d->sceneReport.build(d->textModel);
 }
 
@@ -93,9 +93,9 @@ const AudioplayLocationReport& AudioplayStatisticsModel::locationReport() const
     return d->locationReport;
 }
 
-void AudioplayStatisticsModel::setLocationReportParameters(int _sortBy)
+void AudioplayStatisticsModel::setLocationReportParameters(bool _extendedView, int _sortBy)
 {
-    d->locationReport.setParameters(_sortBy);
+    d->locationReport.setParameters(_extendedView, _sortBy);
     d->locationReport.build(d->textModel);
 }
 

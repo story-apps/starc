@@ -53,13 +53,13 @@ public:
      * @brief Отчёт по сценам
      */
     const AudioplaySceneReport& sceneReport() const;
-    void setSceneReportParameters(int _sortBy);
+    void setSceneReportParameters(bool _showCharacters, int _sortBy);
 
     /**
      * @brief Отчёт по локациям
      */
     const AudioplayLocationReport& locationReport() const;
-    void setLocationReportParameters(int _sortBy);
+    void setLocationReportParameters(bool _extendedView, int _sortBy);
 
     /**
      * @brief Отчёт по персонажам

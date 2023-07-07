@@ -315,10 +315,6 @@ QAbstractItemModel* AudioplayCastReport::castModel() const
 
 void AudioplayCastReport::saveToPdf(const QString& _fileName) const
 {
-    if (d->audioplayModel.isNull()) {
-        return;
-    }
-
     const auto& exportTemplate
         = TemplatesFacade::audioplayTemplate(d->audioplayModel->informationModel()->templateId());
 
