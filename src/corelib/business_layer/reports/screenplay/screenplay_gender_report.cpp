@@ -71,6 +71,7 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     GenderCounter lastScene;
     int totalScenes = 0;
     GenderCounter dialogues;
+    QSet<QString> lastSceneCharacters;
 
     //
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
@@ -128,7 +129,7 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     std::function<void(const TextModelItem*)> includeInReport;
     includeInReport = [&includeInReport, &bechdelTest, &reverseBechdelTest, &male, &female, &other,
                        &undefined, &scenes, &lastScene, &totalScenes, &dialogues,
-                       &rxCharacterFinder](const TextModelItem* _item) {
+                       &lastSceneCharacters, &rxCharacterFinder](const TextModelItem* _item) {
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
             auto childItem = _item->childAt(childIndex);
             switch (childItem->type()) {
@@ -162,6 +163,7 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
                     }
 
                     lastScene = GenderCounter();
+                    lastSceneCharacters.clear();
                     break;
                 }
 
@@ -196,6 +198,18 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
                             undefined.insert(character);
                             ++dialogues.undefined;
                         }
+                        if (!lastSceneCharacters.contains(character)) {
+                            if (male.contains(character)) {
+                                ++lastScene.male;
+                            } else if (female.contains(character)) {
+                                ++lastScene.female;
+                            } else if (other.contains(character)) {
+                                ++lastScene.other;
+                            } else {
+                                ++lastScene.undefined;
+                            }
+                            lastSceneCharacters.insert(character);
+                        }
                         lastScene.hasDialogues = true;
                     }
                     break;
@@ -209,15 +223,17 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
                     auto match = rxCharacterFinder.match(textItem->text());
                     while (match.hasMatch()) {
                         const QString character = TextHelper::smartToUpper(match.captured(2));
-                        if (male.contains(character)) {
-                            ++lastScene.male;
-                        } else if (female.contains(character)) {
-                            ++lastScene.female;
-                        } else if (other.contains(character)) {
-                            ++lastScene.other;
-                        } else {
-                            undefined.insert(character);
-                            ++lastScene.undefined;
+                        if (!lastSceneCharacters.contains(character)) {
+                            if (male.contains(character)) {
+                                ++lastScene.male;
+                            } else if (female.contains(character)) {
+                                ++lastScene.female;
+                            } else if (other.contains(character)) {
+                                ++lastScene.other;
+                            } else {
+                                ++lastScene.undefined;
+                            }
+                            lastSceneCharacters.insert(character);
                         }
 
                         //
