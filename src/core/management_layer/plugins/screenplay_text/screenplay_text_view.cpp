@@ -778,6 +778,12 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
         }
 
         auto currentItem = d->model->itemForIndex(currentModelIndex.parent());
+        if (currentItem->type() == BusinessLayer::TextModelItemType::Folder
+            && static_cast<BusinessLayer::TextFolderType>(currentItem->subtype())
+                == BusinessLayer::TextFolderType::Root) {
+            return nullptr;
+        }
+
         if (currentItem->type() == BusinessLayer::TextModelItemType::Group
             && static_cast<BusinessLayer::TextGroupType>(currentItem->subtype())
                 == BusinessLayer::TextGroupType::Beat) {
