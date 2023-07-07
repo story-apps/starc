@@ -82,8 +82,10 @@ TextParagraphType typeForTextCursor(const QTextCursor& _cursor, TextParagraphTyp
         || blockText == TextHelper::smartToUpper(blockText);
     // ... блоки находящиеся в центре
     bool isCentered = !blockFormat.alignment().testFlag(Qt::AlignRight)
-        && (((blockFormat.leftMargin() + blockFormat.indent()) > kLeftMarginDelta + _minLeftMargin)
-            || (blockFormat.alignment() == Qt::AlignCenter)
+        && (((blockFormat.leftMargin() + blockFormat.indent()) > 0
+             && (blockFormat.leftMargin() + blockFormat.indent())
+                 > kLeftMarginDelta + _minLeftMargin)
+            || (blockFormat.alignment().testFlag(Qt::AlignHCenter))
             || blockText.startsWith(kOldSchoolCenteringPrefix));
 
     //
