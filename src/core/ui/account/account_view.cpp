@@ -71,12 +71,12 @@ public:
     Subtitle2Label* subscriptionEndsLabel = nullptr;
     Body1LinkLabel* subscriptionDetails = nullptr;
     Button* subscriptionTryProForFree = nullptr;
-    Button* subscriptionTryTeamForFree = nullptr;
+    Button* subscriptionTryCloudForFree = nullptr;
     Button* subscriptionBuyProLifetime = nullptr;
     Button* subscriptionRenewPro = nullptr;
-    Button* subscriptionRenewTeam = nullptr;
+    Button* subscriptionRenewCloud = nullptr;
     Button* subscriptionUpgradeToPro = nullptr;
-    Button* subscriptionUpgradeToTeam = nullptr;
+    Button* subscriptionUpgradeToCloud = nullptr;
 
     Card* promocodeInfo = nullptr;
     QGridLayout* promocodeInfoLayout = nullptr;
@@ -111,12 +111,12 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , subscriptionEndsLabel(new Subtitle2Label(subscriptionInfo))
     , subscriptionDetails(new Body1LinkLabel(subscriptionInfo))
     , subscriptionTryProForFree(new Button(subscriptionInfo))
-    , subscriptionTryTeamForFree(new Button(subscriptionInfo))
+    , subscriptionTryCloudForFree(new Button(subscriptionInfo))
     , subscriptionBuyProLifetime(new Button(subscriptionInfo))
     , subscriptionRenewPro(new Button(subscriptionInfo))
-    , subscriptionRenewTeam(new Button(subscriptionInfo))
+    , subscriptionRenewCloud(new Button(subscriptionInfo))
     , subscriptionUpgradeToPro(new Button(subscriptionInfo))
-    , subscriptionUpgradeToTeam(new Button(subscriptionInfo))
+    , subscriptionUpgradeToCloud(new Button(subscriptionInfo))
     //
     , promocodeInfo(new Card(accountPage))
     , promocodeInfoLayout(new QGridLayout)
@@ -171,12 +171,12 @@ AccountView::Implementation::Implementation(QWidget* _parent)
         layout->addWidget(subscriptionDetails);
         layout->addStretch();
         layout->addWidget(subscriptionTryProForFree);
-        layout->addWidget(subscriptionTryTeamForFree);
+        layout->addWidget(subscriptionTryCloudForFree);
         layout->addWidget(subscriptionBuyProLifetime);
         layout->addWidget(subscriptionRenewPro);
-        layout->addWidget(subscriptionRenewTeam);
+        layout->addWidget(subscriptionRenewCloud);
         layout->addWidget(subscriptionUpgradeToPro);
-        layout->addWidget(subscriptionUpgradeToTeam);
+        layout->addWidget(subscriptionUpgradeToCloud);
         subscriptionInfoLayout->addLayout(layout, row++, 0);
     }
     subscriptionInfoLastRow = row;
@@ -300,14 +300,14 @@ AccountView::AccountView(QWidget* _parent)
     //
     connect(d->subscriptionTryProForFree, &Button::clicked, this,
             &AccountView::tryProForFreePressed);
-    connect(d->subscriptionTryTeamForFree, &Button::clicked, this,
-            &AccountView::tryTeamForFreePressed);
+    connect(d->subscriptionTryCloudForFree, &Button::clicked, this,
+            &AccountView::tryCloudForFreePressed);
     connect(d->subscriptionBuyProLifetime, &Button::clicked, this,
             &AccountView::buyProLifetimePressed);
     connect(d->subscriptionRenewPro, &Button::clicked, this, &AccountView::renewProPressed);
-    connect(d->subscriptionRenewTeam, &Button::clicked, this, &AccountView::renewTeamPressed);
+    connect(d->subscriptionRenewCloud, &Button::clicked, this, &AccountView::renewCloudPressed);
     connect(d->subscriptionUpgradeToPro, &Button::clicked, this, &AccountView::renewProPressed);
-    connect(d->subscriptionUpgradeToTeam, &Button::clicked, this, &AccountView::renewTeamPressed);
+    connect(d->subscriptionUpgradeToCloud, &Button::clicked, this, &AccountView::renewCloudPressed);
 
     connect(d->promocodeName, &TextField::textChanged, d->promocodeName,
             [this] { d->promocodeName->setError({}); });
@@ -365,12 +365,12 @@ void AccountView::setConnected(bool _connected)
     d->newsletterSubscription->setEnabled(_connected);
     d->avatar->setEnabled(_connected);
     d->subscriptionTryProForFree->setEnabled(_connected);
-    d->subscriptionTryTeamForFree->setEnabled(_connected);
+    d->subscriptionTryCloudForFree->setEnabled(_connected);
     d->subscriptionBuyProLifetime->setEnabled(_connected);
     d->subscriptionRenewPro->setEnabled(_connected);
-    d->subscriptionRenewTeam->setEnabled(_connected);
+    d->subscriptionRenewCloud->setEnabled(_connected);
     d->subscriptionUpgradeToPro->setEnabled(_connected);
-    d->subscriptionUpgradeToTeam->setEnabled(_connected);
+    d->subscriptionUpgradeToCloud->setEnabled(_connected);
     d->promocodeName->setEnabled(_connected);
     d->activatePromocode->setEnabled(_connected);
     //
@@ -421,12 +421,12 @@ void AccountView::setAvatar(const QPixmap& _avatar)
 void AccountView::setAccountInfo(const Domain::AccountInfo& _account)
 {
     d->subscriptionTryProForFree->hide();
-    d->subscriptionTryTeamForFree->hide();
+    d->subscriptionTryCloudForFree->hide();
     d->subscriptionBuyProLifetime->hide();
     d->subscriptionRenewPro->hide();
-    d->subscriptionRenewTeam->hide();
+    d->subscriptionRenewCloud->hide();
     d->subscriptionUpgradeToPro->hide();
-    d->subscriptionUpgradeToTeam->hide();
+    d->subscriptionUpgradeToCloud->hide();
 
     if (_account.subscriptions.isEmpty()) {
         return;
@@ -453,15 +453,15 @@ void AccountView::setAccountInfo(const Domain::AccountInfo& _account)
         break;
     }
 
-    case Domain::SubscriptionType::TeamMonthly: {
-        d->subscriptionTitle->setText(tr("TEAM version"));
+    case Domain::SubscriptionType::CloudMonthly: {
+        d->subscriptionTitle->setText(tr("CLOUD version"));
         d->subscriptionEnds = subscription.end;
         d->updateSubscriptionEndsLabel();
         break;
     }
 
-    case Domain::SubscriptionType::TeamLifetime: {
-        d->subscriptionTitle->setText(tr("TEAM version"));
+    case Domain::SubscriptionType::CloudLifetime: {
+        d->subscriptionTitle->setText(tr("CLOUD version"));
         d->subscriptionEnds = {};
         d->updateSubscriptionEndsLabel();
         break;
@@ -492,8 +492,8 @@ void AccountView::setAccountInfo(const Domain::AccountInfo& _account)
 
             if (option.subscriptionType == Domain::SubscriptionType::ProMonthly) {
                 d->subscriptionTryProForFree->show();
-            } else if (option.subscriptionType == Domain::SubscriptionType::TeamMonthly) {
-                d->subscriptionTryTeamForFree->show();
+            } else if (option.subscriptionType == Domain::SubscriptionType::CloudMonthly) {
+                d->subscriptionTryCloudForFree->show();
             }
         }
     }
@@ -507,9 +507,9 @@ void AccountView::setAccountInfo(const Domain::AccountInfo& _account)
                 if (option.subscriptionType == Domain::SubscriptionType::ProMonthly
                     || option.subscriptionType == Domain::SubscriptionType::ProLifetime) {
                     d->subscriptionUpgradeToPro->show();
-                } else if (option.subscriptionType == Domain::SubscriptionType::TeamMonthly
-                           || option.subscriptionType == Domain::SubscriptionType::TeamLifetime) {
-                    d->subscriptionUpgradeToTeam->show();
+                } else if (option.subscriptionType == Domain::SubscriptionType::CloudMonthly
+                           || option.subscriptionType == Domain::SubscriptionType::CloudLifetime) {
+                    d->subscriptionUpgradeToCloud->show();
                 }
             }
             break;
@@ -521,9 +521,9 @@ void AccountView::setAccountInfo(const Domain::AccountInfo& _account)
                     d->subscriptionRenewPro->show();
                 } else if (option.subscriptionType == Domain::SubscriptionType::ProLifetime) {
                     d->subscriptionBuyProLifetime->show();
-                } else if (option.subscriptionType == Domain::SubscriptionType::TeamMonthly
-                           || option.subscriptionType == Domain::SubscriptionType::TeamLifetime) {
-                    d->subscriptionUpgradeToTeam->show();
+                } else if (option.subscriptionType == Domain::SubscriptionType::CloudMonthly
+                           || option.subscriptionType == Domain::SubscriptionType::CloudLifetime) {
+                    d->subscriptionUpgradeToCloud->show();
                 }
             }
             break;
@@ -531,18 +531,18 @@ void AccountView::setAccountInfo(const Domain::AccountInfo& _account)
 
         case Domain::SubscriptionType::ProLifetime: {
             for (const auto& option : _account.paymentOptions) {
-                if (option.subscriptionType == Domain::SubscriptionType::TeamMonthly
-                    || option.subscriptionType == Domain::SubscriptionType::TeamLifetime) {
-                    d->subscriptionUpgradeToTeam->show();
+                if (option.subscriptionType == Domain::SubscriptionType::CloudMonthly
+                    || option.subscriptionType == Domain::SubscriptionType::CloudLifetime) {
+                    d->subscriptionUpgradeToCloud->show();
                 }
             }
             break;
         }
 
-        case Domain::SubscriptionType::TeamMonthly: {
+        case Domain::SubscriptionType::CloudMonthly: {
             for (const auto& option : _account.paymentOptions) {
-                if (option.subscriptionType == Domain::SubscriptionType::TeamMonthly) {
-                    d->subscriptionRenewTeam->show();
+                if (option.subscriptionType == Domain::SubscriptionType::CloudMonthly) {
+                    d->subscriptionRenewCloud->show();
                 }
             }
             break;
@@ -633,12 +633,12 @@ void AccountView::updateTranslations()
     d->updateSubscriptionEndsLabel();
     d->subscriptionDetails->setText(tr("Compare versions"));
     d->subscriptionTryProForFree->setText(tr("Try PRO for free"));
-    d->subscriptionTryTeamForFree->setText(tr("Try TEAM for free"));
+    d->subscriptionTryCloudForFree->setText(tr("Try CLOUD for free"));
     d->subscriptionBuyProLifetime->setText(tr("Buy lifetime"));
     d->subscriptionRenewPro->setText(tr("Renew"));
-    d->subscriptionRenewTeam->setText(tr("Renew"));
+    d->subscriptionRenewCloud->setText(tr("Renew"));
     d->subscriptionUpgradeToPro->setText(tr("Upgrade to PRO"));
-    d->subscriptionUpgradeToTeam->setText(tr("Upgrade to TEAM"));
+    d->subscriptionUpgradeToCloud->setText(tr("Upgrade to CLOUD"));
     d->sessionsTitle->setText(tr("Active sessions"));
     d->promocodeName->setLabel(tr("Promotional or gift code"));
     d->activatePromocode->setText(tr("Activate"));
@@ -725,12 +725,12 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     for (auto button : {
              d->subscriptionTryProForFree,
-             d->subscriptionTryTeamForFree,
+             d->subscriptionTryCloudForFree,
              d->subscriptionBuyProLifetime,
              d->subscriptionRenewPro,
-             d->subscriptionRenewTeam,
+             d->subscriptionRenewCloud,
              d->subscriptionUpgradeToPro,
-             d->subscriptionUpgradeToTeam,
+             d->subscriptionUpgradeToCloud,
              d->activatePromocode,
          }) {
         button->setBackgroundColor(Ui::DesignSystem::color().accent());

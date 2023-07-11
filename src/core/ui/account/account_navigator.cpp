@@ -46,7 +46,7 @@ public:
      * @brief Обновить текст лейбла окончания подписки
      */
     void updateProSubtitleLabel();
-    void updateTeamSubtitleLabel();
+    void updateCloudSubtitleLabel();
     void updateStudioSubtitleLabel();
     void updateCreditsSubtitleLabel();
 
@@ -59,7 +59,7 @@ public:
     quint64 cloudStorageSize = 0;
     quint64 cloudStorageSizeUsed = 0;
     QDateTime proSubscriptionEnds;
-    QDateTime teamSubscriptionEnds;
+    QDateTime cloudSubscriptionEnds;
     QDateTime studioSubscriptionEnds;
     int creditsAvailable = 0;
     bool isTeamsCanBeAdded = false;
@@ -82,13 +82,13 @@ public:
     Button* upgradeToProLifetimeButton = nullptr;
     Button* renewProSubscriptionButton = nullptr;
 
-    IconsMidLabel* teamTitleIcon = nullptr;
-    ButtonLabel* teamTitle = nullptr;
-    ProgressBar* teamSpaceStats = nullptr;
-    Subtitle2Label* teamSpaceInfo = nullptr;
-    Subtitle2Label* teamSubtitle = nullptr;
-    Button* tryTeamButton = nullptr;
-    Button* renewTeamSubscriptionButton = nullptr;
+    IconsMidLabel* cloudTitleIcon = nullptr;
+    ButtonLabel* cloudTitle = nullptr;
+    ProgressBar* cloudSpaceStats = nullptr;
+    Subtitle2Label* cloudSpaceInfo = nullptr;
+    Subtitle2Label* cloudSubtitle = nullptr;
+    Button* tryCloudButton = nullptr;
+    Button* renewCloudSubscriptionButton = nullptr;
 
     IconsMidLabel* studioTitleIcon = nullptr;
     ButtonLabel* studioTitle = nullptr;
@@ -140,13 +140,13 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     , upgradeToProLifetimeButton(new Button(accountPage))
     , renewProSubscriptionButton(new Button(accountPage))
     //
-    , teamTitleIcon(new IconsMidLabel(accountPage))
-    , teamTitle(new ButtonLabel(accountPage))
-    , teamSpaceStats(new ProgressBar(accountPage))
-    , teamSpaceInfo(new Subtitle2Label(accountPage))
-    , teamSubtitle(new Subtitle2Label(accountPage))
-    , tryTeamButton(new Button(accountPage))
-    , renewTeamSubscriptionButton(new Button(accountPage))
+    , cloudTitleIcon(new IconsMidLabel(accountPage))
+    , cloudTitle(new ButtonLabel(accountPage))
+    , cloudSpaceStats(new ProgressBar(accountPage))
+    , cloudSpaceInfo(new Subtitle2Label(accountPage))
+    , cloudSubtitle(new Subtitle2Label(accountPage))
+    , tryCloudButton(new Button(accountPage))
+    , renewCloudSubscriptionButton(new Button(accountPage))
     //
     , studioTitleIcon(new IconsMidLabel(accountPage))
     , studioTitle(new ButtonLabel(accountPage))
@@ -193,9 +193,10 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     model->appendRow(createItem(u8"\U000F09A7"));
     tree->setModel(model);
     tree->setCurrentIndex(model->index(0, 0));
+    tree->setRootIsDecorated(false);
 
     proTitleIcon->setIcon(u8"\U000F18BC");
-    teamTitleIcon->setIcon(u8"\U000F015F");
+    cloudTitleIcon->setIcon(u8"\U000F015F");
     studioTitleIcon->setIcon(u8"\U000F0381");
     creditsTitleIcon->setIcon(u8"\U000F133C");
 
@@ -225,15 +226,15 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
         auto layout = new QHBoxLayout;
         layout->setContentsMargins({});
         layout->setSpacing(0);
-        layout->addWidget(teamTitleIcon);
-        layout->addWidget(teamTitle, 1);
+        layout->addWidget(cloudTitleIcon);
+        layout->addWidget(cloudTitle, 1);
         accountLayout->addLayout(layout, row++, 2);
     }
-    accountLayout->addWidget(teamSpaceStats, row++, 2);
-    accountLayout->addWidget(teamSpaceInfo, row++, 2);
-    accountLayout->addWidget(teamSubtitle, row++, 2);
-    accountLayout->addWidget(tryTeamButton, row++, 2);
-    accountLayout->addWidget(renewTeamSubscriptionButton, row++, 2);
+    accountLayout->addWidget(cloudSpaceStats, row++, 2);
+    accountLayout->addWidget(cloudSpaceInfo, row++, 2);
+    accountLayout->addWidget(cloudSubtitle, row++, 2);
+    accountLayout->addWidget(tryCloudButton, row++, 2);
+    accountLayout->addWidget(renewCloudSubscriptionButton, row++, 2);
     //
     {
         auto layout = new QHBoxLayout;
@@ -321,20 +322,20 @@ void AccountNavigator::Implementation::updateProSubtitleLabel()
             : tr("Active until %1").arg(proSubscriptionEnds.toString("dd.MM.yyyy")));
 }
 
-void AccountNavigator::Implementation::updateTeamSubtitleLabel()
+void AccountNavigator::Implementation::updateCloudSubtitleLabel()
 {
     if (cloudStorageSize > 0) {
-        teamSpaceStats->setProgress(cloudStorageSizeUsed / static_cast<qreal>(cloudStorageSize));
+        cloudSpaceStats->setProgress(cloudStorageSizeUsed / static_cast<qreal>(cloudStorageSize));
         const qreal divider = 1024. * 1024. * 1024.;
-        teamSpaceInfo->setText(
+        cloudSpaceInfo->setText(
             tr("Used %1 GB from %2 GB")
                 .arg(QString::number(static_cast<qreal>(cloudStorageSizeUsed) / divider, 'f', 2),
                      QString::number(static_cast<qreal>(cloudStorageSize) / divider, 'f', 2)));
     }
-    teamSubtitle->setText(
-        teamSubscriptionEnds.isNull()
+    cloudSubtitle->setText(
+        cloudSubscriptionEnds.isNull()
             ? tr("Lifetime access")
-            : tr("Active until %1").arg(teamSubscriptionEnds.toString("dd.MM.yyyy")));
+            : tr("Active until %1").arg(cloudSubscriptionEnds.toString("dd.MM.yyyy")));
 }
 
 void AccountNavigator::Implementation::updateStudioSubtitleLabel()
@@ -422,9 +423,9 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
             &AccountNavigator::buyProLifetimePressed);
     connect(d->renewProSubscriptionButton, &Button::clicked, this,
             &AccountNavigator::renewProPressed);
-    connect(d->tryTeamButton, &Button::clicked, this, &AccountNavigator::tryTeamForFreePressed);
-    connect(d->renewTeamSubscriptionButton, &Button::clicked, this,
-            &AccountNavigator::renewTeamPressed);
+    connect(d->tryCloudButton, &Button::clicked, this, &AccountNavigator::tryCloudForFreePressed);
+    connect(d->renewCloudSubscriptionButton, &Button::clicked, this,
+            &AccountNavigator::renewCloudPressed);
     connect(d->buyCreditsButton, &Button::clicked, this, &AccountNavigator::buyCreditsPressed);
     connect(d->logoutButton, &Button::clicked, this, &AccountNavigator::logoutPressed);
     //
@@ -490,8 +491,8 @@ void AccountNavigator::setConnected(bool _connected)
     d->tryProButton->setEnabled(_connected);
     d->upgradeToProLifetimeButton->setEnabled(_connected);
     d->renewProSubscriptionButton->setEnabled(_connected);
-    d->tryTeamButton->setEnabled(_connected);
-    d->renewTeamSubscriptionButton->setEnabled(_connected);
+    d->tryCloudButton->setEnabled(_connected);
+    d->renewCloudSubscriptionButton->setEnabled(_connected);
     d->buyCreditsButton->setEnabled(_connected);
     //
     d->teamsOwner->setContextMenuPolicy(_connected ? Qt::CustomContextMenu : Qt::NoContextMenu);
@@ -513,13 +514,13 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
     d->upgradeToProLifetimeButton->hide();
     d->renewProSubscriptionButton->hide();
     //
-    d->teamTitleIcon->show();
-    d->teamTitle->show();
-    d->teamSpaceStats->hide();
-    d->teamSpaceInfo->hide();
-    d->teamSubtitle->hide();
-    d->tryTeamButton->hide();
-    d->renewTeamSubscriptionButton->hide();
+    d->cloudTitleIcon->show();
+    d->cloudTitle->show();
+    d->cloudSpaceStats->hide();
+    d->cloudSpaceInfo->hide();
+    d->cloudSubtitle->hide();
+    d->tryCloudButton->hide();
+    d->renewCloudSubscriptionButton->hide();
     //
     d->studioTitleIcon->hide();
     d->studioTitle->hide();
@@ -557,26 +558,26 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
             break;
         }
 
-        case Domain::SubscriptionType::TeamMonthly: {
-            d->teamSubscriptionEnds = subscription.end;
-            d->updateTeamSubtitleLabel();
-            d->teamSpaceStats->show();
-            d->teamSpaceInfo->show();
-            d->teamSubtitle->show();
+        case Domain::SubscriptionType::CloudMonthly: {
+            d->cloudSubscriptionEnds = subscription.end;
+            d->updateCloudSubtitleLabel();
+            d->cloudSpaceStats->show();
+            d->cloudSpaceInfo->show();
+            d->cloudSubtitle->show();
             break;
         }
 
-        case Domain::SubscriptionType::TeamLifetime: {
+        case Domain::SubscriptionType::CloudLifetime: {
             d->freeTitle->hide();
             d->freeSubtitle->hide();
             d->proTitleIcon->hide();
             d->proTitle->hide();
             //
-            d->teamSubscriptionEnds = {};
-            d->updateTeamSubtitleLabel();
-            d->teamSpaceStats->show();
-            d->teamSpaceInfo->show();
-            d->teamSubtitle->show();
+            d->cloudSubscriptionEnds = {};
+            d->updateCloudSubtitleLabel();
+            d->cloudSpaceStats->show();
+            d->cloudSpaceInfo->show();
+            d->cloudSubtitle->show();
             break;
         }
 
@@ -587,12 +588,12 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
             d->proSubtitle->hide();
             d->proTitleIcon->hide();
             d->proTitle->hide();
-            d->teamTitleIcon->hide();
-            d->teamTitle->hide();
-            d->teamSubtitle->hide();
-            d->teamSpaceStats->hide();
-            d->teamSpaceInfo->hide();
-            d->teamSubtitle->hide();
+            d->cloudTitleIcon->hide();
+            d->cloudTitle->hide();
+            d->cloudSubtitle->hide();
+            d->cloudSpaceStats->hide();
+            d->cloudSpaceInfo->hide();
+            d->cloudSubtitle->hide();
             //
             d->studioSubscriptionEnds = subscription.end;
             d->updateStudioSubtitleLabel();
@@ -624,11 +625,11 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
             break;
         }
 
-        case Domain::SubscriptionType::TeamMonthly: {
+        case Domain::SubscriptionType::CloudMonthly: {
             if (paymentOption.amount == 0) {
-                d->tryTeamButton->show();
+                d->tryCloudButton->show();
             } else {
-                d->renewTeamSubscriptionButton->show();
+                d->renewCloudSubscriptionButton->show();
             }
             break;
         }
@@ -721,10 +722,10 @@ void AccountNavigator::updateTranslations()
     d->tryProButton->setText(tr("Try for free"));
     d->upgradeToProLifetimeButton->setText(tr("Buy lifetime"));
     d->renewProSubscriptionButton->setText(tr("Renew"));
-    d->teamTitle->setText(tr("TEAM version"));
-    d->updateTeamSubtitleLabel();
-    d->tryTeamButton->setText(tr("Try for free"));
-    d->renewTeamSubscriptionButton->setText(tr("Renew"));
+    d->cloudTitle->setText(tr("CLOUD version"));
+    d->updateCloudSubtitleLabel();
+    d->tryCloudButton->setText(tr("Try for free"));
+    d->renewCloudSubscriptionButton->setText(tr("Renew"));
     d->studioTitle->setText(tr("STUDIO version"));
     d->updateStudioSubtitleLabel();
     d->creditsTitle->setText(tr("Credits for Ai tools"));
@@ -764,7 +765,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                     Ui::DesignSystem::layout().px12(), Ui::DesignSystem::compactLayout().px4());
     for (auto icon : {
              d->proTitleIcon,
-             d->teamTitleIcon,
+             d->cloudTitleIcon,
              d->studioTitleIcon,
              d->creditsTitleIcon,
          }) {
@@ -779,7 +780,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto title : {
              d->freeTitle,
              d->proTitle,
-             d->teamTitle,
+             d->cloudTitle,
              d->studioTitle,
              d->creditsTitle,
          }) {
@@ -798,8 +799,8 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     for (auto subtitle : {
              d->freeSubtitle,
              d->proSubtitle,
-             d->teamSpaceInfo,
-             d->teamSubtitle,
+             d->cloudSpaceInfo,
+             d->cloudSubtitle,
              d->studioSpaceInfo,
              d->studioSubtitle,
              d->creditsSubtitle,
@@ -829,8 +830,8 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->tryProButton,
              d->upgradeToProLifetimeButton,
              d->renewProSubscriptionButton,
-             d->tryTeamButton,
-             d->renewTeamSubscriptionButton,
+             d->tryCloudButton,
+             d->renewCloudSubscriptionButton,
              d->buyCreditsButton,
              d->logoutButton,
              d->addTeamButton,
@@ -839,8 +840,8 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
-    d->teamSpaceStats->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->teamSpaceStats->setContentsMargins(
+    d->cloudSpaceStats->setBackgroundColor(Ui::DesignSystem::color().primary());
+    d->cloudSpaceStats->setContentsMargins(
         Ui::DesignSystem::layout().px16(), Ui::DesignSystem::compactLayout().px16(),
         Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px4());
     d->studioSpaceStats->setBackgroundColor(Ui::DesignSystem::color().primary());
@@ -849,8 +850,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px4());
 
     d->accountLayout->setVerticalSpacing(Ui::DesignSystem::compactLayout().px4());
-    d->accountLayout->setColumnMinimumWidth(0, Ui::DesignSystem::layout().px12());
-    d->accountLayout->setColumnMinimumWidth(1, Ui::DesignSystem::layout().px16());
+    d->accountLayout->setColumnMinimumWidth(0, Ui::DesignSystem::layout().px4());
     d->accountLayout->setColumnMinimumWidth(3, Ui::DesignSystem::layout().px12());
     d->accountLayout->setContentsMargins(0, 0, 0, Ui::DesignSystem::layout().px12());
 

@@ -127,9 +127,9 @@ void AccountManager::Implementation::initNavigatorConnections()
     connect(navigator, &Ui::AccountNavigator::buyProLifetimePressed, q,
             &AccountManager::buyProLifetme);
     connect(navigator, &Ui::AccountNavigator::renewProPressed, q, &AccountManager::renewPro);
-    connect(navigator, &Ui::AccountNavigator::tryTeamForFreePressed, q,
-            &AccountManager::tryTeamForFree);
-    connect(navigator, &Ui::AccountNavigator::renewTeamPressed, q, &AccountManager::renewTeam);
+    connect(navigator, &Ui::AccountNavigator::tryCloudForFreePressed, q,
+            &AccountManager::tryCloudForFree);
+    connect(navigator, &Ui::AccountNavigator::renewCloudPressed, q, &AccountManager::renewCloud);
     connect(navigator, &Ui::AccountNavigator::buyCreditsPressed, q, &AccountManager::buyCredits);
     connect(navigator, &Ui::AccountNavigator::logoutPressed, q, [this] {
         q->clearAccountInfo();
@@ -287,10 +287,10 @@ void AccountManager::Implementation::initViewConnections()
             });
 
     connect(view, &Ui::AccountView::tryProForFreePressed, q, &AccountManager::tryProForFree);
-    connect(view, &Ui::AccountView::tryTeamForFreePressed, q, &AccountManager::tryTeamForFree);
+    connect(view, &Ui::AccountView::tryCloudForFreePressed, q, &AccountManager::tryCloudForFree);
     connect(view, &Ui::AccountView::buyProLifetimePressed, q, &AccountManager::buyProLifetme);
     connect(view, &Ui::AccountView::renewProPressed, q, &AccountManager::renewPro);
-    connect(view, &Ui::AccountView::renewTeamPressed, q, &AccountManager::renewTeam);
+    connect(view, &Ui::AccountView::renewCloudPressed, q, &AccountManager::renewCloud);
     connect(view, &Ui::AccountView::activatePromocodePressed, q,
             &AccountManager::activatePromocodeRequested);
 
@@ -489,7 +489,7 @@ void AccountManager::upgradeAccountToPro()
     }
 }
 
-void AccountManager::upgradeAccountToTeam()
+void AccountManager::upgradeAccountToCloud()
 {
     //
     // Если ещё не авторизован, то отправим на авторизацию
@@ -501,12 +501,12 @@ void AccountManager::upgradeAccountToTeam()
     // Иначе, покажем диалог с апгрейдом аккаунта
     //
     else {
-        const auto canBeUpdatedForFree = tryTeamForFree();
+        const auto canBeUpdatedForFree = tryCloudForFree();
         if (canBeUpdatedForFree) {
             return;
         }
 
-        renewTeam();
+        renewCloud();
     }
 }
 
@@ -593,7 +593,7 @@ void AccountManager::renewPro()
     d->purchaseDialog->showDialog();
 }
 
-bool AccountManager::tryTeamForFree()
+bool AccountManager::tryCloudForFree()
 {
     //
     // Ищем бесплатную активацию
@@ -601,7 +601,7 @@ bool AccountManager::tryTeamForFree()
     Domain::PaymentOption freeOption;
     for (const auto& paymentOption : std::as_const(d->accountInfo.paymentOptions)) {
         if (paymentOption.amount != 0
-            || paymentOption.subscriptionType != Domain::SubscriptionType::TeamMonthly) {
+            || paymentOption.subscriptionType != Domain::SubscriptionType::CloudMonthly) {
             continue;
         }
 
@@ -636,24 +636,24 @@ bool AccountManager::tryTeamForFree()
     return false;
 }
 
-void AccountManager::renewTeam()
+void AccountManager::renewCloud()
 {
-    auto teamPaymentOptions = d->accountInfo.paymentOptions;
-    for (int index = teamPaymentOptions.size() - 1; index >= 0; --index) {
-        const auto& option = teamPaymentOptions.at(index);
+    auto cloudPaymentOptions = d->accountInfo.paymentOptions;
+    for (int index = cloudPaymentOptions.size() - 1; index >= 0; --index) {
+        const auto& option = cloudPaymentOptions.at(index);
         if (option.amount == 0 || option.type != Domain::PaymentType::Subscription
-            || (option.subscriptionType != Domain::SubscriptionType::TeamMonthly
-                && option.subscriptionType != Domain::SubscriptionType::TeamLifetime)) {
-            teamPaymentOptions.removeAt(index);
+            || (option.subscriptionType != Domain::SubscriptionType::CloudMonthly
+                && option.subscriptionType != Domain::SubscriptionType::CloudLifetime)) {
+            cloudPaymentOptions.removeAt(index);
         }
     }
-    if (teamPaymentOptions.isEmpty()) {
+    if (cloudPaymentOptions.isEmpty()) {
         return;
     }
 
     d->initPurchaseDialog();
-    d->purchaseDialog->setPaymentOptions(teamPaymentOptions);
-    d->purchaseDialog->selectOption(teamPaymentOptions.constLast());
+    d->purchaseDialog->setPaymentOptions(cloudPaymentOptions);
+    d->purchaseDialog->selectOption(cloudPaymentOptions.constLast());
     d->purchaseDialog->showDialog();
 }
 

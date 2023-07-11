@@ -2514,7 +2514,7 @@ void ApplicationManager::initConnections()
     connect(d->menuView, &Ui::MenuView::renewProPressed, d->accountManager.data(),
             &AccountManager::renewPro);
     connect(d->menuView, &Ui::MenuView::renewTeamPressed, d->accountManager.data(),
-            &AccountManager::renewTeam);
+            &AccountManager::renewCloud);
 
     //
     // Менеджер посадки
@@ -2565,7 +2565,7 @@ void ApplicationManager::initConnections()
     connect(d->projectsManager.data(), &ProjectsManager::signInRequested, d->accountManager.data(),
             &AccountManager::signIn);
     connect(d->projectsManager.data(), &ProjectsManager::renewTeamSubscriptionRequested,
-            d->accountManager.data(), &AccountManager::renewTeam);
+            d->accountManager.data(), &AccountManager::renewCloud);
     connect(d->projectsManager.data(), &ProjectsManager::createProjectRequested, this,
             [this] { d->createProject(); });
     connect(d->projectsManager.data(), &ProjectsManager::createLocalProjectRequested, this,
@@ -2601,7 +2601,7 @@ void ApplicationManager::initConnections()
     connect(d->projectManager.data(), &ProjectManager::upgradeToProRequested,
             d->accountManager.data(), &AccountManager::upgradeAccountToPro);
     connect(d->projectManager.data(), &ProjectManager::upgradeToTeamRequested,
-            d->accountManager.data(), &AccountManager::upgradeAccountToTeam);
+            d->accountManager.data(), &AccountManager::upgradeAccountToCloud);
     connect(d->projectManager.data(), &ProjectManager::buyCreditsRequested,
             d->accountManager.data(), &AccountManager::buyCredits);
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
@@ -3065,7 +3065,7 @@ void ApplicationManager::initConnections()
                         return;
                     }
 
-                    d->accountManager->renewTeam();
+                    d->accountManager->renewCloud();
                 });
             QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
         } else {

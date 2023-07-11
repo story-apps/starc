@@ -62,8 +62,8 @@ signals:
     void tryProForFreePressed();
     void buyProLifetimePressed();
     void renewProPressed();
-    void tryTeamForFreePressed();
-    void renewTeamPressed();
+    void tryCloudForFreePressed();
+    void renewCloudPressed();
 
     /**
      * @brief Пользователь нажал кнопку покупки кредитов
