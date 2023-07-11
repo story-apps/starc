@@ -2589,8 +2589,8 @@ void PageTextEdit::inputMethodEvent(QInputMethodEvent* e)
     if (!e->preeditString().isEmpty() || !e->commitString().isEmpty() || e->replacementStart() != 0
         || e->replacementLength() != 0 || e->attributes().size() > 0) {
         d->sendControlEvent(e);
+        ensureCursorVisible();
     }
-    ensureCursorVisible();
 }
 
 /*!\reimp

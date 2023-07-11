@@ -11,6 +11,7 @@
 #include <QKeyEvent>
 #include <QLocale>
 #include <QRegularExpression>
+#include <QScrollBar>
 #include <QStyleHints>
 #include <QTextBlock>
 
@@ -380,6 +381,7 @@ void BaseTextEdit::changeTextCase(bool _upper)
     }
 
     if (QString selectedText = cursor.selectedText(); !selectedText.isEmpty()) {
+        cursor.beginEditBlock();
         const QChar firstChar = selectedText.at(0);
         const bool firstToUpper = TextHelper::smartToUpper(firstChar) != firstChar;
         const bool textInUpper = (selectedText.length() > 1)
@@ -406,6 +408,7 @@ void BaseTextEdit::changeTextCase(bool _upper)
                 }
             }
         }
+        cursor.endEditBlock();
 
         if (clearSelection) {
             cursor.setPosition(sourcePosition);
@@ -596,12 +599,18 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     else if (_event->modifiers().testFlag(Qt::ControlModifier)
              && _event->modifiers().testFlag(Qt::ShiftModifier)
-             && (_event->key() == Qt::Key_Up || _event->key() == Qt::Key_Down)
-#ifdef Q_OS_MAC
-             && _event->modifiers().testFlag(Qt::ShiftModifier)
-#endif
-    ) {
+             && (_event->key() == Qt::Key_Up || _event->key() == Qt::Key_Down)) {
         changeTextCase(_event->key() == Qt::Key_Up);
+    }
+    //
+    // Сдвигаем на одну строку
+    // TODO: в macOS на эту комбинацию отрабатывает перемещение курсора в начало/конец документа
+    //
+    else if (_event->modifiers().testFlag(Qt::ControlModifier)
+             && (_event->key() == Qt::Key_Up || _event->key() == Qt::Key_Down)) {
+        verticalScrollBar()->setValue(verticalScrollBar()->value()
+                                      + verticalScrollBar()->singleStep()
+                                          * (_event->key() == Qt::Key_Up ? -1 : 1));
     }
     // ... перевод курсора к следующему символу
     //
