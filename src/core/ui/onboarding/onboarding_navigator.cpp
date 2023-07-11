@@ -863,7 +863,7 @@ void OnboardingNavigator::updateTranslations()
     d->accountChangeAvatarButton->setText(tr("Change avatar"));
     d->accountName->setLabel(tr("Your name"));
     d->accountDescription->setLabel(tr("Your bio"));
-    d->accountSubscription->setText(tr("I want to receive project's news"));
+    d->accountSubscription->setText(tr("I want to receive STARC news"));
     d->accountContinueButton->setText(tr("Continue"));
 
     d->modulesTitle->setText(tr("Customize your workspace"));

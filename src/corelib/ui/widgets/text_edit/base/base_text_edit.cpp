@@ -363,6 +363,60 @@ void BaseTextEdit::setTextAlignment(Qt::Alignment _alignment)
     setTextCursor(cursor);
 }
 
+void BaseTextEdit::changeTextCase(bool _upper)
+{
+    //
+    // Нужно ли убирать выделение после операции
+    //
+    bool clearSelection = false;
+    //
+    // Если выделения нет, работаем со словом под курсором
+    //
+    QTextCursor cursor = textCursor();
+    const int sourcePosition = cursor.position();
+    if (!cursor.hasSelection()) {
+        cursor.select(QTextCursor::WordUnderCursor);
+        clearSelection = true;
+    }
+
+    if (QString selectedText = cursor.selectedText(); !selectedText.isEmpty()) {
+        const QChar firstChar = selectedText.at(0);
+        const bool firstToUpper = TextHelper::smartToUpper(firstChar) != firstChar;
+        const bool textInUpper = (selectedText.length() > 1)
+            && (TextHelper::smartToUpper(selectedText) == selectedText);
+        const int fromPosition = qMin(cursor.selectionStart(), cursor.selectionEnd());
+        const int toPosition = qMax(cursor.selectionStart(), cursor.selectionEnd());
+        for (int position = fromPosition; position < toPosition; ++position) {
+            cursor.setPosition(position);
+            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+            selectedText = cursor.selectedText();
+            if (_upper) {
+                //
+                // Поднимаем для всего текста, или только для первого символа
+                //
+                if (!firstToUpper || (firstToUpper && position == fromPosition)) {
+                    cursor.insertText(TextHelper::smartToUpper(selectedText));
+                }
+            } else {
+                //
+                // Опускаем для всего текста, или для всех символов, кроме первого
+                //
+                if (!textInUpper || (textInUpper && position != fromPosition)) {
+                    cursor.insertText(TextHelper::smartToLower(selectedText));
+                }
+            }
+        }
+
+        if (clearSelection) {
+            cursor.setPosition(sourcePosition);
+        } else {
+            cursor.setPosition(fromPosition);
+            cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
+        }
+        setTextCursor(cursor);
+    }
+}
+
 ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)
 {
     auto menu = CompleterTextEdit::createContextMenu(_position, _parent);
@@ -391,7 +445,7 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
         underlineAction->setWhatsThis(
             QKeySequence(QKeySequence::Underline).toString(QKeySequence::NativeText));
         connect(underlineAction, &QAction::triggered, this, &BaseTextEdit::invertTextUnderline);
-
+        //
         auto strikethroughAction = new QAction(formattingAction);
         strikethroughAction->setText(tr("Strikethrough"));
         strikethroughAction->setWhatsThis(
@@ -423,6 +477,19 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
         alignJustifyAction->setWhatsThis(QKeySequence("Ctrl+J").toString(QKeySequence::NativeText));
         connect(alignJustifyAction, &QAction::triggered, this,
                 [this] { setTextAlignment(Qt::AlignJustify); });
+
+        auto uppercaseAction = new QAction(formattingAction);
+        uppercaseAction->setSeparator(true);
+        uppercaseAction->setText(tr("Make uppercase"));
+        uppercaseAction->setWhatsThis(
+            QKeySequence("Ctrl+Shift+Up").toString(QKeySequence::NativeText));
+        connect(uppercaseAction, &QAction::triggered, this, [this] { changeTextCase(true); });
+        //
+        auto lowercaseAction = new QAction(formattingAction);
+        lowercaseAction->setText(tr("Make lowercase"));
+        lowercaseAction->setWhatsThis(
+            QKeySequence("Ctrl+Shift+Down").toString(QKeySequence::NativeText));
+        connect(lowercaseAction, &QAction::triggered, this, [this] { changeTextCase(false); });
     }
 
     //
@@ -528,62 +595,13 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     // 3. все строчные
     //
     else if (_event->modifiers().testFlag(Qt::ControlModifier)
+             && _event->modifiers().testFlag(Qt::ShiftModifier)
              && (_event->key() == Qt::Key_Up || _event->key() == Qt::Key_Down)
 #ifdef Q_OS_MAC
              && _event->modifiers().testFlag(Qt::ShiftModifier)
 #endif
     ) {
-        //
-        // Нужно ли убирать выделение после операции
-        //
-        bool clearSelection = false;
-        //
-        // Если выделения нет, работаем со словом под курсором
-        //
-        QTextCursor cursor = textCursor();
-        const int sourcePosition = cursor.position();
-        if (!cursor.hasSelection()) {
-            cursor.select(QTextCursor::WordUnderCursor);
-            clearSelection = true;
-        }
-
-        if (QString selectedText = cursor.selectedText(); !selectedText.isEmpty()) {
-            const QChar firstChar = selectedText.at(0);
-            const bool firstToUpper = TextHelper::smartToUpper(firstChar) != firstChar;
-            const bool textInUpper = (selectedText.length() > 1)
-                && (TextHelper::smartToUpper(selectedText) == selectedText);
-            const int fromPosition = qMin(cursor.selectionStart(), cursor.selectionEnd());
-            const int toPosition = qMax(cursor.selectionStart(), cursor.selectionEnd());
-            const bool toUpper = _event->key() == Qt::Key_Up;
-            for (int position = fromPosition; position < toPosition; ++position) {
-                cursor.setPosition(position);
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                selectedText = cursor.selectedText();
-                if (toUpper) {
-                    //
-                    // Поднимаем для всего текста, или только для первого символа
-                    //
-                    if (!firstToUpper || (firstToUpper && position == fromPosition)) {
-                        cursor.insertText(TextHelper::smartToUpper(selectedText));
-                    }
-                } else {
-                    //
-                    // Опускаем для всего текста, или для всех символов, кроме первого
-                    //
-                    if (!textInUpper || (textInUpper && position != fromPosition)) {
-                        cursor.insertText(TextHelper::smartToLower(selectedText));
-                    }
-                }
-            }
-
-            if (clearSelection) {
-                cursor.setPosition(sourcePosition);
-            } else {
-                cursor.setPosition(fromPosition);
-                cursor.setPosition(toPosition, QTextCursor::KeepAnchor);
-            }
-            setTextCursor(cursor);
-        }
+        changeTextCase(_event->key() == Qt::Key_Up);
     }
     // ... перевод курсора к следующему символу
     //

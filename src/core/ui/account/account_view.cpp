@@ -625,7 +625,7 @@ void AccountView::updateTranslations()
 {
     d->name->setLabel(tr("Your name"));
     d->description->setLabel(tr("Your bio"));
-    d->newsletterSubscription->setText(tr("I want to receive project's news"));
+    d->newsletterSubscription->setText(tr("I want to receive STARC news"));
     d->avatar->setSupportingText(tr("Add avatar +"), tr("Change avatar..."),
                                  tr("Do you want to delete your avatar?"));
     d->avatar->setImageCroppingText(tr("Select an area for the avatar"));

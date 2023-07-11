@@ -67,6 +67,11 @@ public:
     void setTextAlignment(Qt::Alignment _alignment);
 
     /**
+     * @brief Поменять регистр букв
+     */
+    void changeTextCase(bool _upper);
+
+    /**
      * @brief Добавляем опции форматирования в контекстное меню
      */
     ContextMenu* createContextMenu(const QPoint& _position, QWidget* _parent = nullptr) override;
