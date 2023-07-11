@@ -138,14 +138,14 @@ protected:
     virtual AbstractCardItem* createCardFor(const QModelIndex& _index) const = 0;
 
     /**
+     * @brief Упорядочиваем карты при изменении размера вьюпорта
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
+    /**
      * @brief Перенастраиваем виджет при обновлении дизайн системы
      */
     bool event(QEvent* _event) override;
-
-    /**
-     * @brief Упорядочиваем карты при изменении размера вьюхи
-     */
-    void resizeEvent(QResizeEvent* _event) override;
 
     /**
      * @brief Отлавливаем комбинации клавиш отмены и повтора последнего действия

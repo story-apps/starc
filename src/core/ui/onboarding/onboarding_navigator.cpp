@@ -1122,7 +1122,6 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
     d->accountSubscription->setContentsMargins(
         margin - Ui::DesignSystem::radioButton().margins().left(), 0,
         margin - Ui::DesignSystem::radioButton().margins().right(), 0);
-
 }
 
 } // namespace Ui

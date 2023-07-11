@@ -1545,6 +1545,8 @@ CardsGraphicsView::CardsGraphicsView(CardsGraphicsScene* _scene, QWidget* _paren
     setVerticalScrollBar(new ScrollBar(this));
     setHorizontalScrollBar(new ScrollBar(this));
 
+    viewport()->installEventFilter(this);
+
     connect(this, &CardsGraphicsView::scaleChanged, this, [this] { d->reorderCards(); });
     connect(d->scene, &CardsGraphicsScene::selectionChanged, this, [this] {
         if (d->scene->selectedItems().isEmpty()) {
@@ -1983,6 +1985,17 @@ bool CardsGraphicsView::excludeFromFlatIndex(const QModelIndex& _index) const
     return false;
 }
 
+bool CardsGraphicsView::eventFilter(QObject* _watched, QEvent* _event)
+{
+    if (_watched == viewport() && _event->type() == QEvent::Resize) {
+        d->cardsAnimationsAvailable = false;
+        d->reorderCardsImpl();
+        d->cardsAnimationsAvailable = true;
+    }
+
+    return ScalableGraphicsView::eventFilter(_watched, _event);
+}
+
 bool CardsGraphicsView::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {
@@ -1998,15 +2011,6 @@ bool CardsGraphicsView::event(QEvent* _event)
         return ScalableGraphicsView::event(_event);
     }
     }
-}
-
-void CardsGraphicsView::resizeEvent(QResizeEvent* _event)
-{
-    ScalableGraphicsView::resizeEvent(_event);
-
-    d->cardsAnimationsAvailable = false;
-    d->reorderCardsImpl();
-    d->cardsAnimationsAvailable = true;
 }
 
 void CardsGraphicsView::keyPressEvent(QKeyEvent* _event)

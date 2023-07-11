@@ -88,7 +88,7 @@ Application::Application(int& _argc, char** _argv)
 
 Application::~Application()
 {
-    if (d->applicationManager) {
+    if (d->applicationManager != nullptr) {
         delete d->applicationManager;
     }
 }
