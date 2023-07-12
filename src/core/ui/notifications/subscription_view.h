@@ -27,7 +27,7 @@ signals:
     void renewProPressed();
 
     /**
-     * @brief Пользователь нажал кнопку продления TEAM версии
+     * @brief Пользователь нажал кнопку продления CLOUD версии
      */
     void renewTeamPressed();
 

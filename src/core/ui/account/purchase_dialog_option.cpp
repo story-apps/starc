@@ -111,7 +111,7 @@ void PurchaseDialogOption::paintEvent(QPaintEvent* _event)
         = (d->option.subscriptionType == Domain::SubscriptionType::ProMonthly
            || d->option.subscriptionType == Domain::SubscriptionType::ProLifetime)
         ? "PRO"
-        : "TEAM";
+        : "CLOUD";
     const auto paymentMethodsTitle = tr("Pay with:");
     const auto regularPrice = QString("$%1").arg(d->option.amount / 100.0, 0, 'f', 2);
     const auto totalPrice = QString("$%1").arg(d->option.totalAmount / 100.0, 0, 'f', 2);

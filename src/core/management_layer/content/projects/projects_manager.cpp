@@ -191,7 +191,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                                          &Dialog::deleteLater);
                     }
                     //
-                    // Если у пользователя нет активной подписки на TEAM версию,
+                    // Если у пользователя нет активной подписки на CLOUD версию,
                     // покажем соответствующее уведомление с предложением обновиться
                     //
                     else if (!d->canCreateCloudProject) {
@@ -199,7 +199,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                         dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
                         dialog->showDialog({},
                                            tr("To move a project to the cloud, you need to upgrade "
-                                              "to the TEAM version."),
+                                              "to the CLOUD version."),
                                            { { 0, tr("Maybe later"), Dialog::RejectButton },
                                              { 1, tr("Upgrade"), Dialog::AcceptButton } });
                         QObject::connect(dialog, &Dialog::finished, this,

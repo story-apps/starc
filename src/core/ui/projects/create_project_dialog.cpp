@@ -350,7 +350,7 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(
     d->cloudProjectCreationNote->setText(tr("The story will be created on the local computer."));
     d->cloudProjectCreationActionNote->setText(tr("to create stories in the cloud."));
     d->cloudProjectCreationAction->disconnect();
-    d->cloudProjectCreationAction->setText(tr("Subscribe to TEAM version"));
+    d->cloudProjectCreationAction->setText(tr("Subscribe to CLOUD version"));
     if (_isLogged) {
         connect(d->cloudProjectCreationAction, &Body1LinkLabel::clicked, this,
                 &CreateProjectDialog::renewSubscriptionPressed);

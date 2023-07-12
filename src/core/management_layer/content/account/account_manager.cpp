@@ -616,12 +616,12 @@ bool AccountManager::tryCloudForFree()
         auto dialog = new Dialog(d->view->topLevelWidget());
         dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
         dialog->showDialog(
-            tr("Try TEAM version for free"),
-            tr("You can try all the features of the TEAM version during 30 days for free. After "
-               "trial period, you can continue to use the TEAM version by renewing your "
+            tr("Try CLOUD version for free"),
+            tr("You can try all the features of the CLOUD version during 30 days for free. After "
+               "trial period, you can continue to use the CLOUD version by renewing your "
                "subscription. Otherwise, you'll be returned to the FREE version automatically."),
             { { 0, tr("Continue with FREE version"), Dialog::RejectButton },
-              { 1, tr("Activate TEAM"), Dialog::AcceptButton } });
+              { 1, tr("Activate CLOUD"), Dialog::AcceptButton } });
         QObject::connect(dialog, &Dialog::finished, this,
                          [this, dialog, freeOption](const Dialog::ButtonInfo& _presedButton) {
                              dialog->hideDialog();
