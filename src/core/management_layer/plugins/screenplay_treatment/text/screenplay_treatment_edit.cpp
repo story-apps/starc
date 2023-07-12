@@ -1155,6 +1155,7 @@ void ScreenplayTreatmentEdit::paintEvent(QPaintEvent* _event)
         //
         // Курсоры соавторов
         //
+        painter.setClipRect(QRectF(), Qt::NoClip);
         if (!d->collaboratorsCursorInfo.isEmpty()) {
             for (const auto& cursorInfo : std::as_const(d->collaboratorsCursorInfo)) {
                 //
