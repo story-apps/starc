@@ -3101,31 +3101,29 @@ void ApplicationManager::initConnections()
                     return;
                 }
 
-                const auto document = d->projectManager->documentToSync(_documentUuid);
-
                 //
-                // Для сложных типов документов, нужна подгрузка документов, которые с ним связаны
+                // Для сложных типов документов, нужна подгрузка документов, которые с ним связаны,
+                // а смаа загрузка документов должна происходить в строго определённом порядке
                 //
-                if (const auto connectedDocuments
-                    = d->projectManager->connectedDocuments(_documentUuid);
-                    !connectedDocuments.isEmpty()) {
-                    for (const auto& connectedDocumentUuid : connectedDocuments) {
-                        d->cloudServiceManager->openDocument(currentProject->id(),
-                                                             connectedDocumentUuid);
+                auto documentsToSync = d->projectManager->documentBundle(_documentUuid);
+                if (documentsToSync.isEmpty()) {
+                    return;
+                }
+                for (const auto& documentToSync : std::as_const(documentsToSync)) {
+                    const auto document = d->projectManager->documentToSync(documentToSync);
+                    //
+                    // Если документ не удалось вытащить из базы, значит он ещё не был
+                    // синхронизирован
+                    //
+                    if (document == nullptr) {
+                        d->cloudServiceManager->openDocument(currentProject->id(), documentToSync);
                     }
-                }
-
-                //
-                // Если документ не удалось вытащить из базы, значит он ещё не был синхронизирован
-                //
-                if (document == nullptr) {
-                    d->cloudServiceManager->openDocument(currentProject->id(), _documentUuid);
-                }
-                //
-                // А если есть, то значит его инстанс уже есть в базе и его надо обновить
-                //
-                else {
-                    d->cloudServiceManager->openDocument(currentProject->id(), document);
+                    //
+                    // А если есть, то значит его инстанс уже есть в базе и его надо обновить
+                    //
+                    else {
+                        d->cloudServiceManager->openDocument(currentProject->id(), document);
+                    }
                 }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentReceived,
@@ -3199,6 +3197,15 @@ void ApplicationManager::initConnections()
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChangesPushed,
             d->projectManager.data(), &ProjectManager::markChangesSynced);
+    connect(d->projectManager.data(), &ProjectManager::closeDocumentRequested, this,
+            [this](const QUuid& _documentUuid) {
+                const auto& currentProject = d->projectsManager->currentProject();
+                if (!currentProject->isRemote() || !currentProject->canBeSynced()) {
+                    return;
+                }
+
+                d->cloudServiceManager->closeDocument(currentProject->id(), _documentUuid);
+            });
     connect(d->projectManager.data(), &ProjectManager::documentRemoved, this,
             [this](const QUuid& _documentUuid) {
                 const auto& currentProject = d->projectsManager->currentProject();

@@ -1223,6 +1223,12 @@ void ProjectManager::Implementation::removeDocumentImpl(BusinessLayer::Structure
         if (!projectStructureModel->isChangesApplyingInProcess()) {
             emit q->documentRemoved(documentUuid);
         }
+        //
+        // ... либо отписываемся от них, если находимся в процессе перестройки структуры
+        //
+        else {
+            emit q->closeDocumentRequested(documentUuid);
+        }
     }
 }
 
@@ -1689,7 +1695,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(d->projectStructureModel, &BusinessLayer::StructureModel::documentAboutToBeRemoved,
             this, [this](const QUuid& _uuid) {
                 //
-                // Удаляем документы только в случае, если накладываются изменения из облака
+                // Удаляем документы только в случае, если накладываются изменения из облака, т.к. в
+                // этой ситуации мы не знаем наверняка, удалён ли документ или перемещён, а в случае
+                // с локальными изменениями - это точно перемещение
                 //
                 if (!d->projectStructureModel->isChangesApplyingInProcess()) {
                     return;
@@ -3332,7 +3340,7 @@ Domain::DocumentObject* ProjectManager::documentToSync(const QUuid& _documentUui
     return DataStorageLayer::StorageFacade::documentStorage()->document(_documentUuid);
 }
 
-QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) const
+QVector<QUuid> ProjectManager::documentBundle(const QUuid& _documentUuid) const
 {
     const auto item = d->projectStructureModel->itemForUuid(_documentUuid);
     if (item == nullptr) {
@@ -3344,24 +3352,17 @@ QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) co
         topLevelParent = topLevelParent->parent();
     }
 
-    const QSet<Domain::DocumentObjectType> aliases = {
-        Domain::DocumentObjectType::ScreenplayTreatment,
-        Domain::DocumentObjectType::NovelOutline,
-    };
-
     QVector<QUuid> documents;
     switch (item->type()) {
-    case Domain::DocumentObjectType::Characters: {
-        for (int childIndex = 0; childIndex < item->childCount(); ++childIndex) {
-            documents.append(item->childAt(childIndex)->uuid());
-        }
-        break;
-    }
-
+    case Domain::DocumentObjectType::Characters:
     case Domain::DocumentObjectType::Locations: {
+        //
+        // Сначала дети, потом сам документ
+        //
         for (int childIndex = 0; childIndex < item->childCount(); ++childIndex) {
             documents.append(item->childAt(childIndex)->uuid());
         }
+        documents.append(_documentUuid);
         break;
     }
 
@@ -3377,15 +3378,15 @@ QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) co
             auto childItem = topLevelParent->childAt(index);
             if (childItem->type() == Domain::DocumentObjectType::Locations) {
                 //
-                // ... сам группирующий документ
-                //
-                documents.append(childItem->uuid());
-                //
                 // ... каждая из локаций
                 //
                 for (int index = 0; index < childItem->childCount(); ++index) {
                     documents.append(childItem->childAt(index)->uuid());
                 }
+                //
+                // ... сам группирующий документ
+                //
+                documents.append(childItem->uuid());
                 break;
             }
         }
@@ -3417,34 +3418,37 @@ QVector<QUuid> ProjectManager::connectedDocuments(const QUuid& _documentUuid) co
             auto childItem = topLevelParent->childAt(index);
             if (childItem->type() == Domain::DocumentObjectType::Characters) {
                 //
-                // ... сам группирующий документ
-                //
-                documents.append(childItem->uuid());
-                //
                 // ... каждый из персонажей
                 //
                 for (int index = 0; index < childItem->childCount(); ++index) {
                     documents.append(childItem->childAt(index)->uuid());
                 }
+                //
+                // ... сам группирующий документ
+                //
+                documents.append(childItem->uuid());
                 break;
             }
         }
 
         //
-        // Полный комплект, кроме себя самого и документов-ссылок
+        // Полный комплект
         //
         documents.append(item->parent()->uuid());
         for (int index = 0; index < item->parent()->childCount(); ++index) {
             auto childItem = item->parent()->childAt(index);
-            if (childItem != item && !aliases.contains(childItem->type())) {
-                documents.append(childItem->uuid());
-            }
+            documents.append(childItem->uuid());
         }
         break;
     }
 
-    default:
+    default: {
+        //
+        // Для обычных документов загружаем лишь сам документ
+        //
+        documents.append(_documentUuid);
         break;
+    }
     }
 
     return documents;

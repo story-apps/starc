@@ -163,9 +163,9 @@ public:
     Domain::DocumentObject* documentToSync(const QUuid& _documentUuid) const;
 
     /**
-     * @brief Получить список документов, связанных с заданным
+     * @brief Получить полный комплект документов, связанных с заданным
      */
-    QVector<QUuid> connectedDocuments(const QUuid& _documentUuid) const;
+    QVector<QUuid> documentBundle(const QUuid& _documentUuid) const;
 
     /**
      * @brief Задать курсоры соавторов
@@ -254,6 +254,11 @@ signals:
      * @brief Запрос на загрузку документа
      */
     void downloadDocumentRequested(const QUuid& _documentUuid);
+
+    /**
+     * @brief Запрос на закрытие документа
+     */
+    void closeDocumentRequested(const QUuid& _documentUuid);
 
     /**
      * @brief Сменилась текущая модель документа

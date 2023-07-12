@@ -285,6 +285,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             }
             Q_ASSERT(screenplayItem);
             model = modelFor(screenplayItem->uuid());
+            //
+            // ... если не удалось получить модель сценария, то значит она ещё не была загружена из
+            //     облака, возвращаем тут пустую модель, т.к. это нормальная штатная ситуация
+            //
+            if (model == nullptr) {
+                return nullptr;
+            }
+
             break;
         }
 
@@ -301,6 +309,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             //
             auto informationModel
                 = qobject_cast<BusinessLayer::ScreenplayInformationModel*>(modelFor(parentUuid));
+            Q_ASSERT(informationModel);
             screenplayModel->setInformationModel(informationModel);
             //
             // ... модель титульной страницы
@@ -311,6 +320,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             Q_ASSERT(titlePageItem->type() == Domain::DocumentObjectType::ScreenplayTitlePage);
             auto titlePageModel
                 = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(titlePageItem->uuid()));
+            Q_ASSERT(titlePageModel);
             screenplayModel->setTitlePageModel(titlePageModel);
             //
             // ... модель синопсиса
@@ -321,24 +331,28 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             Q_ASSERT(synopsisItem->type() == Domain::DocumentObjectType::ScreenplaySynopsis);
             auto synopsisModel
                 = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(synopsisItem->uuid()));
+            Q_ASSERT(synopsisModel);
             screenplayModel->setSynopsisModel(synopsisModel);
             //
             // ... модель справочников сценариев
             //
             auto dictionariesModel = qobject_cast<BusinessLayer::ScreenplayDictionariesModel*>(
                 modelFor(Domain::DocumentObjectType::ScreenplayDictionaries));
+            Q_ASSERT(dictionariesModel);
             screenplayModel->setDictionariesModel(dictionariesModel);
             //
             // ... модель персонажей
             //
             auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
                 modelFor(Domain::DocumentObjectType::Characters));
+            Q_ASSERT(charactersModel);
             screenplayModel->setCharactersModel(charactersModel);
             //
             // ... и модель локаций
             //
             auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(
                 modelFor(Domain::DocumentObjectType::Locations));
+            Q_ASSERT(locationsModel);
             screenplayModel->setLocationsModel(locationsModel);
             //
             // ... обновим словари рантайма
@@ -891,6 +905,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             }
             Q_ASSERT(novelItem);
             model = modelFor(novelItem->uuid());
+            //
+            // ... если не удалось получить модель романа, то значит она ещё не была загружена из
+            //     облака, возвращаем тут пустую модель, т.к. это нормальная штатная ситуация
+            //
+            if (model == nullptr) {
+                return nullptr;
+            }
+
             break;
         }
 
@@ -907,6 +929,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             //
             auto informationModel
                 = qobject_cast<BusinessLayer::NovelInformationModel*>(modelFor(parentUuid));
+            Q_ASSERT(informationModel);
             novelModel->setInformationModel(informationModel);
             //
             // ... модель титульной страницы
@@ -917,6 +940,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             Q_ASSERT(titlePageItem->type() == Domain::DocumentObjectType::NovelTitlePage);
             auto titlePageModel
                 = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(titlePageItem->uuid()));
+            Q_ASSERT(titlePageModel);
             novelModel->setTitlePageModel(titlePageModel);
             //
             // ... модель синопсиса
@@ -927,24 +951,28 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             Q_ASSERT(synopsisItem->type() == Domain::DocumentObjectType::NovelSynopsis);
             auto synopsisModel
                 = qobject_cast<BusinessLayer::SimpleTextModel*>(modelFor(synopsisItem->uuid()));
+            Q_ASSERT(synopsisModel);
             novelModel->setSynopsisModel(synopsisModel);
             //
             // ... модель справочников сценариев
             //
             auto dictionariesModel = qobject_cast<BusinessLayer::NovelDictionariesModel*>(
                 modelFor(Domain::DocumentObjectType::NovelDictionaries));
+            Q_ASSERT(dictionariesModel);
             novelModel->setDictionariesModel(dictionariesModel);
             //
             // ... модель персонажей
             //
             auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(
                 modelFor(Domain::DocumentObjectType::Characters));
+            Q_ASSERT(charactersModel);
             novelModel->setCharactersModel(charactersModel);
             //
             // ... и модель локаций
             //
             auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(
                 modelFor(Domain::DocumentObjectType::Locations));
+            Q_ASSERT(locationsModel);
             novelModel->setLocationsModel(locationsModel);
 
             model = novelModel;
@@ -1107,6 +1135,8 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             return nullptr;
         }
         }
+        Q_ASSERT(model);
+
         model->setImageWrapper(d->imageWrapper);
 
         //
