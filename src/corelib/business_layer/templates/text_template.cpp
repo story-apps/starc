@@ -555,11 +555,11 @@ TextBlockStyle::TextBlockStyle(const QXmlStreamAttributes& _blockAttributes)
     // ... настройки шрифта
     //
     m_font.setFamily(_blockAttributes.value("font_family").toString());
-    m_font.setFamilies({
-        m_font.family(),
-        "Apple Color Emoji",
-        "Noto Color Emoji",
-    });
+    QStringList fontFamilies = QFontDatabase::systemFont(QFontDatabase::GeneralFont).families();
+    fontFamilies.prepend(QLatin1String("Noto Color Emoji"));
+    fontFamilies.prepend(QLatin1String("Apple Color Emoji"));
+    fontFamilies.prepend(m_font.family());
+    m_font.setFamilies(fontFamilies);
     TextHelper::updateFontHinting(m_font);
     m_font.setPixelSize(MeasurementHelper::ptToPx(_blockAttributes.value("font_size").toDouble()));
     //
