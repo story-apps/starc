@@ -1227,8 +1227,11 @@ void AudioplayTextEdit::paintEvent(QPaintEvent* _event)
 
             QTextCursor cursor(document());
             cursor.setPosition(cursorPosition);
-            const auto cursorR = cursorRect(cursor).adjusted(0, 0, 1, 0);
+            if (!cursor.block().isVisible()) {
+                continue;
+            }
 
+            const auto cursorR = cursorRect(cursor).adjusted(0, 0, 1, 0);
             const auto backgroundColor = ColorHelper::forText(cursorInfo.name);
 
             //
