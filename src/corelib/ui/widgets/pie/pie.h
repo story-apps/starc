@@ -19,7 +19,7 @@ public:
     /**
      * @brief Установить модель
      */
-    void setModel(const QAbstractItemModel* _model, int _valueColumn = 0);
+    void setModel(QAbstractItemModel* _model, int _valueColumn = 0);
 
     /**
      * @brief Установить текущий элемент

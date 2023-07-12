@@ -6,11 +6,13 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
+#include <QPointer>
 #include <QVariantAnimation>
 
 namespace {
 int kInvalidIndex = -1;
 }
+
 
 class Pie::Implementation
 {
@@ -29,12 +31,12 @@ public:
     /**
      * @brief Сбрасываем модель
      */
-    void reset(const QAbstractItemModel* _model, int _valueColumn);
+    void reset(QAbstractItemModel* _model, int _valueColumn);
 
     /**
      * @brief Установить модель
      */
-    void setModel(const QAbstractItemModel* _model, int _valueColumn);
+    void setModel(QAbstractItemModel* _model, int _valueColumn);
 
     /**
      * @brief В модель пришли новые данные
@@ -104,7 +106,7 @@ public:
     int selectedSlice = kInvalidIndex;
     int lastSelectedSlice = kInvalidIndex;
 
-    const QAbstractItemModel* model = nullptr;
+    QPointer<QAbstractItemModel> model;
     int valueColumn = 0;
 
     qreal hole = 0;
@@ -125,7 +127,7 @@ Pie::Implementation::Implementation(Pie* _q, qreal _hole)
     connect(&sliceOpacityAnimation, &QVariantAnimation::valueChanged, q, qOverload<>(&Pie::update));
 }
 
-void Pie::Implementation::reset(const QAbstractItemModel* _model, int _valueColumn)
+void Pie::Implementation::reset(QAbstractItemModel* _model, int _valueColumn)
 {
     if (model) {
         model->disconnect(q);
@@ -140,7 +142,7 @@ void Pie::Implementation::reset(const QAbstractItemModel* _model, int _valueColu
     slices.clear();
 }
 
-void Pie::Implementation::setModel(const QAbstractItemModel* _model, int _valueColumn)
+void Pie::Implementation::setModel(QAbstractItemModel* _model, int _valueColumn)
 {
     reset(_model, _valueColumn);
     if (_model == nullptr) {
@@ -392,7 +394,7 @@ Pie::Pie(QWidget* _parent, qreal _hole)
 
 Pie::~Pie() = default;
 
-void Pie::setModel(const QAbstractItemModel* _model, int _valueColumn)
+void Pie::setModel(QAbstractItemModel* _model, int _valueColumn)
 {
     d->setModel(_model, _valueColumn);
 }
