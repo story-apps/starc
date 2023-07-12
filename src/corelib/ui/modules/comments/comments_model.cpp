@@ -683,9 +683,9 @@ void CommentsModel::setTextModel(TextModel* _model)
 
     if (d->model != nullptr) {
         d->model->disconnect(this);
-        d->modelTextItems.clear();
-        d->reviewMarks.clear();
     }
+    d->modelTextItems.clear();
+    d->reviewMarks.clear();
 
     d->model = _model;
 

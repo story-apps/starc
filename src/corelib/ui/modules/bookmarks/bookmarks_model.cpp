@@ -293,9 +293,9 @@ void BookmarksModel::setTextModel(TextModel* _model)
 
     if (d->model != nullptr) {
         d->model->disconnect(this);
-        d->modelTextItems.clear();
-        d->bookmarks.clear();
     }
+    d->modelTextItems.clear();
+    d->bookmarks.clear();
 
     d->model = _model;
 
