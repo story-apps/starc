@@ -19,6 +19,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/model_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/tools/debouncer.h>
 
@@ -1362,6 +1363,8 @@ QMimeData* AudioplayTextEdit::createMimeDataFromSelection() const
 
 void AudioplayTextEdit::insertFromMimeData(const QMimeData* _source)
 {
+    using namespace BusinessLayer;
+
     if (isReadOnly()) {
         return;
     }
@@ -1369,7 +1372,7 @@ void AudioplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Удаляем выделенный текст
     //
-    BusinessLayer::TextCursor cursor = textCursor();
+    TextCursor cursor = textCursor();
     if (cursor.hasSelection()) {
         cursor.removeCharacters(this);
     }
@@ -1418,8 +1421,68 @@ void AudioplayTextEdit::insertFromMimeData(const QMimeData* _source)
         // NOTE: Перед текстом нужно обязательно добавить перенос строки, чтобы он
         //       не воспринимался как титульная страница
         //
-        BusinessLayer::AudioplayFountainImporter fountainImporter;
+        AudioplayFountainImporter fountainImporter;
         textToInsert = fountainImporter.importAudioplay("\n" + text).text;
+    }
+
+    //
+    // Если курсор установлен в таблице
+    //
+    if (cursor.inTable()) {
+        const auto mimeInfo = ModelHelper::isMimeHasJustOneBlock(textToInsert);
+        const auto isMimeContainsJustOneBlock = mimeInfo.first;
+        const auto isMimeContainsFolderOrSequence = mimeInfo.second;
+        //
+        // ... если вставляется один текстовый блок
+        //
+        if (isMimeContainsJustOneBlock && !isMimeContainsFolderOrSequence) {
+            //
+            // ... и вставка происходит в пустой абзац, то вставим в него пробел,
+            //     чтобы его стиль не изменился, а сам текст будем вставлять в начало абзаца
+            //
+            if (cursor.block().text().isEmpty()) {
+                removeCharacterAtPosition = cursor.position();
+                cursor.insertText(" ");
+                setTextCursor(cursor);
+            }
+        }
+        //
+        // ... если вставляется несколько блоков
+        //
+        else {
+            bool isTableEmpty = true;
+            while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter) {
+                cursor.movePosition(TextCursor::PreviousBlock);
+            }
+            const auto tableBeginningPosition = cursor.position();
+            cursor.movePosition(TextCursor::NextBlock);
+            while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter) {
+                if (!cursor.block().text().isEmpty()) {
+                    isTableEmpty = false;
+                    break;
+                }
+                cursor.movePosition(TextCursor::NextBlock);
+            }
+
+            //
+            // ... если таблица пуста, то удалим её
+            //
+            if (isTableEmpty) {
+                cursor.setPosition(tableBeginningPosition, TextCursor::KeepAnchor);
+                cursor.removeSelectedText();
+                setCurrentParagraphType(TextParagraphType::Cue);
+            }
+            //
+            // ... а если не пуста, то выходим из таблицы и будем производить вставку после неё
+            //
+            else {
+                while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter) {
+                    cursor.movePosition(TextCursor::NextBlock);
+                }
+                setTextCursor(cursor);
+                addParagraph(TextParagraphType::Cue);
+            }
+        }
     }
 
     //

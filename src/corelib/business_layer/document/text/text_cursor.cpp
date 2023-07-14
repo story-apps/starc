@@ -174,6 +174,13 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
         if (cursor.hasSelection()) {
             topCursorPosition = cursor.selectionInterval().from;
             bottomCursorPosition = cursor.selectionInterval().to;
+
+            const auto bottomBlock = document()->findBlock(bottomCursorPosition);
+            if (TextBlockStyle::forBlock(bottomBlock) == TextParagraphType::PageSplitter) {
+                bottomCursorPosition = bottomBlock.position() + bottomBlock.length()
+                    - 1; // отнимаем единицу, т.к. длина блока всегда включает перенос строки (даже
+                         // в пустом документе)
+            }
         } else {
             topCursorPosition = cursor.position() - (_backward ? 1 : 0);
             bottomCursorPosition = topCursorPosition + 1;
@@ -292,6 +299,21 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                 cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
                 cursor.deleteChar();
                 cursor.deletePreviousChar();
+                return;
+            }
+        }
+
+        //
+        // ... когда удаляется весь текст
+        //
+        {
+            if (topCursorPosition == 0
+                && bottomCursorPosition == document()->characterCount() - 1) {
+                cursor.select(SelectionType::Document);
+                cursor.removeSelectedText();
+                auto textDocument = qobject_cast<BusinessLayer::TextDocument*>(document());
+                Q_ASSERT(textDocument);
+                textDocument->setParagraphType(textTemplate().defaultParagraphType(), cursor);
                 return;
             }
         }

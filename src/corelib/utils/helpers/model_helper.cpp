@@ -11,6 +11,7 @@
 #include <business_layer/model/stageplay/stageplay_information_model.h>
 #include <business_layer/model/stageplay/stageplay_title_page_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <business_layer/templates/novel_template.h>
@@ -18,6 +19,8 @@
 #include <business_layer/templates/stageplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <domain/document_object.h>
+
+#include <QDomDocument>
 
 using namespace BusinessLayer;
 
@@ -92,4 +95,38 @@ void ModelHelper::resetTitlePageModel(BusinessLayer::SimpleTextModel* _model)
     // ... а затем восстанавливаем исходный контент, чтобы сформировать правильный патч
     //
     _model->document()->setContent(oldContent);
+}
+
+QPair<bool, bool> ModelHelper::isMimeHasJustOneBlock(const QString& _mime)
+{
+    auto isMimeContainsJustOneBlock = false;
+    auto isMimeContainsFolderOrSequence = false;
+
+    QDomDocument mimeDocument;
+    mimeDocument.setContent(_mime);
+    const auto document = mimeDocument.firstChildElement(xml::kDocumentTag);
+
+    //
+    // Всего один текстовый блок
+    //
+    if (document.childNodes().size() == 1
+        && textFolderTypeFromString(document.firstChild().nodeName()) == TextFolderType::Undefined
+        && textGroupTypeFromString(document.firstChild().nodeName()) == TextGroupType::Undefined) {
+        isMimeContainsJustOneBlock = true;
+    }
+
+    //
+    // или группа с одним заголовком
+    //
+    else if (document.childNodes().size() == 1
+             && (textFolderTypeFromString(document.firstChild().nodeName())
+                     != TextFolderType::Undefined
+                 || textGroupTypeFromString(document.firstChild().nodeName())
+                     != TextGroupType::Undefined)
+             && document.firstChild().firstChildElement(xml::kContentTag).childNodes().size()
+                 == 1) {
+        isMimeContainsJustOneBlock = true;
+        isMimeContainsFolderOrSequence = true;
+    }
+    return { isMimeContainsJustOneBlock, isMimeContainsFolderOrSequence };
 }

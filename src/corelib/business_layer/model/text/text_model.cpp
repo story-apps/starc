@@ -1049,7 +1049,7 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
     // Если построить нужно начиная с заголовка сцены или папки, и при этом майм нужен не только для
     // блока заголовка, то нужно захватить и саму сцену/папку
     //
-    if (fromItem->type() == TextModelItemType::Text) {
+    if (fromItem->type() == TextModelItemType::Text && fromItemParent->hasParent()) {
         const auto textItem = static_cast<TextModelTextItem*>(fromItem);
         if (textItem->paragraphType() == TextParagraphType::ActHeading
             || textItem->paragraphType() == TextParagraphType::SequenceHeading
@@ -1124,41 +1124,9 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         // Посмотрим на содержимое майм данных и проверим сколько там текстовых блоков
         //
-        auto isMimeContainsFolderOrSequence = false;
-        auto isMimeContainsJustOneBlock = false;
-        {
-            QDomDocument mimeDocument;
-            mimeDocument.setContent(correctedMimeData);
-            const auto document = mimeDocument.firstChildElement(xml::kDocumentTag);
-
-            //
-            // Всего один текстовый блок
-            //
-            if (document.childNodes().size() == 1
-                && textFolderTypeFromString(document.firstChild().nodeName())
-                    == TextFolderType::Undefined
-                && textGroupTypeFromString(document.firstChild().nodeName())
-                    == TextGroupType::Undefined) {
-                isMimeContainsJustOneBlock = true;
-            }
-
-            //
-            // или группа с одним заголовком
-            //
-            else if (document.childNodes().size() == 1
-                     && (textFolderTypeFromString(document.firstChild().nodeName())
-                             != TextFolderType::Undefined
-                         || textGroupTypeFromString(document.firstChild().nodeName())
-                             != TextGroupType::Undefined)
-                     && document.firstChild()
-                             .firstChildElement(xml::kContentTag)
-                             .childNodes()
-                             .size()
-                         == 1) {
-                isMimeContainsFolderOrSequence = true;
-                isMimeContainsJustOneBlock = true;
-            }
-        }
+        const auto mimeInfo = ModelHelper::isMimeHasJustOneBlock(correctedMimeData);
+        const auto isMimeContainsJustOneBlock = mimeInfo.first;
+        const auto isMimeContainsFolderOrSequence = mimeInfo.second;
         //
         // ... если текст блока, в который идёт вставка не пуст, а в майм данных есть группа и всего
         //     один текстовый элемент в ней
@@ -1205,10 +1173,13 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             //
             if (textItem->text().isEmpty()) {
                 //
-                // ... и блок не является заголовком группы или папки, то просто переносим блок
-                //     после вставляемого фрагмента (в завершении вставки он будет удалён)
+                // ... и блок не является заголовком группы или папки
                 //
-                if (!isTextParagraphAHeading(textItem->paragraphType())) {
+                if (!isTextParagraphHeading(textItem->paragraphType())) {
+                    //
+                    // ... то просто переносим блок после вставляемого фрагмента
+                    //     (в завершении вставки он будет удалён)
+                    //
                     lastItemsFromSourceScene.append(textItem);
                 }
             }
@@ -1341,6 +1312,14 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                 = insertAfterItem != nullptr ? insertAfterItem->type() : TextModelItemType::Folder;
             switch (previousItemType) {
             case TextModelItemType::Text: {
+                //
+                // Т.к. вставка разделителя таблицы аффектит текст, то считаем,
+                // что первый текстовый блок был обработан
+                //
+                if (!isFirstTextItemHandled) {
+                    isFirstTextItemHandled = true;
+                }
+
                 QScopedPointer<TextModelSplitterItem> newSplitterItem(
                     createSplitterItem(contentReader));
                 const auto textItem = static_cast<TextModelTextItem*>(insertAfterItem);
@@ -1374,7 +1353,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                 //
                 // Если всё прошло успешно, добавляем созданный разделитель
                 //
-                increaseMimeLength();
+                increaseMimeLength(1);
                 newItem = createSplitterItem();
                 newItem->copyFrom(newSplitterItem.data());
                 break;

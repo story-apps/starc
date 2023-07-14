@@ -165,7 +165,7 @@ CORE_LIBRARY_EXPORT QString textParagraphTitle(TextParagraphType _type);
 /**
  * @brief Является ли блок заголовком
  */
-CORE_LIBRARY_EXPORT bool isTextParagraphAHeading(TextParagraphType _type);
+CORE_LIBRARY_EXPORT bool isTextParagraphHeading(TextParagraphType _type);
 
 
 /**

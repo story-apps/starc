@@ -1,5 +1,7 @@
 #pragma once
 
+#include <qcontainerfwd.h>
+
 #include <corelib_global.h>
 
 class QAbstractItemModel;
@@ -29,4 +31,10 @@ public:
      * @brief Сбросить модель титульной страницы на дефолтную
      */
     static void resetTitlePageModel(BusinessLayer::SimpleTextModel* _model);
+
+    /**
+     * @brief Содержится ли в майм данных один текстовый элемент
+     * @return <всего один блок, является ли блок папкой или группой>
+     */
+    static QPair<bool, bool> isMimeHasJustOneBlock(const QString& _mime);
 };

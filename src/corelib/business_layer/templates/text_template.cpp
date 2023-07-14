@@ -248,7 +248,7 @@ QString textParagraphTitle(TextParagraphType _type)
     }
 }
 
-bool isTextParagraphAHeading(TextParagraphType _type)
+bool isTextParagraphHeading(TextParagraphType _type)
 {
     const QSet<TextParagraphType> headings = {
         TextParagraphType::ActHeading,      TextParagraphType::SequenceHeading,
@@ -792,15 +792,18 @@ TextTemplate::Implementation::Implementation()
 
 TextParagraphType TextTemplate::Implementation::defaultParagraphType() const
 {
-    if (paragraphsStyles.contains(TextParagraphType::Action)) {
-        return TextParagraphType::Action;
-    } else if (paragraphsStyles.contains(TextParagraphType::Description)) {
-        return TextParagraphType::Description;
-    } else if (paragraphsStyles.contains(TextParagraphType::Dialogue)) {
-        return TextParagraphType::Dialogue;
-    } else {
-        return TextParagraphType::Text;
+    const QVector<TextParagraphType> defaultTypes = {
+        TextParagraphType::SceneHeading,    TextParagraphType::Action,
+        TextParagraphType::PageHeading,     TextParagraphType::Description,
+        TextParagraphType::UnformattedText,
+    };
+
+    for (const auto type : defaultTypes) {
+        if (paragraphsStyles.contains(type)) {
+            return type;
+        }
     }
+    return TextParagraphType::Text;
 }
 
 QFont TextTemplate::Implementation::defaultFont() const

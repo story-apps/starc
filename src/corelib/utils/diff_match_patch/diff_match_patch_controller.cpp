@@ -287,6 +287,18 @@ QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMa
 
 int DiffMatchPatchController::changeEndPosition(const QString& _before, const QString& _after) const
 {
+    //
+    // Обработаем крайние случаи, если один из текстов пуст
+    //
+    if (_before.isEmpty()) {
+        return _after.length() - 1;
+    } else if (_after.isEmpty()) {
+        return 0;
+    }
+
+    //
+    // А если оба текста не пусты определим позицию по дифу
+    //
     diff_match_patch dmp;
     const auto patches = dmp.patch_make(_before, _after);
     if (patches.isEmpty()) {

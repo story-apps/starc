@@ -574,6 +574,9 @@ QByteArray TextModelGroupItem::toXml(TextModelItem* _from, int _fromPosition, Te
         //
         if (child->type() != TextModelItemType::Text) {
             xml += child;
+            if (child == _to) {
+                break;
+            }
             continue;
         }
 
