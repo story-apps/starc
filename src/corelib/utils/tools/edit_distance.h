@@ -82,9 +82,15 @@ Operation<T> insertOperation(const QVector<Operation<T>>& _operations, T* _item)
     if (_item->toXml() == "<splitter type=\"end\"/>\n") {
         weight = 100;
         for (const auto& operation : reversed(_operations)) {
-            if (operation.type == OperationType::Insert
-                && operation.value->toXml() == "<splitter type=\"start\"/>\n") {
-                weight = 1;
+            if (operation.type != OperationType::Insert) {
+                continue;
+            }
+
+            const QString operationValueXml = operation.value->toXml();
+            if (operationValueXml.startsWith("<splitter type=")) {
+                if (operationValueXml == "<splitter type=\"start\"/>\n") {
+                    weight = 1;
+                }
                 break;
             }
         }
@@ -104,9 +110,15 @@ Operation<T> removeOperation(const QVector<Operation<T>>& _operations, T* _item)
     if (_item->toXml() == "<splitter type=\"end\"/>\n") {
         weight = 100;
         for (const auto& operation : reversed(_operations)) {
-            if (operation.type == OperationType::Remove
-                && operation.value->toXml() == "<splitter type=\"start\"/>\n") {
-                weight = 1;
+            if (operation.type != OperationType::Remove) {
+                continue;
+            }
+
+            const QString operationValueXml = operation.value->toXml();
+            if (operationValueXml.startsWith("<splitter type=")) {
+                if (operation.value->toXml() == "<splitter type=\"start\"/>\n") {
+                    weight = 1;
+                }
                 break;
             }
         }
