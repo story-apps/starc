@@ -544,15 +544,8 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                 //
                 // ... выделяем таблицу вместе с границами
                 //
-                const auto selectionInterval = cursor.selectionInterval();
-                cursor.setPosition(selectionInterval.from);
-                while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter) {
-                    cursor.movePosition(TextCursor::PreviousBlock);
-                }
-                do {
-                    cursor.movePosition(TextCursor::NextBlock, TextCursor::KeepAnchor);
-                } while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter
-                         && cursor.position() < selectionInterval.to);
+                cursor.setPosition(topCursorPosition);
+                cursor.setPosition(bottomCursorPosition, TextCursor::KeepAnchor);
                 //
                 // ... удаляем таблицу
                 //
