@@ -3222,7 +3222,8 @@ void ApplicationManager::initConnections()
     connect(d->projectManager.data(), &ProjectManager::cursorChanged, this,
             [this](const QUuid& _documentUuid, const QByteArray& _cursorData) {
                 const auto currentProject = d->projectsManager->currentProject();
-                if (!currentProject->isRemote() || !currentProject->canBeSynced()) {
+                if (currentProject == nullptr || !currentProject->isRemote()
+                    || !currentProject->canBeSynced()) {
                     return;
                 }
 
@@ -3233,7 +3234,8 @@ void ApplicationManager::initConnections()
             [this](int _projectId, const QUuid& _documentUuid,
                    const QVector<Domain::CursorInfo>& _cursors) {
                 if (const auto currentProject = d->projectsManager->currentProject();
-                    currentProject->isRemote() && currentProject->id() == _projectId) {
+                    currentProject != nullptr && currentProject->isRemote()
+                    && currentProject->id() == _projectId) {
                     d->projectManager->setCursors(_documentUuid, _cursors);
                 }
             });

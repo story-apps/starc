@@ -170,10 +170,10 @@ public:
     H6Label* styleChooseTitle = nullptr;
     Body2Label* styleChooseSubtitle = nullptr;
     Subtitle1Label* styleChooseDescription = nullptr;
-    ComboBox* styleChooseComboBox = nullptr;
-    QStandardItemModel* styleChooseModel = nullptr;
     Toggle* styleChooseActivateToggle = nullptr;
     Body1Label* styleChooseActivateTitle = nullptr;
+    ComboBox* styleChooseComboBox = nullptr;
+    QStandardItemModel* styleChooseModel = nullptr;
     Button* styleChooseContinueButton = nullptr;
 
     Widget* backupsPage = nullptr;
@@ -257,10 +257,10 @@ OnboardingNavigator::Implementation::Implementation(OnboardingNavigator* _q)
     , styleChooseTitle(new H6Label(styleChoosePage))
     , styleChooseSubtitle(new Body2Label(styleChoosePage))
     , styleChooseDescription(new Subtitle1Label(styleChoosePage))
-    , styleChooseComboBox(new ComboBox(styleChoosePage))
-    , styleChooseModel(new QStandardItemModel(styleChooseComboBox))
     , styleChooseActivateToggle(new Toggle(styleChoosePage))
     , styleChooseActivateTitle(new Body1Label(styleChoosePage))
+    , styleChooseComboBox(new ComboBox(styleChoosePage))
+    , styleChooseModel(new QStandardItemModel(styleChooseComboBox))
     , styleChooseContinueButton(new Button(styleChoosePage))
     //
     , backupsPage(new Widget(q))
