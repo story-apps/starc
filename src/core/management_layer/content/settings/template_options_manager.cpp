@@ -24,7 +24,6 @@
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 #include <utils/helpers/measurement_helper.h>
 
-#include <QFontDatabase>
 #include <QTimer>
 
 #include <variant>
@@ -320,10 +319,11 @@ void TemplateOptionsManager::Implementation::saveParagraphParameters(
     paragraphStyle.setActive(paragraphsView->isParagraphEnabled());
     paragraphStyle.setStartFromNewPage(paragraphsView->isStartsFromNewPage());
     QFont font(paragraphsView->fontFamily());
-    QStringList fontFamilies = QFontDatabase::systemFont(QFontDatabase::GeneralFont).families();
-    fontFamilies.prepend(QLatin1String("Noto Color Emoji"));
-    fontFamilies.prepend(QLatin1String("Apple Color Emoji"));
-    fontFamilies.prepend(font.family());
+    const QStringList fontFamilies = {
+        font.family(),
+        QLatin1String("Apple Color Emoji"),
+        QLatin1String("Noto Color Emoji"),
+    };
     font.setFamilies(fontFamilies);
     font.setPixelSize(MeasurementHelper::ptToPx(paragraphsView->fontSize()));
     font.setCapitalization(paragraphsView->isUppercase() ? QFont::AllUppercase : QFont::MixedCase);

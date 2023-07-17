@@ -335,8 +335,7 @@ public:
 
 DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
 {
-    QStringList fontFamilies = QFontDatabase::systemFont(QFontDatabase::GeneralFont).families();
-    fontFamilies.prepend(QLatin1String("Roboto"));
+    QStringList fontFamilies = { QLatin1String("Roboto") };
     switch (QLocale().language()) {
     case QLocale::Arabic:
     case QLocale::Persian: {
