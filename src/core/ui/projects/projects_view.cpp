@@ -112,6 +112,7 @@ void ProjectsView::Implementation::initProjectsPage()
 void ProjectsView::Implementation::updateProjectsPageUi()
 {
     projectsPage->setBackgroundColor(DesignSystem::color().surface());
+    projectsPage->setCardsSize(60 * DesignSystem::scaleFactor());
 }
 
 void ProjectsView::Implementation::updateToolbarUi()
