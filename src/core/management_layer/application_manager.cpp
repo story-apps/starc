@@ -1165,18 +1165,19 @@ void ApplicationManager::Implementation::updateWindowTitle()
         return;
     }
 
-    applicationView->setWindowTitle(QString("%1%2 - Story Architect %3")
-                                        .arg(
+    const auto currentProject = projectsManager->currentProject();
+    applicationView->setWindowTitle(
+        QString("%1%2 (%3) - Story Architect%4")
+            .arg(
 #ifndef Q_OS_MAC
-                                            "[*]"
+                "[*]"
 #else
-                                            ""
+                ""
 #endif
-                                            )
-                                        .arg(projectsManager->currentProject()->name(),
-                                             (projectsManager->currentProject()->isReadOnly()
-                                                  ? QString("- %1").arg(tr("Read only"))
-                                                  : "")));
+                ,
+                currentProject->name(),
+                (currentProject->isLocal() ? currentProject->path() : tr("in cloud")),
+                (currentProject->isReadOnly() ? QString(" - %1").arg(tr("Read only")) : "")));
 
     if (applicationView->isWindowModified()) {
         markChangesSaved(false);
