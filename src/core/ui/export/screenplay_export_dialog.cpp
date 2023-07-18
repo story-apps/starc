@@ -29,6 +29,8 @@ const QString kFormatKey = kGroupKey + "format";
 const QString kIncludeSequencesKey = kGroupKey + "include-sequences";
 const QString kIncludeInlineNotesKey = kGroupKey + "include-inline-notes";
 const QString kIncludeReviewMarksKey = kGroupKey + "include-review-marks";
+const QString kHighlightCharacterKey = kGroupKey + "highlight-character";
+const QString kHighlightCharacterWithDialogueKey = kGroupKey + "highlight-character-with-dialogue";
 const QString kScenesToPrintKey = kGroupKey + "scenes-to-print";
 const QString kWatermarkKey = kGroupKey + "watermark";
 const QString kWatermarkColorKey = kGroupKey + "watermark-color";
@@ -55,6 +57,8 @@ public:
     CheckBox* includeSequences = nullptr;
     CheckBox* includeInlineNotes = nullptr;
     CheckBox* includeReviewMarks = nullptr;
+    CheckBox* highlightCharacters = nullptr;
+    CheckBox* highlightCharactersWithDialogue = nullptr;
     TextField* exportConcreteScenes = nullptr;
     TextField* watermark = nullptr;
     ColorPickerPopup* watermarkColorPopup = nullptr;
@@ -74,6 +78,8 @@ ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
     , includeSequences(new CheckBox(_parent))
     , includeInlineNotes(new CheckBox(_parent))
     , includeReviewMarks(new CheckBox(_parent))
+    , highlightCharacters(new CheckBox(_parent))
+    , highlightCharactersWithDialogue(new CheckBox(_parent))
     , exportConcreteScenes(new TextField(_parent))
     , watermark(new TextField(_parent))
     , watermarkColorPopup(new ColorPickerPopup(_parent))
@@ -86,6 +92,8 @@ ScreenplayExportDialog::Implementation::Implementation(QWidget* _parent)
     auto formatsModel = new QStringListModel({ "PDF", "DOCX", "FDX", "Fountain" });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
+    highlightCharactersWithDialogue->setChecked(true);
+    highlightCharactersWithDialogue->setEnabled(false);
     exportConcreteScenes->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     watermark->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     watermark->setTrailingIcon(u8"\U000F0765");
@@ -152,6 +160,15 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->includeSequences, row++, column);
     contentsLayout()->addWidget(d->includeInlineNotes, row++, column);
     contentsLayout()->addWidget(d->includeReviewMarks, row++, column);
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(d->highlightCharacters);
+        layout->addWidget(d->highlightCharactersWithDialogue);
+        layout->addStretch();
+        contentsLayout()->addLayout(layout, row++, column);
+    }
     contentsLayout()->addWidget(d->exportConcreteScenes, row++, column);
     contentsLayout()->addWidget(d->watermark, row, column, Qt::AlignTop);
     contentsLayout()->setRowStretch(row++, 1);
@@ -174,6 +191,7 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
         auto isPrintFoldersVisible = true;
         auto isPrintInlineNotesVisible = true;
         auto isPrintReviewMarksVisible = true;
+        auto isHighlightCharactersVisible = true;
         auto exportConcreteScenesVisible = true;
         auto isWatermarkVisible = true;
         switch (d->fileFormat->currentIndex().row()) {
@@ -219,11 +237,14 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
             isPrintInlineNotesVisible = false;
             isPrintReviewMarksVisible = false;
             exportConcreteScenesVisible = false;
+            isHighlightCharactersVisible = false;
         }
 
         d->includeSequences->setVisible(isPrintFoldersVisible);
         d->includeInlineNotes->setVisible(isPrintInlineNotesVisible);
         d->includeReviewMarks->setVisible(isPrintReviewMarksVisible);
+        d->highlightCharacters->setVisible(isHighlightCharactersVisible);
+        d->highlightCharactersWithDialogue->setVisible(isHighlightCharactersVisible);
         d->exportConcreteScenes->setVisible(exportConcreteScenesVisible);
         d->watermark->setVisible(isWatermarkVisible);
     };
@@ -241,6 +262,8 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
     connect(d->includeTreatment, &CheckBox::checkedChanged, this, updateExportEnabled);
     connect(d->includeScreenplay, &CheckBox::checkedChanged, this, updateExportEnabled);
     //
+    connect(d->highlightCharacters, &CheckBox::checkedChanged, d->highlightCharactersWithDialogue,
+            &CheckBox::setEnabled);
     connect(d->watermark, &TextField::trailingIconPressed, this, [this] {
         d->watermarkColorPopup->showPopup(d->watermark, Qt::AlignBottom | Qt::AlignRight);
     });
@@ -264,6 +287,9 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
     d->includeSequences->setChecked(settings.value(kIncludeSequencesKey, true).toBool());
     d->includeInlineNotes->setChecked(settings.value(kIncludeInlineNotesKey, false).toBool());
     d->includeReviewMarks->setChecked(settings.value(kIncludeReviewMarksKey, true).toBool());
+    d->highlightCharacters->setChecked(settings.value(kHighlightCharacterKey, false).toBool());
+    d->highlightCharactersWithDialogue->setChecked(
+        settings.value(kHighlightCharacterWithDialogueKey, true).toBool());
     d->exportConcreteScenes->setText(settings.value(kScenesToPrintKey).toString());
     d->watermark->setText(settings.value(kWatermarkKey).toString());
     d->watermarkColorPopup->setSelectedColor(
@@ -285,6 +311,9 @@ ScreenplayExportDialog::~ScreenplayExportDialog()
     settings.setValue(kIncludeSequencesKey, d->includeSequences->isChecked());
     settings.setValue(kIncludeInlineNotesKey, d->includeInlineNotes->isChecked());
     settings.setValue(kIncludeReviewMarksKey, d->includeReviewMarks->isChecked());
+    settings.setValue(kHighlightCharacterKey, d->highlightCharacters->isChecked());
+    settings.setValue(kHighlightCharacterWithDialogueKey,
+                      d->highlightCharactersWithDialogue->isChecked());
     settings.setValue(kScenesToPrintKey, d->exportConcreteScenes->text());
     settings.setValue(kWatermarkKey, d->watermark->text());
     settings.setValue(kWatermarkColorKey, d->watermarkColorPopup->selectedColor());
@@ -303,6 +332,8 @@ BusinessLayer::ScreenplayExportOptions ScreenplayExportDialog::exportOptions() c
     options.includeFolders = d->includeSequences->isChecked();
     options.includeInlineNotes = d->includeInlineNotes->isChecked();
     options.includeReviewMarks = d->includeReviewMarks->isChecked();
+    options.highlightCharacters = d->highlightCharacters->isChecked();
+    options.highlightCharactersWithDialogues = d->highlightCharactersWithDialogue->isChecked();
     options.exportScenes = d->scenesToPrint();
     options.watermark = d->watermark->text();
     options.watermarkColor = ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3);
@@ -337,6 +368,8 @@ void ScreenplayExportDialog::updateTranslations()
     d->includeSequences->setText(tr("Include sequences headers and footers"));
     d->includeInlineNotes->setText(tr("Include inline notes"));
     d->includeReviewMarks->setText(tr("Include review marks"));
+    d->highlightCharacters->setText(tr("Highlight characters"));
+    d->highlightCharactersWithDialogue->setText(tr("with dialogues"));
     d->exportConcreteScenes->setLabel(tr("Export concrete scenes"));
     d->exportConcreteScenes->setHelper(tr("Keep empty, if you want to print all scenes"));
     d->watermark->setLabel(tr("Watermark"));
@@ -378,6 +411,8 @@ void ScreenplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
              d->includeSequences,
              d->includeInlineNotes,
              d->includeReviewMarks,
+             d->highlightCharacters,
+             d->highlightCharactersWithDialogue,
              d->openDocumentAfterExport,
          }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());

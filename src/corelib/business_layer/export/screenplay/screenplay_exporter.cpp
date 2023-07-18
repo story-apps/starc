@@ -12,6 +12,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 
 
@@ -92,12 +93,14 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
     //
     // Если нужно выделить реплики конкретного персонажа, добавим форматирование
     //
-    if (!_exportOptions.highlightCharacter.isEmpty()) {
+    if (_exportOptions.highlightCharacters) {
         QString currentCharacter;
+        QColor currentCharacterColor;
         bool updateFormatting = false;
         switch (TextBlockStyle::forBlock(_cursor.block())) {
         case TextParagraphType::Character: {
             currentCharacter = ScreenplayCharacterParser::name(_cursor.block().text());
+            currentCharacterColor = _exportOptions.highlightCharactersList.value(currentCharacter);
             updateFormatting = true;
             break;
         }
@@ -109,6 +112,8 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
             while (block != block.document()->begin()) {
                 if (TextBlockStyle::forBlock(block) == TextParagraphType::Character) {
                     currentCharacter = ScreenplayCharacterParser::name(block.text());
+                    currentCharacterColor
+                        = _exportOptions.highlightCharactersList.value(currentCharacter);
                     break;
                 }
 
@@ -123,13 +128,14 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
         }
         }
 
-        if (updateFormatting && currentCharacter == _exportOptions.highlightCharacter) {
+        if (updateFormatting && currentCharacterColor.isValid()) {
             _cursor.movePosition(QTextCursor::StartOfBlock);
             _cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             auto updateFormatting
-                = [color = _exportOptions.highlightCharacterColor](const QTextCharFormat& _format) {
+                = [color = currentCharacterColor](const QTextCharFormat& _format) {
                       auto format = _format;
                       format.setBackground(color);
+                      format.setForeground(ColorHelper::contrasted(color));
                       return format;
                   };
             TextHelper::updateSelectionFormatting(_cursor, updateFormatting);

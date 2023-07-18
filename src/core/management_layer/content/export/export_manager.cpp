@@ -22,6 +22,7 @@
 #include <business_layer/export/stageplay/stageplay_pdf_exporter.h>
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
+#include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/novel/novel_information_model.h>
@@ -247,6 +248,19 @@ void ExportManager::Implementation::exportScreenplay(
     exportOptions.footer = screenplayInformation->footer();
     exportOptions.printFooterOnTitlePage = screenplayInformation->printFooterOnTitlePage();
     //
+    // ... при необходимости подсветить персонажей, делаем это
+    //
+    if (exportOptions.highlightCharacters) {
+        const auto charactersModel = screenplayTextModel->charactersList();
+        for (int row = 0; row < charactersModel->rowCount(); ++row) {
+            const auto characterName = charactersModel->index(row, 0).data().toString();
+            const auto character = screenplayTextModel->character(characterName);
+            if (character->color().isValid()) {
+                exportOptions.highlightCharactersList.insert(character->name(), character->color());
+            }
+        }
+    }
+    //
     // ... обновим папку, куда в следующий раз он предположительно опять будет
     //     экспортировать
     //
@@ -373,6 +387,20 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                 exportOptions.templateId = comicBookInformation->templateId();
                 exportOptions.header = comicBookInformation->header();
                 exportOptions.footer = comicBookInformation->footer();
+                //
+                // ... при необходимости подсветить персонажей, делаем это
+                //
+                if (exportOptions.highlightCharacters) {
+                    const auto charactersModel = comicBookTextModel->charactersList();
+                    for (int row = 0; row < charactersModel->rowCount(); ++row) {
+                        const auto characterName = charactersModel->index(row, 0).data().toString();
+                        const auto character = comicBookTextModel->character(characterName);
+                        if (character->color().isValid()) {
+                            exportOptions.highlightCharactersList.insert(character->name(),
+                                                                         character->color());
+                        }
+                    }
+                }
                 //
                 // ... обновим папку, куда в следующий раз он предположительно опять будет
                 //     экспортировать
@@ -520,6 +548,20 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
                 exportOptions.printFooterOnTitlePage
                     = audioplayInformation->printFooterOnTitlePage();
                 //
+                // ... при необходимости подсветить персонажей, делаем это
+                //
+                if (exportOptions.highlightCharacters) {
+                    const auto charactersModel = audioplayTextModel->charactersList();
+                    for (int row = 0; row < charactersModel->rowCount(); ++row) {
+                        const auto characterName = charactersModel->index(row, 0).data().toString();
+                        const auto character = audioplayTextModel->character(characterName);
+                        if (character->color().isValid()) {
+                            exportOptions.highlightCharactersList.insert(character->name(),
+                                                                         character->color());
+                        }
+                    }
+                }
+                //
                 // ... обновим папку, куда в следующий раз он предположительно опять будет
                 //     экспортировать
                 //
@@ -664,6 +706,20 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
                 exportOptions.footer = stageplayInformation->footer();
                 exportOptions.printFooterOnTitlePage
                     = stageplayInformation->printFooterOnTitlePage();
+                //
+                // ... при необходимости подсветить персонажей, делаем это
+                //
+                if (exportOptions.highlightCharacters) {
+                    const auto charactersModel = stageplayTextModel->charactersList();
+                    for (int row = 0; row < charactersModel->rowCount(); ++row) {
+                        const auto characterName = charactersModel->index(row, 0).data().toString();
+                        const auto character = stageplayTextModel->character(characterName);
+                        if (character->color().isValid()) {
+                            exportOptions.highlightCharactersList.insert(character->name(),
+                                                                         character->color());
+                        }
+                    }
+                }
                 //
                 // ... обновим папку, куда в следующий раз он предположительно опять будет
                 //     экспортировать

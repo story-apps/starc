@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QColor>
-#include <QString>
+#include <QHash>
 
 #include <corelib_global.h>
 
@@ -68,6 +68,17 @@ struct CORE_LIBRARY_EXPORT ExportOptions {
     bool includeReviewMarks = true;
 
     /**
+     * @brief Необходимо ли подсвечивать персонажей
+     */
+    bool highlightCharacters = false;
+    bool highlightCharactersWithDialogues = false;
+
+    /**
+     * @brief Каких персонажей и какими цветами подсвечивать
+     */
+    QHash<QString, QColor> highlightCharactersList;
+
+    /**
      * @brief Водяной знак
      */
     QString watermark;
@@ -75,16 +86,6 @@ struct CORE_LIBRARY_EXPORT ExportOptions {
      * @brief Цвет водяного знака
      */
     QColor watermarkColor;
-
-    /**
-     * @brief Песонаж, чьи реплики нужно выделить
-     */
-    QString highlightCharacter;
-
-    /**
-     * @brief Цвет для выделения реплик персонажа
-     */
-    QColor highlightCharacterColor;
 
 
     //

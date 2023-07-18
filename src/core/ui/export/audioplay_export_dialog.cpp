@@ -27,6 +27,8 @@ const QString kIncludeScriptKey = kGroupKey + "include-script";
 const QString kFormatKey = kGroupKey + "format";
 const QString kIncludeInlineNotesKey = kGroupKey + "include-inline-notes";
 const QString kIncludeReviewMarksKey = kGroupKey + "include-review-marks";
+const QString kHighlightCharacterKey = kGroupKey + "highlight-character";
+const QString kHighlightCharacterWithDialogueKey = kGroupKey + "highlight-character-with-dialogue";
 const QString kWatermarkKey = kGroupKey + "watermark";
 const QString kWatermarkColorKey = kGroupKey + "watermark-color";
 const QString kOpenDocumentAfterExportKey = kGroupKey + "open-document-after-export";
@@ -45,6 +47,8 @@ public:
     ComboBox* fileFormat = nullptr;
     CheckBox* includeInlineNotes = nullptr;
     CheckBox* includeReviewMarks = nullptr;
+    CheckBox* highlightCharacters = nullptr;
+    CheckBox* highlightCharactersWithDialogue = nullptr;
     TextField* watermark = nullptr;
     ColorPickerPopup* watermarkColorPopup = nullptr;
 
@@ -61,6 +65,8 @@ AudioplayExportDialog::Implementation::Implementation(QWidget* _parent)
     , fileFormat(new ComboBox(_parent))
     , includeInlineNotes(new CheckBox(_parent))
     , includeReviewMarks(new CheckBox(_parent))
+    , highlightCharacters(new CheckBox(_parent))
+    , highlightCharactersWithDialogue(new CheckBox(_parent))
     , watermark(new TextField(_parent))
     , watermarkColorPopup(new ColorPickerPopup(_parent))
     , buttonsLayout(new QHBoxLayout)
@@ -72,6 +78,7 @@ AudioplayExportDialog::Implementation::Implementation(QWidget* _parent)
     auto formatsModel = new QStringListModel({ "PDF", "DOCX" });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
+    highlightCharactersWithDialogue->setEnabled(false);
     watermark->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     watermark->setTrailingIcon(u8"\U000F0765");
     watermarkColorPopup->setColorCanBeDeselected(false);
@@ -109,6 +116,15 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->fileFormat, row++, column);
     contentsLayout()->addWidget(d->includeInlineNotes, row++, column);
     contentsLayout()->addWidget(d->includeReviewMarks, row++, column);
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(d->highlightCharacters);
+        layout->addWidget(d->highlightCharactersWithDialogue);
+        layout->addStretch();
+        contentsLayout()->addLayout(layout, row++, column);
+    }
     contentsLayout()->addWidget(d->watermark, row++, column, Qt::AlignTop);
     contentsLayout()->setRowStretch(row++, 1);
     column = 0;
@@ -118,6 +134,7 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
     auto updateParametersVisibility = [this] {
         auto isPrintInlineNotesVisible = true;
         auto isPrintReviewMarksVisible = true;
+        auto isHighlightCharactersVisible = true;
         auto isWatermarkVisible = true;
         switch (d->fileFormat->currentIndex().row()) {
         //
@@ -142,9 +159,12 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
         if (!d->includeScript->isChecked()) {
             isPrintInlineNotesVisible = false;
             isPrintReviewMarksVisible = false;
+            isHighlightCharactersVisible = false;
         }
         d->includeInlineNotes->setVisible(isPrintInlineNotesVisible);
         d->includeReviewMarks->setVisible(isPrintReviewMarksVisible);
+        d->highlightCharacters->setVisible(isHighlightCharactersVisible);
+        d->highlightCharactersWithDialogue->setVisible(isHighlightCharactersVisible);
         d->watermark->setVisible(isWatermarkVisible);
     };
     connect(d->includeScript, &CheckBox::checkedChanged, this, updateParametersVisibility);
@@ -159,6 +179,8 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
     connect(d->includeSynopsis, &CheckBox::checkedChanged, this, updateExportEnabled);
     connect(d->includeScript, &CheckBox::checkedChanged, this, updateExportEnabled);
     //
+    connect(d->highlightCharacters, &CheckBox::checkedChanged, d->highlightCharactersWithDialogue,
+            &CheckBox::setEnabled);
     connect(d->watermark, &TextField::trailingIconPressed, this, [this] {
         d->watermarkColorPopup->showPopup(d->watermark, Qt::AlignBottom | Qt::AlignRight);
     });
@@ -180,6 +202,9 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
     d->fileFormat->setCurrentIndex(fileFormatIndex);
     d->includeInlineNotes->setChecked(settings.value(kIncludeInlineNotesKey, false).toBool());
     d->includeReviewMarks->setChecked(settings.value(kIncludeReviewMarksKey, true).toBool());
+    d->highlightCharacters->setChecked(settings.value(kHighlightCharacterKey, false).toBool());
+    d->highlightCharactersWithDialogue->setChecked(
+        settings.value(kHighlightCharacterWithDialogueKey, false).toBool());
     d->watermark->setText(settings.value(kWatermarkKey).toString());
     d->watermarkColorPopup->setSelectedColor(
         settings.value(kWatermarkColorKey, QColor("#B7B7B7")).value<QColor>());
@@ -198,6 +223,9 @@ AudioplayExportDialog::~AudioplayExportDialog()
     settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
     settings.setValue(kIncludeInlineNotesKey, d->includeInlineNotes->isChecked());
     settings.setValue(kIncludeReviewMarksKey, d->includeReviewMarks->isChecked());
+    settings.setValue(kHighlightCharacterKey, d->highlightCharacters->isChecked());
+    settings.setValue(kHighlightCharacterWithDialogueKey,
+                      d->highlightCharactersWithDialogue->isChecked());
     settings.setValue(kWatermarkKey, d->watermark->text());
     settings.setValue(kWatermarkColorKey, d->watermarkColorPopup->selectedColor());
     settings.setValue(kOpenDocumentAfterExportKey, d->openDocumentAfterExport->isChecked());
@@ -213,6 +241,8 @@ BusinessLayer::AudioplayExportOptions AudioplayExportDialog::exportOptions() con
     options.includeText = d->includeScript->isChecked();
     options.includeInlineNotes = d->includeInlineNotes->isChecked();
     options.includeReviewMarks = d->includeReviewMarks->isChecked();
+    options.highlightCharacters = d->highlightCharacters->isChecked();
+    options.highlightCharactersWithDialogues = d->highlightCharactersWithDialogue->isChecked();
     options.watermark = d->watermark->text();
     options.watermarkColor = ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3);
     return options;
@@ -244,6 +274,8 @@ void AudioplayExportDialog::updateTranslations()
     d->fileFormat->setLabel(tr("Format"));
     d->includeInlineNotes->setText(tr("Include inline notes"));
     d->includeReviewMarks->setText(tr("Include review marks"));
+    d->highlightCharacters->setText(tr("Highlight characters"));
+    d->highlightCharactersWithDialogue->setText(tr("with dialogues"));
     d->watermark->setLabel(tr("Watermark"));
 
     d->openDocumentAfterExport->setText(tr("Open document after export"));
@@ -280,6 +312,8 @@ void AudioplayExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
              d->includeScript,
              d->includeInlineNotes,
              d->includeReviewMarks,
+             d->highlightCharacters,
+             d->highlightCharactersWithDialogue,
              d->openDocumentAfterExport,
          }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
