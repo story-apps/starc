@@ -1145,7 +1145,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                             if (pageNumberText.contains('-')) {
                                 auto numbers = pageNumberText.split('-');
                                 const int firstNumber = numbers.constFirst().toInt();
-                                if (firstNumber % 2 == 0) {
+                                if (firstNumber % 2 == 1) {
                                     setPainterPen(DesignSystem::color().error());
                                     paintLeftPageIcon(rightPageIcon);
                                     paintRightPageIcon(leftPageIcon);
@@ -1159,7 +1159,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                                 //
                                 // Правая страница
                                 //
-                                if (pageNumber % 2 == 0) {
+                                if (pageNumber % 2 == 1) {
                                     paintRightPageIcon(rightPageIcon);
                                 }
                                 //
