@@ -556,7 +556,7 @@ public:
     /**
      * @brief Дефолтный шрифт шаблона
      */
-    QFont defaultFont() const;
+    QFont baseFont() const;
 
     /**
      * @brief Шаблон оформления титульной страницы

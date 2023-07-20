@@ -160,7 +160,7 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
         //
         else {
             _painter->save();
-            _painter->setFont(_template.defaultFont());
+            _painter->setFont(_template.baseFont());
 
             //
             // Середины верхнего и нижнего полей

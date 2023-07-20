@@ -429,7 +429,7 @@ void ScreenplayGenderReport::saveToPdf(const QString& _fileName) const
     textEdit.setUsePageMode(true);
     textEdit.setPageSpacing(0);
     QTextDocument report;
-    report.setDefaultFont(exportTemplate.defaultFont());
+    report.setDefaultFont(exportTemplate.baseFont());
     textEdit.setDocument(&report);
     //
     // ... параметры страницы

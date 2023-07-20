@@ -520,7 +520,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     //
     // Обновим шрифт документа, в моменте когда текста нет
     //
-    const auto templateDefaultFont = d->documentTemplate().defaultFont();
+    const auto templateDefaultFont = d->documentTemplate().baseFont();
     if (defaultFont() != templateDefaultFont) {
         setDefaultFont(templateDefaultFont);
     }

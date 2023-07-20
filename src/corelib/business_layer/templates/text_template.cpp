@@ -709,9 +709,14 @@ public:
     TextParagraphType defaultParagraphType() const;
 
     /**
+     * @brief Тип простого текстового блока
+     */
+    TextParagraphType baseParagraphType() const;
+
+    /**
      * @brief Дефолтный шрифт
      */
-    QFont defaultFont() const;
+    QFont baseFont() const;
 
     /**
      * @brief Сформировать шаблоны компаньоны
@@ -794,8 +799,19 @@ TextTemplate::Implementation::Implementation()
 TextParagraphType TextTemplate::Implementation::defaultParagraphType() const
 {
     const QVector<TextParagraphType> defaultTypes = {
-        TextParagraphType::SceneHeading,    TextParagraphType::Action,
-        TextParagraphType::PageHeading,     TextParagraphType::Description,
+        // plays
+        TextParagraphType::SceneHeading,
+        TextParagraphType::Action,
+        TextParagraphType::Cue,
+        // comicbook
+        TextParagraphType::PageHeading,
+        TextParagraphType::PanelHeading,
+        TextParagraphType::Description,
+        // novel
+        TextParagraphType::PartHeading,
+        TextParagraphType::ChapterHeading,
+        TextParagraphType::Text,
+        // all
         TextParagraphType::UnformattedText,
     };
 
@@ -807,9 +823,36 @@ TextParagraphType TextTemplate::Implementation::defaultParagraphType() const
     return TextParagraphType::Text;
 }
 
-QFont TextTemplate::Implementation::defaultFont() const
+TextParagraphType TextTemplate::Implementation::baseParagraphType() const
 {
-    auto font = paragraphsStyles.value(defaultParagraphType()).font();
+    const QVector<TextParagraphType> defaultTypes = {
+        // plays
+        TextParagraphType::Action,
+        TextParagraphType::Cue,
+        TextParagraphType::SceneHeading,
+        // comicbook
+        TextParagraphType::Description,
+        TextParagraphType::PanelHeading,
+        TextParagraphType::PageHeading,
+        // novel
+        TextParagraphType::Text,
+        TextParagraphType::ChapterHeading,
+        TextParagraphType::PartHeading,
+        // all
+        TextParagraphType::UnformattedText,
+    };
+
+    for (const auto type : defaultTypes) {
+        if (paragraphsStyles.contains(type)) {
+            return type;
+        }
+    }
+    return TextParagraphType::Text;
+}
+
+QFont TextTemplate::Implementation::baseFont() const
+{
+    auto font = paragraphsStyles.value(baseParagraphType()).font();
     font.setCapitalization(QFont::MixedCase);
     font.setBold(false);
     font.setItalic(false);
@@ -838,10 +881,10 @@ void TextTemplate::Implementation::buildTitlePageTemplate()
     //
     titlePageTemplate->setPageNumbersAlignment(pageNumbersAlignment);
 
-    TextBlockStyle defaultBlockStyle = paragraphsStyles.value(defaultParagraphType());
+    TextBlockStyle defaultBlockStyle = paragraphsStyles.value(baseParagraphType());
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
-    defaultBlockStyle.setFont(defaultFont());
+    defaultBlockStyle.setFont(baseFont());
     defaultBlockStyle.setMargins({});
     defaultBlockStyle.setFirstLineMargin(0.0);
     defaultBlockStyle.setLinesBefore(0);
@@ -876,9 +919,10 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
     synopsisTemplate->setPageMargins(pageMargins);
     synopsisTemplate->setPageNumbersAlignment(pageNumbersAlignment);
 
-    TextBlockStyle defaultBlockStyle = paragraphsStyles.value(defaultParagraphType());
+    auto defaultBlockStyle = paragraphsStyles.value(baseParagraphType());
     defaultBlockStyle.setActive(true);
     defaultBlockStyle.setStartFromNewPage(false);
+    defaultBlockStyle.setFont(baseFont());
     defaultBlockStyle.setMargins(
         { 0.0, defaultBlockStyle.margins().top(), 0.0, defaultBlockStyle.margins().bottom() });
     //
@@ -1228,9 +1272,9 @@ TextParagraphType TextTemplate::defaultParagraphType() const
     return d->defaultParagraphType();
 }
 
-QFont TextTemplate::defaultFont() const
+QFont TextTemplate::baseFont() const
 {
-    return d->defaultFont();
+    return d->baseFont();
 }
 
 const TextTemplate& TextTemplate::titlePageTemplate() const
