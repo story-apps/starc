@@ -79,7 +79,7 @@ const QVector<CompetitorInfo> kCompetitors = {
         "1c262968848a00b6bdffffff28353aaaaaaa28353aaaaaaae44d66f8f8f2000000f8f8f228353aaaaaaa" } },
     { "Trelby",
       { "ebe7e537383fda924bfffffff6f6f7000000ededed37383fec3740f8f8f2000000f8f8f2ffffff000000",
-        "f2f2f21f1f1fda924bffffff182430d3dce91f3142b5c1cdec3740f8f8f2000000f8f8f2182430d3dce9" } },
+        "182430d3dce9da924bffffff182430d3dce91f3142b5c1cdec3740f8f8f2000000f8f8f2182430d3dce9" } },
 };
 
 } // namespace
