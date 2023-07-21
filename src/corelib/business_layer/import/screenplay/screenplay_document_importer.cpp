@@ -31,7 +31,8 @@ namespace {
 /**
  * @brief Регулярное выражение для определения блока "Время и место" по наличию слов места
  */
-const QRegularExpression kPlaceContainsChecker("(^|[^\\S])(INT|EXT|ИНТ|НАТ|ПАВ|ЭКСТ)([.]|[ - ])");
+const QRegularExpression kPlaceContainsChecker(
+    "(^|[^\\S])(INT|EXT|INT/EXT|ИНТ|НАТ|ИНТ/НАТ|ПАВ|ЭКСТ|ИНТ/ЭКСТ)([.]|[ - ])");
 /**
  * @brief Регулярное выражение для определения блока "Титр" по наличию ключевых слов
  */

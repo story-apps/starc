@@ -204,7 +204,8 @@ void SceneCharactersHandler::complete(const QString& _currentBlockText,
         = editor()->screenplayTemplate().paragraphStyle(TextParagraphType::SceneCharacters);
     QString stylePrefix = style.prefix();
     if (!stylePrefix.isEmpty() && cursorBackwardTextToComma.startsWith(stylePrefix)) {
-        cursorBackwardTextToComma.remove(QRegularExpression(QString("^[%1]").arg(stylePrefix)));
+        cursorBackwardTextToComma.remove(
+            QRegularExpression(QString("^[%1]").arg(TextHelper::toRxEscaped(stylePrefix))));
     }
 
     //

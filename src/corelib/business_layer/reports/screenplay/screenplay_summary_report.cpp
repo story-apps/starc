@@ -94,11 +94,11 @@ void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
     QString rxPattern;
     auto charactersModel = d->screenplayModel->charactersList();
     for (int index = 0; index < charactersModel->rowCount(); ++index) {
-        auto characterName = charactersModel->index(index, 0).data().toString();
+        const auto characterName = charactersModel->index(index, 0).data().toString();
         if (!rxPattern.isEmpty()) {
             rxPattern.append("|");
         }
-        rxPattern.append(characterName);
+        rxPattern.append(TextHelper::toRxEscaped(characterName));
     }
     if (!rxPattern.isEmpty()) {
         rxPattern.prepend("(^|\\W)(");

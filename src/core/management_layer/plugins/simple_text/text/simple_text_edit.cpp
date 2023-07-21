@@ -23,7 +23,6 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QPointer>
-#include <QRegularExpression>
 #include <QScrollBar>
 #include <QTextTable>
 

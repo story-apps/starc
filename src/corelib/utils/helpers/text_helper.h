@@ -64,6 +64,11 @@ public:
     static QString toHtmlEscaped(const QString& _text);
 
     /**
+     * @brief Экранировать специфичные символы, чтобы их можно было использовать в регулярках
+     */
+    static QString toRxEscaped(const QString& _text);
+
+    /**
      * @brief Преобразовать html-специфичные символы к обычному виду
      */
     static QString fromHtmlEscaped(const QString& _escaped);

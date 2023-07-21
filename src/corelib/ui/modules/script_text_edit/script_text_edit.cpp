@@ -131,7 +131,8 @@ bool ScriptTextEdit::updateEnteredText(const QKeyEvent* _event)
     // и после курсора нет текста (для ремарки допустима скобка)
     //
     static QRegularExpression endOfSentenceRx;
-    endOfSentenceRx.setPattern(QString("([.]|[?]|[!]|[…]) %1$").arg(eventText));
+    endOfSentenceRx.setPattern(
+        QString("([.]|[?]|[!]|[…]) %1$").arg(TextHelper::toRxEscaped(eventText)));
     if (cursorBackwardText.contains(endOfSentenceRx) && cursorForwardText.isEmpty()
         && eventText[0] != TextHelper::smartToUpper(eventText[0])) {
         //

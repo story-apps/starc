@@ -325,6 +325,25 @@ QString TextHelper::toHtmlEscaped(const QString& _text)
     return escaped;
 }
 
+QString TextHelper::toRxEscaped(const QString& _text)
+{
+    const QHash<QChar, QString> map = { { QLatin1Char('?'), QLatin1String("[?]") },
+                                        { QLatin1Char('*'), QLatin1String("[*]") },
+                                        { QLatin1Char('.'), QLatin1String("[.]") },
+                                        { QLatin1Char('-'), QLatin1String("[-]") },
+                                        { QLatin1Char('\\'), QLatin1String("[\\]") } };
+
+    QString escaped;
+    const int textLength = _text.length();
+    escaped.reserve(static_cast<int>(textLength * 1.1));
+    for (int i = 0; i < textLength; ++i) {
+        const auto character = _text.at(i);
+        escaped += map.value(character, character);
+    }
+    escaped.squeeze();
+    return escaped;
+}
+
 QString TextHelper::fromHtmlEscaped(const QString& _escaped)
 {
     const QHash<QString, QString> map = { { QLatin1String("&lt;"), QLatin1String("<") },

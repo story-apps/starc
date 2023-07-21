@@ -78,7 +78,7 @@ void AudioplayCharactersActivityPlot::build(QAbstractItemModel* _model) const
         if (!rxPattern.isEmpty()) {
             rxPattern.append("|");
         }
-        rxPattern.append(characterName);
+        rxPattern.append(TextHelper::toRxEscaped(characterName));
     }
     if (!rxPattern.isEmpty()) {
         rxPattern.prepend("(^|\\W)(");

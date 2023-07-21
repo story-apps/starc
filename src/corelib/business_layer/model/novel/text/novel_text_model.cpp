@@ -281,8 +281,9 @@ void NovelTextModel::updateCharacterName(const QString& _oldName, const QString&
                     updateItem(textItem);
                 } else if (textItem->text().contains(oldName, Qt::CaseInsensitive)) {
                     auto text = textItem->text();
-                    const QRegularExpression nameMatcher(QString("\\b(%1)\\b").arg(oldName),
-                                                         QRegularExpression::CaseInsensitiveOption);
+                    const QRegularExpression nameMatcher(
+                        QString("\\b(%1)\\b").arg(TextHelper::toRxEscaped(oldName)),
+                        QRegularExpression::CaseInsensitiveOption);
                     auto match = nameMatcher.match(text);
                     while (match.hasMatch()) {
                         text.remove(match.capturedStart(), match.capturedLength());

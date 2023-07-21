@@ -101,7 +101,7 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
         if (!rxPattern.isEmpty()) {
             rxPattern.append("|");
         }
-        rxPattern.append(characterName);
+        rxPattern.append(TextHelper::toRxEscaped(characterName));
     }
     if (!rxPattern.isEmpty()) {
         rxPattern.prepend("(^|\\W)(");
