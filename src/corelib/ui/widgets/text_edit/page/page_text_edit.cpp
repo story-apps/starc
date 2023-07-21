@@ -2034,9 +2034,10 @@ void PageTextEditPrivate::paintTextBlocksOverlay(QPainter* _painter)
     Q_Q(PageTextEdit);
 
     const qreal pageLeft = 0 - hbar->value() + Ui::DesignSystem::card().shadowMargins().left();
-    const qreal pageRight = pageLeft + pageMetrics.pxPageSize().width()
-        - Ui::DesignSystem::card().shadowMargins().left()
-        - Ui::DesignSystem::card().shadowMargins().right();
+    const qreal pageRight = usePageMode ? (pageLeft + pageMetrics.pxPageSize().width()
+                                           - Ui::DesignSystem::card().shadowMargins().left()
+                                           - Ui::DesignSystem::card().shadowMargins().right())
+                                        : q->viewport()->width();
 
     //
     // Идём наверх
