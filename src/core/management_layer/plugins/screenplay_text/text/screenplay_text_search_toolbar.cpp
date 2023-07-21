@@ -296,8 +296,8 @@ void ScreenplayTextSearchToolbar::updateTranslations()
     d->searchText->setLabel(tr("Search"));
     d->searchText->setPlaceholderText(tr("Enter search phrase here"));
     if (auto model = qobject_cast<QStringListModel*>(d->popup->contentModel())) {
-        model->setStringList({ tr("In the whole text"), tr("In scene heading"), tr("In action"),
-                               tr("In character"), tr("In dialogue") });
+        model->setStringList({ tr("In the whole text"), tr("In scene heading"), tr("In cast list"),
+                               tr("In action"), tr("In character"), tr("In dialogue") });
         d->popup->setCurrentIndex(model->index(0, 0));
     }
     d->goToNextAction->setToolTip(
