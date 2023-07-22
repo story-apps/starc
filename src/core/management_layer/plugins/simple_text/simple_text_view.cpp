@@ -345,6 +345,10 @@ void SimpleTextView::Implementation::updateTextEditPageMargins()
 
 void SimpleTextView::Implementation::updateCommentsToolbar()
 {
+    if (!q->isVisible()) {
+        return;
+    }
+
     if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()) {
         commentsToolbar->hideToolbar();
         return;

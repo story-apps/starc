@@ -131,6 +131,8 @@ public:
                        const QString& _comment);
 
 
+    NovelOutlineView* q = nullptr;
+
     //
     // Модели
     //
@@ -187,7 +189,8 @@ public:
 };
 
 NovelOutlineView::Implementation::Implementation(NovelOutlineView* _q)
-    : commentsModel(new BusinessLayer::CommentsModel(_q))
+    : q(_q)
+    , commentsModel(new BusinessLayer::CommentsModel(_q))
     , bookmarksModel(new BusinessLayer::BookmarksModel(_q))
     , textEdit(new NovelOutlineEdit(_q))
     , shortcutsManager(textEdit)
@@ -401,6 +404,10 @@ void NovelOutlineView::Implementation::updateTextEditPageMargins()
 
 void NovelOutlineView::Implementation::updateCommentsToolBar()
 {
+    if (!q->isVisible()) {
+        return;
+    }
+
     if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()) {
         commentsToolbar->hideToolbar();
         return;

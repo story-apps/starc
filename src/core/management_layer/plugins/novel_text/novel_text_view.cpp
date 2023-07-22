@@ -421,6 +421,10 @@ void NovelTextView::Implementation::updateTextEditPageMargins()
 
 void NovelTextView::Implementation::updateCommentsToolbar()
 {
+    if (!q->isVisible()) {
+        return;
+    }
+
     if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()) {
         commentsToolbar->hideToolbar();
         return;

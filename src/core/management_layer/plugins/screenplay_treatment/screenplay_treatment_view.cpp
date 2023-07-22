@@ -134,6 +134,8 @@ public:
                        const QString& _comment);
 
 
+    ScreenplayTreatmentView* q = nullptr;
+
     //
     // Модели
     //
@@ -190,7 +192,8 @@ public:
 };
 
 ScreenplayTreatmentView::Implementation::Implementation(ScreenplayTreatmentView* _q)
-    : commentsModel(new BusinessLayer::CommentsModel(_q))
+    : q(_q)
+    , commentsModel(new BusinessLayer::CommentsModel(_q))
     , bookmarksModel(new BusinessLayer::BookmarksModel(_q))
     , textEdit(new ScreenplayTreatmentEdit(_q))
     , shortcutsManager(textEdit)
@@ -431,6 +434,10 @@ void ScreenplayTreatmentView::Implementation::updateTextEditPageMargins()
 
 void ScreenplayTreatmentView::Implementation::updateCommentsToolBar()
 {
+    if (!q->isVisible()) {
+        return;
+    }
+
     if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()) {
         commentsToolbar->hideToolbar();
         return;

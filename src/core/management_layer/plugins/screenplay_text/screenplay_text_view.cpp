@@ -473,6 +473,10 @@ void ScreenplayTextView::Implementation::updateTextEditPageMargins()
 
 void ScreenplayTextView::Implementation::updateCommentsToolbar()
 {
+    if (!q->isVisible()) {
+        return;
+    }
+
     if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()) {
         commentsToolbar->hideToolbar();
         return;

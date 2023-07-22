@@ -373,6 +373,10 @@ void ComicBookTextView::Implementation::updateTextEditPageMargins()
 
 void ComicBookTextView::Implementation::updateCommentsToolbar()
 {
+    if (!q->isVisible()) {
+        return;
+    }
+
     if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()) {
         commentsToolbar->hideToolbar();
         return;

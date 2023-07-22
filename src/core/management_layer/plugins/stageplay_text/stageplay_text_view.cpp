@@ -359,6 +359,10 @@ void StageplayTextView::Implementation::updateTextEditPageMargins()
 
 void StageplayTextView::Implementation::updateCommentsToolbar()
 {
+    if (!q->isVisible()) {
+        return;
+    }
+
     if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()) {
         commentsToolbar->hideToolbar();
         return;

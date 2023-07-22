@@ -383,6 +383,10 @@ void AudioplayTextView::Implementation::updateTextEditPageMargins()
 
 void AudioplayTextView::Implementation::updateCommentsToolbar()
 {
+    if (!q->isVisible()) {
+        return;
+    }
+
     if (commentsView->isReadOnly() || !toolbar->isCommentsModeEnabled()) {
         commentsToolbar->hideToolbar();
         return;
