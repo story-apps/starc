@@ -670,9 +670,15 @@ void ImagesList::dropEvent(QDropEvent* _event)
     QVector<QPixmap> droppedImages;
     const QMimeData* mimeData = _event->mimeData();
     //
-    // Первым делом проверяем список ссылок, возможно выбраны сразу несколько фотогафий
+    // Первым делом проверяем картинку
     //
-    if (mimeData->hasUrls()) {
+    if (mimeData->hasImage()) {
+        droppedImages.append(qvariant_cast<QPixmap>(mimeData->imageData()));
+    }
+    //
+    // Если картинки нет, то смотрим список ссылок, возможно выбраны сразу несколько фотогафий
+    //
+    else if (mimeData->hasUrls()) {
         for (const auto& url : mimeData->urls()) {
             //
             // ... локальные изображения
@@ -698,8 +704,6 @@ void ImagesList::dropEvent(QDropEvent* _event)
                 droppedImages.append(pixmap);
             }
         }
-    } else if (mimeData->hasImage()) {
-        droppedImages.append(qvariant_cast<QPixmap>(mimeData->imageData()));
     }
 
     //
