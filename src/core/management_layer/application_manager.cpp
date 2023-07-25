@@ -3267,6 +3267,8 @@ void ApplicationManager::initConnections()
             d->cloudServiceManager.data(), &CloudServiceManager::aiSummarizeText);
     connect(d->projectManager.data(), &ProjectManager::translateTextRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiTranslateText);
+    connect(d->projectManager.data(), &ProjectManager::generateSynopsisRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::aiGenerateSynopsis);
     connect(d->projectManager.data(), &ProjectManager::generateTextRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiGenerateText);
     connect(d->projectManager.data(), &ProjectManager::generateImageRequested,
@@ -3283,6 +3285,8 @@ void ApplicationManager::initConnections()
             d->projectManager.data(), &ProjectManager::setSummarizeedText);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textTranslated,
             d->projectManager.data(), &ProjectManager::setTranslatedText);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::synopsisGenerated,
+            d->projectManager.data(), &ProjectManager::setGeneratedSynopsis);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textGenerated,
             d->projectManager.data(), &ProjectManager::setGeneratedText);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::imageGenerated,

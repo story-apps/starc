@@ -46,6 +46,16 @@ public:
     void setInsertionAvailable(bool _available);
 
     /**
+     * @brief Настроить доступность возможности генерации синопсиса
+     */
+    void setSynopsisGenerationAvaiable(bool _available);
+
+    /**
+     * @brief Задать подсказку для генерации синопсиса
+     */
+    void setGenerationSynopsisPromptHint(const QString& _hint);
+
+    /**
      * @brief Задать тип представления генерации контента
      */
     void setGenerationViewType(GenerationViewType _type);
@@ -74,6 +84,7 @@ public:
     void setInsertResult(const QString& _text);
     void setSummarizeResult(const QString& _text);
     void setTransateResult(const QString& _text);
+    void setGenerateSynopsisResult(const QString& _text);
 
     /**
      * @brief Задать количество доступных слов для генерации
@@ -110,6 +121,11 @@ signals:
      * @brief Пользователь хочет перевести текст на заданный язык
      */
     void translateRequested(const QString& _text, const QString& _language);
+
+    /**
+     * @brief Пользователь хочет сгенерировать синопсис
+     */
+    void generateSynopsisRequested(int _maxWordsPerScene);
 
     /**
      * @brief Пользователь хочет сгенерировать текст по запросу

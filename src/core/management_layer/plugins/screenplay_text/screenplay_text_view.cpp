@@ -275,6 +275,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     commentsView->setModel(commentsModel);
     commentsView->hide();
     aiAssistantView->hide();
+    aiAssistantView->setSynopsisGenerationAvaiable(true);
     bookmarksView->setModel(bookmarksModel);
     bookmarksView->hide();
     dictionariesView->hide();
@@ -1254,6 +1255,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             &ScreenplayTextView::summarizeTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
             &ScreenplayTextView::translateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::generateSynopsisRequested, this,
+            &ScreenplayTextView::generateSynopsisRequested);
     connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
             &ScreenplayTextView::generateTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
@@ -1412,6 +1415,11 @@ void ScreenplayTextView::setSummarizedText(const QString& _text)
 void ScreenplayTextView::setTranslatedText(const QString& _text)
 {
     d->aiAssistantView->setTransateResult(_text);
+}
+
+void ScreenplayTextView::setGeneratedSynopsis(const QString& _text)
+{
+    d->aiAssistantView->setGenerateSynopsisResult(_text);
 }
 
 void ScreenplayTextView::setGeneratedText(const QString& _text)
@@ -1718,6 +1726,21 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 
                     d->showParametersFor(updatedItem);
                 });
+
+        auto updateSynopsisPrice = [this] {
+            d->aiAssistantView->setGenerationSynopsisPromptHint(
+                tr("Synopsis generation will takes %n word(s)", 0, d->model->wordsCount()));
+        };
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::modelReset, this,
+                updateSynopsisPrice);
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::dataChanged, this,
+                updateSynopsisPrice);
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsInserted, this,
+                updateSynopsisPrice);
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsMoved, this,
+                updateSynopsisPrice);
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsRemoved, this,
+                updateSynopsisPrice);
     }
 
     d->textEdit->setCursors({});

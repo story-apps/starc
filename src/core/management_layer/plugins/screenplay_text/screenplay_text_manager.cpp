@@ -4,7 +4,9 @@
 
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
@@ -204,6 +206,45 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
             &ScreenplayTextManager::summarizeTextRequested);
     connect(view, &Ui::ScreenplayTextView::translateTextRequested, q,
             &ScreenplayTextManager::translateTextRequested);
+    connect(
+        view, &Ui::ScreenplayTextView::generateSynopsisRequested, q,
+        [this, view](int _maxWordsPerScene) {
+            //
+            // TODO: вырезать строку со списком персонажей
+            //
+            const auto model = modelForView(view);
+            QVector<QString> scenes;
+            std::function<void(const QModelIndex&)> findScenes;
+            findScenes = [&findScenes, model, &scenes](const QModelIndex& _parentItemIndex) {
+                for (int row = 0; row < model->rowCount(_parentItemIndex); ++row) {
+                    const auto itemIndex = model->index(row, 0, _parentItemIndex);
+                    const auto item = model->itemForIndex(itemIndex);
+                    switch (item->type()) {
+                    case BusinessLayer::TextModelItemType::Folder: {
+                        findScenes(itemIndex);
+                        break;
+                    }
+
+                    case BusinessLayer::TextModelItemType::Group: {
+                        if (item->subtype()
+                            == static_cast<int>(BusinessLayer::TextGroupType::Scene)) {
+                            const auto sceneItem
+                                = static_cast<const BusinessLayer::ScreenplayTextModelSceneItem*>(
+                                    item);
+                            scenes.append(sceneItem->text());
+                        }
+                        break;
+                    }
+
+                    default: {
+                        break;
+                    }
+                    }
+                }
+            };
+            findScenes({});
+            emit q->generateSynopsisRequested(scenes, _maxWordsPerScene);
+        });
     connect(view, &Ui::ScreenplayTextView::generateTextRequested, q, [this](const QString& _text) {
         emit q->generateTextRequested({}, _text, ". Write result in fountain format.");
     });

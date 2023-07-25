@@ -3595,7 +3595,7 @@ void ProjectManager::setTranslatedText(const QString& _text)
     }
 }
 
-void ProjectManager::setGeneratedText(const QString& _generatedText)
+void ProjectManager::setGeneratedSynopsis(const QString& _text)
 {
     auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
     Ui::IDocumentView* view = nullptr;
@@ -3606,11 +3606,11 @@ void ProjectManager::setGeneratedText(const QString& _generatedText)
     }
 
     if (view != nullptr) {
-        view->setGeneratedText(_generatedText);
+        view->setGeneratedSynopsis(_text);
     }
 }
 
-void ProjectManager::setGeneratedImage(const QPixmap& _generatedImage)
+void ProjectManager::setGeneratedText(const QString& _text)
 {
     auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
     Ui::IDocumentView* view = nullptr;
@@ -3621,7 +3621,22 @@ void ProjectManager::setGeneratedImage(const QPixmap& _generatedImage)
     }
 
     if (view != nullptr) {
-        view->setGeneratedImage(_generatedImage);
+        view->setGeneratedText(_text);
+    }
+}
+
+void ProjectManager::setGeneratedImage(const QPixmap& _image)
+{
+    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
+    Ui::IDocumentView* view = nullptr;
+    if (d->view.active == d->view.left) {
+        view = plugin->view(d->view.activeModel);
+    } else {
+        view = plugin->secondaryView(d->view.activeModel);
+    }
+
+    if (view != nullptr) {
+        view->setGeneratedImage(_image);
     }
 }
 
@@ -3981,6 +3996,12 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             != invalidSignalIndex) {
             connect(documentManager, SIGNAL(translateTextRequested(QString, QString)), this,
                     SIGNAL(translateTextRequested(QString, QString)), Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal(
+                "generateSynopsisRequested(QVector<QString>,int)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(generateSynopsisRequested(QVector<QString>, int)), this,
+                    SIGNAL(generateSynopsisRequested(QVector<QString>, int)), Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal(
                 "generateTextRequested(QString,QString,QString)")

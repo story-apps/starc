@@ -10,6 +10,7 @@
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
@@ -22,6 +23,8 @@
 
 
 namespace Ui {
+
+using ShadowWodget = Shadow;
 
 namespace {
 
@@ -44,6 +47,8 @@ public:
         setFrameShape(QFrame::NoFrame);
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         setVerticalScrollBar(new ScrollBar);
+
+        new ShadowWodget(Qt::BottomEdge, this);
 
         backButton->setIcon(u8"\U000F0141");
 
@@ -86,6 +91,7 @@ public:
     Button* openInsertButton = nullptr;
     Button* openSummarizeButton = nullptr;
     Button* openTranslateButton = nullptr;
+    Button* openGenerateSynopsisButton = nullptr;
     Button* openGenerateButton = nullptr;
 
     Page* rephrasePage = nullptr;
@@ -133,6 +139,16 @@ public:
     Button* translateButton = nullptr;
     QHBoxLayout* translateButtonsLayout = nullptr;
 
+    Page* generateSynopsisPage = nullptr;
+    Body1Label* generateSynopsisHintLabel = nullptr;
+    Body2Label* generateSynopsisLenghtLabel = nullptr;
+    RadioButton* generateSynopsisLengthShort = nullptr;
+    RadioButton* generateSynopsisLengthMedium = nullptr;
+    RadioButton* generateSynopsisLengthDefault = nullptr;
+    TextField* generateSynopsisResultText = nullptr;
+    Button* generateSynopsisButton = nullptr;
+    QHBoxLayout* generateSynopsisButtonsLayout = nullptr;
+
     GenerationViewType generationViewType = GenerationViewType::Text;
 
     Page* generateTextPage = nullptr;
@@ -171,6 +187,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     , openInsertButton(new Button(buttonsPage))
     , openSummarizeButton(new Button(buttonsPage))
     , openTranslateButton(new Button(buttonsPage))
+    , openGenerateSynopsisButton(new Button(buttonsPage))
     , openGenerateButton(new Button(buttonsPage))
     //
     , rephrasePage(new Page(pages))
@@ -218,6 +235,16 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     , translateButton(new Button(translatePage))
     , translateButtonsLayout(new QHBoxLayout)
     //
+    , generateSynopsisPage(new Page(pages))
+    , generateSynopsisHintLabel(new Body1Label(generateSynopsisPage))
+    , generateSynopsisLenghtLabel(new Body2Label(generateSynopsisPage))
+    , generateSynopsisLengthShort(new RadioButton(generateSynopsisPage))
+    , generateSynopsisLengthMedium(new RadioButton(generateSynopsisPage))
+    , generateSynopsisLengthDefault(new RadioButton(generateSynopsisPage))
+    , generateSynopsisResultText(new TextField(summarizePage))
+    , generateSynopsisButton(new Button(summarizePage))
+    , generateSynopsisButtonsLayout(new QHBoxLayout)
+    //
     , generateTextPage(new Page(pages))
     , generateTextPromptHintLabel(new Body1Label(generateTextPage))
     , generateTextPromptText(new TextField(generateTextPage))
@@ -252,6 +279,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     pages->addWidget(insertPage);
     pages->addWidget(summarizePage);
     pages->addWidget(translatePage);
+    pages->addWidget(generateSynopsisPage);
     pages->addWidget(generateTextPage);
     pages->addWidget(generateCharacterPage);
 
@@ -262,6 +290,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         openInsertButton->setIcon(u8"\U000F0B33");
         openSummarizeButton->setIcon(u8"\U000F0DD0");
         openTranslateButton->setIcon(u8"\U000F05CA");
+        openGenerateSynopsisButton->setIcon(u8"\U000F021A");
         openGenerateButton->setIcon(u8"\U000F027F");
         for (auto button : {
                  openRephraseButton,
@@ -270,10 +299,12 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
                  openInsertButton,
                  openSummarizeButton,
                  openTranslateButton,
+                 openGenerateSynopsisButton,
                  openGenerateButton,
              }) {
             button->setFlat(true);
         }
+        openGenerateSynopsisButton->hide();
 
         auto layout = new QVBoxLayout(buttonsPage);
         layout->setContentsMargins({});
@@ -284,6 +315,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         layout->addWidget(openInsertButton);
         layout->addWidget(openSummarizeButton);
         layout->addWidget(openTranslateButton);
+        layout->addWidget(openGenerateSynopsisButton);
         layout->addWidget(openGenerateButton);
         layout->addStretch();
     }
@@ -417,6 +449,31 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     }
 
     {
+        generateSynopsisResultText->setEnterMakesNewLine(true);
+        generateSynopsisResultText->hide();
+        generateSynopsisLengthShort->setChecked(true);
+        auto lengthButtonsGroup = new RadioButtonGroup(generateSynopsisPage);
+        lengthButtonsGroup->add(generateSynopsisLengthShort);
+        lengthButtonsGroup->add(generateSynopsisLengthMedium);
+        lengthButtonsGroup->add(generateSynopsisLengthDefault);
+        generateSynopsisButtonsLayout->setContentsMargins({});
+        generateSynopsisButtonsLayout->setSpacing(0);
+        generateSynopsisButtonsLayout->addStretch();
+        generateSynopsisButtonsLayout->addWidget(generateSynopsisButton);
+
+
+        auto layout = generateSynopsisPage->contentsLayout;
+        layout->addWidget(generateSynopsisHintLabel);
+        layout->addWidget(generateSynopsisLenghtLabel);
+        layout->addWidget(generateSynopsisLengthShort);
+        layout->addWidget(generateSynopsisLengthMedium);
+        layout->addWidget(generateSynopsisLengthDefault);
+        layout->addWidget(generateSynopsisResultText);
+        layout->addLayout(generateSynopsisButtonsLayout);
+        layout->addStretch();
+    }
+
+    {
         generateTextPromptText->setEnterMakesNewLine(true);
         generateTextPromptText->setWordCount("0/1000");
         generateTextInsertAtCursor->setChecked(true);
@@ -541,6 +598,12 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
         QTimer::singleShot(d->pages->animationDuration(), d->translateSourceText,
                            qOverload<>(&TextField::setFocus));
     });
+    connect(d->openGenerateSynopsisButton, &Button::clicked, this, [this] {
+        d->generateSynopsisResultText->hide();
+        d->pages->setCurrentWidget(d->generateSynopsisPage);
+        QTimer::singleShot(d->pages->animationDuration(), d->generateSynopsisButton,
+                           qOverload<>(&Button::setFocus));
+    });
     connect(d->openGenerateButton, &Button::clicked, this, [this] {
         switch (d->generationViewType) {
         case GenerationViewType::Text: {
@@ -565,6 +628,7 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
              d->insertPage,
              d->summarizePage,
              d->translatePage,
+             d->generateSynopsisPage,
              d->generateTextPage,
              d->generateCharacterPage,
          }) {
@@ -675,6 +739,17 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     connect(d->translateInsertButton, &Button::clicked, this,
             [this] { emit insertTextRequested(d->translateResultText->text()); });
     //
+    connect(d->generateSynopsisButton, &Button::clicked, this, [this] {
+        emit generateSynopsisRequested(
+            d->generateSynopsisLengthShort->isChecked()
+                ? 20
+                : (d->generateSynopsisLengthMedium->isChecked() ? 45 : -1));
+    });
+    connect(d->generateSynopsisResultText, &TextField::textChanged, this,
+            [textField = d->generateSynopsisResultText, updateResultWordCounter] {
+                updateResultWordCounter(textField);
+            });
+    //
     auto updateGenerateTextWordCounters = [this, updateWordCounter] {
         const auto sourceTextWordCount = updateWordCounter(d->generateTextPromptText);
         d->generateTextButton->setEnabled(sourceTextWordCount <= 1000);
@@ -724,6 +799,7 @@ void AiAssistantView::setReadOnly(bool _readOnly)
              d->insertPage,
              d->summarizePage,
              d->translatePage,
+             d->generateSynopsisPage,
              d->generateTextPage,
              d->generateCharacterPage,
          }) {
@@ -743,6 +819,16 @@ void AiAssistantView::setInsertionAvailable(bool _available)
          }) {
         button->setEnabled(_available);
     }
+}
+
+void AiAssistantView::setSynopsisGenerationAvaiable(bool _available)
+{
+    d->openGenerateSynopsisButton->setVisible(_available);
+}
+
+void AiAssistantView::setGenerationSynopsisPromptHint(const QString& _hint)
+{
+    d->generateSynopsisHintLabel->setText(_hint);
 }
 
 void AiAssistantView::setGenerationViewType(GenerationViewType _type)
@@ -833,6 +919,12 @@ void AiAssistantView::setTransateResult(const QString& _text)
     d->translateInsertButton->show();
 }
 
+void AiAssistantView::setGenerateSynopsisResult(const QString& _text)
+{
+    d->generateSynopsisResultText->setText(_text);
+    d->generateSynopsisResultText->show();
+}
+
 void AiAssistantView::setAvailableWords(int _availableWords)
 {
     d->availableWordsLabel->setText(_availableWords > 0
@@ -848,6 +940,7 @@ void AiAssistantView::updateTranslations()
     d->openInsertButton->setText(tr("Insert"));
     d->openSummarizeButton->setText(tr("Summarize"));
     d->openTranslateButton->setText(tr("Translate"));
+    d->openGenerateSynopsisButton->setText(tr("Generate synopsis"));
     d->openGenerateButton->setText(tr("Generate"));
 
     for (auto page : {
@@ -857,7 +950,9 @@ void AiAssistantView::updateTranslations()
              d->insertPage,
              d->summarizePage,
              d->translatePage,
+             d->generateSynopsisPage,
              d->generateTextPage,
+             d->generateCharacterPage,
          }) {
         page->backButton->setToolTip(tr("Go back to list of assistant functions"));
     }
@@ -1049,6 +1144,13 @@ void AiAssistantView::updateTranslations()
     d->translateResultText->setLabel(tr("Translated text"));
     d->translateButton->setText(tr("Translate"));
     d->translateInsertButton->setText(tr("Insert"));
+    d->generateSynopsisPage->titleLabel->setText(tr("Generate synopsis"));
+    d->generateSynopsisLenghtLabel->setText(tr("Synopsis length"));
+    d->generateSynopsisLengthShort->setText(tr("short"));
+    d->generateSynopsisLengthMedium->setText(tr("medium"));
+    d->generateSynopsisLengthDefault->setText(tr("unlimitted"));
+    d->generateSynopsisResultText->setLabel(tr("Synopsis"));
+    d->generateSynopsisButton->setText(tr("Generate"));
     d->generateTextPage->titleLabel->setText(tr("Generate"));
     d->generateTextPromptText->setLabel(tr("Prompt"));
     d->generateTextInsertLabel->setText(tr("Insert result"));
@@ -1089,6 +1191,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->openInsertButton,
              d->openSummarizeButton,
              d->openTranslateButton,
+             d->openGenerateSynopsisButton,
              d->openGenerateButton,
          }) {
         button->setBackgroundColor(ColorHelper::nearby(DesignSystem::color().primary()));
@@ -1102,6 +1205,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->insertPage,
              d->summarizePage,
              d->translatePage,
+             d->generateSynopsisPage,
              d->generateTextPage,
              d->generateCharacterPage,
          }) {
@@ -1112,6 +1216,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         page->titleLabel->setBackgroundColor(DesignSystem::color().primary());
         page->titleLabel->setTextColor(DesignSystem::color().onPrimary());
     }
+    d->generateSynopsisPage->contentsLayout->setSpacing(0);
     d->generateTextPage->contentsLayout->setSpacing(0);
     d->generateCharacterPage->contentsLayout->setSpacing(0);
 
@@ -1131,6 +1236,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->translateSourceText,
              d->translateLanguage,
              d->translateResultText,
+             d->generateSynopsisResultText,
              d->generateTextPromptText,
              d->generateCharacterPromptText,
          }) {
@@ -1152,6 +1258,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->summarizeInsertButton,
              d->translateButton,
              d->translateInsertButton,
+             d->generateSynopsisButton,
              d->generateTextButton,
              d->generateCharacterButton,
          }) {
@@ -1166,6 +1273,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->insertButtonsLayout,
              d->summarizeButtonsLayout,
              d->translateButtonsLayout,
+             d->generateSynopsisButtonsLayout,
              d->generateTextButtonsLayout,
              d->generateCharacterButtonsLayout,
          }) {
@@ -1175,6 +1283,11 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto widget : std::list<Widget*>{
+             d->generateSynopsisHintLabel,
+             d->generateSynopsisLenghtLabel,
+             d->generateSynopsisLengthShort,
+             d->generateSynopsisLengthMedium,
+             d->generateSynopsisLengthDefault,
              d->generateTextPromptHintLabel,
              d->generateTextInsertLabel,
              d->generateTextInsertAtBegin,
@@ -1191,15 +1304,20 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         widget->setBackgroundColor(DesignSystem::color().primary());
         widget->setTextColor(DesignSystem::color().onPrimary());
     }
-    d->generateTextPromptHintLabel->setContentsMargins(DesignSystem::layout().px24(), 0,
-                                                       DesignSystem::layout().px24(),
-                                                       DesignSystem::compactLayout().px16());
+    for (auto label : {
+             d->generateSynopsisHintLabel,
+             d->generateTextPromptHintLabel,
+             d->generateCharacterPromptHintLabel,
+         }) {
+        label->setContentsMargins(DesignSystem::layout().px24(), 0, DesignSystem::layout().px24(),
+                                  DesignSystem::compactLayout().px16());
+    }
+    d->generateSynopsisLenghtLabel->setContentsMargins(DesignSystem::layout().px24(),
+                                                       DesignSystem::compactLayout().px4(),
+                                                       DesignSystem::layout().px24(), 0);
     d->generateTextInsertLabel->setContentsMargins(DesignSystem::layout().px24(),
                                                    DesignSystem::compactLayout().px4(),
                                                    DesignSystem::layout().px24(), 0);
-    d->generateCharacterPromptHintLabel->setContentsMargins(DesignSystem::layout().px24(), 0,
-                                                            DesignSystem::layout().px24(),
-                                                            DesignSystem::compactLayout().px16());
 
     d->availableWordsLabel->setBackgroundColor(DesignSystem::color().primary());
     d->availableWordsLabel->setTextColor(ColorHelper::transparent(

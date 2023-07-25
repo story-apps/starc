@@ -101,6 +101,9 @@ public:
     virtual void setTranslatedText(const QString& _text)
     {
     }
+    virtual void setGeneratedSynopsis(const QString& _text)
+    {
+    }
     virtual void setGeneratedText(const QString& _text)
     {
     }
