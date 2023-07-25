@@ -350,6 +350,11 @@ void WebLoader::initNetworkManager()
     }
 
     //
+    // Настраиваем прокси
+    //
+    m_networkManager->setProxy(m_parameters.proxy());
+
+    //
     // Оключаем от предыдущих соединений и настраиваем новое
     //
     m_networkManager->disconnect();

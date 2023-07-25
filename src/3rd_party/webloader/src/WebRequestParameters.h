@@ -19,6 +19,8 @@
 
 #include "NetworkTypes.h"
 
+#include <QNetworkProxy>
+
 class QNetworkCookieJar;
 
 
@@ -31,14 +33,16 @@ public:
     WebRequestParameters();
 
     /**
-     * @brief Установка cookie для загрузчика
+     * @brief Сookie для загрузчика
      */
     void setCookieJar(QNetworkCookieJar* _cookieJar);
+    QNetworkCookieJar* cookieJar() const;
 
     /**
-     * @brief Получение cookie загрузчика
+     * @brief Прокси запроса
      */
-    QNetworkCookieJar* cookieJar() const;
+    void setProxy(const QNetworkProxy& _proxy);
+    QNetworkProxy proxy() const;
 
     /**
      * @brief Установка метода запроса
@@ -65,6 +69,11 @@ private:
      * @brief Куки процесса
      */
     QNetworkCookieJar* m_cookieJar = nullptr;
+
+    /**
+     * @brief Прокси запроса
+     */
+    QNetworkProxy m_proxy;
 
     /**
      * @brief Метод запроса

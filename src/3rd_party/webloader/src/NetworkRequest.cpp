@@ -50,6 +50,17 @@ QNetworkCookieJar* NetworkRequest::cookieJar() const
     return m_requestParameters.cookieJar();
 }
 
+void NetworkRequest::setProxy(const QNetworkProxy& _proxy)
+{
+    stop();
+    m_requestParameters.setProxy(_proxy);
+}
+
+QNetworkProxy NetworkRequest::proxy() const
+{
+    return m_requestParameters.proxy();
+}
+
 void NetworkRequest::setRequestMethod(NetworkRequestMethod _method)
 {
     stop();

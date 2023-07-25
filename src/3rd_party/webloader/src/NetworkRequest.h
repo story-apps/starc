@@ -24,6 +24,7 @@
 
 class NetworkRequestPrivate;
 class QNetworkCookieJar;
+class QNetworkProxy;
 class WebRequest;
 class WebRequestParameters;
 
@@ -46,14 +47,16 @@ public:
     explicit NetworkRequest(QObject* _parent = nullptr);
 
     /**
-     * @brief Установка cookie для загрузчика
+     * @brief Сookie для загрузчика
      */
     void setCookieJar(QNetworkCookieJar* _cookieJar);
+    QNetworkCookieJar* cookieJar() const;
 
     /**
-     * @brief Получение cookie загрузчика
+     * @brief Прокси запроса
      */
-    QNetworkCookieJar* cookieJar() const;
+    void setProxy(const QNetworkProxy& _proxy);
+    QNetworkProxy proxy() const;
 
     /**
      * @brief Установка метода запроса

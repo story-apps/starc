@@ -22,14 +22,22 @@ WebRequestParameters::WebRequestParameters()
 
 void WebRequestParameters::setCookieJar(QNetworkCookieJar* _cookieJar)
 {
-    if (m_cookieJar != _cookieJar) {
-        m_cookieJar = _cookieJar;
-    }
+    m_cookieJar = _cookieJar;
 }
 
 QNetworkCookieJar* WebRequestParameters::cookieJar() const
 {
     return m_cookieJar;
+}
+
+void WebRequestParameters::setProxy(const QNetworkProxy& _proxy)
+{
+    m_proxy = _proxy;
+}
+
+QNetworkProxy WebRequestParameters::proxy() const
+{
+    return m_proxy;
 }
 
 void WebRequestParameters::setRequestMethod(NetworkRequestMethod _method)
