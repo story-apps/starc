@@ -32,7 +32,7 @@ namespace {
  * @brief Регулярное выражение для определения блока "Время и место" по наличию слов места
  */
 const QRegularExpression kPlaceContainsChecker(
-    "(^|[^\\S])(INT|EXT|INT/EXT|ИНТ|НАТ|ИНТ/НАТ|ПАВ|ЭКСТ|ИНТ/ЭКСТ)([.]|[ - ])");
+    "(INT|EXT|INT/EXT|ИНТ|НАТ|ИНТ/НАТ|ПАВ|ЭКСТ|ИНТ/ЭКСТ)([.]|[ - ])");
 /**
  * @brief Регулярное выражение для определения блока "Титр" по наличию ключевых слов
  */
@@ -93,10 +93,22 @@ TextParagraphType typeForTextCursor(const QTextCursor& _cursor, TextParagraphTyp
     // Собственно определение типа
     //
     {
+
+        //
+        // Самым первым пробуем определить время и место
+        // Блоки текста в верхнем регистре +
+        // 1. текст в верхнем регистре
+        // 2. содержит ключевые сокращения места действия или начинается с номера сцены
+        //
+        if (textIsUppercase
+            && (blockTextUppercase.contains(kPlaceContainsChecker)
+                || blockTextUppercase.contains(kStartFromNumberChecker))) {
+            blockType = TextParagraphType::SceneHeading;
+        }
         //
         // Блоки текста посередине
         //
-        if (isCentered) {
+        else if (isCentered) {
             //
             // Персонаж
             // 1. В верхнем регистре
@@ -129,22 +141,13 @@ TextParagraphType typeForTextCursor(const QTextCursor& _cursor, TextParagraphTyp
             //
             if (textIsUppercase) {
                 //
-                // Время и место
-                // 1. текст в верхнем регистре
-                // 2. содержит ключевые сокращения места действия или начинается с номера сцены
-                //
-                if (blockTextUppercase.contains(kPlaceContainsChecker)
-                    || blockTextUppercase.contains(kStartFromNumberChecker)) {
-                    blockType = TextParagraphType::SceneHeading;
-                }
-                //
                 // Участника сцены
                 // 1. в верхнем регистре
                 // 2. идут сразу же после времени и места
                 // 3. не имеют сверху отступа
                 //
-                else if (_lastBlockType == TextParagraphType::SceneHeading && _prevEmptyLines == 0
-                         && blockFormat.topMargin() == 0) {
+                if (_lastBlockType == TextParagraphType::SceneHeading && _prevEmptyLines == 0
+                    && blockFormat.topMargin() == 0) {
                     blockType = TextParagraphType::SceneCharacters;
                 }
                 //
