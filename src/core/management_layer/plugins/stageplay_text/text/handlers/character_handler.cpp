@@ -23,16 +23,19 @@ using Ui::StageplayTextEdit;
 
 namespace {
 /**
- * @brief Вставить двоеточие в конец блока
+ * @brief Вставить двоеточие в конец блока, при необходимости
  */
-void insertColonAtEnd(QTextCursor& _cursor)
+void insertColonAtEnd(QTextCursor& _cursor, bool _placeDialogsInTable)
 {
     _cursor.movePosition(QTextCursor::EndOfBlock);
     if (!_cursor.block().text().trimmed().endsWith(':')) {
         while (!_cursor.block().text().isEmpty() && _cursor.block().text().endsWith(' ')) {
             _cursor.deletePreviousChar();
         }
-        _cursor.insertText(":");
+
+        if (_placeDialogsInTable) {
+            _cursor.insertText(":");
+        }
     }
 }
 } // namespace
@@ -89,7 +92,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
             //
             // Добавим двоеточие после имени
             //
-            insertColonAtEnd(cursor);
+            insertColonAtEnd(cursor, editor()->stageplayTemplate().placeDialoguesInTable());
 
             //
             // Переходим в следующий блок
@@ -145,7 +148,7 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                     //
                     // Добавим двоеточие после имени
                     //
-                    insertColonAtEnd(cursor);
+                    insertColonAtEnd(cursor, editor()->stageplayTemplate().placeDialoguesInTable());
 
                     //
                     // Если диалоги располагаются в таблице
@@ -233,7 +236,7 @@ void CharacterHandler::handleTab(QKeyEvent*)
                     //
                     // Добавим двоеточие после имени
                     //
-                    insertColonAtEnd(cursor);
+                    insertColonAtEnd(cursor, editor()->stageplayTemplate().placeDialoguesInTable());
 
                     //
                     // Если диалоги располагаются в таблице
