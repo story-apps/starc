@@ -5,13 +5,13 @@
 
 namespace Ui {
 
-class CreateVersionDialog : public AbstractDialog
+class CreateDraftDialog : public AbstractDialog
 {
     Q_OBJECT
 
 public:
-    explicit CreateVersionDialog(QWidget* _parent = nullptr);
-    ~CreateVersionDialog() override;
+    explicit CreateDraftDialog(QWidget* _parent = nullptr);
+    ~CreateDraftDialog() override;
 
     /**
      * @brief Задать список версий из которых можно создать новую

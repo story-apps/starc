@@ -43,7 +43,7 @@
 #include <ui/account/collaborators_tool_bar.h>
 #include <ui/design_system/design_system.h>
 #include <ui/project/create_document_dialog.h>
-#include <ui/project/create_version_dialog.h>
+#include <ui/project/create_draft_dialog.h>
 #include <ui/project/project_navigator.h>
 #include <ui/project/project_tool_bar.h>
 #include <ui/project/project_view.h>
@@ -874,7 +874,7 @@ BusinessLayer::StructureModelItem* ProjectManager::Implementation::aliasedItemFo
 
 void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIndex)
 {
-    auto dialog = new Ui::CreateVersionDialog(topLevelWidget);
+    auto dialog = new Ui::CreateDraftDialog(topLevelWidget);
     dialog->setVersions(
         [this, _itemIndex] {
             const auto item = aliasedItemForIndex(_itemIndex);
@@ -885,7 +885,7 @@ void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIn
             return versions;
         }(),
         view.active->currentVersion());
-    connect(dialog, &Ui::CreateVersionDialog::savePressed, view.active,
+    connect(dialog, &Ui::CreateDraftDialog::savePressed, view.active,
             [this, _itemIndex, dialog](const QString& _name, const QColor& _color,
                                        int _versionIndex, bool _readOnly) {
                 dialog->hideDialog();
@@ -905,19 +905,19 @@ void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIn
                     showVersionsAction->toggle();
                 }
             });
-    connect(dialog, &Ui::CreateVersionDialog::disappeared, dialog,
-            &Ui::CreateVersionDialog::deleteLater);
+    connect(dialog, &Ui::CreateDraftDialog::disappeared, dialog,
+            &Ui::CreateDraftDialog::deleteLater);
 
     dialog->showDialog();
 }
 
 void ProjectManager::Implementation::editVersion(const QModelIndex& _itemIndex, int _versionIndex)
 {
-    auto dialog = new Ui::CreateVersionDialog(topLevelWidget);
+    auto dialog = new Ui::CreateDraftDialog(topLevelWidget);
     const auto item = aliasedItemForIndex(_itemIndex);
     const auto version = item->versions().at(_versionIndex);
     dialog->edit(version->name(), version->color(), version->isReadOnly());
-    connect(dialog, &Ui::CreateVersionDialog::savePressed, view.active,
+    connect(dialog, &Ui::CreateDraftDialog::savePressed, view.active,
             [this, item, _versionIndex, dialog](const QString& _name, const QColor& _color,
                                                 int _sourceVersionIndex, bool _readOnly) {
                 Q_UNUSED(_sourceVersionIndex)
@@ -933,8 +933,8 @@ void ProjectManager::Implementation::editVersion(const QModelIndex& _itemIndex, 
                 //
                 q->showViewForVersion(item->versions().at(_versionIndex));
             });
-    connect(dialog, &Ui::CreateVersionDialog::disappeared, dialog,
-            &Ui::CreateVersionDialog::deleteLater);
+    connect(dialog, &Ui::CreateDraftDialog::disappeared, dialog,
+            &Ui::CreateDraftDialog::deleteLater);
 
     dialog->showDialog();
 }

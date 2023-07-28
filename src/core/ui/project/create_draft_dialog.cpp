@@ -1,4 +1,4 @@
-#include "create_version_dialog.h"
+#include "create_draft_dialog.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -25,7 +25,7 @@ enum State {
 
 } // namespace
 
-class CreateVersionDialog::Implementation
+class CreateDraftDialog::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -44,7 +44,7 @@ public:
     State state = AddNew;
 };
 
-CreateVersionDialog::Implementation::Implementation(QWidget* _parent)
+CreateDraftDialog::Implementation::Implementation(QWidget* _parent)
     : versionName(new TextField(_parent))
     , versionColorPopup(new ColorPickerPopup(_parent))
     , sourceVersion(new ComboBox(_parent))
@@ -55,7 +55,7 @@ CreateVersionDialog::Implementation::Implementation(QWidget* _parent)
     , createButton(new Button(_parent))
 {
     versionColorPopup->setColorCanBeDeselected(false);
-    versionColorPopup->setSelectedColor(Qt::red);
+    versionColorPopup->setSelectedColor(Qt::white);
     versionName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     versionName->setTrailingIcon(u8"\U000F0765");
     versionName->setTrailingIconColor(versionColorPopup->selectedColor());
@@ -72,7 +72,7 @@ CreateVersionDialog::Implementation::Implementation(QWidget* _parent)
 // ****
 
 
-CreateVersionDialog::CreateVersionDialog(QWidget* _parent)
+CreateDraftDialog::CreateDraftDialog(QWidget* _parent)
     : AbstractDialog(_parent)
     , d(new Implementation(this))
 {
@@ -98,12 +98,12 @@ CreateVersionDialog::CreateVersionDialog(QWidget* _parent)
         emit savePressed(d->versionName->text(), d->versionColorPopup->selectedColor(),
                          d->sourceVersion->currentIndex().row(), !d->allowEditVersion->isChecked());
     });
-    connect(d->cancelButton, &Button::clicked, this, &CreateVersionDialog::hideDialog);
+    connect(d->cancelButton, &Button::clicked, this, &CreateDraftDialog::hideDialog);
 }
 
-CreateVersionDialog::~CreateVersionDialog() = default;
+CreateDraftDialog::~CreateDraftDialog() = default;
 
-void CreateVersionDialog::setVersions(const QStringList& _versions, int _selectVersionIndex)
+void CreateDraftDialog::setVersions(const QStringList& _versions, int _selectVersionIndex)
 {
     d->sourceVersion->setVisible(_versions.size() > 1);
 
@@ -111,7 +111,7 @@ void CreateVersionDialog::setVersions(const QStringList& _versions, int _selectV
     d->sourceVersion->setCurrentText(_versions.at(_selectVersionIndex));
 }
 
-void CreateVersionDialog::edit(const QString& _name, const QColor& _color, bool _readOnly)
+void CreateDraftDialog::edit(const QString& _name, const QColor& _color, bool _readOnly)
 {
     d->state = Edit;
     updateTranslations();
@@ -123,17 +123,17 @@ void CreateVersionDialog::edit(const QString& _name, const QColor& _color, bool 
     d->allowEditVersion->setChecked(!_readOnly);
 }
 
-QWidget* CreateVersionDialog::focusedWidgetAfterShow() const
+QWidget* CreateDraftDialog::focusedWidgetAfterShow() const
 {
     return d->versionName;
 }
 
-QWidget* CreateVersionDialog::lastFocusableWidget() const
+QWidget* CreateDraftDialog::lastFocusableWidget() const
 {
     return d->createButton;
 }
 
-void CreateVersionDialog::updateTranslations()
+void CreateDraftDialog::updateTranslations()
 {
     setTitle(d->state == AddNew ? tr("Create new document draft") : tr("Edit document draft"));
 
@@ -144,7 +144,7 @@ void CreateVersionDialog::updateTranslations()
     d->createButton->setText(d->state == AddNew ? tr("Create") : tr("Save"));
 }
 
-void CreateVersionDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void CreateDraftDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
