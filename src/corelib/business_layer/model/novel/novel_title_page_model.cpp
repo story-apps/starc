@@ -15,7 +15,7 @@ public:
 };
 
 NovelTitlePageModel::NovelTitlePageModel(QObject* _parent)
-    : SimpleTextModel(_parent)
+    : TitlePageModel(_parent)
     , d(new Implementation)
 {
 }
@@ -25,11 +25,6 @@ NovelTitlePageModel::~NovelTitlePageModel() = default;
 QString NovelTitlePageModel::documentName() const
 {
     return QString("%1 | %2").arg(tr("Title page"), d->informationModel->name());
-}
-
-void NovelTitlePageModel::setDocumentName(const QString& _name)
-{
-    Q_UNUSED(_name);
 }
 
 void NovelTitlePageModel::setInformationModel(NovelInformationModel* _model)

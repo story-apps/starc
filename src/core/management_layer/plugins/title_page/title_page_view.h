@@ -4,7 +4,7 @@
 #include <ui/widgets/widget/widget.h>
 
 namespace BusinessLayer {
-class SimpleTextModel;
+class TitlePageModel;
 }
 
 namespace Ui {
@@ -43,7 +43,7 @@ public:
     /**
      * @brief Установить модель текста
      */
-    void setModel(BusinessLayer::SimpleTextModel* _model);
+    void setModel(BusinessLayer::TitlePageModel* _model);
 
     /**
      * @brief Позиция курсора

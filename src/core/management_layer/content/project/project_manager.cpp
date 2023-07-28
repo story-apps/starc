@@ -5,6 +5,7 @@
 
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
+#include <business_layer/model/base/title_page_model.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
@@ -1238,29 +1239,14 @@ void ProjectManager::Implementation::findAllCharacters()
     // Найти все модели где могут встречаться персонажи и определить их
     //
     QSet<QString> charactersFromText;
-    const auto screenplayModels
-        = modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
-    for (auto model : screenplayModels) {
-        auto screenplay = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
-        charactersFromText.unite(screenplay->findCharactersFromText());
-    }
-    //
-    const auto comicBookModels = modelsFacade.modelsFor(Domain::DocumentObjectType::ComicBookText);
-    for (auto model : comicBookModels) {
-        auto comicBook = qobject_cast<BusinessLayer::ComicBookTextModel*>(model);
-        charactersFromText.unite(comicBook->findCharactersFromText());
-    }
-    //
-    const auto audioplayModels = modelsFacade.modelsFor(Domain::DocumentObjectType::AudioplayText);
-    for (auto model : audioplayModels) {
-        auto audioplay = qobject_cast<BusinessLayer::AudioplayTextModel*>(model);
-        charactersFromText.unite(audioplay->findCharactersFromText());
-    }
-    //
-    const auto stageplayModels = modelsFacade.modelsFor(Domain::DocumentObjectType::StageplayText);
-    for (auto model : stageplayModels) {
-        auto stageplay = qobject_cast<BusinessLayer::StageplayTextModel*>(model);
-        charactersFromText.unite(stageplay->findCharactersFromText());
+    auto scriptModels = modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
+    scriptModels.append(modelsFacade.modelsFor(Domain::DocumentObjectType::ComicBookText));
+    scriptModels.append(modelsFacade.modelsFor(Domain::DocumentObjectType::AudioplayText));
+    scriptModels.append(modelsFacade.modelsFor(Domain::DocumentObjectType::StageplayText));
+    for (auto model : scriptModels) {
+        auto audioplay = qobject_cast<BusinessLayer::ScriptTextModel*>(model);
+        const auto characters = audioplay->findCharactersFromText();
+        charactersFromText.unite({ characters.begin(), characters.end() });
     }
     charactersFromText.remove({});
 
@@ -1359,11 +1345,14 @@ void ProjectManager::Implementation::findAllLocations()
     // Найти все модели где могут встречаться локации и определить их
     //
     QSet<QString> locationsFromText;
-    const auto screenplayModels
-        = modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
-    for (auto model : screenplayModels) {
-        auto screenplay = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
-        locationsFromText.unite(screenplay->findLocationsFromText());
+    auto scriptModels = modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
+    scriptModels.append(modelsFacade.modelsFor(Domain::DocumentObjectType::ComicBookText));
+    scriptModels.append(modelsFacade.modelsFor(Domain::DocumentObjectType::AudioplayText));
+    scriptModels.append(modelsFacade.modelsFor(Domain::DocumentObjectType::StageplayText));
+    for (auto model : scriptModels) {
+        auto audioplay = qobject_cast<BusinessLayer::ScriptTextModel*>(model);
+        const auto characters = audioplay->findLocationsFromText();
+        locationsFromText.unite({ characters.begin(), characters.end() });
     }
     locationsFromText.remove({});
 
@@ -2344,6 +2333,52 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             [this](const QString& _name, const QByteArray& _content) {
                 d->addDocumentToContainer(Domain::DocumentObjectType::Worlds,
                                           Domain::DocumentObjectType::World, _name, _content);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::titlePageCharactersUpdateRequested, this,
+            [this](BusinessLayer::AbstractModel* _titlePage) {
+                if (_titlePage == nullptr) {
+                    return;
+                }
+
+                using namespace BusinessLayer;
+
+                //
+                // Найти сценарий, к которому относится эта титульная страница
+                //
+                const auto titlePageItem
+                    = d->projectStructureModel->itemForUuid(_titlePage->document()->uuid());
+                const auto scriptItem = titlePageItem->parent();
+                ScriptTextModel* scriptTextModel = nullptr;
+                for (int childIndex = 0; childIndex < scriptItem->childCount(); ++childIndex) {
+                    const auto childItem = scriptItem->childAt(childIndex);
+                    if (childItem->type() == Domain::DocumentObjectType::AudioplayText
+                        || childItem->type() == Domain::DocumentObjectType::StageplayText) {
+                        scriptTextModel = qobject_cast<ScriptTextModel*>(
+                            d->modelsFacade.modelFor(childItem->uuid()));
+                        break;
+                    }
+                }
+                if (scriptTextModel == nullptr) {
+                    return;
+                }
+
+                //
+                // Определить список персонажей сценария
+                //
+                QVector<QPair<QString, QString>> characters;
+                const auto charactersFromText = scriptTextModel->findCharactersFromText();
+                for (const auto& characterName : charactersFromText) {
+                    const auto character = scriptTextModel->character(characterName);
+                    characters.append(
+                        { characterName,
+                          character != nullptr ? character->oneSentenceDescription() : QString() });
+                };
+
+                //
+                // Задать список персонажей в титульную страницу
+                //
+                auto titlePage = qobject_cast<BusinessLayer::TitlePageModel*>(_titlePage);
+                titlePage->setCharacters(characters);
             });
     //
     connect(&d->modelsFacade, &ProjectModelsFacade::screenplayTitlePageVisibilityChanged, this,

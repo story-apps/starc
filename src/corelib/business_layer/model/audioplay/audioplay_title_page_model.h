@@ -1,16 +1,17 @@
 #pragma once
 
-#include "../simple_text/simple_text_model.h"
+#include "../base//title_page_model.h"
 
 
 namespace BusinessLayer {
 
 class AudioplayInformationModel;
+class CharacterModel;
 
 /**
  * @brief Модель титульной страницы аудиопостановки
  */
-class CORE_LIBRARY_EXPORT AudioplayTitlePageModel : public SimpleTextModel
+class CORE_LIBRARY_EXPORT AudioplayTitlePageModel : public TitlePageModel
 {
     Q_OBJECT
 
@@ -22,11 +23,6 @@ public:
      * @brief Название документа
      */
     QString documentName() const override;
-
-    /**
-     * @brief Игнорируем установку названия документа
-     */
-    void setDocumentName(const QString& _name) override;
 
     /**
      * @brief Задать модель информации о сценарии

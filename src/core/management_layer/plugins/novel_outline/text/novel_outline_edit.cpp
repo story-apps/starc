@@ -9,6 +9,7 @@
 #include <business_layer/import/novel/novel_markdown_importer.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
+#include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/novel/novel_dictionaries_model.h>
 #include <business_layer/model/novel/novel_information_model.h>
 #include <business_layer/model/novel/text/novel_text_block_parser.h>

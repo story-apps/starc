@@ -8,6 +8,7 @@
 #include <business_layer/import/text/simple_text_markdown_importer.h>
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/audioplay_title_page_model.h>
+#include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/comic_book_title_page_model.h>
 #include <business_layer/model/novel/novel_information_model.h>
@@ -66,7 +67,7 @@ public:
 
     TitlePageEdit* q = nullptr;
 
-    QPointer<BusinessLayer::SimpleTextModel> model;
+    QPointer<BusinessLayer::TitlePageModel> model;
     BusinessLayer::SimpleTextDocument document;
 };
 
@@ -138,7 +139,7 @@ TitlePageEdit::TitlePageEdit(QWidget* _parent)
 
 TitlePageEdit::~TitlePageEdit() = default;
 
-void TitlePageEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
+void TitlePageEdit::initWithModel(BusinessLayer::TitlePageModel* _model)
 {
     if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {
         titlePageModel->informationModel()->disconnect(this);
@@ -375,6 +376,88 @@ void TitlePageEdit::undo()
 void TitlePageEdit::redo()
 {
     d->revertAction(false);
+}
+
+void TitlePageEdit::addCastList()
+{
+    //
+    // Пока что нам нужны в персонажей только для аудиопьес и пьес
+    //
+    if (d->model.isNull() || d->model->document() == nullptr
+        || (d->model->document()->type() != Domain::DocumentObjectType::AudioplayTitlePage
+            && d->model->document()->type() != Domain::DocumentObjectType::StageplayTitlePage)) {
+        return;
+    }
+
+    //
+    // Запрашиваем обновление списка персонажей сценария
+    //
+    emit d->model->charactersUpdateRequested();
+
+    const auto characters = d->model->characters();
+    if (characters.isEmpty()) {
+        return;
+    }
+
+    //
+    // Выводим список персонажей в конец документа
+    //
+    auto cursor = textCursor();
+    //
+    // ... добавляем заголовок (посередине и полужирным)
+    //
+    moveCursor(QTextCursor::End);
+    addParagraph(BusinessLayer::TextParagraphType::Text);
+    addParagraph(BusinessLayer::TextParagraphType::ChapterHeading6);
+    cursor.movePosition(QTextCursor::End);
+    auto blockFormat = cursor.blockFormat();
+    blockFormat.setAlignment(Qt::AlignHCenter);
+    cursor.setBlockFormat(blockFormat);
+    auto charFormat = cursor.blockCharFormat();
+    charFormat.setFontWeight(QFont::Bold);
+    cursor.mergeBlockCharFormat(charFormat);
+    cursor.insertText(tr("Cast list"));
+    const auto titleCursorPosition = cursor.position();
+    moveCursor(QTextCursor::End);
+    addParagraph(BusinessLayer::TextParagraphType::Text);
+    for (const auto& character : characters) {
+        //
+        // ... в зависимости от типа контента генерируем список действующих лиц
+        //
+        moveCursor(QTextCursor::End);
+        addParagraph(BusinessLayer::TextParagraphType::Text);
+        cursor.movePosition(QTextCursor::End);
+        cursor.insertText(character.first);
+        //
+        // ... для аудиопьес подготавливаем место для указания исполнителя роли
+        //
+        if (d->model->document()->type() == Domain::DocumentObjectType::AudioplayTitlePage) {
+            const auto tbdTerm = " " + tr("TBD");
+            cursor.insertText(" " + QString().fill('.', 70) + tbdTerm);
+            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor,
+                                tbdTerm.length());
+            while (cursor.block().layout()->lineCount() > 1) {
+                cursor.deletePreviousChar();
+            }
+            //
+            // ... а так же делаем пустую строку, чтобы список действующих лиц не конфликтовал
+            //     с основным текстом, т.к. аудиопостановки имеют полуторный интервал обычно
+            //
+            moveCursor(QTextCursor::End);
+            addParagraph(BusinessLayer::TextParagraphType::Text);
+        }
+        //
+        // ... а для пьес добавляем описание персонажа, если оно доступно
+        //
+        else if (d->model->document()->type() == Domain::DocumentObjectType::StageplayTitlePage) {
+            if (!character.second.isEmpty()) {
+                cursor.insertText(", " + character.second);
+            }
+        }
+    }
+
+    cursor.setPosition(titleCursorPosition);
+    ensureCursorVisible(cursor);
 }
 
 void TitlePageEdit::restoreFromTemplate()

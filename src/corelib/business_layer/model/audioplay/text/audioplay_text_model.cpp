@@ -55,21 +55,6 @@ public:
      * @brief Модель информации о проекте
      */
     AudioplayInformationModel* informationModel = nullptr;
-
-    /**
-     * @brief Модель персонажей
-     */
-    CharactersModel* charactersModel = nullptr;
-
-    /**
-     * @brief Нужно ли обновить справочники, которые строятся в рантайме
-     */
-    bool needUpdateRuntimeDictionaries = false;
-
-    /**
-     * @brief Справочники, которые строятся в рантайме
-     */
-    QStringListModel* charactersModelFromText = nullptr;
 };
 
 AudioplayTextModel::Implementation::Implementation(AudioplayTextModel* _q)
@@ -172,7 +157,7 @@ void AudioplayTextModel::Implementation::updateChildrenDuration(const TextModelI
 
 
 AudioplayTextModel::AudioplayTextModel(QObject* _parent)
-    : TextModel(_parent, createFolderItem(TextFolderType::Root))
+    : ScriptTextModel(_parent, createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
     auto updateCounters = [this](const QModelIndex& _index) {
@@ -188,7 +173,7 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
     connect(this, &AudioplayTextModel::afterRowsRemoved, this, updateCounters);
 
     connect(this, &AudioplayTextModel::contentsChanged, this,
-            [this] { d->needUpdateRuntimeDictionaries = true; });
+            &AudioplayTextModel::markNeedUpdateRuntimeDictionaries);
 }
 
 AudioplayTextModel::~AudioplayTextModel() = default;
@@ -236,38 +221,6 @@ void AudioplayTextModel::setInformationModel(AudioplayInformationModel* _model)
 AudioplayInformationModel* AudioplayTextModel::informationModel() const
 {
     return d->informationModel;
-}
-
-void AudioplayTextModel::setCharactersModel(CharactersModel* _model)
-{
-    if (d->charactersModel) {
-        d->charactersModel->disconnect(this);
-    }
-
-    d->charactersModel = _model;
-    d->needUpdateRuntimeDictionaries = true;
-
-    connect(d->charactersModel, &CharactersModel::contentsChanged, this,
-            [this] { d->needUpdateRuntimeDictionaries = true; });
-}
-
-QAbstractItemModel* AudioplayTextModel::charactersList() const
-{
-    if (d->charactersModelFromText != nullptr) {
-        return d->charactersModelFromText;
-    }
-
-    return d->charactersModel;
-}
-
-BusinessLayer::CharacterModel* AudioplayTextModel::character(const QString& _name) const
-{
-    return d->charactersModel->character(_name);
-}
-
-void AudioplayTextModel::createCharacter(const QString& _name)
-{
-    d->charactersModel->createCharacter(_name);
 }
 
 void AudioplayTextModel::updateCharacterName(const QString& _oldName, const QString& _newName)
@@ -378,36 +331,59 @@ QVector<QModelIndex> AudioplayTextModel::characterDialogues(const QString& _name
     return dialoguesIndexes;
 }
 
-QSet<QString> AudioplayTextModel::findCharactersFromText() const
+QVector<QString> AudioplayTextModel::findCharactersFromText() const
 {
-    QSet<QString> characters;
+    QVector<QString> characters;
+    QHash<QString, int> charactersDialogues;
     std::function<void(const TextModelItem*)> findCharacters;
-    findCharacters = [&characters, &findCharacters](const TextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case TextModelItemType::Folder:
-            case TextModelItemType::Group: {
-                findCharacters(childItem);
-                break;
-            }
+    findCharacters
+        = [&characters, &charactersDialogues, &findCharacters](const TextModelItem* _item) {
+              for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+                  auto childItem = _item->childAt(childIndex);
+                  switch (childItem->type()) {
+                  case TextModelItemType::Folder:
+                  case TextModelItemType::Group: {
+                      findCharacters(childItem);
+                      break;
+                  }
 
-            case TextModelItemType::Text: {
-                auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
-                if (textItem->paragraphType() == TextParagraphType::Character) {
-                    characters.insert(AudioplayCharacterParser::name(textItem->text()));
-                }
-                break;
-            }
+                  case TextModelItemType::Text: {
+                      auto textItem = static_cast<TextModelTextItem*>(childItem);
+                      if (textItem->paragraphType() == TextParagraphType::Character) {
+                          const auto character = AudioplayCharacterParser::name(textItem->text());
+                          if (charactersDialogues.contains(character)) {
+                              ++charactersDialogues[character];
+                          } else {
+                              characters.append(character);
+                              charactersDialogues.insert(character, 1);
+                          }
+                      }
+                      break;
+                  }
 
-            default:
-                break;
-            }
-        }
-    };
+                  default:
+                      break;
+                  }
+              }
+          };
     findCharacters(d->rootItem());
+    std::sort(characters.begin(), characters.end(),
+              [&charactersDialogues](const QString& _lhs, const QString& _rhs) {
+                  return charactersDialogues.value(_lhs) > charactersDialogues.value(_rhs);
+              });
 
     return characters;
+}
+
+void AudioplayTextModel::updateLocationName(const QString& _oldName, const QString& _newName)
+{
+    Q_UNUSED(_oldName)
+    Q_UNUSED(_newName)
+}
+
+QVector<QString> AudioplayTextModel::findLocationsFromText() const
+{
+    return {};
 }
 
 std::chrono::milliseconds AudioplayTextModel::duration() const
@@ -487,17 +463,6 @@ void AudioplayTextModel::recalculateDuration()
     emit rowsChanged();
 }
 
-void AudioplayTextModel::updateRuntimeDictionariesIfNeeded()
-{
-    if (!d->needUpdateRuntimeDictionaries) {
-        return;
-    }
-
-    updateRuntimeDictionaries();
-
-    d->needUpdateRuntimeDictionaries = false;
-}
-
 void AudioplayTextModel::updateRuntimeDictionaries()
 {
     const bool showHintsForAllItems
@@ -555,8 +520,8 @@ void AudioplayTextModel::updateRuntimeDictionaries()
     //
     // ... не забываем приаттачить всех персонажей, у кого определена роль в истории
     //
-    for (int row = 0; row < d->charactersModel->rowCount(); ++row) {
-        const auto character = d->charactersModel->character(row);
+    for (int row = 0; row < charactersModel()->rowCount(); ++row) {
+        const auto character = charactersModel()->character(row);
 
         //
         // ... фильтруем по ролям, если необходимо
@@ -591,10 +556,7 @@ void AudioplayTextModel::updateRuntimeDictionaries()
     //
     // ... создаём (при необходимости) и наполняем модель
     //
-    if (d->charactersModelFromText == nullptr) {
-        d->charactersModelFromText = new QStringListModel(this);
-    }
-    d->charactersModelFromText->setStringList(characters.values());
+    charactersModelFromText()->setStringList(characters.values());
 }
 
 void AudioplayTextModel::initEmptyDocument()

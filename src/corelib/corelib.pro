@@ -214,6 +214,8 @@ SOURCES += \
     business_layer/model/text/text_model_splitter_item.cpp \
     business_layer/model/text/text_model_text_item.cpp \
     business_layer/model/text/text_model_xml_writer.cpp \
+    business_layer/model/base/script_text_model.cpp \
+    business_layer/model/base/title_page_model.cpp \
     business_layer/model/worlds/world_model.cpp \
     business_layer/model/worlds/worlds_model.cpp \
     business_layer/plots/audioplay/audioplay_characters_activity_plot.cpp \
@@ -539,6 +541,8 @@ HEADERS += \
     business_layer/model/text/text_model_text_item.h \
     business_layer/model/text/text_model_xml.h \
     business_layer/model/text/text_model_xml_writer.h \
+    business_layer/model/base/script_text_model.h \
+    business_layer/model/base/title_page_model.h \
     business_layer/model/worlds/world_model.h \
     business_layer/model/worlds/worlds_model.h \
     business_layer/plots/abstract_plot.h \

@@ -28,6 +28,9 @@ public:
     QAction* redoAction = nullptr;
     QAction* textFontAction = nullptr;
     QAction* textFontSizeAction = nullptr;
+    //
+    QAction* addCastListAction = nullptr;
+    //
     QAction* restoreTitlePageAction = nullptr;
 
     QStringListModel fontsModel;
@@ -41,6 +44,7 @@ TitlePageEditToolbar::Implementation::Implementation(QWidget* _parent)
     , redoAction(new QAction)
     , textFontAction(new QAction)
     , textFontSizeAction(new QAction)
+    , addCastListAction(new QAction)
     , restoreTitlePageAction(new QAction)
     , popup(new CardPopupWithTree(_parent))
 {
@@ -48,6 +52,8 @@ TitlePageEditToolbar::Implementation::Implementation(QWidget* _parent)
     redoAction->setIconText(u8"\U000f044e");
     textFontAction->setIconText(u8"\U000f035d");
     textFontSizeAction->setIconText(u8"\U000f035d");
+    addCastListAction->setIconText(u8"\U000F0010");
+    addCastListAction->setVisible(false);
     restoreTitlePageAction->setIconText(u8"\U000F099B");
 
     fontsModel.setStringList(QFontDatabase().families());
@@ -150,6 +156,9 @@ TitlePageEditToolbar::TitlePageEditToolbar(QWidget* _parent)
         animateHoverOut();
     });
 
+    addAction(d->addCastListAction);
+    connect(d->addCastListAction, &QAction::triggered, this,
+            &TitlePageEditToolbar::addCastListPressed);
 
     addAction(d->restoreTitlePageAction);
     connect(d->restoreTitlePageAction, &QAction::triggered, this,
@@ -165,6 +174,7 @@ void TitlePageEditToolbar::setReadOnly(bool _readOnly)
     d->redoAction->setEnabled(enabled);
     d->textFontAction->setEnabled(enabled);
     d->textFontSizeAction->setEnabled(enabled);
+    d->addCastListAction->setEnabled(enabled);
     d->restoreTitlePageAction->setEnabled(enabled);
 }
 
@@ -177,6 +187,16 @@ void TitlePageEditToolbar::setCurrentFont(const QFont& _font)
 
     d->textFontAction->setText(_font.family());
     d->textFontSizeAction->setText(QString::number(MeasurementHelper::pxToPt(_font.pixelSize())));
+}
+
+void TitlePageEditToolbar::setAddCastListVisible(bool _visible)
+{
+    if (d->addCastListAction->isVisible() == _visible) {
+        return;
+    }
+
+    d->addCastListAction->setVisible(_visible);
+    resize(sizeHint());
 }
 
 bool TitlePageEditToolbar::canAnimateHoverOut() const
@@ -196,6 +216,7 @@ void TitlePageEditToolbar::updateTranslations()
             QKeySequence(QKeySequence::Redo).toString(QKeySequence::NativeText)));
     d->textFontAction->setToolTip(tr("Current text font family"));
     d->textFontSizeAction->setToolTip(tr("Current text font size"));
+    d->addCastListAction->setToolTip(tr("Add cast list"));
     d->restoreTitlePageAction->setToolTip(tr("Restore default title page"));
 }
 

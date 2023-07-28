@@ -52,7 +52,7 @@ public:
     /**
      * @brief Обновить текущий отображаемый тип абзаца в панели инструментов
      */
-    void updateToolBarCurrentParagraphTypeName();
+    void updateToolBarCurrentParagraphFont();
 
 
     TitlePageView* q = nullptr;
@@ -97,7 +97,7 @@ void TitlePageView::Implementation::updateToolbarPositon()
                       .toPoint());
 }
 
-void TitlePageView::Implementation::updateToolBarCurrentParagraphTypeName()
+void TitlePageView::Implementation::updateToolBarCurrentParagraphFont()
 {
     toolbar->setCurrentFont(textEdit->textCursor().charFormat().font());
 }
@@ -131,10 +131,12 @@ TitlePageView::TitlePageView(QWidget* _parent)
         //
         d->scalableWrapper->setFocus();
     });
+    connect(d->toolbar, &TitlePageEditToolbar::addCastListPressed, d->textEdit,
+            &TitlePageEdit::addCastList);
     connect(d->toolbar, &TitlePageEditToolbar::restoreTitlePagePressed, d->textEdit,
             &TitlePageEdit::restoreFromTemplate);
     //
-    auto handleCursorPositionChanged = [this] { d->updateToolBarCurrentParagraphTypeName(); };
+    auto handleCursorPositionChanged = [this] { d->updateToolBarCurrentParagraphFont(); };
     connect(d->textEdit, &TitlePageEdit::paragraphTypeChanged, this, handleCursorPositionChanged);
     connect(d->textEdit, &TitlePageEdit::cursorPositionChanged, this, handleCursorPositionChanged);
 
@@ -242,25 +244,30 @@ void TitlePageView::saveViewSettings()
     setSettingsValue(kScaleFactorKey, d->scalableWrapper->zoomRange());
 }
 
-void TitlePageView::setModel(BusinessLayer::SimpleTextModel* _model)
+void TitlePageView::setModel(BusinessLayer::TitlePageModel* _model)
 {
+    bool isAddCastListVisible = false;
     if (qobject_cast<BusinessLayer::ComicBookTitlePageModel*>(_model)) {
         d->currentModelType = Domain::DocumentObjectType::ComicBookTitlePage;
     } else if (qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(_model)) {
         d->currentModelType = Domain::DocumentObjectType::ScreenplayTitlePage;
     } else if (qobject_cast<BusinessLayer::AudioplayTitlePageModel*>(_model)) {
         d->currentModelType = Domain::DocumentObjectType::AudioplayTitlePage;
+        isAddCastListVisible = true;
     } else if (qobject_cast<BusinessLayer::StageplayTitlePageModel*>(_model)) {
         d->currentModelType = Domain::DocumentObjectType::StageplayTitlePage;
+        isAddCastListVisible = true;
     } else if (qobject_cast<BusinessLayer::NovelTitlePageModel*>(_model)) {
         d->currentModelType = Domain::DocumentObjectType::NovelTitlePage;
     } else {
         d->currentModelType = Domain::DocumentObjectType::Undefined;
     }
 
+    d->toolbar->setAddCastListVisible(isAddCastListVisible);
     d->textEdit->initWithModel(_model);
 
-    d->updateToolBarCurrentParagraphTypeName();
+    d->updateToolBarCurrentParagraphFont();
+    d->updateToolbarPositon();
 }
 
 int TitlePageView::cursorPosition() const

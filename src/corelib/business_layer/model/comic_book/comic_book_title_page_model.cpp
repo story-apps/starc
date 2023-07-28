@@ -19,7 +19,7 @@ public:
 
 
 ComicBookTitlePageModel::ComicBookTitlePageModel(QObject* _parent)
-    : SimpleTextModel(_parent)
+    : TitlePageModel(_parent)
     , d(new Implementation)
 {
 }
@@ -29,11 +29,6 @@ ComicBookTitlePageModel::~ComicBookTitlePageModel() = default;
 QString ComicBookTitlePageModel::documentName() const
 {
     return QString("%1 | %2").arg(tr("Title page"), d->informationModel->name());
-}
-
-void ComicBookTitlePageModel::setDocumentName(const QString& _name)
-{
-    Q_UNUSED(_name);
 }
 
 void ComicBookTitlePageModel::setInformationModel(ComicBookInformationModel* _model)

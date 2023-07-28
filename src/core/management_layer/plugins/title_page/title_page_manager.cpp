@@ -2,7 +2,7 @@
 
 #include "title_page_view.h"
 
-#include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/model/base/title_page_model.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
@@ -44,7 +44,7 @@ public:
     /**
      * @brief Получить модель связанную с заданным представлением
      */
-    QPointer<BusinessLayer::SimpleTextModel> modelForView(Ui::TitlePageView* _view) const;
+    QPointer<BusinessLayer::TitlePageModel> modelForView(Ui::TitlePageView* _view) const;
 
     /**
      * @brief Работа с параметрами отображения представления
@@ -66,7 +66,7 @@ public:
      */
     struct ViewAndModel {
         QPointer<Ui::TitlePageView> view;
-        QPointer<BusinessLayer::SimpleTextModel> model;
+        QPointer<BusinessLayer::TitlePageModel> model;
     };
     QVector<ViewAndModel> allViews;
 };
@@ -118,7 +118,7 @@ void TitlePageManager::Implementation::setModelForView(BusinessLayer::AbstractMo
     //
     // Определяем новую модель
     //
-    auto model = qobject_cast<BusinessLayer::SimpleTextModel*>(_model);
+    auto model = qobject_cast<BusinessLayer::TitlePageModel*>(_model);
     _view->setModel(model);
 
     //
@@ -148,7 +148,7 @@ void TitlePageManager::Implementation::setModelForView(BusinessLayer::AbstractMo
     }
 }
 
-QPointer<BusinessLayer::SimpleTextModel> TitlePageManager::Implementation::modelForView(
+QPointer<BusinessLayer::TitlePageModel> TitlePageManager::Implementation::modelForView(
     Ui::TitlePageView* _view) const
 {
     for (auto& viewAndModel : allViews) {

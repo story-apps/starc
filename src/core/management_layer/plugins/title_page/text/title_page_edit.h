@@ -3,7 +3,7 @@
 #include <ui/modules/script_text_edit/script_text_edit.h>
 
 namespace BusinessLayer {
-class SimpleTextModel;
+class TitlePageModel;
 class TextTemplate;
 enum class TextParagraphType;
 } // namespace BusinessLayer
@@ -25,7 +25,7 @@ public:
     /**
      * @brief Задать модель текста сценария
      */
-    void initWithModel(BusinessLayer::SimpleTextModel* _model);
+    void initWithModel(BusinessLayer::TitlePageModel* _model);
 
     /**
      * @brief Перенастроить редактор в соответствии с текущей моделью
@@ -48,6 +48,11 @@ public:
      * @brief Повторить последнее отменённое изменение
      */
     void redo();
+
+    /**
+     * @brief Добавить список действующих лиц
+     */
+    void addCastList();
 
     /**
      * @brief Восстановить дефолтную титульную страницу из шаблона

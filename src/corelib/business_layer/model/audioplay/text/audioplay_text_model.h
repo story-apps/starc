@@ -1,18 +1,16 @@
 #pragma once
 
-#include <business_layer/model/text/text_model.h>
+#include <business_layer/model/base/script_text_model.h>
 
 
 namespace BusinessLayer {
 
-class CharacterModel;
-class CharactersModel;
 class AudioplayInformationModel;
 
 /**
  * @brief Модель текста аудиопостановки
  */
-class CORE_LIBRARY_EXPORT AudioplayTextModel : public TextModel
+class CORE_LIBRARY_EXPORT AudioplayTextModel : public ScriptTextModel
 {
     Q_OBJECT
 
@@ -34,35 +32,29 @@ public:
     AudioplayInformationModel* informationModel() const;
 
     /**
-     * @brief Задать модель персонажей проекта
-     */
-    void setCharactersModel(CharactersModel* _model);
-    QAbstractItemModel* charactersList() const;
-
-    /**
-     * @brief Получить модель персонажа по заданному имени
-     */
-    BusinessLayer::CharacterModel* character(const QString& _name) const;
-
-    /**
-     * @brief Создать персонажа с заданным именем
-     */
-    void createCharacter(const QString& _name);
-
-    /**
      * @brief Обновить имя персонажа
      */
-    void updateCharacterName(const QString& _oldName, const QString& _newName);
+    void updateCharacterName(const QString& _oldName, const QString& _newName) override;
 
     /**
      * @brief Получить список реплик персонажа
      */
-    QVector<QModelIndex> characterDialogues(const QString& _name) const;
+    QVector<QModelIndex> characterDialogues(const QString& _name) const override;
 
     /**
      * @brief Найти всех персонажей сценария
      */
-    QSet<QString> findCharactersFromText() const;
+    QVector<QString> findCharactersFromText() const override;
+
+    /**
+     * @brief Обновить название локации
+     */
+    void updateLocationName(const QString& _oldName, const QString& _newName) override;
+
+    /**
+     * @brief Найти все локации сценария
+     */
+    QVector<QString> findLocationsFromText() const override;
 
     /**
      * @brief Длительность сценария
@@ -87,8 +79,7 @@ public:
     /**
      * @brief Настроить справочники сценария, которые собираются во время работы приложения
      */
-    void updateRuntimeDictionariesIfNeeded();
-    void updateRuntimeDictionaries();
+    void updateRuntimeDictionaries() override;
 
     /**
      * @brief Определим список майм типов для модели

@@ -583,6 +583,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 = qobject_cast<BusinessLayer::AudioplayInformationModel*>(modelFor(parentUuid));
             titlePageModel->setInformationModel(informationModel);
 
+            connect(titlePageModel,
+                    &BusinessLayer::AudioplayTitlePageModel::charactersUpdateRequested, this,
+                    [this, titlePageModel] {
+                        emit titlePageCharactersUpdateRequested(titlePageModel);
+                    });
+
             model = titlePageModel;
             break;
         }
@@ -720,6 +726,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             auto informationModel
                 = qobject_cast<BusinessLayer::StageplayInformationModel*>(modelFor(parentUuid));
             titlePageModel->setInformationModel(informationModel);
+
+            connect(titlePageModel,
+                    &BusinessLayer::StageplayTitlePageModel::charactersUpdateRequested, this,
+                    [this, titlePageModel] {
+                        emit titlePageCharactersUpdateRequested(titlePageModel);
+                    });
 
             model = titlePageModel;
             break;

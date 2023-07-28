@@ -28,10 +28,16 @@ public:
      */
     void setCurrentFont(const QFont& _font);
 
+    /**
+     * @brief Задать видимость опции добавления списка действующих лиц
+     */
+    void setAddCastListVisible(bool _visible);
+
 signals:
     void undoPressed();
     void redoPressed();
     void fontChanged(const QFont& _font);
+    void addCastListPressed();
     void restoreTitlePagePressed();
 
 protected:

@@ -209,6 +209,11 @@ signals:
     void createWorldRequested(const QString& _name, const QByteArray& _content);
 
     /**
+     * @brief Запрос на обновление списка действующих лиц титульной страницы
+     */
+    void titlePageCharactersUpdateRequested(BusinessLayer::AbstractModel* _titlePage);
+
+    /**
      * @brief Необходимо очистить корзинку
      */
     void emptyRecycleBinRequested();
