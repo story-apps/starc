@@ -162,6 +162,16 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
         d->view, &Ui::ProjectsView::projectContextMenuRequested, this,
         [this](BusinessLayer::ProjectsModelProjectItem* _project) {
             QVector<QAction*> actions;
+            auto openProjectAction = new QAction;
+            openProjectAction->setIconText(u8"\U000F024B");
+            openProjectAction->setText(tr("Open story"));
+            connect(openProjectAction, &QAction::triggered, this, [this, _project] {
+                if (_project->isLocal()) {
+                    emit openLocalProjectRequested(_project->path());
+                } else {
+                    emit openCloudProjectRequested(_project->id(), _project->path());
+                }
+            });
             //
             // Действия над локальным проектом
             //
@@ -222,8 +232,10 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                 });
                 actions.append(moveToCloudAction);
                 //
+                openProjectAction->setSeparator(true);
+                actions.append(openProjectAction);
+                //
                 auto showInFolderAction = new QAction;
-                showInFolderAction->setSeparator(true);
                 showInFolderAction->setIconText(u8"\U000F178A");
                 showInFolderAction->setText(tr("Show in folder"));
                 connect(showInFolderAction, &QAction::triggered, this,
@@ -267,7 +279,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                 //
                 auto removeProjectAction = new QAction;
                 removeProjectAction->setIconText(u8"\U000F01B4");
-                removeProjectAction->setText(tr("Remove project"));
+                removeProjectAction->setText(tr("Remove story"));
                 connect(removeProjectAction, &QAction::triggered, this, [this, _project] {
                     auto dialog = new Dialog(d->view->topLevelWidget());
                     constexpr int cancelButtonId = 0;
@@ -320,14 +332,16 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                     actions.append(saveLocallyAction);
                 }
 
+                openProjectAction->setSeparator(!actions.isEmpty());
+                actions.append(openProjectAction);
+
                 //
                 // Если пользователь владеет проектом
                 //
                 if (_project->isOwner()) {
                     auto removeProjectAction = new QAction;
-                    removeProjectAction->setSeparator(!actions.isEmpty());
                     removeProjectAction->setIconText(u8"\U000F01B4");
-                    removeProjectAction->setText(tr("Remove project"));
+                    removeProjectAction->setText(tr("Remove story"));
                     connect(removeProjectAction, &QAction::triggered, this, [this, _project] {
                         auto dialog = new Dialog(d->view->topLevelWidget());
                         constexpr int cancelButtonId = 0;
@@ -362,7 +376,6 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                 //
                 else {
                     auto unsubscribeAction = new QAction;
-                    unsubscribeAction->setSeparator(!actions.isEmpty());
                     unsubscribeAction->setIconText(u8"\U000F01B4");
                     unsubscribeAction->setText(tr("Unsubscribe"));
                     connect(unsubscribeAction, &QAction::triggered, this, [this, _project] {
