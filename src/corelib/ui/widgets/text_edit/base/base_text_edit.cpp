@@ -428,6 +428,7 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     }
 
     auto formattingAction = new QAction;
+    formattingAction->setSeparator(true);
     formattingAction->setText(tr("Formatting"));
     formattingAction->setIconText(u8"\U000F0284");
     {
@@ -496,11 +497,11 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     }
 
     //
-    // В зависимости от того, есть ли меню проверки орфографии добавляем пункт меню форматирования
+    // Показываем меню форматирования после базовых действий, и перед "выделить всё"
     //
     auto actions = menu->actions().toVector();
     actions.first()->setSeparator(true);
-    actions.prepend(formattingAction);
+    actions.insert(actions.size() - 1, formattingAction);
     menu->setActions(actions);
 
     return menu;

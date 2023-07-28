@@ -32,6 +32,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QLocale>
+#include <QMenu>
 #include <QMimeData>
 #include <QPainter>
 #include <QPointer>
@@ -1544,36 +1545,6 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
 
     const BusinessLayer::TextCursor cursor = textCursor();
 
-    auto splitAction = new QAction(this);
-    splitAction->setSeparator(true);
-    splitAction->setWhatsThis(QKeySequence("Ctrl+D").toString(QKeySequence::NativeText));
-    splitAction->setIconText(u8"\U000F1917");
-    if (cursor.inTable()) {
-        splitAction->setText(tr("Merge paragraph"));
-    } else {
-        splitAction->setText(tr("Split paragraph"));
-
-        //
-        // Запрещаем разделять некоторые блоки
-        //
-        splitAction->setEnabled(d->canSplitParagraph(cursor));
-    }
-    connect(splitAction, &QAction::triggered, this, [this] {
-        BusinessLayer::TextCursor cursor = textCursor();
-        if (cursor.inTable()) {
-            d->document.mergeParagraph(cursor);
-        } else {
-            d->document.splitParagraph(cursor);
-
-            //
-            // После разделения, возвращаемся в первую ячейку таблицы
-            //
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::PreviousBlock);
-            moveCursor(QTextCursor::EndOfBlock);
-        }
-    });
-
     //
     // Работа с закладками
     //
@@ -1605,9 +1576,56 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     showBookmarks->setIconText(u8"\U000F0E16");
     connect(showBookmarks, &QAction::triggered, this, &ScreenplayTextEdit::showBookmarksRequested);
 
+    //
+    // Разделение абзаца на две колонки/сшивание в одну
+    //
+    auto splitAction = new QAction(this);
+    splitAction->setWhatsThis(QKeySequence("Ctrl+D").toString(QKeySequence::NativeText));
+    if (cursor.inTable()) {
+        splitAction->setText(tr("Merge paragraph"));
+    } else {
+        splitAction->setText(tr("Split paragraph"));
+
+        //
+        // Запрещаем разделять некоторые блоки
+        //
+        splitAction->setEnabled(d->canSplitParagraph(cursor));
+    }
+    connect(splitAction, &QAction::triggered, this, [this] {
+        BusinessLayer::TextCursor cursor = textCursor();
+        if (cursor.inTable()) {
+            d->document.mergeParagraph(cursor);
+        } else {
+            d->document.splitParagraph(cursor);
+
+            //
+            // После разделения, возвращаемся в первую ячейку таблицы
+            //
+            moveCursor(QTextCursor::PreviousBlock);
+            moveCursor(QTextCursor::PreviousBlock);
+            moveCursor(QTextCursor::EndOfBlock);
+        }
+    });
+
+    //
+    // Располагаем работу со вкладками на самом верху меню
+    //
     auto actions = menu->actions().toVector();
-    actions.prepend(splitAction);
     actions.prepend(bookmarkAction);
+    //
+    // ... а разделение абзаца вверху опций форматирования
+    //
+    auto formattingMenu = actions.at(actions.size() - 2);
+    QVector<QAction*> formattingActions;
+    for (auto child : formattingMenu->findChildren<QAction*>()) {
+        formattingActions.append(child);
+        child->setParent(nullptr);
+    }
+    formattingActions.first()->setSeparator(true);
+    formattingActions.prepend(splitAction);
+    for (auto action : std::as_const(formattingActions)) {
+        action->setParent(formattingMenu);
+    }
     menu->setActions(actions);
 
     return menu;

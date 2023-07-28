@@ -3951,6 +3951,12 @@ ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     pasteAction->setWhatsThis(QKeySequence(QKeySequence::Paste).toString(QKeySequence::NativeText));
     connect(pasteAction, &QAction::triggered, this, &PageTextEdit::paste);
 
+    auto deleteAction = new QAction;
+    deleteAction->setEnabled(textCursor().hasSelection());
+    deleteAction->setText(tr("Delete"));
+    deleteAction->setIconText(u8"\U000F01B4");
+    connect(deleteAction, &QAction::triggered, this, [this] { textCursor().removeSelectedText(); });
+
     auto selectAllAction = new QAction;
     selectAllAction->setSeparator(true);
     selectAllAction->setText(tr("Select all"));
@@ -3960,7 +3966,7 @@ ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     connect(selectAllAction, &QAction::triggered, this, &PageTextEdit::selectAll);
 
     auto menu = new ContextMenu(_parent == nullptr ? this : _parent);
-    menu->setActions({ cutAction, copyAction, pasteAction, selectAllAction });
+    menu->setActions({ cutAction, copyAction, pasteAction, deleteAction, selectAllAction });
     menu->setBackgroundColor(Ui::DesignSystem::color().background());
     menu->setTextColor(Ui::DesignSystem::color().onBackground());
     return menu;
