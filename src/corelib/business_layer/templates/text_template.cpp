@@ -869,10 +869,10 @@ void TextTemplate::Implementation::buildTitlePageTemplate()
     titlePageTemplate->d->id = id + "#title_page";
     titlePageTemplate->setPageSizeId(pageSizeId);
     //
-    // Уравновешиваем поля для титульной страницы
+    // Уравновешиваем поля для титульной страницы в сторону большего
     //
     auto titlePageMargins = pageMargins;
-    if (titlePageMargins.left() > titlePageMargins.right()) {
+    if (titlePageMargins.left() < titlePageMargins.right()) {
         titlePageMargins.setLeft(titlePageMargins.right());
     } else {
         titlePageMargins.setRight(titlePageMargins.left());
