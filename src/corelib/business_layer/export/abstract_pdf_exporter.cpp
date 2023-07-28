@@ -59,6 +59,51 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
     QAbstractTextDocumentLayout* layout = _document->documentLayout();
     QAbstractTextDocumentLayout::PaintContext ctx;
     _painter->setClipRect(currentPageRect);
+
+    //
+    // Рисуем водяные знаки
+    //
+    if (!_exportOptions.watermark.isEmpty()) {
+        const QString watermark = "  " + _exportOptions.watermark + "    ";
+
+        //
+        // Рассчитаем какого размера нужен шрифт
+        //
+        QFont font;
+        font.setBold(true);
+        font.setPixelSize(600);
+        const int maxWidth = static_cast<int>(sqrt(pow(_body.height(), 2) + pow(_body.width(), 2)));
+        while (TextHelper::fineTextWidthF(watermark, font) > maxWidth) {
+            font.setPixelSize(font.pixelSize() - 4);
+        }
+
+        //
+        // Рисуем картинку водяного знака
+        //
+        QPixmap watermarkPixmap(_body.size().toSize());
+        {
+            watermarkPixmap.fill(Qt::transparent);
+            QPainter painter(&watermarkPixmap);
+            painter.translate(0, _body.height());
+            painter.rotate(-qRadiansToDegrees(atan(_body.height() / _body.width())));
+            painter.setFont(font);
+            painter.setPen(_exportOptions.watermarkColor);
+            const int delta = TextHelper::fineLineSpacing(font) / 4;
+            painter.drawText(delta, delta, watermark);
+        }
+        //
+        // ... и переносим её в документ
+        //
+        _painter->drawPixmap(currentPageRect, watermarkPixmap, watermarkPixmap.rect());
+
+        //
+        // TODO: Рисуем мусор на странице, чтобы текст нельзя было вытащить
+        //
+    }
+
+    //
+    // Рисуем тело самого документа
+    //
     ctx.clip = currentPageRect;
     // don't use the system palette text as default text color, on HP/UX
     // for example that's white, and white text on white paper doesn't
@@ -281,50 +326,6 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
     }
 
     _painter->restore();
-
-    //
-    // Рисуем водяные знаки
-    //
-    if (!_exportOptions.watermark.isEmpty()) {
-        const QString watermark = "  " + _exportOptions.watermark + "    ";
-        _painter->save();
-
-        //
-        // Рассчитаем какого размера нужен шрифт
-        //
-        QFont font;
-        font.setBold(true);
-        font.setPixelSize(600);
-        const int maxWidth = static_cast<int>(sqrt(pow(_body.height(), 2) + pow(_body.width(), 2)));
-        while (TextHelper::fineTextWidthF(watermark, font) > maxWidth) {
-            font.setPixelSize(font.pixelSize() - 4);
-        }
-
-        //
-        // Рисуем картинку водяного знака
-        //
-        QPixmap watermarkPixmap(_body.size().toSize());
-        {
-            watermarkPixmap.fill(Qt::transparent);
-            QPainter painter(&watermarkPixmap);
-            painter.translate(0, _body.height());
-            painter.rotate(-qRadiansToDegrees(atan(_body.height() / _body.width())));
-            painter.setFont(font);
-            painter.setPen(_exportOptions.watermarkColor);
-            const int delta = TextHelper::fineLineSpacing(font) / 4;
-            painter.drawText(delta, delta, watermark);
-        }
-        //
-        // ... и переносим её в документ
-        //
-        _painter->drawPixmap(_body, watermarkPixmap, watermarkPixmap.rect());
-
-        //
-        // TODO: Рисуем мусор на странице, чтобы текст нельзя было вытащить
-        //
-
-        _painter->restore();
-    }
 }
 
 void AbstractPdfExporter::Implementation::printDocument(QTextDocument* _document,
