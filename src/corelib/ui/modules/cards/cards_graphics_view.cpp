@@ -1735,7 +1735,6 @@ void CardsGraphicsView::setModel(QAbstractItemModel* _model)
                     const auto heightDelta = widthDelta;
                     newSceneRect.adjust(-widthDelta, -heightDelta, widthDelta, heightDelta);
                     d->scene->setSceneRect(newSceneRect);
-                    centerOn(sceneRect().center());
                 },
                 Qt::QueuedConnection);
         }
@@ -1890,6 +1889,7 @@ void CardsGraphicsView::setModel(QAbstractItemModel* _model)
             });
 
     loadModelContent();
+    centerOn(sceneRect().center());
 }
 
 QModelIndex CardsGraphicsView::selectedCardItemIndex() const
