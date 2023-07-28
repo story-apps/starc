@@ -172,69 +172,12 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                     emit openCloudProjectRequested(_project->id(), _project->path());
                 }
             });
+            actions.append(openProjectAction);
+
             //
             // Действия над локальным проектом
             //
             if (_project->isLocal()) {
-                auto moveToCloudAction = new QAction;
-                moveToCloudAction->setIconText(u8"\U000F0167");
-                moveToCloudAction->setText(tr("Move to the cloud"));
-                connect(moveToCloudAction, &QAction::triggered, this, [this, _project] {
-                    //
-                    // Если пользователь не авторизован, предлагаем авторизоваться
-                    //
-                    if (!d->isUserAuthorized) {
-                        auto dialog = new Dialog(d->view->topLevelWidget());
-                        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
-                        dialog->showDialog(
-                            {}, tr("To move a project to the cloud, you should be authorized."),
-                            { { 0, tr("Maybe later"), Dialog::RejectButton },
-                              { 1, tr("Sign in"), Dialog::AcceptButton } });
-                        QObject::connect(dialog, &Dialog::finished, this,
-                                         [this, dialog](const Dialog::ButtonInfo& _presedButton) {
-                                             dialog->hideDialog();
-                                             if (_presedButton.type == Dialog::AcceptButton) {
-                                                 emit signInRequested();
-                                             }
-                                         });
-                        QObject::connect(dialog, &Dialog::disappeared, dialog,
-                                         &Dialog::deleteLater);
-                    }
-                    //
-                    // Если у пользователя нет активной подписки на CLOUD версию,
-                    // покажем соответствующее уведомление с предложением обновиться
-                    //
-                    else if (!d->canCreateCloudProject) {
-                        auto dialog = new Dialog(d->view->topLevelWidget());
-                        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
-                        dialog->showDialog({},
-                                           tr("To move a project to the cloud, you need to upgrade "
-                                              "to the CLOUD version."),
-                                           { { 0, tr("Maybe later"), Dialog::RejectButton },
-                                             { 1, tr("Upgrade"), Dialog::AcceptButton } });
-                        QObject::connect(dialog, &Dialog::finished, this,
-                                         [this, dialog](const Dialog::ButtonInfo& _presedButton) {
-                                             dialog->hideDialog();
-                                             if (_presedButton.type == Dialog::AcceptButton) {
-                                                 emit renewTeamSubscriptionRequested();
-                                             }
-                                         });
-                        QObject::connect(dialog, &Dialog::disappeared, dialog,
-                                         &Dialog::deleteLater);
-                    }
-                    //
-                    // Если проект может быть создан в облаке, то делаем это
-                    //
-                    else {
-                        emit createCloudProjectRequested(_project->name(), _project->path(),
-                                                         Domain::kInvalidId);
-                    }
-                });
-                actions.append(moveToCloudAction);
-                //
-                openProjectAction->setSeparator(true);
-                actions.append(openProjectAction);
-                //
                 auto showInFolderAction = new QAction;
                 showInFolderAction->setIconText(u8"\U000F178A");
                 showInFolderAction->setText(tr("Show in folder"));
@@ -312,29 +255,68 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
                 });
                 actions.append(removeProjectAction);
+                //
+                auto moveToCloudAction = new QAction;
+                moveToCloudAction->setSeparator(true);
+                moveToCloudAction->setIconText(u8"\U000F0167");
+                moveToCloudAction->setText(tr("Move to the cloud"));
+                connect(moveToCloudAction, &QAction::triggered, this, [this, _project] {
+                    //
+                    // Если пользователь не авторизован, предлагаем авторизоваться
+                    //
+                    if (!d->isUserAuthorized) {
+                        auto dialog = new Dialog(d->view->topLevelWidget());
+                        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+                        dialog->showDialog(
+                            {}, tr("To move a project to the cloud, you should be authorized."),
+                            { { 0, tr("Maybe later"), Dialog::RejectButton },
+                              { 1, tr("Sign in"), Dialog::AcceptButton } });
+                        QObject::connect(dialog, &Dialog::finished, this,
+                                         [this, dialog](const Dialog::ButtonInfo& _presedButton) {
+                                             dialog->hideDialog();
+                                             if (_presedButton.type == Dialog::AcceptButton) {
+                                                 emit signInRequested();
+                                             }
+                                         });
+                        QObject::connect(dialog, &Dialog::disappeared, dialog,
+                                         &Dialog::deleteLater);
+                    }
+                    //
+                    // Если у пользователя нет активной подписки на CLOUD версию,
+                    // покажем соответствующее уведомление с предложением обновиться
+                    //
+                    else if (!d->canCreateCloudProject) {
+                        auto dialog = new Dialog(d->view->topLevelWidget());
+                        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+                        dialog->showDialog({},
+                                           tr("To move a project to the cloud, you need to upgrade "
+                                              "to the CLOUD version."),
+                                           { { 0, tr("Maybe later"), Dialog::RejectButton },
+                                             { 1, tr("Upgrade"), Dialog::AcceptButton } });
+                        QObject::connect(dialog, &Dialog::finished, this,
+                                         [this, dialog](const Dialog::ButtonInfo& _presedButton) {
+                                             dialog->hideDialog();
+                                             if (_presedButton.type == Dialog::AcceptButton) {
+                                                 emit renewTeamSubscriptionRequested();
+                                             }
+                                         });
+                        QObject::connect(dialog, &Dialog::disappeared, dialog,
+                                         &Dialog::deleteLater);
+                    }
+                    //
+                    // Если проект может быть создан в облаке, то делаем это
+                    //
+                    else {
+                        emit createCloudProjectRequested(_project->name(), _project->path(),
+                                                         Domain::kInvalidId);
+                    }
+                });
+                actions.append(moveToCloudAction);
             }
             //
             // Действия над облачным проектом
             //
             else {
-                //
-                // Если пользователь может изменть проект
-                //
-                if (_project->editingMode() == DocumentEditingMode::Edit) {
-                    auto saveLocallyAction = new QAction;
-                    saveLocallyAction->setIconText(u8"\U000F0162");
-                    saveLocallyAction->setText(tr("Save to local file"));
-                    connect(saveLocallyAction, &QAction::triggered, this, [this, _project] {
-                        emit createLocalProjectRequested(_project->name(),
-                                                         d->newProjectPath(_project->name()),
-                                                         _project->path());
-                    });
-                    actions.append(saveLocallyAction);
-                }
-
-                openProjectAction->setSeparator(!actions.isEmpty());
-                actions.append(openProjectAction);
-
                 //
                 // Если пользователь владеет проектом
                 //
@@ -407,6 +389,23 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                         connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
                     });
                     actions.append(unsubscribeAction);
+                }
+
+
+                //
+                // Если пользователь может изменть проект
+                //
+                if (_project->editingMode() == DocumentEditingMode::Edit) {
+                    auto saveLocallyAction = new QAction;
+                    saveLocallyAction->setSeparator(true);
+                    saveLocallyAction->setIconText(u8"\U000F0162");
+                    saveLocallyAction->setText(tr("Save to local file"));
+                    connect(saveLocallyAction, &QAction::triggered, this, [this, _project] {
+                        emit createLocalProjectRequested(_project->name(),
+                                                         d->newProjectPath(_project->name()),
+                                                         _project->path());
+                    });
+                    actions.append(saveLocallyAction);
                 }
             }
 
