@@ -1433,8 +1433,10 @@ void ApplicationManager::Implementation::saveAs()
 
     //
     // Если пользователь указал тот же путь, ничего не делаем
+    // NOTE: проверяем именно через QFileInfo, т.к. пути могут выглядеть по разному и сравнивать
+    //       строк итут некорректно
     //
-    if (saveAsProjectFilePath == currentProject->path()) {
+    if (QFileInfo(saveAsProjectFilePath) == QFileInfo(currentProject->path())) {
         return;
     }
 
