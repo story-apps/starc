@@ -3379,7 +3379,11 @@ QVector<QUuid> ProjectManager::documentBundle(const QUuid& _documentUuid) const
 {
     const auto item = d->projectStructureModel->itemForUuid(_documentUuid);
     if (item == nullptr) {
-        return {};
+        //
+        // Если документ не найден в структуре, то это запрос generic-объекта (картинки),
+        // поэтому возвращаем только его
+        //
+        return { _documentUuid };
     }
 
     auto topLevelParent = item->parent();
