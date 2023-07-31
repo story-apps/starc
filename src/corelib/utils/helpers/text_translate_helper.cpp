@@ -1,14 +1,90 @@
 #include "text_translate_helper.h"
 
+#include <utils/tools/run_once.h>
+
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QNetworkProxy>
+#include <QRegularExpression>
 
 #include <NetworkRequest.h>
+#include <NetworkRequestLoader.h>
 
 namespace {
 const QLatin1String kAutoLanguage("auto");
+
+/**
+ * @brief Список прокси серверов для подключения к гугл переводчику
+ */
+static QVector<QNetworkProxy> s_proxies;
+
+/**
+ * @brief Выкачать новые прокси для работы
+ */
+void updateProxies()
+{
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
+        return;
+    }
+
+    //
+    // Собираем список прокси для работы с переводчиком
+    //
+    const auto proxiesData
+        = NetworkRequestLoader::loadSync("https://starc.app/api/services/gproxy/");
+    static const QRegularExpression proxyFinder(
+        "(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}):(\\d{1,5})");
+    auto match = proxyFinder.match(proxiesData);
+    while (match.hasMatch()) {
+        const QString ip = match.captured(1);
+        const quint16 port = match.captured(2).toInt();
+        s_proxies.append({ QNetworkProxy::HttpProxy, ip, port });
+
+        match = proxyFinder.match(proxiesData, match.capturedEnd());
+    }
+
+    //
+    // Последней добавляем пустую прокси, чтобы после того, как все закончатся, пробовать работать
+    // локально
+    //
+    s_proxies.append(QNetworkProxy());
 }
+
+/**
+ * @brief Переключиться на использование следующего прокси
+ */
+QNetworkProxy nextProxy()
+{
+    if (!s_proxies.isEmpty()) {
+        s_proxies.removeFirst();
+    } else {
+        updateProxies();
+    }
+
+    //
+    // Если список прокси так и не удалось обновить, то возвращаем дефолтный прокси
+    //
+    if (s_proxies.isEmpty()) {
+        return {};
+    }
+
+    return s_proxies.constFirst();
+}
+
+/**
+ * @brief Текущий прокси для работы
+ */
+QNetworkProxy currentProxy()
+{
+    if (!s_proxies.isEmpty()) {
+        return s_proxies.constFirst();
+    }
+
+    return {};
+}
+} // namespace
 
 
 TextTranslateHelper::TextTranslateHelper(QObject* _parent)
@@ -24,25 +100,31 @@ void TextTranslateHelper::translate(const QString& _text, const QString& _source
     }
 
     auto request = new NetworkRequest;
+    //
+    // Настраиваем прокси и используем маленький таймаут, чтобы не ждать долго и переходить к
+    // следующим прокси, если одна долго не отвечает, чтобы пользователь долго не ждал
+    //
+    request->setProxy(currentProxy());
+    request->setLoadingTimeout(4000);
+    //
     connect(
         request,
         static_cast<void (NetworkRequest::*)(QByteArray, QUrl)>(&NetworkRequest::downloadComplete),
-        this, [this, _text, _sourceLanguage](const QByteArray& _response) {
+        this, [this, _text, _sourceLanguage, _targetLanguage](const QByteArray& _response) {
+            auto translateWithNextProxy = [this, _text, _sourceLanguage, _targetLanguage] {
+                nextProxy();
+                translate(_text, _sourceLanguage, _targetLanguage);
+            };
+
             const auto translationsJson = QJsonDocument::fromJson(_response).object();
             if (translationsJson.isEmpty() || !translationsJson.contains("sentences")) {
-                //
-                // FIXME: что делать, если перевод завершился неудачно?
-                //
-                emit textTranslated({}, {});
+                translateWithNextProxy();
                 return;
             }
 
             const auto sentencesJson = translationsJson["sentences"].toArray();
             if (sentencesJson.isEmpty()) {
-                //
-                // FIXME: что делать, если перевод завершился неудачно?
-                //
-                emit textTranslated({}, {});
+                translateWithNextProxy();
                 return;
             }
 
@@ -71,7 +153,7 @@ void TextTranslateHelper::translate(const QString& _text, const QString& _source
     requestData.append("&tl=" + _targetLanguage.toUtf8());
     requestData.append("&q=" + _text.toUtf8().toPercentEncoding());
     request->setRawRequestData(requestData, "application/x-www-form-urlencoded;charset=utf-8");
-    const QUrl url("https://translate.google.com/translate_a/single?client=at&dt=t&dj=1");
+    const QUrl url("http://translate.google.com/translate_a/single?client=at&dt=t&dj=1");
     request->loadAsync(url);
 }
 
