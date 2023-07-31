@@ -1736,7 +1736,7 @@
 <context>
     <name>BusinessLayer::ScreenplayTextModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/text/screenplay_text_model.cpp" line="140"/>
+        <location filename="../../corelib/business_layer/model/screenplay/text/screenplay_text_model.cpp" line="156"/>
         <source>Screenplay</source>
         <translation>Screenplay</translation>
     </message>
@@ -2919,24 +2919,19 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1893"/>
-        <source>Generating synopsis</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1896"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2013"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1895"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2012"/>
         <source>Generating synopsis (scene %1 from %2)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2065"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2221"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2064"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2220"/>
         <source>Processing text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2174"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2173"/>
         <source>Generating image</source>
         <translation></translation>
     </message>
