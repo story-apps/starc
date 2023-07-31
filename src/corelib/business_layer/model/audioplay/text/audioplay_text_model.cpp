@@ -55,6 +55,11 @@ public:
      * @brief Модель информации о проекте
      */
     AudioplayInformationModel* informationModel = nullptr;
+
+    /**
+     * @brief Запланировано ли обновление нумерации
+     */
+    bool isUpdateNumberingPlanned = false;
 };
 
 AudioplayTextModel::Implementation::Implementation(AudioplayTextModel* _q)
@@ -69,6 +74,10 @@ TextModelItem* AudioplayTextModel::Implementation::rootItem() const
 
 void AudioplayTextModel::Implementation::updateNumbering()
 {
+    if (isUpdateNumberingPlanned) {
+        return;
+    }
+
     int sceneNumber = 1;
     int dialogueNumber = 0;
     std::function<void(const TextModelItem*)> updateChildNumbering;
@@ -171,6 +180,17 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
     //
     connect(this, &AudioplayTextModel::afterRowsInserted, this, updateCounters);
     connect(this, &AudioplayTextModel::afterRowsRemoved, this, updateCounters);
+    //
+    // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
+    //
+    connect(this, &AudioplayTextModel::rowsAboutToBeChanged, this,
+            [this] { d->isUpdateNumberingPlanned = true; });
+    connect(this, &AudioplayTextModel::rowsChanged, this, [this] {
+        if (d->isUpdateNumberingPlanned) {
+            d->isUpdateNumberingPlanned = false;
+            d->updateNumbering();
+        }
+    });
 
     connect(this, &AudioplayTextModel::contentsChanged, this,
             &AudioplayTextModel::markNeedUpdateRuntimeDictionaries);
@@ -277,9 +297,9 @@ void AudioplayTextModel::updateCharacterName(const QString& _oldName, const QStr
         }
     };
 
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     updateCharacterBlock(d->rootItem());
-    emit rowsChanged();
+    endChangeRows();
 }
 
 QVector<QModelIndex> AudioplayTextModel::characterDialogues(const QString& _name) const
@@ -458,9 +478,9 @@ std::map<std::chrono::milliseconds, QColor> AudioplayTextModel::itemsBookmarks()
 
 void AudioplayTextModel::recalculateDuration()
 {
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     d->updateChildrenDuration(d->rootItem());
-    emit rowsChanged();
+    endChangeRows();
 }
 
 void AudioplayTextModel::updateRuntimeDictionaries()
@@ -570,9 +590,9 @@ void AudioplayTextModel::initEmptyDocument()
 
 void AudioplayTextModel::finalizeInitialization()
 {
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     d->updateNumbering();
-    emit rowsChanged();
+    endChangeRows();
 }
 
 ChangeCursor AudioplayTextModel::applyPatch(const QByteArray& _patch)

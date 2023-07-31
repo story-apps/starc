@@ -63,6 +63,11 @@ public:
      * @brief Название документа
      */
     QString name;
+
+    /**
+     * @brief Запланировано ли обновление нумерации
+     */
+    bool isUpdateNumberingPlanned = false;
 };
 
 SimpleTextModel::Implementation::Implementation(SimpleTextModel* _q)
@@ -93,6 +98,10 @@ void SimpleTextModel::Implementation::updateDocumentName(const QModelIndex& _ind
 
 void SimpleTextModel::Implementation::updateNumbering()
 {
+    if (isUpdateNumberingPlanned) {
+        return;
+    }
+
     int sceneNumber = 1;
     std::function<void(const TextModelItem*)> updateChildNumbering;
     updateChildNumbering = [&sceneNumber, &updateChildNumbering](const TextModelItem* _item) {
@@ -137,6 +146,17 @@ SimpleTextModel::SimpleTextModel(QObject* _parent)
     //
     connect(this, &SimpleTextModel::afterRowsInserted, this, updateNumbering);
     connect(this, &SimpleTextModel::afterRowsRemoved, this, updateNumbering);
+    //
+    // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
+    //
+    connect(this, &SimpleTextModel::rowsAboutToBeChanged, this,
+            [this] { d->isUpdateNumberingPlanned = true; });
+    connect(this, &SimpleTextModel::rowsChanged, this, [this] {
+        if (d->isUpdateNumberingPlanned) {
+            d->isUpdateNumberingPlanned = false;
+            d->updateNumbering();
+        }
+    });
 }
 
 SimpleTextModel::~SimpleTextModel() = default;
@@ -211,9 +231,9 @@ void SimpleTextModel::finalizeInitialization()
 {
     d->updateDocumentName();
 
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     d->updateNumbering();
-    emit rowsChanged();
+    endChangeRows();
 }
 
 ChangeCursor SimpleTextModel::applyPatch(const QByteArray& _patch)

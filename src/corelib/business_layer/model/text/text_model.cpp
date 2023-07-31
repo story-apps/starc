@@ -444,10 +444,10 @@ void TextModel::moveItem(TextModelItem* _item, TextModelItem* _afterSiblingItem,
             return;
         }
 
-        emit rowsAboutToBeChanged();
+        beginChangeRows();
         takeItem(_item);
         prependItem(_item, _parentItem);
-        emit rowsChanged();
+        endChangeRows();
         return;
     }
 
@@ -468,10 +468,10 @@ void TextModel::moveItem(TextModelItem* _item, TextModelItem* _afterSiblingItem,
     //
     // ... собственно перемещение
     //
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     takeItem(_item);
     insertItem(_item, _afterSiblingItem);
-    emit rowsChanged();
+    endChangeRows();
 }
 
 void TextModel::updateItem(TextModelItem* _item)
@@ -732,7 +732,7 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
         //
         // Начинаем операцию изменения модели
         //
-        emit rowsAboutToBeChanged();
+        beginChangeRows();
 
         //
         // Если это перемещение внутри модели, то удалим старые элементы
@@ -831,7 +831,7 @@ bool TextModel::dropMimeData(const QMimeData* _data, Qt::DropAction _action, int
         //
         // Операция изменения завершена
         //
-        emit rowsChanged();
+        endChangeRows();
 
         return true;
     }
@@ -1099,7 +1099,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     //
     // Начинаем операцию изменения модели
     //
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
 
     //
     // Определим элемент, внутрь, или после которого будем вставлять данные
@@ -1552,7 +1552,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     //
     // Завершаем изменение
     //
-    emit rowsChanged();
+    endChangeRows();
 
     return mimeLength;
 }
@@ -1983,7 +1983,7 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
     //
     // И применяем их
     //
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     TextModelItem* previousModelItem = nullptr;
     //
     // В некоторых ситуациях мы не знаем сразу, куда будут извлечены элементы из удаляемого
@@ -2398,7 +2398,7 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
     qDeleteAll(oldItems);
     qDeleteAll(newItems);
 
-    emit rowsChanged();
+    endChangeRows();
 
 #ifdef XML_CHECKS
     //

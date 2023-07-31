@@ -1149,9 +1149,18 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
     // случае, если массовые изменения были инициированы извне, а не во время изменения модели самим
     // документом
     //
-    connect(d->model, &TextModel::rowsAboutToBeChanged, this,
-            [this] { TextCursor(this).beginEditBlock(); });
+    connect(d->model, &TextModel::rowsAboutToBeChanged, this, [this] {
+        if (d->state == DocumentState::Changing) {
+            return;
+        }
+
+        TextCursor(this).beginEditBlock();
+    });
     connect(d->model, &TextModel::rowsChanged, this, [this] {
+        if (d->state == DocumentState::Changing) {
+            return;
+        }
+
         //
         // Завершаем групповое изменение, но при этом обходим стороной корректировки документа,
         // т.к. всё это происходило в модели и документ уже находится в синхронизированном с
@@ -1950,6 +1959,8 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
     }
 
     QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
+
+    d->model->beginChangeRows();
 
     using namespace BusinessLayer;
 
@@ -2906,6 +2917,8 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
         //
         block = block.next();
     }
+
+    d->model->endChangeRows();
 }
 
 void TextDocument::insertTable(const TextCursor& _cursor)

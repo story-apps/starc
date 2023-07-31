@@ -50,6 +50,11 @@ public:
      * @brief Модель информации о проекте
      */
     StageplayInformationModel* informationModel = nullptr;
+
+    /**
+     * @brief Запланировано ли обновление нумерации
+     */
+    bool isUpdateNumberingPlanned = false;
 };
 
 StageplayTextModel::Implementation::Implementation(StageplayTextModel* _q)
@@ -64,6 +69,10 @@ TextModelItem* StageplayTextModel::Implementation::rootItem() const
 
 void StageplayTextModel::Implementation::updateNumbering()
 {
+    if (isUpdateNumberingPlanned) {
+        return;
+    }
+
     int sceneNumber = 1;
     int dialogueNumber = 0;
     std::function<void(const TextModelItem*)> updateChildNumbering;
@@ -135,6 +144,17 @@ StageplayTextModel::StageplayTextModel(QObject* _parent)
     //
     connect(this, &StageplayTextModel::afterRowsInserted, this, updateNumbering);
     connect(this, &StageplayTextModel::afterRowsRemoved, this, updateNumbering);
+    //
+    // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
+    //
+    connect(this, &StageplayTextModel::rowsAboutToBeChanged, this,
+            [this] { d->isUpdateNumberingPlanned = true; });
+    connect(this, &StageplayTextModel::rowsChanged, this, [this] {
+        if (d->isUpdateNumberingPlanned) {
+            d->isUpdateNumberingPlanned = false;
+            d->updateNumbering();
+        }
+    });
 
     connect(this, &StageplayTextModel::contentsChanged, this,
             &StageplayTextModel::markNeedUpdateRuntimeDictionaries);
@@ -241,9 +261,9 @@ void StageplayTextModel::updateCharacterName(const QString& _oldName, const QStr
         }
     };
 
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     updateCharacterBlock(d->rootItem());
-    emit rowsChanged();
+    endChangeRows();
 }
 
 QVector<QModelIndex> StageplayTextModel::characterDialogues(const QString& _name) const
@@ -457,9 +477,9 @@ void StageplayTextModel::initEmptyDocument()
 
 void StageplayTextModel::finalizeInitialization()
 {
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     d->updateNumbering();
-    emit rowsChanged();
+    endChangeRows();
 }
 
 ChangeCursor StageplayTextModel::applyPatch(const QByteArray& _patch)

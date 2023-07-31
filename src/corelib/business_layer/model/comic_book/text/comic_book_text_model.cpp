@@ -59,6 +59,11 @@ public:
      * @brief Модель справочников
      */
     ComicBookDictionariesModel* dictionariesModel = nullptr;
+
+    /**
+     * @brief Запланировано ли обновление нумерации
+     */
+    bool isUpdateNumberingPlanned = false;
 };
 
 ComicBookTextModel::Implementation::Implementation(ComicBookTextModel* _q)
@@ -73,6 +78,10 @@ TextModelItem* ComicBookTextModel::Implementation::rootItem() const
 
 void ComicBookTextModel::Implementation::updateNumbering()
 {
+    if (isUpdateNumberingPlanned) {
+        return;
+    }
+
     int pageNumber = 1;
     int panelNumber = 1;
     int dialogueNumber = 0;
@@ -156,6 +165,17 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
     //
     connect(this, &ComicBookTextModel::afterRowsInserted, this, updateNumbering);
     connect(this, &ComicBookTextModel::afterRowsRemoved, this, updateNumbering);
+    //
+    // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
+    //
+    connect(this, &ComicBookTextModel::rowsAboutToBeChanged, this,
+            [this] { d->isUpdateNumberingPlanned = true; });
+    connect(this, &ComicBookTextModel::rowsChanged, this, [this] {
+        if (d->isUpdateNumberingPlanned) {
+            d->isUpdateNumberingPlanned = false;
+            d->updateNumbering();
+        }
+    });
 
     connect(this, &ComicBookTextModel::contentsChanged, this,
             &ComicBookTextModel::markNeedUpdateRuntimeDictionaries);
@@ -269,9 +289,9 @@ void ComicBookTextModel::updateCharacterName(const QString& _oldName, const QStr
         }
     };
 
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     updateCharacterBlock(d->rootItem());
-    emit rowsChanged();
+    endChangeRows();
 }
 
 QVector<QModelIndex> ComicBookTextModel::characterDialogues(const QString& _name) const
@@ -490,9 +510,9 @@ void ComicBookTextModel::initEmptyDocument()
 
 void ComicBookTextModel::finalizeInitialization()
 {
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     d->updateNumbering();
-    emit rowsChanged();
+    endChangeRows();
 }
 
 ChangeCursor ComicBookTextModel::applyPatch(const QByteArray& _patch)

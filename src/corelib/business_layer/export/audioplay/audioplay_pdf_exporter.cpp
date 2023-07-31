@@ -45,7 +45,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
     //
     const auto firstBlockYDelta =
 #ifdef Q_OS_WINDOWS
-        3
+        6
 #else
         9
 #endif

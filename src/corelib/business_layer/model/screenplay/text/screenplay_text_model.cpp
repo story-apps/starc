@@ -69,6 +69,11 @@ public:
      * @brief Количество сцен
      */
     int scenesCount = 0;
+
+    /**
+     * @brief Запланировано ли обновление нумерации
+     */
+    bool isUpdateNumberingPlanned = false;
 };
 
 ScreenplayTextModel::Implementation::Implementation(ScreenplayTextModel* _q)
@@ -128,6 +133,17 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
     //
     connect(this, &ScreenplayTextModel::afterRowsInserted, this, updateCounters);
     connect(this, &ScreenplayTextModel::afterRowsRemoved, this, updateCounters);
+    //
+    // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
+    //
+    connect(this, &ScreenplayTextModel::rowsAboutToBeChanged, this,
+            [this] { d->isUpdateNumberingPlanned = true; });
+    connect(this, &ScreenplayTextModel::rowsChanged, this, [this] {
+        if (d->isUpdateNumberingPlanned) {
+            d->isUpdateNumberingPlanned = false;
+            updateNumbering();
+        }
+    });
 
     connect(this, &ScreenplayTextModel::contentsChanged, this,
             &ScreenplayTextModel::markNeedUpdateRuntimeDictionaries);
@@ -292,9 +308,9 @@ void ScreenplayTextModel::updateCharacterName(const QString& _oldName, const QSt
         }
     };
 
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     updateCharacterBlock(d->rootItem());
-    emit rowsChanged();
+    endChangeRows();
 }
 
 QVector<QModelIndex> ScreenplayTextModel::characterDialogues(const QString& _name) const
@@ -477,9 +493,9 @@ void ScreenplayTextModel::updateLocationName(const QString& _oldName, const QStr
               }
           };
 
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     updateLocationBlock(d->rootItem());
-    emit rowsChanged();
+    endChangeRows();
 }
 
 int ScreenplayTextModel::treatmentPageCount() const
@@ -607,6 +623,10 @@ std::map<std::chrono::milliseconds, QColor> ScreenplayTextModel::itemsBookmarks(
 
 void ScreenplayTextModel::updateNumbering()
 {
+    if (d->isUpdateNumberingPlanned) {
+        return;
+    }
+
     d->scenesCount = 0;
     int sceneNumber = d->informationModel->scenesNumberingStartAt();
     int dialogueNumber = 0;
@@ -745,10 +765,10 @@ void ScreenplayTextModel::setScenesNumbersLocked(bool _locked)
 
 void ScreenplayTextModel::recalculateDuration()
 {
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     const auto forceUpdate = true;
     d->updateChildrenDuration(d->rootItem(), forceUpdate);
-    emit rowsChanged();
+    endChangeRows();
 }
 
 void ScreenplayTextModel::updateRuntimeDictionaries()
@@ -917,9 +937,9 @@ void ScreenplayTextModel::initEmptyDocument()
 
 void ScreenplayTextModel::finalizeInitialization()
 {
-    emit rowsAboutToBeChanged();
+    beginChangeRows();
     updateNumbering();
-    emit rowsChanged();
+    endChangeRows();
 }
 
 ChangeCursor ScreenplayTextModel::applyPatch(const QByteArray& _patch)
