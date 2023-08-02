@@ -2143,7 +2143,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     Log::init(loggingLevel, logFilePath);
 
 
-    QString applicationVersion = "0.5.6";
+    QString applicationVersion = "0.5.6a";
 #if defined(DEV_BUILD) && DEV_BUILD > 0
     applicationVersion += QString(" dev %1").arg(DEV_BUILD);
 #endif
@@ -2555,8 +2555,14 @@ void ApplicationManager::initConnections()
     //
     // Менеджер аккаунта
     //
-    connect(d->accountManager.data(), &AccountManager::showAccountRequested, this,
-            [this] { d->showAccount(); });
+    connect(d->accountManager.data(), &AccountManager::showAccountRequested, this, [this] {
+        //
+        // Переходим в аккаунт только если это не первая авторизация
+        //
+        if (!d->onboardingManager->navigator()->isVisible()) {
+            d->showAccount();
+        }
+    });
     connect(d->accountManager.data(), &AccountManager::closeAccountRequested, this,
             [this] { d->showLastContent(); });
 
