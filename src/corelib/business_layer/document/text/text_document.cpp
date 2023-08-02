@@ -1960,8 +1960,6 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
 
     QScopedValueRollback temporatryState(d->state, DocumentState::Changing);
 
-    d->model->beginChangeRows();
-
     using namespace BusinessLayer;
 
     auto isFolder = [](TextModelItem* _item) {
@@ -2917,8 +2915,6 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
         //
         block = block.next();
     }
-
-    d->model->endChangeRows();
 }
 
 void TextDocument::insertTable(const TextCursor& _cursor)
