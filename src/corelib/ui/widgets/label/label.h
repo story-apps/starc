@@ -207,6 +207,11 @@ public:
      */
     void setIcon(const QString& _icon);
 
+    /**
+     * @brief Переопределяем для корректного подсчёта размера в компоновщиках
+     */
+    QSize sizeHint() const override;
+
 protected:
     /**
      * @brief Корректируем иконку при смене направления расположения текста

@@ -17,6 +17,11 @@ public:
     ~Pie() override;
 
     /**
+     * @brief Задать возможность выделять часть пирога
+     */
+    void setSelectionEnabled(bool _enabled);
+
+    /**
      * @brief Установить модель
      */
     void setModel(QAbstractItemModel* _model, int _valueColumn = 0);

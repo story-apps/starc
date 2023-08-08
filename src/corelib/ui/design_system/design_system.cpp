@@ -7,6 +7,7 @@
 #include <QEvent>
 #include <QFont>
 #include <QFontDatabase>
+#include <QFontMetricsF>
 #include <QIcon>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -395,6 +396,15 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
               _font.setCapitalization(_capitalization);
               _font.setPixelSize(static_cast<int>(_pixelSize * _scaleFactor));
               _font.setLetterSpacing(QFont::AbsoluteSpacing, _letterSpacing * _scaleFactor);
+
+              //
+              // NOTE: [08.08.2023]
+              //       я очень удивлён, но факт остаётся фактом, если в первый раз вызвать
+              //       QFontMetricsF с латиницей, то он будет выдавать более широкие значения для
+              //       horizontalAdvance (как минимум в Linux, гдя я это обнаружил)
+              //
+              //
+              QFontMetricsF(_font).horizontalAdvance("ф");
           };
 
     initFont(QFont::Light, QFont::Capitalization::MixedCase, 96, -1.5, h1);

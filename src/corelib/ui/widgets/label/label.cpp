@@ -287,6 +287,13 @@ void AbstractIconsLabel::setIcon(const QString& _icon)
     setText(IconHelper::directedIcon(m_icon));
 }
 
+QSize AbstractIconsLabel::sizeHint() const
+{
+    const auto size = std::max(TextHelper::fineTextWidth(m_icon, textFont()),
+                               static_cast<int>(TextHelper::fineLineSpacing(textFont())));
+    return QRect(QPoint(0, 0), QSize(size, size)).marginsAdded(contentsMargins()).size();
+}
+
 bool AbstractIconsLabel::event(QEvent* _event)
 {
     if (_event->type() == QEvent::LayoutDirectionChange) {
@@ -489,8 +496,12 @@ ImageLabel::~ImageLabel() = default;
 void ImageLabel::setImage(const QPixmap& _image)
 {
     d->sourceImage = _image;
-    d->displayImage = d->sourceImage.scaled(contentsRect().size(), Qt::IgnoreAspectRatio,
-                                            Qt::SmoothTransformation);
+    if (d->sourceImage.isNull()) {
+        d->displayImage = {};
+    } else {
+        d->displayImage = d->sourceImage.scaled(contentsRect().size(), Qt::IgnoreAspectRatio,
+                                                Qt::SmoothTransformation);
+    }
     update();
 }
 
@@ -503,8 +514,10 @@ void ImageLabel::paintEvent(QPaintEvent* _event)
 
 void ImageLabel::resizeEvent(QResizeEvent* _event)
 {
-    d->displayImage = d->sourceImage.scaled(contentsRect().size(), Qt::IgnoreAspectRatio,
-                                            Qt::SmoothTransformation);
+    if (!d->sourceImage.isNull()) {
+        d->displayImage = d->sourceImage.scaled(contentsRect().size(), Qt::IgnoreAspectRatio,
+                                                Qt::SmoothTransformation);
+    }
 
     Widget::resizeEvent(_event);
 }

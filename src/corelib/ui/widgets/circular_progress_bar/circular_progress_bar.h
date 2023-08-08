@@ -23,6 +23,7 @@ public:
      * @brief Задать значение прогресса
      */
     void setProgress(qreal _progress);
+    qreal progress() const;
 
     /**
      * @brief Задать текст прогресса

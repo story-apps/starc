@@ -100,8 +100,10 @@ public:
      */
     void animateDeselectedSlice();
 
+
     Pie* q = nullptr;
 
+    bool isSelectionEnabled = true;
     std::vector<Slice> slices;
     int selectedSlice = kInvalidIndex;
     int lastSelectedSlice = kInvalidIndex;
@@ -291,7 +293,7 @@ int Pie::Implementation::findSelectedSlice(const QPoint& point)
 
 void Pie::Implementation::selectSlice(int _sliceIndex)
 {
-    if (selectedSlice == _sliceIndex) {
+    if (!isSelectionEnabled || selectedSlice == _sliceIndex) {
         return;
     }
 
@@ -393,6 +395,18 @@ Pie::Pie(QWidget* _parent, qreal _hole)
 }
 
 Pie::~Pie() = default;
+
+void Pie::setSelectionEnabled(bool _enabled)
+{
+    if (d->isSelectionEnabled == _enabled) {
+        return;
+    }
+
+    if (d->isSelectionEnabled && d->selectedSlice != kInvalidIndex) {
+        d->selectSlice(kInvalidIndex);
+    }
+    d->isSelectionEnabled = _enabled;
+}
 
 void Pie::setModel(QAbstractItemModel* _model, int _valueColumn)
 {

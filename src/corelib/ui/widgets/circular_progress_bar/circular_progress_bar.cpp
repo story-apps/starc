@@ -79,6 +79,15 @@ void CircularProgressBar::setProgress(qreal _progress)
     }
 }
 
+qreal CircularProgressBar::progress() const
+{
+    if (d->progressAnimation.state() == QAbstractAnimation::Running) {
+        return d->progressAnimation.endValue().toReal();
+    }
+
+    return d->progress;
+}
+
 void CircularProgressBar::setText(const QString& _text)
 {
     if (d->text == _text) {
