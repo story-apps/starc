@@ -329,6 +329,11 @@ public:
     ~ImageLabel() override;
 
     /**
+     * @brief Задать скругление углов
+     */
+    void setBorderRadius(qreal _radius);
+
+    /**
      * @brief Задать изображение для отрисовки
      */
     void setImage(const QPixmap& _image);

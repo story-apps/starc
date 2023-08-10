@@ -3,6 +3,7 @@
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/icon_helper.h>
+#include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QFontMetrics>
@@ -479,45 +480,89 @@ void IconsBigLabel::paintEvent(QPaintEvent* _event)
 class ImageLabel::Implementation
 {
 public:
+    explicit Implementation(ImageLabel* _q);
+
+    void updateDisplayImage();
+
+
+    ImageLabel* q = nullptr;
+
+    qreal borderRadius = 0.0;
     QPixmap sourceImage;
     QPixmap displayImage;
 };
+
+ImageLabel::Implementation::Implementation(ImageLabel* _q)
+    : q(_q)
+{
+}
+
+void ImageLabel::Implementation::updateDisplayImage()
+{
+    if (!sourceImage.isNull()) {
+        if (qFuzzyCompare(borderRadius, 0.0)) {
+            displayImage = sourceImage.scaled(q->contentsRect().size(), Qt::IgnoreAspectRatio,
+                                              Qt::SmoothTransformation);
+        } else {
+            displayImage = QPixmap(q->contentsRect().size());
+            displayImage.fill(Qt::transparent);
+            QPainter painter(&displayImage);
+            painter.setRenderHint(QPainter::Antialiasing);
+            ImageHelper::drawRoundedImage(painter, sourceImage.rect(), sourceImage, borderRadius);
+        }
+    } else {
+        displayImage = {};
+    }
+}
 
 // **
 
 ImageLabel::ImageLabel(QWidget* _parent)
     : Widget(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
 }
 
 ImageLabel::~ImageLabel() = default;
 
+void ImageLabel::setBorderRadius(qreal _radius)
+{
+    if (qFuzzyCompare(d->borderRadius, _radius)) {
+        return;
+    }
+
+    d->borderRadius = _radius;
+    d->updateDisplayImage();
+    update();
+}
+
 void ImageLabel::setImage(const QPixmap& _image)
 {
     d->sourceImage = _image;
-    if (d->sourceImage.isNull()) {
-        d->displayImage = {};
-    } else {
-        d->displayImage = d->sourceImage.scaled(contentsRect().size(), Qt::IgnoreAspectRatio,
-                                                Qt::SmoothTransformation);
-    }
+    d->updateDisplayImage();
     update();
 }
 
 void ImageLabel::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);
-    painter.fillRect(_event->rect(), backgroundColor());
-    painter.drawPixmap(contentsRect(), d->displayImage);
+    if (qFuzzyCompare(d->borderRadius, 0.0)) {
+        painter.fillRect(_event->rect(), backgroundColor());
+    } else {
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.fillRect(_event->rect(), Qt::transparent);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(backgroundColor());
+        painter.drawRoundedRect(contentsRect(), d->borderRadius, d->borderRadius);
+    }
+    if (!d->displayImage.isNull()) {
+        painter.drawPixmap(contentsRect(), d->displayImage);
+    }
 }
 
 void ImageLabel::resizeEvent(QResizeEvent* _event)
 {
-    if (!d->sourceImage.isNull()) {
-        d->displayImage = d->sourceImage.scaled(contentsRect().size(), Qt::IgnoreAspectRatio,
-                                                Qt::SmoothTransformation);
-    }
+    d->updateDisplayImage();
 
     Widget::resizeEvent(_event);
 }
