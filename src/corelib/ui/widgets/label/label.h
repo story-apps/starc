@@ -25,6 +25,11 @@ public:
     virtual void setText(const QString& _text);
 
     /**
+     * @brief Задать текст для отрисовки области заливки
+     */
+    void setSkeleton(const QString& _filler);
+
+    /**
      * @brief Задать выравнивание текста
      */
     void setAlignment(Qt::Alignment _alignment);
@@ -332,6 +337,11 @@ public:
      * @brief Задать скругление углов
      */
     void setBorderRadius(qreal _radius);
+
+    /**
+     * @brief Использовать скелетон, если не задано изображение
+     */
+    void setSkeleton(bool _enabled);
 
     /**
      * @brief Задать изображение для отрисовки

@@ -15,6 +15,7 @@ class AbstractLabel::Implementation
 {
 public:
     QString text;
+    QString skeleton;
     Qt::Alignment alignment = Qt::AlignTop | Qt::AlignLeft;
     bool clickable = false;
 };
@@ -50,6 +51,17 @@ void AbstractLabel::setText(const QString& _text)
     update();
 }
 
+void AbstractLabel::setSkeleton(const QString& _filler)
+{
+    if (d->skeleton == _filler) {
+        return;
+    }
+
+    d->skeleton = _filler;
+    updateGeometry();
+    update();
+}
+
 void AbstractLabel::setAlignment(Qt::Alignment _alignment)
 {
     if (d->alignment == _alignment) {
@@ -74,7 +86,7 @@ void AbstractLabel::setClickable(bool _clickable)
 QSize AbstractLabel::sizeHint() const
 {
     int width = 0;
-    const auto lines = d->text.split('\n');
+    const auto lines = (d->text.isEmpty() ? d->skeleton : d->text).split('\n');
     for (const auto& line : lines) {
         width = std::max(width, TextHelper::fineTextWidth(line, textFont()));
     }
@@ -85,8 +97,11 @@ QSize AbstractLabel::sizeHint() const
 int AbstractLabel::heightForWidth(int _width) const
 {
     const int textWidth = _width - contentsMargins().left() - contentsMargins().right();
-    const int textHeight
-        = static_cast<int>(TextHelper::heightForWidth(d->text, textFont(), textWidth));
+    int textHeight = 0;
+    const auto lines = (d->text.isEmpty() ? d->skeleton : d->text).split('\n');
+    for (const auto& line : lines) {
+        textHeight += static_cast<int>(TextHelper::heightForWidth(line, textFont(), textWidth));
+    }
     return contentsMargins().top() + textHeight + contentsMargins().bottom();
 }
 
@@ -100,8 +115,58 @@ void AbstractLabel::paintEvent(QPaintEvent* _event)
     painter.fillRect(_event->rect(), backgroundColor());
 
     //
+    // Если не заданы ни текст, ни скелетон, больше тут делать нечего
+    //
+    if (d->text.isEmpty() && d->skeleton.isEmpty()) {
+        return;
+    }
+
+    //
+    // Если текста нет, рисуем скелетон
+    //
+    if (d->text.isEmpty()) {
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setPen(Qt::NoPen);
+        const int textWidth = contentsRect().width();
+        const auto lines = (d->text.isEmpty() ? d->skeleton : d->text).split('\n');
+        int lastY = contentsMargins().top();
+        for (const auto& line : lines) {
+            const QRectF textRect(
+                contentsMargins().left(), lastY,
+                std::min(TextHelper::fineTextWidth(line, textFont()), textWidth),
+                static_cast<int>(TextHelper::heightForWidth(line, textFont(), textWidth)));
+            if (!line.isEmpty()) {
+                QLinearGradient backgroundGradient(0, 0, textRect.width(), 0);
+                backgroundGradient.setColorAt(
+                    0,
+                    ColorHelper::transparent(textColor(), Ui::DesignSystem::elevationEndOpacity()));
+                backgroundGradient.setColorAt(
+                    0.3,
+                    ColorHelper::transparent(textColor(),
+                                             Ui::DesignSystem::elevationStartOpacity()));
+                backgroundGradient.setColorAt(
+                    0.6,
+                    ColorHelper::transparent(textColor(),
+                                             Ui::DesignSystem::elevationStartOpacity()));
+                backgroundGradient.setColorAt(
+                    1,
+                    ColorHelper::transparent(textColor(),
+                                             Ui::DesignSystem::hoverBackgroundOpacity()));
+                painter.setBrush(backgroundGradient);
+
+                painter.drawRoundedRect(textRect, Ui::DesignSystem::layout().px(6),
+                                        Ui::DesignSystem::layout().px(6));
+            }
+
+            lastY = textRect.bottom();
+        }
+        return;
+    }
+
+    //
     // Рисуем текст
     //
+    painter.setRenderHint(QPainter::TextAntialiasing);
     auto font = textFont();
     if (d->clickable && underMouse()) {
         font.setUnderline(true);
@@ -488,6 +553,7 @@ public:
     ImageLabel* q = nullptr;
 
     qreal borderRadius = 0.0;
+    bool isSkeletonEnabled = false;
     QPixmap sourceImage;
     QPixmap displayImage;
 };
@@ -504,11 +570,14 @@ void ImageLabel::Implementation::updateDisplayImage()
             displayImage = sourceImage.scaled(q->contentsRect().size(), Qt::IgnoreAspectRatio,
                                               Qt::SmoothTransformation);
         } else {
+            const auto roundedImage = sourceImage.scaled(
+                q->contentsRect().size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
             displayImage = QPixmap(q->contentsRect().size());
             displayImage.fill(Qt::transparent);
             QPainter painter(&displayImage);
             painter.setRenderHint(QPainter::Antialiasing);
-            ImageHelper::drawRoundedImage(painter, sourceImage.rect(), sourceImage, borderRadius);
+            ImageHelper::drawRoundedImage(painter, roundedImage.rect(), roundedImage, borderRadius);
         }
     } else {
         displayImage = {};
@@ -536,6 +605,16 @@ void ImageLabel::setBorderRadius(qreal _radius)
     update();
 }
 
+void ImageLabel::setSkeleton(bool _enabled)
+{
+    if (d->isSkeletonEnabled == _enabled) {
+        return;
+    }
+
+    d->isSkeletonEnabled = _enabled;
+    update();
+}
+
 void ImageLabel::setImage(const QPixmap& _image)
 {
     d->sourceImage = _image;
@@ -546,13 +625,31 @@ void ImageLabel::setImage(const QPixmap& _image)
 void ImageLabel::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);
+    QBrush backgroundBrush = backgroundColor();
+    if (d->isSkeletonEnabled) {
+        QLinearGradient backgroundGradient(0, 0, width(), 0);
+        backgroundGradient.setColorAt(
+            0,
+            ColorHelper::transparent(backgroundColor(), Ui::DesignSystem::elevationEndOpacity()));
+        backgroundGradient.setColorAt(
+            0.2,
+            ColorHelper::transparent(backgroundColor(), Ui::DesignSystem::elevationStartOpacity()));
+        backgroundGradient.setColorAt(
+            0.6,
+            ColorHelper::transparent(backgroundColor(), Ui::DesignSystem::elevationStartOpacity()));
+        backgroundGradient.setColorAt(
+            1,
+            ColorHelper::transparent(backgroundColor(), Ui::DesignSystem::elevationEndOpacity()));
+        backgroundBrush = backgroundGradient;
+    }
+
     if (qFuzzyCompare(d->borderRadius, 0.0)) {
-        painter.fillRect(_event->rect(), backgroundColor());
+        painter.fillRect(_event->rect(), backgroundBrush);
     } else {
         painter.setRenderHint(QPainter::Antialiasing);
         painter.fillRect(_event->rect(), Qt::transparent);
         painter.setPen(Qt::NoPen);
-        painter.setBrush(backgroundColor());
+        painter.setBrush(backgroundBrush);
         painter.drawRoundedRect(contentsRect(), d->borderRadius, d->borderRadius);
     }
     if (!d->displayImage.isNull()) {
