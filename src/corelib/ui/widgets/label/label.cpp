@@ -187,7 +187,7 @@ void AbstractLabel::mouseReleaseEvent(QMouseEvent* _event)
 {
     Widget::mouseReleaseEvent(_event);
 
-    if (!rect().contains(_event->pos())) {
+    if (!isEnabled() || !rect().contains(_event->pos())) {
         return;
     }
 

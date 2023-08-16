@@ -341,6 +341,7 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(
     //
     // Если пользователь не может создавать проект в облаке скроем переключатели хранения
     //
+    d->localProject->setChecked(true);
     d->localProject->hide();
     d->cloudProject->hide();
     d->projectTeam->hide();
