@@ -6,8 +6,8 @@ SUBDIRS += \
     corelib \
     core/management_layer/plugins \
     core \
-#    starcapi \
-    testapp
+#    testapp \
+#    starcaiapp \
 
 CONFIG += ordered
 

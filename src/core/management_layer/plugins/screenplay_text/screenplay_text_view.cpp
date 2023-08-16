@@ -1728,8 +1728,9 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
                 });
 
         auto updateSynopsisPrice = [this] {
-            d->aiAssistantView->setGenerationSynopsisPromptHint(
-                tr("Synopsis generation will takes %n word(s)", 0, d->model->wordsCount()));
+            d->aiAssistantView->setGenerationSynopsisOptions(
+                tr("Synopsis generation will takes %n word(s)", 0, d->model->wordsCount()),
+                d->model->wordsCount());
         };
         connect(d->model, &BusinessLayer::ScreenplayTextModel::modelReset, this,
                 updateSynopsisPrice);

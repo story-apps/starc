@@ -81,6 +81,7 @@ public:
 
 
     bool isReadOnly = false;
+    int availableWords = 0;
 
     StackWidget* pages = nullptr;
 
@@ -826,9 +827,10 @@ void AiAssistantView::setSynopsisGenerationAvaiable(bool _available)
     d->openGenerateSynopsisButton->setVisible(_available);
 }
 
-void AiAssistantView::setGenerationSynopsisPromptHint(const QString& _hint)
+void AiAssistantView::setGenerationSynopsisOptions(const QString& _hint, int _wordsRequired)
 {
     d->generateSynopsisHintLabel->setText(_hint);
+    d->generateSynopsisButton->setEnabled(_wordsRequired < d->availableWords);
 }
 
 void AiAssistantView::setGenerationViewType(GenerationViewType _type)
@@ -927,6 +929,7 @@ void AiAssistantView::setGenerateSynopsisResult(const QString& _text)
 
 void AiAssistantView::setAvailableWords(int _availableWords)
 {
+    d->availableWords = _availableWords;
     d->availableWordsLabel->setText(_availableWords > 0
                                         ? tr("%n word(s) available", nullptr, _availableWords)
                                         : tr("No words available"));
