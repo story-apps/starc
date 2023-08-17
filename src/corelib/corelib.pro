@@ -360,6 +360,7 @@ SOURCES += \
     ui/widgets/widget/widget.cpp \
     utils/3rd_party/QOnlineTranslator/qexample.cpp \
     utils/3rd_party/QOnlineTranslator/qonlinetranslator.cpp \
+    utils/3rd_party/QOnlineTranslator/qonlinetranslatorhelper.cpp \
     utils/3rd_party/QOnlineTranslator/qoption.cpp \
     utils/3rd_party/WAF/Animation/Animation.cpp \
     utils/3rd_party/WAF/Animation/CircleFill/CircleFillAnimator.cpp \
@@ -695,6 +696,7 @@ HEADERS += \
     ui/widgets/widget/widget.h \
     utils/3rd_party/QOnlineTranslator/qexample.h \
     utils/3rd_party/QOnlineTranslator/qonlinetranslator.h \
+    utils/3rd_party/QOnlineTranslator/qonlinetranslatorhelper.h \
     utils/3rd_party/QOnlineTranslator/qoption.h \
     utils/3rd_party/WAF/AbstractAnimator.h \
     utils/3rd_party/WAF/Animation/Animation.h \
