@@ -36,11 +36,12 @@ public:
      * @brief Переверсти текст на английский, автоматически определив исходный язык
      */
     void translateToEnglish(const QString& _text);
+    void translateToEnglish(const QString& _text, const QString& _sourceLanguage);
 
 signals:
     /**
      * @brief Текст был переведён
      */
-    void textTranslated(const QVector<TextTranslateHelper::Translation>& _translation,
-                        const QString& _sourceLanguage);
+    void translated(const QVector<TextTranslateHelper::Translation>& _translation,
+                  const QString& _sourceLanguage);
 };

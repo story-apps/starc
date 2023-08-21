@@ -140,7 +140,7 @@ void TextTranslateHelper::translate(const QString& _text, const QString& _source
                 ? translationsJson["src"].toString()
                 : _sourceLanguage;
 
-            emit textTranslated(translation, sourceLanguage);
+            emit translated(translation, sourceLanguage);
         });
     connect(request, &NetworkRequest::finished, request, &NetworkRequest::deleteLater);
 
@@ -164,5 +164,10 @@ void TextTranslateHelper::translateAuto(const QString& _text, const QString& _ta
 
 void TextTranslateHelper::translateToEnglish(const QString& _text)
 {
-    translateAuto(_text, QLatin1String("en"));
+    translateToEnglish(_text, kAutoLanguage);
+}
+
+void TextTranslateHelper::translateToEnglish(const QString& _text, const QString& _sourceLanguage)
+{
+    translate(_text, _sourceLanguage, QLatin1String("en"));
 }
