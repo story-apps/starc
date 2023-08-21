@@ -1,8 +1,8 @@
 #include "abstract_exporter.h"
 
+#include <business_layer/document/simple_text/simple_text_document.h>
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
-#include <business_layer/document/text/text_document.h>
 #include <business_layer/export/export_options.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/model/text/text_model.h>
@@ -70,7 +70,7 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
         //
         // Собственно добавляем текст титульной страницы
         //
-        auto titlePageText = new TextDocument;
+        auto titlePageText = new SimpleTextDocument;
         titlePageText->setModel(_model->titlePageModel(), false);
         //
         cursor.movePosition(TextCursor::PreviousBlock);
