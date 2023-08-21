@@ -582,7 +582,15 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         const QString blockText = block.text();
         documentXml.append("<w:rPr/></w:pPr>");
         const auto textFormats = block.textFormats();
-        for (const auto& range : textFormats) {
+        for (int index = 0; index < textFormats.size(); ++index) {
+            const auto& range = textFormats[index];
+            QTextLayout::FormatRange nextRange;
+            if (index + 1 < textFormats.size()) {
+                nextRange = textFormats[index + 1];
+            } else if (const auto nextBlock = block.next();
+                       nextBlock.isValid() && !nextBlock.textFormats().isEmpty()) {
+                nextRange = nextBlock.textFormats().constFirst();
+            }
             const auto formatRangeSourceText = blockText.mid(range.start, range.length);
             auto formatRangeText = formatRangeSourceText;
             if (range.format.fontCapitalization() == QFont::AllUppercase) {
@@ -655,13 +663,34 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                               .toStringList();
 
                     for (int commentIndex = 0; commentIndex < comments.size(); ++commentIndex) {
+                        //
+                        // Данные комментария для сохранеиня
+                        //
+                        const QStringList commentData = {
+                            comments.at(commentIndex),
+                            authors.at(commentIndex),
+                            dates.at(commentIndex),
+                        };
+                        //
+                        // Проверяем было ли уже добавлено начало комментария в документ
+                        //
+                        bool hasCommentData = false;
+                        for (const auto& savedCommentData : std::as_const(_comments)) {
+                            if (savedCommentData == commentData) {
+                                hasCommentData = true;
+                                break;
+                            }
+                        }
+                        if (hasCommentData) {
+                            continue;
+                        }
+                        //
+                        // Если начало коментария ещё не было добавлено, то добавим
+                        //
                         if (!_comments.isEmpty()) {
                             lastCommentIndex = _comments.lastKey() + 1;
                         }
-                        _comments.insert(lastCommentIndex,
-                                         QStringList()
-                                             << comments.at(commentIndex)
-                                             << authors.at(commentIndex) << dates.at(commentIndex));
+                        _comments.insert(lastCommentIndex, commentData);
 
                         documentXml.append(
                             QString("<w:commentRangeStart w:id=\"%1\"/>").arg(lastCommentIndex));
@@ -707,12 +736,28 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                 // Текст комментария
                 //
                 if (hasComments && isCommentsRangeEnd(block, range)) {
-                    for (int commentIndex = lastCommentIndex - comments.size() + 1;
-                         commentIndex <= lastCommentIndex; ++commentIndex) {
-                        documentXml.append(
-                            QString("<w:commentRangeEnd w:id=\"%1\"/>"
-                                    "<w:r><w:rPr/><w:commentReference w:id=\"%1\"/></w:r>")
-                                .arg(commentIndex));
+                    //
+                    // Завершаем комментарий и указываем ссылку на него только в том случае,
+                    // когда в следующем куске текста уже идёт другой коммент
+                    //
+                    if (range.format.property(TextBlockStyle::PropertyComments).toStringList()
+                            != nextRange.format.property(TextBlockStyle::PropertyComments)
+                                   .toStringList()
+                        || range.format.property(TextBlockStyle::PropertyCommentsAuthors)
+                                .toStringList()
+                            != nextRange.format.property(TextBlockStyle::PropertyCommentsAuthors)
+                                   .toStringList()
+                        || range.format.property(TextBlockStyle::PropertyCommentsDates)
+                                .toStringList()
+                            != nextRange.format.property(TextBlockStyle::PropertyCommentsDates)
+                                   .toStringList()) {
+                        for (int commentIndex = lastCommentIndex - comments.size() + 1;
+                             commentIndex <= lastCommentIndex; ++commentIndex) {
+                            documentXml.append(
+                                QString("<w:commentRangeEnd w:id=\"%1\"/>"
+                                        "<w:r><w:rPr/><w:commentReference w:id=\"%1\"/></w:r>")
+                                    .arg(commentIndex));
+                        }
                     }
                 }
             }
