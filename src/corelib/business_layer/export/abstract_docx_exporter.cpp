@@ -840,6 +840,9 @@ void AbstractDocxExporter::Implementation::writeStyles(QtZipWriter* _zip,
     // Сформируем xml стилей
     //
     const QString languageCode = QLocale().uiLanguages().value(1, "en-US");
+    const QString bidiLanguageCode = QLocale().language() == QLocale::Hebrew
+        ? "he-IL"
+        : (QLocale().language() == QLocale::Arabic ? "ar-SA" : "");
     QString styleXml
         = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
           "<w:styles xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\">"
@@ -851,8 +854,8 @@ void AbstractDocxExporter::Implementation::writeStyles(QtZipWriter* _zip,
           "<w:sz w:val=\"22\"/>"
           "<w:szCs w:val=\"22\"/>"
           "<w:lang w:val=\""
-        + languageCode + "\" w:eastAsia=\"" + languageCode + "\" w:bidi=\""
-        + (QLocale().language() == QLocale::Hebrew ? "he-IL" : "ar-SA")
+        + languageCode + "\" w:eastAsia=\"" + languageCode
+        + (!bidiLanguageCode.isEmpty() ? ("\" w:bidi=\"" + bidiLanguageCode) : "")
         + "\"/>"
           "</w:rPr>"
           "</w:rPrDefault>"
