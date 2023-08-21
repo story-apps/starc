@@ -109,10 +109,11 @@ ScreenplayAbstractImporter::Documents ScreenplayTrelbyImporter::importDocuments(
 
     Documents documents;
     for (const auto& characterName : characterNames) {
-        documents.characters.append({ characterName, {} });
+        documents.characters.append(
+            { Domain::DocumentObjectType::Character, characterName, {}, {} });
     }
     for (const auto& locationName : locationNames) {
-        documents.locations.append({ locationName, {} });
+        documents.locations.append({ Domain::DocumentObjectType::Location, locationName, {}, {} });
     }
     return documents;
 }

@@ -489,6 +489,35 @@ ScreenplayAbstractImporter::Documents ScreenplayKitScenaristImporter::importDocu
         QSqlDatabase database = QSqlDatabase::addDatabase(kSqlDriver, kConnectionName);
         database.setDatabaseName(_options.filePath);
         if (database.open()) {
+            auto typeFor = [](const QSqlQuery& _record) {
+                switch (_record.value("type").toUInt()) {
+                case Character: {
+                    return Domain::DocumentObjectType::Character;
+                }
+                case Location: {
+                    return Domain::DocumentObjectType::Location;
+                }
+                case Text: {
+                    return Domain::DocumentObjectType::SimpleText;
+                }
+                case Folder: {
+                    return Domain::DocumentObjectType::Folder;
+                }
+                case MindMap: {
+                    return Domain::DocumentObjectType::MindMap;
+                }
+                case ImagesGallery: {
+                    return Domain::DocumentObjectType::ImagesGallery;
+                }
+                case Image: {
+                    return Domain::DocumentObjectType::Image;
+                }
+                default: {
+                    return Domain::DocumentObjectType::Undefined;
+                }
+                }
+            };
+
             //
             // Загрузим данные о персонажах
             //
@@ -502,7 +531,7 @@ ScreenplayAbstractImporter::Documents ScreenplayKitScenaristImporter::importDocu
                     const auto name = charactersQuery.value("name").toString();
                     const auto content
                         = readCharacter(name, charactersQuery.value("description").toString());
-                    result.characters.append({ name, content });
+                    result.characters.append({ typeFor(charactersQuery), name, content, {} });
                 }
             }
 
@@ -518,7 +547,25 @@ ScreenplayAbstractImporter::Documents ScreenplayKitScenaristImporter::importDocu
                     const auto name = locationsQuery.value("name").toString();
                     const auto content
                         = readLocation(name, locationsQuery.value("description").toString());
-                    result.locations.append({ name, content });
+                    result.locations.append({ typeFor(locationsQuery), name, content, {} });
+                }
+            }
+
+            //
+            // Загрузим данные разработки
+            //
+            if (_options.importResearch) {
+                QSqlQuery documentsQuery(database);
+                documentsQuery.prepare("SELECT * FROM research WHERE type not in (?, ?) ORDER by "
+                                       "parent_id, sort_order");
+                documentsQuery.addBindValue(Character);
+                documentsQuery.addBindValue(Location);
+                documentsQuery.exec();
+                while (documentsQuery.next()) {
+                    const auto name = documentsQuery.value("name").toString();
+                    const auto content
+                        = readPlainTextDocument(documentsQuery.value("description").toString());
+                    result.locations.append({ typeFor(documentsQuery), name, content, {} });
                 }
             }
         }

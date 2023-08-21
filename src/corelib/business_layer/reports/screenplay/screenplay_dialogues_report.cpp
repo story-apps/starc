@@ -354,9 +354,10 @@ void ScreenplayDialoguesReport::saveToPdf(const QString& _fileName) const
     titleFont.setBold(true);
     titleFormat.setFont(titleFont);
     cursor.setCharFormat(titleFormat);
-    cursor.insertText(QString("%1 - %2").arg(
-        d->screenplayModel->informationModel()->name(),
-        QCoreApplication::translate("BusinessLayer::ScreenplayCastReport", "Dialogue report")));
+    cursor.insertText(
+        QString("%1 - %2").arg(d->screenplayModel->informationModel()->name(),
+                               QCoreApplication::translate(
+                                   "BusinessLayer::ScreenplayDialoguesReport", "Dialogue report")));
     cursor.insertBlock();
     cursor.insertBlock();
     QTextTableFormat tableFormat;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <domain/document_object.h>
+
 #include <QVector>
 
 #include <corelib_global.h>
@@ -21,8 +23,10 @@ public:
      * @brief Вспомогательные структуры для хранения данных импортируемых документов
      */
     struct Document {
+        Domain::DocumentObjectType type = Domain::DocumentObjectType::Undefined;
         QString name;
         QString content;
+        QVector<Document> children;
     };
     struct Documents {
         //
@@ -30,6 +34,7 @@ public:
         //
         QVector<Document> characters;
         QVector<Document> locations;
+        QVector<Document> research;
     };
 
     /**

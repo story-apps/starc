@@ -27,6 +27,11 @@ struct CORE_LIBRARY_EXPORT ScreenplayImportOptions {
     bool importLocations = true;
 
     /**
+     * @brief Нужно ли импортировать документы
+     */
+    bool importResearch = true;
+
+    /**
      * @brief Нужно ли импортировать сценарий
      */
     bool importScreenplay = true;
