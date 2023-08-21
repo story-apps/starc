@@ -43,5 +43,5 @@ signals:
      * @brief Текст был переведён
      */
     void translated(const QVector<TextTranslateHelper::Translation>& _translation,
-                  const QString& _sourceLanguage);
+                    const QString& _sourceLanguage);
 };

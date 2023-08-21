@@ -27,6 +27,6 @@ jobs:
       uses: DoozyX/clang-format-lint-action@v0.12
       with:
         source: 'src'
-        exclude: 'src/3rd_party src/cloud'
+        exclude: 'src/3rd_party src/cloud src/corelib/utils/3rd_party'
         extensions: 'h,hpp,c,cpp'
         clangFormatVersion: 12
