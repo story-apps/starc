@@ -3,8 +3,7 @@
 #include "simple_text_edit.h"
 
 #include <business_layer/templates/simple_text_template.h>
-#include <data_layer/storage/settings_storage.h>
-#include <data_layer/storage/storage_facade.h>
+#include <utils/helpers/shortcuts_helper.h>
 
 #include <QShortcut>
 #include <QSignalMapper>
@@ -56,13 +55,7 @@ void SimpleTextEditShortcutsManager::Implementation::createOrUpdateShortcut(
         return;
     }
 
-    const auto blockType = static_cast<TextParagraphType>(_forBlockType);
-    const QString typeShortName = BusinessLayer::toString(blockType);
-    const QString keySequenceText
-        = settingsValue(QString("%1/shortcuts/%2")
-                            .arg(DataStorageLayer::kComponentsSimpleTextEditorKey, typeShortName))
-              .toString();
-    const QKeySequence keySequence(keySequenceText);
+    const QKeySequence keySequence(ShortcutsHelper::simpleTextShortcut(_forBlockType));
 
     if (paragraphTypeToShortcut.contains(_forBlockType)) {
         paragraphTypeToShortcut.value(_forBlockType)->setKey(keySequence);
@@ -126,14 +119,15 @@ void SimpleTextEditShortcutsManager::reconfigure()
     //
     // Обновим сочетания клавиш для всех блоков
     //
-    for (const auto type : d->paragraphTypeToShortcut.keys()) {
-        d->createOrUpdateShortcut(type);
+    for (auto iter = d->paragraphTypeToShortcut.begin(); iter != d->paragraphTypeToShortcut.end();
+         ++iter) {
+        d->createOrUpdateShortcut(iter.key());
     }
 }
 
 void SimpleTextEditShortcutsManager::setEnabled(bool _enabled)
 {
-    for (auto shortcut : d->paragraphTypeToShortcut) {
+    for (auto shortcut : std::as_const(d->paragraphTypeToShortcut)) {
         shortcut->setEnabled(_enabled);
     }
 }

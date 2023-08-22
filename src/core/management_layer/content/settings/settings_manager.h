@@ -217,9 +217,24 @@ private:
     //
     // Сохранение параметров горячих клавиш
     //
+    void setShortcutsForSimpleTextEdit(const QString& _blockType, const QString& _shortcut,
+                                       const QString& _jumpByTab, const QString& _jumpByEnter,
+                                       const QString& _changeByTab, const QString& _changeByEnter);
     void setShortcutsForScreenplayEdit(const QString& _blockType, const QString& _shortcut,
                                        const QString& _jumpByTab, const QString& _jumpByEnter,
                                        const QString& _changeByTab, const QString& _changeByEnter);
+    void setShortcutsForComicBookEdit(const QString& _blockType, const QString& _shortcut,
+                                      const QString& _jumpByTab, const QString& _jumpByEnter,
+                                      const QString& _changeByTab, const QString& _changeByEnter);
+    void setShortcutsForAudioplayEdit(const QString& _blockType, const QString& _shortcut,
+                                      const QString& _jumpByTab, const QString& _jumpByEnter,
+                                      const QString& _changeByTab, const QString& _changeByEnter);
+    void setShortcutsForStageplayEdit(const QString& _blockType, const QString& _shortcut,
+                                      const QString& _jumpByTab, const QString& _jumpByEnter,
+                                      const QString& _changeByTab, const QString& _changeByEnter);
+    void setShortcutsForNovelEdit(const QString& _blockType, const QString& _shortcut,
+                                  const QString& _jumpByTab, const QString& _jumpByEnter,
+                                  const QString& _changeByTab, const QString& _changeByEnter);
 
 private:
     class Implementation;

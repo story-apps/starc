@@ -96,28 +96,16 @@ QStandardItemModel* buildSpellCheckerLanguagesModel(QObject* _parent)
 }
 
 /**
- * @brief Построить модель типов абзацев сценария
+ * @brief Построить модель типов абзацев для модуля
  */
-QStringListModel* buildScreenplayParagraphTypesModel(QObject* _parent,
-                                                     QStringListModel* _model = nullptr)
+QStringListModel* buildParagraphTypesModel(QObject* _parent,
+                                                     QStringListModel* _model, const QVector<BusinessLayer::TextParagraphType>& _types)
 {
     using namespace BusinessLayer;
-    const QStringList paragraphTypes = {
-        toDisplayString(TextParagraphType::SceneHeading),
-        toDisplayString(TextParagraphType::SceneCharacters),
-        toDisplayString(TextParagraphType::BeatHeading),
-        toDisplayString(TextParagraphType::Action),
-        toDisplayString(TextParagraphType::Character),
-        toDisplayString(TextParagraphType::Parenthetical),
-        toDisplayString(TextParagraphType::Dialogue),
-        toDisplayString(TextParagraphType::Lyrics),
-        toDisplayString(TextParagraphType::Transition),
-        toDisplayString(TextParagraphType::Shot),
-        toDisplayString(TextParagraphType::InlineNote),
-        toDisplayString(TextParagraphType::SequenceHeading),
-        toDisplayString(TextParagraphType::ActHeading),
-        toDisplayString(TextParagraphType::UnformattedText),
-    };
+    QStringList paragraphTypes;
+    for (const auto& type : _types) {
+        paragraphTypes.append(toDisplayString(type));
+    }
 
     if (!_model) {
         _model = new QStringListModel(_parent);
@@ -125,6 +113,100 @@ QStringListModel* buildScreenplayParagraphTypesModel(QObject* _parent,
     _model->setStringList(paragraphTypes);
 
     return _model;
+}
+QStringListModel* buildSimpleTextParagraphTypesModel(QObject* _parent,
+                                                     QStringListModel* _model = nullptr)
+{
+    using namespace BusinessLayer;
+    return buildParagraphTypesModel(_parent, _model, {
+                                        TextParagraphType::ChapterHeading1,
+                                        TextParagraphType::ChapterHeading2,
+                                        TextParagraphType::ChapterHeading3,
+                                        TextParagraphType::ChapterHeading4,
+                                        TextParagraphType::ChapterHeading5,
+                                        TextParagraphType::ChapterHeading6,
+                                        TextParagraphType::Text,
+                                        TextParagraphType::InlineNote,
+                                    });
+}
+QStringListModel* buildScreenplayParagraphTypesModel(QObject* _parent,
+                                                     QStringListModel* _model = nullptr)
+{
+    using namespace BusinessLayer;
+    return buildParagraphTypesModel(_parent, _model, {
+                                        TextParagraphType::SceneHeading,
+                                        TextParagraphType::SceneCharacters,
+                                        TextParagraphType::BeatHeading,
+                                        TextParagraphType::Action,
+                                        TextParagraphType::Character,
+                                        TextParagraphType::Parenthetical,
+                                        TextParagraphType::Dialogue,
+                                        TextParagraphType::Lyrics,
+                                        TextParagraphType::Transition,
+                                        TextParagraphType::Shot,
+                                        TextParagraphType::InlineNote,
+                                        TextParagraphType::SequenceHeading,
+                                        TextParagraphType::ActHeading,
+                                        TextParagraphType::UnformattedText,
+                                    });
+}
+QStringListModel* buildComicBookParagraphTypesModel(QObject* _parent,
+                                                     QStringListModel* _model = nullptr)
+{
+    using namespace BusinessLayer;
+    return buildParagraphTypesModel(_parent, _model, {
+                                        TextParagraphType::PageHeading,
+                                        TextParagraphType::PanelHeading,
+                                        TextParagraphType::Description,
+                                        TextParagraphType::Character,
+                                        TextParagraphType::Dialogue,
+                                        TextParagraphType::InlineNote,
+                                        TextParagraphType::UnformattedText,
+                                        TextParagraphType::SequenceHeading,
+                                    });
+}
+QStringListModel* buildAudioplayParagraphTypesModel(QObject* _parent,
+                                                     QStringListModel* _model = nullptr)
+{
+    using namespace BusinessLayer;
+    return buildParagraphTypesModel(_parent, _model, {
+                                        TextParagraphType::SceneHeading,
+                                        TextParagraphType::Character,
+                                        TextParagraphType::Dialogue,
+                                        TextParagraphType::Sound,
+                                        TextParagraphType::Music,
+                                        TextParagraphType::Cue,
+                                        TextParagraphType::InlineNote,
+                                        TextParagraphType::UnformattedText,
+                                    });
+}
+QStringListModel* buildStageplayParagraphTypesModel(QObject* _parent,
+                                                     QStringListModel* _model = nullptr)
+{
+    using namespace BusinessLayer;
+    return buildParagraphTypesModel(_parent, _model, {
+                                        TextParagraphType::SceneHeading,
+                                        TextParagraphType::Character,
+                                        TextParagraphType::Parenthetical,
+                                        TextParagraphType::Dialogue,
+                                        TextParagraphType::Action,
+                                        TextParagraphType::InlineNote,
+                                        TextParagraphType::UnformattedText,
+                                    });
+}
+QStringListModel* buildNovelParagraphTypesModel(QObject* _parent,
+                                                     QStringListModel* _model = nullptr)
+{
+    using namespace BusinessLayer;
+    return buildParagraphTypesModel(_parent, _model, {
+                                        TextParagraphType::SceneHeading,
+                                        TextParagraphType::BeatHeading,
+                                        TextParagraphType::Text,
+                                        TextParagraphType::InlineNote,
+                                        TextParagraphType::UnformattedText,
+                                        TextParagraphType::ChapterHeading,
+                                        TextParagraphType::PartHeading,
+                                    });
 }
 
 /**
@@ -473,12 +555,60 @@ public:
     QGridLayout* shortcutsCardLayout = nullptr;
     //
     H5Label* shortcutsTitle = nullptr;
+    //
+    // ... Simple text
+    //
+    H6Label* shortcutsForSimpleTextTitle = nullptr;
+    Tree* shortcutsForSimpleText = nullptr;
+    HierarchicalModel* shortcutsForSimpleTextModel = nullptr;
+    QStringListModel* simpleTextParagraphTypesModel = nullptr;
+    ComboBoxItemDelegate* simpleTextParagraphAddTypeDelegate = nullptr;
+    ComboBoxItemDelegate* simpleTextParagraphChangeTypeDelegate = nullptr;
+    //
+    // ... Screenplay
+    //
     H6Label* shortcutsForScreenplayTitle = nullptr;
     Tree* shortcutsForScreenplay = nullptr;
     HierarchicalModel* shortcutsForScreenplayModel = nullptr;
     QStringListModel* screenplayParagraphTypesModel = nullptr;
     ComboBoxItemDelegate* screenplayParagraphAddTypeDelegate = nullptr;
     ComboBoxItemDelegate* screenplayParagraphChangeTypeDelegate = nullptr;
+    //
+    // ... ComicBook
+    //
+    H6Label* shortcutsForComicBookTitle = nullptr;
+    Tree* shortcutsForComicBook = nullptr;
+    HierarchicalModel* shortcutsForComicBookModel = nullptr;
+    QStringListModel* comicBookParagraphTypesModel = nullptr;
+    ComboBoxItemDelegate* comicBookParagraphAddTypeDelegate = nullptr;
+    ComboBoxItemDelegate* comicBookParagraphChangeTypeDelegate = nullptr;
+    //
+    // ... Audioplay
+    //
+    H6Label* shortcutsForAudioplayTitle = nullptr;
+    Tree* shortcutsForAudioplay = nullptr;
+    HierarchicalModel* shortcutsForAudioplayModel = nullptr;
+    QStringListModel* audioplayParagraphTypesModel = nullptr;
+    ComboBoxItemDelegate* audioplayParagraphAddTypeDelegate = nullptr;
+    ComboBoxItemDelegate* audioplayParagraphChangeTypeDelegate = nullptr;
+    //
+    // ... Stageplay
+    //
+    H6Label* shortcutsForStageplayTitle = nullptr;
+    Tree* shortcutsForStageplay = nullptr;
+    HierarchicalModel* shortcutsForStageplayModel = nullptr;
+    QStringListModel* stageplayParagraphTypesModel = nullptr;
+    ComboBoxItemDelegate* stageplayParagraphAddTypeDelegate = nullptr;
+    ComboBoxItemDelegate* stageplayParagraphChangeTypeDelegate = nullptr;
+    //
+    // ... Novel
+    //
+    H6Label* shortcutsForNovelTitle = nullptr;
+    Tree* shortcutsForNovel = nullptr;
+    HierarchicalModel* shortcutsForNovelModel = nullptr;
+    QStringListModel* novelParagraphTypesModel = nullptr;
+    ComboBoxItemDelegate* novelParagraphAddTypeDelegate = nullptr;
+    ComboBoxItemDelegate* novelParagraphChangeTypeDelegate = nullptr;
     //
     int shortcutsCardBottomSpacerIndex = 0;
 };
@@ -684,6 +814,15 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , shortcutsCard(new Card(content))
     , shortcutsCardLayout(new QGridLayout)
     , shortcutsTitle(new H5Label(shortcutsCard))
+    //
+    , shortcutsForSimpleTextTitle(new H6Label(shortcutsCard))
+    , shortcutsForSimpleText(new Tree(shortcutsCard))
+    , simpleTextParagraphTypesModel(buildSimpleTextParagraphTypesModel(shortcutsForSimpleText))
+    , simpleTextParagraphAddTypeDelegate(
+          new ComboBoxItemDelegate(shortcutsForSimpleText, simpleTextParagraphTypesModel))
+    , simpleTextParagraphChangeTypeDelegate(
+          new ComboBoxItemDelegate(shortcutsForSimpleText, simpleTextParagraphTypesModel))
+    //
     , shortcutsForScreenplayTitle(new H6Label(shortcutsCard))
     , shortcutsForScreenplay(new Tree(shortcutsCard))
     , screenplayParagraphTypesModel(buildScreenplayParagraphTypesModel(shortcutsForScreenplay))
@@ -691,6 +830,38 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
           new ComboBoxItemDelegate(shortcutsForScreenplay, screenplayParagraphTypesModel))
     , screenplayParagraphChangeTypeDelegate(
           new ComboBoxItemDelegate(shortcutsForScreenplay, screenplayParagraphTypesModel))
+    //
+    , shortcutsForComicBookTitle(new H6Label(shortcutsCard))
+    , shortcutsForComicBook(new Tree(shortcutsCard))
+    , comicBookParagraphTypesModel(buildComicBookParagraphTypesModel(shortcutsForComicBook))
+    , comicBookParagraphAddTypeDelegate(
+          new ComboBoxItemDelegate(shortcutsForComicBook, comicBookParagraphTypesModel))
+    , comicBookParagraphChangeTypeDelegate(
+          new ComboBoxItemDelegate(shortcutsForComicBook, comicBookParagraphTypesModel))
+    //
+    , shortcutsForAudioplayTitle(new H6Label(shortcutsCard))
+    , shortcutsForAudioplay(new Tree(shortcutsCard))
+    , audioplayParagraphTypesModel(buildAudioplayParagraphTypesModel(shortcutsForAudioplay))
+    , audioplayParagraphAddTypeDelegate(
+          new ComboBoxItemDelegate(shortcutsForAudioplay, audioplayParagraphTypesModel))
+    , audioplayParagraphChangeTypeDelegate(
+          new ComboBoxItemDelegate(shortcutsForAudioplay, audioplayParagraphTypesModel))
+    //
+    , shortcutsForStageplayTitle(new H6Label(shortcutsCard))
+    , shortcutsForStageplay(new Tree(shortcutsCard))
+    , stageplayParagraphTypesModel(buildStageplayParagraphTypesModel(shortcutsForStageplay))
+    , stageplayParagraphAddTypeDelegate(
+          new ComboBoxItemDelegate(shortcutsForStageplay, stageplayParagraphTypesModel))
+    , stageplayParagraphChangeTypeDelegate(
+          new ComboBoxItemDelegate(shortcutsForStageplay, stageplayParagraphTypesModel))
+    //
+    , shortcutsForNovelTitle(new H6Label(shortcutsCard))
+    , shortcutsForNovel(new Tree(shortcutsCard))
+    , novelParagraphTypesModel(buildNovelParagraphTypesModel(shortcutsForNovel))
+    , novelParagraphAddTypeDelegate(
+          new ComboBoxItemDelegate(shortcutsForNovel, novelParagraphTypesModel))
+    , novelParagraphChangeTypeDelegate(
+          new ComboBoxItemDelegate(shortcutsForNovel, novelParagraphTypesModel))
 {
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
@@ -1416,15 +1587,30 @@ void SettingsView::Implementation::initNovelCard()
 
 void SettingsView::Implementation::initShortcutsCard()
 {
+    shortcutsForSimpleText->setHeader(new HierarchicalHeaderView(shortcutsForSimpleText));
     shortcutsForScreenplay->setHeader(new HierarchicalHeaderView(shortcutsForScreenplay));
+    shortcutsForComicBook->setHeader(new HierarchicalHeaderView(shortcutsForComicBook));
+    shortcutsForAudioplay->setHeader(new HierarchicalHeaderView(shortcutsForAudioplay));
+    shortcutsForStageplay->setHeader(new HierarchicalHeaderView(shortcutsForStageplay));
+    shortcutsForNovel->setHeader(new HierarchicalHeaderView(shortcutsForNovel));
 
     shortcutsCardLayout->setContentsMargins({});
     shortcutsCardLayout->setSpacing(0);
     int itemIndex = 0;
     shortcutsCardLayout->addWidget(shortcutsTitle, itemIndex++, 0);
     //
+    shortcutsCardLayout->addWidget(shortcutsForSimpleTextTitle, itemIndex++, 0);
+    shortcutsCardLayout->addWidget(shortcutsForSimpleText, itemIndex++, 0);
     shortcutsCardLayout->addWidget(shortcutsForScreenplayTitle, itemIndex++, 0);
     shortcutsCardLayout->addWidget(shortcutsForScreenplay, itemIndex++, 0);
+    shortcutsCardLayout->addWidget(shortcutsForComicBookTitle, itemIndex++, 0);
+    shortcutsCardLayout->addWidget(shortcutsForComicBook, itemIndex++, 0);
+    shortcutsCardLayout->addWidget(shortcutsForAudioplayTitle, itemIndex++, 0);
+    shortcutsCardLayout->addWidget(shortcutsForAudioplay, itemIndex++, 0);
+    shortcutsCardLayout->addWidget(shortcutsForStageplayTitle, itemIndex++, 0);
+    shortcutsCardLayout->addWidget(shortcutsForStageplay, itemIndex++, 0);
+    shortcutsCardLayout->addWidget(shortcutsForNovelTitle, itemIndex++, 0);
+    shortcutsCardLayout->addWidget(shortcutsForNovel, itemIndex++, 0);
     //
     shortcutsCardBottomSpacerIndex = itemIndex;
     shortcutsCard->setContentLayout(shortcutsCardLayout);
@@ -1464,7 +1650,12 @@ void SettingsView::Implementation::updateTablesGeometry()
                                    * qCeil(Ui::DesignSystem::treeOneLineItem().height()));
         }
     };
+    updateTableGeometry(shortcutsForSimpleText, 0.25);
     updateTableGeometry(shortcutsForScreenplay, 0.25);
+    updateTableGeometry(shortcutsForComicBook, 0.25);
+    updateTableGeometry(shortcutsForAudioplay, 0.25);
+    updateTableGeometry(shortcutsForStageplay, 0.25);
+    updateTableGeometry(shortcutsForNovel, 0.25);
 }
 
 
@@ -1593,12 +1784,15 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->simpleTextNavigatorSceneDescriptionLines3,
                  d->simpleTextNavigatorSceneDescriptionLines4,
                  d->simpleTextNavigatorSceneDescriptionLines5,
+                 d->shortcutsForSimpleTextTitle,
+                 d->shortcutsForSimpleText,
              }) {
             widget->setVisible(_available);
         }
         d->simpleTextCardLayout->setRowMinimumHeight(
             d->simpleTextCardBottomSpacerIndex,
             _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
+        d->updateTablesGeometry();
 
         emit simpleTextAvailableChanged(_available);
     });
@@ -1764,6 +1958,7 @@ SettingsView::SettingsView(QWidget* _parent)
         d->screenplayCardLayout->setRowMinimumHeight(screenplayDurationConfigurableRow,
                                                      _available ? Ui::DesignSystem::layout().px62()
                                                                 : 0.0);
+        d->updateTablesGeometry();
 
         emit screenplayAvailableChanged(_available);
     });
@@ -2075,11 +2270,11 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->comicBookEditorDefaultTemplate,
                  d->comicBookEditorDefaultTemplateOptions,
                  d->comicBookEditorShowDialogueNumber,
-                 d->screenplayEditorSaveItemsFromText,
-                 d->screenplayEditorShowHintsForAllItems,
-                 d->screenplayEditorShowHintsForPrimaryItems,
-                 d->screenplayEditorShowHintsForSecondaryItems,
-                 d->screenplayEditorShowHintsForTertiaryItems,
+                 d->comicBookEditorSaveItemsFromText,
+                 d->comicBookEditorShowHintsForAllItems,
+                 d->comicBookEditorShowHintsForPrimaryItems,
+                 d->comicBookEditorShowHintsForSecondaryItems,
+                 d->comicBookEditorShowHintsForTertiaryItems,
                  d->comicBookEditorShowCharacterSuggestionsInEmptyBlock,
                  d->comicBookNavigatorTitle,
                  d->comicBookNavigatorShowSceneText,
@@ -2088,12 +2283,15 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->comicBookNavigatorSceneDescriptionLines3,
                  d->comicBookNavigatorSceneDescriptionLines4,
                  d->comicBookNavigatorSceneDescriptionLines5,
+                 d->shortcutsForComicBookTitle,
+                 d->shortcutsForComicBook,
              }) {
             widget->setVisible(_available);
         }
         d->comicBookCardLayout->setRowMinimumHeight(d->comicBookCardBottomSpacerIndex,
                                                     _available ? Ui::DesignSystem::layout().px24()
                                                                : Ui::DesignSystem::layout().px12());
+        d->updateTablesGeometry();
 
         emit comicBookAvailableChanged(_available);
     });
@@ -2257,12 +2455,15 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->audioplayDurationByWordsTitle,
                  d->audioplayDurationByWordsWords,
                  d->audioplayDurationByWordsDuration,
+                 d->shortcutsForAudioplayTitle,
+                 d->shortcutsForAudioplay,
              }) {
             widget->setVisible(_available);
         }
         d->audioplayCardLayout->setRowMinimumHeight(d->audioplayCardBottomSpacerIndex,
                                                     _available ? Ui::DesignSystem::layout().px24()
                                                                : Ui::DesignSystem::layout().px12());
+        d->updateTablesGeometry();
 
         emit audioplayAvailableChanged(_available);
     });
@@ -2441,12 +2642,15 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->stageplayNavigatorSceneDescriptionLines3,
                  d->stageplayNavigatorSceneDescriptionLines4,
                  d->stageplayNavigatorSceneDescriptionLines5,
+                 d->shortcutsForStageplayTitle,
+                 d->shortcutsForStageplay,
              }) {
             widget->setVisible(_available);
         }
         d->stageplayCardLayout->setRowMinimumHeight(d->stageplayCardBottomSpacerIndex,
                                                     _available ? Ui::DesignSystem::layout().px24()
                                                                : Ui::DesignSystem::layout().px12());
+        d->updateTablesGeometry();
 
         emit stageplayAvailableChanged(_available);
     });
@@ -2597,12 +2801,15 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->novelNavigatorSceneDescriptionLines3,
                  d->novelNavigatorSceneDescriptionLines4,
                  d->novelNavigatorSceneDescriptionLines5,
+                 d->shortcutsForNovelTitle,
+                 d->shortcutsForNovel,
              }) {
             widget->setVisible(_available);
         }
         d->novelCardLayout->setRowMinimumHeight(d->novelCardBottomSpacerIndex,
                                                 _available ? Ui::DesignSystem::layout().px24()
                                                            : Ui::DesignSystem::layout().px12());
+        d->updateTablesGeometry();
 
         emit novelAvailableChanged(_available);
     });
@@ -3391,6 +3598,53 @@ void SettingsView::setNovelNavigatorShowSceneText(bool _show, int _lines)
     }
 }
 
+void SettingsView::setShortcutsForSimpleTextModel(HierarchicalModel* _model)
+{
+    if (d->shortcutsForSimpleTextModel) {
+        d->shortcutsForSimpleTextModel->disconnect(this);
+        d->shortcutsForSimpleTextModel->deleteLater();
+    }
+
+    d->shortcutsForSimpleTextModel = _model;
+
+    d->shortcutsForSimpleText->setModel(d->shortcutsForSimpleTextModel);
+    d->shortcutsForSimpleText->setItemDelegateForColumn(
+        1, new KeySequenceDelegate(d->shortcutsForSimpleText));
+    d->shortcutsForSimpleText->setItemDelegateForColumn(2, d->simpleTextParagraphAddTypeDelegate);
+    d->shortcutsForSimpleText->setItemDelegateForColumn(3, d->simpleTextParagraphAddTypeDelegate);
+    d->shortcutsForSimpleText->setItemDelegateForColumn(4,
+                                                        d->simpleTextParagraphChangeTypeDelegate);
+    d->shortcutsForSimpleText->setItemDelegateForColumn(5,
+                                                        d->simpleTextParagraphChangeTypeDelegate);
+    d->updateTablesGeometry();
+
+    connect(
+        d->shortcutsForSimpleTextModel, &HierarchicalModel::dataChanged, this,
+        [this](const QModelIndex& _index) {
+            if (!_index.isValid()) {
+                return;
+            }
+
+            const auto blockType
+                = _index.sibling(_index.row(), TextEditorShortcuts::Type).data().toString();
+            const auto shortcut
+                = _index.sibling(_index.row(), TextEditorShortcuts::Shortcut).data().toString();
+            const auto jumpByTab
+                = _index.sibling(_index.row(), TextEditorShortcuts::JumpByTab).data().toString();
+            const auto jumpByEnter
+                = _index.sibling(_index.row(), TextEditorShortcuts::JumpByEnter).data().toString();
+            const auto changeByTab
+                = _index.sibling(_index.row(), TextEditorShortcuts::ChangeByTab).data().toString();
+            const auto changeByEnter
+                = _index.sibling(_index.row(), TextEditorShortcuts::ChangeByEnter)
+                      .data()
+                      .toString();
+
+            emit shortcutsForSimpleTextEditorChanged(blockType, shortcut, jumpByTab, jumpByEnter,
+                                                     changeByTab, changeByEnter);
+        });
+}
+
 void SettingsView::setShortcutsForScreenplayModel(HierarchicalModel* _model)
 {
     if (d->shortcutsForScreenplayModel) {
@@ -3435,7 +3689,195 @@ void SettingsView::setShortcutsForScreenplayModel(HierarchicalModel* _model)
 
             emit shortcutsForScreenplayEditorChanged(blockType, shortcut, jumpByTab, jumpByEnter,
                                                      changeByTab, changeByEnter);
-        });
+    });
+}
+
+void SettingsView::setShortcutsForComicBookModel(HierarchicalModel* _model)
+{
+    if (d->shortcutsForComicBookModel) {
+        d->shortcutsForComicBookModel->disconnect(this);
+        d->shortcutsForComicBookModel->deleteLater();
+    }
+
+    d->shortcutsForComicBookModel = _model;
+
+    d->shortcutsForComicBook->setModel(d->shortcutsForComicBookModel);
+    d->shortcutsForComicBook->setItemDelegateForColumn(
+        1, new KeySequenceDelegate(d->shortcutsForComicBook));
+    d->shortcutsForComicBook->setItemDelegateForColumn(2, d->comicBookParagraphAddTypeDelegate);
+    d->shortcutsForComicBook->setItemDelegateForColumn(3, d->comicBookParagraphAddTypeDelegate);
+    d->shortcutsForComicBook->setItemDelegateForColumn(4,
+                                                        d->comicBookParagraphChangeTypeDelegate);
+    d->shortcutsForComicBook->setItemDelegateForColumn(5,
+                                                        d->comicBookParagraphChangeTypeDelegate);
+    d->updateTablesGeometry();
+
+    connect(
+        d->shortcutsForComicBookModel, &HierarchicalModel::dataChanged, this,
+        [this](const QModelIndex& _index) {
+            if (!_index.isValid()) {
+                return;
+            }
+
+            const auto blockType
+                = _index.sibling(_index.row(), TextEditorShortcuts::Type).data().toString();
+            const auto shortcut
+                = _index.sibling(_index.row(), TextEditorShortcuts::Shortcut).data().toString();
+            const auto jumpByTab
+                = _index.sibling(_index.row(), TextEditorShortcuts::JumpByTab).data().toString();
+            const auto jumpByEnter
+                = _index.sibling(_index.row(), TextEditorShortcuts::JumpByEnter).data().toString();
+            const auto changeByTab
+                = _index.sibling(_index.row(), TextEditorShortcuts::ChangeByTab).data().toString();
+            const auto changeByEnter
+                = _index.sibling(_index.row(), TextEditorShortcuts::ChangeByEnter)
+                      .data()
+                      .toString();
+
+            emit shortcutsForComicBookEditorChanged(blockType, shortcut, jumpByTab, jumpByEnter,
+                                                     changeByTab, changeByEnter);
+    });
+}
+
+void SettingsView::setShortcutsForAudioplayModel(HierarchicalModel* _model)
+{
+    if (d->shortcutsForAudioplayModel) {
+        d->shortcutsForAudioplayModel->disconnect(this);
+        d->shortcutsForAudioplayModel->deleteLater();
+    }
+
+    d->shortcutsForAudioplayModel = _model;
+
+    d->shortcutsForAudioplay->setModel(d->shortcutsForAudioplayModel);
+    d->shortcutsForAudioplay->setItemDelegateForColumn(
+        1, new KeySequenceDelegate(d->shortcutsForAudioplay));
+    d->shortcutsForAudioplay->setItemDelegateForColumn(2, d->audioplayParagraphAddTypeDelegate);
+    d->shortcutsForAudioplay->setItemDelegateForColumn(3, d->audioplayParagraphAddTypeDelegate);
+    d->shortcutsForAudioplay->setItemDelegateForColumn(4,
+                                                        d->audioplayParagraphChangeTypeDelegate);
+    d->shortcutsForAudioplay->setItemDelegateForColumn(5,
+                                                        d->audioplayParagraphChangeTypeDelegate);
+    d->updateTablesGeometry();
+
+    connect(
+        d->shortcutsForAudioplayModel, &HierarchicalModel::dataChanged, this,
+        [this](const QModelIndex& _index) {
+            if (!_index.isValid()) {
+                return;
+            }
+
+            const auto blockType
+                = _index.sibling(_index.row(), TextEditorShortcuts::Type).data().toString();
+            const auto shortcut
+                = _index.sibling(_index.row(), TextEditorShortcuts::Shortcut).data().toString();
+            const auto jumpByTab
+                = _index.sibling(_index.row(), TextEditorShortcuts::JumpByTab).data().toString();
+            const auto jumpByEnter
+                = _index.sibling(_index.row(), TextEditorShortcuts::JumpByEnter).data().toString();
+            const auto changeByTab
+                = _index.sibling(_index.row(), TextEditorShortcuts::ChangeByTab).data().toString();
+            const auto changeByEnter
+                = _index.sibling(_index.row(), TextEditorShortcuts::ChangeByEnter)
+                      .data()
+                      .toString();
+
+            emit shortcutsForAudioplayEditorChanged(blockType, shortcut, jumpByTab, jumpByEnter,
+                                                     changeByTab, changeByEnter);
+    });
+}
+
+void SettingsView::setShortcutsForStageplayModel(HierarchicalModel* _model)
+{
+    if (d->shortcutsForStageplayModel) {
+        d->shortcutsForStageplayModel->disconnect(this);
+        d->shortcutsForStageplayModel->deleteLater();
+    }
+
+    d->shortcutsForStageplayModel = _model;
+
+    d->shortcutsForStageplay->setModel(d->shortcutsForStageplayModel);
+    d->shortcutsForStageplay->setItemDelegateForColumn(
+        1, new KeySequenceDelegate(d->shortcutsForStageplay));
+    d->shortcutsForStageplay->setItemDelegateForColumn(2, d->stageplayParagraphAddTypeDelegate);
+    d->shortcutsForStageplay->setItemDelegateForColumn(3, d->stageplayParagraphAddTypeDelegate);
+    d->shortcutsForStageplay->setItemDelegateForColumn(4,
+                                                        d->stageplayParagraphChangeTypeDelegate);
+    d->shortcutsForStageplay->setItemDelegateForColumn(5,
+                                                        d->stageplayParagraphChangeTypeDelegate);
+    d->updateTablesGeometry();
+
+    connect(
+        d->shortcutsForStageplayModel, &HierarchicalModel::dataChanged, this,
+        [this](const QModelIndex& _index) {
+            if (!_index.isValid()) {
+                return;
+            }
+
+            const auto blockType
+                = _index.sibling(_index.row(), TextEditorShortcuts::Type).data().toString();
+            const auto shortcut
+                = _index.sibling(_index.row(), TextEditorShortcuts::Shortcut).data().toString();
+            const auto jumpByTab
+                = _index.sibling(_index.row(), TextEditorShortcuts::JumpByTab).data().toString();
+            const auto jumpByEnter
+                = _index.sibling(_index.row(), TextEditorShortcuts::JumpByEnter).data().toString();
+            const auto changeByTab
+                = _index.sibling(_index.row(), TextEditorShortcuts::ChangeByTab).data().toString();
+            const auto changeByEnter
+                = _index.sibling(_index.row(), TextEditorShortcuts::ChangeByEnter)
+                      .data()
+                      .toString();
+
+            emit shortcutsForStageplayEditorChanged(blockType, shortcut, jumpByTab, jumpByEnter,
+                                                     changeByTab, changeByEnter);
+    });
+}
+
+void SettingsView::setShortcutsForNovelModel(HierarchicalModel* _model)
+{
+    if (d->shortcutsForNovelModel) {
+        d->shortcutsForNovelModel->disconnect(this);
+        d->shortcutsForNovelModel->deleteLater();
+    }
+
+    d->shortcutsForNovelModel = _model;
+
+    d->shortcutsForNovel->setModel(d->shortcutsForNovelModel);
+    d->shortcutsForNovel->setItemDelegateForColumn(
+        1, new KeySequenceDelegate(d->shortcutsForNovel));
+    d->shortcutsForNovel->setItemDelegateForColumn(2, d->novelParagraphAddTypeDelegate);
+    d->shortcutsForNovel->setItemDelegateForColumn(3, d->novelParagraphAddTypeDelegate);
+    d->shortcutsForNovel->setItemDelegateForColumn(4,
+                                                        d->novelParagraphChangeTypeDelegate);
+    d->shortcutsForNovel->setItemDelegateForColumn(5,
+                                                        d->novelParagraphChangeTypeDelegate);
+    d->updateTablesGeometry();
+
+    connect(
+        d->shortcutsForNovelModel, &HierarchicalModel::dataChanged, this,
+        [this](const QModelIndex& _index) {
+            if (!_index.isValid()) {
+                return;
+            }
+
+            const auto blockType
+                = _index.sibling(_index.row(), TextEditorShortcuts::Type).data().toString();
+            const auto shortcut
+                = _index.sibling(_index.row(), TextEditorShortcuts::Shortcut).data().toString();
+            const auto jumpByTab
+                = _index.sibling(_index.row(), TextEditorShortcuts::JumpByTab).data().toString();
+            const auto jumpByEnter
+                = _index.sibling(_index.row(), TextEditorShortcuts::JumpByEnter).data().toString();
+            const auto changeByTab
+                = _index.sibling(_index.row(), TextEditorShortcuts::ChangeByTab).data().toString();
+            const auto changeByEnter
+                = _index.sibling(_index.row(), TextEditorShortcuts::ChangeByEnter)
+                      .data()
+                      .toString();
+
+            emit shortcutsForNovelEditorChanged(blockType, shortcut, jumpByTab, jumpByEnter,
+                                                     changeByTab, changeByEnter);
+    });
 }
 
 void SettingsView::resizeEvent(QResizeEvent* _event)
@@ -3780,6 +4222,19 @@ void SettingsView::updateTranslations()
     d->novelNavigatorSceneDescriptionLines5->setText("5");
 
     d->shortcutsTitle->setText(tr("Shortcuts"));
+    //
+    d->shortcutsForSimpleTextTitle->setText(tr("Simple text editor"));
+    {
+        auto model = d->shortcutsForSimpleTextModel->headerModel();
+        model->setData(model->index(0, 0), tr("Block name"), Qt::DisplayRole);
+        model->setData(model->index(0, 1), tr("Shortcut"), Qt::DisplayRole);
+        model->setData(model->index(0, 2), tr("If you press in paragraphs end"), Qt::DisplayRole);
+        model->setData(model->index(0, 3), tr("If you press in empty paragraph"), Qt::DisplayRole);
+    }
+    buildSimpleTextParagraphTypesModel(d->shortcutsForSimpleText, d->simpleTextParagraphTypesModel);
+    d->simpleTextParagraphAddTypeDelegate->setLabel(tr("Add paragraph"));
+    d->simpleTextParagraphChangeTypeDelegate->setLabel(tr("Change to"));
+    //
     d->shortcutsForScreenplayTitle->setText(tr("Screenplay editor"));
     {
         auto model = d->shortcutsForScreenplayModel->headerModel();
@@ -3791,6 +4246,54 @@ void SettingsView::updateTranslations()
     buildScreenplayParagraphTypesModel(d->shortcutsForScreenplay, d->screenplayParagraphTypesModel);
     d->screenplayParagraphAddTypeDelegate->setLabel(tr("Add paragraph"));
     d->screenplayParagraphChangeTypeDelegate->setLabel(tr("Change to"));
+    //
+    d->shortcutsForComicBookTitle->setText(tr("ComicBook editor"));
+    {
+        auto model = d->shortcutsForComicBookModel->headerModel();
+        model->setData(model->index(0, 0), tr("Block name"), Qt::DisplayRole);
+        model->setData(model->index(0, 1), tr("Shortcut"), Qt::DisplayRole);
+        model->setData(model->index(0, 2), tr("If you press in paragraphs end"), Qt::DisplayRole);
+        model->setData(model->index(0, 3), tr("If you press in empty paragraph"), Qt::DisplayRole);
+    }
+    buildComicBookParagraphTypesModel(d->shortcutsForComicBook, d->comicBookParagraphTypesModel);
+    d->comicBookParagraphAddTypeDelegate->setLabel(tr("Add paragraph"));
+    d->comicBookParagraphChangeTypeDelegate->setLabel(tr("Change to"));
+    //
+    d->shortcutsForAudioplayTitle->setText(tr("Audioplay editor"));
+    {
+        auto model = d->shortcutsForAudioplayModel->headerModel();
+        model->setData(model->index(0, 0), tr("Block name"), Qt::DisplayRole);
+        model->setData(model->index(0, 1), tr("Shortcut"), Qt::DisplayRole);
+        model->setData(model->index(0, 2), tr("If you press in paragraphs end"), Qt::DisplayRole);
+        model->setData(model->index(0, 3), tr("If you press in empty paragraph"), Qt::DisplayRole);
+    }
+    buildAudioplayParagraphTypesModel(d->shortcutsForAudioplay, d->audioplayParagraphTypesModel);
+    d->audioplayParagraphAddTypeDelegate->setLabel(tr("Add paragraph"));
+    d->audioplayParagraphChangeTypeDelegate->setLabel(tr("Change to"));
+    //
+    d->shortcutsForStageplayTitle->setText(tr("Stageplay editor"));
+    {
+        auto model = d->shortcutsForStageplayModel->headerModel();
+        model->setData(model->index(0, 0), tr("Block name"), Qt::DisplayRole);
+        model->setData(model->index(0, 1), tr("Shortcut"), Qt::DisplayRole);
+        model->setData(model->index(0, 2), tr("If you press in paragraphs end"), Qt::DisplayRole);
+        model->setData(model->index(0, 3), tr("If you press in empty paragraph"), Qt::DisplayRole);
+    }
+    buildStageplayParagraphTypesModel(d->shortcutsForStageplay, d->stageplayParagraphTypesModel);
+    d->stageplayParagraphAddTypeDelegate->setLabel(tr("Add paragraph"));
+    d->stageplayParagraphChangeTypeDelegate->setLabel(tr("Change to"));
+    //
+    d->shortcutsForNovelTitle->setText(tr("Novel editor"));
+    {
+        auto model = d->shortcutsForNovelModel->headerModel();
+        model->setData(model->index(0, 0), tr("Block name"), Qt::DisplayRole);
+        model->setData(model->index(0, 1), tr("Shortcut"), Qt::DisplayRole);
+        model->setData(model->index(0, 2), tr("If you press in paragraphs end"), Qt::DisplayRole);
+        model->setData(model->index(0, 3), tr("If you press in empty paragraph"), Qt::DisplayRole);
+    }
+    buildNovelParagraphTypesModel(d->shortcutsForNovel, d->novelParagraphTypesModel);
+    d->novelParagraphAddTypeDelegate->setLabel(tr("Add paragraph"));
+    d->novelParagraphChangeTypeDelegate->setLabel(tr("Change to"));
 }
 
 SettingsView::~SettingsView() = default;
@@ -3854,7 +4357,12 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->novelEditorTitle,
              d->novelNavigatorTitle,
              d->shortcutsTitle,
+             d->shortcutsForSimpleTextTitle,
              d->shortcutsForScreenplayTitle,
+             d->shortcutsForComicBookTitle,
+             d->shortcutsForAudioplayTitle,
+             d->shortcutsForStageplayTitle,
+             d->shortcutsForNovelTitle,
          }) {
         cardTitle->setBackgroundColor(DesignSystem::color().background());
         cardTitle->setTextColor(titleColor);
@@ -4175,7 +4683,12 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         static_cast<int>(Ui::DesignSystem::compactLayout().px24()));
 
     for (auto table : {
+             d->shortcutsForSimpleText,
              d->shortcutsForScreenplay,
+             d->shortcutsForComicBook,
+             d->shortcutsForAudioplay,
+             d->shortcutsForStageplay,
+             d->shortcutsForNovel,
          }) {
         table->setBackgroundColor(Ui::DesignSystem::color().background());
         table->setTextColor(Ui::DesignSystem::color().onBackground());

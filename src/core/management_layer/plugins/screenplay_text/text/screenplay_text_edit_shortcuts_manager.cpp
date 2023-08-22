@@ -133,7 +133,7 @@ void ScreenplayTextEditShortcutsManager::reconfigure()
 
 void ScreenplayTextEditShortcutsManager::setEnabled(bool _enabled)
 {
-    for (auto shortcut : d->paragraphTypeToShortcut) {
+    for (auto shortcut : std::as_const(d->paragraphTypeToShortcut)) {
         shortcut->setEnabled(_enabled);
     }
 }

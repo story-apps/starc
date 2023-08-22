@@ -158,7 +158,12 @@ public:
     //
     // Задание параметров горячих клавиш
     //
+    void setShortcutsForSimpleTextModel(HierarchicalModel* _model);
     void setShortcutsForScreenplayModel(HierarchicalModel* _model);
+    void setShortcutsForComicBookModel(HierarchicalModel* _model);
+    void setShortcutsForAudioplayModel(HierarchicalModel* _model);
+    void setShortcutsForStageplayModel(HierarchicalModel* _model);
+    void setShortcutsForNovelModel(HierarchicalModel* _model);
 
 signals:
     /**
@@ -337,10 +342,30 @@ signals:
     //
     // Параметры горячих клавиш
     //
+    void shortcutsForSimpleTextEditorChanged(const QString& _blockType, const QString& _shortcut,
+                                             const QString& _jumpByTab, const QString& _jumpByEnter,
+                                             const QString& _changeByTab,
+                                             const QString& _changeByEnter);
     void shortcutsForScreenplayEditorChanged(const QString& _blockType, const QString& _shortcut,
                                              const QString& _jumpByTab, const QString& _jumpByEnter,
                                              const QString& _changeByTab,
                                              const QString& _changeByEnter);
+    void shortcutsForComicBookEditorChanged(const QString& _blockType, const QString& _shortcut,
+                                            const QString& _jumpByTab, const QString& _jumpByEnter,
+                                            const QString& _changeByTab,
+                                            const QString& _changeByEnter);
+    void shortcutsForAudioplayEditorChanged(const QString& _blockType, const QString& _shortcut,
+                                            const QString& _jumpByTab, const QString& _jumpByEnter,
+                                            const QString& _changeByTab,
+                                            const QString& _changeByEnter);
+    void shortcutsForStageplayEditorChanged(const QString& _blockType, const QString& _shortcut,
+                                            const QString& _jumpByTab, const QString& _jumpByEnter,
+                                            const QString& _changeByTab,
+                                            const QString& _changeByEnter);
+    void shortcutsForNovelEditorChanged(const QString& _blockType, const QString& _shortcut,
+                                        const QString& _jumpByTab, const QString& _jumpByEnter,
+                                        const QString& _changeByTab,
+                                        const QString& _changeByEnter);
 
 protected:
     /**

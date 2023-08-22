@@ -72,6 +72,12 @@ public:
     void loadStageplaySettings();
     void loadNovelSettings();
     void loadShortcutsSettings();
+    void loadShortcutsForSimpleTextSettings();
+    void loadShortcutsForScreenplaySettings();
+    void loadShortcutsForComicBookSettings();
+    void loadShortcutsForAudioplaySettings();
+    void loadShortcutsForStageplaySettings();
+    void loadShortcutsForNovelSettings();
 
 
     Ui::SettingsToolBar* toolBar = nullptr;
@@ -363,10 +369,95 @@ void SettingsManager::Implementation::loadNovelSettings()
     //
     view->setNovelNavigatorShowSceneText(
         settingsValue(DataStorageLayer::kComponentsNovelNavigatorShowSceneTextKey).toBool(),
-        settingsValue(DataStorageLayer::kComponentsNovelNavigatorSceneTextLinesKey).toInt());
+                settingsValue(DataStorageLayer::kComponentsNovelNavigatorSceneTextLinesKey).toInt());
 }
 
 void SettingsManager::Implementation::loadShortcutsSettings()
+{
+    loadShortcutsForSimpleTextSettings();
+    loadShortcutsForScreenplaySettings();
+    loadShortcutsForComicBookSettings();
+    loadShortcutsForAudioplaySettings();
+    loadShortcutsForStageplaySettings();
+    loadShortcutsForNovelSettings();
+}
+
+void SettingsManager::Implementation::loadShortcutsForSimpleTextSettings()
+{
+    using namespace BusinessLayer;
+
+    //
+    // Сформировать строку таблицы переходов между блоками для заданного типа
+    //
+    auto blocksJumpsModelRow = [](TextParagraphType _type) {
+        const auto shortcut = ShortcutsHelper::simpleTextShortcut(_type);
+        const auto jumpForTab = ShortcutsHelper::simpleTextJumpByTab(_type);
+        const auto jumpForEnter = ShortcutsHelper::simpleTextJumpByEnter(_type);
+        const auto changeForTab = ShortcutsHelper::simpleTextChangeByTab(_type);
+        const auto changeForEnter = ShortcutsHelper::simpleTextChangeByEnter(_type);
+
+        QList<QStandardItem*> result;
+        result << new QStandardItem(toDisplayString(_type)) << new QStandardItem(shortcut)
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(jumpForTab)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(jumpForEnter)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(changeForTab)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(changeForEnter)));
+        result.first()->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        return result;
+    };
+    //
+    // ... таблика переходов между разными блоками
+    //
+    const int rows = 0;
+    const int columns = 6;
+    QStandardItemModel* blocksJumpsModel = new QStandardItemModel(rows, columns, view);
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::ChapterHeading1));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::ChapterHeading2));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::ChapterHeading3));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::ChapterHeading4));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::ChapterHeading5));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::ChapterHeading6));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Text));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::InlineNote));
+    //
+    // ... модель переходов между блоками, её заголовок и делегат
+    //
+    QStandardItemModel* blockJumpsHeaderModel = new QStandardItemModel(view);
+    {
+        auto columnAfterText = new QStandardItem();
+        {
+            auto tab = new QStandardItem("Tab");
+            tab->setData(u8"\U000F0312", Qt::DecorationRole);
+            columnAfterText->appendColumn({ tab });
+
+            auto enter = new QStandardItem("Enter");
+            enter->setData(u8"\U000F0311", Qt::DecorationRole);
+            columnAfterText->appendColumn({ enter });
+        }
+        auto columnEmptyText = new QStandardItem();
+        {
+            auto tab = new QStandardItem("Tab");
+            tab->setData(u8"\U000F0312", Qt::DecorationRole);
+            columnEmptyText->appendColumn({ tab });
+
+            auto enter = new QStandardItem("Enter");
+            enter->setData(u8"\U000F0311", Qt::DecorationRole);
+            columnEmptyText->appendColumn({ enter });
+        }
+
+        blockJumpsHeaderModel->setItem(0, 0, new QStandardItem());
+        blockJumpsHeaderModel->setItem(0, 1, new QStandardItem());
+        blockJumpsHeaderModel->setItem(0, 2, columnAfterText);
+        blockJumpsHeaderModel->setItem(0, 3, columnEmptyText);
+    }
+
+    auto model = new HierarchicalModel(view);
+    model->setSourceModel(blocksJumpsModel);
+    model->setHeaderModel(blockJumpsHeaderModel);
+    view->setShortcutsForSimpleTextModel(model);
+}
+
+void SettingsManager::Implementation::loadShortcutsForScreenplaySettings()
 {
     using namespace BusinessLayer;
 
@@ -445,6 +536,303 @@ void SettingsManager::Implementation::loadShortcutsSettings()
     model->setSourceModel(blocksJumpsModel);
     model->setHeaderModel(blockJumpsHeaderModel);
     view->setShortcutsForScreenplayModel(model);
+}
+
+void SettingsManager::Implementation::loadShortcutsForComicBookSettings()
+{
+    using namespace BusinessLayer;
+
+    //
+    // Сформировать строку таблицы переходов между блоками для заданного типа
+    //
+    auto blocksJumpsModelRow = [](TextParagraphType _type) {
+        const auto shortcut = ShortcutsHelper::comicBookShortcut(_type);
+        const auto jumpForTab = ShortcutsHelper::comicBookJumpByTab(_type);
+        const auto jumpForEnter = ShortcutsHelper::comicBookJumpByEnter(_type);
+        const auto changeForTab = ShortcutsHelper::comicBookChangeByTab(_type);
+        const auto changeForEnter = ShortcutsHelper::comicBookChangeByEnter(_type);
+
+        QList<QStandardItem*> result;
+        result << new QStandardItem(toDisplayString(_type)) << new QStandardItem(shortcut)
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(jumpForTab)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(jumpForEnter)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(changeForTab)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(changeForEnter)));
+        result.first()->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        return result;
+    };
+    //
+    // ... таблика переходов между разными блоками
+    //
+    const int rows = 0;
+    const int columns = 6;
+    QStandardItemModel* blocksJumpsModel = new QStandardItemModel(rows, columns, view);
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::PageHeading));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::PanelHeading));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Description));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Character));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Dialogue));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::InlineNote));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::UnformattedText));
+    //
+    // ... модель переходов между блоками, её заголовок и делегат
+    //
+    QStandardItemModel* blockJumpsHeaderModel = new QStandardItemModel(view);
+    {
+        auto columnAfterText = new QStandardItem();
+        {
+            auto tab = new QStandardItem("Tab");
+            tab->setData(u8"\U000F0312", Qt::DecorationRole);
+            columnAfterText->appendColumn({ tab });
+
+            auto enter = new QStandardItem("Enter");
+            enter->setData(u8"\U000F0311", Qt::DecorationRole);
+            columnAfterText->appendColumn({ enter });
+        }
+        auto columnEmptyText = new QStandardItem();
+        {
+            auto tab = new QStandardItem("Tab");
+            tab->setData(u8"\U000F0312", Qt::DecorationRole);
+            columnEmptyText->appendColumn({ tab });
+
+            auto enter = new QStandardItem("Enter");
+            enter->setData(u8"\U000F0311", Qt::DecorationRole);
+            columnEmptyText->appendColumn({ enter });
+        }
+
+        blockJumpsHeaderModel->setItem(0, 0, new QStandardItem());
+        blockJumpsHeaderModel->setItem(0, 1, new QStandardItem());
+        blockJumpsHeaderModel->setItem(0, 2, columnAfterText);
+        blockJumpsHeaderModel->setItem(0, 3, columnEmptyText);
+    }
+
+    auto model = new HierarchicalModel(view);
+    model->setSourceModel(blocksJumpsModel);
+    model->setHeaderModel(blockJumpsHeaderModel);
+    view->setShortcutsForComicBookModel(model);
+}
+
+void SettingsManager::Implementation::loadShortcutsForAudioplaySettings()
+{
+    using namespace BusinessLayer;
+
+    //
+    // Сформировать строку таблицы переходов между блоками для заданного типа
+    //
+    auto blocksJumpsModelRow = [](TextParagraphType _type) {
+        const auto shortcut = ShortcutsHelper::audioplayShortcut(_type);
+        const auto jumpForTab = ShortcutsHelper::audioplayJumpByTab(_type);
+        const auto jumpForEnter = ShortcutsHelper::audioplayJumpByEnter(_type);
+        const auto changeForTab = ShortcutsHelper::audioplayChangeByTab(_type);
+        const auto changeForEnter = ShortcutsHelper::audioplayChangeByEnter(_type);
+
+        QList<QStandardItem*> result;
+        result << new QStandardItem(toDisplayString(_type)) << new QStandardItem(shortcut)
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(jumpForTab)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(jumpForEnter)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(changeForTab)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(changeForEnter)));
+        result.first()->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        return result;
+    };
+    //
+    // ... таблика переходов между разными блоками
+    //
+    const int rows = 0;
+    const int columns = 6;
+    QStandardItemModel* blocksJumpsModel = new QStandardItemModel(rows, columns, view);
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::SceneHeading));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Character));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Dialogue));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Sound));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Music));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Cue));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::InlineNote));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::UnformattedText));
+    //
+    // ... модель переходов между блоками, её заголовок и делегат
+    //
+    QStandardItemModel* blockJumpsHeaderModel = new QStandardItemModel(view);
+    {
+        auto columnAfterText = new QStandardItem();
+        {
+            auto tab = new QStandardItem("Tab");
+            tab->setData(u8"\U000F0312", Qt::DecorationRole);
+            columnAfterText->appendColumn({ tab });
+
+            auto enter = new QStandardItem("Enter");
+            enter->setData(u8"\U000F0311", Qt::DecorationRole);
+            columnAfterText->appendColumn({ enter });
+        }
+        auto columnEmptyText = new QStandardItem();
+        {
+            auto tab = new QStandardItem("Tab");
+            tab->setData(u8"\U000F0312", Qt::DecorationRole);
+            columnEmptyText->appendColumn({ tab });
+
+            auto enter = new QStandardItem("Enter");
+            enter->setData(u8"\U000F0311", Qt::DecorationRole);
+            columnEmptyText->appendColumn({ enter });
+        }
+
+        blockJumpsHeaderModel->setItem(0, 0, new QStandardItem());
+        blockJumpsHeaderModel->setItem(0, 1, new QStandardItem());
+        blockJumpsHeaderModel->setItem(0, 2, columnAfterText);
+        blockJumpsHeaderModel->setItem(0, 3, columnEmptyText);
+    }
+
+    auto model = new HierarchicalModel(view);
+    model->setSourceModel(blocksJumpsModel);
+    model->setHeaderModel(blockJumpsHeaderModel);
+    view->setShortcutsForAudioplayModel(model);
+}
+
+void SettingsManager::Implementation::loadShortcutsForStageplaySettings()
+{
+    using namespace BusinessLayer;
+
+    //
+    // Сформировать строку таблицы переходов между блоками для заданного типа
+    //
+    auto blocksJumpsModelRow = [](TextParagraphType _type) {
+        const auto shortcut = ShortcutsHelper::stageplayShortcut(_type);
+        const auto jumpForTab = ShortcutsHelper::stageplayJumpByTab(_type);
+        const auto jumpForEnter = ShortcutsHelper::stageplayJumpByEnter(_type);
+        const auto changeForTab = ShortcutsHelper::stageplayChangeByTab(_type);
+        const auto changeForEnter = ShortcutsHelper::stageplayChangeByEnter(_type);
+
+        QList<QStandardItem*> result;
+        result << new QStandardItem(toDisplayString(_type)) << new QStandardItem(shortcut)
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(jumpForTab)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(jumpForEnter)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(changeForTab)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(changeForEnter)));
+        result.first()->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        return result;
+    };
+    //
+    // ... таблика переходов между разными блоками
+    //
+    const int rows = 0;
+    const int columns = 6;
+    QStandardItemModel* blocksJumpsModel = new QStandardItemModel(rows, columns, view);
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::SceneHeading));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Character));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Parenthetical));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Dialogue));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Action));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::InlineNote));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::UnformattedText));
+    //
+    // ... модель переходов между блоками, её заголовок и делегат
+    //
+    QStandardItemModel* blockJumpsHeaderModel = new QStandardItemModel(view);
+    {
+        auto columnAfterText = new QStandardItem();
+        {
+            auto tab = new QStandardItem("Tab");
+            tab->setData(u8"\U000F0312", Qt::DecorationRole);
+            columnAfterText->appendColumn({ tab });
+
+            auto enter = new QStandardItem("Enter");
+            enter->setData(u8"\U000F0311", Qt::DecorationRole);
+            columnAfterText->appendColumn({ enter });
+        }
+        auto columnEmptyText = new QStandardItem();
+        {
+            auto tab = new QStandardItem("Tab");
+            tab->setData(u8"\U000F0312", Qt::DecorationRole);
+            columnEmptyText->appendColumn({ tab });
+
+            auto enter = new QStandardItem("Enter");
+            enter->setData(u8"\U000F0311", Qt::DecorationRole);
+            columnEmptyText->appendColumn({ enter });
+        }
+
+        blockJumpsHeaderModel->setItem(0, 0, new QStandardItem());
+        blockJumpsHeaderModel->setItem(0, 1, new QStandardItem());
+        blockJumpsHeaderModel->setItem(0, 2, columnAfterText);
+        blockJumpsHeaderModel->setItem(0, 3, columnEmptyText);
+    }
+
+    auto model = new HierarchicalModel(view);
+    model->setSourceModel(blocksJumpsModel);
+    model->setHeaderModel(blockJumpsHeaderModel);
+    view->setShortcutsForStageplayModel(model);
+}
+
+void SettingsManager::Implementation::loadShortcutsForNovelSettings()
+{
+    using namespace BusinessLayer;
+
+    //
+    // Сформировать строку таблицы переходов между блоками для заданного типа
+    //
+    auto blocksJumpsModelRow = [](TextParagraphType _type) {
+        const auto shortcut = ShortcutsHelper::novelShortcut(_type);
+        const auto jumpForTab = ShortcutsHelper::novelJumpByTab(_type);
+        const auto jumpForEnter = ShortcutsHelper::novelJumpByEnter(_type);
+        const auto changeForTab = ShortcutsHelper::novelChangeByTab(_type);
+        const auto changeForEnter = ShortcutsHelper::novelChangeByEnter(_type);
+
+        QList<QStandardItem*> result;
+        result << new QStandardItem(toDisplayString(_type)) << new QStandardItem(shortcut)
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(jumpForTab)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(jumpForEnter)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(changeForTab)))
+               << new QStandardItem(toDisplayString(textParagraphTypeFromString(changeForEnter)));
+        result.first()->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        return result;
+    };
+    //
+    // ... таблика переходов между разными блоками
+    //
+    const int rows = 0;
+    const int columns = 6;
+    QStandardItemModel* blocksJumpsModel = new QStandardItemModel(rows, columns, view);
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::SceneHeading));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::BeatHeading));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::Text));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::InlineNote));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::UnformattedText));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::ChapterHeading));
+    blocksJumpsModel->appendRow(blocksJumpsModelRow(TextParagraphType::PartHeading));
+    //
+    // ... модель переходов между блоками, её заголовок и делегат
+    //
+    QStandardItemModel* blockJumpsHeaderModel = new QStandardItemModel(view);
+    {
+        auto columnAfterText = new QStandardItem();
+        {
+            auto tab = new QStandardItem("Tab");
+            tab->setData(u8"\U000F0312", Qt::DecorationRole);
+            columnAfterText->appendColumn({ tab });
+
+            auto enter = new QStandardItem("Enter");
+            enter->setData(u8"\U000F0311", Qt::DecorationRole);
+            columnAfterText->appendColumn({ enter });
+        }
+        auto columnEmptyText = new QStandardItem();
+        {
+            auto tab = new QStandardItem("Tab");
+            tab->setData(u8"\U000F0312", Qt::DecorationRole);
+            columnEmptyText->appendColumn({ tab });
+
+            auto enter = new QStandardItem("Enter");
+            enter->setData(u8"\U000F0311", Qt::DecorationRole);
+            columnEmptyText->appendColumn({ enter });
+        }
+
+        blockJumpsHeaderModel->setItem(0, 0, new QStandardItem());
+        blockJumpsHeaderModel->setItem(0, 1, new QStandardItem());
+        blockJumpsHeaderModel->setItem(0, 2, columnAfterText);
+        blockJumpsHeaderModel->setItem(0, 3, columnEmptyText);
+    }
+
+    auto model = new HierarchicalModel(view);
+    model->setSourceModel(blocksJumpsModel);
+    model->setHeaderModel(blockJumpsHeaderModel);
+    view->setShortcutsForNovelModel(model);
 }
 
 
@@ -1121,8 +1509,18 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     //
     // Горячие клавиши
     //
+    connect(d->view, &Ui::SettingsView::shortcutsForSimpleTextEditorChanged, this,
+            &SettingsManager::setShortcutsForSimpleTextEdit);
     connect(d->view, &Ui::SettingsView::shortcutsForScreenplayEditorChanged, this,
             &SettingsManager::setShortcutsForScreenplayEdit);
+    connect(d->view, &Ui::SettingsView::shortcutsForComicBookEditorChanged, this,
+            &SettingsManager::setShortcutsForComicBookEdit);
+    connect(d->view, &Ui::SettingsView::shortcutsForAudioplayEditorChanged, this,
+            &SettingsManager::setShortcutsForAudioplayEdit);
+    connect(d->view, &Ui::SettingsView::shortcutsForStageplayEditorChanged, this,
+            &SettingsManager::setShortcutsForStageplayEdit);
+    connect(d->view, &Ui::SettingsView::shortcutsForNovelEditorChanged, this,
+            &SettingsManager::setShortcutsForNovelEdit);
 }
 
 SettingsManager::~SettingsManager() = default;
@@ -1958,6 +2356,21 @@ void SettingsManager::setNovelNavigatorShowSceneText(bool _show, int _lines)
     emit novelNavigatorChanged();
 }
 
+void SettingsManager::setShortcutsForSimpleTextEdit(const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab, const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
+{
+    const auto blockType = BusinessLayer::textParagraphTypeFromDisplayString(_blockType);
+    ShortcutsHelper::setSimpleTextShortcut(blockType, _shortcut);
+    ShortcutsHelper::setSimpleTextJumpByTab(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_jumpByTab));
+    ShortcutsHelper::setSimpleTextJumpByEnter(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_jumpByEnter));
+    ShortcutsHelper::setSimpleTextChangeByTab(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByTab));
+    ShortcutsHelper::setSimpleTextChangeByEnter(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByEnter));
+    emit simpleTextEditorChanged({ DataStorageLayer::kComponentsSimpleTextEditorShortcutsKey });
+}
+
 void SettingsManager::setShortcutsForScreenplayEdit(
     const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab,
     const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
@@ -1973,6 +2386,66 @@ void SettingsManager::setShortcutsForScreenplayEdit(
     ShortcutsHelper::setScreenplayChangeByEnter(
         blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByEnter));
     emit screenplayEditorChanged({ DataStorageLayer::kComponentsScreenplayEditorShortcutsKey });
+}
+
+void SettingsManager::setShortcutsForComicBookEdit(const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab, const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
+{
+    const auto blockType = BusinessLayer::textParagraphTypeFromDisplayString(_blockType);
+    ShortcutsHelper::setComicBookShortcut(blockType, _shortcut);
+    ShortcutsHelper::setComicBookJumpByTab(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_jumpByTab));
+    ShortcutsHelper::setComicBookJumpByEnter(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_jumpByEnter));
+    ShortcutsHelper::setComicBookChangeByTab(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByTab));
+    ShortcutsHelper::setComicBookChangeByEnter(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByEnter));
+    emit comicBookEditorChanged({ DataStorageLayer::kComponentsComicBookEditorShortcutsKey });
+}
+
+void SettingsManager::setShortcutsForAudioplayEdit(const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab, const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
+{
+    const auto blockType = BusinessLayer::textParagraphTypeFromDisplayString(_blockType);
+    ShortcutsHelper::setAudioplayShortcut(blockType, _shortcut);
+    ShortcutsHelper::setAudioplayJumpByTab(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_jumpByTab));
+    ShortcutsHelper::setAudioplayJumpByEnter(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_jumpByEnter));
+    ShortcutsHelper::setAudioplayChangeByTab(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByTab));
+    ShortcutsHelper::setAudioplayChangeByEnter(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByEnter));
+    emit audioplayEditorChanged({ DataStorageLayer::kComponentsAudioplayEditorShortcutsKey });
+}
+
+void SettingsManager::setShortcutsForStageplayEdit(const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab, const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
+{
+    const auto blockType = BusinessLayer::textParagraphTypeFromDisplayString(_blockType);
+    ShortcutsHelper::setStageplayShortcut(blockType, _shortcut);
+    ShortcutsHelper::setStageplayJumpByTab(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_jumpByTab));
+    ShortcutsHelper::setStageplayJumpByEnter(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_jumpByEnter));
+    ShortcutsHelper::setStageplayChangeByTab(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByTab));
+    ShortcutsHelper::setStageplayChangeByEnter(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByEnter));
+    emit stageplayEditorChanged({ DataStorageLayer::kComponentsStageplayEditorShortcutsKey });
+}
+
+void SettingsManager::setShortcutsForNovelEdit(const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab, const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
+{
+    const auto blockType = BusinessLayer::textParagraphTypeFromDisplayString(_blockType);
+    ShortcutsHelper::setNovelShortcut(blockType, _shortcut);
+    ShortcutsHelper::setNovelJumpByTab(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_jumpByTab));
+    ShortcutsHelper::setNovelJumpByEnter(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_jumpByEnter));
+    ShortcutsHelper::setNovelChangeByTab(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByTab));
+    ShortcutsHelper::setNovelChangeByEnter(
+        blockType, BusinessLayer::textParagraphTypeFromDisplayString(_changeByEnter));
+    emit novelEditorChanged({ DataStorageLayer::kComponentsNovelEditorShortcutsKey });
 }
 
 } // namespace ManagementLayer

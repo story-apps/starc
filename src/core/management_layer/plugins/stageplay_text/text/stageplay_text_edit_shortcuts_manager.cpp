@@ -127,7 +127,7 @@ void StageplayTextEditShortcutsManager::reconfigure()
 
 void StageplayTextEditShortcutsManager::setEnabled(bool _enabled)
 {
-    for (auto shortcut : d->paragraphTypeToShortcut) {
+    for (auto shortcut : std::as_const(d->paragraphTypeToShortcut)) {
         shortcut->setEnabled(_enabled);
     }
 }

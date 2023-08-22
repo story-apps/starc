@@ -16,6 +16,29 @@ class CORE_LIBRARY_EXPORT ShortcutsHelper
 {
 public:
     //
+    // Простой текст
+    //
+    static QString simpleTextShortcut(BusinessLayer::TextParagraphType _type);
+    static void setSimpleTextShortcut(BusinessLayer::TextParagraphType _type,
+                                      const QString& _shortcut);
+    //
+    static QString simpleTextJumpByTab(BusinessLayer::TextParagraphType _type);
+    static void setSimpleTextJumpByTab(BusinessLayer::TextParagraphType _fromType,
+                                       BusinessLayer::TextParagraphType _toType);
+    //
+    static QString simpleTextJumpByEnter(BusinessLayer::TextParagraphType _type);
+    static void setSimpleTextJumpByEnter(BusinessLayer::TextParagraphType _fromType,
+                                         BusinessLayer::TextParagraphType _toType);
+    //
+    static QString simpleTextChangeByTab(BusinessLayer::TextParagraphType _type);
+    static void setSimpleTextChangeByTab(BusinessLayer::TextParagraphType _fromType,
+                                         BusinessLayer::TextParagraphType _toType);
+    //
+    static QString simpleTextChangeByEnter(BusinessLayer::TextParagraphType _type);
+    static void setSimpleTextChangeByEnter(BusinessLayer::TextParagraphType _fromType,
+                                           BusinessLayer::TextParagraphType _toType);
+
+    //
     // Сценарий
     //
     // ... тритмент
@@ -63,15 +86,6 @@ public:
                                            BusinessLayer::TextParagraphType _toType);
 
     //
-    // Аудиопостановка
-    //
-    // ... текст
-    //
-    static QString audioplayShortcut(BusinessLayer::TextParagraphType _type);
-    static void setAudioplayShortcut(BusinessLayer::TextParagraphType _type,
-                                     const QString& _shortcut);
-
-    //
     // Комикс
     //
     // ... текст
@@ -79,6 +93,47 @@ public:
     static QString comicBookShortcut(BusinessLayer::TextParagraphType _type);
     static void setComicBookShortcut(BusinessLayer::TextParagraphType _type,
                                      const QString& _shortcut);
+    //
+    static QString comicBookJumpByTab(BusinessLayer::TextParagraphType _type);
+    static void setComicBookJumpByTab(BusinessLayer::TextParagraphType _fromType,
+                                      BusinessLayer::TextParagraphType _toType);
+    //
+    static QString comicBookJumpByEnter(BusinessLayer::TextParagraphType _type);
+    static void setComicBookJumpByEnter(BusinessLayer::TextParagraphType _fromType,
+                                        BusinessLayer::TextParagraphType _toType);
+    //
+    static QString comicBookChangeByTab(BusinessLayer::TextParagraphType _type);
+    static void setComicBookChangeByTab(BusinessLayer::TextParagraphType _fromType,
+                                        BusinessLayer::TextParagraphType _toType);
+    //
+    static QString comicBookChangeByEnter(BusinessLayer::TextParagraphType _type);
+    static void setComicBookChangeByEnter(BusinessLayer::TextParagraphType _fromType,
+                                          BusinessLayer::TextParagraphType _toType);
+
+    //
+    // Аудиопостановка
+    //
+    // ... текст
+    //
+    static QString audioplayShortcut(BusinessLayer::TextParagraphType _type);
+    static void setAudioplayShortcut(BusinessLayer::TextParagraphType _type,
+                                     const QString& _shortcut);
+    //
+    static QString audioplayJumpByTab(BusinessLayer::TextParagraphType _type);
+    static void setAudioplayJumpByTab(BusinessLayer::TextParagraphType _fromType,
+                                      BusinessLayer::TextParagraphType _toType);
+    //
+    static QString audioplayJumpByEnter(BusinessLayer::TextParagraphType _type);
+    static void setAudioplayJumpByEnter(BusinessLayer::TextParagraphType _fromType,
+                                        BusinessLayer::TextParagraphType _toType);
+    //
+    static QString audioplayChangeByTab(BusinessLayer::TextParagraphType _type);
+    static void setAudioplayChangeByTab(BusinessLayer::TextParagraphType _fromType,
+                                        BusinessLayer::TextParagraphType _toType);
+    //
+    static QString audioplayChangeByEnter(BusinessLayer::TextParagraphType _type);
+    static void setAudioplayChangeByEnter(BusinessLayer::TextParagraphType _fromType,
+                                          BusinessLayer::TextParagraphType _toType);
 
     //
     // Пьеса
@@ -88,6 +143,22 @@ public:
     static QString stageplayShortcut(BusinessLayer::TextParagraphType _type);
     static void setStageplayShortcut(BusinessLayer::TextParagraphType _type,
                                      const QString& _shortcut);
+    //
+    static QString stageplayJumpByTab(BusinessLayer::TextParagraphType _type);
+    static void setStageplayJumpByTab(BusinessLayer::TextParagraphType _fromType,
+                                      BusinessLayer::TextParagraphType _toType);
+    //
+    static QString stageplayJumpByEnter(BusinessLayer::TextParagraphType _type);
+    static void setStageplayJumpByEnter(BusinessLayer::TextParagraphType _fromType,
+                                        BusinessLayer::TextParagraphType _toType);
+    //
+    static QString stageplayChangeByTab(BusinessLayer::TextParagraphType _type);
+    static void setStageplayChangeByTab(BusinessLayer::TextParagraphType _fromType,
+                                        BusinessLayer::TextParagraphType _toType);
+    //
+    static QString stageplayChangeByEnter(BusinessLayer::TextParagraphType _type);
+    static void setStageplayChangeByEnter(BusinessLayer::TextParagraphType _fromType,
+                                          BusinessLayer::TextParagraphType _toType);
 
     //
     // Роман
