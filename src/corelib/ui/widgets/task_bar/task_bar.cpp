@@ -151,7 +151,7 @@ void TaskBar::setTaskProgress(const QString& _taskId, qreal _progress)
     auto& tasks = Implementation::instance->d->tasks;
     for (auto& task : tasks) {
         if (task.id == _taskId) {
-            task.progress = _progress;
+            task.progress = std::min(std::max(0.0, _progress), 100.0);
             break;
         }
     }
