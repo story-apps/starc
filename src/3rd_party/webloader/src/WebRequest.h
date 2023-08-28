@@ -26,7 +26,8 @@
 
 /**
  * @brief Класс запроса
- *        Хранит в себе все параметры необходимые для запроса и умеет формировать из них подготовленный QNetworkRequest
+ *        Хранит в себе все параметры необходимые для запроса и умеет формировать из них
+ *        подготовленный QNetworkRequest
  */
 class WebRequest
 {
@@ -58,6 +59,12 @@ public:
      * @brief Установка ссылки referer'а
      */
     void setUrlReferer(const QUrl& _url);
+
+    /**
+     * @brief Токен авторизации
+     */
+    QByteArray authToken() const;
+    void setAuthToken(const QByteArray& _token);
 
     /**
      * @brief Очистить список атрибутов
@@ -94,7 +101,7 @@ public:
     /**
      * @breif Получить данные запроса
      */
-    QByteArray  multiPartData();
+    QByteArray multiPartData();
 
 private:
     /**
@@ -129,6 +136,11 @@ private:
      * @brief Ссылка referer
      */
     QUrl m_urlReferer;
+
+    /**
+     * @brief Токен авторизации
+     */
+    QByteArray m_authToken;
 
     /**
      * @brief Список параметров-атрибутов запроса

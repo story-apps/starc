@@ -79,6 +79,14 @@ public:
     int loadingTimeout() const;
 
     /**
+     * @brief Токен авторизации
+     */
+    /** @{ */
+    QByteArray authToken() const;
+    void setAuthToken(const QByteArray& _token);
+    /** @} */
+
+    /**
      * @brief Очистить все старые атрибуты запроса
      */
     void clearRequestAttributes();

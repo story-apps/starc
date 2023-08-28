@@ -29,14 +29,13 @@ void NetworkRequest::stopAllConnections()
     NetworkQueue::instance()->stopAll();
 }
 
-NetworkRequest::NetworkRequest(QObject* _parent) :
-    QObject(_parent),
-    m_request(NetworkQueue::instance()->registerRequest()),
-    m_requestParameters(NetworkQueue::instance()->registerRequestParameters())
+NetworkRequest::NetworkRequest(QObject* _parent)
+    : QObject(_parent)
+    , m_request(NetworkQueue::instance()->registerRequest())
+    , m_requestParameters(NetworkQueue::instance()->registerRequestParameters())
 {
-    connect(this, &NetworkRequest::downloadComplete, [this] (const QByteArray& _downloadedData) {
-        m_downloadedData = _downloadedData;
-    });
+    connect(this, &NetworkRequest::downloadComplete,
+            [this](const QByteArray& _downloadedData) { m_downloadedData = _downloadedData; });
 }
 
 void NetworkRequest::setCookieJar(QNetworkCookieJar* _cookieJar)
@@ -83,6 +82,17 @@ int NetworkRequest::loadingTimeout() const
     return m_requestParameters.loadingTimeout();
 }
 
+QByteArray NetworkRequest::authToken() const
+{
+    return m_request.authToken();
+}
+
+void NetworkRequest::setAuthToken(const QByteArray& _token)
+{
+    stop();
+    m_request.setAuthToken(_token);
+}
+
 void NetworkRequest::clearRequestAttributes()
 {
     stop();
@@ -101,13 +111,13 @@ void NetworkRequest::addRequestAttributeFile(const QString& _name, const QString
     m_request.addAttributeFile(_name, _filePath);
 }
 
-void NetworkRequest::setRawRequestData(const QByteArray &_data)
+void NetworkRequest::setRawRequestData(const QByteArray& _data)
 {
     stop();
     m_request.setRawData(_data);
 }
 
-void NetworkRequest::setRawRequestData(const QByteArray &_data, const QString &_mime)
+void NetworkRequest::setRawRequestData(const QByteArray& _data, const QString& _mime)
 {
     stop();
     m_request.setRawData(_data, _mime);

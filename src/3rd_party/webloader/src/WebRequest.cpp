@@ -20,37 +20,37 @@
 
 #include <QDebug>
 #include <QFile>
-#include <QStringList>
-#include <QSslConfiguration>
 #include <QMimeDatabase>
+#include <QSslConfiguration>
+#include <QStringList>
 
 namespace {
-    /**
-     * @brief Заголовки запроса
-     */
-    /** @{ */
-    const QByteArray kUserAgentHeader = "User-Agent";
-    const QByteArray kRefererHeader = "Referer";
-    /** @} */
+/**
+ * @brief Заголовки запроса
+ */
+/** @{ */
+const QByteArray kUserAgentHeader = "User-Agent";
+const QByteArray kRefererHeader = "Referer";
+/** @} */
 
-    /**
-     * @brief UserAgent запроса по-умолчанию
-     */
-    const QByteArray kUserAgent = "Web Robot v.0.12.1";
+/**
+ * @brief UserAgent запроса по-умолчанию
+ */
+const QByteArray kUserAgent = "Web Robot v.0.12.1";
 
-    /**
-     * @brief Boundary для разделения атрибутов запроса, при использовании  multi-part form data
-     */
-    const QByteArray kBoundary = "---------------------------7d935033608e2";
+/**
+ * @brief Boundary для разделения атрибутов запроса, при использовании  multi-part form data
+ */
+const QByteArray kBoundary = "---------------------------7d935033608e2";
 
-    /**
-     * @brief ContentType запроса по-умолчанию
-     */
-    /** @{ */
-    const QString kContentTypeDefault = "application/x-www-form-urlencoded";
-    const QString kContentType = "multipart/form-data; boundary=" + kBoundary;
-    /** @} */
-}
+/**
+ * @brief ContentType запроса по-умолчанию
+ */
+/** @{ */
+const QString kContentTypeDefault = "application/x-www-form-urlencoded";
+const QString kContentType = "multipart/form-data; boundary=" + kBoundary;
+/** @} */
+} // namespace
 
 
 WebRequest::WebRequest()
@@ -80,9 +80,7 @@ QString WebRequest::urlQuery() const
 
 void WebRequest::setUrlToLoad(const QUrl& _url)
 {
-    if (urlToLoad() != _url){
-        m_urlToLoad = _url;
-    }
+    m_urlToLoad = _url;
 }
 
 QUrl WebRequest::urlReferer() const
@@ -92,9 +90,17 @@ QUrl WebRequest::urlReferer() const
 
 void WebRequest::setUrlReferer(const QUrl& _url)
 {
-    if (urlReferer() != _url){
-        m_urlReferer = _url;
-    }
+    m_urlReferer = _url;
+}
+
+QByteArray WebRequest::authToken() const
+{
+    return m_authToken;
+}
+
+void WebRequest::setAuthToken(const QByteArray& _token)
+{
+    m_authToken = _token;
 }
 
 void WebRequest::clearAttributes()
@@ -117,7 +123,7 @@ void WebRequest::addAttribute(const QString& _name, const QVariant& _value)
 
 void WebRequest::addAttributeFile(const QString& _name, const QString& _filePath)
 {
-    if(m_useRawData && !m_rawData.isEmpty()) {
+    if (m_useRawData && !m_rawData.isEmpty()) {
         qWarning() << "You are trying to mix methods. Raw data will be cleaned";
         m_rawData.clear();
     }
@@ -134,7 +140,7 @@ void WebRequest::setRawData(const QByteArray& _data)
 
 void WebRequest::setRawData(const QByteArray& _data, const QString& _mime)
 {
-    if(!m_useRawData && (!m_attributes.isEmpty() || !m_attributeFiles.isEmpty())) {
+    if (!m_useRawData && (!m_attributes.isEmpty() || !m_attributeFiles.isEmpty())) {
         qWarning() << "You are trying to mix methods. Attributes will be cleaned";
         m_attributes.clear();
         m_attributeFiles.clear();
@@ -153,7 +159,7 @@ QNetworkRequest WebRequest::networkRequest(bool _addContentHeaders)
     // Установка заголовков запроса
     //
     request.setRawHeader(kUserAgentHeader, kUserAgent);
-    if (!urlReferer().isEmpty()){
+    if (!urlReferer().isEmpty()) {
         request.setRawHeader(kRefererHeader, urlReferer().toString().toUtf8().data());
     }
     //
@@ -166,13 +172,17 @@ QNetworkRequest WebRequest::networkRequest(bool _addContentHeaders)
         }
         request.setHeader(QNetworkRequest::ContentLengthHeader, multiPartData().size());
     }
+    //
+    if (!m_authToken.isEmpty()) {
+        request.setRawHeader("Authorization", m_authToken);
+    }
 
     return request;
 }
 
 QByteArray WebRequest::multiPartData()
 {
-    if(m_useRawData) {
+    if (m_useRawData) {
         return m_rawData;
     }
 
