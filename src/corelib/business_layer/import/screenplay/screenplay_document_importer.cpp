@@ -93,16 +93,12 @@ TextParagraphType typeForTextCursor(const QTextCursor& _cursor, TextParagraphTyp
     // Собственно определение типа
     //
     {
-
         //
         // Самым первым пробуем определить время и место
-        // Блоки текста в верхнем регистре +
-        // 1. текст в верхнем регистре
-        // 2. содержит ключевые сокращения места действия или начинается с номера сцены
+        // 1. содержит ключевые сокращения места действия или начинается с номера сцены
         //
-        if (textIsUppercase
-            && (blockTextUppercase.contains(kPlaceContainsChecker)
-                || blockTextUppercase.contains(kStartFromNumberChecker))) {
+        if (blockTextUppercase.contains(kPlaceContainsChecker)
+            || blockTextUppercase.contains(kStartFromNumberChecker)) {
             blockType = TextParagraphType::SceneHeading;
         }
         //
