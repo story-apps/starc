@@ -98,8 +98,8 @@ QStandardItemModel* buildSpellCheckerLanguagesModel(QObject* _parent)
 /**
  * @brief Построить модель типов абзацев для модуля
  */
-QStringListModel* buildParagraphTypesModel(QObject* _parent,
-                                                     QStringListModel* _model, const QVector<BusinessLayer::TextParagraphType>& _types)
+QStringListModel* buildParagraphTypesModel(QObject* _parent, QStringListModel* _model,
+                                           const QVector<BusinessLayer::TextParagraphType>& _types)
 {
     using namespace BusinessLayer;
     QStringList paragraphTypes;
@@ -118,7 +118,8 @@ QStringListModel* buildSimpleTextParagraphTypesModel(QObject* _parent,
                                                      QStringListModel* _model = nullptr)
 {
     using namespace BusinessLayer;
-    return buildParagraphTypesModel(_parent, _model, {
+    return buildParagraphTypesModel(_parent, _model,
+                                    {
                                         TextParagraphType::ChapterHeading1,
                                         TextParagraphType::ChapterHeading2,
                                         TextParagraphType::ChapterHeading3,
@@ -133,7 +134,8 @@ QStringListModel* buildScreenplayParagraphTypesModel(QObject* _parent,
                                                      QStringListModel* _model = nullptr)
 {
     using namespace BusinessLayer;
-    return buildParagraphTypesModel(_parent, _model, {
+    return buildParagraphTypesModel(_parent, _model,
+                                    {
                                         TextParagraphType::SceneHeading,
                                         TextParagraphType::SceneCharacters,
                                         TextParagraphType::BeatHeading,
@@ -151,10 +153,11 @@ QStringListModel* buildScreenplayParagraphTypesModel(QObject* _parent,
                                     });
 }
 QStringListModel* buildComicBookParagraphTypesModel(QObject* _parent,
-                                                     QStringListModel* _model = nullptr)
+                                                    QStringListModel* _model = nullptr)
 {
     using namespace BusinessLayer;
-    return buildParagraphTypesModel(_parent, _model, {
+    return buildParagraphTypesModel(_parent, _model,
+                                    {
                                         TextParagraphType::PageHeading,
                                         TextParagraphType::PanelHeading,
                                         TextParagraphType::Description,
@@ -166,10 +169,11 @@ QStringListModel* buildComicBookParagraphTypesModel(QObject* _parent,
                                     });
 }
 QStringListModel* buildAudioplayParagraphTypesModel(QObject* _parent,
-                                                     QStringListModel* _model = nullptr)
+                                                    QStringListModel* _model = nullptr)
 {
     using namespace BusinessLayer;
-    return buildParagraphTypesModel(_parent, _model, {
+    return buildParagraphTypesModel(_parent, _model,
+                                    {
                                         TextParagraphType::SceneHeading,
                                         TextParagraphType::Character,
                                         TextParagraphType::Dialogue,
@@ -181,10 +185,11 @@ QStringListModel* buildAudioplayParagraphTypesModel(QObject* _parent,
                                     });
 }
 QStringListModel* buildStageplayParagraphTypesModel(QObject* _parent,
-                                                     QStringListModel* _model = nullptr)
+                                                    QStringListModel* _model = nullptr)
 {
     using namespace BusinessLayer;
-    return buildParagraphTypesModel(_parent, _model, {
+    return buildParagraphTypesModel(_parent, _model,
+                                    {
                                         TextParagraphType::SceneHeading,
                                         TextParagraphType::Character,
                                         TextParagraphType::Parenthetical,
@@ -195,10 +200,11 @@ QStringListModel* buildStageplayParagraphTypesModel(QObject* _parent,
                                     });
 }
 QStringListModel* buildNovelParagraphTypesModel(QObject* _parent,
-                                                     QStringListModel* _model = nullptr)
+                                                QStringListModel* _model = nullptr)
 {
     using namespace BusinessLayer;
-    return buildParagraphTypesModel(_parent, _model, {
+    return buildParagraphTypesModel(_parent, _model,
+                                    {
                                         TextParagraphType::SceneHeading,
                                         TextParagraphType::BeatHeading,
                                         TextParagraphType::Text,
@@ -3689,7 +3695,7 @@ void SettingsView::setShortcutsForScreenplayModel(HierarchicalModel* _model)
 
             emit shortcutsForScreenplayEditorChanged(blockType, shortcut, jumpByTab, jumpByEnter,
                                                      changeByTab, changeByEnter);
-    });
+        });
 }
 
 void SettingsView::setShortcutsForComicBookModel(HierarchicalModel* _model)
@@ -3706,10 +3712,8 @@ void SettingsView::setShortcutsForComicBookModel(HierarchicalModel* _model)
         1, new KeySequenceDelegate(d->shortcutsForComicBook));
     d->shortcutsForComicBook->setItemDelegateForColumn(2, d->comicBookParagraphAddTypeDelegate);
     d->shortcutsForComicBook->setItemDelegateForColumn(3, d->comicBookParagraphAddTypeDelegate);
-    d->shortcutsForComicBook->setItemDelegateForColumn(4,
-                                                        d->comicBookParagraphChangeTypeDelegate);
-    d->shortcutsForComicBook->setItemDelegateForColumn(5,
-                                                        d->comicBookParagraphChangeTypeDelegate);
+    d->shortcutsForComicBook->setItemDelegateForColumn(4, d->comicBookParagraphChangeTypeDelegate);
+    d->shortcutsForComicBook->setItemDelegateForColumn(5, d->comicBookParagraphChangeTypeDelegate);
     d->updateTablesGeometry();
 
     connect(
@@ -3735,8 +3739,8 @@ void SettingsView::setShortcutsForComicBookModel(HierarchicalModel* _model)
                       .toString();
 
             emit shortcutsForComicBookEditorChanged(blockType, shortcut, jumpByTab, jumpByEnter,
-                                                     changeByTab, changeByEnter);
-    });
+                                                    changeByTab, changeByEnter);
+        });
 }
 
 void SettingsView::setShortcutsForAudioplayModel(HierarchicalModel* _model)
@@ -3753,10 +3757,8 @@ void SettingsView::setShortcutsForAudioplayModel(HierarchicalModel* _model)
         1, new KeySequenceDelegate(d->shortcutsForAudioplay));
     d->shortcutsForAudioplay->setItemDelegateForColumn(2, d->audioplayParagraphAddTypeDelegate);
     d->shortcutsForAudioplay->setItemDelegateForColumn(3, d->audioplayParagraphAddTypeDelegate);
-    d->shortcutsForAudioplay->setItemDelegateForColumn(4,
-                                                        d->audioplayParagraphChangeTypeDelegate);
-    d->shortcutsForAudioplay->setItemDelegateForColumn(5,
-                                                        d->audioplayParagraphChangeTypeDelegate);
+    d->shortcutsForAudioplay->setItemDelegateForColumn(4, d->audioplayParagraphChangeTypeDelegate);
+    d->shortcutsForAudioplay->setItemDelegateForColumn(5, d->audioplayParagraphChangeTypeDelegate);
     d->updateTablesGeometry();
 
     connect(
@@ -3782,8 +3784,8 @@ void SettingsView::setShortcutsForAudioplayModel(HierarchicalModel* _model)
                       .toString();
 
             emit shortcutsForAudioplayEditorChanged(blockType, shortcut, jumpByTab, jumpByEnter,
-                                                     changeByTab, changeByEnter);
-    });
+                                                    changeByTab, changeByEnter);
+        });
 }
 
 void SettingsView::setShortcutsForStageplayModel(HierarchicalModel* _model)
@@ -3800,10 +3802,8 @@ void SettingsView::setShortcutsForStageplayModel(HierarchicalModel* _model)
         1, new KeySequenceDelegate(d->shortcutsForStageplay));
     d->shortcutsForStageplay->setItemDelegateForColumn(2, d->stageplayParagraphAddTypeDelegate);
     d->shortcutsForStageplay->setItemDelegateForColumn(3, d->stageplayParagraphAddTypeDelegate);
-    d->shortcutsForStageplay->setItemDelegateForColumn(4,
-                                                        d->stageplayParagraphChangeTypeDelegate);
-    d->shortcutsForStageplay->setItemDelegateForColumn(5,
-                                                        d->stageplayParagraphChangeTypeDelegate);
+    d->shortcutsForStageplay->setItemDelegateForColumn(4, d->stageplayParagraphChangeTypeDelegate);
+    d->shortcutsForStageplay->setItemDelegateForColumn(5, d->stageplayParagraphChangeTypeDelegate);
     d->updateTablesGeometry();
 
     connect(
@@ -3829,8 +3829,8 @@ void SettingsView::setShortcutsForStageplayModel(HierarchicalModel* _model)
                       .toString();
 
             emit shortcutsForStageplayEditorChanged(blockType, shortcut, jumpByTab, jumpByEnter,
-                                                     changeByTab, changeByEnter);
-    });
+                                                    changeByTab, changeByEnter);
+        });
 }
 
 void SettingsView::setShortcutsForNovelModel(HierarchicalModel* _model)
@@ -3843,14 +3843,12 @@ void SettingsView::setShortcutsForNovelModel(HierarchicalModel* _model)
     d->shortcutsForNovelModel = _model;
 
     d->shortcutsForNovel->setModel(d->shortcutsForNovelModel);
-    d->shortcutsForNovel->setItemDelegateForColumn(
-        1, new KeySequenceDelegate(d->shortcutsForNovel));
+    d->shortcutsForNovel->setItemDelegateForColumn(1,
+                                                   new KeySequenceDelegate(d->shortcutsForNovel));
     d->shortcutsForNovel->setItemDelegateForColumn(2, d->novelParagraphAddTypeDelegate);
     d->shortcutsForNovel->setItemDelegateForColumn(3, d->novelParagraphAddTypeDelegate);
-    d->shortcutsForNovel->setItemDelegateForColumn(4,
-                                                        d->novelParagraphChangeTypeDelegate);
-    d->shortcutsForNovel->setItemDelegateForColumn(5,
-                                                        d->novelParagraphChangeTypeDelegate);
+    d->shortcutsForNovel->setItemDelegateForColumn(4, d->novelParagraphChangeTypeDelegate);
+    d->shortcutsForNovel->setItemDelegateForColumn(5, d->novelParagraphChangeTypeDelegate);
     d->updateTablesGeometry();
 
     connect(
@@ -3876,8 +3874,8 @@ void SettingsView::setShortcutsForNovelModel(HierarchicalModel* _model)
                       .toString();
 
             emit shortcutsForNovelEditorChanged(blockType, shortcut, jumpByTab, jumpByEnter,
-                                                     changeByTab, changeByEnter);
-    });
+                                                changeByTab, changeByEnter);
+        });
 }
 
 void SettingsView::resizeEvent(QResizeEvent* _event)

@@ -369,7 +369,7 @@ void SettingsManager::Implementation::loadNovelSettings()
     //
     view->setNovelNavigatorShowSceneText(
         settingsValue(DataStorageLayer::kComponentsNovelNavigatorShowSceneTextKey).toBool(),
-                settingsValue(DataStorageLayer::kComponentsNovelNavigatorSceneTextLinesKey).toInt());
+        settingsValue(DataStorageLayer::kComponentsNovelNavigatorSceneTextLinesKey).toInt());
 }
 
 void SettingsManager::Implementation::loadShortcutsSettings()
@@ -2356,7 +2356,9 @@ void SettingsManager::setNovelNavigatorShowSceneText(bool _show, int _lines)
     emit novelNavigatorChanged();
 }
 
-void SettingsManager::setShortcutsForSimpleTextEdit(const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab, const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
+void SettingsManager::setShortcutsForSimpleTextEdit(
+    const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab,
+    const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
 {
     const auto blockType = BusinessLayer::textParagraphTypeFromDisplayString(_blockType);
     ShortcutsHelper::setSimpleTextShortcut(blockType, _shortcut);
@@ -2388,7 +2390,9 @@ void SettingsManager::setShortcutsForScreenplayEdit(
     emit screenplayEditorChanged({ DataStorageLayer::kComponentsScreenplayEditorShortcutsKey });
 }
 
-void SettingsManager::setShortcutsForComicBookEdit(const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab, const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
+void SettingsManager::setShortcutsForComicBookEdit(
+    const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab,
+    const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
 {
     const auto blockType = BusinessLayer::textParagraphTypeFromDisplayString(_blockType);
     ShortcutsHelper::setComicBookShortcut(blockType, _shortcut);
@@ -2403,7 +2407,9 @@ void SettingsManager::setShortcutsForComicBookEdit(const QString& _blockType, co
     emit comicBookEditorChanged({ DataStorageLayer::kComponentsComicBookEditorShortcutsKey });
 }
 
-void SettingsManager::setShortcutsForAudioplayEdit(const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab, const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
+void SettingsManager::setShortcutsForAudioplayEdit(
+    const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab,
+    const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
 {
     const auto blockType = BusinessLayer::textParagraphTypeFromDisplayString(_blockType);
     ShortcutsHelper::setAudioplayShortcut(blockType, _shortcut);
@@ -2418,7 +2424,9 @@ void SettingsManager::setShortcutsForAudioplayEdit(const QString& _blockType, co
     emit audioplayEditorChanged({ DataStorageLayer::kComponentsAudioplayEditorShortcutsKey });
 }
 
-void SettingsManager::setShortcutsForStageplayEdit(const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab, const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
+void SettingsManager::setShortcutsForStageplayEdit(
+    const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab,
+    const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
 {
     const auto blockType = BusinessLayer::textParagraphTypeFromDisplayString(_blockType);
     ShortcutsHelper::setStageplayShortcut(blockType, _shortcut);
@@ -2433,7 +2441,11 @@ void SettingsManager::setShortcutsForStageplayEdit(const QString& _blockType, co
     emit stageplayEditorChanged({ DataStorageLayer::kComponentsStageplayEditorShortcutsKey });
 }
 
-void SettingsManager::setShortcutsForNovelEdit(const QString& _blockType, const QString& _shortcut, const QString& _jumpByTab, const QString& _jumpByEnter, const QString& _changeByTab, const QString& _changeByEnter)
+void SettingsManager::setShortcutsForNovelEdit(const QString& _blockType, const QString& _shortcut,
+                                               const QString& _jumpByTab,
+                                               const QString& _jumpByEnter,
+                                               const QString& _changeByTab,
+                                               const QString& _changeByEnter)
 {
     const auto blockType = BusinessLayer::textParagraphTypeFromDisplayString(_blockType);
     ShortcutsHelper::setNovelShortcut(blockType, _shortcut);

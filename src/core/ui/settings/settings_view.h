@@ -364,8 +364,7 @@ signals:
                                             const QString& _changeByEnter);
     void shortcutsForNovelEditorChanged(const QString& _blockType, const QString& _shortcut,
                                         const QString& _jumpByTab, const QString& _jumpByEnter,
-                                        const QString& _changeByTab,
-                                        const QString& _changeByEnter);
+                                        const QString& _changeByTab, const QString& _changeByEnter);
 
 protected:
     /**
