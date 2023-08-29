@@ -3,8 +3,9 @@
 #include <business_layer/export/audioplay/audioplay_docx_exporter.h>
 #include <business_layer/export/audioplay/audioplay_export_options.h>
 #include <business_layer/export/audioplay/audioplay_pdf_exporter.h>
-#include <business_layer/export/character/character_export_options.h>
-#include <business_layer/export/character/character_pdf_exporter.h>
+#include <business_layer/export/characters/character_docx_exporter.h>
+#include <business_layer/export/characters/character_export_options.h>
+#include <business_layer/export/characters/character_pdf_exporter.h>
 #include <business_layer/export/comic_book/comic_book_docx_exporter.h>
 #include <business_layer/export/comic_book/comic_book_export_options.h>
 #include <business_layer/export/comic_book/comic_book_pdf_exporter.h>
@@ -1153,10 +1154,10 @@ void ExportManager::Implementation::exportCharacter(BusinessLayer::AbstractModel
                     exporter.reset(new BusinessLayer::CharacterPdfExporter);
                     break;
                 }
-                    //                case ExportFileFormat::Docx: {
-                    //                    exporter.reset(new BusinessLayer::CharacterDocxExporter);
-                    //                    break;
-                    //                }
+                case ExportFileFormat::Docx: {
+                    exporter.reset(new BusinessLayer::CharacterDocxExporter);
+                    break;
+                }
                 }
                 if (exporter.isNull()) {
                     return;

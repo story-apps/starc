@@ -1,6 +1,6 @@
 #include "character_export_dialog.h"
 
-#include <business_layer/export/character/character_export_options.h>
+#include <business_layer/export/characters/character_export_options.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -79,7 +79,7 @@ CharacterExportDialog::Implementation::Implementation(QWidget* _parent)
     fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     auto formatsModel = new QStringListModel({
         "PDF",
-        // "DOCX",
+        "DOCX",
     });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
@@ -130,6 +130,7 @@ CharacterExportDialog::CharacterExportDialog(QWidget* _parent)
     contentsLayout()->addLayout(d->buttonsLayout, row++, column);
 
     auto updateParametersVisibility = [this] {
+        auto isPhotoVisible = true;
         auto isWatermarkVisible = true;
         switch (d->fileFormat->currentIndex().row()) {
         //
@@ -147,10 +148,13 @@ CharacterExportDialog::CharacterExportDialog(QWidget* _parent)
         // DOCX
         //
         case 1: {
+            isPhotoVisible = false;
             isWatermarkVisible = false;
             break;
         }
         }
+        d->includeMainPhoto->setVisible(isPhotoVisible);
+        d->includeAdditionalPhotos->setVisible(isPhotoVisible);
         d->watermark->setVisible(isWatermarkVisible);
     };
     connect(d->fileFormat, &ComboBox::currentIndexChanged, this, updateParametersVisibility);
@@ -192,8 +196,11 @@ CharacterExportDialog::~CharacterExportDialog()
 {
     QSettings settings;
     settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
-    settings.setValue(kIncludeMainPhotoKey, d->includeMainPhoto->isChecked());
-    settings.setValue(kIncludeAdditionalPhototsKey, d->includeAdditionalPhotos->isChecked());
+    settings.setValue(kIncludeMainPhotoKey,
+                      d->includeMainPhoto->isVisible() && d->includeMainPhoto->isChecked());
+    settings.setValue(kIncludeAdditionalPhototsKey,
+                      d->includeAdditionalPhotos->isVisible()
+                          && d->includeAdditionalPhotos->isChecked());
     settings.setValue(kIncludeStoryInfoKey, d->includeStoryInfo->isChecked());
     settings.setValue(kIncludePersonalInfoKey, d->includePersonalInfo->isChecked());
     settings.setValue(kIncludePhysiqueInfoKey, d->includePhysiqueInfo->isChecked());

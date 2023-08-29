@@ -460,6 +460,16 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
             if (formatRangeSourceText.isRightToLeft()) {
                 documentXml.append("<w:rtl/>");
             }
+            if (range.format.hasProperty(QTextFormat::BackgroundBrush)) {
+                documentXml.append(QString("<w:shd w:fill=\"%1\" w:val=\"clear\"/>")
+                                       // код цвета без решётки
+                                       .arg(range.format.background().color().name().mid(1)));
+            }
+            if (range.format.hasProperty(QTextFormat::ForegroundBrush)) {
+                documentXml.append(QString("<w:color w:val=\"%1\"/>")
+                                       // код цвета без решётки
+                                       .arg(range.format.foreground().color().name().mid(1)));
+            }
 
             documentXml.append(QString("</w:rPr><w:t>%1</w:t></w:r>")
                                    .arg(TextHelper::toHtmlEscaped(formatRangeText)));
