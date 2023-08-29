@@ -3105,7 +3105,15 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     // Модели для документов, которые могут быть только в единственном экземпляре, достаём по
     // типу и применяем к ним помимо содержимого также и идентификатор с облака
     //
-    case Domain::DocumentObjectType::Structure:
+    case Domain::DocumentObjectType::Structure: {
+        //
+        // Сохраним состояние структуры на данный момент, чтобы не происходило перескока на другой
+        // документ (который был открыт при старте сессии) при её синхронизации
+        //
+        setSettingsValue(DataStorageLayer::projectStructureKey(d->projectPath),
+                         d->navigator->saveState());
+        Q_FALLTHROUGH();
+    }
     case Domain::DocumentObjectType::RecycleBin:
     case Domain::DocumentObjectType::Project:
     case Domain::DocumentObjectType::ScreenplayDictionaries:
@@ -3177,8 +3185,7 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         }
         //
         // ... в противном случае - создаём отдельную версию с документом содержащим конфликт и
-        // дропаем
-        //     офлайновые правки из базы
+        //     дропаем офлайновые правки из базы
         //
         else {
             //
