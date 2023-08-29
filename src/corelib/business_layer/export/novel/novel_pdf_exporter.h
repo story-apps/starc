@@ -16,7 +16,7 @@ protected:
     /**
      * @brief Дописать в параметры экспорта данные зависящие от модели
      */
-    void updateExportOptions(TextModel* _model, ExportOptions& _exportOptions) const override;
+    void updateExportOptions(AbstractModel* _model, ExportOptions& _exportOptions) const override;
 
     /**
      * @brief Нарисовать декорацию блока

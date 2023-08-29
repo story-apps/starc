@@ -21,7 +21,7 @@ ComicBookPdfExporter::ComicBookPdfExporter()
 {
 }
 
-void ComicBookPdfExporter::updateExportOptions(TextModel* _model,
+void ComicBookPdfExporter::updateExportOptions(AbstractModel* _model,
                                                ExportOptions& _exportOptions) const
 {
     const auto textModel = qobject_cast<ComicBookTextModel*>(_model);

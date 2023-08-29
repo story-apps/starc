@@ -83,6 +83,7 @@ SOURCES += \
     ui/application_view.cpp \
     ui/crash_report_dialog.cpp \
     ui/export/audioplay_export_dialog.cpp \
+    ui/export/character_export_dialog.cpp \
     ui/export/comic_book_export_dialog.cpp \
     ui/export/novel_export_dialog.cpp \
     ui/export/screenplay_export_dialog.cpp \
@@ -166,6 +167,7 @@ HEADERS += \
     ui/application_view.h \
     ui/crash_report_dialog.h \
     ui/export/audioplay_export_dialog.h \
+    ui/export/character_export_dialog.h \
     ui/export/comic_book_export_dialog.h \
     ui/export/novel_export_dialog.h \
     ui/export/screenplay_export_dialog.h \

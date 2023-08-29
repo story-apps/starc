@@ -288,7 +288,7 @@ void writeTitlePage(QXmlStreamWriter& _writer, TextDocument* _screenplayText,
 } // namespace
 
 
-void ScreenplayFdxExporter::exportTo(TextModel* _model, ExportOptions& _exportOptions) const
+void ScreenplayFdxExporter::exportTo(AbstractModel* _model, ExportOptions& _exportOptions) const
 {
     //
     // Открываем документ на запись

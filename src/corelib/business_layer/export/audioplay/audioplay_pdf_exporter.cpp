@@ -22,7 +22,7 @@ AudioplayPdfExporter::AudioplayPdfExporter()
 {
 }
 
-void AudioplayPdfExporter::updateExportOptions(TextModel* _model,
+void AudioplayPdfExporter::updateExportOptions(AbstractModel* _model,
                                                ExportOptions& _exportOptions) const
 {
     const auto textModel = qobject_cast<AudioplayTextModel*>(_model);

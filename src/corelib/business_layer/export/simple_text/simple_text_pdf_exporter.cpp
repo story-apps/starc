@@ -9,7 +9,7 @@ SimpleTextPdfExporter::SimpleTextPdfExporter()
 {
 }
 
-void SimpleTextPdfExporter::updateExportOptions(TextModel* _model,
+void SimpleTextPdfExporter::updateExportOptions(AbstractModel* _model,
                                                 ExportOptions& _exportOptions) const
 {
     Q_UNUSED(_model)

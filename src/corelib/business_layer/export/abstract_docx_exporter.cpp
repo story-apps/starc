@@ -1180,7 +1180,7 @@ AbstractDocxExporter::AbstractDocxExporter()
 
 AbstractDocxExporter::~AbstractDocxExporter() = default;
 
-void AbstractDocxExporter::exportTo(TextModel* _model, ExportOptions& _exportOptions) const
+void AbstractDocxExporter::exportTo(AbstractModel* _model, ExportOptions& _exportOptions) const
 {
     //
     // Открываем документ на запись

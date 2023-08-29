@@ -113,6 +113,8 @@ SOURCES += \
     business_layer/export/audioplay/audioplay_docx_exporter.cpp \
     business_layer/export/audioplay/audioplay_exporter.cpp \
     business_layer/export/audioplay/audioplay_pdf_exporter.cpp \
+    business_layer/export/character/character_exporter.cpp \
+    business_layer/export/character/character_pdf_exporter.cpp \
     business_layer/export/comic_book/comic_book_docx_exporter.cpp \
     business_layer/export/comic_book/comic_book_exporter.cpp \
     business_layer/export/comic_book/comic_book_pdf_exporter.cpp \
@@ -425,6 +427,9 @@ HEADERS += \
     business_layer/export/audioplay/audioplay_export_options.h \
     business_layer/export/audioplay/audioplay_exporter.h \
     business_layer/export/audioplay/audioplay_pdf_exporter.h \
+    business_layer/export/character/character_export_options.h \
+    business_layer/export/character/character_exporter.h \
+    business_layer/export/character/character_pdf_exporter.h \
     business_layer/export/comic_book/comic_book_docx_exporter.h \
     business_layer/export/comic_book/comic_book_export_options.h \
     business_layer/export/comic_book/comic_book_exporter.h \

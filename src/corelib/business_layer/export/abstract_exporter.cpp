@@ -16,9 +16,12 @@
 
 namespace BusinessLayer {
 
-TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
+TextDocument* AbstractExporter::prepareDocument(AbstractModel* _model,
                                                 const ExportOptions& _exportOptions) const
 {
+    auto textModel = qobject_cast<TextModel*>(_model);
+    Q_ASSERT(textModel);
+
     //
     // Настраиваем документ
     //
@@ -37,7 +40,7 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
     //
     // ... формируем текст сценария
     //
-    textDocument->setModel(_model, false);
+    textDocument->setModel(textModel, false);
     //
     // ... отсоединяем документ от модели, что изменения в документе не привели к изменениям модели
     //
@@ -71,7 +74,7 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
         // Собственно добавляем текст титульной страницы
         //
         auto titlePageText = new SimpleTextDocument;
-        titlePageText->setModel(_model->titlePageModel(), false);
+        titlePageText->setModel(textModel->titlePageModel(), false);
         //
         cursor.movePosition(TextCursor::PreviousBlock);
         auto block = titlePageText->begin();
@@ -158,7 +161,7 @@ TextDocument* AbstractExporter::prepareDocument(TextModel* _model,
         // Собственно добавляем текст синопсиса
         //
         auto synopsisText = new TextDocument;
-        synopsisText->setModel(_model->synopsisModel(), false);
+        synopsisText->setModel(textModel->synopsisModel(), false);
         //
         cursor.movePosition(TextCursor::PreviousBlock);
         auto block = synopsisText->begin();

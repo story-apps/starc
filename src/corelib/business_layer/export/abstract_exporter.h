@@ -8,7 +8,7 @@ namespace BusinessLayer {
 struct ExportOptions;
 class TextCursor;
 class TextDocument;
-class TextModel;
+class AbstractModel;
 class TextTemplate;
 
 /**
@@ -24,7 +24,7 @@ public:
     /**
      * @brief Экспорт сценария в файл
      */
-    virtual void exportTo(TextModel* _model, ExportOptions& _exportOptions) const = 0;
+    virtual void exportTo(AbstractModel* _model, ExportOptions& _exportOptions) const = 0;
 
 protected:
     /**
@@ -40,8 +40,12 @@ protected:
     /**
      * @brief Подготовить документ к экспорту в соответствии с заданными опциями
      * @note Владение документом передаётся клиенту
+     *       Внутри реализован базовый экспортер для текстовых моделей, если нужно реализовать
+     *       экспорт для модели другого типа, то метод нужно переопределить
+     * @todo Вынести реализацию этого метода в AbstractTextExporter
      */
-    TextDocument* prepareDocument(TextModel* _model, const ExportOptions& _exportOptions) const;
+    virtual TextDocument* prepareDocument(AbstractModel* _model,
+                                          const ExportOptions& _exportOptions) const;
 
     /**
      * @brief Обработать блок необходимым образом в наследнике

@@ -22,7 +22,7 @@ StageplayPdfExporter::StageplayPdfExporter()
 {
 }
 
-void StageplayPdfExporter::updateExportOptions(TextModel* _model,
+void StageplayPdfExporter::updateExportOptions(AbstractModel* _model,
                                                ExportOptions& _exportOptions) const
 {
     const auto textModel = qobject_cast<StageplayTextModel*>(_model);

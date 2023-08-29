@@ -23,13 +23,14 @@ public:
     /**
      * @brief Экспортировать сценарий
      */
-    void exportTo(TextModel* _model, ExportOptions& _exportOptions) const override;
+    void exportTo(AbstractModel* _model, ExportOptions& _exportOptions) const override;
 
 protected:
     /**
      * @brief Дописать в параметры экспорта данные зависящие от модели
      */
-    virtual void updateExportOptions(TextModel* _model, ExportOptions& _exportOptions) const = 0;
+    virtual void updateExportOptions(AbstractModel* _model,
+                                     ExportOptions& _exportOptions) const = 0;
 
     /**
      * @brief Нарисовать декорацию блока

@@ -24,7 +24,7 @@ ScreenplayPdfExporter::ScreenplayPdfExporter()
 {
 }
 
-void ScreenplayPdfExporter::updateExportOptions(TextModel* _model,
+void ScreenplayPdfExporter::updateExportOptions(AbstractModel* _model,
                                                 ExportOptions& _exportOptions) const
 {
     const auto textModel = qobject_cast<ScreenplayTextModel*>(_model);

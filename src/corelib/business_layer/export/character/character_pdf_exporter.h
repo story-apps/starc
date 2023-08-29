@@ -1,17 +1,17 @@
 #pragma once
 
-#include "audioplay_exporter.h"
+#include "character_exporter.h"
 
 #include <business_layer/export/abstract_pdf_exporter.h>
 
 
 namespace BusinessLayer {
 
-class CORE_LIBRARY_EXPORT AudioplayPdfExporter : public AudioplayExporter,
+class CORE_LIBRARY_EXPORT CharacterPdfExporter : public CharacterExporter,
                                                  public AbstractPdfExporter
 {
 public:
-    AudioplayPdfExporter();
+    CharacterPdfExporter();
 
 protected:
     /**

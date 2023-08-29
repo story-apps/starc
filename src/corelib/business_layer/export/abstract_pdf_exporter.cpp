@@ -402,7 +402,7 @@ AbstractPdfExporter::AbstractPdfExporter()
 
 AbstractPdfExporter::~AbstractPdfExporter() = default;
 
-void AbstractPdfExporter::exportTo(TextModel* _model, ExportOptions& _exportOptions) const
+void AbstractPdfExporter::exportTo(AbstractModel* _model, ExportOptions& _exportOptions) const
 {
     //
     // Настраиваем документ

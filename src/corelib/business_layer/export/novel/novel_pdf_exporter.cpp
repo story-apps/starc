@@ -9,7 +9,7 @@ NovelPdfExporter::NovelPdfExporter()
 {
 }
 
-void NovelPdfExporter::updateExportOptions(TextModel* _model, ExportOptions& _exportOptions) const
+void NovelPdfExporter::updateExportOptions(AbstractModel* _model, ExportOptions& _exportOptions) const
 {
     Q_UNUSED(_model)
     Q_UNUSED(_exportOptions)
