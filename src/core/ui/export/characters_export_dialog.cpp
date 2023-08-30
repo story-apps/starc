@@ -1,6 +1,6 @@
-#include "character_export_dialog.h"
+#include "characters_export_dialog.h"
 
-#include <business_layer/export/characters/character_export_options.h>
+#include <business_layer/export/characters/characters_export_options.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
@@ -20,22 +20,20 @@
 namespace Ui {
 
 namespace {
-const QString kGroupKey = "widgets/character-export-dialog/";
+const QString kGroupKey = "widgets/characters-export-dialog/";
 const QString kFormatKey = kGroupKey + "format";
 const QString kIncludeMainPhotoKey = kGroupKey + "include-main-photo";
-const QString kIncludeAdditionalPhototsKey = kGroupKey + "include-additional-photos";
-const QString kIncludeStoryInfoKey = kGroupKey + "include-story-info";
-const QString kIncludePersonalInfoKey = kGroupKey + "include-personal-info";
-const QString kIncludePhysiqueInfoKey = kGroupKey + "include-physique-info";
-const QString kIncludeLifeInfoKey = kGroupKey + "include-life-info";
-const QString kIncludeAttitudeInfoKey = kGroupKey + "include-attitude-info";
-const QString kIncludeBiographyInfoKey = kGroupKey + "include-biography-info";
+const QString kIncludeStoryRoleKey = kGroupKey + "include-story-role";
+const QString kIncludeAgeKey = kGroupKey + "include-age";
+const QString kIncludeGenderKey = kGroupKey + "include-gender";
+const QString kIncludeOneLineDescriptionKey = kGroupKey + "include-one-line-description";
+const QString kIncludeLongDescriptionKey = kGroupKey + "include-long-description";
 const QString kWatermarkKey = kGroupKey + "watermark";
 const QString kWatermarkColorKey = kGroupKey + "watermark-color";
 const QString kOpenDocumentAfterExportKey = kGroupKey + "open-document-after-export";
 } // namespace
 
-class CharacterExportDialog::Implementation
+class CharactersExportDialog::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -43,13 +41,11 @@ public:
 
     ComboBox* fileFormat = nullptr;
     CheckBox* includeMainPhoto = nullptr;
-    CheckBox* includeAdditionalPhotos = nullptr;
-    CheckBox* includeStoryInfo = nullptr;
-    CheckBox* includePersonalInfo = nullptr;
-    CheckBox* includePhysiqueInfo = nullptr;
-    CheckBox* includeLifeInfo = nullptr;
-    CheckBox* includeAttitudeInfo = nullptr;
-    CheckBox* includeBiographyInfo = nullptr;
+    CheckBox* includeStoryRole = nullptr;
+    CheckBox* includeAge = nullptr;
+    CheckBox* includeGender = nullptr;
+    CheckBox* includeOneLineDescription = nullptr;
+    CheckBox* includeLongDescription = nullptr;
     TextField* watermark = nullptr;
     ColorPickerPopup* watermarkColorPopup = nullptr;
 
@@ -59,16 +55,14 @@ public:
     Button* exportButton = nullptr;
 };
 
-CharacterExportDialog::Implementation::Implementation(QWidget* _parent)
+CharactersExportDialog::Implementation::Implementation(QWidget* _parent)
     : fileFormat(new ComboBox(_parent))
     , includeMainPhoto(new CheckBox(_parent))
-    , includeAdditionalPhotos(new CheckBox(_parent))
-    , includeStoryInfo(new CheckBox(_parent))
-    , includePersonalInfo(new CheckBox(_parent))
-    , includePhysiqueInfo(new CheckBox(_parent))
-    , includeLifeInfo(new CheckBox(_parent))
-    , includeAttitudeInfo(new CheckBox(_parent))
-    , includeBiographyInfo(new CheckBox(_parent))
+    , includeStoryRole(new CheckBox(_parent))
+    , includeAge(new CheckBox(_parent))
+    , includeGender(new CheckBox(_parent))
+    , includeOneLineDescription(new CheckBox(_parent))
+    , includeLongDescription(new CheckBox(_parent))
     , watermark(new TextField(_parent))
     , watermarkColorPopup(new ColorPickerPopup(_parent))
     , buttonsLayout(new QHBoxLayout)
@@ -99,7 +93,7 @@ CharacterExportDialog::Implementation::Implementation(QWidget* _parent)
 // ****
 
 
-CharacterExportDialog::CharacterExportDialog(QWidget* _parent)
+CharactersExportDialog::CharactersExportDialog(QWidget* _parent)
     : AbstractDialog(_parent)
     , d(new Implementation(this))
 {
@@ -109,21 +103,12 @@ CharacterExportDialog::CharacterExportDialog(QWidget* _parent)
     int row = 0;
     int column = 0;
     contentsLayout()->addWidget(d->fileFormat, row++, column);
-    {
-        auto layout = new QHBoxLayout;
-        layout->setContentsMargins({});
-        layout->setSpacing(0);
-        layout->addWidget(d->includeMainPhoto);
-        layout->addWidget(d->includeAdditionalPhotos);
-        layout->addStretch();
-        contentsLayout()->addLayout(layout, row++, column);
-    }
-    contentsLayout()->addWidget(d->includeStoryInfo, row++, column);
-    contentsLayout()->addWidget(d->includePersonalInfo, row++, column);
-    contentsLayout()->addWidget(d->includePhysiqueInfo, row++, column);
-    contentsLayout()->addWidget(d->includeLifeInfo, row++, column);
-    contentsLayout()->addWidget(d->includeAttitudeInfo, row++, column);
-    contentsLayout()->addWidget(d->includeBiographyInfo, row++, column);
+    contentsLayout()->addWidget(d->includeMainPhoto, row++, column);
+    contentsLayout()->addWidget(d->includeStoryRole, row++, column);
+    contentsLayout()->addWidget(d->includeAge, row++, column);
+    contentsLayout()->addWidget(d->includeGender, row++, column);
+    contentsLayout()->addWidget(d->includeOneLineDescription, row++, column);
+    contentsLayout()->addWidget(d->includeLongDescription, row++, column);
     contentsLayout()->addWidget(d->watermark, row++, column, Qt::AlignTop);
     contentsLayout()->setRowStretch(row++, 1);
     column = 0;
@@ -154,7 +139,6 @@ CharacterExportDialog::CharacterExportDialog(QWidget* _parent)
         }
         }
         d->includeMainPhoto->setVisible(isPhotoVisible);
-        d->includeAdditionalPhotos->setVisible(isPhotoVisible);
         d->watermark->setVisible(isWatermarkVisible);
     };
     connect(d->fileFormat, &ComboBox::currentIndexChanged, this, updateParametersVisibility);
@@ -165,8 +149,8 @@ CharacterExportDialog::CharacterExportDialog(QWidget* _parent)
     connect(d->watermarkColorPopup, &ColorPickerPopup::selectedColorChanged, this,
             [this](const QColor& _color) { d->watermark->setTrailingIconColor(_color); });
     //
-    connect(d->exportButton, &Button::clicked, this, &CharacterExportDialog::exportRequested);
-    connect(d->cancelButton, &Button::clicked, this, &CharacterExportDialog::canceled);
+    connect(d->exportButton, &Button::clicked, this, &CharactersExportDialog::exportRequested);
+    connect(d->cancelButton, &Button::clicked, this, &CharactersExportDialog::canceled);
 
     updateParametersVisibility();
 
@@ -175,14 +159,13 @@ CharacterExportDialog::CharacterExportDialog(QWidget* _parent)
         = d->fileFormat->model()->index(settings.value(kFormatKey, 0).toInt(), 0);
     d->fileFormat->setCurrentIndex(fileFormatIndex);
     d->includeMainPhoto->setChecked(settings.value(kIncludeMainPhotoKey, true).toBool());
-    d->includeAdditionalPhotos->setChecked(
-        settings.value(kIncludeAdditionalPhototsKey, false).toBool());
-    d->includeStoryInfo->setChecked(settings.value(kIncludeStoryInfoKey, true).toBool());
-    d->includePersonalInfo->setChecked(settings.value(kIncludePersonalInfoKey, false).toBool());
-    d->includePhysiqueInfo->setChecked(settings.value(kIncludePhysiqueInfoKey, false).toBool());
-    d->includeLifeInfo->setChecked(settings.value(kIncludeLifeInfoKey, false).toBool());
-    d->includeAttitudeInfo->setChecked(settings.value(kIncludeAttitudeInfoKey, false).toBool());
-    d->includeBiographyInfo->setChecked(settings.value(kIncludeBiographyInfoKey, false).toBool());
+    d->includeStoryRole->setChecked(settings.value(kIncludeStoryRoleKey, true).toBool());
+    d->includeAge->setChecked(settings.value(kIncludeAgeKey, true).toBool());
+    d->includeGender->setChecked(settings.value(kIncludeGenderKey, true).toBool());
+    d->includeOneLineDescription->setChecked(
+        settings.value(kIncludeOneLineDescriptionKey, true).toBool());
+    d->includeLongDescription->setChecked(
+        settings.value(kIncludeLongDescriptionKey, true).toBool());
     d->watermark->setText(settings.value(kWatermarkKey).toString());
     d->watermarkColorPopup->setSelectedColor(
         settings.value(kWatermarkColorKey, QColor("#B7B7B7")).value<QColor>());
@@ -192,72 +175,63 @@ CharacterExportDialog::CharacterExportDialog(QWidget* _parent)
     d->watermark->setTrailingIconColor(d->watermarkColorPopup->selectedColor());
 }
 
-CharacterExportDialog::~CharacterExportDialog()
+CharactersExportDialog::~CharactersExportDialog()
 {
     QSettings settings;
     settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
-    settings.setValue(kIncludeMainPhotoKey,
-                      d->includeMainPhoto->isVisible() && d->includeMainPhoto->isChecked());
-    settings.setValue(kIncludeAdditionalPhototsKey,
-                      d->includeAdditionalPhotos->isVisible()
-                          && d->includeAdditionalPhotos->isChecked());
-    settings.setValue(kIncludeStoryInfoKey, d->includeStoryInfo->isChecked());
-    settings.setValue(kIncludePersonalInfoKey, d->includePersonalInfo->isChecked());
-    settings.setValue(kIncludePhysiqueInfoKey, d->includePhysiqueInfo->isChecked());
-    settings.setValue(kIncludeLifeInfoKey, d->includeLifeInfo->isChecked());
-    settings.setValue(kIncludeAttitudeInfoKey, d->includeAttitudeInfo->isChecked());
-    settings.setValue(kIncludeBiographyInfoKey, d->includeBiographyInfo->isChecked());
+    settings.setValue(kIncludeMainPhotoKey, d->includeMainPhoto->isChecked());
+    settings.setValue(kIncludeStoryRoleKey, d->includeStoryRole->isChecked());
+    settings.setValue(kIncludeAgeKey, d->includeAge->isChecked());
+    settings.setValue(kIncludeGenderKey, d->includeGender->isChecked());
+    settings.setValue(kIncludeOneLineDescriptionKey, d->includeOneLineDescription->isChecked());
+    settings.setValue(kIncludeLongDescriptionKey, d->includeLongDescription->isChecked());
     settings.setValue(kWatermarkKey, d->watermark->text());
     settings.setValue(kWatermarkColorKey, d->watermarkColorPopup->selectedColor());
     settings.setValue(kOpenDocumentAfterExportKey, d->openDocumentAfterExport->isChecked());
 }
 
-BusinessLayer::CharacterExportOptions CharacterExportDialog::exportOptions() const
+BusinessLayer::CharactersExportOptions CharactersExportDialog::exportOptions() const
 {
-    BusinessLayer::CharacterExportOptions options;
+    BusinessLayer::CharactersExportOptions options;
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
-    options.includeMainPhoto = d->includeMainPhoto->isChecked();
-    options.includeAdditionalPhotos = d->includeAdditionalPhotos->isChecked();
-    options.includeStoryInfo = d->includeStoryInfo->isChecked();
-    options.includePersonalInfo = d->includePersonalInfo->isChecked();
-    options.includePhysiqueInfo = d->includePhysiqueInfo->isChecked();
-    options.includeLifeInfo = d->includeLifeInfo->isChecked();
-    options.includeAttitudeInfo = d->includeAttitudeInfo->isChecked();
-    options.includeBiographyInfo = d->includeBiographyInfo->isChecked();
+    options.includeMainPhoto = d->includeMainPhoto->isVisible() && d->includeMainPhoto->isChecked();
+    options.includeStoryRole = d->includeStoryRole->isChecked();
+    options.includeAge = d->includeAge->isChecked();
+    options.includeGender = d->includeGender->isChecked();
+    options.includeOneLineDescription = d->includeOneLineDescription->isChecked();
+    options.includeLongDescription = d->includeLongDescription->isChecked();
     options.watermark = d->watermark->text();
     options.watermarkColor = ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3);
     return options;
 }
 
-bool CharacterExportDialog::openDocumentAfterExport() const
+bool CharactersExportDialog::openDocumentAfterExport() const
 {
     return d->openDocumentAfterExport->isChecked();
 }
 
-QWidget* CharacterExportDialog::focusedWidgetAfterShow() const
+QWidget* CharactersExportDialog::focusedWidgetAfterShow() const
 {
     return d->fileFormat;
 }
 
-QWidget* CharacterExportDialog::lastFocusableWidget() const
+QWidget* CharactersExportDialog::lastFocusableWidget() const
 {
     return d->exportButton;
 }
 
-void CharacterExportDialog::updateTranslations()
+void CharactersExportDialog::updateTranslations()
 {
-    setTitle(tr("Export character"));
+    setTitle(tr("Export characters"));
 
     d->fileFormat->setLabel(tr("Format"));
     d->includeMainPhoto->setText(tr("Include main photo"));
-    d->includeAdditionalPhotos->setText(tr("additional photos"));
-    d->includeStoryInfo->setText(tr("Include story info"));
-    d->includePersonalInfo->setText(tr("Include personal info"));
-    d->includePhysiqueInfo->setText(tr("Include physique info"));
-    d->includeLifeInfo->setText(tr("Include life info"));
-    d->includeAttitudeInfo->setText(tr("Include attitude info"));
-    d->includeBiographyInfo->setText(tr("Include biography"));
+    d->includeStoryRole->setText(tr("Include story role"));
+    d->includeAge->setText(tr("Include age"));
+    d->includeGender->setText(tr("Include gender"));
+    d->includeOneLineDescription->setText(tr("Include one line description"));
+    d->includeLongDescription->setText(tr("Include long description"));
     d->watermark->setLabel(tr("Watermark"));
 
     d->openDocumentAfterExport->setText(tr("Open document after export"));
@@ -265,7 +239,7 @@ void CharacterExportDialog::updateTranslations()
     d->cancelButton->setText(tr("Cancel"));
 }
 
-void CharacterExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void CharactersExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
@@ -290,13 +264,11 @@ void CharacterExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
 
     for (auto checkBox : {
              d->includeMainPhoto,
-             d->includeAdditionalPhotos,
-             d->includeStoryInfo,
-             d->includePersonalInfo,
-             d->includePhysiqueInfo,
-             d->includeLifeInfo,
-             d->includeAttitudeInfo,
-             d->includeBiographyInfo,
+             d->includeStoryRole,
+             d->includeAge,
+             d->includeGender,
+             d->includeOneLineDescription,
+             d->includeLongDescription,
              d->openDocumentAfterExport,
          }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
