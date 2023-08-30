@@ -147,6 +147,10 @@ void CharactersModel::moveCharacter(const QString& _name, int _index)
     for (int index = 0; index < d->characterModels.size(); ++index) {
         auto characterModel = d->characterModels[index];
         if (characterModel->name() == nameCorrected) {
+            if (index == _index) {
+                break;
+            }
+
             d->characterModels.move(index, _index);
             emit moveCharacterRequested(characterModel->document()->uuid(), _index);
             break;

@@ -1378,8 +1378,6 @@ bool ExportManager::canExportDocument(BusinessLayer::AbstractModel* _model) cons
     //
     case Domain::DocumentObjectType::Character:
     case Domain::DocumentObjectType::Characters:
-    case Domain::DocumentObjectType::Location:
-    case Domain::DocumentObjectType::Locations:
         return true;
 
     default:

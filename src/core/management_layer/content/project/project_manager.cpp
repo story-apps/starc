@@ -1838,9 +1838,9 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(
         d->projectStructureModel, &BusinessLayer::StructureModel::rowsAboutToBeMoved, this,
         [this](const QModelIndex& _sourceParent, int _sourceStart, int _sourceEnd,
-               const QModelIndex& _destination) {
+               const QModelIndex& _destinationParent, int _destination) {
             const auto sourceParentItem = d->projectStructureModel->itemForIndex(_sourceParent);
-            const auto destinationItem = d->projectStructureModel->itemForIndex(_destination);
+            const auto destinationItem = d->projectStructureModel->itemForIndex(_destinationParent);
             if (sourceParentItem == nullptr || destinationItem == nullptr) {
                 return;
             }
@@ -1957,6 +1957,39 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                         = d->projectStructureModel->itemForIndex(removedItemIndex);
                     worlds->addWorldModel(qobject_cast<BusinessLayer::WorldModel*>(
                         d->modelsFacade.modelFor(removedItem->uuid())));
+                }
+            }
+            //
+            // Перемещаем персонажей
+            //
+            else if (sourceParentItem->type() == Domain::DocumentObjectType::Characters
+                     && destinationItem->type() == Domain::DocumentObjectType::Characters) {
+                auto characters = qobject_cast<BusinessLayer::CharactersModel*>(
+                    d->modelsFacade.modelFor(sourceParentItem->type()));
+                for (int row = _sourceStart; row <= _sourceEnd; ++row) {
+                    const auto movedItemIndex
+                        = d->projectStructureModel->index(row, 0, _sourceParent);
+                    const auto movedItem = d->projectStructureModel->itemForIndex(movedItemIndex);
+                    const auto character = qobject_cast<BusinessLayer::CharacterModel*>(
+                        d->modelsFacade.modelFor(movedItem->uuid()));
+                    characters->moveCharacter(character->name(),
+                                              _destination + (row - _sourceStart));
+                }
+            }
+            //
+            // Перемещаем локации
+            //
+            else if (sourceParentItem->type() == Domain::DocumentObjectType::Locations
+                     && destinationItem->type() == Domain::DocumentObjectType::Locations) {
+                auto locations = qobject_cast<BusinessLayer::LocationsModel*>(
+                    d->modelsFacade.modelFor(sourceParentItem->type()));
+                for (int row = _sourceStart; row <= _sourceEnd; ++row) {
+                    const auto movedItemIndex
+                        = d->projectStructureModel->index(row, 0, _sourceParent);
+                    const auto movedItem = d->projectStructureModel->itemForIndex(movedItemIndex);
+                    const auto location = qobject_cast<BusinessLayer::CharacterModel*>(
+                        d->modelsFacade.modelFor(movedItem->uuid()));
+                    locations->moveLocation(location->name(), _destination + (row - _sourceStart));
                 }
             }
         });

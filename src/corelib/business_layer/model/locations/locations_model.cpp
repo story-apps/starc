@@ -147,6 +147,10 @@ void LocationsModel::moveLocation(const QString& _name, int _index)
     for (int index = 0; index < d->locationModels.size(); ++index) {
         auto locationModel = d->locationModels[index];
         if (locationModel->name() == nameCorrected) {
+            if (index == _index) {
+                break;
+            }
+
             d->locationModels.move(index, _index);
             emit moveLocationRequested(locationModel->document()->uuid(), _index);
             break;
