@@ -167,6 +167,7 @@ public:
     QTextCursor cursorForPositionReimpl(const QPoint& pos) const;
     QRect cursorRect(const QTextCursor& cursor) const;
     QRect cursorRect() const;
+    QRect cursorRectAt(int pos);
 
     QString anchorAt(const QPoint& pos) const;
 

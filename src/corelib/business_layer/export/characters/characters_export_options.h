@@ -11,6 +11,11 @@ struct CORE_LIBRARY_EXPORT CharactersExportOptions : public ExportOptions {
     bool includeMainPhoto = true;
 
     /**
+     * @brief Список персонажей для выгрузки
+     */
+    QVector<QString> characters;
+
+    /**
      * @brief Печатать конкретные параметры персонажей
      */
     bool includeStoryRole = true;

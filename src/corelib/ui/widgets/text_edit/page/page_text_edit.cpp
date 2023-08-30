@@ -2881,6 +2881,13 @@ QRect PageTextEdit::cursorRect() const
     return r;
 }
 
+QRect PageTextEdit::cursorRectAt(int pos)
+{
+    QTextCursor cursor(document());
+    cursor.setPosition(pos);
+    return cursorRect(cursor);
+}
+
 
 /*!
     Returns the reference of the anchor at position \a pos, or an

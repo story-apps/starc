@@ -1,17 +1,21 @@
 #include "characters_export_dialog.h"
 
 #include <business_layer/export/characters/characters_export_options.h>
+#include <business_layer/model/abstract_model.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/label/label.h>
+#include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
 
 #include <QEvent>
 #include <QGridLayout>
+#include <QScrollArea>
 #include <QSettings>
 #include <QStandardItemModel>
 #include <QStringListModel>
@@ -21,6 +25,7 @@ namespace Ui {
 
 namespace {
 const QString kGroupKey = "widgets/characters-export-dialog/";
+const QString kCharactersKey = kGroupKey + "characters";
 const QString kFormatKey = kGroupKey + "format";
 const QString kIncludeMainPhotoKey = kGroupKey + "include-main-photo";
 const QString kIncludeStoryRoleKey = kGroupKey + "include-story-role";
@@ -38,7 +43,14 @@ class CharactersExportDialog::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    void updateSelectAllState();
 
+
+    QScrollArea* charactersScrollArea = nullptr;
+    Widget* charactersContainer = nullptr;
+    QVBoxLayout* charactersLayout = nullptr;
+    CheckBox* selectAllCharacters = nullptr;
+    QVector<CheckBox*> characters;
     ComboBox* fileFormat = nullptr;
     CheckBox* includeMainPhoto = nullptr;
     CheckBox* includeStoryRole = nullptr;
@@ -56,7 +68,11 @@ public:
 };
 
 CharactersExportDialog::Implementation::Implementation(QWidget* _parent)
-    : fileFormat(new ComboBox(_parent))
+    : charactersScrollArea(new QScrollArea(_parent))
+    , charactersContainer(new Widget(charactersScrollArea))
+    , charactersLayout(new QVBoxLayout)
+    , selectAllCharacters(new CheckBox(charactersContainer))
+    , fileFormat(new ComboBox(_parent))
     , includeMainPhoto(new CheckBox(_parent))
     , includeStoryRole(new CheckBox(_parent))
     , includeAge(new CheckBox(_parent))
@@ -70,6 +86,25 @@ CharactersExportDialog::Implementation::Implementation(QWidget* _parent)
     , cancelButton(new Button(_parent))
     , exportButton(new Button(_parent))
 {
+    QPalette palette;
+    palette.setColor(QPalette::Base, Qt::transparent);
+    palette.setColor(QPalette::Window, Qt::transparent);
+    charactersScrollArea->setPalette(palette);
+    charactersScrollArea->setFrameShape(QFrame::NoFrame);
+    charactersScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    charactersScrollArea->setVerticalScrollBar(new ScrollBar);
+    charactersScrollArea->setWidget(charactersContainer);
+    charactersScrollArea->setWidgetResizable(true);
+    charactersLayout->setContentsMargins({});
+    charactersLayout->addWidget(selectAllCharacters);
+    charactersLayout->setSpacing(0);
+    charactersLayout->addStretch();
+    charactersContainer->setLayout(charactersLayout);
+
+    new Shadow(Qt::TopEdge, charactersScrollArea);
+    new Shadow(Qt::BottomEdge, charactersScrollArea);
+
+
     fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     auto formatsModel = new QStringListModel({
         "PDF",
@@ -89,6 +124,26 @@ CharactersExportDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addWidget(exportButton, 0, Qt::AlignVCenter);
 }
 
+void CharactersExportDialog::Implementation::updateSelectAllState()
+{
+    bool hasChecked = false;
+    bool hasUnchecked = false;
+    for (const auto characterCheckBox : std::as_const(characters)) {
+        if (characterCheckBox->isChecked()) {
+            hasChecked = true;
+        } else {
+            hasUnchecked = true;
+        }
+    }
+
+    if (hasChecked && hasUnchecked) {
+        selectAllCharacters->setIndeterminate();
+    } else {
+        QSignalBlocker signalBlocker(selectAllCharacters);
+        selectAllCharacters->setChecked(hasChecked);
+    }
+}
+
 
 // ****
 
@@ -102,6 +157,7 @@ CharactersExportDialog::CharactersExportDialog(QWidget* _parent)
 
     int row = 0;
     int column = 0;
+    contentsLayout()->addWidget(d->charactersScrollArea, row, column++, 8, 1);
     contentsLayout()->addWidget(d->fileFormat, row++, column);
     contentsLayout()->addWidget(d->includeMainPhoto, row++, column);
     contentsLayout()->addWidget(d->includeStoryRole, row++, column);
@@ -112,8 +168,19 @@ CharactersExportDialog::CharactersExportDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->watermark, row++, column, Qt::AlignTop);
     contentsLayout()->setRowStretch(row++, 1);
     column = 0;
-    contentsLayout()->addLayout(d->buttonsLayout, row++, column);
+    contentsLayout()->addLayout(d->buttonsLayout, row++, column, 1, 2);
 
+    connect(d->selectAllCharacters, &CheckBox::checkedChanged, this,
+            [this](bool _checked, bool _indeterminate) {
+                if (_indeterminate) {
+                    return;
+                }
+
+                for (auto characterCheckBox : std::as_const(d->characters)) {
+                    QSignalBlocker signalBlocker(characterCheckBox);
+                    characterCheckBox->setChecked(_checked);
+                }
+            });
     auto updateParametersVisibility = [this] {
         auto isPhotoVisible = true;
         auto isWatermarkVisible = true;
@@ -178,6 +245,11 @@ CharactersExportDialog::CharactersExportDialog(QWidget* _parent)
 CharactersExportDialog::~CharactersExportDialog()
 {
     QSettings settings;
+    QVariantMap characters;
+    for (const auto characterCheckBox : std::as_const(d->characters)) {
+        characters[characterCheckBox->text()] = characterCheckBox->isChecked();
+    }
+    settings.setValue(kCharactersKey, characters);
     settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
     settings.setValue(kIncludeMainPhotoKey, d->includeMainPhoto->isChecked());
     settings.setValue(kIncludeStoryRoleKey, d->includeStoryRole->isChecked());
@@ -190,9 +262,57 @@ CharactersExportDialog::~CharactersExportDialog()
     settings.setValue(kOpenDocumentAfterExportKey, d->openDocumentAfterExport->isChecked());
 }
 
+void CharactersExportDialog::setModel(BusinessLayer::AbstractModel* _model) const
+{
+    qDeleteAll(d->characters);
+    d->characters.clear();
+
+    d->selectAllCharacters->setChecked(true);
+    for (int row = 0; row < _model->rowCount(); ++row) {
+        auto characterCheckBox = new CheckBox(d->charactersContainer);
+        characterCheckBox->setBackgroundColor(Ui::DesignSystem::color().background());
+        characterCheckBox->setTextColor(Ui::DesignSystem::color().onBackground());
+        characterCheckBox->setText(_model->index(row, 0).data().toString());
+        characterCheckBox->setChecked(true);
+        connect(characterCheckBox, &CheckBox::checkedChanged, this,
+                [this] { d->updateSelectAllState(); });
+
+        // 1 - чекбокс "Выделить всех"
+        d->charactersLayout->insertWidget(1 + d->characters.size(), characterCheckBox);
+
+        d->characters.append(characterCheckBox);
+    }
+
+    //
+    // Если список персонажей не изменился с прошлого раза, то восстановим значения
+    //
+    QSettings settings;
+    const auto characters = settings.value(kCharactersKey).toMap();
+    bool isSame = d->characters.size() == characters.size();
+    if (isSame) {
+        for (int index = 0; index < d->characters.size(); ++index) {
+            if (!characters.contains(d->characters[index]->text())) {
+                isSame = false;
+                break;
+            }
+        }
+    }
+    if (isSame) {
+        for (int index = 0; index < d->characters.size(); ++index) {
+            d->characters[index]->setChecked(characters[d->characters[index]->text()].toBool());
+        }
+    }
+}
+
 BusinessLayer::CharactersExportOptions CharactersExportDialog::exportOptions() const
 {
     BusinessLayer::CharactersExportOptions options;
+    options.characters.clear();
+    for (const auto characterCheckBox : std::as_const(d->characters)) {
+        if (characterCheckBox->isChecked()) {
+            options.characters.append(characterCheckBox->text());
+        }
+    }
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
     options.includeMainPhoto = d->includeMainPhoto->isVisible() && d->includeMainPhoto->isChecked();
@@ -225,6 +345,7 @@ void CharactersExportDialog::updateTranslations()
 {
     setTitle(tr("Export characters"));
 
+    d->selectAllCharacters->setText(tr("Select all"));
     d->fileFormat->setLabel(tr("Format"));
     d->includeMainPhoto->setText(tr("Include main photo"));
     d->includeStoryRole->setText(tr("Include story role"));
@@ -263,6 +384,7 @@ void CharactersExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
     }
 
     for (auto checkBox : {
+             d->selectAllCharacters,
              d->includeMainPhoto,
              d->includeStoryRole,
              d->includeAge,

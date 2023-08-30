@@ -1323,6 +1323,7 @@ void ExportManager::Implementation::exportCharacters(BusinessLayer::AbstractMode
                 });
     }
 
+    charactersExportDialog->setModel(_model);
     charactersExportDialog->showDialog();
 }
 

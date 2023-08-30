@@ -53,11 +53,6 @@ TextDocument* CharactersExporter::prepareDocument(AbstractModel* _model,
     textEdit.setPageFormat(exportTemplate.pageSizeId());
     textEdit.setPageMarginsMm(exportTemplate.pageMargins());
     textEdit.setPageNumbersAlignment(exportTemplate.pageNumbersAlignment());
-    //
-    // ... начинаем вставку данных в документ
-    //
-    TextCursor cursor(textDocument);
-    cursor.beginEditBlock();
 
     //
     // Работаем от стандартного шрифта шаблона
@@ -93,15 +88,27 @@ TextDocument* CharactersExporter::prepareDocument(AbstractModel* _model,
 
     const auto& exportOptions = static_cast<const CharactersExportOptions&>(_exportOptions);
 
+    TextCursor cursor(textDocument);
+    int characterStartPosition = 0;
+    int characterEndPosition = 0;
     for (int index = 0; index < characters->rowCount(); ++index) {
         auto character = characters->character(index);
+        if (!exportOptions.characters.contains(character->name())) {
+            continue;
+        }
 
         if (index > 0) {
-            cursor.insertBlock(blockFormat(MeasurementHelper::ptToPx(20)), charFormat(baseFont));
+            cursor.insertBlock(
+                blockFormat(MeasurementHelper::ptToPx(cursor.block().text().isEmpty() ? 0 : 20)),
+                charFormat(baseFont));
         }
+
+        characterStartPosition = cursor.position();
+        cursor.beginEditBlock();
         //
         // Фотка персонажа
         //
+        int photoHeight = 0;
         if (exportOptions.includeMainPhoto && !character->mainPhoto().image.isNull()) {
             const auto mainPhotoScaled = character->mainPhoto().image.scaled(
                 MeasurementHelper::mmToPx(20), MeasurementHelper::mmToPx(20),
@@ -123,6 +130,8 @@ TextDocument* CharactersExporter::prepareDocument(AbstractModel* _model,
             QTextImageFormat format;
             format.setName(imageName);
             cursor.insertImage(format, QTextFrameFormat::FloatRight);
+
+            photoHeight = mainPhoto.height();
         }
         //
         // Роль персонажа
@@ -220,12 +229,26 @@ TextDocument* CharactersExporter::prepareDocument(AbstractModel* _model,
             cursor.insertBlock(blockFormat(MeasurementHelper::ptToPx(6)), baseFormat);
             cursor.insertText(character->longDescription());
         }
-    }
 
-    //
-    // ... заканчиваем формирование документа
-    //
-    cursor.endEditBlock();
+        //
+        // Если после картинки не было добавлено ни одного блока, то сделаем это, чтобы корректно
+        // высчитать высоту недостающего контента и сделать правильный отступ между персонажами,
+        // иначе Qt считает, что позиция курсора в блоке выше, чем реальная позиция
+        //
+        if (photoHeight > 0 && characterStartPosition == cursor.block().position()) {
+            cursor.insertBlock(blockFormat(), baseFormat);
+            cursor.insertText(" ");
+        }
+
+        cursor.endEditBlock();
+        characterEndPosition = cursor.position();
+
+        const auto characterHeight = textEdit.cursorRectAt(characterEndPosition).bottom()
+            - textEdit.cursorRectAt(characterStartPosition).top();
+        if (photoHeight > 0 && photoHeight > characterHeight) {
+            cursor.insertBlock(blockFormat(photoHeight - characterHeight));
+        }
+    }
 
     return textDocument;
 }

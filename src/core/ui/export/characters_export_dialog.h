@@ -4,8 +4,9 @@
 
 
 namespace BusinessLayer {
+class AbstractModel;
 struct CharactersExportOptions;
-}
+} // namespace BusinessLayer
 
 namespace Ui {
 
@@ -19,6 +20,11 @@ class CharactersExportDialog : public AbstractDialog
 public:
     explicit CharactersExportDialog(QWidget* _parent = nullptr);
     ~CharactersExportDialog() override;
+
+    /**
+     * @brief Задать модель персонажей для отображения списка
+     */
+    void setModel(BusinessLayer::AbstractModel* _model) const;
 
     /**
      * @brief Получить опции экспорта
