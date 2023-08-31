@@ -164,7 +164,9 @@ void ScalableGraphicsView::restoreState(const QByteArray& _state)
 QImage ScalableGraphicsView::saveSceneToPng(qreal _scaleFactor)
 {
     scene()->clearSelection();
-    const auto contentsRect = scene()->itemsBoundingRect();
+    const auto margin = 48;
+    const auto contentsRect
+        = scene()->itemsBoundingRect().marginsAdded({ margin, margin, margin, margin });
     QImage image(contentsRect.size().toSize() * _scaleFactor, QImage::Format_ARGB32_Premultiplied);
 
     QPainter painter(&image);

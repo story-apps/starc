@@ -18,6 +18,7 @@
 #include <QCoreApplication>
 #include <QPainter>
 #include <QPainterPath>
+#include <QTextBlock>
 
 
 namespace BusinessLayer {

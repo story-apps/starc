@@ -64,7 +64,8 @@ static QString formatsDiffToString(const QTextCharFormat& _current, const QTextC
 
 } // namespace
 
-void ScreenplayFountainExporter::exportTo(AbstractModel* _model, ExportOptions& _exportOptions) const
+void ScreenplayFountainExporter::exportTo(AbstractModel* _model,
+                                          ExportOptions& _exportOptions) const
 {
     constexpr int invalidPosition = -1;
     exportTo(_model, invalidPosition, invalidPosition, _exportOptions);
