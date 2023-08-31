@@ -55,6 +55,8 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
+#include <optional>
+
 namespace Ui {
 
 namespace {
