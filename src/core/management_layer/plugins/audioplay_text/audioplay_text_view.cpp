@@ -138,6 +138,7 @@ public:
     AudioplayTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
     AudioplayTextScrollBarManager* audioplayTextScrollbarManager = nullptr;
+    std::optional<int> pendingCursorPosition;
 
     //
     // Панели инструментов
@@ -1157,8 +1158,11 @@ void AudioplayTextView::saveViewSettings()
 
 void AudioplayTextView::setModel(BusinessLayer::AudioplayTextModel* _model)
 {
-    if (d->model && d->model->informationModel()) {
-        d->model->informationModel()->disconnect(this);
+    if (d->model) {
+        d->model->disconnect(this);
+        if (d->model->informationModel()) {
+            d->model->informationModel()->disconnect(this);
+        }
     }
 
     d->model = _model;
@@ -1180,6 +1184,35 @@ void AudioplayTextView::setModel(BusinessLayer::AudioplayTextModel* _model)
         connect(d->model->informationModel(),
                 &BusinessLayer::AudioplayInformationModel::continueBlockNumbersChanged, this,
                 [this] { d->reconfigureBlockNumbersVisibility(); });
+
+        //
+        // Перед началом сброса документа запоминаем текущую позицию курсора
+        //
+        connect(d->model, &BusinessLayer::AudioplayTextModel::modelAboutToBeReset, this, [this] {
+            if (!d->pendingCursorPosition.has_value()) {
+                d->pendingCursorPosition = cursorPosition();
+            }
+        });
+        //
+        // ... после завершения сброса, отложенно возвращаем курсор на место
+        //
+        connect(
+            d->model, &BusinessLayer::AudioplayTextModel::modelReset, this,
+            [this] {
+                //
+                // Извлечём позицию для установки
+                //
+                const int position = d->pendingCursorPosition.value();
+                //
+                // ... затем сбрасываем буфер, чтобы позиция установилась внутрь редактора текста
+                //
+                d->pendingCursorPosition.reset();
+                //
+                // ... устанавливаем позицию в редактор
+                //
+                setCursorPosition(position);
+            },
+            Qt::QueuedConnection);
     }
 
     d->textEdit->setCursors({});
@@ -1203,6 +1236,11 @@ int AudioplayTextView::cursorPosition() const
 
 void AudioplayTextView::setCursorPosition(int _position)
 {
+    if (d->pendingCursorPosition.has_value()) {
+        d->pendingCursorPosition = _position;
+        return;
+    }
+
     auto cursor = d->textEdit->textCursor();
     cursor.setPosition(_position);
     d->textEdit->ensureCursorVisible(cursor, false);

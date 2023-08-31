@@ -150,6 +150,7 @@ public:
     ScreenplayTreatmentEdit* textEdit = nullptr;
     ScreenplayTreatmentEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
+    std::optional<int> pendingCursorPosition;
 
     //
     // Панели инструментов
@@ -1551,8 +1552,11 @@ void ScreenplayTreatmentView::saveViewSettings()
 
 void ScreenplayTreatmentView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
-    if (d->model && d->model->informationModel()) {
-        d->model->informationModel()->disconnect(this);
+    if (d->model) {
+        d->model->disconnect(this);
+        if (d->model->informationModel()) {
+            d->model->informationModel()->disconnect(this);
+        }
     }
 
     d->model = _model;
@@ -1591,6 +1595,35 @@ void ScreenplayTreatmentView::setModel(BusinessLayer::ScreenplayTextModel* _mode
 
                     d->showParametersFor(updatedItem);
                 });
+
+        //
+        // Перед началом сброса документа запоминаем текущую позицию курсора
+        //
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::modelAboutToBeReset, this, [this] {
+            if (!d->pendingCursorPosition.has_value()) {
+                d->pendingCursorPosition = cursorPosition();
+            }
+        });
+        //
+        // ... после завершения сброса, отложенно возвращаем курсор на место
+        //
+        connect(
+            d->model, &BusinessLayer::ScreenplayTextModel::modelReset, this,
+            [this] {
+                //
+                // Извлечём позицию для установки
+                //
+                const int position = d->pendingCursorPosition.value();
+                //
+                // ... затем сбрасываем буфер, чтобы позиция установилась внутрь редактора текста
+                //
+                d->pendingCursorPosition.reset();
+                //
+                // ... устанавливаем позицию в редактор
+                //
+                setCursorPosition(position);
+            },
+            Qt::QueuedConnection);
     }
 
     d->textEdit->setCursors({});
@@ -1613,6 +1646,11 @@ int ScreenplayTreatmentView::cursorPosition() const
 
 void ScreenplayTreatmentView::setCursorPosition(int _position)
 {
+    if (d->pendingCursorPosition.has_value()) {
+        d->pendingCursorPosition = _position;
+        return;
+    }
+
     auto cursor = d->textEdit->textCursor();
     cursor.setPosition(_position);
     d->textEdit->ensureCursorVisible(cursor, false);

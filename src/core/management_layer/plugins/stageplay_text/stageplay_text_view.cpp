@@ -135,6 +135,7 @@ public:
     StageplayTextEdit* textEdit = nullptr;
     StageplayTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
+    std::optional<int> pendingCursorPosition;
 
     //
     // Панели инструментов
@@ -1123,8 +1124,11 @@ void StageplayTextView::saveViewSettings()
 
 void StageplayTextView::setModel(BusinessLayer::StageplayTextModel* _model)
 {
-    if (d->model && d->model->informationModel()) {
-        d->model->informationModel()->disconnect(this);
+    if (d->model) {
+        d->model->disconnect(this);
+        if (d->model->informationModel()) {
+            d->model->informationModel()->disconnect(this);
+        }
     }
 
     d->model = _model;
@@ -1139,6 +1143,35 @@ void StageplayTextView::setModel(BusinessLayer::StageplayTextModel* _model)
         connect(d->model->informationModel(),
                 &BusinessLayer::StageplayInformationModel::templateIdChanged, this,
                 [this] { d->reconfigureTemplate(); });
+
+        //
+        // Перед началом сброса документа запоминаем текущую позицию курсора
+        //
+        connect(d->model, &BusinessLayer::StageplayTextModel::modelAboutToBeReset, this, [this] {
+            if (!d->pendingCursorPosition.has_value()) {
+                d->pendingCursorPosition = cursorPosition();
+            }
+        });
+        //
+        // ... после завершения сброса, отложенно возвращаем курсор на место
+        //
+        connect(
+            d->model, &BusinessLayer::StageplayTextModel::modelReset, this,
+            [this] {
+                //
+                // Извлечём позицию для установки
+                //
+                const int position = d->pendingCursorPosition.value();
+                //
+                // ... затем сбрасываем буфер, чтобы позиция установилась внутрь редактора текста
+                //
+                d->pendingCursorPosition.reset();
+                //
+                // ... устанавливаем позицию в редактор
+                //
+                setCursorPosition(position);
+            },
+            Qt::QueuedConnection);
     }
 
     d->textEdit->setCursors({});
@@ -1161,6 +1194,11 @@ int StageplayTextView::cursorPosition() const
 
 void StageplayTextView::setCursorPosition(int _position)
 {
+    if (d->pendingCursorPosition.has_value()) {
+        d->pendingCursorPosition = _position;
+        return;
+    }
+
     auto cursor = d->textEdit->textCursor();
     cursor.setPosition(_position);
     d->textEdit->ensureCursorVisible(cursor, false);

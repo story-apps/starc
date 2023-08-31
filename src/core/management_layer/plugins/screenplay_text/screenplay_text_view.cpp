@@ -156,6 +156,7 @@ public:
     ScreenplayTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
     ScreenplayTextScrollBarManager* screenplayTextScrollbarManager = nullptr;
+    std::optional<int> pendingCursorPosition;
 
     //
     // Панели инструментов
@@ -1685,9 +1686,11 @@ void ScreenplayTextView::saveViewSettings()
 
 void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 {
-    if (d->model && d->model->informationModel()) {
+    if (d->model) {
         d->model->disconnect(this);
-        d->model->informationModel()->disconnect(this);
+        if (d->model->informationModel()) {
+            d->model->informationModel()->disconnect(this);
+        }
     }
 
     d->model = _model;
@@ -1727,6 +1730,9 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
                     d->showParametersFor(updatedItem);
                 });
 
+        //
+        // Обновляем тсоимость генерации синопсиса при изменении модели
+        //
         auto updateSynopsisPrice = [this] {
             d->aiAssistantView->setGenerationSynopsisOptions(
                 tr("Synopsis generation will takes %n word(s)", 0, d->model->wordsCount()),
@@ -1742,6 +1748,35 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
                 updateSynopsisPrice);
         connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsRemoved, this,
                 updateSynopsisPrice);
+
+        //
+        // Перед началом сброса документа запоминаем текущую позицию курсора
+        //
+        connect(d->model, &BusinessLayer::ScreenplayTextModel::modelAboutToBeReset, this, [this] {
+            if (!d->pendingCursorPosition.has_value()) {
+                d->pendingCursorPosition = cursorPosition();
+            }
+        });
+        //
+        // ... после завершения сброса, отложенно возвращаем курсор на место
+        //
+        connect(
+            d->model, &BusinessLayer::ScreenplayTextModel::modelReset, this,
+            [this] {
+                //
+                // Извлечём позицию для установки
+                //
+                const int position = d->pendingCursorPosition.value();
+                //
+                // ... затем сбрасываем буфер, чтобы позиция установилась внутрь редактора текста
+                //
+                d->pendingCursorPosition.reset();
+                //
+                // ... устанавливаем позицию в редактор
+                //
+                setCursorPosition(position);
+            },
+            Qt::QueuedConnection);
     }
 
     d->textEdit->setCursors({});
@@ -1765,6 +1800,11 @@ int ScreenplayTextView::cursorPosition() const
 
 void ScreenplayTextView::setCursorPosition(int _position)
 {
+    if (d->pendingCursorPosition.has_value()) {
+        d->pendingCursorPosition = _position;
+        return;
+    }
+
     auto cursor = d->textEdit->textCursor();
     cursor.setPosition(_position);
     d->textEdit->ensureCursorVisible(cursor, false);
