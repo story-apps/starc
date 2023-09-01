@@ -243,10 +243,10 @@ TextDocument* CharacterExporter::prepareDocument(AbstractModel* _model,
     //
     if (exportOptions.includePersonalInfo) {
         addHeader(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Personal info"));
-        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Nickname"), character->nickname());
+        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Real name"), character->nickname());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Date of birth"), character->dateOfBirth());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Place of birth"), character->placeOfBirth());
-        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Ethnicity"), character->ethnicity());
+        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Ethnicity/race"), character->ethnicity());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Family"), character->family());
     }
     if (exportOptions.includePhysiqueInfo) {
@@ -268,9 +268,9 @@ TextDocument* CharacterExporter::prepareDocument(AbstractModel* _model,
     if (exportOptions.includeLifeInfo) {
         addHeader(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Life info"));
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Skills"), character->skills());
-        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "How it developed"), character->howItDeveloped());
+        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "How skills developed"), character->howItDeveloped());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Incompetence"), character->incompetence());
-        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Strength"), character->strength());
+        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Strength/talent"), character->strength());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Weakness"), character->weakness());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Hobbies"), character->hobbies());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Habits"), character->habits());
@@ -278,15 +278,15 @@ TextDocument* CharacterExporter::prepareDocument(AbstractModel* _model,
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Speech"), character->speech());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Pet"), character->pet());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Dress"), character->dress());
-        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Something always carried"), character->somethingAlwaysCarried());
+        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Something always carried/weapon/tools"), character->somethingAlwaysCarried());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Accessories"), character->accessories());
-        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Area of residence"), character->areaOfResidence());
+        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Area of residence/environment"), character->areaOfResidence());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Home description"), character->homeDescription());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Neighborhood"), character->neighborhood());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Organization involved"), character->organizationInvolved());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Income"), character->income());
-        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Job occupation"), character->jobOccupation());
-        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Job rank"), character->jobRank());
+        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Job/occupation"), character->jobOccupation());
+        addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Job rank/position"), character->jobRank());
         addField(QCoreApplication::translate("BusinessLayer::CharacterExporter", "Job satisfaction"), character->jobSatisfaction());
     }
     if (exportOptions.includeAttitudeInfo) {

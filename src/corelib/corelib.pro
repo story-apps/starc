@@ -364,10 +364,6 @@ SOURCES += \
     ui/widgets/tree/tree_header_view.cpp \
     ui/widgets/tree/tree_view.cpp \
     ui/widgets/widget/widget.cpp \
-    utils/3rd_party/QOnlineTranslator/qexample.cpp \
-    utils/3rd_party/QOnlineTranslator/qonlinetranslator.cpp \
-    utils/3rd_party/QOnlineTranslator/qonlinetranslatorhelper.cpp \
-    utils/3rd_party/QOnlineTranslator/qoption.cpp \
     utils/3rd_party/WAF/Animation/Animation.cpp \
     utils/3rd_party/WAF/Animation/CircleFill/CircleFillAnimator.cpp \
     utils/3rd_party/WAF/Animation/CircleFill/CircleFillDecorator.cpp \
@@ -708,10 +704,6 @@ HEADERS += \
     ui/widgets/tree/tree_header_view.h \
     ui/widgets/tree/tree_view.h \
     ui/widgets/widget/widget.h \
-    utils/3rd_party/QOnlineTranslator/qexample.h \
-    utils/3rd_party/QOnlineTranslator/qonlinetranslator.h \
-    utils/3rd_party/QOnlineTranslator/qonlinetranslatorhelper.h \
-    utils/3rd_party/QOnlineTranslator/qoption.h \
     utils/3rd_party/WAF/AbstractAnimator.h \
     utils/3rd_party/WAF/Animation/Animation.h \
     utils/3rd_party/WAF/Animation/AnimationPrivate.h \

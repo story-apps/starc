@@ -4245,7 +4245,7 @@ void SettingsView::updateTranslations()
     d->screenplayParagraphAddTypeDelegate->setLabel(tr("Add paragraph"));
     d->screenplayParagraphChangeTypeDelegate->setLabel(tr("Change to"));
     //
-    d->shortcutsForComicBookTitle->setText(tr("ComicBook editor"));
+    d->shortcutsForComicBookTitle->setText(tr("Comic book editor"));
     {
         auto model = d->shortcutsForComicBookModel->headerModel();
         model->setData(model->index(0, 0), tr("Block name"), Qt::DisplayRole);
