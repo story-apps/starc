@@ -471,8 +471,10 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
                                        .arg(range.format.foreground().color().name().mid(1)));
             }
 
-            documentXml.append(QString("</w:rPr><w:t>%1</w:t></w:r>")
-                                   .arg(TextHelper::toHtmlEscaped(formatRangeText)));
+            documentXml.append(QString("</w:rPr><w:t xml:space=\"preserve\">%2</w:t></w:r>")
+                                   .arg(TextHelper::toHtmlEscaped(formatRangeText)
+                                            .replace(QChar::LineSeparator,
+                                                     "</w:t><w:br/><w:t xml:space=\"preserve\">")));
         }
         documentXml.append("</w:p>");
     }
