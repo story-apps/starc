@@ -29,6 +29,7 @@ public:
      * @brief Задать размер изображений (т.к. изображения квадратные, используется единое значение)
      */
     void setImageSize(qreal _size);
+    void setImageSize(qreal _width, qreal _height);
 
     /**
      * @brief Задать расстояние между изображениями

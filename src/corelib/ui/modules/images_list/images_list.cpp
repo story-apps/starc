@@ -29,11 +29,6 @@ const QLatin1String kImagesPathKey("widgets/image-files-path");
 constexpr int kInvalidImageIndex = -1;
 constexpr int kAddImageIndex = std::numeric_limits<int>::max();
 
-qreal finalImageSize(qreal _size)
-{
-    return _size > 0 ? _size : DesignSystem::layout().px(90);
-}
-
 qreal finalImageSpacing(qreal _spacing)
 {
     return _spacing > 0 ? _spacing : DesignSystem::layout().px16();
@@ -46,6 +41,11 @@ class ImagesList::Implementation
 {
 public:
     explicit Implementation(ImagesList* _q);
+
+    /**
+     * @brief Итоговый размер изображения
+     */
+    QSizeF finalImageSize() const;
 
     /**
      * @brief Сколько всего элементов нужно отображать (включая кнопку добавления)
@@ -105,7 +105,7 @@ public:
     /**
      * @brief Параметры внешнего вида изображений
      */
-    qreal imageSize = 0.0;
+    QSizeF imageSize;
     qreal imageSpacing = 0.0;
 
     /**
@@ -141,8 +141,15 @@ ImagesList::Implementation::Implementation(ImagesList* _q)
     dragIndicationOpacityAnimation.setEndValue(1.0);
     dragIndicationOpacityAnimation.setDuration(240);
     dragIndicationOpacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
+}
 
-    preview->hide();
+QSizeF ImagesList::Implementation::finalImageSize() const
+{
+    const qreal finalWidth
+        = imageSize.width() > 0 ? imageSize.width() : DesignSystem::layout().px(90);
+    const qreal finalHeight
+        = imageSize.height() > 0 ? imageSize.height() : DesignSystem::layout().px(90);
+    return { finalWidth, finalHeight };
 }
 
 int ImagesList::Implementation::totalImages() const
@@ -152,7 +159,8 @@ int ImagesList::Implementation::totalImages() const
 
 QFont ImagesList::Implementation::clearButtonFont() const
 {
-    return finalImageSize(imageSize) > Ui::DesignSystem::layout().px(100)
+    return finalImageSize().width() > Ui::DesignSystem::layout().px(100)
+            && finalImageSize().height() > Ui::DesignSystem::layout().px(100)
         ? Ui::DesignSystem::font().iconsMid()
         : Ui::DesignSystem::font().iconsSmall();
 }
@@ -160,7 +168,8 @@ QFont ImagesList::Implementation::clearButtonFont() const
 QRectF ImagesList::Implementation::clearButtonRect(const QRectF& _buttonRect) const
 {
     const qreal iconMargin = Ui::DesignSystem::layout().px4();
-    const qreal iconSize = finalImageSize(imageSize) > Ui::DesignSystem::layout().px(100)
+    const qreal iconSize = finalImageSize().width() > Ui::DesignSystem::layout().px(100)
+            && finalImageSize().height() > Ui::DesignSystem::layout().px(100)
         ? Ui::DesignSystem::layout().px24()
         : Ui::DesignSystem::layout().px16();
     const qreal left = _buttonRect.right() - iconSize - iconMargin;
@@ -171,25 +180,26 @@ QRectF ImagesList::Implementation::clearButtonRect(const QRectF& _buttonRect) co
 ImagesList::Implementation::ButtonInfo ImagesList::Implementation::buttonInfo(
     const QPoint& _position) const
 {
-    const auto size = finalImageSize(imageSize);
+    const auto size = finalImageSize();
     const auto spacing = finalImageSpacing(imageSpacing);
     auto x = q->contentsRect().x();
     auto y = q->contentsRect().y();
     for (int index = 0; index < images.size(); ++index) {
-        const QRectF buttonRect(x, y, size, size);
+        const QRectF buttonRect(x, y, size.width(), size.height());
         if (buttonRect.contains(_position)) {
             return { true, false, clearButtonRect(buttonRect).contains(_position), index,
                      buttonRect };
         }
 
-        if (x + size + spacing + size < q->contentsRect().right()) {
-            x += size + spacing;
+        if (x + size.width() + spacing + size.width() < q->contentsRect().right()) {
+            x += size.width() + spacing;
         } else {
             x = q->contentsRect().x();
-            y += size + spacing;
+            y += size.height() + spacing;
         }
     }
-    if (!isReadOnly && isAddButtonVisible && QRectF(x, y, size, size).contains(_position)) {
+    if (!isReadOnly && isAddButtonVisible
+        && QRectF(x, y, size.width(), size.height()).contains(_position)) {
         return { true, true };
     }
 
@@ -198,20 +208,20 @@ ImagesList::Implementation::ButtonInfo ImagesList::Implementation::buttonInfo(
 
 QRectF ImagesList::Implementation::imageRect(int _imageIndex) const
 {
-    const auto size = finalImageSize(imageSize);
+    const auto size = finalImageSize();
     const auto spacing = finalImageSpacing(imageSpacing);
     auto x = q->contentsRect().x();
     auto y = q->contentsRect().y();
     for (int index = 0; index < images.size(); ++index) {
         if (index == _imageIndex) {
-            return QRectF(x, y, size, size);
+            return QRectF(x, y, size.width(), size.height());
         }
 
-        if (x + size + spacing + size < q->contentsRect().right()) {
-            x += size + spacing;
+        if (x + size.width() + spacing + size.width() < q->contentsRect().right()) {
+            x += size.width() + spacing;
         } else {
             x = q->contentsRect().x();
-            y += size + spacing;
+            y += size.height() + spacing;
         }
     }
 
@@ -221,12 +231,13 @@ QRectF ImagesList::Implementation::imageRect(int _imageIndex) const
 void ImagesList::Implementation::updateDisplayImages()
 {
     displayImages.clear();
-    const auto size = finalImageSize(imageSize);
+    const auto size = finalImageSize();
     for (const auto& image : std::as_const(images)) {
-        const auto scaledImage = image.image.scaled(size, size, Qt::KeepAspectRatioByExpanding,
-                                                    Qt::SmoothTransformation);
-        displayImages.append(scaledImage.copy((scaledImage.width() - size) / 2,
-                                              (scaledImage.height() - size) / 2, size, size));
+        const auto scaledImage = image.image.scaled(
+            size.width(), size.height(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+        displayImages.append(scaledImage.copy((scaledImage.width() - size.width()) / 2,
+                                              (scaledImage.height() - size.height()) / 2,
+                                              size.width(), size.height()));
     }
 
     q->update();
@@ -290,11 +301,17 @@ void ImagesList::setAddButtonVisible(bool _visible)
 
 void ImagesList::setImageSize(qreal _size)
 {
-    if (qFuzzyCompare(d->imageSize, _size)) {
+    setImageSize(_size, _size);
+}
+
+void ImagesList::setImageSize(qreal _width, qreal _height)
+{
+    if (qFuzzyCompare(d->imageSize.width(), _width)
+        && qFuzzyCompare(d->imageSize.height(), _height)) {
         return;
     }
 
-    d->imageSize = _size;
+    d->imageSize = { _width, _height };
     updateGeometry();
     update();
 }
@@ -378,9 +395,9 @@ void ImagesList::addImages()
 
 QSize ImagesList::sizeHint() const
 {
-    const auto size = finalImageSize(d->imageSize);
+    const auto size = d->finalImageSize();
     const auto spacing = finalImageSpacing(d->imageSpacing);
-    return QRect(0, 0, d->totalImages() * (size + spacing) - spacing, size)
+    return QRect(0, 0, d->totalImages() * (size.width() + spacing) - spacing, size.height())
         .marginsAdded(contentsMargins())
         .size();
 }
@@ -389,19 +406,19 @@ int ImagesList::heightForWidth(int _width) const
 {
     const int availableWidth = _width - contentsMargins().left() - contentsMargins().right();
     const auto totalImages = d->totalImages();
-    const auto size = finalImageSize(d->imageSize);
+    const auto size = d->finalImageSize();
     const auto spacing = finalImageSpacing(d->imageSpacing);
     auto x = 0.0;
     int imagesInRow = 1;
     for (; imagesInRow < totalImages; ++imagesInRow) {
-        if (x + size + spacing + size < availableWidth) {
-            x += size + spacing;
+        if (x + size.width() + spacing + size.width() < availableWidth) {
+            x += size.width() + spacing;
         } else {
             break;
         }
     }
     const auto rowsCount = qCeil(totalImages / static_cast<qreal>(imagesInRow));
-    return contentsMargins().top() + rowsCount * (size + spacing) - spacing
+    return contentsMargins().top() + rowsCount * (size.height() + spacing) - spacing
         + contentsMargins().bottom();
 }
 
@@ -414,14 +431,18 @@ void ImagesList::paintEvent(QPaintEvent* _event)
     //
     // Рисуем изображения
     //
-    const auto size = finalImageSize(d->imageSize);
+    const auto size = d->finalImageSize();
     const auto spacing = finalImageSpacing(d->imageSpacing);
     const auto radius = DesignSystem::button().borderRadius();
     auto x = contentsRect().x();
     auto y = contentsRect().y();
     for (int index = 0; index < d->images.size(); ++index) {
-        const QRectF imageRect(x, y, size, size);
-        ImageHelper::drawRoundedImage(painter, imageRect, d->displayImages.at(index), radius);
+        const QRectF imageRect(x, y, size.width(), size.height());
+        ImageHelper::drawRoundedImage(
+            painter, imageRect,
+            d->displayImages.at(index).scaled(
+                imageRect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::FastTransformation),
+            radius);
 
         const auto imageOverlayAnimationIter = d->imageToOverlayAnimation.find(index);
         if (imageOverlayAnimationIter != d->imageToOverlayAnimation.end()) {
@@ -445,11 +466,11 @@ void ImagesList::paintEvent(QPaintEvent* _event)
             painter.setOpacity(1.0);
         }
 
-        if (x + size + spacing + size < contentsRect().right()) {
-            x += size + spacing;
+        if (x + size.width() + spacing + size.width() < contentsRect().right()) {
+            x += size.width() + spacing;
         } else {
             x = contentsRect().x();
-            y += size + spacing;
+            y += size.height() + spacing;
         }
     }
 
@@ -457,7 +478,7 @@ void ImagesList::paintEvent(QPaintEvent* _event)
     // Рисуем кнопку добавления изображений
     //
     if (d->isAddButtonVisible) {
-        const QRectF addButtonRect(x, y, size, size);
+        const QRectF addButtonRect(x, y, size.width(), size.height());
         painter.setPen(Qt::NoPen);
         painter.setBrush(ColorHelper::nearby(backgroundColor()));
         painter.drawRoundedRect(addButtonRect, radius, radius);

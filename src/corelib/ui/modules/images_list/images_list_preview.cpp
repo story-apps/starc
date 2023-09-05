@@ -128,6 +128,11 @@ ImagesListPreview::ImagesListPreview(QWidget* _parent)
             hide();
         }
     });
+
+    //
+    // По-умолчанию скрываем виджет
+    //
+    hide();
 }
 
 ImagesListPreview::~ImagesListPreview() = default;
@@ -149,6 +154,10 @@ void ImagesListPreview::showPreview(int _imageIndex, const QRectF& _sourceRect)
     }
 
     if (_imageIndex < 0 || _imageIndex >= d->images.size()) {
+        return;
+    }
+
+    if (d->images.at(_imageIndex).image.isNull()) {
         return;
     }
 
