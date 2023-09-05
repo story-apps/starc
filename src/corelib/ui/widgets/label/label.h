@@ -329,13 +329,16 @@ private:
  */
 class CORE_LIBRARY_EXPORT ImageLabel : public Widget
 {
+    Q_OBJECT
+
 public:
     explicit ImageLabel(QWidget* _parent = nullptr);
     ~ImageLabel() override;
 
     /**
-     * @brief Задать скругление углов
+     * @brief Скругление углов
      */
+    qreal borderRadius() const;
     void setBorderRadius(qreal _radius);
 
     /**
@@ -344,9 +347,16 @@ public:
     void setSkeleton(bool _enabled);
 
     /**
-     * @brief Задать изображение для отрисовки
+     * @brief Изображение для отрисовки
      */
+    QPixmap image() const;
     void setImage(const QPixmap& _image);
+
+signals:
+    /**
+     * @brief Пользователь кликнул на виджете
+     */
+    void clicked();
 
 protected:
     /**
@@ -358,6 +368,11 @@ protected:
      * @brief Обновляем закешированную картинку, чтобы она соответствовала актуальному размеру
      */
     void resizeEvent(QResizeEvent* _event) override;
+
+    /**
+     * @brief Переопределяем для открытия ссылки при клике на виджет
+     */
+    void mouseReleaseEvent(QMouseEvent* _event) override;
 
 private:
     class Implementation;

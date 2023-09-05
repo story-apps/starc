@@ -594,6 +594,11 @@ ImageLabel::ImageLabel(QWidget* _parent)
 
 ImageLabel::~ImageLabel() = default;
 
+qreal ImageLabel::borderRadius() const
+{
+    return d->borderRadius;
+}
+
 void ImageLabel::setBorderRadius(qreal _radius)
 {
     if (qFuzzyCompare(d->borderRadius, _radius)) {
@@ -613,6 +618,11 @@ void ImageLabel::setSkeleton(bool _enabled)
 
     d->isSkeletonEnabled = _enabled;
     update();
+}
+
+QPixmap ImageLabel::image() const
+{
+    return d->sourceImage;
 }
 
 void ImageLabel::setImage(const QPixmap& _image)
@@ -662,4 +672,15 @@ void ImageLabel::resizeEvent(QResizeEvent* _event)
     d->updateDisplayImage();
 
     Widget::resizeEvent(_event);
+}
+
+void ImageLabel::mouseReleaseEvent(QMouseEvent* _event)
+{
+    Widget::mouseReleaseEvent(_event);
+
+    if (!isEnabled() || !rect().contains(_event->pos())) {
+        return;
+    }
+
+    emit clicked();
 }
