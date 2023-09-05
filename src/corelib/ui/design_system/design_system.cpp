@@ -396,15 +396,6 @@ DesignSystem::Font::Implementation::Implementation(qreal _scaleFactor)
               _font.setCapitalization(_capitalization);
               _font.setPixelSize(static_cast<int>(_pixelSize * _scaleFactor));
               _font.setLetterSpacing(QFont::AbsoluteSpacing, _letterSpacing * _scaleFactor);
-
-              //
-              // NOTE: [08.08.2023]
-              //       я очень удивлён, но факт остаётся фактом, если в первый раз вызвать
-              //       QFontMetricsF с латиницей, то он будет выдавать более широкие значения для
-              //       horizontalAdvance (как минимум в Linux, гдя я это обнаружил)
-              //
-              //
-              QFontMetricsF(_font).horizontalAdvance("ф");
           };
 
     initFont(QFont::Light, QFont::Capitalization::MixedCase, 96, -1.5, h1);
@@ -2822,7 +2813,22 @@ DesignSystem::DesignSystem()
 
 DesignSystem* DesignSystem::instance()
 {
-    static DesignSystem* s_designSystem = new DesignSystem;
+    static DesignSystem* s_designSystem = nullptr;
+    if (s_designSystem == nullptr) {
+        //
+        // Шрифты должны быть добавлены до того, как будет инициилизирована дизайн система
+        //
+        const auto fontFamilies = QFontDatabase().families();
+        Q_ASSERT(fontFamilies.contains("Roboto"));
+        Q_ASSERT(fontFamilies.contains("Material Design Icons"));
+        Q_ASSERT(fontFamilies.contains("Material Design Icons"));
+        Q_ASSERT(fontFamilies.contains("Material Design Icons"));
+        Q_ASSERT(fontFamilies.contains("Material Design Icons"));
+        Q_ASSERT(fontFamilies.contains("Font Awesome 6 Brands"));
+        Q_ASSERT(fontFamilies.contains("Font Awesome 6 Brands"));
+
+        s_designSystem = new DesignSystem;
+    }
     return s_designSystem;
 }
 
