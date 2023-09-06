@@ -193,7 +193,8 @@ void LoginDialog::updateTranslations()
 {
     setTitle(tr("Get into your account"));
 
-    d->description->setText(tr("Sign in to get access to the extended free and pro features"));
+    d->description->setText(
+        tr("Sign in to get access to extended features of the FREE, PRO and CLOUD versions"));
     d->email->setLabel(tr("Email"));
     d->updateConfirmationCodeInfo();
     d->confirmationCode->setLabel(tr("Confirmation code"));
