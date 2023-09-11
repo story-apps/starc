@@ -175,17 +175,7 @@ void AbstractTextCorrector::makePlannedCorrection(const QByteArray& _contentHash
     if (d->lastContent.hash == _contentHash
         && d->lastContent.characterCount == d->document->characterCount()) {
         makeSoftCorrections();
-        return;
-    }
-
-    //
-    // Если сейчас происходит повтор/отмена последнего действия, то корректировки уже включены туда
-    //
-    if (auto textModel = qobject_cast<BusinessLayer::TextDocument*>(document())->model();
-        textModel->isUndoInProcess() || textModel->isRedoInProcess()) {
         d->plannedCorrection = {};
-        d->lastContent.hash = _contentHash;
-        d->lastContent.characterCount = d->document->characterCount();
         return;
     }
 
