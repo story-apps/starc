@@ -3518,6 +3518,12 @@ QVector<QUuid> ProjectManager::documentBundle(const QUuid& _documentUuid) const
             auto childItem = item->parent()->childAt(index);
             documents.append(childItem->uuid());
         }
+        //
+        // Версии документов из комплекта добавляем вручную
+        //
+        if (!documents.contains(_documentUuid)) {
+            documents.append(_documentUuid);
+        }
         break;
     }
 
