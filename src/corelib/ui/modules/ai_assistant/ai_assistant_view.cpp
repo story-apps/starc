@@ -1149,8 +1149,8 @@ void AiAssistantView::updateTranslations()
     d->translateInsertButton->setText(tr("Insert"));
     d->generateSynopsisPage->titleLabel->setText(tr("Generate synopsis"));
     d->generateSynopsisLenghtLabel->setText(tr("Synopsis length"));
-    d->generateSynopsisLengthShort->setText(tr("short"));
-    d->generateSynopsisLengthMedium->setText(tr("medium"));
+    d->generateSynopsisLengthShort->setText(tr("short (20 words per scene)"));
+    d->generateSynopsisLengthMedium->setText(tr("medium (45 words per scene)"));
     d->generateSynopsisLengthDefault->setText(tr("unlimitted"));
     d->generateSynopsisResultText->setLabel(tr("Synopsis"));
     d->generateSynopsisButton->setText(tr("Generate"));
