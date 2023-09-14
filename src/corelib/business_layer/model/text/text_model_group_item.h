@@ -99,7 +99,6 @@ public:
      * @brief Уровень вложенности группы
      */
     int level() const;
-    void setLevel(int _level);
 
     /**
      * @brief Номер группы

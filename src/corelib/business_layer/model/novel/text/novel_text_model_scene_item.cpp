@@ -43,7 +43,6 @@ NovelTextModelSceneItem::NovelTextModelSceneItem(const NovelTextModel* _model)
     , d(new Implementation)
 {
     setGroupType(TextGroupType::Scene);
-    setLevel(0);
 }
 
 NovelTextModelSceneItem::~NovelTextModelSceneItem() = default;

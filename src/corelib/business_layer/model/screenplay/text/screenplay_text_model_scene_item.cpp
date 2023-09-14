@@ -53,7 +53,6 @@ ScreenplayTextModelSceneItem::ScreenplayTextModelSceneItem(const ScreenplayTextM
     , d(new Implementation)
 {
     setGroupType(TextGroupType::Scene);
-    setLevel(0);
 }
 
 ScreenplayTextModelSceneItem::~ScreenplayTextModelSceneItem() = default;

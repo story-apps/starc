@@ -37,7 +37,6 @@ NovelTextModelBeatItem::NovelTextModelBeatItem(const NovelTextModel* _model)
     , d(new Implementation)
 {
     setGroupType(TextGroupType::Beat);
-    setLevel(1);
 }
 
 NovelTextModelBeatItem::~NovelTextModelBeatItem() = default;

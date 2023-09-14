@@ -33,7 +33,6 @@ SimpleTextModelChapterItem::SimpleTextModelChapterItem(const SimpleTextModel* _m
     , d(new Implementation)
 {
     setGroupType(_type);
-    setLevel(static_cast<int>(_type));
 }
 
 SimpleTextModelChapterItem::~SimpleTextModelChapterItem() = default;

@@ -1105,112 +1105,155 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     // Определим элемент, внутрь, или после которого будем вставлять данные
     //
     auto item = itemForIndex(_index);
-    //
-    // и извлекаем остающийся в блоке текст, если нужно
-    //
-    int mimeLength = 0;
-    auto increaseMimeLength = [&mimeLength](int _length = 0) {
-        if (mimeLength > 0) {
-            ++mimeLength;
-        }
-        mimeLength += _length;
-    };
-    QString sourceBlockEndContent;
-    QVector<TextModelItem*> lastItemsFromSourceScene;
-    QString correctedMimeData = _mimeData;
-    if (item->type() == TextModelItemType::Text) {
-        auto textItem = static_cast<TextModelTextItem*>(item);
-
-        //
-        // Посмотрим на содержимое майм данных и проверим сколько там текстовых блоков
-        //
-        const auto mimeInfo = ModelHelper::isMimeHasJustOneBlock(correctedMimeData);
-        const auto isMimeContainsJustOneBlock = mimeInfo.first;
-        const auto isMimeContainsFolderOrSequence = mimeInfo.second;
-        //
-        // ... если текст блока, в который идёт вставка не пуст, а в майм данных есть группа и всего
-        //     один текстовый элемент в ней
-        //
-        if (!textItem->text().isEmpty() && isMimeContainsFolderOrSequence
-            && isMimeContainsJustOneBlock) {
-            //
-            // ... то удалим группирующий элемент, чтобы вставлять только текст
-            //
-            QDomDocument mimeDocument;
-            mimeDocument.setContent(correctedMimeData);
-            auto document = mimeDocument.firstChildElement(xml::kDocumentTag);
-            // document -> folder/group -> content tag -> text block
-            const auto itemNode = document.firstChild();
-            auto contentNode = itemNode.firstChild();
-            while (contentNode.nodeName() != xml::kContentTag) {
-                contentNode = contentNode.nextSibling();
-            }
-            const auto textNode = contentNode.firstChild();
-            document.removeChild(itemNode);
-            document.appendChild(textNode);
-            correctedMimeData = mimeDocument.toString();
-        }
-
-        //
-        // Если вставляется несколько блоков и вставка идёт в завершение папки или группы
-        //
-        if (!isMimeContainsJustOneBlock
-            && (textItem->paragraphType() == TextParagraphType::ActFooter
-                || textItem->paragraphType() == TextParagraphType::SequenceFooter
-                || textItem->paragraphType() == TextParagraphType::PartFooter
-                || textItem->paragraphType() == TextParagraphType::ChapterFooter)) {
-            //
-            // ... то вставляем после папки
-            //
-            item = item->parent();
-        }
-        //
-        // В остальных случаях
-        //
-        else {
-            //
-            // Если вставка идёт в пустой блок
-            //
-            if (textItem->text().isEmpty()) {
-                //
-                // ... и блок не является заголовком группы или папки
-                //
-                if (!isTextParagraphHeading(textItem->paragraphType())) {
-                    //
-                    // ... то просто переносим блок после вставляемого фрагмента
-                    //     (в завершении вставки он будет удалён)
-                    //
-                    lastItemsFromSourceScene.append(textItem);
-                }
-            }
-            //
-            // В противном случае
-            //
-            else {
-                //
-                // ... если курсор стоит посередине блока, дробим блок на две части
-                //
-                if (textItem->text().length() > _positionInBlock) {
-                    const bool clearUuid = true;
-                    sourceBlockEndContent = mimeFromSelection(_index, _positionInBlock, _index,
-                                                              textItem->text().length(), clearUuid);
-                    textItem->removeText(_positionInBlock);
-                    updateItem(textItem);
-                }
-            }
-        }
-    } else {
+    if (item->type() != TextModelItemType::Text) {
         Log::warning(
             "Trying to insert from mime to position with no text item. Aborting insertion.");
         return invalidLength;
     }
 
     //
+    // Посмотрим на содержимое майм данных и проверим сколько там текстовых блоков
+    //
+    QString correctedMimeData = _mimeData;
+    const auto mimeInfo = ModelHelper::isMimeHasJustOneBlock(correctedMimeData);
+    const auto isMimeContainsJustOneBlock = mimeInfo.first;
+    const auto isMimeContainsFolderOrSequence = mimeInfo.second;
+    //
+    // ... если текст блока, в который идёт вставка не пуст, а в майм данных есть группа и всего
+    //     один текстовый элемент в ней
+    //
+    auto textItem = static_cast<TextModelTextItem*>(item);
+    if (!textItem->text().isEmpty() && isMimeContainsJustOneBlock
+        && isMimeContainsFolderOrSequence) {
+        //
+        // ... то удалим группирующий элемент, чтобы вставлять только текст
+        //
+        QDomDocument mimeDocument;
+        mimeDocument.setContent(correctedMimeData);
+        auto document = mimeDocument.firstChildElement(xml::kDocumentTag);
+        // document -> folder/group -> content tag -> text block
+        const auto itemNode = document.firstChild();
+        auto contentNode = itemNode.firstChild();
+        while (contentNode.nodeName() != xml::kContentTag) {
+            contentNode = contentNode.nextSibling();
+        }
+        const auto textNode = contentNode.firstChild();
+        document.removeChild(itemNode);
+        document.appendChild(textNode);
+        correctedMimeData = mimeDocument.toString();
+    }
+
+    //
+    // Определим необходимость удаления элемента в который идёт вставка после удаления
+    //
+    TextModelItem* itemToDelete = nullptr;
+    if (textItem->text().isEmpty()
+        && (!isMimeContainsJustOneBlock || isMimeContainsFolderOrSequence)) {
+        itemToDelete = textItem;
+    }
+
+    //
+    // Подготовимся к вставке данных
+    //
+    QString sourceBlockEndContent;
+    QVector<TextModelItem*> itemsToPlaceAfterMime;
+    auto extractEndContentFromBlock
+        = [this, _index, _positionInBlock, &textItem, &sourceBlockEndContent] {
+              //
+              // Извлекаем контент только если текстовый блок не пуст
+              //
+              if (textItem->text().isEmpty()) {
+                  return;
+              }
+
+              //
+              // Разделим текущий блок на два, даже если курсор в самом начале блока
+              //
+              const bool clearUuid = false;
+              sourceBlockEndContent = mimeFromSelection(_index, _positionInBlock, _index,
+                                                        textItem->text().length(), clearUuid);
+              textItem->removeText(_positionInBlock);
+              updateItem(textItem);
+          };
+    std::optional<int> mimeLength;
+    auto increaseMimeLength = [&mimeLength](int _length = 0) {
+        if (mimeLength.has_value()) {
+            ++mimeLength.value();
+        }
+        mimeLength = mimeLength.value_or(0) + _length;
+    };
+    //
+    // ... если вставляются несколько блоков
+    //
+    if (!isMimeContainsJustOneBlock) {
+        //
+        // ... если вставка идёт в заголовке папки/группы/части/главы/сцены/панели/страницы/и т.п.
+        //
+        if (textItem->paragraphType() == TextParagraphType::ActHeading
+            || textItem->paragraphType() == TextParagraphType::SequenceHeading
+            || textItem->paragraphType() == TextParagraphType::PartHeading
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading
+            || textItem->paragraphType() == TextParagraphType::SceneHeading
+            || textItem->paragraphType() == TextParagraphType::BeatHeading
+            || textItem->paragraphType() == TextParagraphType::PageHeading
+            || textItem->paragraphType() == TextParagraphType::PanelHeading
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading1
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading2
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading3
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading4
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading5
+            || textItem->paragraphType() == TextParagraphType::ChapterHeading6) {
+            //
+            // ... то вставляемые данные будем добавлять после текущего элемента
+            //
+
+            itemToDelete = nullptr;
+            increaseMimeLength(textItem->text().length() - _positionInBlock);
+        }
+        //
+        // ... если вставка идёт в завершении папки/группы/части/главы
+        //
+        else if (textItem->paragraphType() == TextParagraphType::ActFooter
+                 || textItem->paragraphType() == TextParagraphType::SequenceFooter
+                 || textItem->paragraphType() == TextParagraphType::PartFooter
+                 || textItem->paragraphType() == TextParagraphType::ChapterFooter) {
+            //
+            // ... то вставляемые данные будем добавлять после родителя текущего элемента
+            //
+            item = item->parent();
+
+            itemToDelete = nullptr;
+            increaseMimeLength(textItem->text().length() - _positionInBlock);
+        }
+        //
+        // ... если вставка идёт в обычный текстовый блок
+        //
+        else {
+            //
+            // ... разделим текущий блок на части, чтобы вставить данные между ними
+            //
+            extractEndContentFromBlock();
+
+            if (_positionInBlock > 0) {
+                increaseMimeLength();
+            }
+        }
+
+    }
+    //
+    // ... если вставляется один блок
+    //
+    else {
+        //
+        // ... разделим текущий блок на части, чтобы потом их сшить
+        //
+        extractEndContentFromBlock();
+    }
+
+    //
     // Считываем данные и последовательно вставляем в модель
     //
-    QXmlStreamReader contentReader(correctedMimeData);
-    contentReader.readNextStartElement(); // document
-    contentReader.readNextStartElement();
     bool isFirstTextItemHandled = false;
     bool isSplitterStartWasCreated = false;
     TextModelItem* lastItem = item;
@@ -1225,6 +1268,26 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         lastItem = itemsToInsert.constLast();
         itemsToInsert.clear();
     };
+    QXmlStreamReader contentReader(correctedMimeData);
+    contentReader.readNextStartElement(); // document
+    contentReader.readNextStartElement();
+    struct ItemContainerType {
+        TextFolderType folder = TextFolderType::Undefined;
+        TextGroupType group = TextGroupType::Undefined;
+
+        bool isValid() const
+        {
+            return folder != TextFolderType::Undefined || group != TextGroupType::Undefined;
+        }
+        bool isFolder() const
+        {
+            return folder != TextFolderType::Undefined;
+        }
+        bool isGroup() const
+        {
+            return group != TextGroupType::Undefined;
+        }
+    };
     while (!contentReader.atEnd()) {
         const auto currentTag = contentReader.name().toString();
 
@@ -1233,58 +1296,158 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         if (currentTag == xml::kDocumentTag) {
             //
-            // ... поместим в модель, все собранные элементы
+            // ... поместим в модель все собранные элементы
             //
             insertCollectedItems();
             break;
         }
 
-        TextModelItem* newItem = nullptr;
         //
-        // При входе в папку или группу, если предыдущий текстовый элемент был в группе,
+        // При вставке папки или группы, если предыдущий текстовый элемент был в группе,
         // то вставлять их будем не после текстового элемента, а после группы
         //
-        if ((textFolderTypeFromString(currentTag) != TextFolderType::Undefined
-             || textGroupTypeFromString(currentTag) != TextGroupType::Undefined)
+        const auto currentItemContainerType
+            = ItemContainerType{ textFolderTypeFromString(currentTag),
+                                 textGroupTypeFromString(currentTag) };
+        if (currentItemContainerType.isValid()
             && (lastItem->type() == TextModelItemType::Text
                 || lastItem->type() == TextModelItemType::Splitter)) {
             //
-            // ... вставим в модель, всё, что было собрано до этого момента
+            // ... вставим в модель всё, что было собрано до этого момента
             //
             insertCollectedItems();
 
+
             //
-            // ... родитель предыдущего элемента должен существовать и это должна быть группа
+            // ... если у предыдущего элемента есть родитель
+            //     и этот родитель не является корнем
+            //     и этот родитель является папкой или группой (более низкого уровня),
+            //     то вставим новую группу/папку после родителя текстового элемента
             //
-            if (lastItem && lastItem->parent() != nullptr
-                && lastItem->parent()->type() == TextModelItemType::Group) {
-                //
-                // ... и при этом вырезаем из него все текстовые блоки, идущие до конца группы/папки
-                //
-                auto lastItemParent = lastItem->parent();
-                int movedItemIndex = lastItemParent->rowOfChild(lastItem) + 1;
-                while (lastItemParent->childCount() > movedItemIndex) {
-                    lastItemsFromSourceScene.append(lastItemParent->childAt(movedItemIndex));
-                    ++movedItemIndex;
+            forever
+            {
+                const auto lastItemParent = lastItem != nullptr ? lastItem->parent() : nullptr;
+                if (lastItemParent != nullptr && lastItemParent != d->rootItem) {
+                    //
+                    // ... в папку будем вставлять после текущего текстового элемента, т.к. вложение
+                    //     в этом случае не имеет ограничений
+                    //
+                    if (lastItemParent->type() == TextModelItemType::Folder) {
+                        //
+                        // ... и при этом вырезаем из него все блоки, идущие до конца группы/папки
+                        //
+                        const int targetChildCountDelta = 1;
+                        int movedItemIndex = lastItemParent->rowOfChild(lastItem) + 1;
+                        while (lastItemParent->childCount()
+                               > movedItemIndex + targetChildCountDelta) {
+                            itemsToPlaceAfterMime.append(lastItemParent->childAt(movedItemIndex));
+                            ++movedItemIndex;
+                        }
+                        //
+                        // ... вставлять будем после текущего элемента
+                        //
+                        insertAfterItem = lastItem;
+                    }
+                    //
+                    // ... в группу вставляется папка - идёт до группы уровня 0 и вставляем после
+                    //     неё, либо до момента, когда родителем группы будет папка
+                    //
+                    else if (lastItemParent->type() == TextModelItemType::Group
+                             && currentItemContainerType.isFolder()) {
+                        //
+                        // ... вставка идёт после группы не самого верхнего уровня, переходим к
+                        //     более верхнему уровню иерархии в поиске места для вставки, при этом
+                        //     текстовые и остальные блоки до конца группирующего элемента должны
+                        //     быть вырезаны для последующей вставки после вставляемых данных
+                        //
+                        if (textGroupTypeLevel(
+                                static_cast<TextGroupType>(lastItemParent->subtype()))
+                            > 0) {
+                            int movedItemIndex = lastItemParent->rowOfChild(lastItem) + 1;
+                            while (lastItemParent->childCount() > movedItemIndex) {
+                                itemsToPlaceAfterMime.append(
+                                    lastItemParent->childAt(movedItemIndex));
+                                ++movedItemIndex;
+                            }
+
+                            lastItem = lastItemParent;
+                            continue;
+                        }
+
+                        //
+                        // ... и при этом вырезаем из него все блоки, идущие до конца группы/папки
+                        //
+                        int movedItemIndex = lastItemParent->rowOfChild(lastItem) + 1;
+                        while (lastItemParent->childCount() > movedItemIndex) {
+                            itemsToPlaceAfterMime.append(lastItemParent->childAt(movedItemIndex));
+                            ++movedItemIndex;
+                        }
+                        //
+                        // Собственно берём родителя вместо самого элемента
+                        //
+                        lastItem = lastItemParent;
+                        insertAfterItem = lastItemParent;
+                    }
+                    //
+                    // ... в группу вставляется группа - идёт до группы того же уровня
+                    //
+                    else if (lastItemParent->type() == TextModelItemType::Group
+                             && currentItemContainerType.isGroup()) {
+                        //
+                        // ... если уровень вставляемой группы выше уровня текущей, то переносим
+                        // оставшиеся элементы и переходим к родителю
+                        //
+                        if (textGroupTypeLevel(currentItemContainerType.group) < textGroupTypeLevel(
+                                static_cast<TextGroupType>(lastItemParent->subtype()))) {
+                            int movedItemIndex = lastItemParent->rowOfChild(lastItem) + 1;
+                            while (lastItemParent->childCount() > movedItemIndex) {
+                                itemsToPlaceAfterMime.append(
+                                    lastItemParent->childAt(movedItemIndex));
+                                ++movedItemIndex;
+                            }
+                            lastItem = lastItemParent;
+                            continue;
+                        }
+
+                        //
+                        // ... и при этом вырезаем из него все блоки, идущие до конца группы/папки
+                        //
+                        int movedItemIndex = lastItemParent->rowOfChild(lastItem) + 1;
+                        while (lastItemParent->childCount() > movedItemIndex) {
+                            itemsToPlaceAfterMime.append(lastItemParent->childAt(movedItemIndex));
+                            ++movedItemIndex;
+                        }
+                        //
+                        // Собственно берём родителя вместо самого элемента
+                        //
+                        lastItem = lastItemParent;
+                        insertAfterItem = lastItemParent;
+                    }
+                    //
+                    // ... в противном случае, вставлять будем после последнего вставленного
+                    // элемента
+                    //
+                    else {
+                        insertAfterItem = lastItem;
+                    }
                 }
-                //
-                // Собственно берём родителя вместо самого элемента
-                //
-                lastItem = lastItemParent;
-                insertAfterItem = lastItemParent;
-            }
-            //
-            // ... в противном случае, вставлять будем после последнего вставленного элемента
-            //
-            else {
-                insertAfterItem = lastItem;
+
+                break;
             }
         }
 
 
-        if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
+        //
+        // Вставляется папка
+        //
+        TextModelItem* newItem = nullptr;
+        if (currentItemContainerType.isFolder()) {
             newItem = createFolderItem(contentReader);
-        } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
+        }
+        //
+        // Вставляется сцена
+        //
+        else if (currentItemContainerType.isGroup()) {
             auto newGroupItem = createGroupItem(contentReader);
             increaseMimeLength(newGroupItem->length());
 
@@ -1307,7 +1470,11 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             }
 
             newItem = newGroupItem;
-        } else if (currentTag == xml::kSplitterTag) {
+        }
+        //
+        // Вставляется разделитель
+        //
+        else if (currentTag == xml::kSplitterTag) {
             const auto previousItemType
                 = insertAfterItem != nullptr ? insertAfterItem->type() : TextModelItemType::Folder;
             switch (previousItemType) {
@@ -1364,7 +1531,11 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                 break;
             }
             }
-        } else {
+        }
+        //
+        // Вставляется текстовый элемент
+        //
+        else {
             auto newTextItem = createTextItem(contentReader);
             increaseMimeLength(newTextItem->text().length());
             //
@@ -1392,10 +1563,10 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
             if (!isFirstTextItemHandled) {
                 isFirstTextItemHandled = true;
                 //
-                // ... то просто объединим их
+                // ... при этом это вставка только одного элемента, то просто объединим их
                 //
-                if (item->type() == TextModelItemType::Text
-                    && !lastItemsFromSourceScene.contains(item)) {
+                if (isMimeContainsJustOneBlock && item->type() == TextModelItemType::Text
+                    && !itemsToPlaceAfterMime.contains(item)) {
                     auto textItem = static_cast<TextModelTextItem*>(item);
                     textItem->mergeWith(newTextItem);
                     updateItem(textItem);
@@ -1403,7 +1574,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                     //
                     // ... и исключаем исходный блок из переноса, если он был туда помещён
                     //
-                    lastItemsFromSourceScene.removeAll(textItem);
+                    itemsToPlaceAfterMime.removeAll(textItem);
                 }
                 //
                 // ... иначе вставляем текстовый элемент в модель
@@ -1445,26 +1616,15 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         }
 
         if (hasContent) {
-            auto item = createTextItem(contentReader);
-            //
-            // ... и последний вставленный элемент был текстовым
-            //
-            if (lastItem->type() == TextModelItemType::Text) {
-                auto lastTextItem = static_cast<TextModelTextItem*>(lastItem);
-
-                //
-                // Объединим элементы
-                //
-                lastTextItem->mergeWith(item);
-                updateItem(lastTextItem);
-                delete item;
-            }
-            //
-            // В противном случае, вставляем текстовый элемент после последнего вставленного
-            //
-            else {
-                appendItem(item, lastItem);
-                lastItem = item;
+            auto newTextItem = createTextItem(contentReader);
+            if (isMimeContainsJustOneBlock) {
+                auto textItem = static_cast<TextModelTextItem*>(lastItem);
+                textItem->mergeWith(newTextItem);
+                updateItem(textItem);
+                delete newTextItem;
+            } else {
+                insertItem(newTextItem, lastItem);
+                lastItem = newTextItem;
             }
         }
     }
@@ -1472,11 +1632,11 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     //
     // Если есть оторванные текстовые блоки
     //
-    if (!lastItemsFromSourceScene.isEmpty()) {
+    if (!itemsToPlaceAfterMime.isEmpty()) {
         //
         // Извлечём блоки из родителя
         //
-        for (auto item : lastItemsFromSourceScene) {
+        for (auto item : itemsToPlaceAfterMime) {
             if (item->hasParent()) {
                 auto itemParent = item->parent();
                 takeItem(item);
@@ -1494,7 +1654,7 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
         //
         // Просто вставляем их внутрь или после последнего элемента
         //
-        for (auto item : lastItemsFromSourceScene) {
+        for (auto item : itemsToPlaceAfterMime) {
             //
             // Удаляем пустые элементы модели
             //
@@ -1550,11 +1710,23 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
     }
 
     //
+    // Если необходимо, то удаляем пустой блок в которым стоял курсор при вставке
+    //
+    if (itemToDelete != nullptr) {
+        if (itemToDelete->parent() != nullptr
+            && itemToDelete->parent()->type() == TextModelItemType::Group
+            && itemToDelete->parent()->childCount() == 1) {
+            itemToDelete = itemToDelete->parent();
+        }
+        removeItem(itemToDelete);
+    }
+
+    //
     // Завершаем изменение
     //
     endChangeRows();
 
-    return mimeLength;
+    return mimeLength.value_or(0);
 }
 
 TextModelItem* TextModel::itemForIndex(const QModelIndex& _index) const

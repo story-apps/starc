@@ -19,6 +19,7 @@ namespace {
 
 const QHash<TextFolderType, QString> kAbstractParagraphFolderToString = {
     { TextFolderType::Undefined, QLatin1String("undefined") },
+    { TextFolderType::Root, QLatin1String("root") },
     { TextFolderType::Act, QLatin1String("act") },
     { TextFolderType::Sequence, QLatin1String("sequence") },
     { TextFolderType::Part, QLatin1String("part") },
@@ -122,6 +123,49 @@ QString toString(TextGroupType _type)
 TextGroupType textGroupTypeFromString(const QString& _text)
 {
     return kAbstractParagraphGroupToString.key(_text, TextGroupType::Undefined);
+}
+
+int textGroupTypeLevel(TextGroupType _type)
+{
+    switch (_type) {
+    default: {
+        Q_ASSERT(false);
+        return -1;
+    }
+
+    case TextGroupType::Scene: {
+        return 0;
+    }
+    case TextGroupType::Beat: {
+        return 1;
+    }
+
+    case TextGroupType::Page: {
+        return 0;
+    }
+    case TextGroupType::Panel: {
+        return 1;
+    }
+
+    case TextGroupType::Chapter1: {
+        return 0;
+    }
+    case TextGroupType::Chapter2: {
+        return 1;
+    }
+    case TextGroupType::Chapter3: {
+        return 2;
+    }
+    case TextGroupType::Chapter4: {
+        return 3;
+    }
+    case TextGroupType::Chapter5: {
+        return 4;
+    }
+    case TextGroupType::Chapter6: {
+        return 5;
+    }
+    }
 }
 
 QString toString(TextParagraphType _type)

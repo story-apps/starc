@@ -14,7 +14,6 @@ StageplayTextModelSceneItem::StageplayTextModelSceneItem(const StageplayTextMode
     : TextModelGroupItem(_model)
 {
     setGroupType(TextGroupType::Scene);
-    setLevel(0);
 }
 
 StageplayTextModelSceneItem::~StageplayTextModelSceneItem() = default;

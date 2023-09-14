@@ -26,6 +26,7 @@ enum class TextFolderType {
 
 /**
  * @brief Типы групп
+ * @note Типы должны следовать по мере уменьшения уровня вложенности (фактически level == groupType)
  */
 enum class TextGroupType {
     Undefined = 100,
@@ -144,6 +145,11 @@ CORE_LIBRARY_EXPORT QString toString(TextGroupType _type);
  * @brief Получить тип группы из текстового представления
  */
 CORE_LIBRARY_EXPORT TextGroupType textGroupTypeFromString(const QString& _text);
+
+/**
+ * @brief Уровень группы в зависимости от типа (чем меньше уровень, тем выше группа в иерархии)
+ */
+CORE_LIBRARY_EXPORT int textGroupTypeLevel(TextGroupType _type);
 
 /**
  * @brief Получить текстовое представление типа блока

@@ -40,7 +40,6 @@ ComicBookTextModelPanelItem::ComicBookTextModelPanelItem(const ComicBookTextMode
     , d(new Implementation)
 {
     setGroupType(TextGroupType::Panel);
-    setLevel(1);
 }
 
 ComicBookTextModelPanelItem::~ComicBookTextModelPanelItem() = default;

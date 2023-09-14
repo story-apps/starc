@@ -42,7 +42,6 @@ ScreenplayTextModelBeatItem::ScreenplayTextModelBeatItem(const ScreenplayTextMod
     , d(new Implementation)
 {
     setGroupType(TextGroupType::Beat);
-    setLevel(1);
 }
 
 ScreenplayTextModelBeatItem::~ScreenplayTextModelBeatItem() = default;

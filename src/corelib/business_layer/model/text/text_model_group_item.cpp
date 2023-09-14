@@ -31,11 +31,6 @@ public:
     QUuid uuid = QUuid::createUuid();
 
     /**
-     * @brief Уровень группы (чем больше число, тем ниже уровень)
-     */
-    int level = 0;
-
-    /**
      * @brief Пропущена ли группа
      */
     bool isOmited = false;
@@ -150,17 +145,7 @@ QUuid TextModelGroupItem::uuid() const
 
 int TextModelGroupItem::level() const
 {
-    return d->level;
-}
-
-void TextModelGroupItem::setLevel(int _level)
-{
-    if (d->level == _level) {
-        return;
-    }
-
-    d->level = _level;
-    setChanged(true);
+    return textGroupTypeLevel(d->groupType);
 }
 
 std::optional<TextModelGroupItem::Number> TextModelGroupItem::number() const

@@ -32,7 +32,6 @@ AudioplayTextModelSceneItem::AudioplayTextModelSceneItem(const AudioplayTextMode
     , d(new Implementation)
 {
     setGroupType(TextGroupType::Scene);
-    setLevel(0);
 }
 
 AudioplayTextModelSceneItem::~AudioplayTextModelSceneItem() = default;

@@ -45,7 +45,6 @@ ComicBookTextModelPageItem::ComicBookTextModelPageItem(const ComicBookTextModel*
     , d(new Implementation)
 {
     setGroupType(TextGroupType::Page);
-    setLevel(0);
 }
 
 ComicBookTextModelPageItem::~ComicBookTextModelPageItem() = default;
