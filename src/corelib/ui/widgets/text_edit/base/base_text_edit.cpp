@@ -951,7 +951,8 @@ bool BaseTextEdit::updateEnteredText(const QKeyEvent* _event)
     //
     // Заменяем i на I для английского
     //
-    if (QLocale().language() == QLocale::English && !eventText.isEmpty()
+    if (QLocale().language() == QLocale::English
+        && QApplication::inputMethod()->locale() == QLocale::English && !eventText.isEmpty()
         && (eventText.front().isPunct() || eventText.front().isSpace())
         && cursorBackwardText.leftRef(cursorBackwardText.length() - eventText.length())
                .endsWith(" i")) {
