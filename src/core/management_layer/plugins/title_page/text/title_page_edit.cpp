@@ -710,7 +710,7 @@ void TitlePageEdit::insertFromMimeData(const QMimeData* _source)
     QString textToInsert;
 
     //
-    // Если вставляются данные в сценарном формате, то вставляем как положено
+    // Если вставляются данные в сценарном формате
     //
     if (_source->formats().contains(d->model->mimeTypes().constFirst())) {
         textToInsert = _source->data(d->model->mimeTypes().constFirst());

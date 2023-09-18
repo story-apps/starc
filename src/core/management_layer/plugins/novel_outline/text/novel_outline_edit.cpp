@@ -1306,35 +1306,6 @@ void NovelOutlineEdit::insertFromMimeData(const QMimeData* _source)
     }
 
     //
-    // Переместим курсор в конец бита
-    //
-    const int invalidPosition = -1;
-    int removeCharacterAtPosition = invalidPosition;
-    if (BusinessLayer::TextBlockStyle::forBlock(cursor)
-        == BusinessLayer::TextParagraphType::BeatHeading) {
-        do {
-            const auto positionBeforeMove = cursor.position();
-            const auto isCursorMoved = cursor.movePosition(QTextCursor::NextBlock);
-            if (isCursorMoved
-                && kEndOfBeatTypes.contains(BusinessLayer::TextBlockStyle::forBlock(cursor))) {
-                cursor.setPosition(positionBeforeMove);
-                break;
-            }
-
-            cursor.movePosition(QTextCursor::EndOfBlock);
-        } while (!cursor.atEnd());
-
-        //
-        // Если текст блока пуст, то поместим туда пробел, чтобы вставка майм-данных не
-        // проглатила этот блок
-        //
-        if (cursor.block().text().isEmpty()) {
-            removeCharacterAtPosition = cursor.position();
-            cursor.insertText(" ");
-        }
-    }
-
-    //
     // Если в моменте входа мы в состоянии редактирования (такое возможно в момент дропа),
     // то запомним это состояние, чтобы восстановить после дропа, а для вставки важно,
     // чтобы режим редактирования был выключен, т.к. данные будут загружаться через модель
@@ -1350,7 +1321,7 @@ void NovelOutlineEdit::insertFromMimeData(const QMimeData* _source)
     QString textToInsert;
 
     //
-    // Если вставляются данные в сценарном формате, то вставляем как положено
+    // Если вставляются данные в сценарном формате
     //
     if (_source->formats().contains(d->model->mimeTypes().constFirst())) {
         textToInsert = _source->data(d->model->mimeTypes().constFirst());
@@ -1377,17 +1348,6 @@ void NovelOutlineEdit::insertFromMimeData(const QMimeData* _source)
     // Собственно вставка данных
     //
     auto cursorPosition = d->document.insertFromMime(cursor.position(), textToInsert);
-
-    //
-    // Удалим лишний пробел, который вставляли
-    //
-    if (removeCharacterAtPosition != invalidPosition) {
-        cursor.setPosition(removeCharacterAtPosition);
-        cursor.deleteChar();
-        if (removeCharacterAtPosition < cursorPosition) {
-            --cursorPosition;
-        }
-    }
 
     //
     // Восстанавливаем режим редактирования, если нужно

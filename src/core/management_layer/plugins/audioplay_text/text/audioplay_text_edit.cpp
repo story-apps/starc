@@ -1392,10 +1392,8 @@ void AudioplayTextEdit::insertFromMimeData(const QMimeData* _source)
     QString textToInsert;
 
     //
-    // Если вставляются данные в сценарном формате, то вставляем как положено
+    // Если вставляются данные в сценарном формате
     //
-    const int invalidPosition = -1;
-    int removeCharacterAtPosition = invalidPosition;
     if (_source->formats().contains(d->model->mimeTypes().constFirst())) {
         textToInsert = _source->data(d->model->mimeTypes().constFirst());
     }
@@ -1404,16 +1402,6 @@ void AudioplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     else if (_source->hasText()) {
         const auto text = _source->text();
-
-        //
-        // ... если в тексте всего одна строка и вставка происходит в пустой абзац, то вставим в
-        // него пробел, чтобы его стиль не изменился, а сам текст будем вставлять в начало абзаца
-        //
-        if (!text.contains('\n') && cursor.block().text().isEmpty()) {
-            removeCharacterAtPosition = cursor.position();
-            cursor.insertText(" ");
-            setTextCursor(cursor);
-        }
 
         //
         // ... если строк несколько, то вставляем его, импортировав с фонтана
@@ -1432,23 +1420,9 @@ void AudioplayTextEdit::insertFromMimeData(const QMimeData* _source)
         const auto isMimeContainsJustOneBlock = mimeInfo.first;
         const auto isMimeContainsFolderOrSequence = mimeInfo.second;
         //
-        // ... если вставляется один текстовый блок
-        //
-        if (isMimeContainsJustOneBlock && !isMimeContainsFolderOrSequence) {
-            //
-            // ... и вставка происходит в пустой абзац, то вставим в него пробел,
-            //     чтобы его стиль не изменился, а сам текст будем вставлять в начало абзаца
-            //
-            if (cursor.block().text().isEmpty()) {
-                removeCharacterAtPosition = cursor.position();
-                cursor.insertText(" ");
-                setTextCursor(cursor);
-            }
-        }
-        //
         // ... если вставляется несколько блоков
         //
-        else {
+        if (!isMimeContainsJustOneBlock || isMimeContainsFolderOrSequence) {
             bool isTableEmpty = true;
             while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter) {
                 cursor.movePosition(TextCursor::PreviousBlock);
@@ -1488,17 +1462,6 @@ void AudioplayTextEdit::insertFromMimeData(const QMimeData* _source)
     // Собственно вставка данных
     //
     auto cursorPosition = d->document.insertFromMime(textCursor().position(), textToInsert);
-
-    //
-    // Удалим лишний пробел, который вставляли
-    //
-    if (removeCharacterAtPosition != invalidPosition) {
-        cursor.setPosition(removeCharacterAtPosition);
-        cursor.deleteChar();
-        if (removeCharacterAtPosition < cursorPosition) {
-            --cursorPosition;
-        }
-    }
 
     //
     // Восстанавливаем режим редактирования, если нужно
