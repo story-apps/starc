@@ -51,6 +51,7 @@
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <utils/logging.h>
+#include <utils/shugar.h>
 
 #include <QAction>
 #include <QApplication>
@@ -1312,6 +1313,32 @@ void ProjectManager::Implementation::findAllCharacters()
             }
 
             //
+            // Удаляем дубликаты
+            // FIXME: выяснить откуда тут могут появляться дубликаты и искоренить проблему, сейчас
+            //        тут исправляется только следствие, эта проблема может аффектить и другие места
+            //
+            {
+                QSet<QString> allCharacters;
+                QVector<int> duplicatesToRemove;
+                for (int row = 0; row < charactersModel->rowCount(); ++row) {
+                    const auto characterName = charactersModel->index(row, 0).data().toString();
+                    if (allCharacters.contains(characterName)) {
+                        duplicatesToRemove.append(row);
+                    } else {
+                        allCharacters.insert(characterName);
+                    }
+                }
+
+                for (auto duplicateRow : reversed(duplicatesToRemove)) {
+                    const auto characterModel = charactersModel->character(duplicateRow);
+                    auto item
+                        = projectStructureModel->itemForUuid(characterModel->document()->uuid());
+                    const auto forceRemove = true;
+                    removeDocument(item, forceRemove);
+                }
+            }
+
+            //
             // Если надо, удалим персонажей, которые не встречаются в тексте
             //
             if (_buttonInfo.id == kKeepFromTextButtonId) {
@@ -1415,6 +1442,32 @@ void ProjectManager::Implementation::findAllLocations()
             //
             if (_buttonInfo.id == kCancelButtonId) {
                 return;
+            }
+
+            //
+            // Удаляем дубликаты
+            // FIXME: выяснить откуда тут могут появляться дубликаты и искоренить проблему, сейчас
+            //        тут исправляется только следствие, эта проблема может аффектить и другие места
+            //
+            {
+                QSet<QString> allCharacters;
+                QVector<int> duplicatesToRemove;
+                for (int row = 0; row < locationsModel->rowCount(); ++row) {
+                    const auto locationName = locationsModel->index(row, 0).data().toString();
+                    if (allCharacters.contains(locationName)) {
+                        duplicatesToRemove.append(row);
+                    } else {
+                        allCharacters.insert(locationName);
+                    }
+                }
+
+                for (auto duplicateRow : reversed(duplicatesToRemove)) {
+                    const auto locationModel = locationsModel->location(duplicateRow);
+                    auto item
+                        = projectStructureModel->itemForUuid(locationModel->document()->uuid());
+                    const auto forceRemove = true;
+                    removeDocument(item, forceRemove);
+                }
             }
 
             //
