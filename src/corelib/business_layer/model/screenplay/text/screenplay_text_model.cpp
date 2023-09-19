@@ -572,6 +572,10 @@ std::map<std::chrono::milliseconds, QColor> ScreenplayTextModel::itemsColors() c
             }
 
             case TextModelItemType::Group: {
+                if (static_cast<TextGroupType>(childItem->subtype()) != TextGroupType::Scene) {
+                    break;
+                }
+
                 const auto sceneItem = static_cast<const ScreenplayTextModelSceneItem*>(childItem);
                 colors.emplace(lastItemDuration, sceneItem->color());
                 lastItemDuration += sceneItem->duration();

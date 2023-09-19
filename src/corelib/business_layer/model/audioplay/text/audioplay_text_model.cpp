@@ -427,6 +427,10 @@ std::map<std::chrono::milliseconds, QColor> AudioplayTextModel::itemsColors() co
             }
 
             case TextModelItemType::Group: {
+                if (static_cast<TextGroupType>(childItem->subtype()) != TextGroupType::Scene) {
+                    break;
+                }
+
                 const auto sceneItem = static_cast<const AudioplayTextModelSceneItem*>(childItem);
                 colors.emplace(lastItemDuration, sceneItem->color());
                 lastItemDuration += sceneItem->duration();
