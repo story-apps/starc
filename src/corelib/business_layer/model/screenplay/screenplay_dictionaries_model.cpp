@@ -376,7 +376,8 @@ void ScreenplayDictionariesModel::addResourceCategory(const QString& _name, cons
         return;
     }
 
-    d->resourceCategories.append({ QUuid::createUuid(), _name, _icon, _color, _hasIds });
+    d->resourceCategories.append(
+        { QUuid::createUuid(), _name, !_icon.isEmpty() ? _icon : u8"\U000F0766", _color, _hasIds });
     emit resourceCategoriesChanged();
 }
 
@@ -392,7 +393,7 @@ void ScreenplayDictionariesModel::setResourceCategory(const QUuid& _uuid, const 
         }
 
         category.name = _name;
-        //        category.icon = _icon;
+        category.icon = !_icon.isEmpty() ? _icon : u8"\U000F0766";
         category.color = _color;
         category.hasIds = _hasIds;
         emit resourceCategoriesChanged();
