@@ -341,8 +341,8 @@ void Splitter::setSizes(const QVector<int>& _sizes)
     // ... и кнопку отображения скрытой панели
     //
     const auto minimumVisibleSize = 0.005;
-    if ((d->sizes.constFirst() <= minimumVisibleSize && widgets.constFirst()->isVisible())
-        || (d->sizes.constLast() <= minimumVisibleSize && widgets.constLast()->isVisible())) {
+    if ((d->sizes.constFirst() <= minimumVisibleSize && widgets.constFirst()->isVisibleTo(this))
+        || (d->sizes.constLast() <= minimumVisibleSize && widgets.constLast()->isVisibleTo(this))) {
         if (d->sizes.constFirst() <= minimumVisibleSize) {
             d->showHiddenPanelToolbar->setActionCustomWidth(d->showRightPanelAction,
                                                             Ui::DesignSystem::layout().px8());
