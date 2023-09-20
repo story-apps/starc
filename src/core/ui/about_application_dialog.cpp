@@ -59,7 +59,8 @@ AboutApplicationDialog::Implementation::Implementation(QWidget* _parent)
 {
     versionLabel->setLink(QUrl("https://starc.app/blog/"));
     authorsLink->setLink(QUrl("https://storyapps.dev/"));
-    partnerLink->setLink(QUrl("https://scriptwriting.courses/"));
+    partnerLink->setLink(
+        QUrl("https://scriptwriting.courses/?utm_source=starc-desktop-app&utm_medium=referral"));
 
     twitterButton->setIcon(u8"\U0000f099");
     discordButton->setIcon(u8"\U0000f392");
