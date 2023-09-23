@@ -2895,7 +2895,9 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 } else {
                     textItem->clearAlignment();
                 }
-                textItem->setText(block.text());
+                textItem->setText(block.charFormat().fontCapitalization() == QFont::AllUppercase
+                                      ? TextHelper::smartToUpper(block.text())
+                                      : block.text());
                 textItem->setFormats(block.textFormats());
                 textItem->setReviewMarks(block.textFormats());
                 textItem->setResourceMarks(block.textFormats());
