@@ -379,10 +379,10 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
     toolBar->hide();
     navigator->hide();
     view.left->installEventFilter(_q);
+    view.right->hide();
     view.container->setWidgets(view.left, view.right);
     view.container->setSizes({ 1, 0 });
     view.container->hide();
-    view.right->hide();
     view.active = view.left;
     view.inactive = view.right;
 

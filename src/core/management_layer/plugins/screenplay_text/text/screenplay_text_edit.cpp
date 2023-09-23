@@ -1163,7 +1163,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         const auto placeholderText = QString("%1 %2").arg(
                             QCoreApplication::translate("KeyProcessingLayer::FolderFooterHandler",
-                                                        "END OF"),
+                                                        "End of"),
                             headerBlock.text());
                         const auto rect = textRect();
                         painter.drawText(rect, block.blockFormat().alignment(), placeholderText);

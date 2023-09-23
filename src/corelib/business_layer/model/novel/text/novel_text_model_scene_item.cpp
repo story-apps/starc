@@ -226,21 +226,13 @@ void NovelTextModelSceneItem::handleChange()
             QString childTextItemText = childTextItem->text();
             switch (childTextItem->paragraphType()) {
             case TextParagraphType::SceneHeading: {
-                heading = TextHelper::smartToUpper(childTextItemText);
+                heading = childTextItemText;
                 break;
             }
 
             case TextParagraphType::InlineNote: {
                 ++inlineNotesSize;
                 break;
-            }
-
-            case TextParagraphType::SceneCharacters:
-            case TextParagraphType::Character:
-            case TextParagraphType::Shot:
-            case TextParagraphType::Transition: {
-                childTextItemText = TextHelper::smartToUpper(childTextItemText);
-                Q_FALLTHROUGH();
             }
 
             default: {

@@ -988,7 +988,7 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         const auto placeholderText = QString("%1 %2").arg(
                             QCoreApplication::translate("KeyProcessingLayer::FolderFooterHandler",
-                                                        "END OF"),
+                                                        "End of"),
                             headerBlock.text());
                         const QPoint topLeft = QPoint(
                             textLeft + leftDelta + spaceBetweenSceneNumberAndText, cursorR.top());

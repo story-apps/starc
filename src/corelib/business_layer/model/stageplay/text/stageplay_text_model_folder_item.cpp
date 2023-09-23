@@ -29,7 +29,7 @@ void StageplayTextModelFolderItem::handleChange()
             auto childItem = static_cast<TextModelTextItem*>(child);
             if (childItem->paragraphType() == TextParagraphType::ActHeading
                 || childItem->paragraphType() == TextParagraphType::SequenceHeading) {
-                setHeading(TextHelper::smartToUpper(childItem->text()));
+                setHeading(childItem->text());
             }
             break;
         }

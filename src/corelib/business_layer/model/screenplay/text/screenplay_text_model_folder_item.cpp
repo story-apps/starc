@@ -159,7 +159,7 @@ void ScreenplayTextModelFolderItem::handleChange()
             auto childItem = static_cast<ScreenplayTextModelTextItem*>(child);
             if (childItem->paragraphType() == TextParagraphType::ActHeading
                 || childItem->paragraphType() == TextParagraphType::SequenceHeading) {
-                setHeading(TextHelper::smartToUpper(childItem->text()));
+                setHeading(childItem->text());
             }
             d->wordsCount += childItem->wordsCount();
             d->charactersCount.first += childItem->charactersCount().first;

@@ -131,7 +131,7 @@ void NovelTextModelFolderItem::handleChange()
             auto childItem = static_cast<NovelTextModelTextItem*>(child);
             if (childItem->paragraphType() == TextParagraphType::PartHeading
                 || childItem->paragraphType() == TextParagraphType::ChapterHeading) {
-                setHeading(TextHelper::smartToUpper(childItem->text()));
+                setHeading(childItem->text());
             }
             d->wordsCount += childItem->wordsCount();
             d->charactersCount.first += childItem->charactersCount().first;

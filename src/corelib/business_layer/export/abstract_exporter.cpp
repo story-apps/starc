@@ -281,7 +281,7 @@ TextDocument* AbstractExporter::prepareDocument(AbstractModel* _model,
 
                     const auto footerText = QString("%1 %2").arg(
                         QGuiApplication::translate("KeyProcessingLayer::FolderFooterHandler",
-                                                   "END OF"),
+                                                   "End of"),
                         headerBlock.text());
                     cursor.insertText(footerText);
                     cursor.movePosition(QTextCursor::StartOfBlock);
