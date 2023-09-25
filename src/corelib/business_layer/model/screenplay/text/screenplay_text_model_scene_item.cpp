@@ -88,6 +88,34 @@ void ScreenplayTextModelSceneItem::removeResource(const QUuid& _uuid)
             continue;
         }
 
+        //
+        // Удаляем привязку ресурса к тексту, если таковая имеется
+        //
+        std::function<void(BusinessLayer::TextModelItem*)> removeResourcesFromText;
+        removeResourcesFromText = [&removeResourcesFromText,
+                                   _uuid](BusinessLayer::TextModelItem* _groupItem) {
+            for (int childIndex = 0; childIndex < _groupItem->childCount(); ++childIndex) {
+                auto childItem = _groupItem->childAt(childIndex);
+                if (childItem->type() != BusinessLayer::TextModelItemType::Text) {
+                    removeResourcesFromText(childItem);
+                    return;
+                }
+
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(childItem);
+                auto resources = textItem->resourceMarks();
+                for (int resourceIndex = 0; resourceIndex < resources.size(); ++resourceIndex) {
+                    if (resources.at(resourceIndex).uuid == _uuid) {
+                        resources.removeAt(resourceIndex);
+                        --resourceIndex;
+                    }
+                }
+                if (textItem->resourceMarks().size() > resources.size()) {
+                    textItem->setResourceMarks(resources);
+                }
+            }
+        };
+        removeResourcesFromText(this);
+
         d->resources.removeAt(index);
         setChanged(true);
         return;
