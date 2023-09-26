@@ -1765,6 +1765,10 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
         connect(
             d->model, &BusinessLayer::ScreenplayTextModel::modelReset, this,
             [this] {
+                if (!d->pendingCursorPosition.has_value()) {
+                    return;
+                }
+
                 //
                 // Извлечём позицию для установки
                 //
