@@ -1535,6 +1535,10 @@ void NovelOutlineView::setModel(BusinessLayer::NovelTextModel* _model)
         connect(
             d->model, &BusinessLayer::NovelTextModel::modelReset, this,
             [this] {
+                if (!d->pendingCursorPosition.has_value()) {
+                    return;
+                }
+
                 //
                 // Извлечём позицию для установки
                 //

@@ -1612,6 +1612,10 @@ void ScreenplayTreatmentView::setModel(BusinessLayer::ScreenplayTextModel* _mode
         connect(
             d->model, &BusinessLayer::ScreenplayTextModel::modelReset, this,
             [this] {
+                if (!d->pendingCursorPosition.has_value()) {
+                    return;
+                }
+
                 //
                 // Извлечём позицию для установки
                 //

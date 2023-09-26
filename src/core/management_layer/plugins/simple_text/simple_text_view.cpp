@@ -1104,6 +1104,10 @@ void SimpleTextView::setModel(BusinessLayer::SimpleTextModel* _model)
         connect(
             d->model, &BusinessLayer::SimpleTextModel::modelReset, this,
             [this] {
+                if (!d->pendingCursorPosition.has_value()) {
+                    return;
+                }
+
                 //
                 // Извлечём позицию для установки
                 //

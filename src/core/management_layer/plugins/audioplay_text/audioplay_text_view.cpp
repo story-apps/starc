@@ -1201,6 +1201,10 @@ void AudioplayTextView::setModel(BusinessLayer::AudioplayTextModel* _model)
         connect(
             d->model, &BusinessLayer::AudioplayTextModel::modelReset, this,
             [this] {
+                if (!d->pendingCursorPosition.has_value()) {
+                    return;
+                }
+
                 //
                 // Извлечём позицию для установки
                 //

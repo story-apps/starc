@@ -1160,6 +1160,10 @@ void StageplayTextView::setModel(BusinessLayer::StageplayTextModel* _model)
         connect(
             d->model, &BusinessLayer::StageplayTextModel::modelReset, this,
             [this] {
+                if (!d->pendingCursorPosition.has_value()) {
+                    return;
+                }
+
                 //
                 // Извлечём позицию для установки
                 //
