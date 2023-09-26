@@ -13,7 +13,7 @@
 class Splitter::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(Splitter* _parent);
 
     /**
      * @brief Получить список размеров виджетов в зависимости от ориентации разделителя
@@ -30,6 +30,8 @@ public:
      */
     void animateShowHiddenPanelToolbar(const QPointF& _finalPosition);
 
+
+    Splitter* q = nullptr;
 
     Qt::Orientation orientation = Qt::Horizontal;
     Widget* handle = nullptr;
@@ -49,12 +51,13 @@ public:
     QTimer hideVisiblePanelToolbarHidingTimer;
 };
 
-Splitter::Implementation::Implementation(QWidget* _parent)
-    : handle(new Widget(_parent))
-    , showHiddenPanelToolbar(new FloatingToolBar(_parent))
+Splitter::Implementation::Implementation(Splitter* _q)
+    : q(_q)
+    , handle(new Widget(_q))
+    , showHiddenPanelToolbar(new FloatingToolBar(_q))
     , showLeftPanelAction(new QAction(showHiddenPanelToolbar))
     , showRightPanelAction(new QAction(showHiddenPanelToolbar))
-    , hideVisiblePanelToolbar(new FloatingToolBar(_parent))
+    , hideVisiblePanelToolbar(new FloatingToolBar(_q))
     , hideLeftPanelAction(new QAction(showHiddenPanelToolbar))
     , hideRightPanelAction(new QAction(showHiddenPanelToolbar))
 {
@@ -121,7 +124,7 @@ void Splitter::Implementation::animateShowHiddenPanelToolbar(const QPointF& _fin
             return;
         }
 
-        if (showHiddenPanelToolbar->isVisible()) {
+        if (showHiddenPanelToolbar->isVisibleTo(q)) {
             if (showHiddenPanelToolbarPositionAnimation.state() == QVariantAnimation::Running) {
                 showHiddenPanelToolbarPositionAnimation.pause();
                 showHiddenPanelToolbarPositionAnimation.setEndValue(_finalPosition);
@@ -152,7 +155,7 @@ void Splitter::Implementation::animateShowHiddenPanelToolbar(const QPointF& _fin
     else {
         if ((showHiddenPanelToolbarPositionAnimation.direction() == QVariantAnimation::Backward
              && showHiddenPanelToolbarPositionAnimation.state() == QVariantAnimation::Running)
-            || !showHiddenPanelToolbar->isVisible()) {
+            || !showHiddenPanelToolbar->isVisibleTo(q)) {
             return;
         }
 
@@ -222,7 +225,7 @@ void Splitter::setHidePanelButtonAvailable(bool _available)
     }
 
     d->isHideButtonAvailable = _available;
-    if (!d->isHideButtonAvailable && d->hideVisiblePanelToolbar->isVisible()) {
+    if (!d->isHideButtonAvailable && d->hideVisiblePanelToolbar->isVisibleTo(this)) {
         d->hideVisiblePanelToolbar->hide();
     }
 }
@@ -254,7 +257,7 @@ void Splitter::setWidgets(QWidget* _first, QWidget* _second)
     //
     // Настроим дефолтный размер
     //
-    setSizes({ _first->isVisible() ? 1 : 0, _second->isVisible() ? 1 : 0 });
+    setSizes({ _first->isVisibleTo(this) ? 1 : 0, _second->isVisibleTo(this) ? 1 : 0 });
 
     //
     // Поднимем хендл, чтобы не терять управление
@@ -363,8 +366,8 @@ void Splitter::setSizes(const QVector<int>& _sizes)
     //
     // ... и кнопку скрытия панели
     //
-    if ((d->sizes.constFirst() <= minimumVisibleSize && widgets.constFirst()->isVisible())
-        || (d->sizes.constLast() <= minimumVisibleSize && widgets.constLast()->isVisible())) {
+    if ((d->sizes.constFirst() <= minimumVisibleSize && widgets.constFirst()->isVisibleTo(this))
+        || (d->sizes.constLast() <= minimumVisibleSize && widgets.constLast()->isVisibleTo(this))) {
         d->hideVisiblePanelToolbar->hide();
     } else {
         d->hideVisiblePanelToolbar->setActionCustomWidth(d->hideRightPanelAction,
@@ -541,13 +544,13 @@ bool Splitter::eventFilter(QObject* _watched, QEvent* _event)
 
         if (widgetIndex == 0) {
             d->hideVisiblePanelToolbarHidingTimer.stop();
-            if (!d->hideVisiblePanelToolbar->isVisible()) {
+            if (!d->hideVisiblePanelToolbar->isVisibleTo(this)) {
                 d->hideVisiblePanelToolbar->setOpacity(0.0);
                 d->hideVisiblePanelToolbar->setVisible(true);
                 d->hideVisiblePanelToolbarOpacityAnimation.setDirection(QVariantAnimation::Forward);
                 d->hideVisiblePanelToolbarOpacityAnimation.start();
             }
-        } else if (widgetIndex == 1 && d->hideVisiblePanelToolbar->isVisible()) {
+        } else if (widgetIndex == 1 && d->hideVisiblePanelToolbar->isVisibleTo(this)) {
             d->hideVisiblePanelToolbarHidingTimer.start();
         }
         break;
