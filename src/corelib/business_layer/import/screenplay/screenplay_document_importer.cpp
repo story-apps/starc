@@ -473,7 +473,8 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::impo
             //
             // Если текущий тип "Время и место", то удалим номер сцены
             //
-            if (blockType == TextParagraphType::SceneHeading && !_options.keepSceneNumbers) {
+            QString sceneNumber;
+            if (blockType == TextParagraphType::SceneHeading) {
                 const auto match
                     = kStartFromNumberChecker.match(cursor.block().text().simplified());
                 if (match.hasMatch()) {
@@ -481,6 +482,12 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::impo
                     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
                                         match.capturedEnd());
                     if (cursor.hasSelection()) {
+                        if (_options.keepSceneNumbers) {
+                            sceneNumber = cursor.selectedText().trimmed();
+                            if (sceneNumber.endsWith('.')) {
+                                sceneNumber.chop(1);
+                            }
+                        }
                         cursor.deleteChar();
                     }
                     cursor.movePosition(QTextCursor::EndOfBlock);
@@ -505,6 +512,15 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::impo
 
                 writer.writeStartElement(toString(TextGroupType::Scene));
                 writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
+
+                if (!sceneNumber.isEmpty()) {
+                    writer.writeStartElement(xml::kNumberTag);
+                    writer.writeAttribute(xml::kNumberValueAttribute, sceneNumber);
+                    writer.writeAttribute(xml::kNumberIsCustomAttribute, "true");
+                    writer.writeAttribute(xml::kNumberIsEatNumberAttribute, "true");
+                    writer.writeEndElement();
+                }
+
                 writer.writeStartElement(xml::kContentTag);
             }
             writer.writeStartElement(toString(blockType));

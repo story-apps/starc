@@ -52,7 +52,6 @@ ImportDialog::Implementation::Implementation(const QString& _importFilePath, QWi
     }
 
     keepSceneNumbers->setChecked(false);
-    keepSceneNumbers->hide();
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
@@ -88,9 +87,8 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     connect(d->importCharacters, &CheckBox::checkedChanged, this, configureImportAvailability);
     connect(d->importLocations, &CheckBox::checkedChanged, this, configureImportAvailability);
     connect(d->importScreenplay, &CheckBox::checkedChanged, this, configureImportAvailability);
-    connect(d->importScreenplay, &CheckBox::checkedChanged, this, [this](bool _checked) {
-        //        d->keepSceneNumbers->setVisible(_checked);
-    });
+    connect(d->importScreenplay, &CheckBox::checkedChanged, d->keepSceneNumbers,
+            &CheckBox::setVisible);
     connect(d->importButton, &Button::clicked, this, &ImportDialog::importRequested);
     connect(d->cancelButton, &Button::clicked, this, &ImportDialog::canceled);
 }
