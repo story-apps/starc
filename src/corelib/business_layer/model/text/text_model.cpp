@@ -1819,10 +1819,19 @@ void TextModel::clearDocument()
     }
 
     beginResetModelTransaction();
-    while (d->rootItem->childCount() > 0) {
+    while (d->rootItem->hasChildren()) {
         d->rootItem->removeItem(d->rootItem->childAt(0));
     }
     endResetModelTransaction();
+
+    //
+    // После того, как транзакция сброса модели завершена, будет создан один элемент внутри
+    // документа, т.к. в текстовом документе всегда имеется один абзац, поэтому тут повторно удаляем
+    // всех детей, чтобы при последующей инициилизации у нас в модели не торчали лишние данные
+    //
+    while (d->rootItem->hasChildren()) {
+        d->rootItem->removeItem(d->rootItem->childAt(0));
+    }
 }
 
 QByteArray TextModel::toXml() const
@@ -1958,7 +1967,9 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
         // Сперва загружаем содержимое из нового XML в модель через документ
         //
         const auto oldContent = document()->content();
+        qDebug(oldContent);
         const auto newContent = dmpController().applyPatch(toXml(), _patch);
+        qDebug(newContent);
         clearDocument();
         document()->setContent(newContent);
         initDocument();
