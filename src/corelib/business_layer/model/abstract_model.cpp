@@ -267,6 +267,13 @@ bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
         newContent.swap(patchedContent);
     }
 
+    //
+    // Если все эти изменения уже есть у нас локально, не нужно их заново применять
+    // TODO: оптимизировать это место, сравнивать огромные строки думаю, что довольно ресурсоёмко
+    //
+    if (!_content.isEmpty() && toXml() == newContent) {
+        return true;
+    }
 
     beginResetModelTransaction();
     clearDocument();

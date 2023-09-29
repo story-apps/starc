@@ -588,7 +588,7 @@ void ApplicationManager::Implementation::loadMissedFonts()
     //
     // Загрузить
     //
-    const QHash<QString, QVector<QString>> fontsToUlsMap = {
+    const QHash<QString, QVector<QString>> fontsToUrlsMap = {
         { QLatin1String("Noto Sans Arabic"),
           {
               QLatin1String("noto-sans-arabic-light.ttf"),
@@ -632,7 +632,7 @@ void ApplicationManager::Implementation::loadMissedFonts()
     };
     QVector<QString> fontsUrls;
     for (const auto& fontFamily : missedFonts) {
-        fontsUrls.append(fontsToUlsMap.value(fontFamily));
+        fontsUrls.append(fontsToUrlsMap.value(fontFamily));
     }
     for (auto& url : fontsUrls) {
         url.prepend("https://starc.app/downloads/fonts/");
@@ -2215,6 +2215,9 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     d.reset(new Implementation(this));
 
+    //
+    // Настроим соединения с менеджерами и представлением приложения
+    //
     initConnections();
 }
 
