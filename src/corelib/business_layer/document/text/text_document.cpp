@@ -1514,41 +1514,55 @@ void TextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
     auto cursor = _cursor;
     cursor.beginEditBlock();
 
-    //
-    // NOTE: Тут костылик - перед применением стиля, добавляем пробел, чтобы блоки корректно
-    //       обновились на всех связанных с моделью документах, почему-то при попытке изменения
-    //       стиля пустого блока в кейсе НАЧАЛО/КОНЕЦ в связанных документах остаётся лишний блок
-    //       конца блока
-    //
-    const struct {
-        bool isEmpty = false;
-        int postion = -1;
-    } sourceBlockInfo = { cursor.block().text().isEmpty(), cursor.position() };
-    if (sourceBlockInfo.isEmpty) {
-        cursor.insertText(" ");
-    }
+    for (int cursorPosition = _cursor.selectionInterval().from;
+         cursorPosition <= _cursor.selectionInterval().to;) {
+        cursor.setPosition(cursorPosition);
 
-    //
-    // Первым делом очищаем пользовательские данные
-    //
-    cursor.block().setUserData(nullptr);
+        //
+        // NOTE: Тут костылик - перед применением стиля, добавляем пробел, чтобы блоки корректно
+        //       обновились на всех связанных с моделью документах, почему-то при попытке изменения
+        //       стиля пустого блока в кейсе НАЧАЛО/КОНЕЦ в связанных документах остаётся лишний
+        //       блок конца блока
+        //
+        const struct {
+            bool isEmpty = false;
+            int postion = -1;
+        } sourceBlockInfo = { cursor.block().text().isEmpty(), cursor.position() };
+        if (sourceBlockInfo.isEmpty) {
+            cursor.insertText(" ");
+        }
 
-    //
-    // Обработаем предшествующий установленный стиль
-    //
-    cleanParagraphType(_cursor);
+        //
+        // Первым делом очищаем пользовательские данные
+        //
+        cursor.block().setUserData(nullptr);
 
-    //
-    // Применим новый стиль к блоку
-    //
-    applyParagraphType(_type, _cursor);
+        //
+        // Обработаем предшествующий установленный стиль
+        //
+        cleanParagraphType(cursor);
 
-    //
-    // NOTE: После завершения операции, удаляем добавленный пробел
-    //
-    if (sourceBlockInfo.isEmpty) {
-        cursor.setPosition(sourceBlockInfo.postion);
-        cursor.deleteChar();
+        //
+        // Применим новый стиль к блоку
+        //
+        applyParagraphType(_type, cursor);
+
+        //
+        // NOTE: После завершения операции, удаляем добавленный пробел
+        //
+        if (sourceBlockInfo.isEmpty) {
+            cursor.setPosition(sourceBlockInfo.postion);
+            cursor.deleteChar();
+        }
+
+        //
+        // Перейдём к работе над следующим блоком
+        //
+        if (cursor.block().next().isValid()) {
+            cursorPosition = cursor.block().next().position();
+        } else {
+            ++cursorPosition;
+        }
     }
 
     cursor.endEditBlock();
