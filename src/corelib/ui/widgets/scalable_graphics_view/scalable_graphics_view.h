@@ -71,7 +71,7 @@ protected:
     /**
      * @brief Переопределяем для обработки жестов
      */
-    bool event(QEvent* _event);
+    bool event(QEvent* _event) override;
 
     /**
      * @brief Обрабатываем жест увеличения масштаба
@@ -79,25 +79,30 @@ protected:
     void gestureEvent(QGestureEvent* _event);
 
     /**
+     * @brief Переопределяем для того, чтобы избежать автоматического центрирования сцены
+     */
+    void showEvent(QShowEvent* _event) override;
+
+    /**
      * @brief Обрабатываем изменение масштаба при помощи ролика
      */
-    void wheelEvent(QWheelEvent* _event);
+    void wheelEvent(QWheelEvent* _event) override;
 
     /**
      * @brief Переопределяем для обработки горячих клавиш изменения масштаба и скроллинга
      */
     /** @{ */
-    void keyPressEvent(QKeyEvent* _event);
-    void keyReleaseEvent(QKeyEvent* _event);
+    void keyPressEvent(QKeyEvent* _event) override;
+    void keyReleaseEvent(QKeyEvent* _event) override;
     /** @} */
 
     /**
      * @brief Реализация перетаскивания/прокрутки
      */
     /** @{ */
-    void mousePressEvent(QMouseEvent* _event);
-    void mouseMoveEvent(QMouseEvent* _event);
-    void mouseReleaseEvent(QMouseEvent* _event);
+    void mousePressEvent(QMouseEvent* _event) override;
+    void mouseMoveEvent(QMouseEvent* _event) override;
+    void mouseReleaseEvent(QMouseEvent* _event) override;
     /** @} */
 
 private:

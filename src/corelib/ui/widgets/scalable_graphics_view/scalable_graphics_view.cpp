@@ -248,6 +248,22 @@ void ScalableGraphicsView::gestureEvent(QGestureEvent* _event)
     }
 }
 
+void ScalableGraphicsView::showEvent(QShowEvent* _event)
+{
+    //
+    // QGraphicsView всегда центрирует сцену при отображении, а нам этого не нужно, поэтому на время
+    // отображения отключаем якорь трансформаций, а после отображения возвращаем его в предыдущее
+    // заданное состояние
+    //
+
+    const auto anchor = transformationAnchor();
+    setTransformationAnchor(NoAnchor);
+
+    QGraphicsView::showEvent(_event);
+
+    setTransformationAnchor(anchor);
+}
+
 void ScalableGraphicsView::wheelEvent(QWheelEvent* _event)
 {
 #ifdef Q_OS_MAC
