@@ -582,6 +582,7 @@ void CardsGraphicsView::Implementation::reorderCardInRows(const QModelIndex& _in
     // Если карточка остаётся на месте, ничего не делаем
     //
     if (moveTarget.row == _index.row() && moveTarget.parent == _index.parent()) {
+        moveTarget = {};
         return;
     }
 
