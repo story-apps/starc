@@ -1422,6 +1422,12 @@ void NovelOutlineView::reconfigure(const QStringList& _changedSettingsKeys)
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
+            DataStorageLayer::kApplicationCapitalizeSingleILetterKey)) {
+        d->textEdit->setCapitalizeSingleILetter(
+            settingsValue(DataStorageLayer::kApplicationCapitalizeSingleILetterKey).toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(
             DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey)) {
         d->textEdit->setReplaceThreeDots(
             settingsValue(DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey).toBool());

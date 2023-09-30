@@ -157,6 +157,7 @@ public:
 
     bool capitalizeWords = true;
     bool correctDoubleCapitals = true;
+    bool capitalizeSingleILetter = true;
     bool replaceThreeDots = false;
     bool smartQuotes = false;
     bool replaceTwoDashes = false;
@@ -251,6 +252,11 @@ void BaseTextEdit::setCapitalizeWords(bool _capitalize)
 void BaseTextEdit::setCorrectDoubleCapitals(bool _correct)
 {
     d->correctDoubleCapitals = _correct;
+}
+
+void BaseTextEdit::setCapitalizeSingleILetter(bool _capitalize)
+{
+    d->capitalizeSingleILetter = _capitalize;
 }
 
 void BaseTextEdit::setReplaceThreeDots(bool _replace)
@@ -951,8 +957,7 @@ bool BaseTextEdit::updateEnteredText(const QKeyEvent* _event)
     //
     // Заменяем i на I для английского
     //
-    if (QLocale().language() == QLocale::English
-        && QApplication::inputMethod()->locale() == QLocale::English && !eventText.isEmpty()
+    if (d->capitalizeSingleILetter && !eventText.isEmpty()
         && (eventText.front().isPunct() || eventText.front().isSpace())
         && cursorBackwardText.leftRef(cursorBackwardText.length() - eventText.length())
                .endsWith(" i")) {

@@ -99,7 +99,7 @@ public:
                                  const QString& _viewMimeType) const;
 
     /**
-     * @brief Активировать полноэкранный режим
+     * @brief Выбрать заданный элемент в представлении заданного майм типа
      */
     void setViewCurrentIndex(const QModelIndex& _index, const QString& _viewMimeType) const;
     void setSecondaryViewCurrentIndex(const QModelIndex& _index,

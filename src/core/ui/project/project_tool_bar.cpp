@@ -67,7 +67,7 @@ void ProjectToolBar::setCurrentViewMimeType(const QString& _mimeType)
 
         if (action->data().toString() == _mimeType) {
             if (action->isChecked()) {
-                return;
+                continue;
             }
 
             action->setChecked(true);

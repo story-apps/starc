@@ -331,6 +331,7 @@ private:
 
     /**
      * @brief Активировать представление заданным элементом и маймом редактора
+     * @note Делается это, когда пользователь переключается между панелями в двухпанельном режиме
      */
     void activateView(const QModelIndex& _itemIndex, const QString& _viewMimeType);
 
@@ -349,7 +350,8 @@ private:
     /**
      * @brief Пользователь хочет активировать ссылку на за документ с заданным индексом элемента
      */
-    Q_SLOT void activateLink(const QUuid& _documentUuid, const QModelIndex& _index);
+    Q_SLOT void activateLink(const QUuid& _documentUuid, const QModelIndex& _index,
+                             const QString& _viewMimeType);
 
     /**
      * @brief Обновить значение текущей модели и её представления

@@ -128,6 +128,8 @@ void SettingsManager::Implementation::loadApplicationSettings()
         settingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey).toBool());
     view->setApplicationUseTypewriterScrolling(
         settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
+    view->setApplicationCapitalizeSinglaILetter(
+        settingsValue(DataStorageLayer::kApplicationCapitalizeSingleILetterKey).toBool());
     view->setApplicationReplaceThreeDotsWithEllipsis(
         settingsValue(DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey).toBool());
     view->setApplicationUseSmartQuotes(
@@ -985,6 +987,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setApplicationFocusCurrentParagraph);
     connect(d->view, &Ui::SettingsView::applicationUseTypewriterScrollingChanged, this,
             &SettingsManager::setApplicationUseTypewriterScrolling);
+    connect(d->view, &Ui::SettingsView::applicationCapitalizeSingleILetterChanged, this,
+            &SettingsManager::setApplicationCapitalizeSingleILetter);
     connect(d->view, &Ui::SettingsView::applicationReplaceThreeDotsWithEllipsisChanged, this,
             &SettingsManager::setApplicationReplaceThreeDotsWithEllipsis);
     connect(d->view, &Ui::SettingsView::applicationUseSmartQuotesChanged, this,
@@ -1879,6 +1883,17 @@ void SettingsManager::setApplicationUseTypewriterScrolling(bool _use)
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
     emit novelEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
+}
+
+void SettingsManager::setApplicationCapitalizeSingleILetter(bool _capitalize)
+{
+    setSettingsValue(DataStorageLayer::kApplicationCapitalizeSingleILetterKey, _capitalize);
+    emit simpleTextEditorChanged({ DataStorageLayer::kApplicationCapitalizeSingleILetterKey });
+    emit screenplayEditorChanged({ DataStorageLayer::kApplicationCapitalizeSingleILetterKey });
+    emit comicBookEditorChanged({ DataStorageLayer::kApplicationCapitalizeSingleILetterKey });
+    emit audioplayEditorChanged({ DataStorageLayer::kApplicationCapitalizeSingleILetterKey });
+    emit stageplayEditorChanged({ DataStorageLayer::kApplicationCapitalizeSingleILetterKey });
+    emit novelEditorChanged({ DataStorageLayer::kApplicationCapitalizeSingleILetterKey });
 }
 
 void SettingsManager::setApplicationReplaceThreeDotsWithEllipsis(bool _replace)

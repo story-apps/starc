@@ -22,6 +22,11 @@ public:
     void setCorrectDoubleCapitals(bool _correct);
 
     /**
+     * @brief Необходимо ли i на I
+     */
+    void setCapitalizeSingleILetter(bool _capitalize);
+
+    /**
      * @brief Необходимо ли заменять три точки на многоточие
      */
     void setReplaceThreeDots(bool _replace);

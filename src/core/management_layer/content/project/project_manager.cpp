@@ -3992,8 +3992,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             = settingsValue(documentSettingsKey(sourceItem->uuid(), kCurrentViewMimeTypeKey),
                             _defaultMimeType)
                   .toString();
-        d->toolBar->setCurrentViewMimeType(viewMimeType);
     }
+    d->toolBar->setCurrentViewMimeType(viewMimeType);
 
     //
     // ... сохраним последний используемый с данным документом редактор
@@ -4100,10 +4100,10 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             connect(documentManager, SIGNAL(buyCreditsRequested()), this,
                     SIGNAL(buyCreditsRequested()), Qt::UniqueConnection);
         }
-        if (documentManager->metaObject()->indexOfSignal("linkActivated(QUuid,QModelIndex)")
+        if (documentManager->metaObject()->indexOfSignal("linkActivated(QUuid,QModelIndex,QString)")
             != invalidSignalIndex) {
-            connect(documentManager, SIGNAL(linkActivated(QUuid, QModelIndex)), this,
-                    SLOT(activateLink(QUuid, QModelIndex)), Qt::UniqueConnection);
+            connect(documentManager, SIGNAL(linkActivated(QUuid, QModelIndex, QString)), this,
+                    SLOT(activateLink(QUuid, QModelIndex, QString)), Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal("rephraseTextRequested(QString,QString)")
             != invalidSignalIndex) {
@@ -4366,7 +4366,8 @@ void ProjectManager::notifyCursorChanged(const QByteArray& _cursorData)
     emit cursorChanged(d->view.activeModel->document()->uuid(), _cursorData);
 }
 
-void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex& _index)
+void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex& _index,
+                                  const QString& _viewMimeType)
 {
     const auto item = d->projectStructureModel->itemForUuid(_documentUuid);
     if (item == nullptr) {
@@ -4409,7 +4410,33 @@ void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex&
     if (d->view.right->isVisible()) {
         d->switchViews(withActivation);
     }
+    //
+    // ... выберем элемент в навигаторе
+    //
     d->navigator->setCurrentIndex(itemIndex);
+    //
+    // ... определим майм-тип редактора, который нужно открыть
+    //
+    QString viewMimeType;
+    const auto documentMimeType = Domain::mimeTypeFor(item->type());
+    const auto views = d->pluginsBuilder.editorsInfoFor(documentMimeType, d->isProjectRemote);
+    if (!_viewMimeType.isEmpty()) {
+        for (const auto& view : views) {
+            if (view.mimeType == _viewMimeType) {
+                viewMimeType = view.mimeType;
+                break;
+            }
+        }
+    }
+    if (viewMimeType.isEmpty()) {
+        viewMimeType = views.constFirst().mimeType;
+    }
+    //
+    // ... если в данный момент открыт другой редактор, загрузким запрашиваемый модуль
+    //
+    if (d->view.activeViewMimeType != viewMimeType) {
+        showView(itemIndex, viewMimeType);
+    }
     //
     // ... если нужно, активируем заданную версию
     //
@@ -4426,9 +4453,9 @@ void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex&
     // ... фокусируем в представлении элемент с заданным индексом
     //
     if (d->view.active == d->view.left) {
-        d->pluginsBuilder.setViewCurrentIndex(_index, d->view.activeViewMimeType);
+        d->pluginsBuilder.setViewCurrentIndex(_index, viewMimeType);
     } else {
-        d->pluginsBuilder.setSecondaryViewCurrentIndex(_index, d->view.activeViewMimeType);
+        d->pluginsBuilder.setSecondaryViewCurrentIndex(_index, viewMimeType);
     }
     //
     // ... возвращаем активность на исходную панель
