@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="te">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="te">
 <context>
     <name>AppBar</name>
     <message>
@@ -10,57 +12,57 @@
 <context>
     <name>BaseTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="432"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="438"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="436"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="442"/>
         <source>Bold</source>
         <translation>బోల్డ్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="442"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="448"/>
         <source>Italic</source>
         <translation>ఇటాలిక్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="448"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="454"/>
         <source>Underline</source>
         <translation>అండర్ లైన్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="454"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="460"/>
         <source>Strikethrough</source>
         <translation>కొట్టివేయు </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="462"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="468"/>
         <source>Align left</source>
         <translation>ఎడమ వైపు </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="468"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="474"/>
         <source>Align center</source>
         <translation>మధ్యలో ఉంచు </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="474"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="480"/>
         <source>Align right</source>
         <translation>కుడి వైపు </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="480"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="486"/>
         <source>Align justify</source>
         <translation>ఆటో అలైన్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="487"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="493"/>
         <source>Make uppercase</source>
         <translation>పెద్ద అక్షరం చేయండి</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="493"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="499"/>
         <source>Make lowercase</source>
         <translation>చిన్న అక్షరం చేయండి</translation>
     </message>
@@ -68,180 +70,180 @@
 <context>
     <name>BusinessLayer::AbstractTemplate</name>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="136"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="180"/>
         <source>Undefined</source>
         <translation>స్పష్టత లేదు </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="138"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="182"/>
         <source>Unformatted text</source>
         <translation>ఫార్మెట్ లేని టెక్స్ట్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="140"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="184"/>
         <source>Inline note</source>
         <translation>ఇన్ లైన్ నోట్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="143"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="187"/>
         <source>Act</source>
         <translation>యాక్ట్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="145"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="189"/>
         <source>Act footer</source>
         <translation>యాక్ట్ ఫూటర్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="147"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="191"/>
         <source>Sequence</source>
         <translation>సీక్వెన్స్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="149"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="193"/>
         <source>Sequence footer</source>
         <translation>సీక్వెన్స్ ఫూటర్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="151"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="195"/>
         <source>Part</source>
         <translation>పార్ట్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="153"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="197"/>
         <source>Part footer</source>
         <translation>పార్ట్ ఫూటర్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="155"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="199"/>
         <source>Chapter</source>
         <translation>చాప్టర్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="157"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="201"/>
         <source>Chapter footer</source>
         <translation>చాప్టర్ ఫూటర్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="160"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="204"/>
         <source>Scene heading</source>
         <translation>సీన్ హెడ్డింగ్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="162"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="206"/>
         <source>Character</source>
         <translation>క్యారెక్టర్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="164"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="208"/>
         <source>Dialogue</source>
         <translation>డైలాగ్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="167"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="211"/>
         <source>Scene characters</source>
         <translation>సీన్ లోని క్యారెక్టర్స్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="169"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="213"/>
         <source>Beat</source>
         <translation>బీట్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="171"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="215"/>
         <source>Action</source>
         <translation>యాక్షన్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="173"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="217"/>
         <source>Parenthetical</source>
         <translation>రియాక్షన్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="175"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="219"/>
         <source>Lyrics</source>
         <translation>లిరిక్స్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="177"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="221"/>
         <source>Transition</source>
         <translation>ట్రాన్సిషన్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="179"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="223"/>
         <source>Shot</source>
         <translation>షాట్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="182"/>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="236"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="226"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="280"/>
         <source>Sound</source>
         <translation>సౌండ్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="184"/>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="239"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="228"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="283"/>
         <source>Music</source>
         <translation>సంగీతం </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="186"/>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="242"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="230"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="286"/>
         <source>Cue</source>
         <translation>క్యూ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="189"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="233"/>
         <source>Page</source>
         <translation>పేజీ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="191"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="235"/>
         <source>Panel</source>
         <translation>ప్యానెల్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="193"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="237"/>
         <source>Description</source>
         <translation>వివరణ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="196"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="240"/>
         <source>Heading 1</source>
         <translation>హెడ్డింగ్ 1 </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="198"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="242"/>
         <source>Heading 2</source>
         <translation>హెడ్డింగ్ 2 </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="200"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="244"/>
         <source>Heading 3</source>
         <translation>హెడ్డింగ్ 3</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="202"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="246"/>
         <source>Heading 4</source>
         <translation>హెడ్డింగ్ 4</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="204"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="248"/>
         <source>Heading 5</source>
         <translation>హెడ్డింగ్ 5</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="206"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="250"/>
         <source>Heading 6</source>
         <translation>హెడ్డింగ్ 6</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="208"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="252"/>
         <source>Text</source>
         <translation>టెక్స్ట్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="1107"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="1151"/>
         <source>Copy of </source>
         <translation>కాపీ ఆఫ్ </translation>
     </message>
@@ -387,7 +389,10 @@
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="413"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="578"/>
         <source>Passed %n time(s)</source>
-        <translation><numerusform>%n సమయం(లు) దాటింది</numerusform><numerusform>%n సమయం(లు) దాటింది</numerusform></translation>
+        <translation>
+            <numerusform>%n సమయం(లు) దాటింది</numerusform>
+            <numerusform>%n సమయం(లు) దాటింది</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="573"/>
@@ -621,19 +626,19 @@
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="127"/>
         <location filename="../../corelib/business_layer/export/characters/characters_exporter.cpp" line="144"/>
         <source>primary character</source>
-        <translation type="unfinished"/>
+        <translation>ప్రాథమిక పాత్ర</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="132"/>
         <location filename="../../corelib/business_layer/export/characters/characters_exporter.cpp" line="149"/>
         <source>secondary character</source>
-        <translation type="unfinished"/>
+        <translation>ద్వితీయ పాత్ర</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="137"/>
         <location filename="../../corelib/business_layer/export/characters/characters_exporter.cpp" line="154"/>
         <source>tertiary character</source>
-        <translation type="unfinished"/>
+        <translation>తృతీయ పాత్ర</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="166"/>
@@ -656,7 +661,7 @@
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="232"/>
         <source>Story info</source>
-        <translation type="unfinished"/>
+        <translation>కథ సమాచారం</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="233"/>
@@ -726,7 +731,7 @@
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="253"/>
         <source>Physique info</source>
-        <translation type="unfinished"/>
+        <translation>శారీరక సమాచారం</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="254"/>
@@ -796,7 +801,7 @@
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="269"/>
         <source>Life info</source>
-        <translation type="unfinished"/>
+        <translation>జీవిత సమాచారం</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="270"/>
@@ -916,7 +921,7 @@
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="293"/>
         <source>Attitude info</source>
-        <translation type="unfinished"/>
+        <translation>వైఖరి సమాచారం</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="294"/>
@@ -966,7 +971,7 @@
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="305"/>
         <source>Biography info</source>
-        <translation type="unfinished"/>
+        <translation>జీవిత చరిత్ర సమాచారం</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="306"/>
@@ -1016,7 +1021,7 @@
     <message>
         <location filename="../../corelib/business_layer/export/characters/character_exporter.cpp" line="319"/>
         <source>Additional photos</source>
-        <translation type="unfinished"/>
+        <translation>అదనపు ఫోటోలు</translation>
     </message>
 </context>
 <context>
@@ -1445,242 +1450,242 @@
 <context>
     <name>BusinessLayer::ScreenplayDictionariesModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="577"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="578"/>
         <source>INT.</source>
         <translation>INT.</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="578"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="579"/>
         <source>EXT.</source>
         <translation>EXT.</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="579"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="580"/>
         <source>INT./EXT.</source>
         <translation>INT./EXT.</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="580"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="581"/>
         <source>EXT./INT.</source>
         <translation>INT./EXT.</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="585"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="586"/>
         <source>DAY</source>
         <translation>DAY</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="585"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="586"/>
         <source>NIGHT</source>
         <translation>NIGHT</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="585"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="586"/>
         <source>MORNING</source>
         <translation>MORNING</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="585"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="586"/>
         <source>AFTERNOON</source>
         <translation>AFTERNOON</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="585"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="586"/>
         <source>EVENING</source>
         <translation>EVENING</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="586"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="587"/>
         <source>LATER</source>
         <translation>LATER</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="586"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="587"/>
         <source>MOMENTS LATER</source>
         <translation>MOMENTS LATER</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="586"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="587"/>
         <source>CONTINUOUS</source>
         <translation>CONTINUOUS</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="586"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="587"/>
         <source>THE NEXT DAY</source>
         <translation>THE NEXT DAY</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="591"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="592"/>
         <source>V.O.</source>
         <translation>వాయిస్ ఓవర్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="591"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="592"/>
         <source>O.S.</source>
         <translation>O.S.</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="591"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="592"/>
         <source>O.C.</source>
         <translation>O.C.</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="591"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="592"/>
         <source>SUBTITLE</source>
         <translation>సబ్ టైటిల్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="591"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="592"/>
         <source>CONT&apos;D</source>
         <translation>CONT&apos;D</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="596"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="597"/>
         <source>CUT TO:</source>
         <translation>CUT TO:</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="596"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="597"/>
         <source>FADE IN:</source>
         <translation>FADE IN:</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="596"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="597"/>
         <source>FADE OUT</source>
         <translation>FADE OUT</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="597"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="598"/>
         <source>FADE TO:</source>
         <translation>FADE TO:</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="597"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="598"/>
         <source>DISSOLVE TO:</source>
         <translation>DISSOLVE TO:</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="597"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="598"/>
         <source>BACK TO:</source>
         <translation>BACK TO:</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="598"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="599"/>
         <source>MATCH CUT TO:</source>
         <translation>MATCH CUT TO:</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="598"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="599"/>
         <source>JUMP CUT TO:</source>
         <translation>JUMP CUT TO:</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="598"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="599"/>
         <source>FADE TO BLACK</source>
         <translation>FADE TO BLACK</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="637"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="638"/>
         <source>Background actors (atmosphere)</source>
         <translation>బ్యాగ్రౌండ్ యాక్టర్స్ (అట్మాస్పియర్)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="638"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="639"/>
         <source>Background actors (silent)</source>
         <translation>బ్యాగ్రౌండ్ యాక్టర్స్ (సైలెంట్ )</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="639"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="640"/>
         <source>Background actors (special)</source>
         <translation>బ్యాగ్రౌండ్ యాక్టర్స్ (స్పెషల్)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="643"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="644"/>
         <source>Stunts</source>
         <translation>ఫైట్స్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="642"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="643"/>
         <source>Vehicles</source>
         <translation>వెహికల్స్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="635"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="636"/>
         <source>Props</source>
         <translation>ప్రాపర్టీస్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="647"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="648"/>
         <source>Camera</source>
         <translation>కెమెరా </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="644"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="645"/>
         <source>Special effects</source>
         <translation>స్పెషల్ ఎఫెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="640"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="641"/>
         <source>Wardrobe</source>
         <translation>కాస్ట్యూమ్స్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="641"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="642"/>
         <source>Makeup/hair</source>
         <translation>మేకప్/హెయిర్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="645"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="646"/>
         <source>Animals</source>
         <translation>జంతువులు</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="646"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="647"/>
         <source>Animal handler</source>
         <translation>యానిమల్ హ్యాండ్లర్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="648"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="649"/>
         <source>Music</source>
         <translation>సంగీతం </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="649"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="650"/>
         <source>Sound</source>
         <translation>సౌండ్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="636"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="637"/>
         <source>Set dressing</source>
         <translation>సెట్ డ్రెస్సింగ్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="650"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="651"/>
         <source>Greenery</source>
         <translation>గ్రీనరీ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="651"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="652"/>
         <source>Special equipment</source>
         <translation>స్పెషల్ ఎక్విప్ మెంట్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="652"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="653"/>
         <source>Security</source>
         <translation>సెక్యూరిటీ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="653"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="654"/>
         <source>Additional labor</source>
         <translation>అడిషనల్ లేబర్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="654"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="655"/>
         <source>Optical FX (Visual FX)</source>
         <translation>ఆప్టికల్ ఎఫెక్ట్స్ (విజువల్ ఎఫెక్ట్స్)</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="655"/>
+        <location filename="../../corelib/business_layer/model/screenplay/screenplay_dictionaries_model.cpp" line="656"/>
         <source>Mechanical FX</source>
         <translation>మెకానికల్ ఎఫెక్ట్స్ </translation>
     </message>
@@ -1737,7 +1742,10 @@
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="461"/>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="626"/>
         <source>Passed %n time(s)</source>
-        <translation><numerusform>%n సమయం(లు) దాటింది</numerusform><numerusform>Passed %n time(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n సమయం(లు) దాటింది</numerusform>
+            <numerusform>Passed %n time(s)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="631"/>
@@ -2638,8 +2646,8 @@
         <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="922"/>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1111"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1174"/>
-        <source>END OF</source>
-        <translation>END OF</translation>
+        <source>End of</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2878,13 +2886,13 @@
         <translation>.STARCకి మారండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3085"/>
+        <location filename="../management_layer/application_manager.cpp" line="3088"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>ప్రాజెక్ట్ యజమానుల క్లౌడ్ సేవా సభ్యత్వం గడువు ముగిసింది. వారు సబ్‌స్క్రిప్షన్‌ను పునరుద్ధరించిన వెంటనే మీరు ప్రాజెక్ట్‌తో పని చేయడం కొనసాగించవచ్చు.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3066"/>
-        <location filename="../management_layer/application_manager.cpp" line="3087"/>
+        <location filename="../management_layer/application_manager.cpp" line="3069"/>
+        <location filename="../management_layer/application_manager.cpp" line="3090"/>
         <source>Continue offline</source>
         <translation>ఆఫ్ లైన్ లో కొనసాగించండి </translation>
     </message>
@@ -2900,12 +2908,12 @@
         <translation>మిస్ అయిన ఫాంట్స్ లోడ్ అవుతున్నాయి </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3064"/>
+        <location filename="../management_layer/application_manager.cpp" line="3067"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>మీ క్లౌడ్ సేవా సభ్యత్వం గడువు ముగిసింది. ప్రాజెక్ట్‌తో పని చేయడం కొనసాగించడానికి సభ్యత్వాన్ని సక్రియం చేయండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3067"/>
+        <location filename="../management_layer/application_manager.cpp" line="3070"/>
         <source>Renew subscription</source>
         <translation>రెన్యూవల్ చేసుకోండి </translation>
     </message>
@@ -2915,7 +2923,7 @@
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_manager.cpp" line="106"/>
         <source>Upgrade the app to the PRO version to access audioplay statistics exporting.</source>
-        <translation type="unfinished"/>
+        <translation>ఆడియోప్లే గణాంకాల ఎగుమతిని యాక్సెస్ చేయడానికి యాప్‌ను PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_manager.cpp" line="107"/>
@@ -2965,7 +2973,7 @@
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="73"/>
         <source>Upgrade the app to the PRO version to access character dialogues module.</source>
-        <translation type="unfinished"/>
+        <translation>క్యారెక్టర్ డైలాగ్‌ల మాడ్యూల్‌ని యాక్సెస్ చేయడానికి యాప్‌ని PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_manager.cpp" line="74"/>
@@ -2983,7 +2991,7 @@
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="78"/>
         <source>Upgrade the app to the PRO version to access extended character profile.</source>
-        <translation type="unfinished"/>
+        <translation>పొడిగించిన అక్షర ప్రొఫైల్‌ను యాక్సెస్ చేయడానికి యాప్‌ను PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="79"/>
@@ -3027,7 +3035,7 @@
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="141"/>
         <source>Upgrade the app to the PRO version to edit the character relations graph.</source>
-        <translation type="unfinished"/>
+        <translation>అక్షర సంబంధాల గ్రాఫ్‌ని సవరించడానికి యాప్‌ను PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="529"/>
@@ -3070,7 +3078,10 @@
     <message numerus="yes">
         <location filename="../../cloud/cloud_service_manager.cpp" line="460"/>
         <source>PRO version subscription activated for %n month(s).</source>
-        <translation><numerusform>PRO వెర్షన్ సబ్‌స్క్రిప్షన్ %n నెల(ల)కి యాక్టివేట్ చేయబడింది.</numerusform><numerusform>PRO వెర్షన్ సబ్‌స్క్రిప్షన్ %n నెల(ల)కి యాక్టివేట్ చేయబడింది.</numerusform></translation>
+        <translation>
+            <numerusform>PRO వెర్షన్ సబ్‌స్క్రిప్షన్ %n నెల(ల)కి యాక్టివేట్ చేయబడింది.</numerusform>
+            <numerusform>PRO వెర్షన్ సబ్‌స్క్రిప్షన్ %n నెల(ల)కి యాక్టివేట్ చేయబడింది.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="465"/>
@@ -3080,7 +3091,10 @@
     <message numerus="yes">
         <location filename="../../cloud/cloud_service_manager.cpp" line="469"/>
         <source>CLOUD version subscription activated for %n month(s).</source>
-        <translation><numerusform>%n నెల(ల)కి CLOUD వెర్షన్ సబ్‌స్క్రిప్షన్ యాక్టివేట్ చేయబడింది.</numerusform><numerusform>%n నెల(ల)కి CLOUD వెర్షన్ సబ్‌స్క్రిప్షన్ యాక్టివేట్ చేయబడింది.</numerusform></translation>
+        <translation>
+            <numerusform>%n నెల(ల)కి CLOUD వెర్షన్ సబ్‌స్క్రిప్షన్ యాక్టివేట్ చేయబడింది.</numerusform>
+            <numerusform>%n నెల(ల)కి CLOUD వెర్షన్ సబ్‌స్క్రిప్షన్ యాక్టివేట్ చేయబడింది.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="474"/>
@@ -3090,7 +3104,10 @@
     <message numerus="yes">
         <location filename="../../cloud/cloud_service_manager.cpp" line="482"/>
         <source>%n credits were added to your balance.</source>
-        <translation><numerusform>మీ బ్యాలెన్స్‌కు %n క్రెడిట్‌లు జోడించబడ్డాయి.</numerusform><numerusform>మీ బ్యాలెన్స్‌కు %n క్రెడిట్‌లు జోడించబడ్డాయి.</numerusform></translation>
+        <translation>
+            <numerusform>మీ బ్యాలెన్స్‌కు %n క్రెడిట్‌లు జోడించబడ్డాయి.</numerusform>
+            <numerusform>మీ బ్యాలెన్స్‌కు %n క్రెడిట్‌లు జోడించబడ్డాయి.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="682"/>
@@ -3245,7 +3262,7 @@
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="73"/>
         <source>Upgrade the app to the PRO version to edit the images gallery.</source>
-        <translation type="unfinished"/>
+        <translation>చిత్రాల గ్యాలరీని సవరించడానికి యాప్‌ను PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/images_gallery/images_gallery_manager.cpp" line="74"/>
@@ -3296,7 +3313,7 @@
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="71"/>
         <source>Upgrade the app to the PRO version to access extended location profile.</source>
-        <translation type="unfinished"/>
+        <translation>పొడిగించిన లొకేషన్ ప్రొఫైల్‌ని యాక్సెస్ చేయడానికి యాప్‌ని PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="72"/>
@@ -3340,7 +3357,7 @@
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="139"/>
         <source>Upgrade the app to the PRO version to edit the location map.</source>
-        <translation type="unfinished"/>
+        <translation>లొకేషన్ మ్యాప్‌ని ఎడిట్ చేయడానికి యాప్‌ని PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="511"/>
@@ -3376,21 +3393,53 @@
 <context>
     <name>ManagementLayer::NovelCardsManager</name>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="114"/>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="117"/>
         <source>Upgrade the app to the PRO version to edit novel cards.
 
 If you want to continue editing novel text, switch to the corresponding module via icons on the top left toolbar.</source>
-        <translation type="unfinished"/>
+        <translation>నవల కార్డ్‌లను సవరించడానికి యాప్‌ను PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.
+
+మీరు నవల వచనాన్ని సవరించడాన్ని కొనసాగించాలనుకుంటే, ఎగువ ఎడమవైపు టూల్‌బార్‌లోని చిహ్నాల ద్వారా సంబంధిత మాడ్యూల్‌కు మారండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="117"/>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="120"/>
         <source>Maybe later</source>
         <translation>తర్వాత </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="118"/>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="121"/>
         <source>Upgrade</source>
         <translation>అప్ గ్రేడ్ </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="540"/>
+        <source>Add part</source>
+        <translation>భాగాన్ని జోడించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="546"/>
+        <source>Add chapter</source>
+        <translation>అధ్యాయాన్ని జోడించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="553"/>
+        <source>Add scene</source>
+        <translation>సన్నివేశాన్ని జోడించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="560"/>
+        <source>Color</source>
+        <translation>కలర్ </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="595"/>
+        <source>Remove</source>
+        <translation>రిమూవ్ </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="603"/>
+        <source>Go to text</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3462,224 +3511,224 @@ If you want to continue editing novel text, switch to the corresponding module v
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="448"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="449"/>
         <source>Find all characters</source>
         <translation>మొత్తం క్యారెక్టర్స్ చూడండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="454"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="455"/>
         <source>Add character</source>
         <translation>క్యారెక్టర్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="459"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="460"/>
         <source>Find all locations</source>
         <translation>మొత్తం లొకేషన్స్ చూడండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="465"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="466"/>
         <source>Add location</source>
         <translation>లొకేషన్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="471"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="472"/>
         <source>Empty recycle bin</source>
         <translation>రీ సైకిల్ బిన్ ఖాళీ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="489"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="490"/>
         <source>Add document</source>
         <translation>డాక్యుమెంట్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="524"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="525"/>
         <source>Remove document</source>
         <translation>డాక్యుమెంట్ రిమూవ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="539"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2031"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="540"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2084"/>
         <source>Create new draft</source>
         <translation>కొత్త డ్రాఫ్ట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="553"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="554"/>
         <source>Open in new window</source>
         <translation>కొత్త విండోలో ఓపెన్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="725"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="726"/>
         <source>Character with this name already exists</source>
         <translation>ఈ పేరుతో క్యారెక్టర్ ఉంది </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="735"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="736"/>
         <source>Location with this name already exists</source>
         <translation>ఈ పేరుతో లొకేషన్ ఆల్రెడీ ఉంది. </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="881"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="882"/>
         <source>Current draft</source>
         <translation>ప్రస్తుత డ్రాఫ్ట్</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="950"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="951"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation>Do you really want to remove document version &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1055"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1056"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>శాశ్వతంగా డాక్యుమెంట్ రిమూవ్ చెయ్యాలా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="951"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1056"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1463"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="952"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1057"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1516"/>
         <source>No</source>
         <translation>వద్దు </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="403"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="404"/>
         <source>Remove split</source>
         <translation>Remove split</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="404"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="405"/>
         <source>Split window</source>
         <translation>Split window</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="482"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="483"/>
         <source>Add folder</source>
         <translation>ఫోల్డర్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="610"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="611"/>
         <source>Share access</source>
         <translation>యాక్సెస్‌ను షేర్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="745"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="746"/>
         <source>World with this name already exists</source>
         <translation>ఈ పేరుతో ప్రపంచం ఇప్పటికే ఉంది</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="952"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1057"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1464"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="953"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1058"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1517"/>
         <source>Yes, remove</source>
         <translation>అవును, రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1274"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1275"/>
         <source>Characters from the text</source>
         <translation>Characters from the text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1284"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1285"/>
         <source>Characters that are not found in the text</source>
         <translation>Characters that are not found in the text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1297"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1298"/>
         <source>Save only characters from the text</source>
         <translation>Save only characters from the text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1298"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1299"/>
         <source>Save all characters</source>
         <translation>మొత్తం క్యారెక్టర్స్ సేవ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1299"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1405"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1300"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1432"/>
         <source>Change nothing</source>
         <translation>ఏమీ మార్చవద్దు </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1380"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1407"/>
         <source>Locations from the text</source>
         <translation>Locations from the text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1390"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1417"/>
         <source>Locations that are not found in the text</source>
         <translation>Locations that are not found in the text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1403"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1430"/>
         <source>Save only locations from the text</source>
         <translation>Save only locations from the text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1404"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1431"/>
         <source>Save all locations</source>
         <translation>మొత్తం లొకేషన్స్ సేవ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1462"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1515"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>మీరు నిజంగా రీసైకిల్ బిన్ నుండి అన్ని డాక్యుమెంట్స్ శాశ్వతంగా తీసివేయాలనుకుంటున్నారా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2045"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2098"/>
         <source>Edit</source>
         <translation>ఎడిట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2055"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2108"/>
         <source>Remove</source>
         <translation>రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2215"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2236"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2257"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2278"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2268"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2289"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2310"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2331"/>
         <source>draft</source>
         <translation>డ్రాఫ్ట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2234"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2255"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2276"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2287"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2308"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2329"/>
         <source>Script</source>
         <translation>స్క్రిప్ట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2957"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3010"/>
         <source>Title page</source>
         <translation>టైటిల్ పేజీ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2959"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3012"/>
         <source>Synopsis</source>
         <translation>సారాంశం</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2971"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3024"/>
         <source>Treatment</source>
         <translation>ట్రీమ్ మెంట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2213"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2962"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2266"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3015"/>
         <source>Screenplay</source>
         <translation>స్క్రీన్ ప్లే </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="405"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="406"/>
         <source>Hide document drafts</source>
         <translation>డాక్యుమెంట్ డ్రాఫ్ట్‌లను దాచండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="406"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="407"/>
         <source>Show document drafts</source>
         <translation>డాక్యుమెంట్ డ్రాఫ్ట్‌లను చూపించు</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2965"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3018"/>
         <source>Statistics</source>
         <translation>గణాంకాలు </translation>
     </message>
@@ -3805,7 +3854,9 @@ If you want to continue editing novel text, switch to the corresponding module v
         <source>Upgrade the app to the CLOUD version to work with the screenplay breakdown.
 
 If you want to continue editing screenplay text, switch to the corresponding module via icons on the top left toolbar.</source>
-        <translation type="unfinished"/>
+        <translation>స్క్రీన్‌ప్లే బ్రేక్‌డౌన్‌తో పని చేయడానికి యాప్‌ను CLOUD వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.
+
+మీరు స్క్రీన్‌ప్లే వచనాన్ని సవరించడాన్ని కొనసాగించాలనుకుంటే, ఎగువ ఎడమవైపు టూల్‌బార్‌లోని చిహ్నాల ద్వారా సంబంధిత మాడ్యూల్‌కు మారండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_manager.cpp" line="178"/>
@@ -4140,7 +4191,10 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="602"/>
         <source>Do you really want to remove element &quot;%1&quot; from entire screenplay? It participates in %n scene(s).</source>
-        <translation><numerusform>మీరు నిజంగా మొత్తం స్క్రీన్‌ప్లే నుండి &quot;%1&quot; మూలకాన్ని తీసివేయాలనుకుంటున్నారా? ఇది %n దృశ్య(ల)లో పాల్గొంటుంది.</numerusform><numerusform>మీరు నిజంగా మొత్తం స్క్రీన్‌ప్లే నుండి &quot;%1&quot; మూలకాన్ని తీసివేయాలనుకుంటున్నారా? ఇది %n దృశ్య(ల)లో పాల్గొంటుంది.</numerusform></translation>
+        <translation>
+            <numerusform>మీరు నిజంగా మొత్తం స్క్రీన్‌ప్లే నుండి &quot;%1&quot; మూలకాన్ని తీసివేయాలనుకుంటున్నారా? ఇది %n దృశ్య(ల)లో పాల్గొంటుంది.</numerusform>
+            <numerusform>మీరు నిజంగా మొత్తం స్క్రీన్‌ప్లే నుండి &quot;%1&quot; మూలకాన్ని తీసివేయాలనుకుంటున్నారా? ఇది %n దృశ్య(ల)లో పాల్గొంటుంది.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="458"/>
@@ -4169,21 +4223,53 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ManagementLayer::ScreenplayCardsManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="116"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="119"/>
         <source>Upgrade the app to the PRO version to edit screenplay cards.
 
 If you want to continue editing screenplay text, switch to the corresponding module via icons on the top left toolbar.</source>
-        <translation type="unfinished"/>
+        <translation>స్క్రీన్‌ప్లే కార్డ్‌లను సవరించడానికి యాప్‌ను PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.
+
+మీరు స్క్రీన్‌ప్లే వచనాన్ని సవరించడాన్ని కొనసాగించాలనుకుంటే, ఎగువ ఎడమవైపు టూల్‌బార్‌లోని చిహ్నాల ద్వారా సంబంధిత మాడ్యూల్‌కు మారండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="119"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="122"/>
         <source>Maybe later</source>
         <translation>తర్వాత </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="120"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="123"/>
         <source>Upgrade</source>
         <translation>అప్ గ్రేడ్ </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="542"/>
+        <source>Add act</source>
+        <translation>యాక్ట్  జోడించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="548"/>
+        <source>Add sequence</source>
+        <translation>సీక్వెన్స్  జోడించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="555"/>
+        <source>Add scene</source>
+        <translation>సన్నివేశాన్ని జోడించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="562"/>
+        <source>Color</source>
+        <translation>కలర్ </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="597"/>
+        <source>Remove</source>
+        <translation>రిమూవ్ </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="605"/>
+        <source>Go to text</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4204,7 +4290,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="106"/>
         <source>Upgrade the app to the PRO version to access screenplay statistics exporting.</source>
-        <translation type="unfinished"/>
+        <translation>స్క్రీన్‌ప్లే గణాంకాలను ఎగుమతి చేయడానికి యాక్సెస్ చేయడానికి యాప్‌ను PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_manager.cpp" line="107"/>
@@ -4289,62 +4375,62 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ManagementLayer::SettingsManager</name>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="884"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="886"/>
         <source>Do you want to revert all changes in settings to the default state? This action can&apos;t be undone.</source>
         <translation>మీరు సెట్టింగ్‌లలోని అన్ని మార్పులను డిఫాల్ట్ స్థితికి మార్చాలనుకుంటున్నారా? ఈ చర్య రద్దు చేయబడదు.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="886"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="888"/>
         <source>Cancel</source>
         <translation>క్యాన్సిల్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="887"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="889"/>
         <source>Reset</source>
         <translation>రీసెట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1171"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1222"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1273"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1323"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1373"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1423"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1175"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1226"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1277"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1327"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1377"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1427"/>
         <source>Choose the file to save template</source>
         <translation>టెంప్లేట్‌ను సేవ్ చేయడానికి ఫైల్‌ను ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1192"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1243"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1293"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1343"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1393"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1443"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1196"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1247"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1297"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1347"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1397"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1447"/>
         <source>Choose the file with template to load</source>
         <translation>లోడ్ చేయడానికి టెంప్లేట్ ఉన్న ఫైల్‌ను ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1695"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1699"/>
         <source>Spelling dictionary loading</source>
         <translation>స్పెల్లింగ్ డిక్షనరీ  లోడ్ అవుతోంది</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1735"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1763"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1802"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1835"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1739"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1767"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1806"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1839"/>
         <source>Dictionary loading error</source>
         <translation>నిఘంటువు లోడింగ్ లోపం</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1736"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1803"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1740"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1807"/>
         <source>For some reason dictionary file isn&apos;t loaded. Please check internet connection and firewall/anitivirus settings, and try to reload dictionary.</source>
         <translation>కొన్ని కారణాల వల్ల నిఘంటువు ఫైల్ లోడ్ కాలేదు. దయచేసి ఇంటర్నెట్ కనెక్షన్ మరియు ఫైర్‌వాల్/యాంటీవైరస్ సెట్టింగ్‌లను తనిఖీ చేసి, డిక్షనరీని రీలోడ్ చేయడానికి ప్రయత్నించండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1765"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1837"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1769"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1841"/>
         <source>Please check internet connection and firewall/anitivirus settings, and try to reload dictionary.</source>
         <translation>దయచేసి ఇంటర్నెట్ కనెక్షన్ మరియు ఫైర్‌వాల్/యానిటివైరస్ సెట్టింగ్‌లను తనిఖీ చేసి, డిక్షనరీని రీలోడ్ చేయడానికి ప్రయత్నించండి.</translation>
     </message>
@@ -4400,7 +4486,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="71"/>
         <source>Upgrade the app to the PRO version to access extended world profile.</source>
-        <translation type="unfinished"/>
+        <translation>విస్తరించిన ప్రపంచ ప్రొఫైల్‌ను యాక్సెస్ చేయడానికి యాప్‌ను PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="72"/>
@@ -4444,7 +4530,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="134"/>
         <source>Upgrade the app to the PRO version to edit the world map.</source>
-        <translation type="unfinished"/>
+        <translation>ప్రపంచ మ్యాప్‌ను సవరించడానికి యాప్‌ను PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="135"/>
@@ -4813,18 +4899,18 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Splitter</name>
     <message>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="582"/>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="583"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="585"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="586"/>
         <source>Show hidden panel</source>
         <translation>హిడెన్ ప్యానెల్ ని చూపించు </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="584"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="587"/>
         <source>Hide left panel</source>
         <translation>లెఫ్ట్ ప్యానెల్  దాచి ఉంచు </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="585"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="588"/>
         <source>Hide right panel</source>
         <translation>రైట్ ప్యానెల్  దాచి ఉంచు </translation>
     </message>
@@ -4960,32 +5046,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AboutApplicationDialog</name>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="154"/>
+        <location filename="../ui/about_application_dialog.cpp" line="155"/>
         <source>version</source>
         <translation>వెర్షన్ </translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="156"/>
+        <location filename="../ui/about_application_dialog.cpp" line="157"/>
         <source>Designed, coded and crafted with love at the</source>
         <translation>ప్రేమతో రూపొందించబడింది, కోడ్ చేయబడింది మరియు రూపొందించబడింది</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="158"/>
+        <location filename="../ui/about_application_dialog.cpp" line="159"/>
         <source>company</source>
         <translation>కంపెనీ </translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="159"/>
+        <location filename="../ui/about_application_dialog.cpp" line="160"/>
         <source>The Logline Generator is powered by</source>
         <translation>లాగ్‌లైన్ జనరేటర్ దీని ద్వారా ఆధారితమైనది</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="163"/>
+        <location filename="../ui/about_application_dialog.cpp" line="164"/>
         <source>Starc is being developed with strong authors’ involvement and support so we won’t waste the app performance on the features you don’t need.</source>
         <translation>స్టార్క్ బలమైన రచయితల ప్రమేయం మరియు మద్దతుతో అభివృద్ధి చేయబడుతోంది కాబట్టి మేము మీకు అవసరం లేని ఫీచర్‌లపై యాప్ పనితీరును వృధా చేయము.</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="166"/>
+        <location filename="../ui/about_application_dialog.cpp" line="167"/>
         <source>Feel free to contact us at any point of your creative journey to share your thoughts about the app, suggest ideas and report issues you met.</source>
         <translation>యాప్ గురించి మీ ఆలోచనలను పంచుకోవడానికి, ఆలోచనలను సూచించడానికి మరియు మీరు ఎదుర్కొన్న  సమస్యలను నివేదించడానికి మీ సృజనాత్మక ప్రయాణంలో ఏ సమయంలోనైనా మమ్మల్ని సంప్రదించడానికి సంకోచించకండి.</translation>
     </message>
@@ -5033,7 +5119,10 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../ui/account/account_navigator.cpp" line="360"/>
         <source>%n credits available</source>
-        <translation><numerusform>%n క్రెడిట్‌లు అందుబాటులో ఉన్నాయి</numerusform><numerusform>%n క్రెడిట్‌లు అందుబాటులో ఉన్నాయి</numerusform></translation>
+        <translation>
+            <numerusform>%n క్రెడిట్‌లు అందుబాటులో ఉన్నాయి</numerusform>
+            <numerusform>%n క్రెడిట్‌లు అందుబాటులో ఉన్నాయి</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="361"/>
@@ -5451,7 +5540,10 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="934"/>
         <source>%n word(s) available</source>
-        <translation><numerusform>%n పద(లు) అందుబాటులో ఉన్నాయి</numerusform><numerusform>%n పద(లు) అందుబాటులో ఉన్నాయి</numerusform></translation>
+        <translation>
+            <numerusform>%n పద(లు) అందుబాటులో ఉన్నాయి</numerusform>
+            <numerusform>%n పద(లు) అందుబాటులో ఉన్నాయి</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="935"/>
@@ -6284,13 +6376,13 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
     <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1152"/>
-        <source>short</source>
-        <translation>చిన్నది</translation>
+        <source>short (20 words per scene)</source>
+        <translation>చిన్నది (ఒక సన్నివేశానికి 20 పదాలు)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1153"/>
-        <source>medium</source>
-        <translation>మధ్యస్థం</translation>
+        <source>medium (45 words per scene)</source>
+        <translation>మీడియం (ఒక సన్నివేశానికి 45 పదాలు)</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1154"/>
@@ -6458,7 +6550,10 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="212"/>
         <source>Passed %n time(s)</source>
-        <translation><numerusform>%n సమయం(లు) దాటింది</numerusform><numerusform>Passed %n time(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n సమయం(లు) దాటింది</numerusform>
+            <numerusform>Passed %n time(s)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="277"/>
@@ -6506,7 +6601,10 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="122"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n పదం(లు)</numerusform><numerusform>%n word(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n పదం(లు)</numerusform>
+            <numerusform>%n word(s)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="221"/>
@@ -7061,27 +7159,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1292"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1302"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1293"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1303"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1294"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1304"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1295"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1305"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1298"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1308"/>
         <source>Start prompt from something like &quot;Write an audio drama about ...&quot;, or &quot;Write a radio drama about ...&quot;</source>
         <translation>&quot;గురించి ఆడియో డ్రామా వ్రాయండి ...&quot;, లేదా &quot;గురించి రేడియో డ్రామా వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి</translation>
     </message>
@@ -7255,7 +7353,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="250"/>
         <source>Export character</source>
-        <translation type="unfinished"/>
+        <translation>ఎగుమతి పాత్ర</translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="252"/>
@@ -7265,42 +7363,42 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="253"/>
         <source>Include main photo</source>
-        <translation type="unfinished"/>
+        <translation>ప్రధాన ఫోటోను చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="254"/>
         <source>additional photos</source>
-        <translation type="unfinished"/>
+        <translation>అదనపు ఫోటోలు</translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="255"/>
         <source>Include story info</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="256"/>
         <source>Include personal info</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="257"/>
         <source>Include physique info</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="258"/>
         <source>Include life info</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="259"/>
         <source>Include attitude info</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="260"/>
         <source>Include biography</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="261"/>
@@ -7849,7 +7947,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="346"/>
         <source>Export characters</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="348"/>
@@ -7864,32 +7962,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="350"/>
         <source>Include main photo</source>
-        <translation type="unfinished"/>
+        <translation>ప్రధాన ఫోటోను చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="351"/>
         <source>Include story role</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="352"/>
         <source>Include age</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="353"/>
         <source>Include gender</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="354"/>
         <source>Include one line description</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="355"/>
         <source>Include long description</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="356"/>
@@ -7951,7 +8049,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="669"/>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="840"/>
         <source>Open relation details</source>
-        <translation>రిలేషన్ వివరాలు ఓపెన్ చెయ్యండి </translation>
+        <translation>రిలేషన్ వివరాలు ఓపెన్&#xa0;చెయ్యండి </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_sidebar.cpp" line="732"/>
@@ -8247,7 +8345,10 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="123"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n పదం(లు)</numerusform><numerusform>%n word(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n పదం(లు)</numerusform>
+            <numerusform>%n word(s)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="222"/>
@@ -8356,7 +8457,10 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1069"/>
         <source>%n panels</source>
-        <translation><numerusform>%n ప్యానెల్లు</numerusform><numerusform>%n ప్యానెల్లు</numerusform></translation>
+        <translation>
+            <numerusform>%n ప్యానెల్లు</numerusform>
+            <numerusform>%n ప్యానెల్లు</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1248"/>
@@ -8543,7 +8647,10 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="352"/>
         <source>%n PANELS</source>
-        <translation><numerusform>%n ప్యానెల్లు</numerusform><numerusform>%n ప్యానెల్లు</numerusform></translation>
+        <translation>
+            <numerusform>%n ప్యానెల్లు</numerusform>
+            <numerusform>%n ప్యానెల్లు</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -8567,27 +8674,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1289"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1299"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1290"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1300"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1291"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1301"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1292"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1302"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1295"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1305"/>
         <source>Start prompt from something like &quot;Write a comic book script about ...&quot;</source>
         <translation>&quot;దీని గురించి కామిక్ బుక్ స్క్రిప్ట్ వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి</translation>
     </message>
@@ -8607,7 +8714,10 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="283"/>
         <source>%n reply(s)</source>
-        <translation><numerusform>%n ప్రత్యుత్తరం(లు)</numerusform><numerusform>%n reply(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n ప్రత్యుత్తరం(లు)</numerusform>
+            <numerusform>%n reply(s)</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -9516,7 +9626,10 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../ui/notifications/credits_view.cpp" line="58"/>
         <source>%n credits were added to your balance.</source>
-        <translation><numerusform>మీ బ్యాలెన్స్‌కు %n క్రెడిట్‌లు జోడించబడ్డాయి.</numerusform><numerusform>%n credits were added to your balance.</numerusform></translation>
+        <translation>
+            <numerusform>మీ బ్యాలెన్స్‌కు %n క్రెడిట్‌లు జోడించబడ్డాయి.</numerusform>
+            <numerusform>%n credits were added to your balance.</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -9563,12 +9676,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ImagesList</name>
     <message>
-        <location filename="../../corelib/ui/modules/images_list/images_list.cpp" line="354"/>
+        <location filename="../../corelib/ui/modules/images_list/images_list.cpp" line="371"/>
         <source>Choose image</source>
         <translation>ఇమేజ్ సెలక్ట్ చెయ్యి</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/images_list/images_list.cpp" line="355"/>
+        <location filename="../../corelib/ui/modules/images_list/images_list.cpp" line="372"/>
         <source>Images</source>
         <translation>ఇమేజస్ </translation>
     </message>
@@ -9576,47 +9689,47 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ImportDialog</name>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="124"/>
+        <location filename="../ui/import/import_dialog.cpp" line="122"/>
         <source>Import data from the file</source>
         <translation>ఫైల్ నుండి డేటాను ఇంపోర్ట్  చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="126"/>
+        <location filename="../ui/import/import_dialog.cpp" line="124"/>
         <source>Documents</source>
         <translation>డాక్యుమెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="127"/>
+        <location filename="../ui/import/import_dialog.cpp" line="125"/>
         <source>Import characters</source>
         <translation>క్యారెక్టర్స్ ఇంపోర్ట్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="128"/>
+        <location filename="../ui/import/import_dialog.cpp" line="126"/>
         <source>Import locations</source>
         <translation>లొకేషన్స్ ఇంపోర్ట్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="129"/>
+        <location filename="../ui/import/import_dialog.cpp" line="127"/>
         <source>Screenplay</source>
         <translation>స్క్రీన్ ప్లే </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="130"/>
+        <location filename="../ui/import/import_dialog.cpp" line="128"/>
         <source>Import screenplay</source>
         <translation>స్క్రీన్ ప్లే ఇంపోర్ట్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="131"/>
+        <location filename="../ui/import/import_dialog.cpp" line="129"/>
         <source>Keep scene numbers</source>
         <translation>సీన్ నంబర్స్ ఉంచండి </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="133"/>
+        <location filename="../ui/import/import_dialog.cpp" line="131"/>
         <source>Import</source>
         <translation>ఇంపోర్ట్ </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="134"/>
+        <location filename="../ui/import/import_dialog.cpp" line="132"/>
         <source>Cancel</source>
         <translation>క్యాన్సిల్ </translation>
     </message>
@@ -10066,32 +10179,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>మీ ఖాతాలోకి ప్రవేశించండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="196"/>
-        <source>Sign in to get access to the extended free and pro features</source>
-        <translation>పొడిగించిన ఉచిత మరియు ప్రో ఫీచర్‌లకు యాక్సెస్ పొందడానికి సైన్ ఇన్ చేయండి</translation>
+        <location filename="../ui/account/login_dialog.cpp" line="197"/>
+        <source>Sign in to get access to extended features of the FREE, PRO and CLOUD versions</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="197"/>
+        <location filename="../ui/account/login_dialog.cpp" line="198"/>
         <source>Email</source>
         <translation>ఇమెయిల్</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="199"/>
+        <location filename="../ui/account/login_dialog.cpp" line="200"/>
         <source>Confirmation code</source>
         <translation>నిర్ధారణ కోడ్</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="200"/>
+        <location filename="../ui/account/login_dialog.cpp" line="201"/>
         <source>Sign in</source>
         <translation>సైన్ ఇన్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="201"/>
+        <location filename="../ui/account/login_dialog.cpp" line="202"/>
         <source>Send code again</source>
         <translation>కోడ్ మళ్ళి పంపించు</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="202"/>
+        <location filename="../ui/account/login_dialog.cpp" line="203"/>
         <source>Cancel</source>
         <translation>క్యాన్సిల్ </translation>
     </message>
@@ -10729,7 +10842,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelCardsView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="417"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="273"/>
         <source>Choose the file to save image</source>
         <translation>ఇమేజ్  సేవ్ చేయడానికి ఫైల్‌ను ఎంచుకోండి</translation>
     </message>
@@ -10827,7 +10940,10 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="126"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n పదం(లు)</numerusform><numerusform>%n word(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n పదం(లు)</numerusform>
+            <numerusform>%n word(s)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="233"/>
@@ -11075,32 +11191,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1625"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1635"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1626"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1636"/>
         <source>Scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1627"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1637"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1628"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1638"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1629"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1639"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1632"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1642"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>&quot;గురించి ఒక నవల వ్రాయండి ...&quot; లేదా &quot;గురించి ఒక అధ్యాయాన్ని వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి</translation>
     </message>
@@ -11348,27 +11464,42 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="120"/>
         <source>%n page(s)</source>
-        <translation><numerusform>%n పేజీ(లు)</numerusform><numerusform>%n page(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n పేజీ(లు)</numerusform>
+            <numerusform>%n page(s)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="121"/>
         <source>%n scene(s)</source>
-        <translation><numerusform>%n సీన్(లు)</numerusform><numerusform>%n scene(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n సీన్(లు)</numerusform>
+            <numerusform>%n scene(s)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="122"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n పదం(లు)</numerusform><numerusform>%n word(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n పదం(లు)</numerusform>
+            <numerusform>%n word(s)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="123"/>
         <source>%n character(s)</source>
-        <translation><numerusform>%n పాత్ర(లు)</numerusform><numerusform>%n character(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n పాత్ర(లు)</numerusform>
+            <numerusform>%n character(s)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="124"/>
         <source>%n character(s) with spaces</source>
-        <translation><numerusform>ఖాళీలతో %n అక్షరం(లు).</numerusform><numerusform>%n character(s) with spaces</numerusform></translation>
+        <translation>
+            <numerusform>ఖాళీలతో %n అక్షరం(లు).</numerusform>
+            <numerusform>%n character(s) with spaces</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="232"/>
@@ -11405,32 +11536,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1656"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1666"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1657"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1667"/>
         <source>Scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1658"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1668"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1659"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1669"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1660"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1670"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1663"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1673"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>&quot;గురించి ఒక నవల వ్రాయండి ...&quot; లేదా &quot;గురించి ఒక అధ్యాయాన్ని వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి</translation>
     </message>
@@ -12124,7 +12255,10 @@ Discuss everything with fellow community of writers, share your work in progress
     <message numerus="yes">
         <location filename="../ui/account/purchase_dialog_option.cpp" line="193"/>
         <source>%n month(s)</source>
-        <translation><numerusform>%n నెల(లు)</numerusform><numerusform>%n month(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n నెల(లు)</numerusform>
+            <numerusform>%n month(s)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../ui/account/purchase_dialog_option.cpp" line="194"/>
@@ -12152,7 +12286,10 @@ Discuss everything with fellow community of writers, share your work in progress
     <message numerus="yes">
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="75"/>
         <source>There are %n document(s) in the recycle bin.</source>
-        <translation><numerusform>రీసైకిల్ బిన్‌లో %n డాక్యుమెంట్(లు) ఉన్నాయి.</numerusform><numerusform>There are %n document(s) in the recycle bin.</numerusform></translation>
+        <translation>
+            <numerusform>రీసైకిల్ బిన్‌లో %n డాక్యుమెంట్(లు) ఉన్నాయి.</numerusform>
+            <numerusform>There are %n document(s) in the recycle bin.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="76"/>
@@ -12733,47 +12870,47 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation>స్క్రీన్ ప్లే నిఘంటువులను చూపించు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1178"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1150"/>
         <source>Do you really want to remove element &quot;%1&quot; from current scene?</source>
         <translation>మీరు నిజంగా ప్రస్తుత సీన్ నుండి &quot;% 1&quot; ఎలిమెంట్  తీసివేయాలనుకుంటున్నారా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2031"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2013"/>
         <source>Elements</source>
         <translation>ఎలిమెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1180"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1152"/>
         <source>No</source>
         <translation>వద్దు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1181"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1153"/>
         <source>Yes, remove</source>
         <translation>అవును, రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2032"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2014"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2033"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2015"/>
         <source>Scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2034"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2016"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2035"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2017"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2036"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2018"/>
         <source>Dictionaries</source>
         <translation>నిఘంటువులు</translation>
     </message>
@@ -12990,7 +13127,7 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayCardsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="419"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="278"/>
         <source>Choose the file to save image</source>
         <translation>ఇమేజ్  సేవ్ చేయడానికి ఫైల్‌ను ఎంచుకోండి</translation>
     </message>
@@ -13101,7 +13238,10 @@ Discuss everything with fellow community of writers, share your work in progress
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="212"/>
         <source>Passed %n time(s)</source>
-        <translation><numerusform>%n సమయం(లు) దాటింది</numerusform><numerusform>Passed %n time(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n సమయం(లు) దాటింది</numerusform>
+            <numerusform>Passed %n time(s)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="277"/>
@@ -13149,7 +13289,10 @@ Discuss everything with fellow community of writers, share your work in progress
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="126"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n పదం(లు)</numerusform><numerusform>%n word(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n పదం(లు)</numerusform>
+            <numerusform>%n word(s)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="233"/>
@@ -14165,27 +14308,42 @@ Discuss everything with fellow community of writers, share your work in progress
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="122"/>
         <source>%n page(s)</source>
-        <translation><numerusform>%n పేజీ(లు)</numerusform><numerusform>%n పేజీ(లు)</numerusform></translation>
+        <translation>
+            <numerusform>%n పేజీ(లు)</numerusform>
+            <numerusform>%n పేజీ(లు)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="123"/>
         <source>%n scene(s)</source>
-        <translation><numerusform>%n సీన్(లు)</numerusform><numerusform>%n సీన్(లు)</numerusform></translation>
+        <translation>
+            <numerusform>%n సీన్(లు)</numerusform>
+            <numerusform>%n సీన్(లు)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="124"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n పదం(లు)</numerusform><numerusform>%n పదం(లు)</numerusform></translation>
+        <translation>
+            <numerusform>%n పదం(లు)</numerusform>
+            <numerusform>%n పదం(లు)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="125"/>
         <source>%n character(s)</source>
-        <translation><numerusform>%n పాత్ర(లు)</numerusform><numerusform>%n పాత్ర(లు)</numerusform></translation>
+        <translation>
+            <numerusform>%n పాత్ర(లు)</numerusform>
+            <numerusform>%n పాత్ర(లు)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="126"/>
         <source>%n character(s) with spaces</source>
-        <translation><numerusform>ఖాళీలతో %n అక్షరం(లు).</numerusform><numerusform>ఖాళీలతో %n అక్షరం(లు).</numerusform></translation>
+        <translation>
+            <numerusform>ఖాళీలతో %n అక్షరం(లు).</numerusform>
+            <numerusform>ఖాళీలతో %n అక్షరం(లు).</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -14221,42 +14379,45 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1740"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1746"/>
         <source>Synopsis generation will takes %n word(s)</source>
-        <translation><numerusform>సారాంశం ఉత్పత్తి %n పదం(లు) పడుతుంది</numerusform><numerusform>సారాంశం ఉత్పత్తి %n పదం(లు) పడుతుంది</numerusform></translation>
+        <translation>
+            <numerusform>సారాంశం ఉత్పత్తి %n పదం(లు) పడుతుంది</numerusform>
+            <numerusform>సారాంశం ఉత్పత్తి %n పదం(లు) పడుతుంది</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1856"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1866"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1857"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1867"/>
         <source>Scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1858"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1868"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1859"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1869"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1860"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1870"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1861"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1871"/>
         <source>Dictionaries</source>
         <translation>నిఘంటువులు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1864"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1874"/>
         <source>Start prompt from something like &quot;Write a screenplay about ...&quot;, or &quot;Write a short movie screenplay about ...&quot;</source>
         <translation>&quot;దీని గురించి స్క్రీన్‌ప్లే వ్రాయండి ...&quot;, లేదా &quot;గురించి ఒక చిన్న సినిమా స్క్రీన్‌ప్లే వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్‌ను ప్రారంభించండి</translation>
     </message>
@@ -14466,32 +14627,32 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1702"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1712"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1703"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1713"/>
         <source>Scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1704"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1714"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1705"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1715"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1706"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1716"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1709"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1719"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>&quot;గురించి ఒక నవల వ్రాయండి ...&quot; లేదా &quot;గురించి ఒక అధ్యాయాన్ని వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి</translation>
     </message>
@@ -14518,7 +14679,10 @@ Discuss everything with fellow community of writers, share your work in progress
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="169"/>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="170"/>
         <source>word(s)</source>
-        <translation><numerusform>పదం(లు)</numerusform><numerusform>పదం(లు)</numerusform></translation>
+        <translation>
+            <numerusform>పదం(లు)</numerusform>
+            <numerusform>పదం(లు)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="178"/>
@@ -14641,7 +14805,7 @@ STARTED</translation>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="132"/>
         <source>was active %1 at %2</source>
-        <extracomment>Last active date (%1) and time (%2) of the user's device</extracomment>
+        <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
         <translation>was active %1 at %2</translation>
     </message>
     <message>
@@ -14734,993 +14898,998 @@ STARTED</translation>
 <context>
     <name>Ui::SettingsView</name>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1698"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1701"/>
         <source>Choose the folder where backups will be saved</source>
         <translation>బ్యాకప్‌లు సేవ్ చేయబడే ఫోల్డర్‌ను ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1814"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1980"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2313"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2485"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2672"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2831"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1819"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1985"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2318"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2490"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2677"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2836"/>
         <source>Edit</source>
         <translation>ఎడిట్ </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1822"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1988"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2321"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2493"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2680"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2839"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1827"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1993"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2326"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2498"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2685"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2844"/>
         <source>Create new template based on current</source>
         <translation>కరెంట్ ఆధారంగా కొత్త టెంప్లేట్‌ను సృష్టించండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1829"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1995"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2328"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2500"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2687"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2846"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1834"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2000"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2333"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2505"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2692"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2851"/>
         <source>Save to file</source>
         <translation>ఫైల్‌లో సేవ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1835"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2001"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2334"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2506"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2693"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2852"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1840"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2006"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2339"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2511"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2698"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2857"/>
         <source>Remove</source>
         <translation>రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1842"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2008"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2341"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2513"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2700"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2859"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1847"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2013"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2346"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2518"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2705"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2864"/>
         <source>Load template from file</source>
         <translation>ఫైల్ నుండి టెంప్లేట్‌ను లోడ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3890"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3900"/>
         <source>Application settings</source>
         <translation>అప్లికేషన్ సెట్టింగ్స్ </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3891"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3901"/>
         <source>Language</source>
         <translation>భాష</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3895"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3905"/>
         <source>Make application interface compact</source>
         <translation>అప్లికేషన్ ఇంటర్‌ఫేస్‌ని కాంపాక్ట్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3904"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3914"/>
         <source>Qty</source>
         <translation>Qty</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3905"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3915"/>
         <source>Text editing</source>
         <translation>Text editing</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3906"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3916"/>
         <source>Show documents pages</source>
         <translation>డాక్యుమెంట్ పేజీలు చూపించు </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3907"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3917"/>
         <source>Use typewriter sound for keys pressing</source>
         <translation>కీలు నొక్కడం కోసం టైప్‌రైటర్ ధ్వనిని ఉపయోగించండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3908"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3918"/>
         <source>Spell check</source>
         <translation>అక్షరక్రమ తనిఖీ</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3909"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3919"/>
         <source>Spelling dictionary</source>
         <translation>అక్షరక్రమ నిఘంటువు</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3911"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3921"/>
         <source>Afrikaans</source>
         <translation>Afrikaans</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3912"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3922"/>
         <source>Aragonese</source>
         <translation>Aragonese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3913"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3923"/>
         <source>Arabic</source>
         <translation>Arabic</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3914"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3924"/>
         <source>Asturian</source>
         <translation>Asturian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3915"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3925"/>
         <source>Azerbaijani</source>
         <translation>Azerbaijani</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3916"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3926"/>
         <source>Belarusian</source>
         <translation>Belarusian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3917"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3927"/>
         <source>Bulgarian</source>
         <translation>Bulgarian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3918"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3928"/>
         <source>Bengali</source>
         <translation>Bengali</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3919"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3929"/>
         <source>Tibetan</source>
         <translation>Tibetan</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3920"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3930"/>
         <source>Breton</source>
         <translation>Breton</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3921"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3931"/>
         <source>Bosnian</source>
         <translation>Bosnian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3922"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3932"/>
         <source>Catalan (Valencian)</source>
         <translation>Catalan (Valencian)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3923"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3933"/>
         <source>Catalan</source>
         <translation>Catalan</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3924"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3934"/>
         <source>Czech</source>
         <translation>Czech</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3925"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3935"/>
         <source>Welsh</source>
         <translation>Welsh</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3926"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3936"/>
         <source>Danish</source>
         <translation>Danish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3927"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3937"/>
         <source>German (Austria)</source>
         <translation>German (Austria)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3928"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3938"/>
         <source>German (Switzerland)</source>
         <translation>German (Switzerland)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3929"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3939"/>
         <source>German</source>
         <translation>German</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3930"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3940"/>
         <source>Greek (Polytonic)</source>
         <translation>Greek (Polytonic)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3931"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3941"/>
         <source>Greek</source>
         <translation>Greek</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3932"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3942"/>
         <source>English (Australia)</source>
         <translation>English (Australia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3933"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3943"/>
         <source>English (Canada)</source>
         <translation>English (Canada)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3934"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3944"/>
         <source>English (United Kingdom)</source>
         <translation>English (United Kingdom)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3935"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3945"/>
         <source>English (New Zealand)</source>
         <translation>English (New Zealand)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3936"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3946"/>
         <source>English (South Africa)</source>
         <translation>English (South Africa)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3937"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3947"/>
         <source>English (United States)</source>
         <translation>English (United States)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3938"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3948"/>
         <source>Esperanto</source>
         <translation>Esperanto</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3939"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3949"/>
         <source>Spanish (Argentina)</source>
         <translation>Spanish (Argentina)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3940"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3950"/>
         <source>Spanish (Bolivia)</source>
         <translation>Spanish (Bolivia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3941"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3951"/>
         <source>Spanish (Chile)</source>
         <translation>Spanish (Chile)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3942"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3952"/>
         <source>Spanish (Colombia)</source>
         <translation>Spanish (Colombia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3943"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3953"/>
         <source>Spanish (Costa Rica)</source>
         <translation>Spanish (Costa Rica)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3944"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3954"/>
         <source>Spanish (Cuba)</source>
         <translation>Spanish (Cuba)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3945"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3955"/>
         <source>Spanish (Dominican Republic)</source>
         <translation>Spanish (Dominican Republic)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3946"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3956"/>
         <source>Spanish (Ecuador)</source>
         <translation>Spanish (Ecuador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3947"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3957"/>
         <source>Spanish (Guatemala)</source>
         <translation>Spanish (Guatemala)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3948"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3958"/>
         <source>Spanish (Honduras)</source>
         <translation>Spanish (Honduras)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3949"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3959"/>
         <source>Spanish (Mexico)</source>
         <translation>Spanish (Mexico)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3950"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3960"/>
         <source>Spanish (Nicaragua)</source>
         <translation>Spanish (Nicaragua)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3951"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3961"/>
         <source>Spanish (Panama)</source>
         <translation>Spanish (Panama)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3952"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3962"/>
         <source>Spanish (Peru)</source>
         <translation>Spanish (Peru)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3953"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3963"/>
         <source>Spanish (Philippines)</source>
         <translation>Spanish (Philippines)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3954"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3964"/>
         <source>Spanish (Puerto Rico)</source>
         <translation>Spanish (Puerto Rico)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3955"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3965"/>
         <source>Spanish (Paraguay)</source>
         <translation>Spanish (Paraguay)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3956"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3966"/>
         <source>Spanish (El Salvador)</source>
         <translation>Spanish (El Salvador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3957"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3967"/>
         <source>Spanish (United States)</source>
         <translation>Spanish (United States)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3958"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3968"/>
         <source>Spanish (Uruguay)</source>
         <translation>Spanish (Uruguay)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3959"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3969"/>
         <source>Spanish (Venezuela)</source>
         <translation>Spanish (Venezuela)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3960"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3970"/>
         <source>Spanish</source>
         <translation>Spanish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3961"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3971"/>
         <source>Estonian</source>
         <translation>Estonian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3962"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3972"/>
         <source>Basque</source>
         <translation>Basque</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3963"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3973"/>
         <source>Persian</source>
         <translation>Persian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3964"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3974"/>
         <source>Faroese</source>
         <translation>Faroese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3965"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3975"/>
         <source>French</source>
         <translation>French</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3966"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3976"/>
         <source>Friulian</source>
         <translation>Friulian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3967"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3977"/>
         <source>Western Frisian</source>
         <translation>Western Frisian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3968"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3978"/>
         <source>Irish</source>
         <translation>Irish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3969"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3979"/>
         <source>Gaelic</source>
         <translation>Gaelic</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3970"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3980"/>
         <source>Galician</source>
         <translation>Galician</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3971"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3981"/>
         <source>Gujarati</source>
         <translation>Gujarati</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3972"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3982"/>
         <source>Guarani</source>
         <translation>Guarani</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3973"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3983"/>
         <source>Hebrew</source>
         <translation>Hebrew</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3974"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3984"/>
         <source>Hindi</source>
         <translation>Hindi</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3975"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3985"/>
         <source>Croatian</source>
         <translation>Croatian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3976"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3986"/>
         <source>Hungarian</source>
         <translation>Hungarian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3977"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3987"/>
         <source>Armenian</source>
         <translation>Armenian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3978"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3988"/>
         <source>Armenian (Western)</source>
         <translation>Armenian (Western)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3979"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3989"/>
         <source>Interlingua</source>
         <translation>Interlingua</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3980"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3990"/>
         <source>Indonesian</source>
         <translation>Indonesian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3981"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3991"/>
         <source>Icelandic</source>
         <translation>Icelandic</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3982"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3992"/>
         <source>Italian</source>
         <translation>Italian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3983"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3993"/>
         <source>Georgian</source>
         <translation>Georgian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3984"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3994"/>
         <source>Kazakh</source>
         <translation>Kazakh</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3985"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3995"/>
         <source>Kurdish</source>
         <translation>Kurdish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3986"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3996"/>
         <source>Korean</source>
         <translation>Korean</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3987"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3997"/>
         <source>Latin</source>
         <translation>Latin</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3988"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3998"/>
         <source>Luxembourgish</source>
         <translation>Luxembourgish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3989"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3999"/>
         <source>Lao</source>
         <translation>Lao</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3990"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4000"/>
         <source>Lithuanian</source>
         <translation>Lithuanian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3991"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4001"/>
         <source>Latgalian</source>
         <translation>Latgalian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3992"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4002"/>
         <source>Latvian</source>
         <translation>Latvian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3993"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4003"/>
         <source>Macedonian</source>
         <translation>Macedonian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3994"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4004"/>
         <source>Mongolian</source>
         <translation>Mongolian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3995"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4005"/>
         <source>Maltese</source>
         <translation>Maltese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3996"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4000"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4006"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4010"/>
         <source>Norwegian</source>
         <translation>Norwegian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3997"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4007"/>
         <source>Low German</source>
         <translation>Low German</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3998"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4008"/>
         <source>Nepali</source>
         <translation>Nepali</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3999"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4009"/>
         <source>Dutch</source>
         <translation>Dutch</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4001"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4011"/>
         <source>Occitan</source>
         <translation>Occitan</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4002"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4012"/>
         <source>Polish</source>
         <translation>Polish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4003"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4013"/>
         <source>Portuguese (Brazilian)</source>
         <translation>Portuguese (Brazilian)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4004"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4014"/>
         <source>Portuguese</source>
         <translation>Portuguese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4005"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4015"/>
         <source>Quechua</source>
         <translation>Quechua</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4006"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4016"/>
         <source>Romanian</source>
         <translation>Romanian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4007"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4017"/>
         <source>Russian (with Yo)</source>
         <translation>Russian (with Yo)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4008"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4018"/>
         <source>Russian</source>
         <translation>Russian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4009"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4019"/>
         <source>Kinyarwanda</source>
         <translation>Kinyarwanda</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4010"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4020"/>
         <source>Sinhala</source>
         <translation>Sinhala</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4011"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4021"/>
         <source>Slovak</source>
         <translation>Slovak</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4012"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4022"/>
         <source>Slovenian</source>
         <translation>Slovenian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4013"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4023"/>
         <source>Albanian</source>
         <translation>Albanian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4014"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4024"/>
         <source>Serbian (Latin)</source>
         <translation>Serbian (Latin)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4015"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4025"/>
         <source>Serbian</source>
         <translation>Serbian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4016"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4026"/>
         <source>Swedish (Finland)</source>
         <translation>Swedish (Finland)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4017"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4027"/>
         <source>Swedish</source>
         <translation>Swedish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4018"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4028"/>
         <source>Swahili</source>
         <translation>Swahili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4019"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4029"/>
         <source>Tamil</source>
         <translation>Tamil</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4020"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4030"/>
         <source>Telugu</source>
         <translation>Telugu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4021"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4031"/>
         <source>Thai</source>
         <translation>Thai</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4022"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4032"/>
         <source>Turkmen</source>
         <translation>Turkmen</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4023"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4033"/>
         <source>Klingon (Latin)</source>
         <translation>Klingon (Latin)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4024"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4034"/>
         <source>Klingon</source>
         <translation>Klingon</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4025"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4035"/>
         <source>Turkish</source>
         <translation>Turkish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4026"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4036"/>
         <source>Ukrainian</source>
         <translation>Ukrainian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4027"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4037"/>
         <source>Vietnamese</source>
         <translation>Vietnamese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4037"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4047"/>
         <source>User interface</source>
         <translation>User interface</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4038"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4048"/>
         <source>Manage user dictionary</source>
         <translation>వినియోగదారు నిఘంటువుని నిర్వహించండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4043"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4053"/>
         <source>Automatic text corrections</source>
         <translation>ఆటోమాటిక్ టెక్ట్ కరెక్షన్స్ </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4044"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4054"/>
+        <source>Capitalize single &quot;i&quot; letter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4055"/>
         <source>Replace three single dots with ellipsis</source>
         <translation>మూడు సింగిల్ డాట్‌లను ఎలిప్సిస్‌తో భర్తీ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4045"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4056"/>
         <source>Replace vertical quotation marks to curly ones</source>
         <translation>నిలువు కొటేషన్ గుర్తులను వంకరగా ఉండేలా మార్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4046"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4057"/>
         <source>Replace two dashes with em dash</source>
         <translation>రెండు డాష్‌లను ఎమ్ డాష్‌తో భర్తీ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4047"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4058"/>
         <source>Avoid multiple spaces</source>
         <translation>బహుళ ఖాళీలను నివారించండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4054"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4065"/>
         <source>Turn on/off text and folders module</source>
         <translation>టెక్స్ట్ మరియు ఫోల్డర్‌ల మాడ్యూల్‌ని ఆన్/ఆఫ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4068"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4079"/>
         <source>Turn on/off screenplay module</source>
         <translation>స్క్రీన్‌ప్లే మాడ్యూల్‌ని ఆన్/ఆఫ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4078"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4089"/>
         <source>Add a continuation (CONT&apos;D) to dialogues separated by an action</source>
         <translation>యాక్షన్  ద్వారా వేరు చేయబడిన డైలాగ్‌లకు కొనసాగింపు (CONT&apos;D)ని జోడించండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4080"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4091"/>
         <source>Automatically correct screenplay text on page breaks</source>
         <translation>పేజీ విరామాలలో స్క్రీన్‌ప్లే టెక్ట్స్ ని  ఆటోమాటిక్ గా  సరిచేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4088"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4145"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4169"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4198"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4099"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4156"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4180"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4209"/>
         <source>Show characters suggestions in empty paragraph</source>
         <translation>ఖాళీ పేరాలో క్యారెక్టర్స్  సూచనలను చూపండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4090"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4101"/>
         <source>Use opening bracket in dialogue to switch to parenthetical</source>
         <translation>కుండలీకరణానికి మారడానికి డైలాగ్‌లో ఓపెనింగ్ బ్రాకెట్‌ని ఉపయోగించండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4091"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4102"/>
         <source>Screenplay navigator</source>
         <translation>స్క్రీన్ ప్లే నావిగేటర్</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4092"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4103"/>
         <source>Show beats</source>
         <translation>బీట్స్ చూపించు</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4093"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4104"/>
         <source>in treatment</source>
         <translation>ట్రీట్ మెంట్ లో </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4094"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4105"/>
         <source>in screenplay</source>
         <translation>స్క్రీన్ ప్లే లో </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4115"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4126"/>
         <source>Calculate duration based on the custom rules</source>
         <translation>అనుకూల నియమాల ఆధారంగా వ్యవధిని లెక్కించండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4116"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4127"/>
         <source>For action</source>
         <translation>యాక్షన్ కోసం </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4117"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4128"/>
         <source>Per entry</source>
         <translation>ప్రతి ప్రవేశానికి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4119"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4124"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4128"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4130"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4135"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4139"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4120"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4131"/>
         <source>Each 50 characters</source>
         <translation>ప్రతి 50 అక్షరాలు</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4122"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4133"/>
         <source>For dialogue</source>
         <translation>డైలాగ్ కోసం</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4126"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4137"/>
         <source>For scene heading</source>
         <translation>సీన్ హెడ్డింగ్ కోసం </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4132"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4143"/>
         <source>Turn on/off comic book module</source>
         <translation>కామిక్ బుక్ మాడ్యూల్‌ని ఆన్/ఆఫ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4154"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4165"/>
         <source>Audioplay module</source>
         <translation>ఆడియోప్లే మాడ్యూల్</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4155"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4166"/>
         <source>Turn on/off audioplay module</source>
         <translation>ఆడియోప్లే మాడ్యూల్‌ని ఆన్/ఆఫ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4160"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4171"/>
         <source>Show block numbers</source>
         <translation>బ్లాక్ నంబర్లను చూపించు</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4161"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4172"/>
         <source>Continue block numbers through document</source>
         <translation>డాక్యుమెంట్ లో  బ్లాక్ నంబర్లను కొనసాగించండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4208"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4219"/>
         <source>Novel module</source>
         <translation>నవల మాడ్యూల్</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4209"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4220"/>
         <source>Turn on/off novel module</source>
         <translation>నవల మాడ్యూల్‌ని ఆన్/ఆఫ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4224"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4235"/>
         <source>Simple text editor</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4230"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4242"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4254"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4266"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4278"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4290"/>
-        <source>If you press in empty paragraph</source>
-        <translation>మీరు ఖాళీ పేరాలో నొక్కితే</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4248"/>
-        <source>Comic book editor</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4260"/>
-        <source>Audioplay editor</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4272"/>
-        <source>Stageplay editor</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4284"/>
-        <source>Novel editor</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4170"/>
-        <source>Audioplay navigator</source>
-        <translation>ఆడియోప్లే నావిగేటర్</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4179"/>
-        <source>Calculate duration based on the count of words</source>
-        <translation>పదాల సంఖ్య ఆధారంగా వ్యవధిని లెక్కించండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4181"/>
-        <source>words</source>
-        <translation>పదాలు</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4185"/>
-        <source>Stageplay module</source>
-        <translation>స్టేజ్‌ప్లే మాడ్యూల్</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4186"/>
-        <source>Turn on/off stageplay module</source>
-        <translation>స్టేజ్‌ప్లే మాడ్యూల్‌ని ఆన్/ఆఫ్ చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4199"/>
-        <source>Stageplay navigator</source>
-        <translation>స్టేజ్‌ప్లే నావిగేటర్</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4236"/>
-        <source>Screenplay editor</source>
-        <translation>స్క్రీన్ ప్లే ఎడిటర్</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4227"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4239"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4251"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4263"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4275"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4287"/>
-        <source>Block name</source>
-        <translation>పేరు బ్లాక్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4228"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4240"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4252"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4264"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4276"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4288"/>
-        <source>Shortcut</source>
-        <translation>షార్ట్ కట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4229"/>
         <location filename="../ui/settings/settings_view.cpp" line="4241"/>
         <location filename="../ui/settings/settings_view.cpp" line="4253"/>
         <location filename="../ui/settings/settings_view.cpp" line="4265"/>
         <location filename="../ui/settings/settings_view.cpp" line="4277"/>
         <location filename="../ui/settings/settings_view.cpp" line="4289"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4301"/>
+        <source>If you press in empty paragraph</source>
+        <translation>మీరు ఖాళీ పేరాలో నొక్కితే</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4259"/>
+        <source>Comic book editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4271"/>
+        <source>Audioplay editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4283"/>
+        <source>Stageplay editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4295"/>
+        <source>Novel editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4181"/>
+        <source>Audioplay navigator</source>
+        <translation>ఆడియోప్లే నావిగేటర్</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4190"/>
+        <source>Calculate duration based on the count of words</source>
+        <translation>పదాల సంఖ్య ఆధారంగా వ్యవధిని లెక్కించండి</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4192"/>
+        <source>words</source>
+        <translation>పదాలు</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4196"/>
+        <source>Stageplay module</source>
+        <translation>స్టేజ్‌ప్లే మాడ్యూల్</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4197"/>
+        <source>Turn on/off stageplay module</source>
+        <translation>స్టేజ్‌ప్లే మాడ్యూల్‌ని ఆన్/ఆఫ్ చేయండి</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4210"/>
+        <source>Stageplay navigator</source>
+        <translation>స్టేజ్‌ప్లే నావిగేటర్</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4247"/>
+        <source>Screenplay editor</source>
+        <translation>స్క్రీన్ ప్లే ఎడిటర్</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4238"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4250"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4262"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4274"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4286"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4298"/>
+        <source>Block name</source>
+        <translation>పేరు బ్లాక్ చెయ్యండి </translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4239"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4251"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4263"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4275"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4287"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4299"/>
+        <source>Shortcut</source>
+        <translation>షార్ట్ కట్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4240"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4252"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4264"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4276"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4288"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4300"/>
         <source>If you press in paragraphs end</source>
         <translation>మీరు పేరాగ్రాఫ్‌ల ముగింపులో నొక్కితే</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4233"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4244"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4256"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4268"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4280"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4292"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4304"/>
+        <source>Add paragraph</source>
+        <translation>పేరా జోడించండి</translation>
+    </message>
+    <message>
         <location filename="../ui/settings/settings_view.cpp" line="4245"/>
         <location filename="../ui/settings/settings_view.cpp" line="4257"/>
         <location filename="../ui/settings/settings_view.cpp" line="4269"/>
         <location filename="../ui/settings/settings_view.cpp" line="4281"/>
         <location filename="../ui/settings/settings_view.cpp" line="4293"/>
-        <source>Add paragraph</source>
-        <translation>పేరా జోడించండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4234"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4246"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4258"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4270"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4282"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4294"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4305"/>
         <source>Change to</source>
         <translation>కు మార్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3892"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3902"/>
         <source>Size of the user interface elements:</source>
         <translation>వినియోగదారు ఇంటర్‌ఫేస్ మూలకాల పరిమాణం:</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3893"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3903"/>
         <source>small</source>
         <translation>చిన్నది</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3894"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3904"/>
         <source>big</source>
         <translation>పెద్దది </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3896"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3906"/>
         <source>Save changes &amp; backups</source>
         <translation>మార్పులు &amp; బ్యాక్ అప్స్ సేవ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3897"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3907"/>
         <source>Automatically save changes as soon as possible</source>
         <translation>వీలైనంత త్వరగా మార్పులను ఆటోమాటిక్ గా సేవ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3899"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3909"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
@@ -15729,237 +15898,237 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 మీరు ఎటువంటి అంతరాయాలు లేకుండా పని చేస్తే అది ప్రతి 3 నిమిషాలకు ప్రాజెక్ట్‌ను ఆదా చేస్తుంది.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3902"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3912"/>
         <source>Save backups</source>
         <translation>బేకప్స్ సేవ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3903"/>
+        <location filename="../ui/settings/settings_view.cpp" line="3913"/>
         <source>Backups folder path</source>
         <translation>బ్యాకప్ ఫోల్డర్ మార్గం</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4040"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4050"/>
         <source>Focus current paragraph</source>
         <translation>ప్రస్తుత పేరాపై దృష్టి పెట్టండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4042"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4052"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
         <translation>టైప్‌రైటర్ స్క్రోలింగ్‌ని ఉపయోగించండి (స్క్రీన్ సెంటర్‌లో కర్సర్‌తో లైన్‌ను ఉంచుతుంది)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4049"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4060"/>
         <source>Components</source>
         <translation>భాగాలు</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4053"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4064"/>
         <source>Simple text module</source>
         <translation>సింపుల్ టెక్ట్స్ మాడ్యూల్ </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4055"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4069"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4133"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4156"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4187"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4210"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4066"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4080"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4144"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4167"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4198"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4221"/>
         <source>Text editor</source>
         <translation>టెక్ట్స్ ఎడిటర్ </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4056"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4070"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4134"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4157"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4188"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4211"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4067"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4081"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4145"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4168"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4199"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4222"/>
         <source>Default template</source>
         <translation>డీఫాల్ట్ టెంప్లేట్ </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4058"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4072"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4136"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4159"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4190"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4213"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4069"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4083"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4147"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4170"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4201"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4224"/>
         <source>Available actions for the selected template</source>
         <translation>ఎంచుకున్న టెంప్లేట్ కోసం అందుబాటులో ఉన్న చర్యలు</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4073"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4095"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4171"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4200"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4084"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4106"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4182"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4211"/>
         <source>Show scene number</source>
         <translation>సీన్ నంబర్ చూపించు </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4074"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4085"/>
         <source>on the left</source>
         <translation>ఎడమ వైపు </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4075"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4086"/>
         <source>on the right</source>
         <translation>కుడివైపు </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4076"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4137"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4087"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4148"/>
         <source>Show dialogue number</source>
         <translation>డైలాగ్ నంబర్ చూపించు </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4039"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4049"/>
         <source>Highlight current line</source>
         <translation>ప్రస్తుత లైన్‌ను హైలైట్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4059"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4146"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4214"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4070"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4157"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4225"/>
         <source>Navigator</source>
         <translation>నావిగేటర్</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4060"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4071"/>
         <source>Show chapter text, lines</source>
         <translation>అధ్యాయం టెక్ట్స్ , పంక్తులు చూపించు</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4067"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4078"/>
         <source>Screenplay module</source>
         <translation>స్క్రీన్ ప్లే మాడ్యూల్</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4081"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4092"/>
         <source>Save characters &amp; locations on typing</source>
         <translation>టైపింగ్‌లో అక్షరాలు &amp; స్థానాలను సేవ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4083"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4094"/>
         <source>Show hints for all characters &amp; locations, or only for</source>
         <translation>అన్ని అక్షరాలు మరియు స్థానాలకు లేదా వాటి కోసం మాత్రమే సూచనలను చూపండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4084"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4141"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4165"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4194"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4095"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4152"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4176"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4205"/>
         <source>primary</source>
         <translation>ప్రాథమిక</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4085"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4142"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4166"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4195"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4096"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4153"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4177"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4206"/>
         <source>secondary</source>
         <translation>ద్వితీయ</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4086"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4143"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4167"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4196"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4097"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4154"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4178"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4207"/>
         <source>tertiary</source>
         <translation>తృతీయ</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4096"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4172"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4201"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4215"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4107"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4183"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4212"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4226"/>
         <source>Show scene text, lines</source>
         <translation>సీన్ టెక్ట్స్ , పంక్తులు చూపించు</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4102"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4178"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4113"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4189"/>
         <source>Duration</source>
         <translation>సమయం </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4103"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4114"/>
         <source>Calculate duration based on the count of pages</source>
         <translation>పేజీల సంఖ్య ఆధారంగా వ్యవధిని లెక్కించండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4104"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4110"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4180"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4115"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4121"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4191"/>
         <source>at the rate of</source>
         <translation>చొప్పున</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4105"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4116"/>
         <source>pages</source>
         <translation>పేజీలు </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4106"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4113"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4182"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4117"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4124"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4193"/>
         <source>has duration</source>
         <translation>వ్యవధిని కలిగి ఉంటుంది</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4107"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4114"/>
         <location filename="../ui/settings/settings_view.cpp" line="4118"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4121"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4123"/>
         <location filename="../ui/settings/settings_view.cpp" line="4125"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4127"/>
         <location filename="../ui/settings/settings_view.cpp" line="4129"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4183"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4132"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4134"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4136"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4138"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4140"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4194"/>
         <source>seconds</source>
         <translation>సెకండ్స్ </translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4109"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4120"/>
         <source>Calculate duration based on the count of letters</source>
         <translation>అక్షరాల సంఖ్య ఆధారంగా వ్యవధిని లెక్కించండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4111"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4122"/>
         <source>letters</source>
         <translation>అక్షరాలు</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4112"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4123"/>
         <source>including spaces</source>
         <translation>ఖాళీలతో సహా</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4131"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4142"/>
         <source>Comic book module</source>
         <translation>కామిక్ బుక్ మాడ్యూల్</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4138"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4162"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4191"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4149"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4173"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4202"/>
         <source>Save characters on typing</source>
         <translation>టైపింగ్‌లో అక్షరాలను సేవ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4140"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4164"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4193"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4151"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4175"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4204"/>
         <source>Show hints for all characters, or only for</source>
         <translation>అన్ని క్యారెక్టర్‌లకు లేదా వాటి కోసం మాత్రమే సూచనలను చూపండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4147"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4158"/>
         <source>Show panel text, lines</source>
         <translation>ప్యానెల్ టెక్స్ట్, లైన్లను చూపించు</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4222"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4233"/>
         <source>Shortcuts</source>
         <translation>షార్ట్ కట్స్ </translation>
     </message>
@@ -16190,27 +16359,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1194"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1204"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1195"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1205"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1196"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1206"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1197"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1207"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1200"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1210"/>
         <source>Start prompt from something like &quot;Write a story about ...&quot;, or &quot;Write about ...&quot;, or simply ask AI about anything</source>
         <translation>&quot;గురించి ఒక కథనాన్ని వ్రాయండి ...&quot;, లేదా &quot;గురించి వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి లేదా ఏదైనా గురించి AIని అడగండి.</translation>
     </message>
@@ -16293,7 +16462,10 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="123"/>
         <source>%n word(s)</source>
-        <translation><numerusform>%n పదం(లు)</numerusform><numerusform>%n word(s)</numerusform></translation>
+        <translation>
+            <numerusform>%n పదం(లు)</numerusform>
+            <numerusform>%n word(s)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="225"/>
@@ -16600,27 +16772,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1250"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1260"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1251"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1261"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1252"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1262"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1253"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1263"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1256"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1266"/>
         <source>Start prompt from something like &quot;Write a stage play about ...&quot;</source>
         <translation>&quot;దీని గురించి రంగస్థల నాటకం వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి</translation>
     </message>
@@ -16671,7 +16843,10 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../ui/notifications/subscription_view.cpp" line="110"/>
         <source>Your CLOUD version subscription expires in %n day(s).</source>
-        <translation><numerusform>మీ CLOUD సంస్కరణ సభ్యత్వం %n రోజు(ల)లో ముగుస్తుంది.</numerusform><numerusform>మీ CLOUD సంస్కరణ సభ్యత్వం %n రోజు(ల)లో ముగుస్తుంది.</numerusform></translation>
+        <translation>
+            <numerusform>మీ CLOUD సంస్కరణ సభ్యత్వం %n రోజు(ల)లో ముగుస్తుంది.</numerusform>
+            <numerusform>మీ CLOUD సంస్కరణ సభ్యత్వం %n రోజు(ల)లో ముగుస్తుంది.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="121"/>
@@ -16686,7 +16861,10 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../ui/notifications/subscription_view.cpp" line="109"/>
         <source>Your PRO version subscription expires in %n day(s).</source>
-        <translation><numerusform>మీ PRO వెర్షన్  సభ్యత్వం %n రోజు(ల)లో ముగుస్తుంది.</numerusform><numerusform>మీ PRO వెర్షన్  సభ్యత్వం %n రోజు(ల)లో ముగుస్తుంది.</numerusform></translation>
+        <translation>
+            <numerusform>మీ PRO వెర్షన్  సభ్యత్వం %n రోజు(ల)లో ముగుస్తుంది.</numerusform>
+            <numerusform>మీ PRO వెర్షన్  సభ్యత్వం %n రోజు(ల)లో ముగుస్తుంది.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="117"/>
@@ -17555,12 +17733,18 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="280"/>
         <source>Done! I&apos;ve just written %n word(s)</source>
-        <translation><numerusform>పూర్తి! నేను ఇప్పుడే %n పదం(లు) వ్రాసాను</numerusform><numerusform>పూర్తి! నేను ఇప్పుడే %n పదం(లు) వ్రాసాను</numerusform></translation>
+        <translation>
+            <numerusform>పూర్తి! నేను ఇప్పుడే %n పదం(లు) వ్రాసాను</numerusform>
+            <numerusform>పూర్తి! నేను ఇప్పుడే %n పదం(లు) వ్రాసాను</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="281"/>
         <source>in %n minute(s)</source>
-        <translation><numerusform>%n నిమిషం(లు)లో</numerusform><numerusform>%n నిమిషం(లు)లో</numerusform></translation>
+        <translation>
+            <numerusform>%n నిమిషం(లు)లో</numerusform>
+            <numerusform>%n నిమిషం(లు)లో</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="467"/>

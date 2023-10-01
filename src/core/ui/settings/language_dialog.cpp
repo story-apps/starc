@@ -76,16 +76,16 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     : arabic(new PercentRadioButton(_parent, 87))
     , azerbaijani(new PercentRadioButton(_parent, 90))
     , belarusian(new PercentRadioButton(_parent, 51))
-    , catalan(new PercentRadioButton(_parent, 76))
-    , chinese(new PercentRadioButton(_parent, 5))
+    , catalan(new PercentRadioButton(_parent, 78))
+    , chinese(new PercentRadioButton(_parent, 97))
     , croatian(new PercentRadioButton(_parent, 54))
     , danish(new PercentRadioButton(_parent, 85))
-    , dutch(new PercentRadioButton(_parent, 98))
+    , dutch(new PercentRadioButton(_parent, 100))
     , english(new PercentRadioButton(_parent, 100))
     , esperanto(new PercentRadioButton(_parent, 7))
-    , french(new PercentRadioButton(_parent, 73))
+    , french(new PercentRadioButton(_parent, 75))
     , galician(new PercentRadioButton(_parent, 55))
-    , german(new PercentRadioButton(_parent, 98))
+    , german(new PercentRadioButton(_parent, 100))
     , hebrew(new PercentRadioButton(_parent, 88))
     , hindi(new PercentRadioButton(_parent, 29))
     , hungarian(new PercentRadioButton(_parent, 29))
@@ -102,9 +102,9 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     , spanish(new PercentRadioButton(_parent, 71))
     , tagalog(new PercentRadioButton(_parent, 16))
     , tamil(new PercentRadioButton(_parent, 37))
-    , telugu(new PercentRadioButton(_parent, 98))
+    , telugu(new PercentRadioButton(_parent, 99))
     , turkish(new PercentRadioButton(_parent, 95))
-    , ukrainian(new PercentRadioButton(_parent, 98))
+    , ukrainian(new PercentRadioButton(_parent, 100))
     , languageHowToAddLink(new Body1LinkLabel(_parent))
     , translationProgressLabel(new Body2Label(_parent))
     , improveButton(new Button(_parent))
@@ -228,11 +228,16 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
         }
     };
     buildFocusChain({
-        d->azerbaijani, d->belarusian, d->catalan,   d->danish,  d->dutch,      d->german,
-        d->english,     d->spanish,    d->esperanto, d->french,  d->galician,   d->croatian,
-        d->indonesian,  d->italian,    d->hungarian, d->polish,  d->portuguese, d->portugueseBrazil,
-        d->romanian,    d->russian,    d->slovenian, d->tagalog, d->turkish,    d->ukrainian,
-        d->arabic,      d->chinese,    d->hebrew,    d->hindi,   d->persian,    d->tamil,
+        d->azerbaijani, d->belarusian, d->catalan,
+        d->danish,      d->german,     d->english,
+        d->spanish,     d->esperanto,  d->french,
+        d->galician,    d->croatian,   d->indonesian,
+        d->italian,     d->hungarian,  d->dutch,
+        d->polish,      d->portuguese, d->portugueseBrazil,
+        d->romanian,    d->russian,    d->slovenian,
+        d->tagalog,     d->turkish,    d->ukrainian,
+        d->arabic,      d->chinese,    d->hebrew,
+        d->hindi,       d->persian,    d->tamil,
         d->telugu,      d->korean,
     });
 
