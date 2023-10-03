@@ -41,14 +41,16 @@ public:
     ConnectionStatusToolBar* q = nullptr;
 
     QParallelAnimationGroup statusAnimation;
-    QVariantAnimation startAngleAnimation;
-    QVariantAnimation spanAngleAnimation;
+    QVariantAnimation* startAngleAnimation = nullptr;
+    QVariantAnimation* spanAngleAnimation = nullptr;
 
     QVariantAnimation positionAnimation;
 };
 
 ConnectionStatusToolBar::Implementation::Implementation(ConnectionStatusToolBar* _q)
     : q(_q)
+    , startAngleAnimation(new QVariantAnimation(q))
+    , spanAngleAnimation(new QVariantAnimation(q))
 {
     const int startAngle = 90;
     const int endAngle = -270;
@@ -58,30 +60,30 @@ ConnectionStatusToolBar::Implementation::Implementation(ConnectionStatusToolBar*
     const int firstPhaseDuration = duration / 4 * 3;
     const int secondPhaseDuration = duration / 4;
     auto initFirstPhase = [=] {
-        startAngleAnimation.setStartValue(startAngle);
-        startAngleAnimation.setEndValue(endAngle);
-        startAngleAnimation.setDuration(firstPhaseDuration);
+        startAngleAnimation->setStartValue(startAngle);
+        startAngleAnimation->setEndValue(endAngle);
+        startAngleAnimation->setDuration(firstPhaseDuration);
 
-        spanAngleAnimation.setStartValue(startSpanAngle);
-        spanAngleAnimation.setEndValue(endSpanAngle);
-        spanAngleAnimation.setDuration(firstPhaseDuration);
+        spanAngleAnimation->setStartValue(startSpanAngle);
+        spanAngleAnimation->setEndValue(endSpanAngle);
+        spanAngleAnimation->setDuration(firstPhaseDuration);
     };
     auto initSecondPhase = [=] {
-        startAngleAnimation.setStartValue(startAngle);
-        startAngleAnimation.setEndValue(endAngle);
-        startAngleAnimation.setDuration(secondPhaseDuration);
+        startAngleAnimation->setStartValue(startAngle);
+        startAngleAnimation->setEndValue(endAngle);
+        startAngleAnimation->setDuration(secondPhaseDuration);
 
-        spanAngleAnimation.setStartValue(endSpanAngle);
-        spanAngleAnimation.setEndValue(startSpanAngle);
-        spanAngleAnimation.setDuration(secondPhaseDuration);
+        spanAngleAnimation->setStartValue(endSpanAngle);
+        spanAngleAnimation->setEndValue(startSpanAngle);
+        spanAngleAnimation->setDuration(secondPhaseDuration);
     };
 
     initFirstPhase();
 
-    connect(&statusAnimation, &QVariantAnimation::finished, &startAngleAnimation,
+    connect(&statusAnimation, &QVariantAnimation::finished, startAngleAnimation,
             [this, endSpanAngle, initFirstPhase, initSecondPhase] {
                 // first phase
-                if (spanAngleAnimation.startValue() == endSpanAngle) {
+                if (spanAngleAnimation->startValue() == endSpanAngle) {
                     initFirstPhase();
                 }
                 // second phase
@@ -94,8 +96,8 @@ ConnectionStatusToolBar::Implementation::Implementation(ConnectionStatusToolBar*
                 }
             });
 
-    statusAnimation.addAnimation(&startAngleAnimation);
-    statusAnimation.addAnimation(&spanAngleAnimation);
+    statusAnimation.addAnimation(startAngleAnimation);
+    statusAnimation.addAnimation(spanAngleAnimation);
 
     positionAnimation.setEasingCurve(QEasingCurve::OutQuad);
     positionAnimation.setDuration(240);
@@ -159,9 +161,9 @@ ConnectionStatusToolBar::ConnectionStatusToolBar(QWidget* _parent)
     connect(progressAction, &QAction::triggered, this,
             &ConnectionStatusToolBar::checkConnectionPressed);
 
-    connect(&d->startAngleAnimation, &QVariantAnimation::valueChanged, this,
+    connect(d->startAngleAnimation, &QVariantAnimation::valueChanged, this,
             qOverload<>(&ConnectionStatusToolBar::update));
-    connect(&d->spanAngleAnimation, &QVariantAnimation::valueChanged, this,
+    connect(d->spanAngleAnimation, &QVariantAnimation::valueChanged, this,
             qOverload<>(&ConnectionStatusToolBar::update));
     connect(&d->positionAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) { d->correctPosition(_value.toInt()); });
@@ -220,8 +222,8 @@ void ConnectionStatusToolBar::paintEvent(QPaintEvent* _event)
 {
     FloatingToolBar::paintEvent(_event);
 
-    if (d->startAngleAnimation.state() != QVariantAnimation::Running
-        || d->spanAngleAnimation.state() != QVariantAnimation::Running) {
+    if (d->startAngleAnimation->state() != QVariantAnimation::Running
+        || d->spanAngleAnimation->state() != QVariantAnimation::Running) {
         return;
     }
 
@@ -238,8 +240,8 @@ void ConnectionStatusToolBar::paintEvent(QPaintEvent* _event)
     const auto circleRect
         = QRectF(rect()).marginsRemoved(Ui::DesignSystem::floatingToolBar().shadowMargins()
                                         + Ui::DesignSystem::floatingToolBar().margins());
-    paiter.drawArc(circleRect, d->startAngleAnimation.currentValue().toInt() * 16,
-                   d->spanAngleAnimation.currentValue().toInt() * 16);
+    paiter.drawArc(circleRect, d->startAngleAnimation->currentValue().toInt() * 16,
+                   d->spanAngleAnimation->currentValue().toInt() * 16);
 }
 
 void ConnectionStatusToolBar::updateTranslations()
