@@ -1514,8 +1514,8 @@ void TextDocument::setParagraphType(BusinessLayer::TextParagraphType _type,
     auto cursor = _cursor;
     cursor.beginEditBlock();
 
-    for (int cursorPosition = _cursor.selectionInterval().from;
-         cursorPosition <= _cursor.selectionInterval().to;) {
+    const auto selectionInterval = _cursor.selectionInterval();
+    for (int cursorPosition = selectionInterval.from; cursorPosition <= selectionInterval.to;) {
         cursor.setPosition(cursorPosition);
 
         //
