@@ -328,9 +328,11 @@ QString TextHelper::toHtmlEscaped(const QString& _text)
 QString TextHelper::toRxEscaped(const QString& _text)
 {
     const QHash<QChar, QString> map = {
-        { QLatin1Char('?'), QLatin1String("[?]") }, { QLatin1Char('*'), QLatin1String("[*]") },
-        { QLatin1Char('.'), QLatin1String("[.]") }, { QLatin1Char('+'), QLatin1String("[+]") },
-        { QLatin1Char('-'), QLatin1String("[-]") }, { QLatin1Char('\\'), QLatin1String("[\\]") }
+        { QLatin1Char('?'), QLatin1String("[?]") },  { QLatin1Char('*'), QLatin1String("[*]") },
+        { QLatin1Char('.'), QLatin1String("[.]") },  { QLatin1Char('+'), QLatin1String("[+]") },
+        { QLatin1Char('-'), QLatin1String("[-]") },  { QLatin1Char('\\'), QLatin1String("[\\]") },
+        { QLatin1Char('"'), QLatin1String("[\"]") }, { QLatin1Char('('), QLatin1String("[(]") },
+        { QLatin1Char(')'), QLatin1String("[)]") },
     };
 
     QString escaped;
