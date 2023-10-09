@@ -51,7 +51,9 @@ void ScreenplayPdfExporter::printBlockDecorations(
     if (_paragraphType == TextParagraphType::SceneHeading && !_block.text().isEmpty()
         && exportOptions.showScenesNumbers) {
         const auto blockData = static_cast<TextBlockData*>(_block.userData());
-        if (blockData != nullptr) {
+        if (blockData != nullptr && blockData->item() != nullptr
+            && blockData->item()->parent() != nullptr
+            && blockData->item()->parent()->type() == TextModelItemType::Group) {
             _painter->setFont(_block.charFormat().font());
             //
             const auto sceneItem
