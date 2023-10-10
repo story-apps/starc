@@ -119,9 +119,20 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
         }
     });
     connect(d->tree, &Tree::doubleClicked, this, [this](const QModelIndex& _index) {
-        if (d->tree->model()->rowCount(_index) > 0 && !d->tree->isExpanded(_index)) {
-            d->tree->expand(_index);
-        } else {
+        //
+        // Если у элемента есть вложенные, то действуем как с папкой
+        //
+        if (d->tree->model()->rowCount(_index) > 0) {
+            if (!d->tree->isExpanded(_index)) {
+                d->tree->expand(_index);
+            } else {
+                d->tree->collapse(_index);
+            }
+        }
+        //
+        // А если вложений нет, то можем показать структуру
+        //
+        else {
             emit itemDoubleClicked(_index);
         }
     });

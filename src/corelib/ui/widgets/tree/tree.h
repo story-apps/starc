@@ -120,9 +120,10 @@ public:
     bool isExpanded(const QModelIndex& _index) const;
 
     /**
-     * @brief Развернуть заданный элемент
+     * @brief Развернуть/свернуть заданный элемент
      */
     void expand(const QModelIndex& _index);
+    void collapse(const QModelIndex& _index);
 
     /**
      * @brief Развернуть/свернуть все элементы

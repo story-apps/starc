@@ -221,6 +221,11 @@ void Tree::expand(const QModelIndex& _index)
     d->tree->expand(_index);
 }
 
+void Tree::collapse(const QModelIndex& _index)
+{
+    d->tree->collapse(_index);
+}
+
 void Tree::expandAll()
 {
     d->tree->expandAll();
