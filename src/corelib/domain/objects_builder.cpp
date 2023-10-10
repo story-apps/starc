@@ -7,9 +7,10 @@
 namespace Domain {
 
 DocumentObject* ObjectsBuilder::createDocument(const Identifier& _id, const QUuid& _uuid,
-                                               DocumentObjectType _type, const QByteArray& _content)
+                                               DocumentObjectType _type, const QByteArray& _content,
+                                               const QDateTime& _syncedAt)
 {
-    return new DocumentObject(_id, _uuid, _type, _content);
+    return new DocumentObject(_id, _uuid, _type, _content, _syncedAt);
 }
 
 DocumentChangeObject* ObjectsBuilder::createDocumentChange(

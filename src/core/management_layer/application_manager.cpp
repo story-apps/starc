@@ -3121,6 +3121,7 @@ void ApplicationManager::initConnections()
                 if (documentsToSync.isEmpty()) {
                     return;
                 }
+                QVector<Domain::DocumentObject*> documentsToUpdate;
                 for (const auto& documentToSync : std::as_const(documentsToSync)) {
                     const auto document = d->projectManager->documentToSync(documentToSync);
                     //
@@ -3134,9 +3135,10 @@ void ApplicationManager::initConnections()
                     // А если есть, то значит его инстанс уже есть в базе и его надо обновить
                     //
                     else {
-                        d->cloudServiceManager->openDocument(currentProject->id(), document);
+                        documentsToUpdate.append(document);
                     }
                 }
+                d->cloudServiceManager->openDocuments(currentProject->id(), documentsToUpdate);
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentReceived,
             d->projectManager.data(), &ProjectManager::mergeDocumentInfo);

@@ -3176,6 +3176,8 @@ QVector<Domain::DocumentObject*> ProjectManager::unsyncedDocuments() const
 
 void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo)
 {
+    const auto syncDatetime = QDateTime::currentDateTimeUtc();
+
     Domain::DocumentObject* document = nullptr;
     const auto documentType = static_cast<Domain::DocumentObjectType>(_documentInfo.type);
     switch (documentType) {
@@ -3359,8 +3361,9 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     }
 
     //
-    // Сохраним документ
+    // Помечаем документ синхронизированным и сохраняем
     //
+    document->setSyncedAt(syncDatetime);
     DataStorageLayer::StorageFacade::documentStorage()->saveDocument(document);
 
     //
@@ -3386,6 +3389,12 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
             }
         }
     }
+
+    //
+    // TODO: Вынести в отдельный поток применение массовых изменений? либо как-то уведомлять
+    //       пользователя о том, что сейчас идёт синхронизация данных проекта
+    //
+    QApplication::processEvents();
 }
 
 void ProjectManager::applyDocumentChanges(const Domain::DocumentInfo& _documentInfo)

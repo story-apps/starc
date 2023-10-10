@@ -285,7 +285,8 @@ void Database::createTables(QSqlDatabase& _database)
                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                "uuid TEXT UNIQUE NOT NULL, "
                "type INTEGER NOT NULL DEFAULT(0), "
-               "content BLOB DEFAULT(NULL) "
+               "content BLOB DEFAULT(NULL), "
+               "synced_at TEXT DEFAULT(NULL) "
                ")");
 
     //
@@ -339,20 +340,60 @@ void Database::updateDatabase(QSqlDatabase& _database)
     query.addBindValue(applicationVersionKey());
     query.exec();
     query.next();
-    const auto databaseVersion = query.record().value("version").toString();
-
+    auto databaseVersion = query.record().value("version").toString();
     //
-    // Некоторые версии выходили с ошибками, их заменяем на предыдущие
+    // Извлекаем информацию о dev-версии
     //
-    {
-        //        if (databaseVersion.startsWith("X.X.X beta")) {
-        //            databaseVersion = "Y.Y.Y";
-        //        }
+    bool isDevVersion = false;
+    if (const auto devIndex = databaseVersion.indexOf(" dev "); devIndex > 0) {
+        isDevVersion = true;
+        databaseVersion = databaseVersion.left(devIndex);
     }
     const QStringList& versionParts = databaseVersion.split(".");
-    const int versionMajor = versionParts.value(0, "0").toInt();
-    const int versionMinor = versionParts.value(1, "0").toInt();
-    const int versionBuild = versionParts.value(2, "1").toInt();
+    int versionMajor = versionParts.value(0, "0").toInt();
+    int versionMinor = versionParts.value(1, "0").toInt();
+    int versionBuild = versionParts.value(2, "1").toInt();
+    //
+    // Корректируем номер версии если это dev-сборка
+    //
+    if (isDevVersion) {
+        //
+        // x.x.3 dev -> x.x.2
+        //
+        if (versionBuild > 0) {
+            --versionBuild;
+        }
+        //
+        // x.x.0 dev ->
+        //
+        else {
+            versionBuild = 999;
+            //
+            // x.3.0 dev -> x.2.999
+            //
+            if (versionMinor > 0) {
+                --versionMinor;
+            }
+            //
+            // x.0.0 dev ->
+            //
+            else {
+                versionMinor = 999;
+                //
+                // 1.0.0 dev -> 0.999.999
+                //
+                if (versionMajor > 0) {
+                    --versionMajor;
+                }
+                //
+                // 0.0.0 dev - такого не может быть!
+                //
+                else {
+                    Q_ASSERT(false);
+                }
+            }
+        }
+    }
 
     //
     // Вызываются необходимые процедуры обновления БД в зависимости от её версии
@@ -391,6 +432,17 @@ void Database::updateDatabase(QSqlDatabase& _database)
             //
             if (versionMajor < 0 || versionMinor < 2 || versionBuild <= 3) {
                 updateDatabaseTo_0_2_4(_database);
+            }
+        }
+        //
+        // 0.6.x
+        //
+        if (versionMajor < 0 || versionMinor <= 6) {
+            //
+            // 0.6.1
+            //
+            if (versionMajor < 0 || versionMinor < 6 || versionBuild <= 1) {
+                updateDatabaseTo_0_6_2(_database);
             }
         }
     }
@@ -525,6 +577,17 @@ void Database::updateDatabaseTo_0_2_4(QSqlDatabase& _database)
     _database.transaction();
 
     q_updater.exec("ALTER TABLE documents_changes ADD is_synced INTEGER NOT NULL DEFAULT(0)");
+
+    _database.commit();
+}
+
+void Database::updateDatabaseTo_0_6_2(QSqlDatabase& _database)
+{
+    QSqlQuery q_updater(_database);
+
+    _database.transaction();
+
+    q_updater.exec("ALTER TABLE documents ADD synced_at TEXT DEFAULT(NULL)");
 
     _database.commit();
 }

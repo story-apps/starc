@@ -25,7 +25,8 @@ public:
      * @brief Создать элемент
      */
     static DocumentObject* createDocument(const Identifier& _id, const QUuid& _uuid,
-                                          DocumentObjectType _type, const QByteArray& _content);
+                                          DocumentObjectType _type, const QByteArray& _content,
+                                          const QDateTime& _syncedAt);
 
     /**
      * @brief Создать изменение

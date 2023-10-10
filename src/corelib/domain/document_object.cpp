@@ -173,12 +173,28 @@ void DocumentObject::setContent(const QByteArray& _content)
     markChangesNotStored();
 }
 
+const QDateTime& DocumentObject::syncedAt() const
+{
+    return m_syncedAt;
+}
+
+void DocumentObject::setSyncedAt(const QDateTime& _syncedAt)
+{
+    if (m_syncedAt == _syncedAt) {
+        return;
+    }
+
+    m_syncedAt = _syncedAt;
+    markChangesNotStored();
+}
+
 DocumentObject::DocumentObject(const Identifier& _id, const QUuid& _uuid, DocumentObjectType _type,
-                               const QByteArray& _content)
+                               const QByteArray& _content, const QDateTime& _syncedAt)
     : DomainObject(_id)
     , m_uuid(_uuid)
     , m_type(_type)
     , m_content(_content)
+    , m_syncedAt(_syncedAt)
 {
 }
 

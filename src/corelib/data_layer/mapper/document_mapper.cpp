@@ -15,8 +15,9 @@ using Domain::Identifier;
 namespace DataMappingLayer {
 
 namespace {
-const QString kColumns = " id, uuid, type, content ";
+const QString kColumns = " id, uuid, type, content, synced_at ";
 const QString kTableName = " documents ";
+const QString kDateTimeFormat = "yyyy-MM-dd hh:mm:ss:zzz";
 QString uuidFilter(const QUuid& _uuid)
 {
     return QString(" WHERE uuid = '%1' ").arg(_uuid.toString());
@@ -121,7 +122,7 @@ QString DocumentMapper::insertStatement(DomainObject* _object, QVariantList& _in
 {
     const QString insertStatement = QString("INSERT INTO " + kTableName + " (" + kColumns
                                             + ") "
-                                              " VALUES(?, ?, ?, ?) ");
+                                              " VALUES(?, ?, ?, ?, ?) ");
 
     const auto documentObject = static_cast<DocumentObject*>(_object);
     _insertValues.clear();
@@ -129,6 +130,9 @@ QString DocumentMapper::insertStatement(DomainObject* _object, QVariantList& _in
     _insertValues.append(documentObject->uuid().toString());
     _insertValues.append(static_cast<int>(documentObject->type()));
     _insertValues.append(documentObject->content());
+    _insertValues.append(documentObject->syncedAt().isValid()
+                             ? documentObject->syncedAt().toString(kDateTimeFormat)
+                             : QVariant());
 
     return insertStatement;
 }
@@ -138,7 +142,8 @@ QString DocumentMapper::updateStatement(DomainObject* _object, QVariantList& _up
     const QString updateStatement = QString("UPDATE " + kTableName
                                             + " SET uuid = ?, "
                                               " type = ?, "
-                                              " content = ? "
+                                              " content = ?, "
+                                              " synced_at = ? "
                                               " WHERE id = ? ");
 
     const auto documentObject = static_cast<DocumentObject*>(_object);
@@ -146,6 +151,9 @@ QString DocumentMapper::updateStatement(DomainObject* _object, QVariantList& _up
     _updateValues.append(documentObject->uuid().toString());
     _updateValues.append(static_cast<int>(documentObject->type()));
     _updateValues.append(documentObject->content());
+    _updateValues.append(documentObject->syncedAt().isValid()
+                             ? documentObject->syncedAt().toString(kDateTimeFormat)
+                             : QVariant());
     _updateValues.append(documentObject->id().value());
 
     return updateStatement;
@@ -166,8 +174,10 @@ DomainObject* DocumentMapper::doLoad(const Identifier& _id, const QSqlRecord& _r
     const auto uuid = QUuid::fromString(_record.value("uuid").toString());
     const auto type = static_cast<DocumentObjectType>(_record.value("type").toInt());
     const auto content = _record.value("content").toByteArray();
+    const auto syncedAt
+        = QDateTime::fromString(_record.value("synced_at").toString(), kDateTimeFormat);
 
-    return Domain::ObjectsBuilder::createDocument(_id, uuid, type, content);
+    return Domain::ObjectsBuilder::createDocument(_id, uuid, type, content, syncedAt);
 }
 
 void DocumentMapper::doLoad(DomainObject* _object, const QSqlRecord& _record)
@@ -185,6 +195,10 @@ void DocumentMapper::doLoad(DomainObject* _object, const QSqlRecord& _record)
 
     const auto content = _record.value("content").toByteArray();
     documentObject->setContent(content);
+
+    const auto syncedAt
+        = QDateTime::fromString(_record.value("synced_at").toString(), kDateTimeFormat);
+    documentObject->setSyncedAt(syncedAt);
 }
 
 } // namespace DataMappingLayer

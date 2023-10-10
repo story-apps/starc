@@ -157,7 +157,7 @@ TemplateOptionsManager::Implementation::Implementation(QWidget* _parent,
     , viewToolBar(new Ui::ScreenplayTemplateViewToolBar(_parent))
     , pluginsBuilder(_pluginsBuilder)
     , titlePageDocument(Domain::ObjectsBuilder::createDocument(
-          {}, {}, Domain::DocumentObjectType::ScreenplayTitlePage, {}))
+          {}, {}, Domain::DocumentObjectType::ScreenplayTitlePage, {}, {}))
 {
     toolBar->hide();
     navigator->hide();

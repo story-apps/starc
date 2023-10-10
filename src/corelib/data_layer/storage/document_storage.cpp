@@ -88,7 +88,7 @@ QVector<Domain::DocumentObject*> DocumentStorage::documents()
 Domain::DocumentObject* DocumentStorage::createDocument(const QUuid& _uuid,
                                                         Domain::DocumentObjectType _type)
 {
-    auto newDocument = Domain::ObjectsBuilder::createDocument({}, _uuid, _type, {});
+    auto newDocument = Domain::ObjectsBuilder::createDocument({}, _uuid, _type, {}, {});
     d->notSavedDocuments.insert(_uuid, newDocument);
     return newDocument;
 }

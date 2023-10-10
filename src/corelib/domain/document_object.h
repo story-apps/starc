@@ -2,6 +2,7 @@
 
 #include "domain_object.h"
 
+#include <QDateTime>
 #include <QPixmap>
 #include <QUuid>
 
@@ -147,9 +148,15 @@ public:
     const QByteArray& content() const;
     void setContent(const QByteArray& _content);
 
+    /**
+     * @brief Дата и время последней синхронизации
+     */
+    const QDateTime& syncedAt() const;
+    void setSyncedAt(const QDateTime& _syncedAt);
+
 private:
     explicit DocumentObject(const Identifier& _id, const QUuid& _uuid, DocumentObjectType _type,
-                            const QByteArray& _content);
+                            const QByteArray& _content, const QDateTime& _syncedAt);
     friend class ObjectsBuilder;
 
     /**
@@ -166,6 +173,11 @@ private:
      * @brief Содержимое объекта
      */
     QByteArray m_content;
+
+    /**
+     * @brief Дата время последней синхронизации содержимого документа
+     */
+    QDateTime m_syncedAt;
 };
 
 } // namespace Domain
