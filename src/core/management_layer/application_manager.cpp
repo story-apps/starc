@@ -61,6 +61,7 @@
 #include <QMenu>
 #include <QProcess>
 #include <QScopedPointer>
+#include <QSettings>
 #include <QShortcut>
 #include <QSoundEffect>
 #include <QStandardPaths>
@@ -2363,12 +2364,14 @@ bool ApplicationManager::event(QEvent* _event)
         if (d->autosaveTimer.isActive()) {
             d->saveChanges();
         }
+
         //
         // Уведомляем заинтересованные менеджеры о том, что перешли в состояние простоя
         //
         for (auto manager : { d->projectManager.data() }) {
             QApplication::sendEvent(manager, _event);
         }
+
         //
         // Если был долгий простой, то завершаем текущую сессию, пользователь ушёл
         //
@@ -2385,6 +2388,11 @@ bool ApplicationManager::event(QEvent* _event)
         else {
             d->lastActivityDateTime = QDateTime::currentDateTimeUtc();
         }
+
+        //
+        // Сохраняем настройки приложения
+        //
+        QSettings().sync();
 
         _event->accept();
         return true;
