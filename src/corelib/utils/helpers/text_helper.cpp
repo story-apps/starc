@@ -332,7 +332,8 @@ QString TextHelper::toRxEscaped(const QString& _text)
         { QLatin1Char('.'), QLatin1String("[.]") },  { QLatin1Char('+'), QLatin1String("[+]") },
         { QLatin1Char('-'), QLatin1String("[-]") },  { QLatin1Char('\\'), QLatin1String("[\\]") },
         { QLatin1Char('"'), QLatin1String("[\"]") }, { QLatin1Char('('), QLatin1String("[(]") },
-        { QLatin1Char(')'), QLatin1String("[)]") },
+        { QLatin1Char(')'), QLatin1String("[)]") },  { QLatin1Char('['), QLatin1String("[[]") },
+        { QLatin1Char(']'), QLatin1String("[]]") },
     };
 
     QString escaped;

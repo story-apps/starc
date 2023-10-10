@@ -1,5 +1,7 @@
 #include "backup_builder.h"
 
+#include <utils/helpers/text_helper.h>
+
 #include <QDate>
 #include <QDir>
 #include <QString>
@@ -56,7 +58,8 @@ void BackupBuilder::save(const QString& _filePath, const QString& _backupDir,
     //
     // Формируем список имеющихся резервных копий
     //
-    const auto nameFilter = QString("%1_*.%2").arg(backupBaseName, fileInfo.completeSuffix());
+    auto nameFilter = QString("%1_*.%2").arg(TextHelper::toRxEscaped(backupBaseName),
+                                             fileInfo.completeSuffix());
     QVector<QString> backups;
     const auto files = QDir(_backupDir).entryInfoList({ nameFilter }, QDir::Files);
     for (const auto& file : files) {
