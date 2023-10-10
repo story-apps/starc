@@ -1391,6 +1391,13 @@ QVariantMap SettingsStorage::values(const QString& _valuesGroup,
     return values;
 }
 
+void SettingsStorage::sync(SettingsPlace _settingsPlace)
+{
+    if (_settingsPlace == SettingsPlace::Application) {
+        d->appSettings.sync();
+    }
+}
+
 QString SettingsStorage::accountName() const
 {
     auto name = value(kAccountUserNameKey, SettingsPlace::Application).toString();

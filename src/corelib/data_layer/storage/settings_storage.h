@@ -475,7 +475,10 @@ const QString kComponentsWorldsMapSplitterStateKey
 class CORE_LIBRARY_EXPORT SettingsStorage
 {
 public:
-    enum class SettingsPlace { Application, Project };
+    enum class SettingsPlace {
+        Application,
+        Project,
+    };
 
 public:
     ~SettingsStorage();
@@ -501,6 +504,11 @@ public:
      * @brief Получить группу значений
      */
     QVariantMap values(const QString& _valuesGroup, SettingsPlace _settingsPlace);
+
+    /**
+     * @brief Сохранить настройки
+     */
+    void sync(SettingsPlace _settingsPlace);
 
     //
     // Вспомогательные функции для работы с данными о пользователе

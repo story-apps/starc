@@ -61,7 +61,6 @@
 #include <QMenu>
 #include <QProcess>
 #include <QScopedPointer>
-#include <QSettings>
 #include <QShortcut>
 #include <QSoundEffect>
 #include <QStandardPaths>
@@ -2392,7 +2391,8 @@ bool ApplicationManager::event(QEvent* _event)
         //
         // Сохраняем настройки приложения
         //
-        QSettings().sync();
+        DataStorageLayer::StorageFacade::settingsStorage()->sync(
+            DataStorageLayer::SettingsStorage::SettingsPlace::Application);
 
         _event->accept();
         return true;
