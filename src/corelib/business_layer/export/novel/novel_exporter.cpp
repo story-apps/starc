@@ -35,9 +35,9 @@ bool NovelExporter::prepareBlock(const ExportOptions& _exportOptions, TextCursor
     //
     // Убираем блоки завершений частей и глав
     //
-    if (const auto blockType = TextBlockStyle::forBlock(_cursor);
-        blockType == TextParagraphType::PartFooter
-        || blockType == TextParagraphType::ChapterFooter) {
+    if (const auto blockType = TextBlockStyle::forBlock(_cursor); !exportOptions.includeFooters
+        && (blockType == TextParagraphType::PartFooter
+            || blockType == TextParagraphType::ChapterFooter)) {
         _cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         if (_cursor.hasSelection()) {
             _cursor.deleteChar();

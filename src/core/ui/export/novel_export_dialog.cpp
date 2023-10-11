@@ -26,7 +26,7 @@ const QString kIncludeSynopsisKey = kGroupKey + "include-synopsis";
 const QString kIncludeOutlineKey = kGroupKey + "include-outline";
 const QString kIncludeNovelKey = kGroupKey + "include-novel";
 const QString kFormatKey = kGroupKey + "format";
-const QString kIncludeSequencesKey = kGroupKey + "include-sequences";
+const QString kIncludeFootersKey = kGroupKey + "include-footer";
 const QString kIncludeInlineNotesKey = kGroupKey + "include-inline-notes";
 const QString kIncludeReviewMarksKey = kGroupKey + "include-review-marks";
 const QString kScenesToPrintKey = kGroupKey + "scenes-to-print";
@@ -52,6 +52,7 @@ public:
     CheckBox* includeNovel = nullptr;
 
     ComboBox* fileFormat = nullptr;
+    CheckBox* includeFooters = nullptr;
     CheckBox* includeInlineNotes = nullptr;
     CheckBox* includeReviewMarks = nullptr;
     TextField* ornamentalBreak = nullptr;
@@ -70,6 +71,7 @@ NovelExportDialog::Implementation::Implementation(QWidget* _parent)
     , includeOutline(new CheckBox(_parent))
     , includeNovel(new CheckBox(_parent))
     , fileFormat(new ComboBox(_parent))
+    , includeFooters(new CheckBox(_parent))
     , includeInlineNotes(new CheckBox(_parent))
     , includeReviewMarks(new CheckBox(_parent))
     , ornamentalBreak(new TextField(_parent))
@@ -147,6 +149,7 @@ NovelExportDialog::NovelExportDialog(QWidget* _parent)
     int column = 0;
     contentsLayout()->addLayout(leftLayout, row, column++, 6, 1);
     contentsLayout()->addWidget(d->fileFormat, row++, column);
+    contentsLayout()->addWidget(d->includeFooters, row++, column);
     contentsLayout()->addWidget(d->includeInlineNotes, row++, column);
     contentsLayout()->addWidget(d->includeReviewMarks, row++, column);
     contentsLayout()->addWidget(d->ornamentalBreak, row++, column);
@@ -168,7 +171,6 @@ NovelExportDialog::NovelExportDialog(QWidget* _parent)
     });
     //
     auto updateParametersVisibility = [this] {
-        auto isPrintFoldersVisible = true;
         auto isPrintInlineNotesVisible = true;
         auto isPrintReviewMarksVisible = true;
         auto exportConcreteScenesVisible = true;
@@ -195,7 +197,6 @@ NovelExportDialog::NovelExportDialog(QWidget* _parent)
         }
 
         if (!d->includeOutline->isChecked() && !d->includeNovel->isChecked()) {
-            isPrintFoldersVisible = false;
             isPrintInlineNotesVisible = false;
             isPrintReviewMarksVisible = false;
             exportConcreteScenesVisible = false;
@@ -240,6 +241,7 @@ NovelExportDialog::NovelExportDialog(QWidget* _parent)
     const auto fileFormatIndex
         = d->fileFormat->model()->index(settings.value(kFormatKey, 0).toInt(), 0);
     d->fileFormat->setCurrentIndex(fileFormatIndex);
+    d->includeFooters->setChecked(settings.value(kIncludeFootersKey, false).toBool());
     d->includeInlineNotes->setChecked(settings.value(kIncludeInlineNotesKey, false).toBool());
     d->includeReviewMarks->setChecked(settings.value(kIncludeReviewMarksKey, true).toBool());
     d->ornamentalBreak->setText(settings.value(kScenesToPrintKey).toString());
@@ -260,6 +262,7 @@ NovelExportDialog::~NovelExportDialog()
     settings.setValue(kIncludeOutlineKey, d->includeOutline->isChecked());
     settings.setValue(kIncludeNovelKey, d->includeNovel->isChecked());
     settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
+    settings.setValue(kIncludeFootersKey, d->includeFooters->isChecked());
     settings.setValue(kIncludeInlineNotesKey, d->includeInlineNotes->isChecked());
     settings.setValue(kIncludeReviewMarksKey, d->includeReviewMarks->isChecked());
     settings.setValue(kScenesToPrintKey, d->ornamentalBreak->text());
@@ -278,6 +281,7 @@ BusinessLayer::NovelExportOptions NovelExportDialog::exportOptions() const
     options.includeText = d->includeOutline->isChecked() || d->includeNovel->isChecked();
     options.includeOutline = d->includeOutline->isChecked();
     options.includeFolders = true;
+    options.includeFooters = d->includeFooters->isChecked();
     options.includeInlineNotes = d->includeInlineNotes->isChecked();
     options.includeReviewMarks = d->includeReviewMarks->isChecked();
     options.ornamentalBreak = d->ornamentalBreak->text();
@@ -311,6 +315,7 @@ void NovelExportDialog::updateTranslations()
     d->includeNovel->setText(tr("Novel"));
 
     d->fileFormat->setLabel(tr("Format"));
+    d->includeFooters->setText(tr("Include parts & chapters footers"));
     d->includeInlineNotes->setText(tr("Include inline notes"));
     d->includeReviewMarks->setText(tr("Include review marks"));
     d->ornamentalBreak->setLabel(tr("Scenes' ornamental break"));
@@ -351,6 +356,7 @@ void NovelExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->includeSynopsis,
              d->includeOutline,
              d->includeNovel,
+             d->includeFooters,
              d->includeInlineNotes,
              d->includeReviewMarks,
              d->openDocumentAfterExport,

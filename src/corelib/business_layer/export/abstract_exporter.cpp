@@ -125,7 +125,7 @@ TextDocument* AbstractExporter::prepareDocument(AbstractModel* _model,
         }
 
         //
-        // Убираем нижний отступ у поледнего блока титульной страницы
+        // Убираем нижний отступ у последнего блока титульной страницы
         //
         blockFormat = cursor.blockFormat();
         blockFormat.setBottomMargin(0);

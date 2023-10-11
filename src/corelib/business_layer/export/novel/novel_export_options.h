@@ -11,6 +11,11 @@ struct CORE_LIBRARY_EXPORT NovelExportOptions : public ExportOptions {
     bool includeOutline = false;
 
     /**
+     * @brief Включать блоки окончания частей и глав
+     */
+    bool includeFooters = false;
+
+    /**
      * @brief Нужно ли заменять заголовки глав заданной строкой
      */
     QString ornamentalBreak;
