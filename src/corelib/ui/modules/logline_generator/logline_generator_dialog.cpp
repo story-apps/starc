@@ -569,7 +569,7 @@ QString LoglineGeneratorDialog::Implementation::buildLogline() const
     QString logline;
     const auto characterPronoun = characterGender->currentIndex().row() == 0
         ? tr("he")
-        : (characterGender->currentIndex().row() == 1 ? tr("she") : tr("it"));
+        : (characterGender->currentIndex().row() == 1 ? tr("she") : tr("they"));
 
     // Q1
     if (!majorEvent->text().isEmpty()) {
