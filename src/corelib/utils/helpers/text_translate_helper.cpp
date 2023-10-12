@@ -6,12 +6,23 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkProxy>
+#include <QPointer>
 #include <QRegularExpression>
+#include <QTimer>
 
 #include <NetworkRequest.h>
 #include <NetworkRequestLoader.h>
 
 namespace {
+
+/**
+ * @brief Таймаут извлечения переводчиков из очереди (50 в минуту)
+ */
+constexpr auto kDequeTimeoutMsec = 60000 / 50;
+
+/**
+ * @brief Ключ автоматического определения исходного текста
+ */
 const QLatin1String kAutoLanguage("auto");
 
 /**
@@ -87,6 +98,111 @@ QNetworkProxy currentProxy()
 } // namespace
 
 
+/**
+ * @brief Очередь переводов для ограничения кол-ва запросов на единицу времени
+ */
+class TranslationQueue
+{
+public:
+    /**
+     * @brief Добавить переводчик в очередь на выполнение
+     */
+    static void enque(TextTranslateHelper* _translator, const QString& _text,
+                      const QString& _sourceLanguage, const QString& _targetLanguage);
+
+private:
+    TranslationQueue() = default;
+
+    /**
+     * @brief Запустить следующий переводчик из очереди
+     */
+    void deque();
+
+
+    /**
+     * @brief Сама очередь переводчиков
+     */
+    struct TextTranslatorInfo {
+        QPointer<TextTranslateHelper> translator;
+        QString sourceText;
+        QString sourceLanguage;
+        QString targetLanguage;
+    };
+    QList<TextTranslatorInfo> m_queue;
+
+    /**
+     * @brief Дата и время последнего перевода
+     */
+    QDateTime m_lastTranslationDateTime;
+};
+
+void TranslationQueue::enque(TextTranslateHelper* _translator, const QString& _text,
+                             const QString& _sourceLanguage, const QString& _targetLanguage)
+{
+    static TranslationQueue instance;
+
+    //
+    // Добавляем переводчика в очередь
+    //
+    instance.m_queue.append({ _translator, _text, _sourceLanguage, _targetLanguage });
+
+    //
+    // Пробуем запустить следующего переводчика (если текущий добавленный всего один в ней)
+    //
+    instance.deque();
+}
+
+void TranslationQueue::deque()
+{
+    //
+    // Если в очереди больше никого нет, отдыхаем
+    //
+    if (m_queue.isEmpty()) {
+        return;
+    }
+
+    //
+    // Если ещё не прошло необходимое кол-во времени до следующего запроса, отдыхаем
+    //
+    const auto currentDateTime = QDateTime::currentDateTime();
+    if (m_lastTranslationDateTime.isValid()
+        && m_lastTranslationDateTime.msecsTo(currentDateTime) < kDequeTimeoutMsec) {
+        return;
+    }
+
+    //
+    // Извлечём следующий переводчик из очереди и обработаем его
+    //
+    auto translatorInfo = m_queue.takeFirst();
+    if (translatorInfo.translator.isNull()) {
+        //
+        // ... если переводчик умер, перейдём к следующему
+        //
+        deque();
+        return;
+    }
+
+    //
+    // Если с переводчиком всё окей, то сохраняем дату и время запуска последнего из переводчиков
+    //
+    m_lastTranslationDateTime = currentDateTime;
+
+    //
+    // Собственно запускаем перевод
+    //
+    translatorInfo.translator->translateImpl(
+        translatorInfo.sourceText, translatorInfo.sourceLanguage, translatorInfo.targetLanguage);
+
+    //
+    // И готовимся к извлечению следующего переводчика из очереди
+    //
+    QTimer::singleShot(kDequeTimeoutMsec, [this] { deque(); });
+}
+
+
+// ****
+
+
 TextTranslateHelper::TextTranslateHelper(QObject* _parent)
     : QObject(_parent)
 {
@@ -99,6 +215,27 @@ void TextTranslateHelper::translate(const QString& _text, const QString& _source
         return;
     }
 
+    TranslationQueue::enque(this, _text, _sourceLanguage, _targetLanguage);
+}
+
+void TextTranslateHelper::translateAuto(const QString& _text, const QString& _targetLanguage)
+{
+    translate(_text, kAutoLanguage, _targetLanguage);
+}
+
+void TextTranslateHelper::translateToEnglish(const QString& _text)
+{
+    translateToEnglish(_text, kAutoLanguage);
+}
+
+void TextTranslateHelper::translateToEnglish(const QString& _text, const QString& _sourceLanguage)
+{
+    translate(_text, _sourceLanguage, QLatin1String("en"));
+}
+
+void TextTranslateHelper::translateImpl(const QString& _text, const QString& _sourceLanguage,
+                                        const QString& _targetLanguage)
+{
     auto request = new NetworkRequest;
     //
     // Настраиваем прокси и используем маленький таймаут, чтобы не ждать долго и переходить к
@@ -116,58 +253,32 @@ void TextTranslateHelper::translate(const QString& _text, const QString& _source
                 translate(_text, _sourceLanguage, _targetLanguage);
             };
 
-            const auto translationsJson = QJsonDocument::fromJson(_response).object();
-            if (translationsJson.isEmpty() || !translationsJson.contains("sentences")) {
-                translateWithNextProxy();
-                return;
-            }
-
-            const auto sentencesJson = translationsJson["sentences"].toArray();
-            if (sentencesJson.isEmpty()) {
-                translateWithNextProxy();
-                return;
-            }
+            const auto translationsJson = QJsonDocument::fromJson(_response).array();
 
             QVector<Translation> translation;
-            for (const auto& sentenceJson : sentencesJson) {
-                translation.append({
-                    sentenceJson["orig"].toString(),
-                    sentenceJson["trans"].toString(),
-                });
+            for (const auto& sentencesJson : translationsJson.at(0).toArray()) {
+                const auto sentenceJson = sentencesJson.toArray();
+                const auto sourceSentence = sentenceJson.at(1).toString();
+                const auto targetSentence = sentenceJson.at(0).toString();
+
+                if (!sourceSentence.isEmpty() && !targetSentence.isEmpty()) {
+                    translation.append({ sourceSentence, targetSentence });
+                }
             }
 
             const auto sourceLanguage = _sourceLanguage == kAutoLanguage
-                ? translationsJson["src"].toString()
+                ? translationsJson.at(2).toString()
                 : _sourceLanguage;
 
             emit translated(translation, sourceLanguage);
         });
     connect(request, &NetworkRequest::finished, request, &NetworkRequest::deleteLater);
 
-    //
-    // Запрос на генерацию текста выполняем постом, чтобы не светить ключ
-    //
-    request->setRequestMethod(NetworkRequestMethod::Post);
-    QByteArray requestData;
-    requestData.append("sl=" + _sourceLanguage.toUtf8());
-    requestData.append("&tl=" + _targetLanguage.toUtf8());
-    requestData.append("&q=" + _text.toUtf8().toPercentEncoding());
-    request->setRawRequestData(requestData, "application/x-www-form-urlencoded;charset=utf-8");
-    const QUrl url("http://translate.google.com/translate_a/single?client=at&dt=t&dj=1");
+    request->setRequestMethod(NetworkRequestMethod::Get);
+    QUrl url(QStringLiteral("https://translate.googleapis.com/translate_a/single"));
+    url.setQuery(QStringLiteral("client=gtx&ie=UTF-8&oe=UTF-8&dt=bd&dt=ex&dt=ld&dt=md&dt=rw&dt=rm&"
+                                "dt=ss&dt=t&dt=at&dt=qc&sl=%1&tl=%2&hl=%3&q=%4")
+                     .arg(_sourceLanguage, _targetLanguage, _targetLanguage,
+                          QUrl::toPercentEncoding(_text)));
     request->loadAsync(url);
-}
-
-void TextTranslateHelper::translateAuto(const QString& _text, const QString& _targetLanguage)
-{
-    translate(_text, kAutoLanguage, _targetLanguage);
-}
-
-void TextTranslateHelper::translateToEnglish(const QString& _text)
-{
-    translateToEnglish(_text, kAutoLanguage);
-}
-
-void TextTranslateHelper::translateToEnglish(const QString& _text, const QString& _sourceLanguage)
-{
-    translate(_text, _sourceLanguage, QLatin1String("en"));
 }

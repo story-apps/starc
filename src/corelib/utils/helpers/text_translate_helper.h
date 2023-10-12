@@ -5,9 +5,15 @@
 #include <corelib_global.h>
 
 
+/**
+ * @brief Переводчик гугл
+ * @note Максимально можно делать 50 запросов в минуту
+ */
 class CORE_LIBRARY_EXPORT TextTranslateHelper : public QObject
 {
     Q_OBJECT
+
+    friend class TranslationQueue;
 
 public:
     /**
@@ -44,4 +50,11 @@ signals:
      */
     void translated(const QVector<TextTranslateHelper::Translation>& _translation,
                     const QString& _sourceLanguage);
+
+private:
+    /**
+     * @brief Реализация метода перевода текста
+     */
+    void translateImpl(const QString& _text, const QString& _sourceLanguage,
+                       const QString& _targetLanguage);
 };
