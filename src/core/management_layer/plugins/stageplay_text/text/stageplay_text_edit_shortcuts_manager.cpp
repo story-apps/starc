@@ -94,9 +94,8 @@ void StageplayTextEditShortcutsManager::setShortcutsContext(QWidget* _context)
     d->createOrUpdateShortcut(TextParagraphType::SceneHeading);
     d->createOrUpdateShortcut(TextParagraphType::Character);
     d->createOrUpdateShortcut(TextParagraphType::Dialogue);
-    d->createOrUpdateShortcut(TextParagraphType::Sound);
-    d->createOrUpdateShortcut(TextParagraphType::Music);
-    d->createOrUpdateShortcut(TextParagraphType::Cue);
+    d->createOrUpdateShortcut(TextParagraphType::Parenthetical);
+    d->createOrUpdateShortcut(TextParagraphType::Action);
     d->createOrUpdateShortcut(TextParagraphType::InlineNote);
 
     //
