@@ -268,7 +268,7 @@ void ExportManager::Implementation::exportScreenplay(
         for (int row = 0; row < charactersModel->rowCount(); ++row) {
             const auto characterName = charactersModel->index(row, 0).data().toString();
             const auto character = screenplayTextModel->character(characterName);
-            if (character->color().isValid()) {
+            if (character != nullptr && character->color().isValid()) {
                 exportOptions.highlightCharactersList.insert(character->name(), character->color());
             }
         }
@@ -408,7 +408,7 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                     for (int row = 0; row < charactersModel->rowCount(); ++row) {
                         const auto characterName = charactersModel->index(row, 0).data().toString();
                         const auto character = comicBookTextModel->character(characterName);
-                        if (character->color().isValid()) {
+                        if (character != nullptr && character->color().isValid()) {
                             exportOptions.highlightCharactersList.insert(character->name(),
                                                                          character->color());
                         }
@@ -568,7 +568,7 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
                     for (int row = 0; row < charactersModel->rowCount(); ++row) {
                         const auto characterName = charactersModel->index(row, 0).data().toString();
                         const auto character = audioplayTextModel->character(characterName);
-                        if (character->color().isValid()) {
+                        if (character != nullptr && character->color().isValid()) {
                             exportOptions.highlightCharactersList.insert(character->name(),
                                                                          character->color());
                         }
@@ -727,7 +727,7 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
                     for (int row = 0; row < charactersModel->rowCount(); ++row) {
                         const auto characterName = charactersModel->index(row, 0).data().toString();
                         const auto character = stageplayTextModel->character(characterName);
-                        if (character->color().isValid()) {
+                        if (character != nullptr && character->color().isValid()) {
                             exportOptions.highlightCharactersList.insert(character->name(),
                                                                          character->color());
                         }
