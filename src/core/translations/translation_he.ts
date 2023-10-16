@@ -2883,13 +2883,13 @@
         <translation>שנה ל- STARC.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3088"/>
+        <location filename="../management_layer/application_manager.cpp" line="3096"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>המנוי לשירותי ענן של בעלי הפרויקט פג תוקף. ניתן להמשיך לעבוד על הפרויקט ברגע שהבעלים יחדשו את המנוי.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3069"/>
-        <location filename="../management_layer/application_manager.cpp" line="3090"/>
+        <location filename="../management_layer/application_manager.cpp" line="3077"/>
+        <location filename="../management_layer/application_manager.cpp" line="3098"/>
         <source>Continue offline</source>
         <translation>המשך ללא חיבור לשרת</translation>
     </message>
@@ -2905,12 +2905,12 @@
         <translation>טוען גופנים חסרים</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3067"/>
+        <location filename="../management_layer/application_manager.cpp" line="3075"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>מנוייך לשירותי הענן פג תוקף. יש לחדש את המנוי כדי להמשיך לעבוד על הפרויקט.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3070"/>
+        <location filename="../management_layer/application_manager.cpp" line="3078"/>
         <source>Renew subscription</source>
         <translation>חדש מינוי</translation>
     </message>
@@ -3142,49 +3142,49 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1308"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1331"/>
         <source>Rephrasing text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1419"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1442"/>
         <source>Expanding text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1528"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1551"/>
         <source>Shortening text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1637"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1660"/>
         <source>Inserting text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1746"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1769"/>
         <source>Summarizing text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1855"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1878"/>
         <source>Translating text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1895"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2012"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1918"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2035"/>
         <source>Generating synopsis (scene %1 from %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2064"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2220"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2087"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2244"/>
         <source>Processing text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2173"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2197"/>
         <source>Generating image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8801,7 +8801,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ConnectionStatusToolBar</name>
     <message>
-        <location filename="../ui/account/connection_status_tool_bar.cpp" line="247"/>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="249"/>
         <source>Connection with server lost. Automatic reconnection enabled. Press, to try to reconnect right now.</source>
         <translation>החיבור עם השרת אבד. חיבור מחדש אוטומטי מופעל. לחץ, כדי לנסות להתחבר מחדש.</translation>
     </message>
@@ -9728,42 +9728,42 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="294"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="299"/>
         <source>Translation is ready for %1%</source>
         <translation>התרגום מוכן ל-%1%</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="304"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="309"/>
         <source>Select file with translation</source>
         <translation>בחר בקובץ עם תרגום</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="306"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="311"/>
         <source>Compiled Qt translation files</source>
         <translation>הידור קבצי תרגום Qt</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="340"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="345"/>
         <source>Change application language</source>
         <translation>שנה את שפת היישום</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="343"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="348"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>לא מצאת את השפה המועדפת עליך? קרא כיצד תוכל להוסיף אותו בעצמך.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="345"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="350"/>
         <source>Improve</source>
         <translation>שפר</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="346"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="351"/>
         <source>Browse</source>
         <translation>עיון</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="347"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="352"/>
         <source>Close</source>
         <translation>סגור</translation>
     </message>
@@ -10255,8 +10255,8 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="572"/>
-        <source>it</source>
-        <translation>הוא</translation>
+        <source>they</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="576"/>
@@ -10841,72 +10841,77 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelExportDialog</name>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="306"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="310"/>
         <source>Export novel</source>
         <translation>ייצוא הרומן</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="308"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="312"/>
         <source>Title page</source>
         <translation>עמוד שער</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="309"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="313"/>
         <source>Synopsis</source>
         <translation>סינופסיס</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="310"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="314"/>
         <source>Outline</source>
         <translation>קו חיצוני</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="311"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="315"/>
         <source>Novel</source>
         <translation>רומן</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="313"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="317"/>
         <source>Format</source>
         <translation>פורמט</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="314"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="318"/>
+        <source>Include parts &amp; chapters footers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="319"/>
         <source>Include inline notes</source>
         <translation>כלול הערות מוטבעות</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="315"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="320"/>
         <source>Include review marks</source>
         <translation>כלול הערות</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="316"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="321"/>
         <source>Scenes&apos; ornamental break</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="317"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="322"/>
         <source>Keep empty, if you want to print scene headings instead</source>
         <translation>השאר ריק אם תרצה להדפיס כותרות סצנות במקום</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="318"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="323"/>
         <source>Watermark</source>
         <translation>סימן מים</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="320"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="325"/>
         <source>Open document after export</source>
         <translation>פתח מסמך לאחר יצוא</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="321"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="326"/>
         <source>Export</source>
         <translation>יצוא</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="322"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="327"/>
         <source>Cancel</source>
         <translation>בטל</translation>
     </message>
@@ -11843,47 +11848,47 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation>התרגום מוכן ל-%1%. תדע איך אתה יכול לשפר את זה. </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="430"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="412"/>
         <source>Choose preferred language</source>
         <translation>בחר שפה מועדפת</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="432"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="414"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>לא מצאת את השפה המועדפת עליך? קרא כיצד תוכל להוסיף אותו בעצמך.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="433"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="415"/>
         <source>Continue</source>
         <translation>המשך</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="434"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="416"/>
         <source>Skip initial setup</source>
         <translation>דלג על הגדרה ראשונית</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="436"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="418"/>
         <source>Choose application theme</source>
         <translation>בחר ממשק יישום</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="437"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="419"/>
         <source>Setup size of the user interface elements</source>
         <translation>הגדר גודל ממשק משתמש</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="420"/>
         <source>small</source>
         <translation>קטן</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="421"/>
         <source>big</source>
         <translation>גדול</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="422"/>
         <source>Start writing</source>
         <translation>התחל לכתוב</translation>
     </message>
@@ -12101,17 +12106,17 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectNavigator</name>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="253"/>
+        <location filename="../ui/project/project_navigator.cpp" line="264"/>
         <source>Show document structure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="261"/>
+        <location filename="../ui/project/project_navigator.cpp" line="272"/>
         <source>Add document</source>
         <translation>הוסף מסמך</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="262"/>
+        <location filename="../ui/project/project_navigator.cpp" line="273"/>
         <source>Empty recycle bin</source>
         <translation>רוקן סל מיחזור</translation>
     </message>

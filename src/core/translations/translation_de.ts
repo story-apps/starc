@@ -2647,7 +2647,7 @@
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1111"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1174"/>
         <source>End of</source>
-        <translation type="unfinished"></translation>
+        <translation>Ende von</translation>
     </message>
 </context>
 <context>
@@ -2886,13 +2886,13 @@
         <translation>Zu .STARC wechseln</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3088"/>
+        <location filename="../management_layer/application_manager.cpp" line="3096"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>Cloud-Abonnement des Projektbesitzer ist abgelaufen. Sie können weiterarbeiten, sobald der Projektbesitzer das Abonnement erneuert.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3069"/>
-        <location filename="../management_layer/application_manager.cpp" line="3090"/>
+        <location filename="../management_layer/application_manager.cpp" line="3077"/>
+        <location filename="../management_layer/application_manager.cpp" line="3098"/>
         <source>Continue offline</source>
         <translation>Offline weiterschreiben</translation>
     </message>
@@ -2908,12 +2908,12 @@
         <translation>Lade fehlende Schriften</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3067"/>
+        <location filename="../management_layer/application_manager.cpp" line="3075"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>Ihr Cloud-Abonnement ist abgelaufen. Aktivieren sie das Abonnement, um weiterzuarbeiten.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3070"/>
+        <location filename="../management_layer/application_manager.cpp" line="3078"/>
         <source>Renew subscription</source>
         <translation>Abonnement erneuern</translation>
     </message>
@@ -3145,49 +3145,49 @@
         <translation>Auffüllen</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1308"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1331"/>
         <source>Rephrasing text</source>
         <translation>Text umformulieren</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1419"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1442"/>
         <source>Expanding text</source>
         <translation>Text erweitern</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1528"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1551"/>
         <source>Shortening text</source>
         <translation>Text kürzen</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1637"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1660"/>
         <source>Inserting text</source>
         <translation>Text einfügen</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1746"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1769"/>
         <source>Summarizing text</source>
         <translation>Text zusammenfassen</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1855"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1878"/>
         <source>Translating text</source>
         <translation>Text übersetzen</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1895"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2012"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1918"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2035"/>
         <source>Generating synopsis (scene %1 from %2)</source>
         <translation>Synopsis(Szene %1 von %2) wird erzeugt</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2064"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2220"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2087"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2244"/>
         <source>Processing text</source>
         <translation>Verarbeite Text</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2173"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2197"/>
         <source>Generating image</source>
         <translation>Erzeuge Bild</translation>
     </message>
@@ -3439,7 +3439,7 @@ Wenn sie den Roman-Text weiter bearbeiten wollen, schalten sie mit dem Icon im W
     <message>
         <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="603"/>
         <source>Go to text</source>
-        <translation type="unfinished"></translation>
+        <translation>Gehe zum Text</translation>
     </message>
 </context>
 <context>
@@ -4269,7 +4269,7 @@ Wenn sie den Drehbuch-Text bearbeiten wollen, schalten sie mit dem Icon im Werkz
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="605"/>
         <source>Go to text</source>
-        <translation type="unfinished"></translation>
+        <translation>Gehe zum Text</translation>
     </message>
 </context>
 <context>
@@ -8812,7 +8812,7 @@ Wenn sie den Drehbuch-Text bearbeiten wollen, schalten sie mit dem Icon im Werkz
 <context>
     <name>Ui::ConnectionStatusToolBar</name>
     <message>
-        <location filename="../ui/account/connection_status_tool_bar.cpp" line="247"/>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="249"/>
         <source>Connection with server lost. Automatic reconnection enabled. Press, to try to reconnect right now.</source>
         <translation>Serververbindung verloren. Automatische Wiederverbindung aktiviert. Drücken, um es jetzt nochmal zu versuchen.</translation>
     </message>
@@ -9739,42 +9739,42 @@ Wenn sie den Drehbuch-Text bearbeiten wollen, schalten sie mit dem Icon im Werkz
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="294"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="299"/>
         <source>Translation is ready for %1%</source>
         <translation>Die Übersetzung ist fertig für %1%</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="304"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="309"/>
         <source>Select file with translation</source>
         <translation>Datei mit Übersetzung wählen</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="306"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="311"/>
         <source>Compiled Qt translation files</source>
         <translation>Kompilierte Qt Übersetzungsdateien</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="340"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="345"/>
         <source>Change application language</source>
         <translation>Sprache der Applikation wechseln</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="343"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="348"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Haben Sie Ihre bevorzugte Sprache nicht gefunden? Lesen Sie nach, wie Sie sie selbst hinzufügen können.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="345"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="350"/>
         <source>Improve</source>
         <translation>Verbessern</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="346"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="351"/>
         <source>Browse</source>
         <translation>Durschsuchen</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="347"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="352"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
@@ -10266,8 +10266,8 @@ Wenn sie den Drehbuch-Text bearbeiten wollen, schalten sie mit dem Icon im Werkz
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="572"/>
-        <source>it</source>
-        <translation>es</translation>
+        <source>they</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="576"/>
@@ -10852,72 +10852,77 @@ Wenn sie den Drehbuch-Text bearbeiten wollen, schalten sie mit dem Icon im Werkz
 <context>
     <name>Ui::NovelExportDialog</name>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="306"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="310"/>
         <source>Export novel</source>
         <translation>Roman exportieren</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="308"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="312"/>
         <source>Title page</source>
         <translation>Titelseite</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="309"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="313"/>
         <source>Synopsis</source>
         <translation>Kurzzusammenfassung</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="310"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="314"/>
         <source>Outline</source>
         <translation>Gliederung</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="311"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="315"/>
         <source>Novel</source>
         <translation>Roman</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="313"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="317"/>
         <source>Format</source>
         <translation>Format</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="314"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="318"/>
+        <source>Include parts &amp; chapters footers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="319"/>
         <source>Include inline notes</source>
         <translation>Anmerkungen einschließen</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="315"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="320"/>
         <source>Include review marks</source>
         <translation>Anmerkungen einschließen</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="316"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="321"/>
         <source>Scenes&apos; ornamental break</source>
         <translation>dekorative Szenen-Unterbrechungen</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="317"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="322"/>
         <source>Keep empty, if you want to print scene headings instead</source>
         <translation>Leer lassen, falls sie lieber Szenenüberschriften drucken wollen</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="318"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="323"/>
         <source>Watermark</source>
         <translation>Wasserzeichen</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="320"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="325"/>
         <source>Open document after export</source>
         <translation>Dokument nach dem Export öffnen</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="321"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="326"/>
         <source>Export</source>
         <translation>Exportieren</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="322"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="327"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
@@ -11847,47 +11852,47 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation>Die Übersetzung ist fertig für %1%. Wisse, wie du es verbessern kannst. </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="430"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="412"/>
         <source>Choose preferred language</source>
         <translation>Bevorzugte Sprache auswählen</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="432"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="414"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Haben sie ihre bevorzugte Sprache nicht gefunden? Lesen sie nach, wie sie sie selbst hinzufügen können.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="433"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="415"/>
         <source>Continue</source>
         <translation>Weitermachen</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="434"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="416"/>
         <source>Skip initial setup</source>
         <translation>Anfängliches Set-Up überspringen</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="436"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="418"/>
         <source>Choose application theme</source>
         <translation>Applikationsdesign auswählen</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="437"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="419"/>
         <source>Setup size of the user interface elements</source>
         <translation>Die Größe der Nutzerinterface-Elemente konfigurieren</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="420"/>
         <source>small</source>
         <translation>klein</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="421"/>
         <source>big</source>
         <translation>groß</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="422"/>
         <source>Start writing</source>
         <translation>Beginnen sie zu schreiben</translation>
     </message>
@@ -12105,17 +12110,17 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectNavigator</name>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="253"/>
+        <location filename="../ui/project/project_navigator.cpp" line="264"/>
         <source>Show document structure</source>
         <translation>Dokumentenstruktur anzeigen</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="261"/>
+        <location filename="../ui/project/project_navigator.cpp" line="272"/>
         <source>Add document</source>
         <translation>Dokument hinzufügen</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="262"/>
+        <location filename="../ui/project/project_navigator.cpp" line="273"/>
         <source>Empty recycle bin</source>
         <translation>Papierkorb entleeren</translation>
     </message>
@@ -15590,7 +15595,7 @@ GESTARTET</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4054"/>
         <source>Capitalize single &quot;i&quot; letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Schreibe den Buchstaben &quot;i&quot; groß</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4055"/>

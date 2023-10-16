@@ -2647,7 +2647,7 @@
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1111"/>
         <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1174"/>
         <source>End of</source>
-        <translation type="unfinished"></translation>
+        <translation>చివరకి</translation>
     </message>
 </context>
 <context>
@@ -2886,13 +2886,13 @@
         <translation>.STARCకి మారండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3088"/>
+        <location filename="../management_layer/application_manager.cpp" line="3096"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>ప్రాజెక్ట్ యజమానుల క్లౌడ్ సేవా సభ్యత్వం గడువు ముగిసింది. వారు సబ్‌స్క్రిప్షన్‌ను పునరుద్ధరించిన వెంటనే మీరు ప్రాజెక్ట్‌తో పని చేయడం కొనసాగించవచ్చు.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3069"/>
-        <location filename="../management_layer/application_manager.cpp" line="3090"/>
+        <location filename="../management_layer/application_manager.cpp" line="3077"/>
+        <location filename="../management_layer/application_manager.cpp" line="3098"/>
         <source>Continue offline</source>
         <translation>ఆఫ్ లైన్ లో కొనసాగించండి </translation>
     </message>
@@ -2908,12 +2908,12 @@
         <translation>మిస్ అయిన ఫాంట్స్ లోడ్ అవుతున్నాయి </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3067"/>
+        <location filename="../management_layer/application_manager.cpp" line="3075"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>మీ క్లౌడ్ సేవా సభ్యత్వం గడువు ముగిసింది. ప్రాజెక్ట్‌తో పని చేయడం కొనసాగించడానికి సభ్యత్వాన్ని సక్రియం చేయండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3070"/>
+        <location filename="../management_layer/application_manager.cpp" line="3078"/>
         <source>Renew subscription</source>
         <translation>రెన్యూవల్ చేసుకోండి </translation>
     </message>
@@ -3145,49 +3145,49 @@
         <translation>తిరిగి నింపు</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1308"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1331"/>
         <source>Rephrasing text</source>
         <translation>టెక్స్ట్  పునఃప్రారంభించడం</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1419"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1442"/>
         <source>Expanding text</source>
         <translation>వచనాన్ని విస్తరిస్తోంది</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1528"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1551"/>
         <source>Shortening text</source>
         <translation>వచనాన్ని కుదించడం</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1637"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1660"/>
         <source>Inserting text</source>
         <translation>వచనాన్ని చొప్పించడం</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1746"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1769"/>
         <source>Summarizing text</source>
         <translation>వచనాన్ని సంగ్రహించడం</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1855"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1878"/>
         <source>Translating text</source>
         <translation>వచనాన్ని అనువదిస్తోంది</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1895"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2012"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1918"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2035"/>
         <source>Generating synopsis (scene %1 from %2)</source>
         <translation>సారాంశాన్ని రూపొందిస్తోంది (%2 నుండి సీన్% 1)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2064"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2220"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2087"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2244"/>
         <source>Processing text</source>
         <translation>వచనాన్ని ప్రాసెస్ చేస్తోంది</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2173"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2197"/>
         <source>Generating image</source>
         <translation>చిత్రాన్ని రూపొందిస్తోంది</translation>
     </message>
@@ -3439,7 +3439,7 @@ If you want to continue editing novel text, switch to the corresponding module v
     <message>
         <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="603"/>
         <source>Go to text</source>
-        <translation type="unfinished"></translation>
+        <translation>టెక్స్ట్ కి  వెళ్లండి</translation>
     </message>
 </context>
 <context>
@@ -4269,7 +4269,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="605"/>
         <source>Go to text</source>
-        <translation type="unfinished"></translation>
+        <translation>టెక్స్ట్ కి  వెళ్లండి</translation>
     </message>
 </context>
 <context>
@@ -7373,32 +7373,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="255"/>
         <source>Include story info</source>
-        <translation type="unfinished"></translation>
+        <translation>కథన సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="256"/>
         <source>Include personal info</source>
-        <translation type="unfinished"></translation>
+        <translation>వ్యక్తిగత సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="257"/>
         <source>Include physique info</source>
-        <translation type="unfinished"></translation>
+        <translation>శరీరాకృతి సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="258"/>
         <source>Include life info</source>
-        <translation type="unfinished"></translation>
+        <translation>జీవిత సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="259"/>
         <source>Include attitude info</source>
-        <translation type="unfinished"></translation>
+        <translation>వైఖరి సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="260"/>
         <source>Include biography</source>
-        <translation type="unfinished"></translation>
+        <translation>జీవిత చరిత్రను చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/character_export_dialog.cpp" line="261"/>
@@ -7947,7 +7947,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="346"/>
         <source>Export characters</source>
-        <translation type="unfinished"></translation>
+        <translation>అక్షరాలను ఎగుమతి చేయండి</translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="348"/>
@@ -7967,27 +7967,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="351"/>
         <source>Include story role</source>
-        <translation type="unfinished"></translation>
+        <translation>కథా పాత్రను చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="352"/>
         <source>Include age</source>
-        <translation type="unfinished"></translation>
+        <translation>వయస్సును చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="353"/>
         <source>Include gender</source>
-        <translation type="unfinished"></translation>
+        <translation>జెండర్  చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="354"/>
         <source>Include one line description</source>
-        <translation type="unfinished"></translation>
+        <translation>ఒక లైన్ వివరణను చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="355"/>
         <source>Include long description</source>
-        <translation type="unfinished"></translation>
+        <translation>సుదీర్ఘ వివరణను చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/characters_export_dialog.cpp" line="356"/>
@@ -8810,7 +8810,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ConnectionStatusToolBar</name>
     <message>
-        <location filename="../ui/account/connection_status_tool_bar.cpp" line="247"/>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="249"/>
         <source>Connection with server lost. Automatic reconnection enabled. Press, to try to reconnect right now.</source>
         <translation>Connection with server lost. Automatic reconnection enabled. Press, to try to reconnect right now.</translation>
     </message>
@@ -9737,42 +9737,42 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="294"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="299"/>
         <source>Translation is ready for %1%</source>
         <translation>%1%కి అనువాదం సిద్ధంగా ఉంది</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="304"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="309"/>
         <source>Select file with translation</source>
         <translation>అనువాదం ఉన్న ఫైల్‌ని ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="306"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="311"/>
         <source>Compiled Qt translation files</source>
         <translation>కంపైల్ చేయబడిన Qt అనువాద ఫైళ్లు</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="340"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="345"/>
         <source>Change application language</source>
         <translation>అప్లికేషన్ భాషను మార్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="343"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="348"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>మీరు ఇష్టపడే భాష కనుగొనలేదా? దీన్ని మీరే ఎలా జోడించవచ్చో చదవండి.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="345"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="350"/>
         <source>Improve</source>
         <translation>ఇంప్రూవ్ </translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="346"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="351"/>
         <source>Browse</source>
         <translation>బ్రౌజ్ </translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="347"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="352"/>
         <source>Close</source>
         <translation>క్లోజ్ </translation>
     </message>
@@ -10181,7 +10181,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="197"/>
         <source>Sign in to get access to extended features of the FREE, PRO and CLOUD versions</source>
-        <translation type="unfinished"></translation>
+        <translation>ఉచిత, PRO మరియు CLOUD సంస్కరణల యొక్క పొడిగించిన ఫీచర్‌లకు ప్రాప్యత పొందడానికి సైన్ ఇన్ చేయండి</translation>
     </message>
     <message>
         <location filename="../ui/account/login_dialog.cpp" line="198"/>
@@ -10264,8 +10264,8 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="572"/>
-        <source>it</source>
-        <translation>ఇది </translation>
+        <source>they</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="576"/>
@@ -10850,72 +10850,77 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelExportDialog</name>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="306"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="310"/>
         <source>Export novel</source>
         <translation>నవల ఎక్స్ పోర్ట్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="308"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="312"/>
         <source>Title page</source>
         <translation>టైటిల్ పేజీ </translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="309"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="313"/>
         <source>Synopsis</source>
         <translation>సారాంశం</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="310"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="314"/>
         <source>Outline</source>
         <translation>కథ అవుట్ లైన్ </translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="311"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="315"/>
         <source>Novel</source>
         <translation>నవల</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="313"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="317"/>
         <source>Format</source>
         <translation>ఫార్మాట్ </translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="314"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="318"/>
+        <source>Include parts &amp; chapters footers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="319"/>
         <source>Include inline notes</source>
         <translation>ఇన్‌లైన్ నోట్స్ చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="315"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="320"/>
         <source>Include review marks</source>
         <translation>రివ్యూ మార్క్స్ చేర్చండి </translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="316"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="321"/>
         <source>Scenes&apos; ornamental break</source>
         <translation>సన్నివేశాల అలంకార విరామం</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="317"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="322"/>
         <source>Keep empty, if you want to print scene headings instead</source>
         <translation> సీన్ హెడ్డింగ్స్  ప్రింట్ చేయాలనుకుంటే ఖాళీగా ఉంచండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="318"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="323"/>
         <source>Watermark</source>
         <translation>వాటర్ మార్క్ </translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="320"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="325"/>
         <source>Open document after export</source>
         <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="321"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="326"/>
         <source>Export</source>
         <translation>ఎక్స్ పోర్ట్ </translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="322"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="327"/>
         <source>Cancel</source>
         <translation>క్యాన్సిల్ </translation>
     </message>
@@ -11853,47 +11858,47 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation>%1%కి అనువాదం సిద్ధంగా ఉంది. మీరు దీన్ని ఎలా మెరుగుపరచవచ్చో తెలుసుకోండి.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="430"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="412"/>
         <source>Choose preferred language</source>
         <translation>ఇష్టపడే భాషను ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="432"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="414"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>మీరు ఇష్టపడే భాష కనుగొనలేదా? దీన్ని మీరే ఎలా జోడించవచ్చో చదవండి.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="433"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="415"/>
         <source>Continue</source>
         <translation>కొనసాగించు</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="434"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="416"/>
         <source>Skip initial setup</source>
         <translation>ప్రారంభ సెటప్‌ను దాటవేయి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="436"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="418"/>
         <source>Choose application theme</source>
         <translation>Choose application theme</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="437"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="419"/>
         <source>Setup size of the user interface elements</source>
         <translation>వినియోగదారు ఇంటర్‌ఫేస్ మూలకాల యొక్క సెటప్ పరిమాణం</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="420"/>
         <source>small</source>
         <translation>చిన్నది</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="421"/>
         <source>big</source>
         <translation>పెద్దది </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="422"/>
         <source>Start writing</source>
         <translation>రాయడం ప్రారంభించండి</translation>
     </message>
@@ -12111,17 +12116,17 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectNavigator</name>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="253"/>
+        <location filename="../ui/project/project_navigator.cpp" line="264"/>
         <source>Show document structure</source>
         <translation>డాక్యుమెంట్ నిర్మాణాన్ని చూపించు</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="261"/>
+        <location filename="../ui/project/project_navigator.cpp" line="272"/>
         <source>Add document</source>
         <translation>డాక్యుమెంట్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="262"/>
+        <location filename="../ui/project/project_navigator.cpp" line="273"/>
         <source>Empty recycle bin</source>
         <translation>రీ సైకిల్ బిన్ ఖాళీ చెయ్యండి </translation>
     </message>
@@ -15596,7 +15601,7 @@ STARTED</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4054"/>
         <source>Capitalize single &quot;i&quot; letter</source>
-        <translation type="unfinished"></translation>
+        <translation>ఒకే &quot;i&quot; అక్షరాన్ని క్యాపిటలైజ్ చేయండి</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4055"/>
@@ -15746,7 +15751,7 @@ STARTED</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4235"/>
         <source>Simple text editor</source>
-        <translation type="unfinished"></translation>
+        <translation>సాధారణ టెక్స్ట్ ఎడిటర్</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4241"/>
@@ -15761,22 +15766,22 @@ STARTED</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4259"/>
         <source>Comic book editor</source>
-        <translation type="unfinished"></translation>
+        <translation>కామిక్ బుక్ ఎడిటర్</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4271"/>
         <source>Audioplay editor</source>
-        <translation type="unfinished"></translation>
+        <translation>ఆడియోప్లే ఎడిటర్</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4283"/>
         <source>Stageplay editor</source>
-        <translation type="unfinished"></translation>
+        <translation>స్టేజ్ ప్లే ఎడిటర్</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4295"/>
         <source>Novel editor</source>
-        <translation type="unfinished"></translation>
+        <translation>నవల సంపాదకుడు</translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4181"/>

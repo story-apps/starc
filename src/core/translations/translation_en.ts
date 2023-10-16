@@ -3019,13 +3019,13 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3088"/>
+        <location filename="../management_layer/application_manager.cpp" line="3096"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3069"/>
-        <location filename="../management_layer/application_manager.cpp" line="3090"/>
+        <location filename="../management_layer/application_manager.cpp" line="3077"/>
+        <location filename="../management_layer/application_manager.cpp" line="3098"/>
         <source>Continue offline</source>
         <translation></translation>
     </message>
@@ -3041,12 +3041,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3067"/>
+        <location filename="../management_layer/application_manager.cpp" line="3075"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3070"/>
+        <location filename="../management_layer/application_manager.cpp" line="3078"/>
         <source>Renew subscription</source>
         <translation>Renew subscription</translation>
     </message>
@@ -3297,49 +3297,49 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1308"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1331"/>
         <source>Rephrasing text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1419"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1442"/>
         <source>Expanding text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1528"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1551"/>
         <source>Shortening text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1637"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1660"/>
         <source>Inserting text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1746"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1769"/>
         <source>Summarizing text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1855"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1878"/>
         <source>Translating text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1895"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2012"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1918"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2035"/>
         <source>Generating synopsis (scene %1 from %2)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2064"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2220"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2087"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2244"/>
         <source>Processing text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2173"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2197"/>
         <source>Generating image</source>
         <translation></translation>
     </message>
@@ -9486,7 +9486,7 @@ from 2 Gb</translation>
 <context>
     <name>Ui::ConnectionStatusToolBar</name>
     <message>
-        <location filename="../ui/account/connection_status_tool_bar.cpp" line="247"/>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="249"/>
         <source>Connection with server lost. Automatic reconnection enabled. Press, to try to reconnect right now.</source>
         <translation></translation>
     </message>
@@ -10554,42 +10554,42 @@ from 2 Gb</translation>
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="294"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="299"/>
         <source>Translation is ready for %1%</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="304"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="309"/>
         <source>Select file with translation</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="306"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="311"/>
         <source>Compiled Qt translation files</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="340"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="345"/>
         <source>Change application language</source>
         <translation>Change application language</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="343"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="348"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Did not find your preffered language? Read how you can add it yourself.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="345"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="350"/>
         <source>Improve</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="346"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="351"/>
         <source>Browse</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="347"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="352"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>
@@ -11101,8 +11101,8 @@ from 2 Gb</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="572"/>
-        <source>it</source>
-        <translation></translation>
+        <source>they</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="576"/>
@@ -11691,72 +11691,77 @@ from 2 Gb</translation>
 <context>
     <name>Ui::NovelExportDialog</name>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="306"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="310"/>
         <source>Export novel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="308"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="312"/>
         <source>Title page</source>
         <translation>Title page</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="309"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="313"/>
         <source>Synopsis</source>
         <translation>Synopsis</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="310"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="314"/>
         <source>Outline</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="311"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="315"/>
         <source>Novel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="313"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="317"/>
         <source>Format</source>
         <translation>Format</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="314"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="318"/>
+        <source>Include parts &amp; chapters footers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="319"/>
         <source>Include inline notes</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="315"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="320"/>
         <source>Include review marks</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="316"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="321"/>
         <source>Scenes&apos; ornamental break</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="317"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="322"/>
         <source>Keep empty, if you want to print scene headings instead</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="318"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="323"/>
         <source>Watermark</source>
         <translation>Watermark</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="320"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="325"/>
         <source>Open document after export</source>
         <translation>Open document after export</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="321"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="326"/>
         <source>Export</source>
         <translation>Export</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="322"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="327"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
@@ -12697,27 +12702,27 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="430"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="412"/>
         <source>Choose preferred language</source>
         <translation>Choose preferred language</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="432"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="414"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Did not find your preffered language? Read how you can add it yourself.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="433"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="415"/>
         <source>Continue</source>
         <translation>Continue</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="434"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="416"/>
         <source>Skip initial setup</source>
         <translation>Skip initial setup</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="436"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="418"/>
         <source>Choose application theme</source>
         <translation>Choose application theme</translation>
     </message>
@@ -12746,22 +12751,22 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation type="vanished">Theme is convenient for work with sufficient light.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="437"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="419"/>
         <source>Setup size of the user interface elements</source>
         <translation>Setup size of the user interface elements</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="420"/>
         <source>small</source>
         <translation>small</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="421"/>
         <source>big</source>
         <translation>big</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="422"/>
         <source>Start writing</source>
         <translation>Start writing</translation>
     </message>
@@ -12986,17 +12991,17 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectNavigator</name>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="253"/>
+        <location filename="../ui/project/project_navigator.cpp" line="264"/>
         <source>Show document structure</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="261"/>
+        <location filename="../ui/project/project_navigator.cpp" line="272"/>
         <source>Add document</source>
         <translation>Add document</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="262"/>
+        <location filename="../ui/project/project_navigator.cpp" line="273"/>
         <source>Empty recycle bin</source>
         <translation>Empty recycle bin</translation>
     </message>
