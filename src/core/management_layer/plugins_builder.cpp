@@ -91,6 +91,7 @@ const QString kNovelTextCardsMime = QStringLiteral("application/x-starc/editor/n
 const QString kNovelStatisticsViewMime = QStringLiteral("application/x-starc/view/novel/statistics");
 const QString kNovelStatisticsNavigatorMime = QStringLiteral("application/x-starc/navigator/novel/statistics");
 //
+const QString kMindMapMime = QStringLiteral("application/x-starc/editor/mind_map/mind_map");
 const QString kImagesGalleryMime = QStringLiteral("application/x-starc/editor/images/images-gallery");
 
 /**
@@ -183,6 +184,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         //
         { "application/x-starc/document/folder",     { { kSimpleTextFolderEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/text",       { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
+        { "application/x-starc/document/mind-map",  { { kMindMapMime, u8"\U000F04AA" } } },
         { "application/x-starc/document/images-gallery",  { { kImagesGalleryMime, u8"\U000F02F9" } } },
         //,
         { "application/x-starc/document/recycle-bin",       { { "application/x-starc/editor/recycle-bin", u8"\U000f01b4" } } }
@@ -262,6 +264,7 @@ const QHash<QString, QString> kMimeToPlugin
         { kWorldEditorMime, "*worldinformationplugin*" },
         { kWorldNavigatorMime, "*worldstructureplugin*" },
         //
+        { kMindMapMime, "*mindmapplugin*" },
         { kImagesGalleryMime, "*imagesgalleryplugin*" },
         //
         { "application/x-starc/editor/recycle-bin", "*recyclebinplugin*" },
@@ -619,6 +622,9 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
             { "application/x-starc/document/recycle-bin",
               { { "application/x-starc/editor/recycle-bin",
                   QApplication::translate("ProjectPluginsBuilder", "Recycle bin summary info") } } },
+            { "application/x-starc/document/mind-map",
+              { { kImagesGalleryMime,
+                  QApplication::translate("ProjectPluginsBuilder", "Mind map") } } },
             { "application/x-starc/document/images-gallery",
               { { kImagesGalleryMime,
                   QApplication::translate("ProjectPluginsBuilder", "Images gallery") } } },

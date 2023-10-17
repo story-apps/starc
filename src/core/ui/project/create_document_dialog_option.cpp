@@ -224,6 +224,11 @@ void CreateDocumentDialogOption::updateTranslations()
         break;
     }
 
+    case DocumentObjectType::MindMap: {
+        d->documentName = tr("Mind map");
+        break;
+    }
+
     case DocumentObjectType::ImagesGallery: {
         d->documentName = tr("Image gallery");
         break;

@@ -16,6 +16,7 @@
 #include <business_layer/model/images/images_gallery_model.h>
 #include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/locations/locations_model.h>
+#include <business_layer/model/mind_map/mind_map_model.h>
 #include <business_layer/model/novel/novel_dictionaries_model.h>
 #include <business_layer/model/novel/novel_information_model.h>
 #include <business_layer/model/novel/novel_statistics_model.h>
@@ -1134,6 +1135,11 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         case Domain::DocumentObjectType::Folder:
         case Domain::DocumentObjectType::SimpleText: {
             model = new BusinessLayer::SimpleTextModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::MindMap: {
+            model = new BusinessLayer::MindMapModel;
             break;
         }
 

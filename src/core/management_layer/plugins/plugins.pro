@@ -99,3 +99,7 @@ exists (novel_statistics/novel_statistics.pro) {
 exists (images_gallery/images_gallery.pro) {
     SUBDIRS += images_gallery
 }
+
+exists (mind_map/mind_map.pro) {
+    SUBDIRS += mind_map
+}

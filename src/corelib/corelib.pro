@@ -174,6 +174,7 @@ SOURCES += \
     business_layer/model/images/images_gallery_model.cpp \
     business_layer/model/locations/location_model.cpp \
     business_layer/model/locations/locations_model.cpp \
+    business_layer/model/mind_map/mind_map_model.cpp \
     business_layer/model/novel/novel_dictionaries_model.cpp \
     business_layer/model/novel/novel_information_model.cpp \
     business_layer/model/novel/novel_statistics_model.cpp \
@@ -508,6 +509,7 @@ HEADERS += \
     business_layer/model/images/images_gallery_model.h \
     business_layer/model/locations/location_model.h \
     business_layer/model/locations/locations_model.h \
+    business_layer/model/mind_map/mind_map_model.h \
     business_layer/model/novel/novel_dictionaries_model.h \
     business_layer/model/novel/novel_information_model.h \
     business_layer/model/novel/novel_statistics_model.h \

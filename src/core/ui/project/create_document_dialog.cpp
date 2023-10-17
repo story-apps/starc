@@ -22,10 +22,6 @@
 
 namespace Ui {
 
-namespace {
-const int kTypeRole = Qt::UserRole + 1;
-}
-
 class CreateDocumentDialog::Implementation
 {
 public:
@@ -126,6 +122,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
             layout->addWidget(makeOption(Domain::DocumentObjectType::Folder));
             layout->addWidget(makeOption(Domain::DocumentObjectType::SimpleText));
         }
+        layout->addWidget(makeOption(Domain::DocumentObjectType::MindMap));
         layout->addWidget(makeOption(Domain::DocumentObjectType::ImagesGallery));
         optionsLayout->addLayout(layout);
     }
@@ -160,6 +157,7 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
         { Domain::DocumentObjectType::Audioplay, tr("Add audioplay") },
         { Domain::DocumentObjectType::Stageplay, tr("Add stageplay") },
         { Domain::DocumentObjectType::Novel, tr("Add novel") },
+        { Domain::DocumentObjectType::MindMap, tr("Add mind map") },
         { Domain::DocumentObjectType::ImagesGallery, tr("Add image gallery") },
     };
     const QHash<Domain::DocumentObjectType, QString> documenTypeToInfo = {
@@ -187,6 +185,8 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
           tr("Create a document set to streamline your work on the stage play, or musical.") },
         { Domain::DocumentObjectType::Novel,
           tr("Create a document set to streamline your work on the fiction book.") },
+        { Domain::DocumentObjectType::MindMap,
+          tr("Create a mind map to brainstorm ideas and plan your story development.") },
         { Domain::DocumentObjectType::ImagesGallery,
           tr("Create a moodboard with atmospheric images or photos.") },
     };

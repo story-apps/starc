@@ -58,3 +58,6 @@
 [submodule "src/core/management_layer/plugins/screenplay_breakdown_structure"]
     path = src/core/management_layer/plugins/screenplay_breakdown_structure
     url = git@github.com:story-apps/starc-screenplay-breakdown-structure-plugin.git
+[submodule "src/core/management_layer/plugins/mind_map"]
+    path = src/core/management_layer/plugins/mind_map
+    url = git@github.com:story-apps/starc-mind-map-plugin.git

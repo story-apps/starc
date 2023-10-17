@@ -407,6 +407,12 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         break;
     }
 
+    case DocumentObjectType::MindMap: {
+        appendItem(createItem(_type, !_name.isEmpty() ? _name : tr("Mind map")), parentItem,
+                   _content);
+        break;
+    }
+
     case DocumentObjectType::ImagesGallery: {
         appendItem(createItem(_type, !_name.isEmpty() ? _name : tr("Images gallery")), parentItem,
                    _content);
@@ -683,6 +689,7 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     // Элемент можно только перемещать
     //
     case Domain::DocumentObjectType::SimpleText:
+    case Domain::DocumentObjectType::MindMap:
     case Domain::DocumentObjectType::ImagesGallery: {
         return defaultFlags | Qt::ItemIsDragEnabled;
     }
