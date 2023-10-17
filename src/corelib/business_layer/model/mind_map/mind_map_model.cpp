@@ -13,8 +13,9 @@ namespace BusinessLayer {
 namespace {
 const QLatin1String kDocumentKey("document");
 const QLatin1String kNameKey("name");
-const QLatin1String kPhotosKey("photos");
-const QLatin1String kPhotoKey("photo");
+const QLatin1String kDescriptionKey("description");
+// const QLatin1String kPhotosKey("photos");
+// const QLatin1String kPhotoKey("photo");
 } // namespace
 
 
@@ -22,7 +23,8 @@ class MindMapModel::Implementation
 {
 public:
     QString name;
-    QVector<Domain::DocumentImage> photos;
+    QString description;
+    //    QVector<Domain::DocumentImage> photos;
 };
 
 
@@ -34,10 +36,8 @@ MindMapModel::MindMapModel(QObject* _parent)
     , d(new Implementation)
 {
 
-    connect(this, &MindMapModel::nameChanged, this,
-            &MindMapModel::updateDocumentContent);
-    connect(this, &MindMapModel::photosChanged, this,
-            &MindMapModel::updateDocumentContent);
+    connect(this, &MindMapModel::nameChanged, this, &MindMapModel::updateDocumentContent);
+    connect(this, &MindMapModel::descriptionChanged, this, &MindMapModel::updateDocumentContent);
 }
 
 MindMapModel::~MindMapModel() = default;
@@ -68,59 +68,33 @@ void MindMapModel::setDocumentName(const QString& _name)
     setName(_name);
 }
 
-QVector<Domain::DocumentImage> MindMapModel::photos() const
+QString MindMapModel::description() const
 {
-    return d->photos;
+    return d->description;
 }
 
-void MindMapModel::addPhoto(const Domain::DocumentImage& _photo)
+void MindMapModel::setDescription(const QString& _description)
 {
-    if (_photo.uuid.isNull() && _photo.image.isNull()) {
+    if (d->description == _description) {
         return;
     }
 
-    d->photos.append(_photo);
-    emit photosChanged(d->photos);
-}
-
-void MindMapModel::addPhotos(const QVector<QPixmap>& _photos)
-{
-    if (_photos.isEmpty()) {
-        return;
-    }
-
-    for (const auto& photo : _photos) {
-        d->photos.append({ imageWrapper()->save(photo), photo });
-    }
-    emit photosChanged(d->photos);
-}
-
-void MindMapModel::removePhoto(const QUuid& _photoUuid)
-{
-    for (int index = 0; index < d->photos.size(); ++index) {
-        if (d->photos.at(index).uuid != _photoUuid) {
-            continue;
-        }
-
-        imageWrapper()->remove(_photoUuid);
-        d->photos.removeAt(index);
-        emit photosChanged(d->photos);
-        break;
-    }
+    d->description = _description;
+    emit descriptionChanged(d->description);
 }
 
 void MindMapModel::initImageWrapper()
 {
-    connect(imageWrapper(), &AbstractImageWrapper::imageUpdated, this,
-            [this](const QUuid& _uuid, const QPixmap& _image) {
-                for (auto& photo : d->photos) {
-                    if (photo.uuid == _uuid) {
-                        photo.image = _image;
-                        emit photosChanged(d->photos);
-                        break;
-                    }
-                }
-            });
+    //    connect(imageWrapper(), &AbstractImageWrapper::imageUpdated, this,
+    //            [this](const QUuid& _uuid, const QPixmap& _image) {
+    //                for (auto& photo : d->photos) {
+    //                    if (photo.uuid == _uuid) {
+    //                        photo.image = _image;
+    //                        emit photosChanged(d->photos);
+    //                        break;
+    //                    }
+    //                }
+    //            });
 }
 
 void MindMapModel::initDocument()
@@ -136,18 +110,20 @@ void MindMapModel::initDocument()
         return TextHelper::fromHtmlEscaped(documentNode.firstChildElement(_key).text());
     };
     d->name = load(kNameKey);
-    const auto photosNode = documentNode.firstChildElement(kPhotosKey);
-    if (!photosNode.isNull()) {
-        auto photoNode = photosNode.firstChildElement(kPhotoKey);
-        while (!photoNode.isNull()) {
-            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
-            if (!uuid.isNull()) {
-                d->photos.append({ uuid, imageWrapper()->load(uuid) });
-            }
+    d->description = load(kDescriptionKey);
+    //    const auto photosNode = documentNode.firstChildElement(kPhotosKey);
+    //    if (!photosNode.isNull()) {
+    //        auto photoNode = photosNode.firstChildElement(kPhotoKey);
+    //        while (!photoNode.isNull()) {
+    //            const auto uuid =
+    //            QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text())); if
+    //            (!uuid.isNull()) {
+    //                d->photos.append({ uuid, imageWrapper()->load(uuid) });
+    //            }
 
-            photoNode = photoNode.nextSiblingElement();
-        }
-    }
+    //            photoNode = photoNode.nextSiblingElement();
+    //        }
+    //    }
 }
 
 void MindMapModel::clearDocument()
@@ -171,15 +147,16 @@ QByteArray MindMapModel::toXml() const
                    .toUtf8();
     };
     save(kNameKey, d->name);
-    if (!d->photos.isEmpty()) {
-        xml += QString("<%1>\n").arg(kPhotosKey).toUtf8();
-        for (const auto& photo : std::as_const(d->photos)) {
-            xml += QString("<%1><![CDATA[%2]]></%1>\n")
-                       .arg(kPhotoKey, TextHelper::toHtmlEscaped(photo.uuid.toString()))
-                       .toUtf8();
-        }
-        xml += QString("</%1>\n").arg(kPhotosKey).toUtf8();
-    }
+    save(kDescriptionKey, d->description);
+    //    if (!d->photos.isEmpty()) {
+    //        xml += QString("<%1>\n").arg(kPhotosKey).toUtf8();
+    //        for (const auto& photo : std::as_const(d->photos)) {
+    //            xml += QString("<%1><![CDATA[%2]]></%1>\n")
+    //                       .arg(kPhotoKey, TextHelper::toHtmlEscaped(photo.uuid.toString()))
+    //                       .toUtf8();
+    //        }
+    //        xml += QString("</%1>\n").arg(kPhotosKey).toUtf8();
+    //    }
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }
@@ -201,47 +178,49 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
         return TextHelper::fromHtmlEscaped(documentNode.firstChildElement(_key).text());
     };
     setName(load(kNameKey));
-    //
-    // Считываем фотографии
-    //
-    auto photosNode = documentNode.firstChildElement(kPhotosKey);
-    QVector<QUuid> newPhotosUuids;
-    if (!photosNode.isNull()) {
-        auto photoNode = photosNode.firstChildElement(kPhotoKey);
-        while (!photoNode.isNull()) {
-            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
-            newPhotosUuids.append(uuid);
+    setDescription(load(kDescriptionKey));
+    //    //
+    //    // Считываем фотографии
+    //    //
+    //    auto photosNode = documentNode.firstChildElement(kPhotosKey);
+    //    QVector<QUuid> newPhotosUuids;
+    //    if (!photosNode.isNull()) {
+    //        auto photoNode = photosNode.firstChildElement(kPhotoKey);
+    //        while (!photoNode.isNull()) {
+    //            const auto uuid =
+    //            QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+    //            newPhotosUuids.append(uuid);
 
-            photoNode = photoNode.nextSiblingElement();
-        }
-    }
-    //
-    // ... корректируем текущие фотографии персонажа
-    //
-    for (int photoIndex = 0; photoIndex < d->photos.size(); ++photoIndex) {
-        const auto& photo = d->photos.at(photoIndex);
-        //
-        // ... если такое отношение осталось актуальным, то оставим его в списке текущих
-        //     и удалим из списка новых
-        //
-        if (newPhotosUuids.contains(photo.uuid)) {
-            newPhotosUuids.removeAll(photo.uuid);
-        }
-        //
-        // ... если такого отношения нет в списке новых, то удалим его из списка текущих
-        //
-        else {
-            removePhoto(photo.uuid);
-            --photoIndex;
-        }
-    }
-    //
-    // ... добавляем новые фотографии к персонажу
-    //
-    for (const auto& photoUuid : newPhotosUuids) {
-        addPhoto({ photoUuid });
-        imageWrapper()->load(photoUuid);
-    }
+    //            photoNode = photoNode.nextSiblingElement();
+    //        }
+    //    }
+    //    //
+    //    // ... корректируем текущие фотографии персонажа
+    //    //
+    //    for (int photoIndex = 0; photoIndex < d->photos.size(); ++photoIndex) {
+    //        const auto& photo = d->photos.at(photoIndex);
+    //        //
+    //        // ... если такое отношение осталось актуальным, то оставим его в списке текущих
+    //        //     и удалим из списка новых
+    //        //
+    //        if (newPhotosUuids.contains(photo.uuid)) {
+    //            newPhotosUuids.removeAll(photo.uuid);
+    //        }
+    //        //
+    //        // ... если такого отношения нет в списке новых, то удалим его из списка текущих
+    //        //
+    //        else {
+    //            removePhoto(photo.uuid);
+    //            --photoIndex;
+    //        }
+    //    }
+    //    //
+    //    // ... добавляем новые фотографии к персонажу
+    //    //
+    //    for (const auto& photoUuid : newPhotosUuids) {
+    //        addPhoto({ photoUuid });
+    //        imageWrapper()->load(photoUuid);
+    //    }
 
     return {};
 }

@@ -466,6 +466,13 @@ const QString kComponentsWorldsMapFocusCurrentWorldKey
     = kComponentsWorldsMapKey + QStringLiteral("/focus-current-world");
 const QString kComponentsWorldsMapSplitterStateKey
     = kComponentsWorldsMapKey + QStringLiteral("/splitter-state");
+//
+// редактор ментальных карт
+const QString kComponentsMindMapKey = kComponentsGroupKey + QStringLiteral("/mind-map");
+const QString kComponentsMindMapFocusCurrentNodeKey
+    = kComponentsMindMapKey + QStringLiteral("/focus-current-node");
+const QString kComponentsMindMapSplitterStateKey
+    = kComponentsMindMapKey + QStringLiteral("/splitter-state");
 
 } // namespace
 
