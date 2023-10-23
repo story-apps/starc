@@ -89,6 +89,14 @@ PRE_TARGETDEPS += $$PWD/../3rd_party/qtxlsxwriter
 win32-msvc*:LIBS += -lUser32
 #
 
+#
+# Подключаем библиотеку AVOID
+#
+LIBS += -L$$LIBSDIR/ -lavoid
+INCLUDEPATH += $$PWD/../3rd_party/libavoid/
+DEPENDPATH += $$PWD/../3rd_party/libavoid
+#
+
 SOURCES += \
     business_layer/chronometry/chronometer.cpp \
     business_layer/document/audioplay/text/audioplay_text_corrector.cpp \
@@ -383,6 +391,7 @@ SOURCES += \
     utils/helpers/extension_helper.cpp \
     utils/helpers/icon_helper.cpp \
     utils/helpers/image_helper.cpp \
+    utils/helpers/libavoid_helper.cpp \
     utils/helpers/measurement_helper.cpp \
     utils/helpers/model_helper.cpp \
     utils/helpers/names_generator.cpp \
@@ -727,6 +736,7 @@ HEADERS += \
     utils/helpers/extension_helper.h \
     utils/helpers/icon_helper.h \
     utils/helpers/image_helper.h \
+    utils/helpers/libavoid_helper.h \
     utils/helpers/measurement_helper.h \
     utils/helpers/model_helper.h \
     utils/helpers/names_generator.h \
