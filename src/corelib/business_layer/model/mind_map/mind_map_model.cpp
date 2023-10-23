@@ -110,7 +110,6 @@ public:
     QString description;
     QVector<MindMapNode> nodes;
     QVector<MindMapNodeGroup> nodeGroups;
-    //    QVector<Domain::DocumentImage> photos;
 };
 
 
@@ -566,48 +565,129 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
     };
     setName(load(kNameKey));
     setDescription(load(kDescriptionKey));
-    //    //
-    //    // Считываем фотографии
-    //    //
-    //    auto photosNode = documentNode.firstChildElement(kPhotosKey);
-    //    QVector<QUuid> newPhotosUuids;
-    //    if (!photosNode.isNull()) {
-    //        auto photoNode = photosNode.firstChildElement(kPhotoKey);
-    //        while (!photoNode.isNull()) {
-    //            const auto uuid =
-    //            QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
-    //            newPhotosUuids.append(uuid);
+    //
+    // Ячейки
+    //
+    auto nodeNode = documentNode.firstChildElement(kNodeKey);
+    QVector<MindMapNode> newNodes;
+    while (!nodeNode.isNull() && nodeNode.nodeName() == kNodeKey) {
+        MindMapNode node;
+        node.uuid = QUuid::fromString(nodeNode.attribute(kUuidKey));
+        node.name = TextHelper::fromHtmlEscaped(nodeNode.attribute(kNameKey));
+        node.description = TextHelper::fromHtmlEscaped(nodeNode.attribute(kDescriptionKey));
+        const auto positionText = nodeNode.attribute(kPositionKey).split(";");
+        Q_ASSERT(positionText.size() == 2);
+        const QPointF position(positionText.constFirst().toDouble(),
+                               positionText.constLast().toDouble());
+        node.position = position;
+        if (nodeNode.hasAttribute(kColorKey)) {
+            node.color = nodeNode.attribute(kColorKey);
+        }
+        newNodes.append(node);
 
-    //            photoNode = photoNode.nextSiblingElement();
-    //        }
-    //    }
-    //    //
-    //    // ... корректируем текущие фотографии персонажа
-    //    //
-    //    for (int photoIndex = 0; photoIndex < d->photos.size(); ++photoIndex) {
-    //        const auto& photo = d->photos.at(photoIndex);
-    //        //
-    //        // ... если такое отношение осталось актуальным, то оставим его в списке текущих
-    //        //     и удалим из списка новых
-    //        //
-    //        if (newPhotosUuids.contains(photo.uuid)) {
-    //            newPhotosUuids.removeAll(photo.uuid);
-    //        }
-    //        //
-    //        // ... если такого отношения нет в списке новых, то удалим его из списка текущих
-    //        //
-    //        else {
-    //            removePhoto(photo.uuid);
-    //            --photoIndex;
-    //        }
-    //    }
-    //    //
-    //    // ... добавляем новые фотографии к персонажу
-    //    //
-    //    for (const auto& photoUuid : newPhotosUuids) {
-    //        addPhoto({ photoUuid });
-    //        imageWrapper()->load(photoUuid);
-    //    }
+        nodeNode = nodeNode.nextSiblingElement();
+    }
+    //
+    // ... корректируем текущие группы
+    //
+    for (int nodeIndex = 0; nodeIndex < d->nodes.size(); ++nodeIndex) {
+        const auto& node = d->nodes.at(nodeIndex);
+        //
+        // ... если такая группа осталось актуальной, то оставим её в списке текущих
+        //     и удалим из списка новых
+        //
+        if (int nodeIndex = newNodes.indexOf(node); nodeIndex != -1) {
+            auto newConnections = newNodes[nodeIndex].connections;
+            //
+            // При этом обновим список связей если необходимо
+            //
+            for (int connectionIndex = 0; connectionIndex < node.connections.size();
+                 ++connectionIndex) {
+                const auto& connection = node.connections[connectionIndex];
+                //
+                // ... если такое соединение есть, то оставим его в списке текущих
+                //     и удалим из списка новых
+                //
+                if (newConnections.contains(connection)) {
+                    newConnections.removeAll(connection);
+                }
+                //
+                // ... если такого соединения нет в списке новых, то удалим его из списка текущих
+                //
+                else {
+                    removeNodeConnection(connection.fromNodeUuid, connection.toNodeUuid);
+                    --connectionIndex;
+                }
+            }
+            for (const auto& connection : std::as_const(newConnections)) {
+                addNodeConnection(connection);
+            }
+
+            newNodes.removeAll(node);
+        }
+        //
+        // ... если такой группы нет в списке новых, то удалим её из списка текущих
+        //
+        else {
+            removeNode(node.uuid);
+            --nodeIndex;
+        }
+    }
+    //
+    // ... добавляем новые ячейки
+    //
+    for (const auto& node : std::as_const(newNodes)) {
+        addNode(node);
+        for (const auto& connection : std::as_const(node.connections)) {
+            addNodeConnection(connection);
+        }
+    }
+    //
+    // Группы ячеек
+    //
+    auto nodeGroupNode = documentNode.firstChildElement(kNodeGroupKey);
+    QVector<MindMapNodeGroup> newNodeGroups;
+    while (!nodeGroupNode.isNull() && nodeGroupNode.nodeName() == kNodeGroupKey) {
+        MindMapNodeGroup group;
+        group.uuid = QUuid::fromString(nodeGroupNode.attribute(kUuidKey));
+        group.name = TextHelper::fromHtmlEscaped(nodeGroupNode.attribute(kNameKey));
+        group.description = TextHelper::fromHtmlEscaped(nodeGroupNode.attribute(kDescriptionKey));
+        group.rect = rectFromString(nodeGroupNode.attribute(kRectKey));
+        group.lineType = nodeGroupNode.attribute(kLineTypeKey).toInt();
+        if (nodeGroupNode.hasAttribute(kColorKey)) {
+            group.color = nodeGroupNode.attribute(kColorKey);
+        }
+        newNodeGroups.append(group);
+
+        nodeGroupNode = nodeGroupNode.nextSiblingElement();
+    }
+    //
+    // ... корректируем текущие группы
+    //
+    for (int groupIndex = 0; groupIndex < d->nodeGroups.size(); ++groupIndex) {
+        const auto& group = d->nodeGroups.at(groupIndex);
+        //
+        // ... если такая группа осталось актуальной, то оставим её в списке текущих
+        //     и удалим из списка новых
+        //
+        if (newNodeGroups.contains(group)) {
+            updateNodeGroup(group);
+            newNodeGroups.removeAll(group);
+        }
+        //
+        // ... если такой группы нет в списке новых, то удалим её из списка текущих
+        //
+        else {
+            removeNodeGroup(group.uuid);
+            --groupIndex;
+        }
+    }
+    //
+    // ... добавляем новые группы
+    //
+    for (const auto& group : std::as_const(newNodeGroups)) {
+        addNodeGroup(group);
+    }
 
     return {};
 }
