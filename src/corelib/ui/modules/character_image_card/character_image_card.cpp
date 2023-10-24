@@ -74,7 +74,7 @@ void CharacterImageCard::Implementation::generateCharacterPhoto()
     // NOTE: оптимизация, чтобы не делать бессмысленный запрос на количество страниц, API Unsplash
     // всегда отдаёт максимально 10000 изображений, а соответственно чуть более 400 страниц
     //
-    const auto totalPages = 400;
+    const auto totalPages = 200;
     const auto pageIndex = QRandomGenerator::global()->bounded(0, totalPages);
     const auto photosPageUrl = QString("%1&page=%2").arg(url).arg(pageIndex);
     NetworkRequestLoader::loadAsync(photosPageUrl, q, [this](const QByteArray& _data) {
@@ -87,6 +87,12 @@ void CharacterImageCard::Implementation::generateCharacterPhoto()
         // Выбираем случайную фотку на странице и загружаем ссылки на неё
         //
         const auto photos = QJsonDocument::fromJson(_data).object()["results"].toArray();
+        if (photos.isEmpty()) {
+            photoGenerationTaskId.clear();
+            QMetaObject::invokeMethod(q, [this] { generateCharacterPhoto(); });
+            return;
+        }
+
         const auto photoIndex = QRandomGenerator::global()->bounded(0, photos.size());
         const auto photoInfo = photos.at(photoIndex).toObject();
         const auto photoPageUrl
