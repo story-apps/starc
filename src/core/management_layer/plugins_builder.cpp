@@ -896,10 +896,6 @@ void PluginsBuilder::reconfigureNovelNavigator() const
 
 void PluginsBuilder::checkAvailabilityToEdit(bool _projectInTeam) const
 {
-    if (d->isProjectInTeam == _projectInTeam) {
-        return;
-    }
-
     d->isProjectInTeam = _projectInTeam;
     for (auto plugin : std::as_const(d->plugins)) {
         plugin->checkAvailabilityToEdit(d->isProjectInTeam);
