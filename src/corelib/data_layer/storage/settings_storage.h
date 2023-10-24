@@ -471,6 +471,8 @@ const QString kComponentsWorldsMapSplitterStateKey
 const QString kComponentsMindMapKey = kComponentsGroupKey + QStringLiteral("/mind-map");
 const QString kComponentsMindMapFocusCurrentNodeKey
     = kComponentsMindMapKey + QStringLiteral("/focus-current-node");
+const QString kComponentsMindMapiAssistantEnabledKey
+    = kComponentsMindMapKey + QStringLiteral("/ai-assistant-enabled");
 const QString kComponentsMindMapSplitterStateKey
     = kComponentsMindMapKey + QStringLiteral("/splitter-state");
 

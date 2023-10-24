@@ -174,6 +174,12 @@ public:
     Button* generateCharacterButton = nullptr;
     QHBoxLayout* generateCharacterButtonsLayout = nullptr;
 
+    Page* generateMindMapPage = nullptr;
+    Body1Label* generateMindMapPromptHintLabel = nullptr;
+    TextField* generateMindMapPromptText = nullptr;
+    Button* generateMindMapButton = nullptr;
+    QHBoxLayout* generateMindMapButtonsLayout = nullptr;
+
     Body2Label* availableWordsLabel = nullptr;
     Body2LinkLabel* buyCreditsLabel = nullptr;
     QHBoxLayout* buttonsLayout = nullptr;
@@ -268,6 +274,12 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     , generateCharacterButton(new Button(generateCharacterPage))
     , generateCharacterButtonsLayout(new QHBoxLayout)
     //
+    , generateMindMapPage(new Page(pages))
+    , generateMindMapPromptHintLabel(new Body1Label(generateMindMapPage))
+    , generateMindMapPromptText(new TextField(generateMindMapPage))
+    , generateMindMapButton(new Button(generateMindMapPage))
+    , generateMindMapButtonsLayout(new QHBoxLayout)
+    //
     , availableWordsLabel(new Body2Label(_parent))
     , buyCreditsLabel(new Body2LinkLabel(_parent))
     , buttonsLayout(new QHBoxLayout)
@@ -283,6 +295,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     pages->addWidget(generateSynopsisPage);
     pages->addWidget(generateTextPage);
     pages->addWidget(generateCharacterPage);
+    pages->addWidget(generateMindMapPage);
 
     {
         openRephraseButton->setIcon(u8"\U000F0456");
@@ -527,6 +540,22 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         layout->addStretch();
     }
 
+    {
+        generateMindMapPromptText->setEnterMakesNewLine(true);
+        generateMindMapPromptText->setWordCount("0/1000");
+        generateMindMapButtonsLayout->setContentsMargins({});
+        generateMindMapButtonsLayout->setSpacing(0);
+        generateMindMapButtonsLayout->addStretch();
+        generateMindMapButtonsLayout->addWidget(generateMindMapButton);
+
+
+        auto layout = generateMindMapPage->contentsLayout;
+        layout->addWidget(generateMindMapPromptHintLabel);
+        layout->addWidget(generateMindMapPromptText);
+        layout->addLayout(generateMindMapButtonsLayout);
+        layout->addStretch();
+    }
+
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
     buttonsLayout->addWidget(availableWordsLabel);
@@ -620,6 +649,13 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
                                qOverload<>(&TextField::setFocus));
             break;
         }
+
+        case GenerationViewType::MindMap: {
+            d->pages->setCurrentWidget(d->generateMindMapPage);
+            QTimer::singleShot(d->pages->animationDuration(), d->generateMindMapPromptText,
+                               qOverload<>(&TextField::setFocus));
+            break;
+        }
         }
     });
     for (auto page : {
@@ -632,6 +668,7 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
              d->generateSynopsisPage,
              d->generateTextPage,
              d->generateCharacterPage,
+             d->generateMindMapPage,
          }) {
         connect(page->backButton, &IconButton::clicked, this,
                 [this] { d->pages->setCurrentWidget(d->buttonsPage); });
@@ -773,6 +810,15 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
             d->generateCharacterAttitude->isChecked(), d->generateCharacterBiography->isChecked(),
             d->generateCharacterPhoto->isChecked());
     });
+    //
+    auto updateGenerateMindMapWordCounters = [this, updateWordCounter] {
+        const auto sourceTextWordCount = updateWordCounter(d->generateMindMapPromptText);
+        d->generateMindMapButton->setEnabled(sourceTextWordCount <= 1000);
+    };
+    connect(d->generateMindMapPromptText, &TextField::textChanged, this,
+            updateGenerateMindMapWordCounters);
+    connect(d->generateMindMapButton, &Button::clicked, this,
+            [this] { emit generateMindMapRequested(d->generateMindMapPromptText->text()); });
 
     connect(d->buyCreditsLabel, &Body1LinkLabel::clicked, this,
             &AiAssistantView::buyCreditsPressed);
@@ -803,6 +849,7 @@ void AiAssistantView::setReadOnly(bool _readOnly)
              d->generateSynopsisPage,
              d->generateTextPage,
              d->generateCharacterPage,
+             d->generateMindMapPage,
          }) {
         button->setEnabled(!_readOnly);
     }
@@ -850,6 +897,11 @@ void AiAssistantView::setGenerationPromptHint(const QString& _hint)
         d->generateCharacterPromptHintLabel->setText(_hint);
         break;
     }
+
+    case GenerationViewType::MindMap: {
+        d->generateMindMapPromptHintLabel->setText(_hint);
+        break;
+    }
     }
 }
 
@@ -863,6 +915,11 @@ void AiAssistantView::setGenerationPrompt(const QString& _prompt)
 
     case GenerationViewType::CharacterInformation: {
         d->generateCharacterPromptText->setText(_prompt);
+        break;
+    }
+
+    case GenerationViewType::MindMap: {
+        d->generateMindMapPromptText->setText(_prompt);
         break;
     }
     }
@@ -956,6 +1013,7 @@ void AiAssistantView::updateTranslations()
              d->generateSynopsisPage,
              d->generateTextPage,
              d->generateCharacterPage,
+             d->generateMindMapPage,
          }) {
         page->backButton->setToolTip(tr("Go back to list of assistant functions"));
     }
@@ -1170,6 +1228,9 @@ void AiAssistantView::updateTranslations()
     d->generateCharacterBiography->setText(tr("Biography"));
     d->generateCharacterPhoto->setText(tr("Photo"));
     d->generateCharacterButton->setText(tr("Generate"));
+    d->generateMindMapPage->titleLabel->setText(tr("Generate"));
+    d->generateMindMapPromptText->setLabel(tr("Prompt"));
+    d->generateMindMapButton->setText(tr("Generate"));
 
     d->buyCreditsLabel->setText(tr("purchase"));
 }
@@ -1211,6 +1272,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->generateSynopsisPage,
              d->generateTextPage,
              d->generateCharacterPage,
+             d->generateMindMapPage,
          }) {
         page->contentsLayout->setSpacing(DesignSystem::compactLayout().px16());
 
@@ -1222,26 +1284,19 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->generateSynopsisPage->contentsLayout->setSpacing(0);
     d->generateTextPage->contentsLayout->setSpacing(0);
     d->generateCharacterPage->contentsLayout->setSpacing(0);
+    d->generateMindMapPage->contentsLayout->setSpacing(0);
 
     for (auto textField : std::vector<TextField*>{
-             d->rephraseSourceText,
-             d->rephraseStyleText,
-             d->rephraseResultText,
-             d->expandSourceText,
-             d->expandResultText,
-             d->shortenSourceText,
-             d->shortenResultText,
-             d->insertAfterText,
-             d->insertBeforeText,
-             d->insertResultText,
-             d->summarizeSourceText,
-             d->summarizeResultText,
-             d->translateSourceText,
-             d->translateLanguage,
-             d->translateResultText,
-             d->generateSynopsisResultText,
-             d->generateTextPromptText,
-             d->generateCharacterPromptText,
+             d->rephraseSourceText,        d->rephraseStyleText,
+             d->rephraseResultText,        d->expandSourceText,
+             d->expandResultText,          d->shortenSourceText,
+             d->shortenResultText,         d->insertAfterText,
+             d->insertBeforeText,          d->insertResultText,
+             d->summarizeSourceText,       d->summarizeResultText,
+             d->translateSourceText,       d->translateLanguage,
+             d->translateResultText,       d->generateSynopsisResultText,
+             d->generateTextPromptText,    d->generateCharacterPromptText,
+             d->generateMindMapPromptText,
          }) {
         textField->setBackgroundColor(DesignSystem::color().onPrimary());
         textField->setTextColor(DesignSystem::color().onPrimary());
@@ -1264,6 +1319,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->generateSynopsisButton,
              d->generateTextButton,
              d->generateCharacterButton,
+             d->generateMindMapButton,
          }) {
         button->setBackgroundColor(DesignSystem::color().accent());
         button->setTextColor(DesignSystem::color().accent());
@@ -1279,6 +1335,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->generateSynopsisButtonsLayout,
              d->generateTextButtonsLayout,
              d->generateCharacterButtonsLayout,
+             d->generateMindMapButtonsLayout,
          }) {
         buttonsLayout->setContentsMargins(isLeftToRight() ? 0.0 : DesignSystem::layout().px8(), 0.0,
                                           isLeftToRight() ? DesignSystem::layout().px8() : 0.0,
@@ -1303,6 +1360,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->generateCharacterLife,
              d->generateCharacterBiography,
              d->generateCharacterPhoto,
+             d->generateMindMapPromptHintLabel,
          }) {
         widget->setBackgroundColor(DesignSystem::color().primary());
         widget->setTextColor(DesignSystem::color().onPrimary());
@@ -1311,6 +1369,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->generateSynopsisHintLabel,
              d->generateTextPromptHintLabel,
              d->generateCharacterPromptHintLabel,
+             d->generateMindMapPromptHintLabel,
          }) {
         label->setContentsMargins(DesignSystem::layout().px24(), 0, DesignSystem::layout().px24(),
                                   DesignSystem::compactLayout().px16());

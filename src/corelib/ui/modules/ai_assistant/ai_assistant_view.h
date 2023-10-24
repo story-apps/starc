@@ -28,6 +28,7 @@ public:
     enum class GenerationViewType {
         Text,
         CharacterInformation,
+        MindMap,
     };
 
 public:
@@ -137,6 +138,11 @@ signals:
      */
     void generateCharacterRequested(const QString& _text, bool _personalInfo, bool _physique,
                                     bool _life, bool _attitude, bool _biography, bool _image);
+
+    /**
+     * @brief Пользователь хочет сгенерировать интеллект карту по запросу
+     */
+    void generateMindMapRequested(const QString& _text);
 
     /**
      * @brief Пользователь хочет вставить заданный текст в редактор
