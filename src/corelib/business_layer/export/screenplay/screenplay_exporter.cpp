@@ -54,7 +54,12 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
         auto checkScene = [exportOptions, &needRemoveBlock](TextModelGroupItem* _item) {
             if (_item->groupType() == TextGroupType::Scene) {
                 const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(_item);
-                if (exportOptions.exportScenes.contains(sceneItem->number()->value)) {
+                if (sceneItem->number().has_value()
+                    //
+                    // ... тут проверяем номер целиком (вместе с номером, за которым он следует)
+                    //
+                    && exportOptions.exportScenes.contains(sceneItem->number()->followNumber
+                                                           + sceneItem->number()->value)) {
                     needRemoveBlock = false;
                 }
             }
