@@ -243,7 +243,7 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
                 }
             };
             findScenes({});
-            emit q->generateSynopsisRequested(scenes, _maxWordsPerScene);
+            emit q->generateSynopsisRequested(scenes, _maxWordsPerScene, model->wordsCount());
         });
     connect(view, &Ui::ScreenplayTextView::generateTextRequested, q, [this](const QString& _text) {
         emit q->generateTextRequested({}, _text, ". Write result in fountain format.");

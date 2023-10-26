@@ -54,7 +54,7 @@ public:
     /**
      * @brief Задать подсказку для генерации синопсиса
      */
-    void setGenerationSynopsisOptions(const QString& _hint, int _wordsRequired);
+    void setGenerationSynopsisOptions(const QString& _hint);
 
     /**
      * @brief Задать тип представления генерации контента

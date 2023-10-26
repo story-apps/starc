@@ -4145,10 +4145,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
                     SIGNAL(translateTextRequested(QString, QString)), Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal(
-                "generateSynopsisRequested(QVector<QString>,int)")
+                "generateSynopsisRequested(QVector<QString>,int,int)")
             != invalidSignalIndex) {
-            connect(documentManager, SIGNAL(generateSynopsisRequested(QVector<QString>, int)), this,
-                    SIGNAL(generateSynopsisRequested(QVector<QString>, int)), Qt::UniqueConnection);
+            connect(documentManager, SIGNAL(generateSynopsisRequested(QVector<QString>, int, int)),
+                    this, SIGNAL(generateSynopsisRequested(QVector<QString>, int, int)),
+                    Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal(
                 "generateTextRequested(QString,QString,QString)")

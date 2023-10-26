@@ -61,7 +61,8 @@ signals:
     void insertTextRequested(const QString& _after, const QString& _before);
     void summarizeTextRequested(const QString& _text);
     void translateTextRequested(const QString& _text, const QString& _languageCode);
-    void generateSynopsisRequested(const QVector<QString>& _scenes, int _maxWordsPerScene);
+    void generateSynopsisRequested(const QVector<QString>& _scenes, int _maxWordsPerScene,
+                                   int _wordsRequired);
     void generateTextRequested(const QString& _promptPrefix, const QString& _prompt,
                                const QString& _promptSuffix);
 

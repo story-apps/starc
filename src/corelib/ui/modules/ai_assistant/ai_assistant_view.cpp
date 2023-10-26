@@ -874,10 +874,9 @@ void AiAssistantView::setSynopsisGenerationAvaiable(bool _available)
     d->openGenerateSynopsisButton->setVisible(_available);
 }
 
-void AiAssistantView::setGenerationSynopsisOptions(const QString& _hint, int _wordsRequired)
+void AiAssistantView::setGenerationSynopsisOptions(const QString& _hint)
 {
     d->generateSynopsisHintLabel->setText(_hint);
-    d->generateSynopsisButton->setEnabled(_wordsRequired < d->availableWords);
 }
 
 void AiAssistantView::setGenerationViewType(GenerationViewType _type)
