@@ -14,7 +14,6 @@ class ColorPickerPopup::Implementation
 public:
     explicit Implementation(ColorPickerPopup* _q);
 
-    bool isPopupShown = false;
     bool autoHide = true;
     ColorPicker* colorPicker = nullptr;
     QVariantAnimation heightAnimation;
@@ -42,12 +41,11 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
     : Card(_parent)
     , d(new Implementation(this))
 {
-    setFocusPolicy(Qt::StrongFocus);
-    setWindowFlags(Qt::Tool | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint
-                   | Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     setAttribute(Qt::WA_Hover, false);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_ShowWithoutActivating);
+    setFocusPolicy(Qt::StrongFocus);
     hide();
 
     auto popupLayout = new QHBoxLayout;
@@ -68,7 +66,7 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
                 resize(width(), height);
             });
     connect(&d->heightAnimation, &QVariantAnimation::finished, this, [this] {
-        if (!d->isPopupShown) {
+        if (d->heightAnimation.direction() == QAbstractAnimation::Backward) {
             hide();
         }
     });
@@ -98,11 +96,18 @@ void ColorPickerPopup::setSelectedColor(const QColor& _color)
 
 bool ColorPickerPopup::isPopupShown() const
 {
-    return d->isPopupShown;
+    //
+    // Попам видимый и не находится в процессе скрытия в данный момент
+    //
+    return isVisible() && d->heightAnimation.direction() == QAbstractAnimation::Forward;
 }
 
 void ColorPickerPopup::showPopup(QWidget* _parent, Qt::Alignment _alignment)
 {
+    if (isVisible()) {
+        return;
+    }
+
     Q_ASSERT(_parent);
     if (_parent == nullptr) {
         return;
@@ -111,9 +116,7 @@ void ColorPickerPopup::showPopup(QWidget* _parent, Qt::Alignment _alignment)
     d->watchedWidget = _parent;
     _parent->installEventFilter(this);
 
-    d->isPopupShown = true;
-
-    resize(sizeHint().width(), 0);
+    resize(sizeHint().width(), 1);
 
     QPoint leftTop;
     if (_alignment.testFlag(Qt::AlignHCenter)) {
@@ -147,8 +150,6 @@ void ColorPickerPopup::showPopup(QWidget* _parent, Qt::Alignment _alignment)
 
 void ColorPickerPopup::hidePopup()
 {
-    d->isPopupShown = false;
-
     d->heightAnimation.setDirection(QVariantAnimation::Backward);
     d->heightAnimation.start();
 
@@ -165,22 +166,4 @@ void ColorPickerPopup::processBackgroundColorChange()
 void ColorPickerPopup::processTextColorChange()
 {
     d->colorPicker->setTextColor(textColor());
-}
-
-bool ColorPickerPopup::eventFilter(QObject* _watched, QEvent* _event)
-{
-    if (_watched == d->watchedWidget) {
-        if (_event->type() == QEvent::KeyPress) {
-            auto keyEvent = static_cast<QKeyEvent*>(_event);
-            if (keyEvent->key() == Qt::Key_Escape) {
-                hidePopup();
-            }
-        } else if (_event->type() == QEvent::FocusOut) {
-            if (!hasFocus()) {
-                hidePopup();
-            }
-        }
-    }
-
-    return Widget::eventFilter(_watched, _event);
 }
