@@ -486,14 +486,18 @@ QString SpellCheckTextEdit::removePunctutaion(const QString& _word) const
     // Убираем знаки препинания окружающие слово
     //
     QString wordWithoutPunct = _word.trimmed();
-    while (!wordWithoutPunct.isEmpty()
-           && (wordWithoutPunct.at(0).isPunct()
-               || wordWithoutPunct.at(wordWithoutPunct.length() - 1).isPunct())) {
-        if (wordWithoutPunct.at(0).isPunct()) {
-            wordWithoutPunct = wordWithoutPunct.mid(1);
-        } else {
-            wordWithoutPunct = wordWithoutPunct.left(wordWithoutPunct.length() - 1);
-        }
+    //
+    // ... слева
+    //
+    while (!wordWithoutPunct.isEmpty() && wordWithoutPunct.at(0).isPunct()) {
+        wordWithoutPunct = wordWithoutPunct.mid(1);
+    }
+    //
+    // ... справа
+    //
+    while (!wordWithoutPunct.isEmpty() && wordWithoutPunct.right(1)[0].isPunct()
+           && wordWithoutPunct.right(1) != "'") {
+        wordWithoutPunct.chop(1);
     }
     return wordWithoutPunct;
 }

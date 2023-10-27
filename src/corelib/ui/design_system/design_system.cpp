@@ -2821,10 +2821,6 @@ DesignSystem* DesignSystem::instance()
         const auto fontFamilies = QFontDatabase().families();
         Q_ASSERT(fontFamilies.contains("Roboto"));
         Q_ASSERT(fontFamilies.contains("Material Design Icons"));
-        Q_ASSERT(fontFamilies.contains("Material Design Icons"));
-        Q_ASSERT(fontFamilies.contains("Material Design Icons"));
-        Q_ASSERT(fontFamilies.contains("Material Design Icons"));
-        Q_ASSERT(fontFamilies.contains("Font Awesome 6 Brands"));
         Q_ASSERT(fontFamilies.contains("Font Awesome 6 Brands"));
 
         s_designSystem = new DesignSystem;
