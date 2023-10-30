@@ -19,7 +19,7 @@ public:
      * @brief Роли данных из модели
      */
     enum {
-        SceneDurationRole = TextModelGroupItem::GroupUserRole + 1,
+        SceneWordCountRole = TextModelGroupItem::GroupUserRole + 1,
         SceneDescriptionRole,
     };
 

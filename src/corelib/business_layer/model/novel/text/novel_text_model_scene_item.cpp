@@ -101,6 +101,10 @@ QString NovelTextModelSceneItem::description(const QString& _separator) const
 QVariant NovelTextModelSceneItem::data(int _role) const
 {
     switch (_role) {
+    case SceneWordCountRole: {
+        return d->wordsCount;
+    }
+
     case SceneDescriptionRole: {
         return description();
     }

@@ -22,7 +22,7 @@ public:
      * @brief Роли данных из модели
      */
     enum {
-        FolderDurationRole = TextModelFolderItem::FolderUserRole + 1,
+        FolderWordCountRole = TextModelFolderItem::FolderUserRole + 1,
     };
 
 public:
@@ -48,6 +48,11 @@ public:
      * @brief Количество символов
      */
     QPair<int, int> charactersCount() const;
+
+    /**
+     * @brief Определяем интерфейс получения данных папки
+     */
+    QVariant data(int _role) const override;
 
     /**
      * @brief Подходит ли элемент под условия заданного фильтра

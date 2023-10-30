@@ -23,6 +23,12 @@ public:
                         const QVariant& _color, const QModelIndex& _index) const;
 
     /**
+     * @brief Нарисовать кол-во слов
+     */
+    QRectF paintItemWordCount(QPainter* _painter, const QStyleOptionViewItem& _option,
+                              int _wordCount) const;
+
+    /**
      * @brief Нарисовать элемент
      */
     void paintFolder(QPainter* _painter, const QStyleOptionViewItem& _option,
@@ -119,6 +125,38 @@ void NovelTextStructureDelegate::Implementation::paintItemColor(QPainter* _paint
     }
 }
 
+QRectF NovelTextStructureDelegate::Implementation::paintItemWordCount(
+    QPainter* _painter, const QStyleOptionViewItem& _option, int _wordCount) const
+{
+    using namespace BusinessLayer;
+
+    _painter->setFont(DesignSystem::font().subtitle2());
+
+    QString wordCountText;
+    if (_wordCount < 1000) {
+        wordCountText = QString::number(_wordCount);
+    } else if (_wordCount < 1000000) {
+        wordCountText = QString("%1K").arg(QString::number(_wordCount / 1000.0, 'f', 1));
+    } else if (_wordCount < 1000000000) {
+        wordCountText = QString("%1M").arg(QString::number(_wordCount / 1000000.0, 'f', 1));
+    } else {
+        wordCountText = QString("%1B").arg(QString::number(_wordCount / 1000000000.0, 'f', 1));
+    }
+    const qreal wordCountWidth = TextHelper::fineTextWidthF(wordCountText, _painter->font());
+
+    const QRectF backgroundRect = _option.rect;
+    const QRectF wordCountRect(
+        QPointF(QLocale().textDirection() == Qt::LeftToRight
+                    ? (backgroundRect.right() - wordCountWidth
+                       - DesignSystem::treeOneLineItem().margins().right())
+                    : backgroundRect.left() + DesignSystem::treeOneLineItem().margins().left(),
+                backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()),
+        QSizeF(wordCountWidth, DesignSystem::treeOneLineItem().contentHeight()));
+    _painter->drawText(wordCountRect, Qt::AlignLeft | Qt::AlignVCenter, wordCountText);
+
+    return wordCountRect;
+}
+
 void NovelTextStructureDelegate::Implementation::paintFolder(QPainter* _painter,
                                                              const QStyleOptionViewItem& _option,
                                                              const QModelIndex& _index) const
@@ -187,6 +225,12 @@ void NovelTextStructureDelegate::Implementation::paintFolder(QPainter* _painter,
     }
 
     //
+    // ... количество слов
+    //
+    const auto wordCount = _index.data(NovelTextModelFolderItem::FolderWordCountRole).toInt();
+    const auto wordCountRect = paintItemWordCount(_painter, _option, wordCount);
+
+    //
     // ... название папки
     //
     _painter->setFont(DesignSystem::font().subtitle2());
@@ -195,10 +239,10 @@ void NovelTextStructureDelegate::Implementation::paintFolder(QPainter* _painter,
     qreal headingWidth = 0.0;
     if (isLeftToRight) {
         headingLeft = iconRect.right() + DesignSystem::treeOneLineItem().spacing();
-        headingWidth = backgroundRect.right() - DesignSystem::treeOneLineItem().margins().right()
-            - headingLeft;
+        headingWidth
+            = wordCountRect.left() - headingLeft - DesignSystem::treeOneLineItem().spacing();
     } else {
-        headingLeft = backgroundRect.left() + DesignSystem::treeOneLineItem().margins().left();
+        headingLeft = wordCountRect.right() + DesignSystem::treeOneLineItem().spacing();
         headingWidth = iconRect.left() - headingLeft - DesignSystem::treeOneLineItem().spacing();
     }
     const QRectF headingRect(
@@ -278,21 +322,28 @@ void NovelTextStructureDelegate::Implementation::paintScene(QPainter* _painter,
     }
 
     //
+    // ... кол-во слов
+    //
+    const auto wordCount = _index.data(NovelTextModelSceneItem::SceneWordCountRole).toInt();
+    const auto durationRect = paintItemWordCount(_painter, _option, wordCount);
+
+    //
     // ... заголовок сцены
     //
     _painter->setFont(DesignSystem::font().subtitle2());
-    qreal hadingLeft = 0.0;
+    qreal headingLeft = 0.0;
     qreal headingWidth = 0.0;
     if (isLeftToRight) {
-        hadingLeft = iconRect.right() + DesignSystem::treeOneLineItem().spacing();
-        headingWidth = backgroundRect.right() - DesignSystem::treeOneLineItem().margins().right()
-            - hadingLeft;
+        headingLeft = iconRect.right() + DesignSystem::treeOneLineItem().spacing();
+        headingWidth
+            = durationRect.left() - headingLeft - DesignSystem::treeOneLineItem().spacing();
     } else {
-        hadingLeft = backgroundRect.left() + DesignSystem::treeOneLineItem().margins().left();
-        headingWidth = iconRect.left() - hadingLeft - DesignSystem::treeOneLineItem().spacing();
+        headingLeft = durationRect.right() + DesignSystem::treeOneLineItem().spacing();
+        headingWidth = iconRect.left() - headingLeft - DesignSystem::treeOneLineItem().spacing();
     }
     const QRectF headingRect(
-        QPointF(hadingLeft, backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()),
+        QPointF(headingLeft,
+                backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()),
         QSizeF(headingWidth, DesignSystem::treeOneLineItem().contentHeight()));
     auto sceneHeading
         = TextHelper::smartToUpper(_index.data(TextModelGroupItem::GroupHeadingRole).toString());
@@ -317,11 +368,9 @@ void NovelTextStructureDelegate::Implementation::paintScene(QPainter* _painter,
     QRectF textRect;
     if (textLines > 0) {
         _painter->setFont(DesignSystem::font().body2());
-        const qreal textLeft = isLeftToRight ? iconRect.left() : headingRect.left();
-        const qreal textWidth = isLeftToRight
-            ? (backgroundRect.right() - textLeft
-               - DesignSystem::treeOneLineItem().margins().right())
-            : (iconRect.right() - textLeft);
+        const qreal textLeft = isLeftToRight ? iconRect.left() : durationRect.left();
+        const qreal textWidth = isLeftToRight ? (durationRect.right() - iconRect.left())
+                                              : (iconRect.right() - durationRect.left());
         textRect
             = QRectF(QPointF(textLeft, headingRect.bottom() + DesignSystem::compactLayout().px8()),
                      QSizeF(textWidth, TextHelper::fineLineSpacing(_painter->font()) * textLines));

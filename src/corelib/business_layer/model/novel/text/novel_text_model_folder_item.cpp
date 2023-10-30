@@ -72,6 +72,19 @@ QPair<int, int> NovelTextModelFolderItem::charactersCount() const
     return d->charactersCount;
 }
 
+QVariant NovelTextModelFolderItem::data(int _role) const
+{
+    switch (_role) {
+    case FolderWordCountRole: {
+        return d->wordsCount;
+    }
+
+    default: {
+        return TextModelFolderItem::data(_role);
+    }
+    }
+}
+
 bool NovelTextModelFolderItem::isFilterAccepted(const QString& _text, bool _isCaseSensitive,
                                                 int _filterType) const
 {
