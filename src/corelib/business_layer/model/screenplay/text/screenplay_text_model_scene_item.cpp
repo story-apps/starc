@@ -156,7 +156,7 @@ QVector<QString> ScreenplayTextModelSceneItem::beats() const
     return beats;
 }
 
-QString ScreenplayTextModelSceneItem::description() const
+QString ScreenplayTextModelSceneItem::description(const QString& _separator) const
 {
     QString description;
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
@@ -171,7 +171,7 @@ QString ScreenplayTextModelSceneItem::description() const
         }
 
         if (!description.isEmpty()) {
-            description.append(" ");
+            description.append(_separator);
         }
         description.append(group->heading());
     }

@@ -45,7 +45,7 @@ public:
     /**
      * @brief Описание сцены (объединённые биты)
      */
-    QString description() const;
+    QString description(const QString& _separator = " ") const;
 
     /**
      * @brief Определяем интерфейс получения данных сцены

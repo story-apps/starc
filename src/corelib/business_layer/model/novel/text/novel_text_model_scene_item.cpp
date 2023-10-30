@@ -76,7 +76,7 @@ QVector<QString> NovelTextModelSceneItem::beats() const
     return beats;
 }
 
-QString NovelTextModelSceneItem::description() const
+QString NovelTextModelSceneItem::description(const QString& _separator) const
 {
     QString description;
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
@@ -91,7 +91,7 @@ QString NovelTextModelSceneItem::description() const
         }
 
         if (!description.isEmpty()) {
-            description.append(" ");
+            description.append(_separator);
         }
         description.append(group->heading());
     }
