@@ -2225,6 +2225,11 @@
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="411"/>
+        <source>Mind map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="417"/>
         <source>Images gallery</source>
         <translation>Галерэя выяў</translation>
     </message>
@@ -2383,22 +2388,22 @@
         <translation>Рыхтоўля да стварэння фатаграфіі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/character_image_card/character_image_card.cpp" line="95"/>
+        <location filename="../../corelib/ui/modules/character_image_card/character_image_card.cpp" line="101"/>
         <source>Photo by %1 on Unsplash.com</source>
         <translation>Фота %1 з Unsplash.com</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/character_image_card/character_image_card.cpp" line="107"/>
+        <location filename="../../corelib/ui/modules/character_image_card/character_image_card.cpp" line="113"/>
         <source>Generating photo</source>
         <translation>Стварэнне фатаграфіі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/character_image_card/character_image_card.cpp" line="144"/>
+        <location filename="../../corelib/ui/modules/character_image_card/character_image_card.cpp" line="150"/>
         <source>Select an area for the character main photo</source>
         <translation>Выберыце вобласць для галоўнай фатаграфіі персанажа</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/character_image_card/character_image_card.cpp" line="190"/>
+        <location filename="../../corelib/ui/modules/character_image_card/character_image_card.cpp" line="196"/>
         <source>Generate</source>
         <translation>Згенераваць</translation>
     </message>
@@ -3177,19 +3182,19 @@
         <translation>Пераклад тэксту</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1918"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2035"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1923"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2040"/>
         <source>Generating synopsis (scene %1 from %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2087"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2244"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2092"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2248"/>
         <source>Processing text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2197"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2201"/>
         <source>Generating image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3390,6 +3395,24 @@
         <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="159"/>
         <source>Location with this name already exists</source>
         <translation>Лакацыя з такой назвай ужо існуе</translation>
+    </message>
+</context>
+<context>
+    <name>ManagementLayer::MindMapManager</name>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/mind_map_manager.cpp" line="91"/>
+        <source>Upgrade the app to the PRO version to edit the mind map.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/mind_map_manager.cpp" line="92"/>
+        <source>Maybe later</source>
+        <translation>Іншым разам</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/mind_map_manager.cpp" line="93"/>
+        <source>Upgrade</source>
+        <translation>Абнавіць</translation>
     </message>
 </context>
 <context>
@@ -3710,6 +3733,11 @@ If you want to continue editing novel text, switch to the corresponding module v
         <location filename="../management_layer/content/project/project_manager.cpp" line="3024"/>
         <source>Treatment</source>
         <translation>Паэпізоднік</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3287"/>
+        <source>Conflicted version</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="2266"/>
@@ -4658,33 +4686,24 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="465"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="468"/>
         <source>Information about project</source>
         <translation>Інфармацыя пра праект</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="467"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="470"/>
         <source>Project collaborators</source>
         <translation>Суаўтары праекта</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="471"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="474"/>
         <source>Information about screenplay</source>
         <translation>Інфармацыя пра сцэнар</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="473"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="476"/>
         <source>Screenplay parameters</source>
         <translation>Параметры сцэнара</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="476"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="507"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="527"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="547"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="567"/>
-        <source>Title page text</source>
-        <translation>Тэкст тытульнай старонкі</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="479"/>
@@ -4692,175 +4711,1688 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../management_layer/plugins_builder.cpp" line="530"/>
         <location filename="../management_layer/plugins_builder.cpp" line="550"/>
         <location filename="../management_layer/plugins_builder.cpp" line="570"/>
+        <source>Title page text</source>
+        <translation>Тэкст тытульнай старонкі</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins_builder.cpp" line="482"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="513"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="533"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="553"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="573"/>
         <source>Synopsis text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="484"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="575"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="487"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="578"/>
         <source>Beats</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="493"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="584"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="496"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="587"/>
         <source>Timeline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="495"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="498"/>
         <source>Breakdown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="502"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="505"/>
         <source>Information about comic book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="504"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="507"/>
         <source>Comic book parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="513"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="516"/>
         <source>Comic book text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="522"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="525"/>
         <source>Information about audioplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="524"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="527"/>
         <source>Audioplay parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="533"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="536"/>
         <source>Audioplay text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="542"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="545"/>
         <source>Information about stageplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="544"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="547"/>
         <source>Stageplay parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="553"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="556"/>
         <source>Stageplay text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="562"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="565"/>
         <source>Information about novel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="564"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="567"/>
         <source>Novel parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="573"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="576"/>
         <source>Outline text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="580"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="583"/>
         <source>Novel text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="591"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="594"/>
         <source>Characters relations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="594"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="597"/>
         <source>Character information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="596"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="599"/>
         <source>Character dialogues</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="600"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="603"/>
         <source>Locations map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="603"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="606"/>
         <source>Location information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="607"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="610"/>
         <source>Worlds map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="610"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="613"/>
         <source>World information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="614"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="617"/>
         <source>Folder text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="617"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="620"/>
         <source>Document text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="621"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="624"/>
         <source>Recycle bin summary info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="624"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="627"/>
+        <source>Mind map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins_builder.cpp" line="630"/>
         <source>Images gallery</source>
         <translation>Галерэя выяў</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="482"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="485"/>
         <source>Treatment text</source>
         <translation>Тэкст паэпізодніка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="489"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="492"/>
         <source>Screenplay text</source>
         <translation>Тэкст сцэнара</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="486"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="491"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="515"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="535"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="555"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="577"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="582"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="489"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="494"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="518"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="538"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="558"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="580"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="585"/>
         <source>Cards</source>
         <translation>Карткі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="498"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="518"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="538"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="558"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="587"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="501"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="521"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="541"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="561"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="590"/>
         <source>Statistics</source>
         <translation>Статыстыка</translation>
+    </message>
+</context>
+<context>
+    <name>QuotesGenerator</name>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="15"/>
+        <source>I learned there’s an amazing unexplored territory in terms of narrative. Before, I thought the unexplored territory was the form, the way you shoot a movie. Now, I’m learning about the beautiful marriage between form and narrative.</source>
+        <extracomment>Cite of the Alfonso Cuarón</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="16"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="20"/>
+        <source>Alfonso Cuarón</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="19"/>
+        <source>When you’re doing a film, narrative is your most important tool, but it’s a tool to create a cinematographic experience, to create those moments that are beyond narrative, that are almost an abstraction of that moment that hits your psyche.</source>
+        <extracomment>Cite of the Alfonso Cuarón</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="23"/>
+        <source>To make a great film you need three things: the script, the script, and the script.</source>
+        <extracomment>Cite of the Alfred Hitchcock</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="24"/>
+        <source>Alfred Hitchcock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="27"/>
+        <source>I wrote a check for $1,000 to the NRA, gave it to my friend, and I said, I’m giving myself 5 weeks. On August 8, if this is not a fully written script and two people read it and confirm, you are sending that check in. And then I told all my friends. It was the most stressful five weeks of my life. It was like having a thousand agents breathing down my neck.</source>
+        <extracomment>Cite of the Alice Wu</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="28"/>
+        <source>Alice Wu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="31"/>
+        <source>Know your literary tradition, savor it, steal from it, but when you sit down to write, forget about worshiping greatness and fetishizing masterpieces.</source>
+        <extracomment>Cite of the Allegra Goodman</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="32"/>
+        <source>Allegra Goodman</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="35"/>
+        <source>To gain your own voice, you have to forget about having it heard.</source>
+        <extracomment>Cite of the Allen Ginsberg</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="36"/>
+        <source>Allen Ginsberg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="39"/>
+        <source>I think the deeper you go into questions, the deeper or more interesting the questions get. And I think that’s the job of art.</source>
+        <extracomment>Cite of the Andre Dubus III</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="40"/>
+        <source>Andre Dubus III</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="43"/>
+        <source>The most beautiful things are those that madness prompts and reason writes.</source>
+        <extracomment>Cite of the Andre Gide</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="44"/>
+        <source>Andre Gide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="47"/>
+        <source>Do not hoard what seems good for a later place in the book, or for another book; give it, give it all, give it now.</source>
+        <extracomment>Cite of the Annie Dillard</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="48"/>
+        <source>Annie Dillard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="51"/>
+        <source>Out of the thousand writers huffing and puffing through movieland there are scarcely fifty men and women of wit or talent. The rest of the fraternity is deadwood. Yet, in a curious way, there is not much difference between the product of a good writer and a bad one. They both have to toe the same mark.</source>
+        <extracomment>Cite of the Ben Hecht</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="52"/>
+        <source>Ben Hecht</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="55"/>
+        <source>If you have a problem with the third act, the real problem is in the first act.</source>
+        <extracomment>Cite of the Billy Wilder</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="56"/>
+        <source>Billy Wilder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="59"/>
+        <source>I have a complex feeling about genre. I love it, but I hate it at the same time. I have the urge to make audiences thrill with the excitement of a genre, but I also try to betray and destroy the expectations placed on that genre.</source>
+        <extracomment>Cite of the Bong Joon-Ho</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="60"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="64"/>
+        <source>Bong Joon-Ho</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="63"/>
+        <source>The multilevel, the conscious and the unconscious, is natural when I write scripts… when I come up with ideas and stories.</source>
+        <extracomment>Cite of the Bong Joon-Ho</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="67"/>
+        <source>Beware of advice — even this.</source>
+        <extracomment>Cite of the Carl Sandburg</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="68"/>
+        <source>Carl Sandburg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="71"/>
+        <source>It’s so important just because what we see, we kind of validate; what we see, we can empathize with; what we see, we can sort of put ourselves into the shoes of. I think what I do as a storyteller and what we all do as storytellers is kind of fundamental to the fabric of society.</source>
+        <extracomment>Cite of the Charise Castro Smith</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="72"/>
+        <source>Charise Castro Smith</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="75"/>
+        <source>A screenplay is an exploration. It’s about the thing you don’t know. It’s a step into the abyss. It necessarily starts somewhere, anywhere; there is a starting point, but the rest is undetermined.</source>
+        <extracomment>Cite of the Charlie Kaufman</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="76"/>
+        <source>Charlie Kaufman</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="79"/>
+        <source>A good film script should be able to do completely without dialogue.</source>
+        <extracomment>Cite of the David Mamet</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="80"/>
+        <source>David Mamet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="83"/>
+        <source>I care about subtext. If you get that right, the text will flow.</source>
+        <extracomment>Cite of the Dee Rees</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="84"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="88"/>
+        <source>Dee Rees</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="87"/>
+        <source>Writing is really freeing because it’s the only part of the process where it’s just you and the characters and you are by yourself in a room and you can just hash it out. There are no limitations.</source>
+        <extracomment>Cite of the Dee Rees</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="91"/>
+        <source>There is no reason why challenging themes and engaging stories have to be mutually exclusive - in fact, each can fuel the other. As a filmmaker, I want to entertain people first and foremost. If out of that comes a greater awareness and understanding of a time or a circumstance, then the hope is that change can happen.</source>
+        <extracomment>Cite of the Edward Zwick</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="92"/>
+        <source>Edward Zwick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="95"/>
+        <source>A lot of my ideas were crap, but bad ideas help get the ball rolling too. And bad ideas lead to better ideas.</source>
+        <extracomment>Cite of the Elaine Loh</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="96"/>
+        <source>Elaine Loh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="99"/>
+        <source>If it sounds like writing, I rewrite it.</source>
+        <extracomment>Cite of the Elmore Leonard</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="100"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="104"/>
+        <source>Elmore Leonard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="103"/>
+        <source>If it sounds like writing, I rewrite it. Or, if proper usage gets in the way, it may have to go. I can’t allow what we learned in English composition to disrupt the sound and rhythm of the narrative.</source>
+        <extracomment>Cite of the Elmore Leonard</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="107"/>
+        <source>Who wants to become a writer? And why? Because it’s the answer to everything. … It’s the streaming reason for living. To note, to pin down, to build up, to create, to be astonished at nothing, to cherish the oddities, to let nothing go down the drain, to make something, to make a great flower out of life, even if it’s a cactus.</source>
+        <extracomment>Cite of the Enid Bagnold</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="108"/>
+        <source>Enid Bagnold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="111"/>
+        <source>Critics are men who watch a battle from a high place then come down and shoot the survivors.</source>
+        <extracomment>Cite of the Ernest Hemingway</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="112"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="116"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="120"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="124"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="128"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="132"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="136"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="140"/>
+        <source>Ernest Hemingway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="115"/>
+        <source>It’s none of their business that you have to learn to write. Let them think you were born that way.</source>
+        <extracomment>Cite of the Ernest Hemingway</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="119"/>
+        <source>Life breaks us all but in the end we are stronger in the broken places.</source>
+        <extracomment>Cite of the Ernest Hemingway</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="123"/>
+        <source>The best people possess a feeling for beauty, the courage to take risks, the discipline to tell the truth, the capacity for sacrifice. Ironically, their virtues make them vulnerable; they are often wounded, sometimes destroyed.</source>
+        <extracomment>Cite of the Ernest Hemingway</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="127"/>
+        <source>The first draft of anything is shit.</source>
+        <extracomment>Cite of the Ernest Hemingway</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="131"/>
+        <source>We are all apprentices in a craft where no one ever becomes a master.</source>
+        <extracomment>Cite of the Ernest Hemingway</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="135"/>
+        <source>When writing a novel a writer should create living people; people, not characters. A character is a caricature.</source>
+        <extracomment>Cite of the Ernest Hemingway</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="139"/>
+        <source>You must be prepared to work always without applause.</source>
+        <extracomment>Cite of the Ernest Hemingway</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="143"/>
+        <source>We wouldn’t have done it if we didn’t think we could have fun with it.</source>
+        <extracomment>Cite of the Ethan Coen</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="144"/>
+        <source>Ethan Coen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="147"/>
+        <source>The last thing I want to see at the movies is a version of my reality. I don’t want to see art imitating life.</source>
+        <extracomment>Cite of the Fran Walsh</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="148"/>
+        <source>Fran Walsh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="151"/>
+        <source>I became quite successful very young, and it was mainly because I was so enthusiastic and I just worked so hard at it.</source>
+        <extracomment>Cite of the Francis Ford Coppola</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="152"/>
+        <source>Francis Ford Coppola</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="155"/>
+        <source> I inherited the knowledge that sometimes (talents) not only skip a generation, but sometimes run screaming from it. Ironically, it was the singing non-ability that helped feed my love of laughter.</source>
+        <extracomment>Cite of the Fred Astaire</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="156"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="160"/>
+        <source>Fred Astaire</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="159"/>
+        <source>Either the camera will dance, or I will.</source>
+        <extracomment>Cite of the Fred Astaire</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="163"/>
+        <source>Dialogue is a necessary evil.</source>
+        <extracomment>Cite of the Fred Zinnemann</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="164"/>
+        <source>Fred Zinnemann</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="167"/>
+        <source>When I sit down to write a book, I do not say to myself, ‘I am going to produce a work of art.’ I write it because there is some lie that I want to expose, some fact to which I want to draw attention, and my initial concern is to get a hearing.</source>
+        <extracomment>Cite of the George Orwell</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="168"/>
+        <source>George Orwell</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="171"/>
+        <source>Keep a small can of WD-40 on your desk—away from any open flames—to remind yourself that if you don’t write daily, you will get rusty.</source>
+        <extracomment>Cite of the George Singleton</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="172"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="176"/>
+        <source>George Singleton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="175"/>
+        <source>You do not have to explain every single drop of water contained in a rain barrel. You have to explain one drop—H2O. The reader will get it.</source>
+        <extracomment>Cite of the George Singleton</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="179"/>
+        <source>Each writer is born with a repertory company in his head. Shakespeare has perhaps 20 players. … I have 10 or so, and that’s a lot. As you get older, you become more skillful at casting them.</source>
+        <extracomment>Cite of the Gore Vidal</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="180"/>
+        <source>Gore Vidal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="183"/>
+        <source>Let your characters talk to each other and do things. Spend time with them — they’ll tell you who they are and what they’re up to.</source>
+        <extracomment>Cite of the Greta Gerwig</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="184"/>
+        <source>Greta Gerwig</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="187"/>
+        <source>To me, art and storytelling serve primal, spiritual functions in my daily life. Whether I’m telling a bedtime story to my kids or trying to mount a movie or write a short story or a novel, I take it very seriously.</source>
+        <extracomment>Cite of the Guillermo del Toro</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="188"/>
+        <source>Guillermo del Toro</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="191"/>
+        <source>There are no dull subjects, only dull writers</source>
+        <extracomment>Cite of the H. L. Mencken</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="192"/>
+        <source>H. L. Mencken</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="195"/>
+        <source>Characters make their own plot. The dimensions of the characters determine the action of the novel.</source>
+        <extracomment>Cite of the Harper Lee</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="196"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="200"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="204"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="208"/>
+        <source>Harper Lee</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="199"/>
+        <source>I would advise anyone who aspires to a writing career that before developing his talent he would be wise to develop a thick hide.</source>
+        <extracomment>Cite of the Harper Lee</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="203"/>
+        <source>It’s not necessary to tell all you know.</source>
+        <extracomment>Cite of the Harper Lee</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="207"/>
+        <source>You never really understand a person until you consider things from his point of view.</source>
+        <extracomment>Cite of the Harper Lee</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="211"/>
+        <source>The creation of a single world comes from a huge number of fragments and chaos.</source>
+        <extracomment>Cite of the Hayao Miyazaki</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="212"/>
+        <source>Hayao Miyazaki</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="215"/>
+        <source>Write while the heat is in you. … The writer who postpones the recording of his thoughts uses an iron which has cooled to burn a hole with.</source>
+        <extracomment>Cite of the Henry David Thoreau</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="216"/>
+        <source>Henry David Thoreau</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="219"/>
+        <source>Not a wasted word. This has been a main point to my literary thinking all my life.</source>
+        <extracomment>Cite of the Hunter S. Thompson</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="220"/>
+        <source>Hunter S. Thompson</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="223"/>
+        <source>Genius gives birth, talent delivers. What Rembrandt or Van Gogh saw in the night can never be seen again. Born writers of the future are amazed already at what they’re seeing now, what we’ll all see in time for the first time, and then see imitated many times by made writers.</source>
+        <extracomment>Cite of the Jack Kerouac</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="224"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="228"/>
+        <source>Jack Kerouac</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="227"/>
+        <source>It ain’t whatcha write, it’s the way atcha write it.</source>
+        <extracomment>Cite of the Jack Kerouac</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="231"/>
+        <source>A story should have a beginning, a middle, and an end, but not necessarily in that order.</source>
+        <extracomment>Cite of the Jean-Luc Godard</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="232"/>
+        <source>Jean-Luc Godard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="235"/>
+        <source>There is only one plot—things are not what they seem.</source>
+        <extracomment>Cite of the Jim Thompson</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="236"/>
+        <source>Jim Thompson</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="239"/>
+        <source>Long patience and application saturated with your heart’s blood—you will either write or you will not—and the only way to find out whether you will or not is to try.</source>
+        <extracomment>Cite of the Jim Tully, WD</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="240"/>
+        <source>Jim Tully, WD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="243"/>
+        <source>The characters are the result of two things — first, we elaborate them into fairly well-defined people through their dialogue, then they happen all over again, when the actor interprets them.</source>
+        <extracomment>Cite of the Joel Coen</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="244"/>
+        <source>Joel Coen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="247"/>
+        <source>I often say that a lot of my job, as a screenwriter, is sort of being a stock picker, in that I need to figure out what movies are probably going to get made because otherwise, I’m spending a lot of my time on something that’s trapped in 12-point courier.</source>
+        <extracomment>Cite of the John August</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="248"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="252"/>
+        <source>John August</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="251"/>
+        <source>I think the greatest barrier I’ve always faced as a writer is just starting. Like all of us, I can just procrastinate and find some excuse for not actually getting started.</source>
+        <extracomment>Cite of the John August</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="255"/>
+        <source>In England, I am a horror movie director. In Germany, I am a filmmaker. In the US, I am a bum.</source>
+        <extracomment>Cite of the John Carpenter</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="256"/>
+        <source>John Carpenter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="259"/>
+        <source>Feydeau’s one rule of playwriting: Character A: My life is perfect as long as I don’t see Character B. Knock Knock. Enter Character B.</source>
+        <extracomment>Cite of the John Guare</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="260"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="264"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="268"/>
+        <source>John Guare</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="263"/>
+        <source>James Joyce wrote the definitive work about Dublin while he was living in Switzerland. We&apos;re all where we come from. We all have our roots.</source>
+        <extracomment>Cite of the John Guare</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="267"/>
+        <source>You can read ten books and finally come across one detail, and it&apos;s like, &quot;now everything else makes sense. Now I know where I am.&quot;</source>
+        <extracomment>Cite of the John Guare</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="271"/>
+        <source>I’ve noticed that the truth works… If you’re being yourself and you’re just using your own emotions, they can feel it. If you’re doing fake, they can feel it. It took me a while in comedy to realize that your truth is more powerful than your mask.</source>
+        <extracomment>Cite of the Jordan Peele</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="272"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="276"/>
+        <source>Jordan Peele</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="275"/>
+        <source>That’s my advice with dealing with writer’s block. Follow the fun. If you aren’t having fun, you are doing it wrong.</source>
+        <extracomment>Cite of the Jordan Peele</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="279"/>
+        <source>Always be yourself…unless you suck</source>
+        <extracomment>Cite of the Joss Whedon</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="280"/>
+        <source>Joss Whedon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="283"/>
+        <source>The first sentence can’t be written until the final sentence is written.</source>
+        <extracomment>Cite of the Joyce Carol Oates</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="284"/>
+        <source>Joyce Carol Oates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="287"/>
+        <source>Style is to forget all styles.</source>
+        <extracomment>Cite of the Jules Renard</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="288"/>
+        <source>Jules Renard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="291"/>
+        <source>Write. Rewrite. When not writing or rewriting, read. I know of no shortcuts.</source>
+        <extracomment>Cite of the Larry L. King</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="292"/>
+        <source>Larry L. King</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="295"/>
+        <source>One thing that helps is to give myself permission to write badly. I tell myself that I’m going to do my five or 10 pages no matter what, and that I can always tear them up the following morning if I want. I’ll have lost nothing—writing and tearing up five pages would leave me no further behind than if I took the day off.</source>
+        <extracomment>Cite of the Lawrence Block</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="296"/>
+        <source>Lawrence Block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="299"/>
+        <source>Plot is people. Human emotions and desires founded on the realities of life, working at cross purposes, getting hotter and fiercer as they strike against each other until finally there’s an explosion—that’s Plot.</source>
+        <extracomment>Cite of the Leigh Brackett</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="300"/>
+        <source>Leigh Brackett</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="303"/>
+        <source>Your first obligation as a writer is to tell the truth and to tell a good story.</source>
+        <extracomment>Cite of the Lena Waithe</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="304"/>
+        <source>Lena Waithe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="307"/>
+        <source>One rule of screenwriting: does the reader want to turn the page?</source>
+        <extracomment>Cite of the Leslie Dixon</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="308"/>
+        <source>Leslie Dixon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="311"/>
+        <source>Don’t expect the puppets of your mind to become the people of your story. If they are not realities in your own mind, there is no mysterious alchemy in ink and paper that will turn wooden figures into flesh and blood.</source>
+        <extracomment>Cite of the Leslie Gordon Barnard</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="312"/>
+        <source>Leslie Gordon Barnard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="315"/>
+        <source>Animals are less alone with roaring than we are with all these words.</source>
+        <extracomment>Cite of the Margaret Laurence</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="316"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="320"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="324"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="328"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="332"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="336"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="340"/>
+        <source>Margaret Laurence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="319"/>
+        <source>Follow your heart, and you perish.</source>
+        <extracomment>Cite of the Margaret Laurence</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="323"/>
+        <source>I&apos;ve never been able to force a novel. I always had the sense something being given to me. You can&apos;t sit around and wait until inspiration strikes, but neither can you force into being something that isn&apos;t there.</source>
+        <extracomment>Cite of the Margaret Laurence</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="327"/>
+        <source>If I hadn&apos;t had my children, I wouldn&apos;t have written more and better, I would have written less and worse.</source>
+        <extracomment>Cite of the Margaret Laurence</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="331"/>
+        <source>The struggle is not lost. I believe we have to live, as long as we live, in the expectation and hope of changing the world for the better. That may sound naive. It may even sound sentimental. Never mind: I believe it. What are we to live for, except life itself? And, with all our doubts, with all our flaws, with all our problems, I believe that we will carry on, with God&apos;s help.</source>
+        <extracomment>Cite of the Margaret Laurence</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="335"/>
+        <source>What goes on inside isn&apos;t ever the same as what goes on outside.</source>
+        <extracomment>Cite of the Margaret Laurence</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="339"/>
+        <source>When I say work I only mean writing. Everything else is just odd jobs.</source>
+        <extracomment>Cite of the Margaret Laurence</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="343"/>
+        <source>Courage is resistance to fear, mastery of fear – not absence of fear.</source>
+        <extracomment>Cite of the Mark Twain</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="344"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="348"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="352"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="356"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="360"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="364"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="368"/>
+        <source>Mark Twain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="347"/>
+        <source>First get your facts, then distort them at your leisure</source>
+        <extracomment>Cite of the Mark Twain</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="351"/>
+        <source>Get your facts first, then you can distort them as you please.</source>
+        <extracomment>Cite of the Mark Twain</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="355"/>
+        <source>I have never let my schooling interfere with my education.</source>
+        <extracomment>Cite of the Mark Twain</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="359"/>
+        <source>If you tell the truth, you don’t have to remember anything.</source>
+        <extracomment>Cite of the Mark Twain</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="363"/>
+        <source>The secret of getting ahead is getting started.</source>
+        <extracomment>Cite of the Mark Twain</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="367"/>
+        <source>To succeed in life, you need two things: ignorance and confidence.</source>
+        <extracomment>Cite of the Mark Twain</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="371"/>
+        <source>There is no greater agony than bearing an untold story inside you.</source>
+        <extracomment>Cite of the Maya Angelou</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="372"/>
+        <source>Maya Angelou</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="375"/>
+        <source>You have to be true to your instinctive way of writing. You have to find your identity.</source>
+        <extracomment>Cite of the Michaela Coel</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="376"/>
+        <source>Michaela Coel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="379"/>
+        <source>I just have my characters say my controversial opinions and then hide behind them.</source>
+        <extracomment>Cite of the Mindy Kaling</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="380"/>
+        <source>Mindy Kaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="383"/>
+        <source>As a young journalist, I thought that stories were simply what happened. As a screenwriter, I realized that we create stories by imposing narrative on the events that happen around us.</source>
+        <extracomment>Cite of the Nora Ephron</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="384"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="388"/>
+        <source>Nora Ephron</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="387"/>
+        <source>My mother wanted us to understand that the tragedies of your life one day have the potential to be comic stories the next.</source>
+        <extracomment>Cite of the Nora Ephron</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="391"/>
+        <source>Here&apos;s an outdated quote! -- &quot;A typewriter needs only paper; a camera uses film, requires subsidiary equipment by the truckload and Wellington several hundreds of technicians. That is always the central fact about the filmmakers opposed to any other artist: he can never afford his own tools.&quot;</source>
+        <extracomment>Cite of the Orson Welles</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="392"/>
+        <source>Orson Welles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="395"/>
+        <source>I could be just a writer very easily. I am not a writer. I am a screenwriter, which is half a filmmaker. … But it is not an art form, because screenplays are not works of art. They are invitations to others to collaborate on a work of art.</source>
+        <extracomment>Cite of the Paul Schrader</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="396"/>
+        <source>Paul Schrader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="399"/>
+        <source>We don’t need books to make films. It’s the last thing we want — it turns cinema into the bastard art of illustration.</source>
+        <extracomment>Cite of the Peter Greenaway</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="400"/>
+        <source>Peter Greenaway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="403"/>
+        <source>If a nation loses its storytellers, it loses its childhood.</source>
+        <extracomment>Cite of the Peter Handke</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="404"/>
+        <source>Peter Handke</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="407"/>
+        <source>The road to hell is paved with works-in-progress.</source>
+        <extracomment>Cite of the Philip Roth</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="408"/>
+        <source>Philip Roth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="411"/>
+        <source>[T]he element of surprise is the most important thing and what keeps me interested in writing. I can feel if I’ve written that predictable or boring line, and I will carry that around with me all day.</source>
+        <extracomment>Cite of the Phoebe Waller-Bridge</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="412"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="416"/>
+        <source>Phoebe Waller-Bridge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="415"/>
+        <source>Once you know what makes someone angry, you can tell a lot about that person.</source>
+        <extracomment>Cite of the Phoebe Waller-Bridge</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="419"/>
+        <source>A writer should have this little voice inside of you saying, Tell the truth. Reveal a few secrets here.</source>
+        <extracomment>Cite of the Quentin Tarantino</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="420"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="424"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="428"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="432"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="436"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="440"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="444"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="448"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="452"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="456"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="460"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="464"/>
+        <source>Quentin Tarantino</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="423"/>
+        <source>Everything I learned as an actor, I have basically applied to writing.</source>
+        <extracomment>Cite of the Quentin Tarantino</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="427"/>
+        <source>I consider myself a student of cinema. It’s almost like I am going for my professorship in cinema, and the day I die is the day I graduate. It is a lifelong study.</source>
+        <extracomment>Cite of the Quentin Tarantino</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="431"/>
+        <source>I don’t think there’s anything to be afraid of. Failure brings great rewards — in the life of an artist.</source>
+        <extracomment>Cite of the Quentin Tarantino</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="435"/>
+        <source>I steal from every movie ever made.</source>
+        <extracomment>Cite of the Quentin Tarantino</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="439"/>
+        <source>I’ve made a choice, so far, to go on this road alone. Because this is my time. This is my time to make movies.</source>
+        <extracomment>Cite of the Quentin Tarantino</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="443"/>
+        <source>If you just love movies enough, you can make a good one.</source>
+        <extracomment>Cite of the Quentin Tarantino</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="447"/>
+        <source>Movies are not about the weekend that they’re released, and in the grand scheme of things, that’s probably the most unimportant time of a film’s life.</source>
+        <extracomment>Cite of the Quentin Tarantino</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="451"/>
+        <source>There are a lot of bad screenplays, so if you write a good screenplay people are going to respond to it.</source>
+        <extracomment>Cite of the Quentin Tarantino</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="455"/>
+        <source>To me, movies and music go hand in hand. When I’m writing a script, one of the first things I do is find the music I’m going to play for the opening sequence.</source>
+        <extracomment>Cite of the Quentin Tarantino</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="459"/>
+        <source>Trying to make a feature film yourself with no money is the best film school you can do.</source>
+        <extracomment>Cite of the Quentin Tarantino</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="463"/>
+        <source>You know, my problem with most screenwriting is it is a blueprint. It’s like they’re afraid to write the damn thing. And I’m a writer. That’s what I do. I want it to be written. I want it to work on the page first and foremost. So when I’m writing the script, I’m not thinking about the viewer watching the movie. I’m thinking about the reader reading the script.</source>
+        <extracomment>Cite of the Quentin Tarantino</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="467"/>
+        <source>People say, ‘What advice do you have for people who want to be writers?’ I say, they don’t really need advice, they know they want to be writers, and they’re gonna do it. Those people who know that they really want to do this and are cut out for it, they know it.</source>
+        <extracomment>Cite of the R.L. Stine</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="468"/>
+        <source>R.L. Stine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="471"/>
+        <source>I don’t believe in being serious about anything. I think life is too serious to be taken seriously.</source>
+        <extracomment>Cite of the Ray Bradbury, WD</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="472"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="476"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="480"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="484"/>
+        <source>Ray Bradbury, WD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="475"/>
+        <source>I don’t need an alarm clock. My ideas wake me.</source>
+        <extracomment>Cite of the Ray Bradbury, WD</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="479"/>
+        <source>Just write every day of your life. Read intensely. Then see what happens. Most of my friends who are put on that diet have very pleasant careers.</source>
+        <extracomment>Cite of the Ray Bradbury, WD</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="483"/>
+        <source>Let the world burn through you. Throw the prism light, white hot, on paper.</source>
+        <extracomment>Cite of the Ray Bradbury, WD</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="487"/>
+        <source>The wise screen writer is he who wears his second-best suit, artistically speaking, and doesn’t take things too much to heart. He should have a touch of cynicism, but only a touch. The complete cynic is as useless to Hollywood as he is to himself. He should do the best he can without straining at it. He should be scrupulously honest about his work, but he should not expect scrupulous honesty in return. He won’t get it. And when he has had enough, he should say goodbye with a smile, because for all he knows he may want to go back.</source>
+        <extracomment>Cite of the Raymond Chandler</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="488"/>
+        <source>Raymond Chandler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="491"/>
+        <source>I’m out there to clean the plate. Once they’ve read what I’ve written on a subject, I want them to think, ‘That’s it!’ I think the highest aspiration people in our trade can have is that once they’ve written a story, nobody will ever try it again.</source>
+        <extracomment>Cite of the Richard Ben Cramer</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="492"/>
+        <source>Richard Ben Cramer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="495"/>
+        <source>You sell a screenplay like you sell a car. If someone drives it off a cliff, that’s it.</source>
+        <extracomment>Cite of the Rita Mae Brown</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="496"/>
+        <source>Rita Mae Brown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="499"/>
+        <source>... don’t care if a reader hates one of my stories, just as long as he finishes the book.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="500"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="504"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="508"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="512"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="516"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="520"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="524"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="528"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="532"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="536"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="540"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="544"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="548"/>
+        <source>Roald Dahl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="503"/>
+        <source>A life is made up of a great number of small incidents, and a small number of great ones.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="507"/>
+        <source>A little magic can take you a long way.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="511"/>
+        <source>A little nonsense now and then is relished by the wisest men.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="515"/>
+        <source>A person who has good thoughts cannot ever be ugly. You can have a wonky nose and a crooked mouth and a double chin and stick-out teeth, but if you have good thoughts they will shine out of your face like sunbeams and you will always look lovely.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="519"/>
+        <source>Don&apos;t gobblefunk around with words.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="523"/>
+        <source>Grown ups are complicated creatures, full of quirks and secrets.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="527"/>
+        <source>I think probably kindness is my number one attribute in a human being. I&apos;ll put it before any of the things like courage or bravery or generosity or anything else.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="531"/>
+        <source>If you are going to get anywhere in life you have to read a lot of books.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="535"/>
+        <source>Kindness - that simple word. To be kind - it covers everything, to my mind. If you&apos;re kind that&apos;s it.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="539"/>
+        <source>Somewhere inside all of us is the power to change the world.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="543"/>
+        <source>Those who don&apos;t believe in magic will never find it.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="547"/>
+        <source>We make realities out of our dreams and dreams out of our realities. We are the dreamers of the dream.</source>
+        <extracomment>Cite of the Roald Dahl</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="551"/>
+        <source>I don’t think screenplay writing is the same as writing — I mean, I think it’s blueprinting.</source>
+        <extracomment>Cite of the Robert Altman</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="552"/>
+        <source>Robert Altman</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="555"/>
+        <source>The most ordinary word, when put into place, suddenly acquires brilliance. That is the brilliance with which your images must shine.</source>
+        <extracomment>Cite of the Robert Bresson</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="556"/>
+        <source>Robert Bresson</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="559"/>
+        <source>If the story you’re telling, is the story you’re telling, you’re in deep shit.</source>
+        <extracomment>Cite of the Robert McKee</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="560"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="564"/>
+        <source>Robert McKee</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="563"/>
+        <source>Writing is a marathon, not a sprint.</source>
+        <extracomment>Cite of the Robert McKee</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="567"/>
+        <source>Do not be told something is impossible. There is always a way.</source>
+        <extracomment>Cite of the Robert Rodriguez</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="568"/>
+        <source>Robert Rodriguez</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="571"/>
+        <source>My three Ps: passion, patience, perseverance. You have to do this if you’ve got to be a filmmaker.</source>
+        <extracomment>Cite of the Robert Wise</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="572"/>
+        <source>Robert Wise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="575"/>
+        <source>You don’t learn how to write a screenplay by just reading screenplays and watching movies. It’s about developing the kind of mind that sees and makes drama. You can do this in a kind of holistic way by reading history and theology and psychology, reading great fiction and poetry, and plays. You develop an eye for the structures of everything and look for the patterns that help you become a dramatist.</source>
+        <extracomment>Cite of the Robin Swicord</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="576"/>
+        <source>Robin Swicord</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="579"/>
+        <source>You can make a movie about anything, as long as it has a hook to hang the advertising on.</source>
+        <extracomment>Cite of the Roger Corman</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="580"/>
+        <source>Roger Corman</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="583"/>
+        <source>Cinema should make you forget you are sitting in a theater.</source>
+        <extracomment>Cite of the Roman Polanski</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="584"/>
+        <source>Roman Polanski</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="587"/>
+        <source>With all of my work, it always takes a while for people to get it. It goes from, ‘What the hell is that?’ to ‘Oh, I like that.’</source>
+        <extracomment>Cite of the Ryan Murphy</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="588"/>
+        <source>Ryan Murphy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="591"/>
+        <source>The greatest part of a writer’s time is spent in reading, in order to write; a man will turn over half a library to make one book.</source>
+        <extracomment>Cite of the Samuel Johnson</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="592"/>
+        <source>Samuel Johnson</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="595"/>
+        <source>It seems that the greatest difficulty is to find the end. Don’t try to find it, it’s there already.</source>
+        <extracomment>Cite of the Sofia Coppola</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="596"/>
+        <source>Sofia Coppola</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="599"/>
+        <source>A lot of times you get credit for stuff in your movies you didn’t intend to be there.</source>
+        <extracomment>Cite of the Spike Lee</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="600"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="604"/>
+        <source>Spike Lee</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="603"/>
+        <source>A spine to my films that’s become more evident to me is that many are about the choices that people make… You go this way, or that way, and either way, there’s going to be consequences.</source>
+        <extracomment>Cite of the Spike Lee</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="607"/>
+        <source>If it can be written, or thought, it can be filmed.</source>
+        <extracomment>Cite of the Stanley Kubrick</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="608"/>
+        <source>Stanley Kubrick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="611"/>
+        <source>Making people believe the unbelievable is no trick</source>
+        <extracomment>Cite of the Stephen King</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="612"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="616"/>
+        <source>Stephen King</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="615"/>
+        <source>When your story is ready for rewrite, cut it to the bone. Get rid of every ounce of excess fat. This is going to hurt; revising a story down to the bare essentials is always a little like murdering children, but it must be done.</source>
+        <extracomment>Cite of the Stephen King</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="619"/>
+        <source>All readers come to fiction as willing accomplices to your lies. Such is the basic goodwill contract made the moment we pick up a work of fiction.</source>
+        <extracomment>Cite of the Steve Almond</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="620"/>
+        <source>Steve Almond</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="623"/>
+        <source>What a person does is what he is, not what he says.</source>
+        <extracomment>Cite of the Syd Field</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="624"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="628"/>
+        <source>Syd Field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="627"/>
+        <source>Writing a screenplay is like climbing a mountain. When you’re climbing, all you can see is the rock in front of you and the rock directly above you. You can’t see where you’ve come from or where you’re going.</source>
+        <extracomment>Cite of the Syd Field</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="631"/>
+        <source>My world is not spectacle and explosion. It’s two people talking.</source>
+        <extracomment>Cite of the Taika Waititi</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="632"/>
+        <source>Taika Waititi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="635"/>
+        <source>I do not over-intellectualize the production process. I try to keep it simple: Tell the damned story.</source>
+        <extracomment>Cite of the Tom Clancy</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="636"/>
+        <source>Tom Clancy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="639"/>
+        <source>Every secret of a writer’s soul, every experience of his life, every quality of his mind, is written large in his works.</source>
+        <extracomment>Cite of the Virginia Woolf</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="640"/>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="644"/>
+        <source>Virginia Woolf</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="643"/>
+        <source>Literature is strewn with the wreckage of men who have minded beyond reason the opinions of others.</source>
+        <extracomment>Cite of the Virginia Woolf</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="647"/>
+        <source>Screenplay writing is not an art form. It’s a skill; it’s carpentry; it’s structure. I don’t mean to knock it — it ain’t easy. But if it’s all you do, if you only write screenplays, it is ultimately denigrating to the soul. You may get lucky and get rich, but you sure won’t get happy.</source>
+        <extracomment>Cite of the William Goldman</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="648"/>
+        <source>William Goldman</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="651"/>
+        <source>Cheat your landlord if you can and must, but do not try to shortchange the Muse. It cannot be done. You can’t fake quality any more than you can fake a good meal.</source>
+        <extracomment>Cite of the William S. Burroughs</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="652"/>
+        <source>William S. Burroughs</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5536,7 +7068,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AiAssistantView</name>
     <message numerus="yes">
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="934"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="990"/>
         <source>%n word(s) available</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -5545,912 +7077,915 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="935"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="991"/>
         <source>No words available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="940"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="962"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="967"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="996"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1019"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1024"/>
         <source>Rephrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="941"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="969"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="972"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="997"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1026"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1029"/>
         <source>Expand</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="942"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="974"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="977"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="998"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1031"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1034"/>
         <source>Shorten</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="943"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="968"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="973"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="978"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="979"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="984"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="989"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1149"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="999"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1025"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1030"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1035"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1036"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1041"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1046"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1206"/>
         <source>Insert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="944"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="985"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="988"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1000"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1042"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1045"/>
         <source>Summarize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="945"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="990"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1148"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1001"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1047"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1205"/>
         <source>Translate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="946"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1150"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1002"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1207"/>
         <source>Generate synopsis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="947"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="983"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1156"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1157"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1163"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1164"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1172"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1003"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1040"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1213"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1214"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1220"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1221"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1229"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1230"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1232"/>
         <source>Generate</source>
         <translation>Згенераваць</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="960"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1017"/>
         <source>Go back to list of assistant functions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="963"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1020"/>
         <source>Text to rephrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="964"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1021"/>
         <source>Rephrase in style of</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="965"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1022"/>
         <source>Keep empty to avoid style changing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="966"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1023"/>
         <source>Rephrased text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="970"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1027"/>
         <source>Text to expand</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="971"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1028"/>
         <source>Expanded text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="975"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1032"/>
         <source>Text to shorten</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="976"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1033"/>
         <source>Shortened text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="980"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1037"/>
         <source>Text before inserted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="981"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1038"/>
         <source>Text after inserted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="982"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1039"/>
         <source>Inserted text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="986"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1043"/>
         <source>Text to summarize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="987"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1044"/>
         <source>Summarized text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="991"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1048"/>
         <source>Text to translate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="992"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1049"/>
         <source>Translate to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="995"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1052"/>
         <source>Afrikaans</source>
         <translation>Afrikaans</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="996"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1053"/>
         <source>Albanian</source>
         <translation>Albanian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="997"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1054"/>
         <source>Amharic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="998"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1055"/>
         <source>Arabic</source>
         <translation>Arabic</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="999"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1056"/>
         <source>Armenian</source>
         <translation>Armenian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1000"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1057"/>
         <source>Assamese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1001"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1058"/>
         <source>Aymara</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1002"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1059"/>
         <source>Azerbaijani</source>
         <translation>Azerbaijani</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1003"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1060"/>
         <source>Bambara</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1004"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1061"/>
         <source>Basque</source>
         <translation>Basque</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1005"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1062"/>
         <source>Belarusian</source>
         <translation>Беларуская</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1006"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1063"/>
         <source>Bengali</source>
         <translation>Bengali</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1007"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1064"/>
         <source>Bhojpuri</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1008"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1065"/>
         <source>Bosnian</source>
         <translation>Bosnian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1009"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1066"/>
         <source>Bulgarian</source>
         <translation>Bulgarian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1010"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1067"/>
         <source>Catalan</source>
         <translation>Catalan</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1011"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1068"/>
         <source>Cebuano</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1012"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1069"/>
         <source>Chinese (Simplified)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1013"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1070"/>
         <source>Chinese (Traditional)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1014"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1071"/>
         <source>Corsican</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1015"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1072"/>
         <source>Croatian</source>
         <translation>Croatian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1016"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1073"/>
         <source>Czech</source>
         <translation>Czech</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1017"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1074"/>
         <source>Danish</source>
         <translation>Danish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1018"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1075"/>
         <source>Dhivehi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1019"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1076"/>
         <source>Dogri</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1020"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1077"/>
         <source>Dutch</source>
         <translation>Dutch</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1021"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1078"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1022"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1079"/>
         <source>Esperanto</source>
         <translation>Esperanto</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1023"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1080"/>
         <source>Estonian</source>
         <translation>Estonian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1024"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1081"/>
         <source>Ewe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1025"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1082"/>
         <source>Filipino (Tagalog)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1026"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1083"/>
         <source>Finnish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1027"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1084"/>
         <source>French</source>
         <translation>French</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1028"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1085"/>
         <source>Frisian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1029"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1086"/>
         <source>Galician</source>
         <translation>Galician</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1030"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1087"/>
         <source>Georgian</source>
         <translation>Georgian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1031"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1088"/>
         <source>German</source>
         <translation>German</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1032"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1089"/>
         <source>Greek</source>
         <translation>Greek</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1033"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1090"/>
         <source>Guarani</source>
         <translation>Guarani</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1034"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1091"/>
         <source>Gujarati</source>
         <translation>Gujarati</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1035"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1092"/>
         <source>Haitian Creole</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1036"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1093"/>
         <source>Hausa</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1037"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1094"/>
         <source>Hawaiian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1038"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1095"/>
         <source>Hebrew</source>
         <translation>Hebrew</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1039"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1096"/>
         <source>Hindi</source>
         <translation>Hindi</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1040"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1097"/>
         <source>Hmong</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1041"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1098"/>
         <source>Hungarian</source>
         <translation>Hungarian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1042"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1099"/>
         <source>Icelandic</source>
         <translation>Icelandic</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1043"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1100"/>
         <source>Igbo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1044"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1101"/>
         <source>Ilocano</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1045"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1102"/>
         <source>Indonesian</source>
         <translation>Indonesian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1046"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1103"/>
         <source>Irish</source>
         <translation>Irish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1047"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1104"/>
         <source>Italian</source>
         <translation>Italian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1048"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1105"/>
         <source>Japanese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1049"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1106"/>
         <source>Javanese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1050"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1107"/>
         <source>Kannada</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1051"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1108"/>
         <source>Kazakh</source>
         <translation>Kazakh</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1052"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1109"/>
         <source>Khmer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1053"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1110"/>
         <source>Kinyarwanda</source>
         <translation>Kinyarwanda</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1054"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1111"/>
         <source>Konkani</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1055"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1112"/>
         <source>Korean</source>
         <translation>Korean</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1056"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1113"/>
         <source>Krio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1057"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1114"/>
         <source>Kurdish</source>
         <translation>Kurdish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1058"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1115"/>
         <source>Kurdish (Sorani)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1059"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1116"/>
         <source>Kyrgyz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1060"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1117"/>
         <source>Lao</source>
         <translation>Lao</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1061"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1118"/>
         <source>Latin</source>
         <translation>Latin</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1062"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1119"/>
         <source>Latvian</source>
         <translation>Latvian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1063"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1120"/>
         <source>Lingala</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1064"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1121"/>
         <source>Lithuanian</source>
         <translation>Lithuanian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1065"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1122"/>
         <source>Luganda</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1066"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1123"/>
         <source>Luxembourgish</source>
         <translation>Luxembourgish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1067"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1124"/>
         <source>Macedonian</source>
         <translation>Macedonian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1068"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1125"/>
         <source>Maithili</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1069"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1126"/>
         <source>Malagasy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1070"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1127"/>
         <source>Malay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1071"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1128"/>
         <source>Malayalam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1072"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1129"/>
         <source>Maltese</source>
         <translation>Maltese</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1073"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1130"/>
         <source>Maori</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1074"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1131"/>
         <source>Marathi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1075"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1132"/>
         <source>Meiteilon (Manipuri)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1076"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1133"/>
         <source>Mizo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1077"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1134"/>
         <source>Mongolian</source>
         <translation>Mongolian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1078"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1135"/>
         <source>Myanmar (Burmese)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1079"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1136"/>
         <source>Nepali</source>
         <translation>Nepali</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1080"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1137"/>
         <source>Norwegian</source>
         <translation>Norwegian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1081"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1138"/>
         <source>Nyanja (Chichewa)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1082"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1139"/>
         <source>Odia (Oriya)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1083"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1140"/>
         <source>Oromo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1084"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1141"/>
         <source>Pashto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1085"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1142"/>
         <source>Persian</source>
         <translation>Persian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1086"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1143"/>
         <source>Polish</source>
         <translation>Polish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1087"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1144"/>
         <source>Portuguese (Portugal, Brazil)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1088"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1145"/>
         <source>Punjabi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1089"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1146"/>
         <source>Quechua</source>
         <translation>Quechua</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1090"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1147"/>
         <source>Romanian</source>
         <translation>Romanian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1091"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1148"/>
         <source>Russian</source>
         <translation>Russian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1092"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1149"/>
         <source>Samoan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1093"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1150"/>
         <source>Sanskrit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1094"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1151"/>
         <source>Scots Gaelic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1095"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1152"/>
         <source>Sepedi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1096"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1153"/>
         <source>Serbian</source>
         <translation>Serbian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1097"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1154"/>
         <source>Sesotho</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1098"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1155"/>
         <source>Shona</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1099"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1156"/>
         <source>Sindhi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1100"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1157"/>
         <source>Sinhala (Sinhalese)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1101"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1158"/>
         <source>Slovak</source>
         <translation>Slovak</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1102"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1159"/>
         <source>Slovenian</source>
         <translation>Slovenian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1103"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1160"/>
         <source>Somali</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1104"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1161"/>
         <source>Spanish</source>
         <translation>Spanish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1105"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1162"/>
         <source>Sundanese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1106"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1163"/>
         <source>Swahili</source>
         <translation>Swahili</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1107"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1164"/>
         <source>Swedish</source>
         <translation>Swedish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1108"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1165"/>
         <source>Tagalog (Filipino)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1109"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1166"/>
         <source>Tajik</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1110"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1167"/>
         <source>Tamil</source>
         <translation>Тамільскі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1111"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1168"/>
         <source>Tatar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1112"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1169"/>
         <source>Telugu</source>
         <translation>Telugu</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1113"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1170"/>
         <source>Thai</source>
         <translation>Thai</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1114"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1171"/>
         <source>Tigrinya</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1115"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1172"/>
         <source>Tsonga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1116"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1173"/>
         <source>Turkish</source>
         <translation>Turkish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1117"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1174"/>
         <source>Turkmen</source>
         <translation>Turkmen</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1118"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1175"/>
         <source>Twi (Akan)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1119"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1176"/>
         <source>Ukrainian</source>
         <translation>Ukrainian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1120"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1177"/>
         <source>Urdu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1121"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1178"/>
         <source>Uyghur</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1122"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1179"/>
         <source>Uzbek</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1123"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1180"/>
         <source>Vietnamese</source>
         <translation>Vietnamese</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1124"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1181"/>
         <source>Welsh</source>
         <translation>Welsh</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1125"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1182"/>
         <source>Xhosa</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1126"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1183"/>
         <source>Yiddish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1127"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1184"/>
         <source>Yoruba</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1128"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1185"/>
         <source>Zulu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1147"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1204"/>
         <source>Translated text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1151"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1208"/>
         <source>Synopsis length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1152"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1209"/>
         <source>short (20 words per scene)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1153"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1210"/>
         <source>medium (45 words per scene)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1154"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1211"/>
         <source>unlimitted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1155"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1212"/>
         <source>Synopsis</source>
         <translation>Сінопсіс</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1158"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1165"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1215"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1222"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1231"/>
         <source>Prompt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1159"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1216"/>
         <source>Insert result</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1160"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1217"/>
         <source>at the beginning of the document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1161"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1218"/>
         <source>at the cursor position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1162"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1219"/>
         <source>at the end of the document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1166"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1223"/>
         <source>Personal info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1167"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1224"/>
         <source>Physique</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1168"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1225"/>
         <source>Life</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1169"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1226"/>
         <source>Attitude</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1170"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1227"/>
         <source>Biography</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1171"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1228"/>
         <source>Photo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1174"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1234"/>
         <source>purchase</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9146,108 +10681,118 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateDocumentDialog</name>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="153"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="150"/>
         <source>Add folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="154"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="151"/>
         <source>Add text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="155"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="152"/>
         <source>Add character</source>
         <translation>Дадаць персанажа</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="156"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="153"/>
         <source>Add location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="157"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="154"/>
         <source>Add world</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="158"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="155"/>
         <source>Add screenplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="159"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="156"/>
         <source>Add comic book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="160"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="157"/>
         <source>Add audioplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="161"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="158"/>
         <source>Add stageplay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="162"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="159"/>
         <source>Add novel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="163"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="160"/>
+        <source>Add mind map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_document_dialog.cpp" line="161"/>
         <source>Add image gallery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="167"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="165"/>
         <source>Create a folder to group documents inside the story.</source>
         <translation>Стварыце тэчку для групоўкі дакументаў ўнутры гісторыі.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="169"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="167"/>
         <source>Create a plain text document to write out ideas and notes.</source>
         <translation>Стварыце просты тэкставы дакумент, каб запісваць ідэі і нататкі.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="171"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="169"/>
         <source>Create a document with full character&apos;s description to track his relations and follow his journey within the story.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="174"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="172"/>
         <source>Create a document to note down the location&apos;s description and keep the details.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="176"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="174"/>
         <source>Create a document with detailed world description to keep all the notes in one place</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="179"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="177"/>
         <source>Create a document set to streamline your work on the feature film, series, or animation.</source>
         <translation>Стварыце набор дакументаў, каб спрасціць працу над мастацкім фільмам, серыялам ці анімацыяй.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="182"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="180"/>
         <source>Create a document set to streamline your work on the comic book, graphic novel, or manga.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="185"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="183"/>
         <source>Create a document set to streamline your work on the audio drama, or podcast.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="187"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="185"/>
         <source>Create a document set to streamline your work on the stage play, or musical.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="189"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="187"/>
         <source>Create a document set to streamline your work on the fiction book.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_document_dialog.cpp" line="189"/>
+        <source>Create a mind map to brainstorm ideas and plan your story development.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9365,6 +10910,11 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="228"/>
+        <source>Mind map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="233"/>
         <source>Image gallery</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10633,6 +12183,180 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/menu_view.cpp" line="546"/>
         <source>Notifications preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Ui::MindMapSidebar</name>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="618"/>
+        <source>Solid line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="618"/>
+        <source>Dash line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="618"/>
+        <source>Dot line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="620"/>
+        <source>Parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="621"/>
+        <source>AI assistant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="623"/>
+        <source>Mind map name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="624"/>
+        <source>Mind map description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="627"/>
+        <source>To see node info and all their connections, select concrete node.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="628"/>
+        <source>To see connection details, select concrete connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="631"/>
+        <source>To create a new connection, hold the Option button and move one node to another.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="634"/>
+        <source>To create a new connection, hold the Alt button and move one node to another.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="640"/>
+        <source>Node text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="641"/>
+        <source>Node details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="643"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="647"/>
+        <source>Line type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="644"/>
+        <source>Connection text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="645"/>
+        <source>Connection details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="648"/>
+        <source>Group name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="649"/>
+        <source>Group details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="651"/>
+        <source>Give AI a short description of the idea or question you want it to provide ideas about.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Ui::MindMapView</name>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="151"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="258"/>
+        <source>New node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="265"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="758"/>
+        <source>Add child node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="271"/>
+        <source>Add sibling node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="292"/>
+        <source>New group</source>
+        <translation>Новая група</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="316"/>
+        <source>Choose the file to save image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="593"/>
+        <source>Writing ideas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="612"/>
+        <source>Ideas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="752"/>
+        <source>Unlock ability to edit mind map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="755"/>
+        <source>Add node</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="759"/>
+        <source>Add group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="762"/>
+        <source>Remove selected item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="765"/>
+        <source>AI assistant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="768"/>
+        <source>Show connections titles only for the selected nodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="769"/>
+        <source>Save mind map to image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -14401,37 +16125,37 @@ Discuss everything with fellow community of writers, share your work in progress
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1866"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1865"/>
         <source>Formatting</source>
         <translation>Фарматаванне</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1867"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1866"/>
         <source>Scene parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1868"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1867"/>
         <source>Comments</source>
         <translation>Каментары</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1869"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1868"/>
         <source>AI assistant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1870"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1869"/>
         <source>Bookmarks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1871"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1870"/>
         <source>Dictionaries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1874"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1873"/>
         <source>Start prompt from something like &quot;Write a screenplay about ...&quot;, or &quot;Write a short movie screenplay about ...&quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17599,17 +19323,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="704"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="707"/>
         <source>Solid line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="704"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="707"/>
         <source>Dash line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="704"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="707"/>
         <source>Dot line</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17718,17 +19442,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="391"/>
-        <source>Save relations scheme to image</source>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="389"/>
+        <source>Save worlds map to image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="393"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="391"/>
         <source>Here will be a worlds map.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="392"/>
         <source>It&apos;s time to create the first world!</source>
         <translation type="unfinished"></translation>
     </message>

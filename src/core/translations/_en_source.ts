@@ -3730,6 +3730,11 @@ If you want to continue editing novel text, switch to the corresponding module v
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3287"/>
+        <source>Conflicted version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="2266"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="3015"/>
         <source>Screenplay</source>

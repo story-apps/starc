@@ -321,14 +321,14 @@ void OnboardingNavigator::Implementation::initUiPage()
     auto englishItem = addLanguage("English", QLocale::English, 100);
     addLanguage("Español", QLocale::Spanish, 71);
     addLanguage("Esperanto", QLocale::Esperanto, 7);
-    addLanguage("Français", QLocale::French, 73);
+    addLanguage("Français", QLocale::French, 83);
     addLanguage("Galego", QLocale::Galician, 55);
     addLanguage("Hrvatski", QLocale::Croatian, 54);
     addLanguage("Indonesian", QLocale::Indonesian, 8);
     addLanguage("Italiano", QLocale::Italian, 49);
     addLanguage("Magyar", QLocale::Hungarian, 29);
     addLanguage("Nederlands", QLocale::Dutch, 98);
-    addLanguage("Polski", QLocale::Polish, 42);
+    addLanguage("Polski", QLocale::Polish, 56);
     addLanguage("Português", static_cast<QLocale::Language>(QLocale::LastLanguage + 1), 10);
     addLanguage("Português Brasileiro", QLocale::Portuguese, 79);
     addLanguage("Română", QLocale::Romanian, 50);
