@@ -489,7 +489,8 @@ QString SpellCheckTextEdit::removePunctutaion(const QString& _word) const
     //
     // ... слева
     //
-    while (!wordWithoutPunct.isEmpty() && wordWithoutPunct.at(0).isPunct()) {
+    while (!wordWithoutPunct.isEmpty() && wordWithoutPunct.at(0).isPunct()
+           && wordWithoutPunct.left(1) != "'") {
         wordWithoutPunct = wordWithoutPunct.mid(1);
     }
     //
