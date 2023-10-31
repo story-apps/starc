@@ -3277,9 +3277,32 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         //
         else {
             //
-            // TODO: Создать версию документа с конфликтом
+            // Если было много изменений, то создаём версию документа с конфликтом
             //
+            if (unsyncedChanges.size() > 4) {
+                const auto item = d->projectStructureModel->itemForIndex(
+                    d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex()));
+                Q_ASSERT(item);
+                const auto versionName = QString("%1 [%2]").arg(
+                    tr("Conflicted version"),
+                    QDateTime::currentDateTime().toString(Qt::ISODateWithMs));
+                const auto color = Qt::red;
+                const auto readOnly = false;
+                d->projectStructureModel->addItemVersion(item, versionName, color, readOnly,
+                                                         lastDocumentVersion);
+                d->view.active->setDocumentVersions(item->versions());
 
+                //
+                // Если версии скрыты, то отображим их список при добавлении новой
+                //
+                if (!d->showVersionsAction->isChecked()) {
+                    d->showVersionsAction->toggle();
+                }
+            }
+
+            //
+            // Удаляем локальные изменения, которые привели к конфликту
+            //
             for (auto change : unsyncedChanges) {
                 DataStorageLayer::StorageFacade::documentChangeStorage()->removeDocumentChange(
                     change);
