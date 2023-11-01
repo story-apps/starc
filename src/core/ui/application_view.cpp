@@ -194,16 +194,25 @@ void ApplicationView::restoreState(bool _onboaringPassed, const QVariantMap& _st
     }
     if (_state.contains(kViewGeometry)) {
         restoreGeometry(_state[kViewGeometry].toByteArray());
+    }
 
-        //
-        // Иногда (пока такое только на маке встречалось) бывает так, что приложение начинает
-        // загружать геометрию невалидную, поэтому сделана эта проверка и расширение размера вьюхи
-        //
-        constexpr int minSize = 100;
-        if (height() < minSize || width() < minSize) {
-            resize(Ui::DesignSystem::layout().px(1200), Ui::DesignSystem::layout().px(740));
-            move(screen()->availableGeometry().center() - QPoint(width() / 2, height() / 2));
-        }
+    //
+    // Почему-то иногда состояние геометрии может аффектить на видимость вьюхи, поэтому тут
+    // принудительно показываем её, чтобы не словить кейс, когда приложение запущено, а интерфейс не
+    // отображается
+    //
+    if (!isVisible()) {
+        setVisible(true);
+    }
+
+    //
+    // Иногда бывает так, что приложение после того, как станет видимым устанавливает геометрию окна
+    // невалидной, поэтому сделана данная проверка и расширение размера вьюхи
+    //
+    constexpr int minSize = 100;
+    if (height() < minSize || width() < minSize) {
+        resize(Ui::DesignSystem::layout().px(1200), Ui::DesignSystem::layout().px(740));
+        move(screen()->availableGeometry().center() - QPoint(width() / 2, height() / 2));
     }
 
     //
