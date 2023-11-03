@@ -80,7 +80,9 @@ Section "App files section" SecFiles
 
   ; Добавление программы в список установленных программ системы
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Starc" "DisplayName" "Story Architect"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Starc" "Publisher" "Story Apps LLC"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Starc" "Publisher" "Story Apps"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Starc" "DisplayVersion" "$%APP_VERSION%"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Starc" "Version" "$%APP_VERSION%"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Starc" "DisplayIcon" "$INSTDIR\starcapp.exe"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Starc" "UninstallString" "$INSTDIR\uninstall.exe"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Starc" "UrlInfoAbout" "https://starc.app"
