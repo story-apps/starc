@@ -143,7 +143,7 @@ void CharactersModel::moveCharacter(const QString& _name, int _index)
         return;
     }
 
-    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
+    const auto nameCorrected = TextHelper::smartToUpper(_name.trimmed());
     for (int index = 0; index < d->characterModels.size(); ++index) {
         auto characterModel = d->characterModels[index];
         if (characterModel->name() == nameCorrected) {
@@ -160,7 +160,7 @@ void CharactersModel::moveCharacter(const QString& _name, int _index)
 
 bool CharactersModel::exists(const QString& _name) const
 {
-    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
+    const auto nameCorrected = TextHelper::smartToUpper(_name.trimmed());
     for (const auto character : std::as_const(d->characterModels)) {
         if (character->name() == nameCorrected) {
             return true;
@@ -183,7 +183,7 @@ CharacterModel* CharactersModel::character(const QUuid& _uuid) const
 
 CharacterModel* CharactersModel::character(const QString& _name) const
 {
-    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
+    const auto nameCorrected = TextHelper::smartToUpper(_name.trimmed());
     for (const auto character : std::as_const(d->characterModels)) {
         if (character->name() == nameCorrected) {
             return character;
@@ -205,7 +205,7 @@ CharacterModel* CharactersModel::character(int _row) const
 QVector<CharacterModel*> CharactersModel::characters(const QString& _name) const
 {
     QVector<CharacterModel*> characters;
-    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
+    const auto nameCorrected = TextHelper::smartToUpper(_name.trimmed());
     for (const auto character : std::as_const(d->characterModels)) {
         if (character->name() == nameCorrected) {
             characters.append(character);

@@ -143,7 +143,7 @@ void LocationsModel::moveLocation(const QString& _name, int _index)
         return;
     }
 
-    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
+    const auto nameCorrected = TextHelper::smartToUpper(_name.trimmed());
     for (int index = 0; index < d->locationModels.size(); ++index) {
         auto locationModel = d->locationModels[index];
         if (locationModel->name() == nameCorrected) {
@@ -160,7 +160,7 @@ void LocationsModel::moveLocation(const QString& _name, int _index)
 
 bool LocationsModel::exists(const QString& _name) const
 {
-    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
+    const auto nameCorrected = TextHelper::smartToUpper(_name.trimmed());
     for (const auto location : std::as_const(d->locationModels)) {
         if (location->name() == nameCorrected) {
             return true;
@@ -183,7 +183,7 @@ LocationModel* LocationsModel::location(const QUuid& _uuid) const
 
 LocationModel* LocationsModel::location(const QString& _name) const
 {
-    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
+    const auto nameCorrected = TextHelper::smartToUpper(_name.trimmed());
     for (const auto location : std::as_const(d->locationModels)) {
         if (location->name() == nameCorrected) {
             return location;
@@ -205,7 +205,7 @@ LocationModel* LocationsModel::location(int _row) const
 QVector<LocationModel*> LocationsModel::locations(const QString& _name) const
 {
     QVector<LocationModel*> locations;
-    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
+    const auto nameCorrected = TextHelper::smartToUpper(_name.trimmed());
     for (const auto location : std::as_const(d->locationModels)) {
         if (location->name() == nameCorrected) {
             locations.append(location);

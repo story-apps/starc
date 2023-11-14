@@ -131,7 +131,7 @@ void WorldsModel::createWorld(const QString& _name, const QByteArray& _content)
 
 bool WorldsModel::exists(const QString& _name) const
 {
-    const auto nameCorrected = TextHelper::smartToUpper(_name.simplified());
+    const auto nameCorrected = TextHelper::smartToUpper(_name.trimmed());
     for (const auto world : std::as_const(d->worldModels)) {
         if (world->name() == nameCorrected) {
             return true;
