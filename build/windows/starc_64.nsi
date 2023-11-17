@@ -152,5 +152,11 @@ Function .onInit
   InitPluginsDir
   !insertmacro MUI_LANGDLL_DISPLAY
 
+  IfSilent 0 +5
+  CreateDirectory "$SMPROGRAMS\Starc"
+  CreateShortCut "$SMPROGRAMS\Starc\Story Architect.lnk" "$INSTDIR\starcapp.exe"
+  CreateShortCut "$SMPROGRAMS\Starc\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+  CreateShortcut "$DESKTOP\Story Architect.lnk" "$INSTDIR\starcapp.exe" "" "$INSTDIR\starcapp.exe" 0
+
 FunctionEnd
 
