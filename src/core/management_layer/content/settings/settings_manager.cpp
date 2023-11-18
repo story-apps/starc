@@ -1457,6 +1457,44 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     //
     // ... сам менеджер шаблона
     //
+    connect(d->templateOptionsManager, &TemplateOptionsManager::templateSaved, this,
+            [this](Domain::DocumentObjectType _templateType, const QString& _templateId) {
+                switch (_templateType) {
+                case Domain::DocumentObjectType::SimpleText: {
+                    d->view->setSimpleTextEditorDefaultTemplate(_templateId);
+                    break;
+                }
+
+                case Domain::DocumentObjectType::Screenplay: {
+                    d->view->setScreenplayEditorDefaultTemplate(_templateId);
+                    break;
+                }
+
+                case Domain::DocumentObjectType::ComicBook: {
+                    d->view->setComicBookEditorDefaultTemplate(_templateId);
+                    break;
+                }
+
+                case Domain::DocumentObjectType::Audioplay: {
+                    d->view->setAudioplayEditorDefaultTemplate(_templateId);
+                    break;
+                }
+
+                case Domain::DocumentObjectType::Stageplay: {
+                    d->view->setStageplayEditorDefaultTemplate(_templateId);
+                    break;
+                }
+
+                case Domain::DocumentObjectType::Novel: {
+                    d->view->setNovelEditorDefaultTemplate(_templateId);
+                    break;
+                }
+
+                default: {
+                    break;
+                }
+                }
+            });
     connect(d->templateOptionsManager, &TemplateOptionsManager::closeRequested, this, [this] {
         d->toolBar->showDefaultPage();
         d->navigator->showDefaultPage();

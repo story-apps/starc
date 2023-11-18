@@ -46,6 +46,11 @@ public:
 
 signals:
     /**
+     * @brief Шаблон был сохранён
+     */
+    void templateSaved(Domain::DocumentObjectType _templateType, const QString& _templateId);
+
+    /**
      * @brief Запрос на закрытие редактора шаблона
      */
     void closeRequested();

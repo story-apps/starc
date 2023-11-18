@@ -445,6 +445,7 @@ TemplateOptionsManager::TemplateOptionsManager(QObject* _parent, QWidget* _paren
                 //
                 if (_buttonInfo.id == kYesButtonId) {
                     d->saveTemplate();
+                    emit templateSaved(d->currentDocumentType, d->currentTemplate.get().id());
                 }
 
                 emit closeRequested();
@@ -517,8 +518,10 @@ TemplateOptionsManager::TemplateOptionsManager(QObject* _parent, QWidget* _paren
                 d->updateParagraphParameters(d->paragraphsView->currentParagraphType());
             });
 
-    connect(d->viewToolBar, &Ui::ScreenplayTemplateViewToolBar::savePressed, this,
-            [this] { d->saveTemplate(); });
+    connect(d->viewToolBar, &Ui::ScreenplayTemplateViewToolBar::savePressed, this, [this] {
+        d->saveTemplate();
+        emit templateSaved(d->currentDocumentType, d->currentTemplate.get().id());
+    });
     connect(d->paragraphsView, &Ui::ScreenplayTemplateParagraphsView::currentParagraphTypeChanged,
             this,
             [this](BusinessLayer::TextParagraphType _currentType,
