@@ -2583,15 +2583,8 @@ void PageTextEdit::inputMethodEvent(QInputMethodEvent* e)
         setEditFocus(true);
 #endif
 
-    //
-    // Обрабатываем событие, только если внутри что-то есть, в противном случае это только создаёт
-    // излишние события изменения текста, хотя по факту текст не меняется
-    //
-    if (!e->preeditString().isEmpty() || !e->commitString().isEmpty() || e->replacementStart() != 0
-        || e->replacementLength() != 0 || e->attributes().size() > 0) {
-        d->sendControlEvent(e);
-        ensureCursorVisible();
-    }
+    d->sendControlEvent(e);
+    ensureCursorVisible();
 }
 
 /*!\reimp
