@@ -99,5 +99,12 @@ public:
      * @brief Применить заданный функтор форматирования для выделенного текста в курсоре
      */
     static void updateSelectionFormatting(
-        QTextCursor _cursor, std::function<QTextCharFormat(const QTextCharFormat&)> _updateFormat);
+        QTextCursor& _cursor, std::function<QTextCharFormat(const QTextCharFormat&)> _updateFormat);
+
+    /**
+     * @brief Применить заданный формат к абзацу, в котором установлен курсор, сохраняя при этом
+     *        нюансы исходного форматирования текста
+     */
+    static void applyTextFormattingForBlock(QTextCursor& _cursor,
+                                            const QTextCharFormat& _newFormat);
 };

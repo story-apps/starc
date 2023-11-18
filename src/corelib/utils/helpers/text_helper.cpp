@@ -437,7 +437,7 @@ int TextHelper::wordsCount(const QString& _text)
 }
 
 void TextHelper::updateSelectionFormatting(
-    QTextCursor _cursor, std::function<QTextCharFormat(const QTextCharFormat&)> _updateFormat)
+    QTextCursor& _cursor, std::function<QTextCharFormat(const QTextCharFormat&)> _updateFormat)
 {
     if (!_cursor.hasSelection()) {
         return;
@@ -484,4 +484,40 @@ void TextHelper::updateSelectionFormatting(
     }
 
     _cursor.endEditBlock();
+}
+
+void TextHelper::applyTextFormattingForBlock(QTextCursor& _cursor, const QTextCharFormat& _newFormat)
+{
+    _cursor.movePosition(QTextCursor::StartOfBlock);
+
+    //
+    // Если в блоке есть выделения, обновляем цвет только тех частей, которые не входят в
+    // выделения
+    //
+    QTextBlock currentBlock = _cursor.block();
+    if (!currentBlock.textFormats().isEmpty()) {
+        const auto formats = currentBlock.textFormats();
+        for (const auto& range : formats) {
+            auto newFormat = _newFormat;
+            newFormat.setFontWeight(range.format.fontWeight());
+            newFormat.setFontItalic(range.format.fontItalic());
+            newFormat.setFontUnderline(range.format.fontUnderline());
+            newFormat.setFontStrikeOut(range.format.fontStrikeOut());
+            newFormat.setBackground(range.format.background());
+            newFormat.setForeground(range.format.foreground());
+
+            _cursor.setPosition(currentBlock.position() + range.start);
+            _cursor.setPosition(_cursor.position() + range.length, QTextCursor::KeepAnchor);
+            _cursor.mergeCharFormat(newFormat);
+        }
+    }
+    //
+    // Если выделений нет, обновляем блок целиком
+    //
+    else {
+        _cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        _cursor.mergeCharFormat(_newFormat);
+    }
+
+    _cursor.clearSelection();
 }

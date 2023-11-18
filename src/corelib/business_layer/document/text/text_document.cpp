@@ -1640,35 +1640,7 @@ void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
     // т.к. в блоке могут находиться фрагменты в другом стиле
     // + сохраняем форматирование выделений
     //
-    {
-        cursor.movePosition(QTextCursor::StartOfBlock);
-
-        //
-        // Если в блоке есть выделения, обновляем цвет только тех частей, которые не входят в
-        // выделения
-        //
-        QTextBlock currentBlock = cursor.block();
-        if (!currentBlock.textFormats().isEmpty()) {
-            const auto formats = currentBlock.textFormats();
-            for (const auto& range : formats) {
-                if (range.format.boolProperty(TextBlockStyle::PropertyIsReviewMark)) {
-                    continue;
-                }
-                cursor.setPosition(currentBlock.position() + range.start);
-                cursor.setPosition(cursor.position() + range.length, QTextCursor::KeepAnchor);
-                cursor.mergeCharFormat(newBlockStyle.charFormat());
-            }
-        }
-        //
-        // Если выделений нет, обновляем блок целиком
-        //
-        else {
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            cursor.mergeCharFormat(newBlockStyle.charFormat());
-        }
-
-        cursor.clearSelection();
-    }
+    TextHelper::applyTextFormattingForBlock(cursor, newBlockStyle.charFormat());
 
     //
     // Для заголовка папки нужно создать завершение
