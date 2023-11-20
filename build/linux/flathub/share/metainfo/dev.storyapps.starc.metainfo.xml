@@ -33,6 +33,7 @@
         <keyword>fiction writing</keyword>
         <keyword>ai assistant</keyword>
         <keyword>chatgpt</keyword>
+        <keyword>mind map</keyword>
     </keywords>
     <url type="homepage">https://starc.app</url>
     <url type="bugtracker">https://github.com/story-apps/starc/issues</url>
@@ -62,6 +63,7 @@
             <li>Timer for organizing writing sprints</li>
             <li>Corkboard</li>
             <li>Statistical and visual reports</li>
+            <li>Mind maps</li>
             <li>and much more</li>
         </ul>
         <p>Starc is being developed with strong authors’ involvement and support so we don’t waste the app performance on the features you don’t need.</p>
@@ -92,6 +94,10 @@
         <screenshot>
             <caption>Screenplay index cards module</caption>
             <image>https://starc.app/media/main/screenplay-cards-columns.png</image>
+        </screenshot>
+        <screenshot>
+            <caption>Mind maps module</caption>
+            <image>https://starc.app/media/main/mind-maps.png</image>
         </screenshot>
         <screenshot>
             <caption>Screenplay statistics</caption>
