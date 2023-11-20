@@ -80,9 +80,10 @@ public:
     void bind(const QString& _viewMimeType, const QString& _navigatorMimeType) const;
 
     /**
-     * @brief Связать редакторы одного типа
+     * @brief Синхронизировать модель и связать редакторы одного типа
      */
-    void bindEditors(const QString& _viewMimeType) const;
+    void syncModelAndBindEditors(const QString& _viewMimeType, BusinessLayer::AbstractModel* _model,
+                                 bool _isPrimaryView) const;
 
     /**
      * @brief Активировать полноэкранный режим

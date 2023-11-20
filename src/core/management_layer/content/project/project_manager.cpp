@@ -4048,7 +4048,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     Log::debug("Activate plugin view");
     Ui::IDocumentView* view = nullptr;
-    if (d->view.active == d->view.left) {
+    const bool isPrimaryView = d->view.active == d->view.left;
+    if (isPrimaryView) {
         view = d->pluginsBuilder.activateView(viewMimeType, d->view.activeModel);
     } else {
         view = d->pluginsBuilder.activateSecondView(viewMimeType, d->view.activeModel);
@@ -4071,7 +4072,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Связываем редакторы
     //
-    d->pluginsBuilder.bindEditors(viewMimeType);
+    d->pluginsBuilder.syncModelAndBindEditors(viewMimeType, d->view.activeModel, isPrimaryView);
 
     //
     // Настроим опции редактора

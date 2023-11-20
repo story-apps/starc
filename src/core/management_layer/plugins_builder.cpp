@@ -668,7 +668,8 @@ void PluginsBuilder::bind(const QString& _viewMimeType, const QString& _navigato
     navigatorPlugin->bind(viewPlugin);
 }
 
-void PluginsBuilder::bindEditors(const QString& _viewMimeType) const
+void PluginsBuilder::syncModelAndBindEditors(const QString& _viewMimeType, BusinessLayer::AbstractModel* _model,
+                                 bool _isPrimaryView) const
 {
     if (_viewMimeType.isEmpty()) {
         return;
@@ -709,6 +710,20 @@ void PluginsBuilder::bindEditors(const QString& _viewMimeType) const
     for (auto iter = d->plugins.begin(); iter != d->plugins.end(); ++iter) {
         if (iter.key().startsWith(viewGroupMimeType)) {
             pluginsFiltered.insert(iter.key(), iter.value());
+        }
+    }
+    //
+    // Установим им единую модель
+    //
+    for (auto i = pluginsFiltered.begin(); i != pluginsFiltered.end(); ++i) {
+        if (_isPrimaryView) {
+            if (i.value()->view() != nullptr) {
+                i.value()->view(_model);
+            }
+        } else {
+            if (i.value()->secondaryView() != nullptr) {
+                i.value()->secondaryView(_model);
+            }
         }
     }
     //
