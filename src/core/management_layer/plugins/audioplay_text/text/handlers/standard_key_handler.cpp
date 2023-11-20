@@ -228,8 +228,12 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     // Идём через один последующий символ до следующей строки и ищем в ней лучшее совпадение
     //
     while (!cursor.atEnd()) {
+        const auto cursorPositionBeforeMovement = cursor.position();
         if (!cursor.movePosition(TextCursor::NextCharacter, cursorMoveMode)) {
             cursor.setPosition(cursor.position() + 1, cursorMoveMode);
+        }
+        if (cursor.position() == cursorPositionBeforeMovement) {
+            break;
         }
 
         //
@@ -266,8 +270,12 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     const auto previousLineCursorRect = cursorRect();
     auto bestXDelta = findXDelta();
     while (!cursor.atEnd()) {
+        const auto cursorPositionBeforeMovement = cursor.position();
         if (!cursor.movePosition(TextCursor::NextCharacter, cursorMoveMode)) {
             cursor.setPosition(cursor.position() + 1, cursorMoveMode);
+        }
+        if (cursor.position() == cursorPositionBeforeMovement) {
+            break;
         }
 
         //
