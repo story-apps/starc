@@ -976,7 +976,8 @@ bool BaseTextEdit::updateEnteredText(const QKeyEvent* _event)
     // удаляем этот лишний пробел
     //
     if (d->avoidMultipleSpaces
-        && (cursorBackwardText == " " || cursorBackwardText.endsWith("  "))) {
+        && (cursorBackwardText == " " || cursorBackwardText.endsWith("  ")
+            || (cursorBackwardText.endsWith(" ") && cursorForwardText.startsWith(" ")))) {
         cursor.deletePreviousChar();
 
         return true;

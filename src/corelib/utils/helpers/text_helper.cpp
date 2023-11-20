@@ -486,7 +486,8 @@ void TextHelper::updateSelectionFormatting(
     _cursor.endEditBlock();
 }
 
-void TextHelper::applyTextFormattingForBlock(QTextCursor& _cursor, const QTextCharFormat& _newFormat)
+void TextHelper::applyTextFormattingForBlock(QTextCursor& _cursor,
+                                             const QTextCharFormat& _newFormat)
 {
     _cursor.movePosition(QTextCursor::StartOfBlock);
 
