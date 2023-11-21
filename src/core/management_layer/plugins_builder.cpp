@@ -668,8 +668,9 @@ void PluginsBuilder::bind(const QString& _viewMimeType, const QString& _navigato
     navigatorPlugin->bind(viewPlugin);
 }
 
-void PluginsBuilder::syncModelAndBindEditors(const QString& _viewMimeType, BusinessLayer::AbstractModel* _model,
-                                 bool _isPrimaryView) const
+void PluginsBuilder::syncModelAndBindEditors(const QString& _viewMimeType,
+                                             BusinessLayer::AbstractModel* _model,
+                                             bool _isPrimaryView) const
 {
     if (_viewMimeType.isEmpty()) {
         return;

@@ -972,13 +972,23 @@ bool BaseTextEdit::updateEnteredText(const QKeyEvent* _event)
     }
 
     //
-    // Если была попытка ввести несколько пробелов подряд, или пробел в начале строки,
-    // удаляем этот лишний пробел
+    // Если запрещено вводить несколько пробелов подряд
     //
-    if (d->avoidMultipleSpaces
-        && (cursorBackwardText == " " || cursorBackwardText.endsWith("  ")
-            || (cursorBackwardText.endsWith(" ") && cursorForwardText.startsWith(" ")))) {
-        cursor.deletePreviousChar();
+    if (d->avoidMultipleSpaces) {
+        //
+        // ... и была попытка ввести несколько пробелов подряд, или пробел в начале строки,
+        //     удаляем этот лишний пробел
+        //
+        if (cursorBackwardText == " " || cursorBackwardText.endsWith("  ")) {
+            cursor.deletePreviousChar();
+        }
+        //
+        // ... в кейсе когда пробел ставится после слова, но перед двумя пробелами, как бы смещаем
+        //     курсор внутрь этих двух пробелов
+        //
+        else if (cursorBackwardText.endsWith(" ") && cursorForwardText.startsWith("  ")) {
+            cursor.deleteChar();
+        }
 
         return true;
     }
