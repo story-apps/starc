@@ -36,6 +36,7 @@ public:
     Qt::Orientation orientation = Qt::Horizontal;
     Widget* handle = nullptr;
     QVector<qreal> sizes;
+    QVector<int> lastSizes;
     QVector<QWidget*> widgets;
 
     FloatingToolBar* showHiddenPanelToolbar = nullptr;
@@ -182,10 +183,26 @@ Splitter::Splitter(QWidget* _parent)
 {
     d->handle->installEventFilter(this);
 
-    connect(d->showLeftPanelAction, &QAction::triggered, this, [this] { setSizes({ 2, 7 }); });
-    connect(d->showRightPanelAction, &QAction::triggered, this, [this] { setSizes({ 7, 2 }); });
-    connect(d->hideLeftPanelAction, &QAction::triggered, this, [this] { setSizes({ 0, 1 }); });
-    connect(d->hideRightPanelAction, &QAction::triggered, this, [this] { setSizes({ 1, 0 }); });
+    connect(d->showLeftPanelAction, &QAction::triggered, this, [this] {
+        if (d->lastSizes.isEmpty()) {
+            d->lastSizes = { 2, 7 };
+        }
+        setSizes(d->lastSizes);
+    });
+    connect(d->showRightPanelAction, &QAction::triggered, this, [this] {
+        if (d->lastSizes.isEmpty()) {
+            d->lastSizes = { 7, 2 };
+        }
+        setSizes(d->lastSizes);
+    });
+    connect(d->hideLeftPanelAction, &QAction::triggered, this, [this] {
+        d->lastSizes = sizes();
+        setSizes({ 0, 1 });
+    });
+    connect(d->hideRightPanelAction, &QAction::triggered, this, [this] {
+        d->lastSizes = sizes();
+        setSizes({ 1, 0 });
+    });
     connect(&d->showHiddenPanelToolbarPositionAnimation, &QVariantAnimation::valueChanged, this,
             [this] {
                 d->showHiddenPanelToolbar->move(
