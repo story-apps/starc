@@ -21,6 +21,16 @@ public:
     ~CreateDocumentDialog() override;
 
     /**
+     * @brief Последний выбранный тип документов
+     */
+    Domain::DocumentObjectType lastSelectedType() const;
+
+    /**
+     * @brief Сохранить выбранный тип элемента
+     */
+    void saveSelectedType();
+
+    /**
      * @brief Выбрать документ заданного типа
      */
     void setDocumentType(Domain::DocumentObjectType _type);

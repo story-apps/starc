@@ -18,9 +18,14 @@
 
 #include <QGridLayout>
 #include <QScrollArea>
+#include <QSettings>
 
 
 namespace Ui {
+
+namespace {
+const QLatin1String kLastSelectedType("widgets/create-document-dialog/last-selected-type");
+}
 
 class CreateDocumentDialog::Implementation
 {
@@ -283,12 +288,38 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
 
 CreateDocumentDialog::~CreateDocumentDialog() = default;
 
+Domain::DocumentObjectType CreateDocumentDialog::lastSelectedType() const
+{
+    return static_cast<Domain::DocumentObjectType>(QSettings().value(kLastSelectedType).toInt());
+}
+
+void CreateDocumentDialog::saveSelectedType()
+{
+    Domain::DocumentObjectType documentType = Domain::DocumentObjectType::Undefined;
+    for (auto option : std::as_const(d->options)) {
+        if (option->isChecked()) {
+            documentType = option->documentType();
+            break;
+        }
+    }
+    if (documentType == Domain::DocumentObjectType::Undefined) {
+        return;
+    }
+
+    QSettings().setValue(kLastSelectedType, static_cast<int>(documentType));
+}
+
 void CreateDocumentDialog::setDocumentType(Domain::DocumentObjectType _type)
 {
     for (auto option : std::as_const(d->options)) {
         if (option->documentType() == _type) {
             option->setChecked(true);
-            d->content->ensureWidgetVisible(option);
+            //
+            // Скорректируем прокрутку для опций идущих за первой группой
+            //
+            if (option->documentType() >= Domain::DocumentObjectType::Characters) {
+                d->content->ensureWidgetVisible(option);
+            }
             break;
         }
     }

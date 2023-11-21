@@ -711,96 +711,107 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
         dialog->setDocumentType(Domain::DocumentObjectType::Location);
     } else if (currentItem->type() == Domain::DocumentObjectType::Worlds) {
         dialog->setDocumentType(Domain::DocumentObjectType::World);
+    } else {
+        dialog->setDocumentType(dialog->lastSelectedType());
     }
 
-    connect(
-        dialog, &Ui::CreateDocumentDialog::createPressed, navigator,
-        [this, currentItemIndex, dialog](Domain::DocumentObjectType _type, const QString& _name) {
-            if (_type == Domain::DocumentObjectType::Character) {
-                auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
-                    Domain::DocumentObjectType::Characters);
-                auto model = modelsFacade.modelFor(document);
-                auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(model);
-                Q_ASSERT(charactersModel);
-                if (charactersModel->exists(_name)) {
-                    dialog->setNameError(tr("Character with this name already exists"));
-                    return;
+    connect(dialog, &Ui::CreateDocumentDialog::createPressed, navigator,
+            [this, sourceType = _type, currentItemIndex, dialog](Domain::DocumentObjectType _type,
+                                                                 const QString& _name) {
+                if (_type == Domain::DocumentObjectType::Character) {
+                    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Characters);
+                    auto model = modelsFacade.modelFor(document);
+                    auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(model);
+                    Q_ASSERT(charactersModel);
+                    if (charactersModel->exists(_name)) {
+                        dialog->setNameError(tr("Character with this name already exists"));
+                        return;
+                    }
+                } else if (_type == Domain::DocumentObjectType::Location) {
+                    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Locations);
+                    auto model = modelsFacade.modelFor(document);
+                    auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(model);
+                    Q_ASSERT(locationsModel);
+                    if (locationsModel->exists(_name)) {
+                        dialog->setNameError(tr("Location with this name already exists"));
+                        return;
+                    }
+                } else if (_type == Domain::DocumentObjectType::World) {
+                    auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
+                        Domain::DocumentObjectType::Worlds);
+                    auto model = modelsFacade.modelFor(document);
+                    auto worldsModel = qobject_cast<BusinessLayer::WorldsModel*>(model);
+                    Q_ASSERT(worldsModel);
+                    if (worldsModel->exists(_name)) {
+                        dialog->setNameError(tr("World with this name already exists"));
+                        return;
+                    }
                 }
-            } else if (_type == Domain::DocumentObjectType::Location) {
-                auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
-                    Domain::DocumentObjectType::Locations);
-                auto model = modelsFacade.modelFor(document);
-                auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(model);
-                Q_ASSERT(locationsModel);
-                if (locationsModel->exists(_name)) {
-                    dialog->setNameError(tr("Location with this name already exists"));
-                    return;
+
+                //
+                // Определим индекс родительского элемента, ищем именно папку
+                //
+                auto parentIndex
+                    = dialog->needInsertIntoParent() ? currentItemIndex : currentItemIndex.parent();
+                auto parentItem = projectStructureModel->itemForIndex(parentIndex);
+                while (parentIndex.isValid() && parentItem != nullptr
+                       && parentItem->type() != Domain::DocumentObjectType::Folder) {
+                    parentIndex = parentIndex.parent();
+                    parentItem = projectStructureModel->itemForIndex(parentIndex);
                 }
-            } else if (_type == Domain::DocumentObjectType::World) {
-                auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
-                    Domain::DocumentObjectType::Worlds);
-                auto model = modelsFacade.modelFor(document);
-                auto worldsModel = qobject_cast<BusinessLayer::WorldsModel*>(model);
-                Q_ASSERT(worldsModel);
-                if (worldsModel->exists(_name)) {
-                    dialog->setNameError(tr("World with this name already exists"));
-                    return;
+
+                //
+                // Определим индекс элемента для выделения
+                //
+                const auto addedItemIndex
+                    = projectStructureModel->addDocument(_type, _name, parentIndex);
+                QModelIndex itemForSelectIndex = addedItemIndex;
+                //
+                // ... в зависимости от типа, выбираем потенциально желаемый к редактированию
+                // документ
+                //     сейчас это просто выбор сценария для всех видов бандлов
+                //
+                constexpr int invalidIndex = -1;
+                int childIndex = invalidIndex;
+                switch (_type) {
+                case Domain::DocumentObjectType::Screenplay:
+                case Domain::DocumentObjectType::Novel: {
+                    childIndex = 3;
+                    break;
                 }
-            }
+                case Domain::DocumentObjectType::Audioplay:
+                case Domain::DocumentObjectType::ComicBook:
+                case Domain::DocumentObjectType::Stageplay: {
+                    childIndex = 2;
+                    break;
+                }
+                default: {
+                    break;
+                }
+                }
+                if (childIndex != invalidIndex) {
+                    itemForSelectIndex
+                        = projectStructureModel->index(childIndex, 0, itemForSelectIndex);
+                }
+                const auto mappedAddedItemIndex
+                    = projectStructureProxyModel->mapFromSource(itemForSelectIndex);
+                navigator->setCurrentIndex(mappedAddedItemIndex);
 
-            //
-            // Определим индекс родительского элемента, ищем именно папку
-            //
-            auto parentIndex
-                = dialog->needInsertIntoParent() ? currentItemIndex : currentItemIndex.parent();
-            auto parentItem = projectStructureModel->itemForIndex(parentIndex);
-            while (parentIndex.isValid() && parentItem != nullptr
-                   && parentItem->type() != Domain::DocumentObjectType::Folder) {
-                parentIndex = parentIndex.parent();
-                parentItem = projectStructureModel->itemForIndex(parentIndex);
-            }
+                //
+                // Если исходный тип документа задан не был, то сохраним выбранный, чтобы
+                // переиспользовать его при следующем вызове диалога добавления документа
+                //
+                if (sourceType == Domain::DocumentObjectType::Undefined) {
+                    dialog->saveSelectedType();
+                }
 
-            //
-            // Определим индекс элемента для выделения
-            //
-            const auto addedItemIndex
-                = projectStructureModel->addDocument(_type, _name, parentIndex);
-            QModelIndex itemForSelectIndex = addedItemIndex;
-            //
-            // ... в зависимости от типа, выбираем потенциально желаемый к редактированию документ
-            //     сейчас это просто выбор сценария для всех видов бандлов
-            //
-            constexpr int invalidIndex = -1;
-            int childIndex = invalidIndex;
-            switch (_type) {
-            case Domain::DocumentObjectType::Screenplay:
-            case Domain::DocumentObjectType::Novel: {
-                childIndex = 3;
-                break;
-            }
-            case Domain::DocumentObjectType::Audioplay:
-            case Domain::DocumentObjectType::ComicBook:
-            case Domain::DocumentObjectType::Stageplay: {
-                childIndex = 2;
-                break;
-            }
-            default: {
-                break;
-            }
-            }
-            if (childIndex != invalidIndex) {
-                itemForSelectIndex
-                    = projectStructureModel->index(childIndex, 0, itemForSelectIndex);
-            }
-            const auto mappedAddedItemIndex
-                = projectStructureProxyModel->mapFromSource(itemForSelectIndex);
-            navigator->setCurrentIndex(mappedAddedItemIndex);
-
-            //
-            // Скрываем сам диалог
-            //
-            dialog->hideDialog();
-        });
+                //
+                // Скрываем сам диалог
+                //
+                dialog->hideDialog();
+            });
     connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog,
             &Ui::CreateDocumentDialog::deleteLater);
 
