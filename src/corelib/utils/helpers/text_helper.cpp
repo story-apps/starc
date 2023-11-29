@@ -109,6 +109,13 @@ static void initFontMetrics()
     addFontDelta("Courier Final Draft", 2318.0);
     addFontDelta("Arial", 2355.0);
     addFontDelta("Times New Roman", 2355.0);
+
+    //
+    // Прочие шрифты
+    //
+#ifndef Q_OS_WIN
+    sFontToLineSpacing.insert("Roboto", 0.98);
+#endif
 }
 
 } // namespace
@@ -140,20 +147,11 @@ qreal TextHelper::fineLineSpacing(const QFont& _font)
     initFontMetrics();
 
     const QFontMetricsF metrics(_font);
-
-    const qreal platformDelta =
-#ifdef Q_OS_LINUX
-        //
-        // 09.04.2020 Ubuntu 18.04.4
-        // Не знаю почему, но ручками пришлось подобрать данный коэффициент,
-        // только при нём получается такой же вывод как и в ворде для разных шрифтов
-        // тестировал как минимум на Courier New, Courier Prime и ещё паре каких были в системе
-        //
-        0.2;
-#else
-        0;
-#endif
-    return metrics.lineSpacing() + sFontToLineSpacing.value(_font.family(), platformDelta);
+    const qreal platformDelta = 0;
+    return metrics.lineSpacing()
+        + sFontToLineSpacing.value(!_font.families().isEmpty() ? _font.families().constFirst()
+                                                               : _font.family(),
+                                   platformDelta);
 }
 
 void TextHelper::updateFontHinting(QFont& _font)
