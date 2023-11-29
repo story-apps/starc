@@ -16,14 +16,19 @@
 namespace {
 
 /**
- * @brief Таймаут извлечения переводчиков из очереди (50 в минуту)
+ * @brief Таймаут извлечения переводчиков из очереди (40 в минуту)
  */
-constexpr auto kDequeTimeoutMsec = 60000 / 50;
+constexpr auto kDequeTimeoutMsec = 60000 / 40;
 
 /**
  * @brief Ключ автоматического определения исходного текста
  */
 const QLatin1String kAutoLanguage("auto");
+
+/**
+ * @brief Ключ перевода на английский язык
+ */
+const QLatin1String kEnglishLanguage("en");
 
 /**
  * @brief Список прокси серверов для подключения к гугл переводчику
@@ -230,7 +235,12 @@ void TextTranslateHelper::translateToEnglish(const QString& _text)
 
 void TextTranslateHelper::translateToEnglish(const QString& _text, const QString& _sourceLanguage)
 {
-    translate(_text, _sourceLanguage, QLatin1String("en"));
+    translate(_text, _sourceLanguage, kEnglishLanguage);
+}
+
+void TextTranslateHelper::translateFromEnglish(const QString& _text, const QString& _targetLanguage)
+{
+    translate(_text, kEnglishLanguage, _targetLanguage);
 }
 
 void TextTranslateHelper::translateImpl(const QString& _text, const QString& _sourceLanguage,
@@ -253,7 +263,16 @@ void TextTranslateHelper::translateImpl(const QString& _text, const QString& _so
                 translate(_text, _sourceLanguage, _targetLanguage);
             };
 
+            if (_response.isEmpty()) {
+                translateWithNextProxy();
+                return;
+            }
+
             const auto translationsJson = QJsonDocument::fromJson(_response).array();
+            if (translationsJson.isEmpty()) {
+                translateWithNextProxy();
+                return;
+            }
 
             QVector<Translation> translation;
             for (const auto& sentencesJson : translationsJson.at(0).toArray()) {

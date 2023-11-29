@@ -44,6 +44,11 @@ public:
     void translateToEnglish(const QString& _text);
     void translateToEnglish(const QString& _text, const QString& _sourceLanguage);
 
+    /**
+     * @brief Перевести с английского на заданный язык
+     */
+    void translateFromEnglish(const QString& _text, const QString& _targetLanguage);
+
 signals:
     /**
      * @brief Текст был переведён
