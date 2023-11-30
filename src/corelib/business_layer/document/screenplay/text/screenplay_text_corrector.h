@@ -27,6 +27,11 @@ public:
      */
     void setCorrectionOptions(const QStringList& _options) override;
 
+    /**
+     * @brief Должен ли быть виден в документе блок заданного типа
+     */
+    bool isBlockVisible(TextParagraphType _type) const override;
+
 protected:
     /**
      * @brief Очистить все сохранённые параметры

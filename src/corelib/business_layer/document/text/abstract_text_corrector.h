@@ -10,6 +10,7 @@ class QTextDocument;
 namespace BusinessLayer {
 
 class TextModelItem;
+enum class TextParagraphType;
 
 /**
  * @brief Класс корректирующий текст документа
@@ -43,6 +44,11 @@ public:
      */
     void setVisibleTopLevelItem(TextModelItem* _item);
     TextModelItem* visibleTopLevelItem() const;
+
+    /**
+     * @brief Должен ли быть виден в документе блок заданного типа
+     */
+    virtual bool isBlockVisible(TextParagraphType _type) const;
 
     /**
      * @brief Очистить все сохранённые параметры

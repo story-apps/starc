@@ -423,6 +423,13 @@ void TextDocument::Implementation::readModelItemContent(int _itemRow, const QMod
             resourceCursor.mergeCharFormat(resourceMark.charFormat());
         }
 
+        //
+        // Настроим видимость блока
+        //
+        if (corrector != nullptr) {
+            _cursor.block().setVisible(corrector->isBlockVisible(textItem->paragraphType()));
+        }
+
         break;
     }
 
@@ -603,6 +610,13 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                 //
                 if (TextBlockStyle::forBlock(cursor.block()) != textItem->paragraphType()) {
                     applyParagraphType(textItem->paragraphType(), cursor);
+                    //
+                    // ... а также его видимость
+                    //
+                    if (d->corrector != nullptr) {
+                        cursor.block().setVisible(
+                            d->corrector->isBlockVisible(textItem->paragraphType()));
+                    }
                 }
                 //
                 // ... выравнивание

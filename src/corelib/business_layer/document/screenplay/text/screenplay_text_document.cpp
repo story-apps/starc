@@ -104,7 +104,7 @@ void ScreenplayTextDocument::setBeatsVisible(bool _visible)
 
     d->isBeatsVisible = _visible;
 
-    emit contentsChange(0, 0, 0);
+    emit contentsChange(0, -1, -1);
     emit contentsChanged();
 }
 
@@ -112,10 +112,14 @@ QSet<TextParagraphType> ScreenplayTextDocument::visibleBlocksTypes() const
 {
     if (d->isTreatmentDocument) {
         return {
-            TextParagraphType::SceneHeading,      TextParagraphType::SceneHeadingShadowTreatment,
-            TextParagraphType::SceneCharacters,   TextParagraphType::BeatHeading,
-            TextParagraphType::BeatHeadingShadow, TextParagraphType::ActHeading,
-            TextParagraphType::ActFooter,         TextParagraphType::SequenceHeading,
+            TextParagraphType::SceneHeading,
+            TextParagraphType::SceneHeadingShadowTreatment,
+            TextParagraphType::SceneCharacters,
+            TextParagraphType::BeatHeading,
+            TextParagraphType::BeatHeadingShadowTreatment,
+            TextParagraphType::ActHeading,
+            TextParagraphType::ActFooter,
+            TextParagraphType::SequenceHeading,
             TextParagraphType::SequenceFooter,
         };
     }

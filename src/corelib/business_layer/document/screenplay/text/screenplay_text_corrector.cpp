@@ -739,11 +739,19 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
     //
     while (block.isValid()) {
         //
-        // Если у нас подряд идут maxConsecutiveBlocks блоков по месту, то прерываем корректировки
+        // Если при проверке части документа, у нас подряд идут maxConsecutiveBlocks блоков
+        // на правильном месте, то прерываем корректировки (при проверке документа целиком -
+        // не учитываем последовательные блоки находящиеся на своих местах)
         //
-        constexpr int maxConsecutiveBlocks = 15;
-        if (consecutiveFineBlocksCount >= maxConsecutiveBlocks) {
-            return;
+        if (_charsChanged > 0) {
+            //
+            // maxConsecutiveBlocks выбран таким образом, чтобы покрывать кейс с максимальным
+            // кол-вом блоков на странице
+            //
+            constexpr int maxConsecutiveBlocks = 40;
+            if (consecutiveFineBlocksCount >= maxConsecutiveBlocks) {
+                return;
+            }
         }
 
         //
@@ -1111,7 +1119,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
         if (needToCorrectPageBreaks && (atPageEnd || atPageBreak)) {
             switch (blockType) {
             //
-            // Если это время и место, бит, кадр или начало папки
+            // Если это время и место, кадр или начало папки
             //
             case TextParagraphType::SceneHeading:
             case TextParagraphType::Shot:
@@ -2178,7 +2186,11 @@ void ScreenplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBlo
         break;
     }
     case TextParagraphType::BeatHeading: {
-        paragraphType = TextParagraphType::BeatHeadingShadow;
+        auto screenplay = qobject_cast<ScreenplayTextDocument*>(document());
+        Q_ASSERT(screenplay);
+        paragraphType = screenplay->isTreatmentDocument()
+            ? TextParagraphType::BeatHeadingShadowTreatment
+            : TextParagraphType::BeatHeadingShadow;
         break;
     }
     case TextParagraphType::ActHeading:
@@ -2273,6 +2285,12 @@ void ScreenplayTextCorrector::setCorrectionOptions(const QStringList& _options)
     makeCorrections();
 }
 
+bool ScreenplayTextCorrector::isBlockVisible(TextParagraphType _type) const
+{
+    const auto screenplayDocument = qobject_cast<ScreenplayTextDocument*>(document());
+    return screenplayDocument->visibleBlocksTypes().contains(_type);
+}
+
 void ScreenplayTextCorrector::clearImpl()
 {
     d->lastDocumentSize = QSizeF();
@@ -2307,7 +2325,7 @@ void ScreenplayTextCorrector::makeCorrections(int _position, int _charsChanged)
     }
 
     if (d->needToCorrectPageBreaks) {
-        d->correctPageBreaks(_position);
+        d->correctPageBreaks(_position, _charsChanged);
     }
 
     cursor.endEditBlock();

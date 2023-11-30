@@ -236,16 +236,15 @@ TextDocument* AbstractExporter::prepareDocument(AbstractModel* _model,
             //
             // Если не нужно печатать папки, то удаляем их
             //
-            if (!_exportOptions.includeFolders) {
-                if (blockType == TextParagraphType::SequenceHeading
-                    || blockType == TextParagraphType::SequenceFooter) {
-                    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-                    if (cursor.hasSelection()) {
-                        cursor.deleteChar();
-                    }
+            if (!_exportOptions.includeFolders
+                && (blockType == TextParagraphType::SequenceHeading
+                    || blockType == TextParagraphType::SequenceFooter)) {
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+                if (cursor.hasSelection()) {
                     cursor.deleteChar();
-                    continue;
                 }
+                cursor.deleteChar();
+                continue;
             }
 
             //

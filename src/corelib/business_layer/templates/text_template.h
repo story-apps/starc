@@ -79,7 +79,8 @@ enum class TextParagraphType {
     //
     SceneCharacters, //!< Персонажи сцены
     BeatHeading, //!< Бит истории
-    BeatHeadingShadow, //!< Бит истории, для вспомогательных разрывов
+    BeatHeadingShadow, //!< Бит истории, для вспомогательных разрывов в сценарии
+    BeatHeadingShadowTreatment, //!< Бит истории, для вспомогательных разрывов в поэпизоднике
     Action, //!< Описание действия
     Parenthetical, //!< Ремарка в реплике персонажа
     Lyrics, //!< Песнь или стихотворения произносимые персонажем

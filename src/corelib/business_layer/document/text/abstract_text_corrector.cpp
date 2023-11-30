@@ -124,6 +124,11 @@ TextModelItem* AbstractTextCorrector::visibleTopLevelItem() const
     return d->visibleTopLevelItem;
 }
 
+bool AbstractTextCorrector::isBlockVisible(TextParagraphType _type) const
+{
+    return true;
+}
+
 void AbstractTextCorrector::clear()
 {
     if (d->visibleTopLevelItem != nullptr) {
@@ -168,20 +173,6 @@ void AbstractTextCorrector::makePlannedCorrection(const QByteArray& _contentHash
     if (!d->plannedCorrection.isValid) {
         return;
     }
-
-    //
-    // Если по факту нет изменений, делаем только мягкие корректировки с внешним видом и видимостью
-    //
-    if (d->lastContent.hash == _contentHash
-        && d->lastContent.characterCount == d->document->characterCount()) {
-        makeSoftCorrections();
-        d->plannedCorrection = {};
-        return;
-    }
-
-    //
-    // Во всех остальных ситуациях выполняем полные корректировки
-    //
 
     makeCorrections(d->plannedCorrection.position, d->plannedCorrection.lenght);
 
