@@ -1630,17 +1630,19 @@ void TextDocument::applyParagraphType(BusinessLayer::TextParagraphType _type,
     const auto& newBlockStyle = d->documentTemplate().paragraphStyle(_type);
 
     //
-    // Обновим стили
-    //
-    cursor.setBlockCharFormat(newBlockStyle.charFormat());
-    cursor.setBlockFormat(newBlockStyle.blockFormat(cursor.inTable()));
-
-    //
     // Применим стиль текста ко всему блоку, выделив его,
     // т.к. в блоке могут находиться фрагменты в другом стиле
     // + сохраняем форматирование выделений
+    // + делать это нужно до того, как блоку будут обновлены стили, чтобы можно было извлечь старый
+    //   формат самого блока и скорректировать только нужные параметры
     //
     TextHelper::applyTextFormattingForBlock(cursor, newBlockStyle.charFormat());
+
+    //
+    // Обновим стили самого блока
+    //
+    cursor.setBlockCharFormat(newBlockStyle.charFormat());
+    cursor.setBlockFormat(newBlockStyle.blockFormat(cursor.inTable()));
 
     //
     // Для заголовка папки нужно создать завершение

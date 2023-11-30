@@ -490,24 +490,45 @@ void TextHelper::applyTextFormattingForBlock(QTextCursor& _cursor,
     _cursor.movePosition(QTextCursor::StartOfBlock);
 
     //
-    // Если в блоке есть выделения, обновляем цвет только тех частей, которые не входят в
-    // выделения
+    // Если в блоке есть кастомные форматы текста, то обновляем только те параметры форматов,
+    // которые соответствую дефолтным во всём абзаце, а кастомные оставляем без изменений
     //
     QTextBlock currentBlock = _cursor.block();
+    const auto currentBlockCharFormat = currentBlock.charFormat();
     if (!currentBlock.textFormats().isEmpty()) {
         const auto formats = currentBlock.textFormats();
         for (const auto& range : formats) {
-            auto newFormat = _newFormat;
-            newFormat.setFontWeight(range.format.fontWeight());
-            newFormat.setFontItalic(range.format.fontItalic());
-            newFormat.setFontUnderline(range.format.fontUnderline());
-            newFormat.setFontStrikeOut(range.format.fontStrikeOut());
-            newFormat.setBackground(range.format.background());
-            newFormat.setForeground(range.format.foreground());
+            auto rangeFormat = range.format;
+            if (rangeFormat.fontFamily() == currentBlockCharFormat.fontFamily()) {
+                rangeFormat.setFontFamily(_newFormat.fontFamily());
+            }
+            if (rangeFormat.fontFamilies() == currentBlockCharFormat.fontFamilies()) {
+                rangeFormat.setFontFamilies(_newFormat.fontFamilies().toStringList());
+            }
+            if (rangeFormat.font().pixelSize() == currentBlockCharFormat.font().pixelSize()) {
+                auto font = rangeFormat.font();
+                font.setPixelSize(_newFormat.font().pixelSize());
+                rangeFormat.setFont(font);
+            }
+            if (rangeFormat.fontCapitalization() == currentBlockCharFormat.fontCapitalization()) {
+                rangeFormat.setFontCapitalization(_newFormat.fontCapitalization());
+            }
+            if (rangeFormat.fontWeight() == currentBlockCharFormat.fontWeight()) {
+                rangeFormat.setFontWeight(_newFormat.fontWeight());
+            }
+            if (rangeFormat.fontItalic() == currentBlockCharFormat.fontItalic()) {
+                rangeFormat.setFontItalic(_newFormat.fontItalic());
+            }
+            if (rangeFormat.fontUnderline() == currentBlockCharFormat.fontUnderline()) {
+                rangeFormat.setFontUnderline(_newFormat.fontUnderline());
+            }
+            if (rangeFormat.fontStrikeOut() == currentBlockCharFormat.fontStrikeOut()) {
+                rangeFormat.setFontStrikeOut(_newFormat.fontStrikeOut());
+            }
 
             _cursor.setPosition(currentBlock.position() + range.start);
             _cursor.setPosition(_cursor.position() + range.length, QTextCursor::KeepAnchor);
-            _cursor.mergeCharFormat(newFormat);
+            _cursor.mergeCharFormat(rangeFormat);
         }
     }
     //
