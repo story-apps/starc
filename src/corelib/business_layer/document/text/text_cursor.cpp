@@ -6,6 +6,7 @@
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <ui/widgets/text_edit/base/base_text_edit.h>
+#include <utils/helpers/text_helper.h>
 #include <utils/shugar.h>
 
 #include <QTextTable>
@@ -677,16 +678,23 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
     //        targetBlockData = nullptr;
     //    }
 
+
     //
     // Собственно удаление
     //
     cursor.beginEditBlock();
     {
-        FoldersToDelete foldersToDelete;
+        //
+        // Перед удаление, применим к блоку, который находится в конце удаления формат текста,
+        // который он должен будет использовать после объединения с верхним
+        //
+        cursor.setPosition(bottomCursorPosition);
+        TextHelper::applyTextFormattingForBlock(cursor, topBlock.charFormat());
 
         //
         // Подсчитать количество группирующих элементов входящих в выделение
         //
+        FoldersToDelete foldersToDelete;
         const bool needToDeleteGroups = topBlock != bottomBlock;
         if (needToDeleteGroups) {
             foldersToDelete = findFoldersToDelete(topCursorPosition, bottomCursorPosition,
