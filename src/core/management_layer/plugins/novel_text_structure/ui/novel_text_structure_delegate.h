@@ -25,6 +25,11 @@ public:
     void setTextLinesSize(int _size);
 
     /**
+     * @brief Задать тип счётчика
+     */
+    void setCounterType(int _type);
+
+    /**
      * @brief Реализуем собственную отрисовку
      */
     void paint(QPainter* _painter, const QStyleOptionViewItem& _option,

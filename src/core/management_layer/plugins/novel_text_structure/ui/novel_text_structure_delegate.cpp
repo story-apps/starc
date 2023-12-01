@@ -48,6 +48,7 @@ public:
 
     bool showSceneNumber = true;
     int textLines = 2;
+    int counterType = 0;
 };
 
 void NovelTextStructureDelegate::Implementation::paintItemColor(QPainter* _painter,
@@ -227,8 +228,15 @@ void NovelTextStructureDelegate::Implementation::paintFolder(QPainter* _painter,
     //
     // ... количество слов
     //
-    const auto wordCount = _index.data(NovelTextModelFolderItem::FolderWordCountRole).toInt();
-    const auto wordCountRect = paintItemWordCount(_painter, _option, wordCount);
+    const auto counter
+        = _index
+              .data(counterType == 0
+                        ? NovelTextModelFolderItem::FolderWordCountRole
+                        : (counterType == 1
+                               ? NovelTextModelFolderItem::FolderCharacterCountRole
+                               : NovelTextModelFolderItem::FolderCharacterCountWithSpacesRole))
+              .toInt();
+    const auto wordCountRect = paintItemWordCount(_painter, _option, counter);
 
     //
     // ... название папки
@@ -322,10 +330,17 @@ void NovelTextStructureDelegate::Implementation::paintScene(QPainter* _painter,
     }
 
     //
-    // ... кол-во слов
+    // ... счётчик
     //
-    const auto wordCount = _index.data(NovelTextModelSceneItem::SceneWordCountRole).toInt();
-    const auto durationRect = paintItemWordCount(_painter, _option, wordCount);
+    const auto counter
+        = _index
+              .data(counterType == 0
+                        ? NovelTextModelSceneItem::SceneWordCountRole
+                        : (counterType == 1
+                               ? NovelTextModelSceneItem::SceneCharacterCountRole
+                               : NovelTextModelSceneItem::SceneCharacterCountWithSpacesRole))
+              .toInt();
+    const auto counterRect = paintItemWordCount(_painter, _option, counter);
 
     //
     // ... заголовок сцены
@@ -335,10 +350,9 @@ void NovelTextStructureDelegate::Implementation::paintScene(QPainter* _painter,
     qreal headingWidth = 0.0;
     if (isLeftToRight) {
         headingLeft = iconRect.right() + DesignSystem::treeOneLineItem().spacing();
-        headingWidth
-            = durationRect.left() - headingLeft - DesignSystem::treeOneLineItem().spacing();
+        headingWidth = counterRect.left() - headingLeft - DesignSystem::treeOneLineItem().spacing();
     } else {
-        headingLeft = durationRect.right() + DesignSystem::treeOneLineItem().spacing();
+        headingLeft = counterRect.right() + DesignSystem::treeOneLineItem().spacing();
         headingWidth = iconRect.left() - headingLeft - DesignSystem::treeOneLineItem().spacing();
     }
     const QRectF headingRect(
@@ -368,9 +382,9 @@ void NovelTextStructureDelegate::Implementation::paintScene(QPainter* _painter,
     QRectF textRect;
     if (textLines > 0) {
         _painter->setFont(DesignSystem::font().body2());
-        const qreal textLeft = isLeftToRight ? iconRect.left() : durationRect.left();
-        const qreal textWidth = isLeftToRight ? (durationRect.right() - iconRect.left())
-                                              : (iconRect.right() - durationRect.left());
+        const qreal textLeft = isLeftToRight ? iconRect.left() : counterRect.left();
+        const qreal textWidth = isLeftToRight ? (counterRect.right() - iconRect.left())
+                                              : (iconRect.right() - counterRect.left());
         textRect
             = QRectF(QPointF(textLeft, headingRect.bottom() + DesignSystem::compactLayout().px8()),
                      QSizeF(textWidth, TextHelper::fineLineSpacing(_painter->font()) * textLines));
@@ -605,6 +619,11 @@ void NovelTextStructureDelegate::showSceneNumber(bool _show)
 void NovelTextStructureDelegate::setTextLinesSize(int _size)
 {
     d->textLines = _size;
+}
+
+void NovelTextStructureDelegate::setCounterType(int _type)
+{
+    d->counterType = _type;
 }
 
 void NovelTextStructureDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _option,

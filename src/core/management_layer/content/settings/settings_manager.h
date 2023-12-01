@@ -214,6 +214,7 @@ private:
     void setNovelEditorDefaultTemplate(const QString& _templateId);
     //
     void setNovelNavigatorShowSceneText(bool _show, int _lines);
+    void setNovelNavigatorCounterType(int _type);
 
     //
     // Сохранение параметров горячих клавиш

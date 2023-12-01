@@ -424,6 +424,8 @@ const QString kComponentsNovelNavigatorShowSceneTextKey
     = kComponentsNovelNavigatorKey + QStringLiteral("/show-scene-text");
 const QString kComponentsNovelNavigatorSceneTextLinesKey
     = kComponentsNovelNavigatorKey + QStringLiteral("/scene-text-lines");
+const QString kComponentsNovelNavigatorCounterTypeKey
+    = kComponentsNovelNavigatorKey + QStringLiteral("/counter-type");
 // ... редактор карточек
 const QString kComponentsNovelCardsKey = kComponentsNovelKey + QStringLiteral("/cards");
 const QString kComponentsNovelCardsSplitterStateKey

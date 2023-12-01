@@ -543,7 +543,7 @@ public:
     ComboBox* novelEditorDefaultTemplate = nullptr;
     IconButton* novelEditorDefaultTemplateOptions = nullptr;
     //
-    // ... Simple text navigator
+    // ... Novel text navigator
     //
     H6Label* novelNavigatorTitle = nullptr;
     CheckBox* novelNavigatorShowSceneText = nullptr;
@@ -552,6 +552,10 @@ public:
     RadioButton* novelNavigatorSceneDescriptionLines3 = nullptr;
     RadioButton* novelNavigatorSceneDescriptionLines4 = nullptr;
     RadioButton* novelNavigatorSceneDescriptionLines5 = nullptr;
+    Subtitle1Label* novelNavigatorCounterType = nullptr;
+    RadioButton* novelNavigatorCounterUseWords = nullptr;
+    RadioButton* novelNavigatorCounterUseCharacters = nullptr;
+    RadioButton* novelNavigatorCounterUseCharactersWithSpaces = nullptr;
     //
     int novelCardBottomSpacerIndex = 0;
 
@@ -818,6 +822,10 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , novelNavigatorSceneDescriptionLines3(new RadioButton(novelCard))
     , novelNavigatorSceneDescriptionLines4(new RadioButton(novelCard))
     , novelNavigatorSceneDescriptionLines5(new RadioButton(novelCard))
+    , novelNavigatorCounterType(new Subtitle1Label(novelCard))
+    , novelNavigatorCounterUseWords(new RadioButton(novelCard))
+    , novelNavigatorCounterUseCharacters(new RadioButton(novelCard))
+    , novelNavigatorCounterUseCharactersWithSpaces(new RadioButton(novelCard))
     //
     , shortcutsCard(new Card(content))
     , shortcutsCardLayout(new QGridLayout)
@@ -1549,6 +1557,11 @@ void SettingsView::Implementation::initNovelCard()
     novelNavigatorSceneDescriptionLines3->setEnabled(false);
     novelNavigatorSceneDescriptionLines4->setEnabled(false);
     novelNavigatorSceneDescriptionLines5->setEnabled(false);
+    auto typesGroup = new RadioButtonGroup(novelCard);
+    typesGroup->add(novelNavigatorCounterUseWords);
+    typesGroup->add(novelNavigatorCounterUseCharacters);
+    typesGroup->add(novelNavigatorCounterUseCharactersWithSpaces);
+    novelNavigatorCounterUseWords->setChecked(true);
 
 
     //
@@ -1586,6 +1599,15 @@ void SettingsView::Implementation::initNovelCard()
         layout->addWidget(novelNavigatorSceneDescriptionLines3);
         layout->addWidget(novelNavigatorSceneDescriptionLines4);
         layout->addWidget(novelNavigatorSceneDescriptionLines5);
+        layout->addStretch();
+        novelCardLayout->addLayout(layout, itemIndex++, 0);
+    }
+    {
+        auto layout = makeLayout();
+        layout->addWidget(novelNavigatorCounterType);
+        layout->addWidget(novelNavigatorCounterUseWords);
+        layout->addWidget(novelNavigatorCounterUseCharacters);
+        layout->addWidget(novelNavigatorCounterUseCharactersWithSpaces);
         layout->addStretch();
         novelCardLayout->addLayout(layout, itemIndex++, 0);
     }
@@ -2812,6 +2834,10 @@ SettingsView::SettingsView(QWidget* _parent)
                  d->novelNavigatorSceneDescriptionLines3,
                  d->novelNavigatorSceneDescriptionLines4,
                  d->novelNavigatorSceneDescriptionLines5,
+                 d->novelNavigatorCounterType,
+                 d->novelNavigatorCounterUseWords,
+                 d->novelNavigatorCounterUseCharacters,
+                 d->novelNavigatorCounterUseCharactersWithSpaces,
                  d->shortcutsForNovelTitle,
                  d->shortcutsForNovel,
              }) {
@@ -2915,6 +2941,22 @@ SettingsView::SettingsView(QWidget* _parent)
             notifynovelNavigatorShowSceneTextChanged);
     connect(d->novelNavigatorSceneDescriptionLines5, &RadioButton::checkedChanged, this,
             notifynovelNavigatorShowSceneTextChanged);
+    //
+    auto notifyNovelNavigatorCounterTypeChanged = [this] {
+        int type = 0;
+        if (d->novelNavigatorCounterUseCharacters->isChecked()) {
+            type = 1;
+        } else if (d->novelNavigatorCounterUseCharactersWithSpaces->isChecked()) {
+            type = 2;
+        }
+        emit novelNavigatorCounterTypeChanged(type);
+    };
+    connect(d->novelNavigatorCounterUseWords, &RadioButton::checkedChanged, this,
+            notifyNovelNavigatorCounterTypeChanged);
+    connect(d->novelNavigatorCounterUseCharacters, &RadioButton::checkedChanged, this,
+            notifyNovelNavigatorCounterTypeChanged);
+    connect(d->novelNavigatorCounterUseCharactersWithSpaces, &RadioButton::checkedChanged, this,
+            notifyNovelNavigatorCounterTypeChanged);
 
     //
     // Соединения шорткатов настраиваются в момент установки моделей с данными о них в представление
@@ -3614,6 +3656,24 @@ void SettingsView::setNovelNavigatorShowSceneText(bool _show, int _lines)
     }
 }
 
+void SettingsView::setNovelNavigatorCounterType(int _type)
+{
+    switch (_type) {
+    case 0: {
+        d->novelNavigatorCounterUseWords->setChecked(true);
+        break;
+    }
+    case 1: {
+        d->novelNavigatorCounterUseCharacters->setChecked(true);
+        break;
+    }
+    case 2: {
+        d->novelNavigatorCounterUseCharactersWithSpaces->setChecked(true);
+        break;
+    }
+    }
+}
+
 void SettingsView::setShortcutsForSimpleTextModel(HierarchicalModel* _model)
 {
     if (d->shortcutsForSimpleTextModel) {
@@ -4229,6 +4289,10 @@ void SettingsView::updateTranslations()
     d->novelNavigatorSceneDescriptionLines3->setText("3");
     d->novelNavigatorSceneDescriptionLines4->setText("4");
     d->novelNavigatorSceneDescriptionLines5->setText("5");
+    d->novelNavigatorCounterType->setText("Scene counter type");
+    d->novelNavigatorCounterUseWords->setText("words");
+    d->novelNavigatorCounterUseCharacters->setText("characters");
+    d->novelNavigatorCounterUseCharactersWithSpaces->setText("characters with spaces");
 
     d->shortcutsTitle->setText(tr("Shortcuts"));
     //
@@ -4435,7 +4499,10 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         iconLabel->setContentsMargins(iconLabelMargins);
     }
 
-    for (auto checkBox : {
+    d->novelNavigatorCounterType->setContentsMargins(
+        DesignSystem::layout().px24(), DesignSystem::layout().px12(), DesignSystem::layout().px24(),
+        DesignSystem::layout().px(36));
+    for (auto checkBox : std::vector<Widget*>{
              d->isCompact,
              d->autoSave,
              d->saveBackups,
@@ -4504,6 +4571,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->stageplayNavigatorShowSceneText,
              //
              d->novelNavigatorShowSceneText,
+             d->novelNavigatorCounterType,
          }) {
         checkBox->setBackgroundColor(DesignSystem::color().background());
         checkBox->setTextColor(DesignSystem::color().onBackground());
@@ -4548,6 +4616,9 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->novelNavigatorSceneDescriptionLines3,
              d->novelNavigatorSceneDescriptionLines4,
              d->novelNavigatorSceneDescriptionLines5,
+             d->novelNavigatorCounterUseWords,
+             d->novelNavigatorCounterUseCharacters,
+             d->novelNavigatorCounterUseCharactersWithSpaces,
          }) {
         radioButton->setBackgroundColor(DesignSystem::color().background());
         radioButton->setTextColor(DesignSystem::color().onBackground());

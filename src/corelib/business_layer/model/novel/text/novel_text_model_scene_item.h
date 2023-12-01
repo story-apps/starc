@@ -20,6 +20,8 @@ public:
      */
     enum {
         SceneWordCountRole = TextModelGroupItem::GroupUserRole + 1,
+        SceneCharacterCountRole,
+        SceneCharacterCountWithSpacesRole,
         SceneDescriptionRole,
     };
 

@@ -188,6 +188,8 @@ void NovelTextStructureView::reconfigure()
             = settingsValue(DataStorageLayer::kComponentsNovelNavigatorSceneTextLinesKey).toInt();
         d->contentDelegate->setTextLinesSize(sceneTextLines);
     }
+    d->contentDelegate->setCounterType(
+        settingsValue(DataStorageLayer::kComponentsNovelNavigatorCounterTypeKey).toInt());
 
     d->content->setItemDelegate(nullptr);
     d->content->setItemDelegate(d->contentDelegate);

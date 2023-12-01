@@ -372,6 +372,8 @@ void SettingsManager::Implementation::loadNovelSettings()
     view->setNovelNavigatorShowSceneText(
         settingsValue(DataStorageLayer::kComponentsNovelNavigatorShowSceneTextKey).toBool(),
         settingsValue(DataStorageLayer::kComponentsNovelNavigatorSceneTextLinesKey).toInt());
+    view->setNovelNavigatorCounterType(
+        settingsValue(DataStorageLayer::kComponentsNovelNavigatorCounterTypeKey).toInt());
 }
 
 void SettingsManager::Implementation::loadShortcutsSettings()
@@ -1141,6 +1143,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     //
     connect(d->view, &Ui::SettingsView::novelNavigatorShowSceneTextChanged, this,
             &SettingsManager::setNovelNavigatorShowSceneText);
+    connect(d->view, &Ui::SettingsView::novelNavigatorCounterTypeChanged, this,
+            &SettingsManager::setNovelNavigatorCounterType);
 
     //
     // Работа с библиотекой шаблонов сценария
@@ -2406,6 +2410,12 @@ void SettingsManager::setNovelNavigatorShowSceneText(bool _show, int _lines)
 {
     setSettingsValue(DataStorageLayer::kComponentsNovelNavigatorShowSceneTextKey, _show);
     setSettingsValue(DataStorageLayer::kComponentsNovelNavigatorSceneTextLinesKey, _lines);
+    emit novelNavigatorChanged();
+}
+
+void SettingsManager::setNovelNavigatorCounterType(int _type)
+{
+    setSettingsValue(DataStorageLayer::kComponentsNovelNavigatorCounterTypeKey, _type);
     emit novelNavigatorChanged();
 }
 

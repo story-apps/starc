@@ -155,6 +155,7 @@ public:
     void setNovelEditorDefaultTemplate(const QString& _templateId);
     //
     void setNovelNavigatorShowSceneText(bool _show, int _lines);
+    void setNovelNavigatorCounterType(int _type);
 
     //
     // Задание параметров горячих клавиш
@@ -289,6 +290,7 @@ signals:
     void novelEditorDefaultTemplateChanged(const QString& _templateId);
     //
     void novelNavigatorShowSceneTextChanged(bool _show, int _lines);
+    void novelNavigatorCounterTypeChanged(int _type);
 
     //
     // Редактирование шаблонов

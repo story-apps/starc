@@ -1170,6 +1170,7 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsNovelNavigatorShowBeatsInTextKey, false);
         defaultValues.insert(kComponentsNovelNavigatorShowSceneTextKey, true);
         defaultValues.insert(kComponentsNovelNavigatorSceneTextLinesKey, 1);
+        defaultValues.insert(kComponentsNovelNavigatorCounterTypeKey, 0);
         //
         // Параметры карточек сценария
         //

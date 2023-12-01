@@ -105,6 +105,14 @@ QVariant NovelTextModelSceneItem::data(int _role) const
         return d->wordsCount;
     }
 
+    case SceneCharacterCountRole: {
+        return d->charactersCount.first;
+    }
+
+    case SceneCharacterCountWithSpacesRole: {
+        return d->charactersCount.second;
+    }
+
     case SceneDescriptionRole: {
         return description();
     }

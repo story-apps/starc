@@ -79,6 +79,14 @@ QVariant NovelTextModelFolderItem::data(int _role) const
         return d->wordsCount;
     }
 
+    case FolderCharacterCountRole: {
+        return d->charactersCount.first;
+    }
+
+    case FolderCharacterCountWithSpacesRole: {
+        return d->charactersCount.second;
+    }
+
     default: {
         return TextModelFolderItem::data(_role);
     }

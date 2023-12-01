@@ -23,6 +23,8 @@ public:
      */
     enum {
         FolderWordCountRole = TextModelFolderItem::FolderUserRole + 1,
+        FolderCharacterCountRole,
+        FolderCharacterCountWithSpacesRole,
     };
 
 public:
