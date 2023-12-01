@@ -4289,10 +4289,10 @@ void SettingsView::updateTranslations()
     d->novelNavigatorSceneDescriptionLines3->setText("3");
     d->novelNavigatorSceneDescriptionLines4->setText("4");
     d->novelNavigatorSceneDescriptionLines5->setText("5");
-    d->novelNavigatorCounterType->setText("Scene counter type");
-    d->novelNavigatorCounterUseWords->setText("words");
-    d->novelNavigatorCounterUseCharacters->setText("characters");
-    d->novelNavigatorCounterUseCharactersWithSpaces->setText("characters with spaces");
+    d->novelNavigatorCounterType->setText(tr("Scene content counter type"));
+    d->novelNavigatorCounterUseWords->setText(tr("words"));
+    d->novelNavigatorCounterUseCharacters->setText(tr("characters"));
+    d->novelNavigatorCounterUseCharactersWithSpaces->setText(tr("characters with spaces"));
 
     d->shortcutsTitle->setText(tr("Shortcuts"));
     //
