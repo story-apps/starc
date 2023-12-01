@@ -299,7 +299,10 @@ void ScreenplayFountainExporter::exportTo(AbstractModel* _model, int _fromPositi
                 //
                 if (exportOptions.showScenesNumbers) {
                     const auto blockData = static_cast<TextBlockData*>(block.userData());
-                    if (blockData != nullptr) {
+                    if (blockData != nullptr && blockData->item()->parent() != nullptr
+                        && blockData->item()->parent()->type() == TextModelItemType::Group
+                        && static_cast<TextGroupType>(blockData->item()->parent()->subtype())
+                            == TextGroupType::Scene) {
                         const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(
                             blockData->item()->parent());
                         paragraphText += QString(" #%1#").arg(sceneItem->number()->text);

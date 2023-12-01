@@ -53,7 +53,9 @@ void ScreenplayPdfExporter::printBlockDecorations(
         const auto blockData = static_cast<TextBlockData*>(_block.userData());
         if (blockData != nullptr && blockData->item() != nullptr
             && blockData->item()->parent() != nullptr
-            && blockData->item()->parent()->type() == TextModelItemType::Group) {
+            && blockData->item()->parent()->type() == TextModelItemType::Group
+            && static_cast<TextGroupType>(blockData->item()->parent()->subtype())
+                == TextGroupType::Scene) {
             _painter->setFont(_block.charFormat().font());
             //
             const auto sceneItem

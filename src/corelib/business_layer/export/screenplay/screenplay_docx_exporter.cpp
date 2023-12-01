@@ -47,7 +47,10 @@ void ScreenplayDocxExporter::processBlock(const TextCursor& _cursor,
     //
     if (currentBlockType == TextParagraphType::SceneHeading && exportOptions.showScenesNumbers) {
         const auto blockData = static_cast<TextBlockData*>(block.userData());
-        if (blockData != nullptr) {
+        if (blockData != nullptr && blockData->item()->parent() != nullptr
+            && blockData->item()->parent()->type() == TextModelItemType::Group
+            && static_cast<TextGroupType>(blockData->item()->parent()->subtype())
+                == TextGroupType::Scene) {
             const auto sceneItem
                 = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
             const auto sceneNumber = sceneItem->number()->text + " ";

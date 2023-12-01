@@ -62,7 +62,10 @@ void writeLine(QXmlStreamWriter& _writer, const QTextBlock& _block,
         //
         if (_exportOptions.showScenesNumbers) {
             const auto blockData = static_cast<TextBlockData*>(_block.userData());
-            if (blockData != nullptr) {
+            if (blockData != nullptr && blockData->item()->parent() != nullptr
+                && blockData->item()->parent()->type() == TextModelItemType::Group
+                && static_cast<TextGroupType>(blockData->item()->parent()->subtype())
+                    == TextGroupType::Scene) {
                 const auto sceneItem
                     = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
                 sceneNumber = sceneItem->number()->text;
