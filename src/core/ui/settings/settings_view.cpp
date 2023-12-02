@@ -567,6 +567,12 @@ public:
     //
     H5Label* shortcutsTitle = nullptr;
     //
+    // ... Appliction
+    //
+    H6Label* shortcutsForApplicationTitle = nullptr;
+    Tree* shortcutsForApplication = nullptr;
+    HierarchicalModel* shortcutsForApplicationModel = nullptr;
+    //
     // ... Simple text
     //
     H6Label* shortcutsForSimpleTextTitle = nullptr;
@@ -830,6 +836,9 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , shortcutsCard(new Card(content))
     , shortcutsCardLayout(new QGridLayout)
     , shortcutsTitle(new H5Label(shortcutsCard))
+    //
+    , shortcutsForApplicationTitle(new H6Label(shortcutsCard))
+    , shortcutsForApplication(new Tree(shortcutsCard))
     //
     , shortcutsForSimpleTextTitle(new H6Label(shortcutsCard))
     , shortcutsForSimpleText(new Tree(shortcutsCard))
@@ -1618,6 +1627,7 @@ void SettingsView::Implementation::initNovelCard()
 
 void SettingsView::Implementation::initShortcutsCard()
 {
+    shortcutsForApplication->setHeader(new HierarchicalHeaderView(shortcutsForApplication));
     shortcutsForSimpleText->setHeader(new HierarchicalHeaderView(shortcutsForSimpleText));
     shortcutsForScreenplay->setHeader(new HierarchicalHeaderView(shortcutsForScreenplay));
     shortcutsForComicBook->setHeader(new HierarchicalHeaderView(shortcutsForComicBook));
@@ -1630,6 +1640,8 @@ void SettingsView::Implementation::initShortcutsCard()
     int itemIndex = 0;
     shortcutsCardLayout->addWidget(shortcutsTitle, itemIndex++, 0);
     //
+    shortcutsCardLayout->addWidget(shortcutsForApplicationTitle, itemIndex++, 0);
+    shortcutsCardLayout->addWidget(shortcutsForApplication, itemIndex++, 0);
     shortcutsCardLayout->addWidget(shortcutsForSimpleTextTitle, itemIndex++, 0);
     shortcutsCardLayout->addWidget(shortcutsForSimpleText, itemIndex++, 0);
     shortcutsCardLayout->addWidget(shortcutsForScreenplayTitle, itemIndex++, 0);
@@ -1681,6 +1693,7 @@ void SettingsView::Implementation::updateTablesGeometry()
                                    * qCeil(Ui::DesignSystem::treeOneLineItem().height()));
         }
     };
+    updateTableGeometry(shortcutsForApplication, 0.25);
     updateTableGeometry(shortcutsForSimpleText, 0.25);
     updateTableGeometry(shortcutsForScreenplay, 0.25);
     updateTableGeometry(shortcutsForComicBook, 0.25);
@@ -3674,6 +3687,35 @@ void SettingsView::setNovelNavigatorCounterType(int _type)
     }
 }
 
+void SettingsView::setShortcutsForApplicationModel(HierarchicalModel* _model)
+{
+    if (d->shortcutsForApplicationModel) {
+        d->shortcutsForApplicationModel->disconnect(this);
+        d->shortcutsForApplicationModel->deleteLater();
+    }
+
+    d->shortcutsForApplicationModel = _model;
+
+    d->shortcutsForApplication->setModel(d->shortcutsForApplicationModel);
+    d->shortcutsForApplication->setItemDelegateForColumn(
+        1, new KeySequenceDelegate(d->shortcutsForApplication));
+    d->updateTablesGeometry();
+
+    connect(d->shortcutsForApplicationModel, &HierarchicalModel::dataChanged, this,
+            [this](const QModelIndex& _index) {
+                if (!_index.isValid()) {
+                    return;
+                }
+
+                const auto shortcutName
+                    = _index.sibling(_index.row(), TextEditorShortcuts::Type).data().toString();
+                const auto shortcut
+                    = _index.sibling(_index.row(), TextEditorShortcuts::Shortcut).data().toString();
+
+                emit shortcutForApplicationChanged(shortcutName, shortcut);
+            });
+}
+
 void SettingsView::setShortcutsForSimpleTextModel(HierarchicalModel* _model)
 {
     if (d->shortcutsForSimpleTextModel) {
@@ -4296,6 +4338,13 @@ void SettingsView::updateTranslations()
 
     d->shortcutsTitle->setText(tr("Shortcuts"));
     //
+    d->shortcutsForApplicationTitle->setText(tr("Application"));
+    {
+        auto model = d->shortcutsForApplicationModel->headerModel();
+        model->setData(model->index(0, 0), tr("Action"), Qt::DisplayRole);
+        model->setData(model->index(0, 1), tr("Shortcut"), Qt::DisplayRole);
+    }
+    //
     d->shortcutsForSimpleTextTitle->setText(tr("Simple text editor"));
     {
         auto model = d->shortcutsForSimpleTextModel->headerModel();
@@ -4430,6 +4479,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->novelEditorTitle,
              d->novelNavigatorTitle,
              d->shortcutsTitle,
+             d->shortcutsForApplicationTitle,
              d->shortcutsForSimpleTextTitle,
              d->shortcutsForScreenplayTitle,
              d->shortcutsForComicBookTitle,
@@ -4764,6 +4814,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         static_cast<int>(Ui::DesignSystem::compactLayout().px24()));
 
     for (auto table : {
+             d->shortcutsForApplication,
              d->shortcutsForSimpleText,
              d->shortcutsForScreenplay,
              d->shortcutsForComicBook,

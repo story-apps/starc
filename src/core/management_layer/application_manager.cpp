@@ -9,6 +9,7 @@
 #include "content/projects/projects_manager.h"
 #include "content/projects/projects_model_project_item.h"
 #include "content/settings/settings_manager.h"
+#include "content/shortcuts/shortcuts_manager.h"
 #include "content/writing_session/writing_session_manager.h"
 #include "plugins_builder.h"
 
@@ -81,7 +82,13 @@ namespace {
 /**
  * @brief Состояние приложения
  */
-enum class ApplicationState { Initializing, ProjectLoading, ProjectClosing, Working, Importing };
+enum class ApplicationState {
+    Initializing,
+    ProjectLoading,
+    ProjectClosing,
+    Working,
+    Importing,
+};
 } // namespace
 
 class ApplicationManager::Implementation
@@ -307,6 +314,8 @@ public:
      */
     Ui::ApplicationView* applicationView = nullptr;
     Ui::MenuView* menuView = nullptr;
+    QShortcut* importShortcut = nullptr;
+    QShortcut* exportShortcut = nullptr;
     struct LastContent {
         QWidget* toolBar = nullptr;
         QWidget* navigator = nullptr;
@@ -325,6 +334,7 @@ public:
      * @brief Менеджеры управляющие конкретными частями приложения
      */
     QScopedPointer<AccountManager> accountManager;
+    QScopedPointer<ShortcutsManager> shortcutsManager;
     QScopedPointer<OnboardingManager> onboardingManager;
     QScopedPointer<ProjectsManager> projectsManager;
     QScopedPointer<ProjectManager> projectManager;
@@ -366,12 +376,14 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     , menuView(new Ui::MenuView(applicationView))
     , connectionStatus(new Ui::ConnectionStatusToolBar(applicationView))
     , accountManager(new AccountManager(nullptr, applicationView))
+    , shortcutsManager(new ShortcutsManager(nullptr))
     , onboardingManager(new OnboardingManager(nullptr, applicationView))
     , projectsManager(new ProjectsManager(nullptr, applicationView))
     , projectManager(new ProjectManager(nullptr, applicationView, pluginsBuilder))
     , importManager(new ImportManager(nullptr, applicationView))
     , exportManager(new ExportManager(nullptr, applicationView))
-    , settingsManager(new SettingsManager(nullptr, applicationView, pluginsBuilder))
+    , settingsManager(
+          new SettingsManager(nullptr, applicationView, pluginsBuilder, shortcutsManager.data()))
     , writingSessionManager(new WritingSessionManager(nullptr, applicationView->view()))
     , notificationsManager(new NotificationsManager)
 #ifdef CLOUD_SERVICE_MANAGER
@@ -381,6 +393,8 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     initDockMenu();
 
     menuView->setShowDevVersions(notificationsManager->showDevVersions());
+    menuView->setImportShortcut(shortcutsManager->importShortcut());
+    menuView->setCurrentDocumentExportShortcut(shortcutsManager->currentDocumentExportShortcut());
 
     settingsManager->setThemeSetupView(applicationView->themeSetupView());
 
@@ -1115,6 +1129,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     // Настроим/обновим переводы для док-меню
     //
     initDockMenu();
+
+    //
+    // Настроим/обновим переводы для конкретных менеджеров
+    //
+    shortcutsManager->updateTranslations();
 }
 
 void ApplicationManager::Implementation::setDesignSystemTheme(Ui::ApplicationTheme _theme)
@@ -2471,13 +2490,14 @@ void ApplicationManager::initConnections()
     saveShortcut->setContext(Qt::ApplicationShortcut);
     connect(saveShortcut, &QShortcut::activated, this, [this] { d->saveChanges(); });
     //
-    QShortcut* importShortcut = new QShortcut(QKeySequence("Alt+I"), d->applicationView);
-    importShortcut->setContext(Qt::ApplicationShortcut);
-    connect(importShortcut, &QShortcut::activated, this, [this] { d->importProject(); });
+    d->importShortcut = new QShortcut(d->shortcutsManager->importShortcut(), d->applicationView);
+    d->importShortcut->setContext(Qt::ApplicationShortcut);
+    connect(d->importShortcut, &QShortcut::activated, this, [this] { d->importProject(); });
     //
-    QShortcut* exportShortcut = new QShortcut(QKeySequence("Alt+E"), d->applicationView);
-    exportShortcut->setContext(Qt::ApplicationShortcut);
-    connect(exportShortcut, &QShortcut::activated, this, [this] { d->exportCurrentDocument(); });
+    d->exportShortcut
+        = new QShortcut(d->shortcutsManager->currentDocumentExportShortcut(), d->applicationView);
+    d->exportShortcut->setContext(Qt::ApplicationShortcut);
+    connect(d->exportShortcut, &QShortcut::activated, this, [this] { d->exportCurrentDocument(); });
     //
     QShortcut* fullScreenShortcut = new QShortcut(QKeySequence::FullScreen, d->applicationView);
     fullScreenShortcut->setContext(Qt::ApplicationShortcut);
@@ -2576,6 +2596,20 @@ void ApplicationManager::initConnections()
     });
     connect(d->accountManager.data(), &AccountManager::closeAccountRequested, this,
             [this] { d->showLastContent(); });
+
+    //
+    // Менеджер горячих клавиш
+    //
+    connect(d->shortcutsManager.data(), &ShortcutsManager::importShortcutChanged,
+            [this](const QKeySequence& _shortcut) {
+                d->importShortcut->setKey(_shortcut);
+                d->menuView->setImportShortcut(_shortcut);
+            });
+    connect(d->shortcutsManager.data(), &ShortcutsManager::exportShortcutChanged,
+            [this](const QKeySequence& _shortcut) {
+                d->exportShortcut->setKey(_shortcut);
+                d->menuView->setCurrentDocumentExportShortcut(_shortcut);
+            });
 
     //
     // Менеджер проектов

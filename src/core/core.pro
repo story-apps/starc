@@ -63,6 +63,7 @@ SOURCES += \
     management_layer/content/projects/projects_model_team_item.cpp \
     management_layer/content/settings/settings_manager.cpp \
     management_layer/content/settings/template_options_manager.cpp \
+    management_layer/content/shortcuts/shortcuts_manager.cpp \
     management_layer/content/writing_session/writing_session_manager.cpp \
     management_layer/content/writing_session/writing_session_storage.cpp \
     management_layer/plugins_builder.cpp \
@@ -148,6 +149,7 @@ HEADERS += \
     management_layer/content/projects/projects_model_team_item.h \
     management_layer/content/settings/settings_manager.h \
     management_layer/content/settings/template_options_manager.h \
+    management_layer/content/shortcuts/shortcuts_manager.h \
     management_layer/content/writing_session/writing_session_manager.h \
     management_layer/content/writing_session/writing_session_storage.h \
     management_layer/plugins_builder.h \

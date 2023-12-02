@@ -160,6 +160,7 @@ public:
     //
     // Задание параметров горячих клавиш
     //
+    void setShortcutsForApplicationModel(HierarchicalModel* _model);
     void setShortcutsForSimpleTextModel(HierarchicalModel* _model);
     void setShortcutsForScreenplayModel(HierarchicalModel* _model);
     void setShortcutsForComicBookModel(HierarchicalModel* _model);
@@ -346,6 +347,7 @@ signals:
     //
     // Параметры горячих клавиш
     //
+    void shortcutForApplicationChanged(const QString& _blockType, const QString& _shortcut);
     void shortcutsForSimpleTextEditorChanged(const QString& _blockType, const QString& _shortcut,
                                              const QString& _jumpByTab, const QString& _jumpByEnter,
                                              const QString& _changeByTab,

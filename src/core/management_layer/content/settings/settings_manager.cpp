@@ -1,5 +1,6 @@
 #include "settings_manager.h"
 
+#include "../shortcuts/shortcuts_manager.h"
 #include "template_options_manager.h"
 
 #include <3rd_party/webloader/src/NetworkRequest.h>
@@ -54,7 +55,8 @@ class SettingsManager::Implementation
 {
 public:
     explicit Implementation(QObject* _parent, QWidget* _parentWidget,
-                            const PluginsBuilder& _pluginsBuilder);
+                            const PluginsBuilder& _pluginsBuilder,
+                            ShortcutsManager* _shortcutsManager);
 
     /**
      * @brief Загрузить параметры приложения
@@ -72,6 +74,7 @@ public:
     void loadStageplaySettings();
     void loadNovelSettings();
     void loadShortcutsSettings();
+    void loadShortcutsForApplicationSettings();
     void loadShortcutsForSimpleTextSettings();
     void loadShortcutsForScreenplaySettings();
     void loadShortcutsForComicBookSettings();
@@ -86,14 +89,17 @@ public:
     Ui::ThemeSetupView* themeSetupView = nullptr;
 
     TemplateOptionsManager* templateOptionsManager = nullptr;
+    ShortcutsManager* shortcutsManager = nullptr;
 };
 
 SettingsManager::Implementation::Implementation(QObject* _parent, QWidget* _parentWidget,
-                                                const PluginsBuilder& _pluginsBuilder)
+                                                const PluginsBuilder& _pluginsBuilder,
+                                                ShortcutsManager* _shortcutsManager)
     : toolBar(new Ui::SettingsToolBar(_parentWidget))
     , navigator(new Ui::SettingsNavigator(_parentWidget))
     , view(new Ui::SettingsView(_parentWidget))
     , templateOptionsManager(new TemplateOptionsManager(_parent, _parentWidget, _pluginsBuilder))
+    , shortcutsManager(_shortcutsManager)
 {
     toolBar->hide();
     navigator->hide();
@@ -378,12 +384,37 @@ void SettingsManager::Implementation::loadNovelSettings()
 
 void SettingsManager::Implementation::loadShortcutsSettings()
 {
+    loadShortcutsForApplicationSettings();
     loadShortcutsForSimpleTextSettings();
     loadShortcutsForScreenplaySettings();
     loadShortcutsForComicBookSettings();
     loadShortcutsForAudioplaySettings();
     loadShortcutsForStageplaySettings();
     loadShortcutsForNovelSettings();
+}
+
+void SettingsManager::Implementation::loadShortcutsForApplicationSettings()
+{
+    const int rows = 0;
+    const int columns = 2;
+    QStandardItemModel* dataModel = new QStandardItemModel(rows, columns, view);
+    for (const auto& shortcutName : shortcutsManager->shortcutNames()) {
+        QList<QStandardItem*> row = {
+            new QStandardItem(shortcutName),
+            new QStandardItem(
+                shortcutsManager->shortcutByName(shortcutName).toString(QKeySequence::NativeText))
+        };
+        row.first()->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        dataModel->appendRow(row);
+    }
+    QStandardItemModel* headerModel = new QStandardItemModel(view);
+    headerModel->setItem(0, 0, new QStandardItem());
+    headerModel->setItem(0, 1, new QStandardItem());
+
+    auto model = new HierarchicalModel(view);
+    model->setSourceModel(dataModel);
+    model->setHeaderModel(headerModel);
+    view->setShortcutsForApplicationModel(model);
 }
 
 void SettingsManager::Implementation::loadShortcutsForSimpleTextSettings()
@@ -844,9 +875,10 @@ void SettingsManager::Implementation::loadShortcutsForNovelSettings()
 
 
 SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
-                                 const PluginsBuilder& _pluginsBuilder)
+                                 const PluginsBuilder& _pluginsBuilder,
+                                 ShortcutsManager* _shortcutsManager)
     : QObject(_parent)
-    , d(new Implementation(this, _parentWidget, _pluginsBuilder))
+    , d(new Implementation(this, _parentWidget, _pluginsBuilder, _shortcutsManager))
 {
     d->loadApplicationSettings();
     d->loadComponentsSettings();
@@ -1555,6 +1587,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     //
     // Горячие клавиши
     //
+    connect(d->view, &Ui::SettingsView::shortcutForApplicationChanged, this,
+            &SettingsManager::setShortcutForApplication);
     connect(d->view, &Ui::SettingsView::shortcutsForSimpleTextEditorChanged, this,
             &SettingsManager::setShortcutsForSimpleTextEdit);
     connect(d->view, &Ui::SettingsView::shortcutsForScreenplayEditorChanged, this,
@@ -2417,6 +2451,12 @@ void SettingsManager::setNovelNavigatorCounterType(int _type)
 {
     setSettingsValue(DataStorageLayer::kComponentsNovelNavigatorCounterTypeKey, _type);
     emit novelNavigatorChanged();
+}
+
+void SettingsManager::setShortcutForApplication(const QString& _actionName,
+                                                const QString& _shortcut)
+{
+    d->shortcutsManager->setShortcutByName(_actionName, _shortcut);
 }
 
 void SettingsManager::setShortcutsForSimpleTextEdit(

@@ -14,6 +14,7 @@ class ThemeSetupView;
 namespace ManagementLayer {
 
 class PluginsBuilder;
+class ShortcutsManager;
 
 /**
  * @brief Менеджер экрана настроек
@@ -23,8 +24,8 @@ class SettingsManager : public QObject
     Q_OBJECT
 
 public:
-    SettingsManager(QObject* _parent, QWidget* _parentWidget,
-                    const PluginsBuilder& _pluginsBuilder);
+    SettingsManager(QObject* _parent, QWidget* _parentWidget, const PluginsBuilder& _pluginsBuilder,
+                    ShortcutsManager* _shortcutsManager);
     ~SettingsManager() override;
 
     QWidget* toolBar() const;
@@ -219,6 +220,7 @@ private:
     //
     // Сохранение параметров горячих клавиш
     //
+    void setShortcutForApplication(const QString& _actionName, const QString& _shortcut);
     void setShortcutsForSimpleTextEdit(const QString& _blockType, const QString& _shortcut,
                                        const QString& _jumpByTab, const QString& _jumpByEnter,
                                        const QString& _changeByTab, const QString& _changeByEnter);

@@ -95,6 +95,14 @@ const QString kApplicationAvoidMultipleSpacesKey = kApplicationGroupKey + "/avoi
 // список недавних проектов
 const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
 //
+// горячие клавиши
+const QString kApplicationShortcutsKey = kApplicationGroupKey + "/shortcuts";
+//
+const QString kApplicationShortcutsImportKey = kApplicationShortcutsKey + "/import";
+const QString kApplicationShortcutsCurrentDocumentExportKey
+    = kApplicationShortcutsKey + "/current-document-export";
+
+//
 // Аккаунт
 //
 const QString kAccountGroupKey = "account";
@@ -110,6 +118,7 @@ const QString kAccountNewsletterLanguageKey = kAccountGroupKey + "/newsletter-la
 const QString kAccountNewsletterSubscribedKey = kAccountGroupKey + "/newsletter-subscribed";
 // аватарка
 const QString kAccountAvatarKey = kAccountGroupKey + "/avatar";
+
 
 //
 // Проект

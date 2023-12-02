@@ -68,9 +68,19 @@ public:
     void markChangesSaved(bool _saved);
 
     /**
+     * @brief Задать горячие клавиши импорта
+     */
+    void setImportShortcut(const QKeySequence& _key);
+
+    /**
      * @brief Задать доступность импорта
      */
     void setImportAvailable(bool _available);
+
+    /**
+     * @brief Задать горячие клавиши экспорта текущего документа
+     */
+    void setCurrentDocumentExportShortcut(const QKeySequence& _key);
 
     /**
      * @brief Установить возможность экспортирования текущего документа

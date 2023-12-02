@@ -399,9 +399,19 @@ void MenuView::markChangesSaved(bool _saved)
     update();
 }
 
+void MenuView::setImportShortcut(const QKeySequence& _key)
+{
+    d->importProject->setWhatsThis(_key.toString(QKeySequence::NativeText));
+}
+
 void MenuView::setImportAvailable(bool _available)
 {
     d->importProject->setEnabled(_available);
+}
+
+void MenuView::setCurrentDocumentExportShortcut(const QKeySequence& _key)
+{
+    d->exportCurrentDocument->setWhatsThis(_key.toString(QKeySequence::NativeText));
 }
 
 void MenuView::setCurrentDocumentExportAvailable(bool _available)
@@ -524,10 +534,7 @@ void MenuView::updateTranslations()
         QKeySequence(QKeySequence::Save).toString(QKeySequence::NativeText));
     d->saveProjectAs->setText(tr("Save current story as..."));
     d->importProject->setText(tr("Import..."));
-    d->importProject->setWhatsThis(QKeySequence("Alt+I").toString(QKeySequence::NativeText));
     d->exportCurrentDocument->setText(tr("Export current document..."));
-    d->exportCurrentDocument->setWhatsThis(
-        QKeySequence("Alt+E").toString(QKeySequence::NativeText));
     d->fullScreen->setText(tr("Toggle full screen"));
     d->fullScreen->setWhatsThis(
         QKeySequence(QKeySequence::FullScreen).toString(QKeySequence::NativeText));

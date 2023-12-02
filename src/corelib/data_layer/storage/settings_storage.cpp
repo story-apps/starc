@@ -114,6 +114,8 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kApplicationSmartQuotesKey, false);
     defaultValues.insert(kApplicationReplaceTwoDashesWithEmDashKey, false);
     defaultValues.insert(kApplicationAvoidMultipleSpacesKey, false);
+    defaultValues.insert(kApplicationShortcutsImportKey, "Alt+I");
+    defaultValues.insert(kApplicationShortcutsCurrentDocumentExportKey, "Alt+E");
 
     defaultValues.insert(kProjectTypeKey, 0);
     defaultValues.insert(kProjectSaveFolderKey,
