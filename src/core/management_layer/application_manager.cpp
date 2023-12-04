@@ -901,6 +901,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
         break;
     }
 
+    case QLocale::Armenian: {
+        translation = "hy";
+        break;
+    }
+
     case QLocale::Azerbaijani: {
         translation = "az";
         break;
@@ -1023,6 +1028,11 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
 
     case QLocale::Spanish: {
         translation = "es";
+        break;
+    }
+
+    case QLocale::Swedish: {
+        translation = "sv";
         break;
     }
 

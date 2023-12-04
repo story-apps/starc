@@ -3048,6 +3048,9 @@ void SettingsView::setApplicationLanguage(int _language)
         case QLocale::Arabic: {
             return "اَلْعَرَبِيَّةُ";
         }
+        case QLocale::Armenian: {
+            return "Հայերեն";
+        }
         case QLocale::Azerbaijani: {
             return "Azərbaycan";
         }
@@ -3122,6 +3125,9 @@ void SettingsView::setApplicationLanguage(int _language)
         }
         case QLocale::Spanish: {
             return "Español";
+        }
+        case QLocale::Swedish: {
+            return "Svenska";
         }
         case QLocale::Filipino: {
             return "Tagalog";

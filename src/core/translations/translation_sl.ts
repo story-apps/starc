@@ -152,12 +152,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="215"/>
         <source>Action</source>
-        <translation>Dejanje</translation>
+        <translation>Dogajanje</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="217"/>
         <source>Parenthetical</source>
-        <translation>Didaskalije</translation>
+        <translation>Navodilo igralcu</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/text_template.cpp" line="219"/>
@@ -243,7 +243,7 @@
         <translation>Besedilo</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="1151"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="1155"/>
         <source>Copy of </source>
         <translation>Kopija</translation>
     </message>
@@ -515,7 +515,7 @@
         <location filename="../../corelib/business_layer/plots/audioplay/audioplay_structure_analysis_plot.cpp" line="297"/>
         <location filename="../../corelib/business_layer/plots/audioplay/audioplay_structure_analysis_plot.cpp" line="393"/>
         <source>Action duration</source>
-        <translation>Trajanje dejanj</translation>
+        <translation>Trajanje dogajanja</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/plots/audioplay/audioplay_structure_analysis_plot.cpp" line="241"/>
@@ -606,12 +606,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="21"/>
         <source>BBC scene style template (page: A4; font: Arial)</source>
-        <translation>Slogovna predloga prizora BBC (stran A4, pisava Arial)</translation>
+        <translation>Slogovna predloga prizora BBC (stran A4, črkovna vrsta Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/audioplay_template.cpp" line="24"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation>Ameriška predloga (velikost strani Letter, pisava Courier Prime)</translation>
+        <translation>Ameriška predloga (velikost strani Letter, črkovna vrsta Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -1150,12 +1150,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="23"/>
         <source>International template (page: A4; font: Courier Prime)</source>
-        <translation>Mednarodna predloga (velikost strani A4, pisava Courier Prime)</translation>
+        <translation>Mednarodna predloga (velikost strani A4, črkovna vrsta Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="27"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation>Ameriška predloga (velikost strani Letter, pisava Courier Prime)</translation>
+        <translation>Ameriška predloga (velikost strani Letter, črkovna vrsta Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -1421,7 +1421,7 @@
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="300"/>
         <source>Parenthetical</source>
-        <translation>Didaskalije</translation>
+        <translation>Navodilo igralcu</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="304"/>
@@ -1865,7 +1865,7 @@
         <location filename="../../corelib/business_layer/plots/screenplay/screenplay_structure_analysis_plot.cpp" line="306"/>
         <location filename="../../corelib/business_layer/plots/screenplay/screenplay_structure_analysis_plot.cpp" line="402"/>
         <source>Action duration</source>
-        <translation>Trajanje dejanj</translation>
+        <translation>Trajanje dogajanja</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/plots/screenplay/screenplay_structure_analysis_plot.cpp" line="250"/>
@@ -2006,42 +2006,42 @@
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="21"/>
         <source>International template (page: A4; font: Courier Prime)</source>
-        <translation>Mednarodna predloga (velikost strani A4, pisava Courier Prime)</translation>
+        <translation>Mednarodna predloga (velikost strani A4, črkovna vrsta Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="25"/>
         <source>International template (page: A4; font: Courier New)</source>
-        <translation>Mednarodna predloga (velikost strani A4, pisava Courier New)</translation>
+        <translation>Mednarodna predloga (velikost strani A4, črkovna vrsta Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="28"/>
         <source>Arabic template (page: A4; font: Courier New)</source>
-        <translation>Arabska predloga (velikost strani A4, pisava Courier New)</translation>
+        <translation>Arabska predloga (velikost strani A4, črkovna vrsta Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="31"/>
         <source>Hebrew template (page: A4; font: Arial)</source>
-        <translation>Hebrejska predloga (velikost strani A4, pisava Arial)</translation>
+        <translation>Hebrejska predloga (velikost strani A4, črkovna vrsta Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="34"/>
         <source>Russian template (page: A4; font: Courier New)</source>
-        <translation>Ruska predloga (velikost strani A4, pisava Courier New)</translation>
+        <translation>Ruska predloga (velikost strani A4, črkovna vrsta Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="37"/>
         <source>Tamil template (page: A4; font: Mukta Malar)</source>
-        <translation>Tamilska predloga (velikost strani A4, pisava Mukta Malar)</translation>
+        <translation>Tamilska predloga (velikost strani A4, črkovna vrsta Mukta Malar)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="40"/>
         <source>Telugu template (page: A4; font: Courier Prime, Mallanna)</source>
-        <translation>Teluška predloga (velikost strani A4, pisava Courier Prime, Mallanna)</translation>
+        <translation>Teluška predloga (velikost strani A4, črkovna vrsta Courier Prime, Mallanna)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/screenplay_template.cpp" line="44"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation>Ameriška predloga (velikost strani Letter, pisava Courier Prime)</translation>
+        <translation>Ameriška predloga (velikost strani Letter, črkovna vrsta Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -2111,12 +2111,12 @@
     <message>
         <location filename="../../corelib/business_layer/templates/stageplay_template.cpp" line="21"/>
         <source>BBC stage template (page: A4; font: Arial)</source>
-        <translation>Predloga BBC za dramsko besedilo (stran A4, pisava Arial)</translation>
+        <translation>Predloga BBC za dramsko besedilo (stran A4, črkovna vrsta Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/stageplay_template.cpp" line="24"/>
         <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation>Ameriška predloga (velikost strani Letter, pisava Courier Prime)</translation>
+        <translation>Ameriška predloga (velikost strani Letter, črkovna vrsta Courier Prime)</translation>
     </message>
 </context>
 <context>
@@ -2161,7 +2161,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="281"/>
         <source>Treatment</source>
-        <translation>Treatment</translation>
+        <translation>Scenosled</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="275"/>
@@ -2228,7 +2228,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="411"/>
         <source>Mind map</source>
-        <translation type="unfinished"></translation>
+        <translation>Miselni vzorec</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="417"/>
@@ -2241,62 +2241,62 @@
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="22"/>
         <source>Monotype template (page: A4; font: Courier Prime)</source>
-        <translation>Predloga s pisavo enake širine (velikost strani A4, pisava Courier Prime)</translation>
+        <translation>Predloga s pisavo enake širine (velikost strani A4, črkovna vrsta Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="25"/>
         <source>Monotype template (page: A4; font: Courier New)</source>
-        <translation>Predloga s pisavo enake širine (velikost strani A4, pisava Courier New)</translation>
+        <translation>Predloga s pisavo enake širine (velikost strani A4, črkovna vrsta Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="28"/>
         <source>Monotype template (page: Letter; font: Courier Prime)</source>
-        <translation>Predloga s pisavo enake širine (velikost strani Letter, pisava Courier Prime)</translation>
+        <translation>Predloga s pisavo enake širine (velikost strani Letter, črkovna vrsta Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="31"/>
         <source>Sans serif template (page: A4; font: Roboto)</source>
-        <translation>Predloga brez serifov (velikost strani A4, pisava Roboto)</translation>
+        <translation>Predloga brez serifov (velikost strani A4, črkovna vrsta Roboto)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/simple_text_template.cpp" line="34"/>
         <source>Sans serif template (page: Letter; font: Roboto)</source>
-        <translation>Predloga brez serifov (velikost strani Letter, pisava Roboto)</translation>
+        <translation>Predloga brez serifov (velikost strani Letter, črkovna vrsta Roboto)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="22"/>
         <source>Manuscript template (page: A4; font: Courier Prime)</source>
-        <translation>Predloga rokopisa (velikost strani A4, pisava Courier Prime)</translation>
+        <translation>Predloga rokopisa (velikost strani A4, črkovna vrsta Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="25"/>
         <source>Manuscript template (page: A4; font: Courier New)</source>
-        <translation>Predloga rokopisa (velikost strani A4, pisava Courier New)</translation>
+        <translation>Predloga rokopisa (velikost strani A4, črkovna vrsta Courier New)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="28"/>
         <source>Manuscript template (page: A4; font: Times New Roman)</source>
-        <translation>Predloga rokopisa (velikost strani A4, pisava Times New Roman)</translation>
+        <translation>Predloga rokopisa (velikost strani A4, črkovna vrsta Times New Roman)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="31"/>
         <source>Manuscript template (page: Letter; font: Courier Prime)</source>
-        <translation>Predloga rokopisa (velikost strani Letter, pisava Courier Prime)</translation>
+        <translation>Predloga rokopisa (velikost strani Letter, črkovna vrsta Courier Prime)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="35"/>
         <source>Manuscript template (page: Letter; font: Times New Roman)</source>
-        <translation>Predloga rokopisa (velikost strani Letter, pisava Times New Roman)</translation>
+        <translation>Predloga rokopisa (velikost strani Letter, črkovna vrsta Times New Roman)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="39"/>
         <source>Modern template (page: A4; font: Arial)</source>
-        <translation>Sodobna predloga (velikost strani A4, pisava Arial)</translation>
+        <translation>Sodobna predloga (velikost strani A4, črkovna vrsta Arial)</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/novel_template.cpp" line="42"/>
         <source>Modern template (page: Letter; font: Arial)</source>
-        <translation>Sodobna predloga (velikost strani Letter, pisava Arial)</translation>
+        <translation>Sodobna predloga (velikost strani Letter, črkovna vrsta Arial)</translation>
     </message>
 </context>
 <context>
@@ -2646,7 +2646,7 @@
 <context>
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
-        <location filename="../../corelib/business_layer/export/abstract_exporter.cpp" line="283"/>
+        <location filename="../../corelib/business_layer/export/abstract_exporter.cpp" line="282"/>
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1055"/>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="990"/>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="970"/>
@@ -2752,177 +2752,177 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="692"/>
+        <location filename="../management_layer/application_manager.cpp" line="706"/>
         <source>Please update to the latest version if you want to use the Cloud.</source>
         <translation>Prosimo, posodobite na najnovejšo različico, če želite uporabljati oblačno različico Cloud</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="693"/>
+        <location filename="../management_layer/application_manager.cpp" line="707"/>
         <source>Nope, I’m fine without Cloud</source>
         <translation>Ne, hvala, ne rabim Cloud</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="694"/>
+        <location filename="../management_layer/application_manager.cpp" line="708"/>
         <source>Update</source>
         <translation>Posodobi</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="712"/>
+        <location filename="../management_layer/application_manager.cpp" line="726"/>
         <source>The last version is downloading</source>
         <translation>Prenašate najnovejšo različico</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1179"/>
+        <location filename="../management_layer/application_manager.cpp" line="1198"/>
         <source>in cloud</source>
         <translation>v oblaku</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1180"/>
+        <location filename="../management_layer/application_manager.cpp" line="1199"/>
         <source>Read only</source>
         <translation>Samo za branje</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1190"/>
+        <location filename="../management_layer/application_manager.cpp" line="1209"/>
         <source> - changed</source>
         <translation> – spremenjeno</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1246"/>
         <location filename="../management_layer/application_manager.cpp" line="1265"/>
-        <location filename="../management_layer/application_manager.cpp" line="1457"/>
+        <location filename="../management_layer/application_manager.cpp" line="1284"/>
+        <location filename="../management_layer/application_manager.cpp" line="1476"/>
         <source>Saving error</source>
         <translation>Napaka pri shranjevanju</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1247"/>
+        <location filename="../management_layer/application_manager.cpp" line="1266"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Sprememb ni mogoče zapisati. Prišlo je do napake notranje zbirke podatkov: »%1«. Preverite, da datoteka obstaja in da imate ustrezne pravice za pisanje.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1266"/>
+        <location filename="../management_layer/application_manager.cpp" line="1285"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Sprememb ni mogoče zapisati, ker zgodba na mestu »%1« ne obstaja. Postavite datoteko nazaj in poskusite ponovno shraniti zgodbo.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1339"/>
+        <location filename="../management_layer/application_manager.cpp" line="1358"/>
         <source>Project was modified. Save changes?</source>
         <translation>Projekt je bil spremenjen. Ali želite shraniti spremembe?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1340"/>
+        <location filename="../management_layer/application_manager.cpp" line="1359"/>
         <source>Cancel</source>
         <translation>Prekliči</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1341"/>
+        <location filename="../management_layer/application_manager.cpp" line="1360"/>
         <source>Don&apos;t save</source>
         <translation>Ne shrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1342"/>
+        <location filename="../management_layer/application_manager.cpp" line="1361"/>
         <source>Save</source>
         <translation>Shrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1417"/>
+        <location filename="../management_layer/application_manager.cpp" line="1436"/>
         <source>Choose file to save story</source>
         <translation>Izberite datoteko za shranjevanje zgodbe</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1458"/>
+        <location filename="../management_layer/application_manager.cpp" line="1477"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Zgodbe ni možno shraniti v datoteko %1. Preverite dovoljenja in poskusite znova.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1508"/>
+        <location filename="../management_layer/application_manager.cpp" line="1527"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Projekt ste poskusili ustvariti v neobstoječi mapi %1. Izberite drugo mesto za novi projekt.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1513"/>
+        <location filename="../management_layer/application_manager.cpp" line="1532"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Datoteke ni mogoče zapisati. Kaže, da je odprta v drugem programu. Zaprite jo in poskusite ustvariti nov projekt.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1517"/>
+        <location filename="../management_layer/application_manager.cpp" line="1536"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Datoteke ni mogoče zapisati. Preverite in dodelite ustrezne pravice programu za pisanje v izbrano mapo ali pa izberite drugo mapo za shranjevanje novega projekta.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1521"/>
+        <location filename="../management_layer/application_manager.cpp" line="1540"/>
         <source>Create project error</source>
         <translation>Napaka pri ustvarjanju projekta</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1707"/>
-        <location filename="../management_layer/application_manager.cpp" line="1730"/>
+        <location filename="../management_layer/application_manager.cpp" line="1726"/>
+        <location filename="../management_layer/application_manager.cpp" line="1749"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>Te datoteke trenutno ni mogoče odpreti, ker je že odprta v drugi instanci tega programa.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1733"/>
+        <location filename="../management_layer/application_manager.cpp" line="1752"/>
         <source>Ignore and open</source>
         <translation>Prezri in odpri</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1829"/>
+        <location filename="../management_layer/application_manager.cpp" line="1848"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation>Datoteka, ki jo skušate odpreti, nima pravic za pisanje. Preverite lastnosti datoteke in dovolite njeno urejanje. Ker je trenutno ni mogoče urejati, bo odprta v načinu samo za branje.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1846"/>
+        <location filename="../management_layer/application_manager.cpp" line="1865"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation>Ali želite še naprej uporabljati zapis datotek .%1?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1847"/>
+        <location filename="../management_layer/application_manager.cpp" line="1866"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation>Nekaterih podatkov projekta ni mogoče shraniti v zapisu .%1. Priporočamo, da uporabite zapis Story Architect .%2, da bodo vsi podatki projekta ustrezno shranjeni.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1850"/>
+        <location filename="../management_layer/application_manager.cpp" line="1869"/>
         <source>Never ask again</source>
         <translation>Ne sprašuj več</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1851"/>
+        <location filename="../management_layer/application_manager.cpp" line="1870"/>
         <source>Keep .%1</source>
         <translation>Ohrani .%1</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1852"/>
+        <location filename="../management_layer/application_manager.cpp" line="1871"/>
         <source>Switch to .STARC</source>
         <translation>Preklopi na .STARC</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3096"/>
+        <location filename="../management_layer/application_manager.cpp" line="3130"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>Naročnina lastnikov projekta na oblačno storitev je potekla. Z delom na projektu lahko nadaljujete, takoj ko obnovijo naročnino.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3077"/>
-        <location filename="../management_layer/application_manager.cpp" line="3098"/>
+        <location filename="../management_layer/application_manager.cpp" line="3111"/>
+        <location filename="../management_layer/application_manager.cpp" line="3132"/>
         <source>Continue offline</source>
         <translation>Nadaljuj nepovezano</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="427"/>
         <location filename="../management_layer/application_manager.cpp" line="441"/>
+        <location filename="../management_layer/application_manager.cpp" line="455"/>
         <source>Open new window</source>
         <translation>Odpri novo okno</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="642"/>
+        <location filename="../management_layer/application_manager.cpp" line="656"/>
         <source>Loading missed fonts</source>
-        <translation>Nalaganje manjkajočih pisav</translation>
+        <translation>Nalaganje manjkajočih črkovnih vrst</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3075"/>
+        <location filename="../management_layer/application_manager.cpp" line="3109"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>Vaša naročnina na oblačno storitev je potekla. Aktivirajte naročnino, da nadaljujete z delom na projektu.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3078"/>
+        <location filename="../management_layer/application_manager.cpp" line="3112"/>
         <source>Renew subscription</source>
         <translation>Obnovi naročnino</translation>
     </message>
@@ -3410,7 +3410,7 @@
     <message>
         <location filename="../management_layer/plugins/mind_map/mind_map_manager.cpp" line="91"/>
         <source>Upgrade the app to the PRO version to edit the mind map.</source>
-        <translation type="unfinished"></translation>
+        <translation>Posodobite program na različico PRO, če želite urejati miselni vzorec.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/mind_map_manager.cpp" line="92"/>
@@ -3580,7 +3580,7 @@ If you want to continue editing novel text, switch to the corresponding module v
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="540"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2084"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2095"/>
         <source>Create new draft</source>
         <translation>Ustvari nov osnutek</translation>
     </message>
@@ -3590,34 +3590,34 @@ If you want to continue editing novel text, switch to the corresponding module v
         <translation>Odpri v novem oknu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="726"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="728"/>
         <source>Character with this name already exists</source>
         <translation>Lik s tem imenom že obstaja</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="736"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="738"/>
         <source>Location with this name already exists</source>
         <translation>Prizorišče s tem imenom že obstaja</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="882"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="893"/>
         <source>Current draft</source>
         <translation>Trenutni osnutek</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="951"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="962"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation>Ali resnično želite odstraniti različico dokumenta »%1«?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1056"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1067"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Ali želite trajno odstraniti dokument?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="952"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1057"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1516"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="963"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1068"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1527"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
@@ -3642,116 +3642,116 @@ If you want to continue editing novel text, switch to the corresponding module v
         <translation>Deli dostop</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="746"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="748"/>
         <source>World with this name already exists</source>
         <translation>Svet s tem imenom že obstaja</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="953"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1058"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1517"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="964"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1069"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1528"/>
         <source>Yes, remove</source>
         <translation>Da, odstrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1275"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1286"/>
         <source>Characters from the text</source>
         <translation>Liki iz besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1285"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1296"/>
         <source>Characters that are not found in the text</source>
         <translation>Liki, ki niso navedeni v besedilu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1298"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1309"/>
         <source>Save only characters from the text</source>
         <translation>Shrani le like iz besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1299"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1310"/>
         <source>Save all characters</source>
         <translation>Shrani vse like</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1300"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1432"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1311"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1443"/>
         <source>Change nothing</source>
         <translation>Ne spremeni ničesar</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1407"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1418"/>
         <source>Locations from the text</source>
         <translation>Lokacije iz besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1417"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1428"/>
         <source>Locations that are not found in the text</source>
         <translation>Lokacije, ki niso navedene v besedilu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1430"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1441"/>
         <source>Save only locations from the text</source>
         <translation>Shrani le lokacije iz besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1431"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1442"/>
         <source>Save all locations</source>
         <translation>Shrani vse lokacije</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1515"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1526"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Ali želite trajno odstraniti vse dokumente iz koša?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2098"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2109"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2108"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2119"/>
         <source>Remove</source>
         <translation>Odstrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2268"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2289"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2310"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2331"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2279"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2300"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2321"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2342"/>
         <source>draft</source>
         <translation>osnutek</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2287"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2308"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2329"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2298"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2319"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2340"/>
         <source>Script</source>
         <translation>Scenarij</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3010"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3021"/>
         <source>Title page</source>
         <translation>Naslovnica</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3012"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3023"/>
         <source>Synopsis</source>
         <translation>Sinopsis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3024"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3035"/>
         <source>Treatment</source>
-        <translation>Treatment</translation>
+        <translation>Scenosled</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3287"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3298"/>
         <source>Conflicted version</source>
-        <translation type="unfinished"></translation>
+        <translation>Različica v sporu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2266"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3015"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2277"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3026"/>
         <source>Screenplay</source>
         <translation>Scenarij</translation>
     </message>
@@ -3766,7 +3766,7 @@ If you want to continue editing novel text, switch to the corresponding module v
         <translation>Pokaži osnutke dokumenta</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3018"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3029"/>
         <source>Statistics</source>
         <translation>Statistika</translation>
     </message>
@@ -4409,70 +4409,83 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/screenplay_treatment_structure/screenplay_treatment_structure_manager.cpp" line="376"/>
         <source>Treatment</source>
-        <translation>Treatment</translation>
+        <translation>Scenosled</translation>
     </message>
 </context>
 <context>
     <name>ManagementLayer::SettingsManager</name>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="886"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="920"/>
         <source>Do you want to revert all changes in settings to the default state? This action can&apos;t be undone.</source>
         <translation>Ali želite povrniti vse spremembe nastavitev na privzeto stanje? Tega dejanja ni mogoče povrniti.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="888"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="922"/>
         <source>Cancel</source>
         <translation>Prekliči</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="889"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="923"/>
         <source>Reset</source>
         <translation>Ponastavi</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1175"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1226"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1277"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1327"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1377"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1427"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1211"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1262"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1313"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1363"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1413"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1463"/>
         <source>Choose the file to save template</source>
         <translation>Izberite datoteko za shranjevanje predloge</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1196"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1247"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1297"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1347"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1397"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1447"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1232"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1283"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1333"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1383"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1433"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1483"/>
         <source>Choose the file with template to load</source>
         <translation>Izberite datoteko za uvoz predloge</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1699"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1775"/>
         <source>Spelling dictionary loading</source>
         <translation>Nalaganje slovarja za preverjanje črkovanja</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1739"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1767"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1806"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1839"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1815"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1843"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1882"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1915"/>
         <source>Dictionary loading error</source>
         <translation>Napaka pri nalaganju slovarja</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1740"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1807"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1816"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1883"/>
         <source>For some reason dictionary file isn&apos;t loaded. Please check internet connection and firewall/anitivirus settings, and try to reload dictionary.</source>
         <translation>Datoteka se iz neznanega razloga ni naložila. Preverite internetno povezavo in nastavitve požarnega zidu/protivirusne zaščite ter poskusite znova naložiti slovar.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1769"/>
-        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1841"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1845"/>
+        <location filename="../management_layer/content/settings/settings_manager.cpp" line="1917"/>
         <source>Please check internet connection and firewall/anitivirus settings, and try to reload dictionary.</source>
         <translation>Preverite internetno povezavo in nastavitve požarnega zidu/protivirusne zaščite ter poskusite znova naložiti slovar.</translation>
+    </message>
+</context>
+<context>
+    <name>ManagementLayer::ShortcutsManager</name>
+    <message>
+        <location filename="../management_layer/content/shortcuts/shortcuts_manager.cpp" line="105"/>
+        <source>Import</source>
+        <translation type="unfinished">Uvozi</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/shortcuts/shortcuts_manager.cpp" line="106"/>
+        <source>Export</source>
+        <translation type="unfinished">Izvozi</translation>
     </message>
 </context>
 <context>
@@ -4645,27 +4658,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>PageTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3943"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3936"/>
         <source>Cut</source>
         <translation>Izreži</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3950"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3943"/>
         <source>Copy</source>
         <translation>Kopiraj</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3956"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3949"/>
         <source>Paste</source>
         <translation>Prilepi</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3963"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3956"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3969"/>
+        <location filename="../../corelib/ui/widgets/text_edit/page/page_text_edit.cpp" line="3962"/>
         <source>Select all</source>
         <translation>Izberi vse</translation>
     </message>
@@ -4873,7 +4886,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="627"/>
         <source>Mind map</source>
-        <translation type="unfinished"></translation>
+        <translation>Miselni vzorec</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="630"/>
@@ -4883,7 +4896,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="485"/>
         <source>Treatment text</source>
-        <translation>Besedilo treatmenta</translation>
+        <translation>Besedilo scenosleda</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="492"/>
@@ -4917,255 +4930,255 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="15"/>
         <source>I learned there’s an amazing unexplored territory in terms of narrative. Before, I thought the unexplored territory was the form, the way you shoot a movie. Now, I’m learning about the beautiful marriage between form and narrative.</source>
         <extracomment>Cite of the Alfonso Cuarón</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Spoznal sem, da je na področju pripovedi še veliko neraziskanega. Prej sem mislil, da je neraziskano oblika, način snemanja filma. Zdaj pa spoznavam čudovito povezavo med obliko in pripovedjo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="16"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="20"/>
         <source>Alfonso Cuarón</source>
-        <translation type="unfinished"></translation>
+        <translation>Alfonso Cuarón</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="19"/>
         <source>When you’re doing a film, narrative is your most important tool, but it’s a tool to create a cinematographic experience, to create those moments that are beyond narrative, that are almost an abstraction of that moment that hits your psyche.</source>
         <extracomment>Cite of the Alfonso Cuarón</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ko snemate film, je pripoved najpomembnejše orodje, vendar je orodje za ustvarjanje kinematografske izkušnje, za ustvarjanje trenutkov, ki presegajo pripoved, ki so skorajda abstrakcija trenutka, ki zadene vašo psiho.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="23"/>
         <source>To make a great film you need three things: the script, the script, and the script.</source>
         <extracomment>Cite of the Alfred Hitchcock</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Za odličen film potrebujete tri stvari: scenarij, scenarij in scenarij.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="24"/>
         <source>Alfred Hitchcock</source>
-        <translation type="unfinished"></translation>
+        <translation>Alfred Hitchcock</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="27"/>
         <source>I wrote a check for $1,000 to the NRA, gave it to my friend, and I said, I’m giving myself 5 weeks. On August 8, if this is not a fully written script and two people read it and confirm, you are sending that check in. And then I told all my friends. It was the most stressful five weeks of my life. It was like having a thousand agents breathing down my neck.</source>
         <extracomment>Cite of the Alice Wu</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Napisal sem ček za 1.000 dolarjev za NRA, ga dal prijatelju in rekel, da imam na voljo pet tednov. Če to ne bo do konca napisan scenarij, ki sta ga prebrali dve osebi ter to potrdili, boš 8. avgusta poslal ta ček. In potem sem to povedal vsem svojim prijateljem. To je bilo najbolj stresnih pet tednov v mojem življenju. Bilo je, kot da bi mi za vrat dihalo tisoč agentov.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="28"/>
         <source>Alice Wu</source>
-        <translation type="unfinished"></translation>
+        <translation>Alice Wu</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="31"/>
         <source>Know your literary tradition, savor it, steal from it, but when you sit down to write, forget about worshiping greatness and fetishizing masterpieces.</source>
         <extracomment>Cite of the Allegra Goodman</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Spoznajte svojo literarno tradicijo, uživajte v njej, kradite iz nje, a ko se usedete k pisanju, pozabite na čaščenje veličine in fetišiziranje mojstrovin.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="32"/>
         <source>Allegra Goodman</source>
-        <translation type="unfinished"></translation>
+        <translation>Allegra Goodman</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="35"/>
         <source>To gain your own voice, you have to forget about having it heard.</source>
         <extracomment>Cite of the Allen Ginsberg</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če želite pridobiti lasten glas, morate pozabiti na to, da ste ga že slišali.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="36"/>
         <source>Allen Ginsberg</source>
-        <translation type="unfinished"></translation>
+        <translation>Allen Ginsberg</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="39"/>
         <source>I think the deeper you go into questions, the deeper or more interesting the questions get. And I think that’s the job of art.</source>
         <extracomment>Cite of the Andre Dubus III</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Menim, da bolj ko se poglabljaš v vprašanja, bolj globoka in zanimiva postanejo vprašanja. In mislim, da je to naloga umetnosti.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="40"/>
         <source>Andre Dubus III</source>
-        <translation type="unfinished"></translation>
+        <translation>Andre Dubus III</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="43"/>
         <source>The most beautiful things are those that madness prompts and reason writes.</source>
         <extracomment>Cite of the Andre Gide</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Najlepše stvari so tiste, ki jih sproži norost in napiše razum.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="44"/>
         <source>Andre Gide</source>
-        <translation type="unfinished"></translation>
+        <translation>Andre Gide</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="47"/>
         <source>Do not hoard what seems good for a later place in the book, or for another book; give it, give it all, give it now.</source>
         <extracomment>Cite of the Annie Dillard</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Tistega, kar se vam zdi dobro, ne hranite za poznejše mesto v knjigi ali za drugo knjigo; dajte, dajte vse, dajte to zdaj.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="48"/>
         <source>Annie Dillard</source>
-        <translation type="unfinished"></translation>
+        <translation>Annie Dillard</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="51"/>
         <source>Out of the thousand writers huffing and puffing through movieland there are scarcely fifty men and women of wit or talent. The rest of the fraternity is deadwood. Yet, in a curious way, there is not much difference between the product of a good writer and a bad one. They both have to toe the same mark.</source>
         <extracomment>Cite of the Ben Hecht</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Med tisoč pisci, ki se potikajo po deželi filma, je komaj petdeset duhovitih in nadarjenih moških in žensk. Preostali del bratovščine je balast. Vendar pa na nenavaden način ni velike razlike med izdelkom dobrega in slabega pisca. Oba sta namenjena k istemu cilju.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="52"/>
         <source>Ben Hecht</source>
-        <translation type="unfinished"></translation>
+        <translation>Ben Hecht</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="55"/>
         <source>If you have a problem with the third act, the real problem is in the first act.</source>
         <extracomment>Cite of the Billy Wilder</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če imate težave s tretjim dejanjem, je prava težava v prvem dejanju.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="56"/>
         <source>Billy Wilder</source>
-        <translation type="unfinished"></translation>
+        <translation>Billy Wilder</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="59"/>
         <source>I have a complex feeling about genre. I love it, but I hate it at the same time. I have the urge to make audiences thrill with the excitement of a genre, but I also try to betray and destroy the expectations placed on that genre.</source>
         <extracomment>Cite of the Bong Joon-Ho</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Do žanra imam zapleten odnos. Všeč mi je, a ga hkrati sovražim. Hočem gledalce navdušiti z vznemirljivostjo žanra, hkrati pa skušam izdati in pokvariti pričakovanja, ki jih prinaša ta žanr.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="60"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="64"/>
         <source>Bong Joon-Ho</source>
-        <translation type="unfinished"></translation>
+        <translation>Bong Džun-Ho</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="63"/>
         <source>The multilevel, the conscious and the unconscious, is natural when I write scripts… when I come up with ideas and stories.</source>
         <extracomment>Cite of the Bong Joon-Ho</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Večplastnost, zavestno in nezavedno, je nekaj naravnega, ko pišem scenarije ... ko se mi porajajo ideje in zgodbe.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="67"/>
         <source>Beware of advice — even this.</source>
         <extracomment>Cite of the Carl Sandburg</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Varujte se nasvetov - tudi tega.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="68"/>
         <source>Carl Sandburg</source>
-        <translation type="unfinished"></translation>
+        <translation>Carl Sandburg</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="71"/>
         <source>It’s so important just because what we see, we kind of validate; what we see, we can empathize with; what we see, we can sort of put ourselves into the shoes of. I think what I do as a storyteller and what we all do as storytellers is kind of fundamental to the fabric of society.</source>
         <extracomment>Cite of the Charise Castro Smith</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>To je tako pomembno že zato, ker tisto, kar vidimo, nekako potrdimo; s tistim, kar vidimo, lahko sočustvujemo; tisto, kar vidimo, lahko nekako podoživimo. Mislim, da je to, kar počnem kot pripovedovalka zgodb in kar počnemo vsi kot pripovedovalci zgodb, nekako temeljnega pomena za ustroj družbe.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="72"/>
         <source>Charise Castro Smith</source>
-        <translation type="unfinished"></translation>
+        <translation>Charise Castro Smith</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="75"/>
         <source>A screenplay is an exploration. It’s about the thing you don’t know. It’s a step into the abyss. It necessarily starts somewhere, anywhere; there is a starting point, but the rest is undetermined.</source>
         <extracomment>Cite of the Charlie Kaufman</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Scenarij je raziskovanje. Govori o stvari, ki je ne poznaš. Je korak v prepad. Nujno je, da se nekje začne, kjerkoli; izhodišče obstaja, ostalo pa je nedoločeno.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="76"/>
         <source>Charlie Kaufman</source>
-        <translation type="unfinished"></translation>
+        <translation>Charlie Kaufman</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="79"/>
         <source>A good film script should be able to do completely without dialogue.</source>
         <extracomment>Cite of the David Mamet</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Dober filmski scenarij bi moral shajati povsem brez dialoga.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="80"/>
         <source>David Mamet</source>
-        <translation type="unfinished"></translation>
+        <translation>David Mamet</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="83"/>
         <source>I care about subtext. If you get that right, the text will flow.</source>
         <extracomment>Cite of the Dee Rees</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pomemben mi je podtekst. Če ga boste pravilno določili, bo besedilo teklo samo od sebe.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="84"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="88"/>
         <source>Dee Rees</source>
-        <translation type="unfinished"></translation>
+        <translation>Dee Rees</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="87"/>
         <source>Writing is really freeing because it’s the only part of the process where it’s just you and the characters and you are by yourself in a room and you can just hash it out. There are no limitations.</source>
         <extracomment>Cite of the Dee Rees</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pisanje je resnično osvobajajoče, saj je to edini del procesa, v katerem ste sami s svojimi liki v sobi in lahko vse skupaj neposredno razrešite. Nobenih omejitev ni.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="91"/>
         <source>There is no reason why challenging themes and engaging stories have to be mutually exclusive - in fact, each can fuel the other. As a filmmaker, I want to entertain people first and foremost. If out of that comes a greater awareness and understanding of a time or a circumstance, then the hope is that change can happen.</source>
         <extracomment>Cite of the Edward Zwick</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ni razloga, da bi se zahtevne teme in zanimive zgodbe izključevale - pravzaprav lahko ena spodbuja drugo. Kot filmski ustvarjalec želim ljudi predvsem zabavati. Če iz tega izvira večja ozaveščenost in razumevanje nekega časa ali okoliščin, potem obstaja upanje, da se lahko zgodijo spremembe.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="92"/>
         <source>Edward Zwick</source>
-        <translation type="unfinished"></translation>
+        <translation>Edward Zwick</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="95"/>
         <source>A lot of my ideas were crap, but bad ideas help get the ball rolling too. And bad ideas lead to better ideas.</source>
         <extracomment>Cite of the Elaine Loh</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Veliko mojih idej je bilo slabih, vendar tudi slabe ideje pomagajo pri razvoju. In slabe ideje vodijo do boljših idej.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="96"/>
         <source>Elaine Loh</source>
-        <translation type="unfinished"></translation>
+        <translation>Elaine Loh</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="99"/>
         <source>If it sounds like writing, I rewrite it.</source>
         <extracomment>Cite of the Elmore Leonard</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če zveni napisano, napišem na novo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="100"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="104"/>
         <source>Elmore Leonard</source>
-        <translation type="unfinished"></translation>
+        <translation>Elmore Leonard</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="103"/>
         <source>If it sounds like writing, I rewrite it. Or, if proper usage gets in the way, it may have to go. I can’t allow what we learned in English composition to disrupt the sound and rhythm of the narrative.</source>
         <extracomment>Cite of the Elmore Leonard</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če zveni napisano, napišem na novo. Če pa so v napoto pravila, bo morda moralo stran. Ne morem dovoliti, da bi to, kar smo se učili pri pisanju besedil, motilo zvok in ritem pripovedi.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="107"/>
         <source>Who wants to become a writer? And why? Because it’s the answer to everything. … It’s the streaming reason for living. To note, to pin down, to build up, to create, to be astonished at nothing, to cherish the oddities, to let nothing go down the drain, to make something, to make a great flower out of life, even if it’s a cactus.</source>
         <extracomment>Cite of the Enid Bagnold</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Kdo želi postati pisatelj? In zakaj? Ker je to odgovor na vse. ... To je razlog za življenje. Zapisati, ubesediti, zgraditi, ustvarjati, se čuditi ničemur, ceniti nenavadnosti, ničesar ne izpustiti iz rok, nekaj narediti, iz življenja narediti velik cvet, četudi je to kaktus.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="108"/>
         <source>Enid Bagnold</source>
-        <translation type="unfinished"></translation>
+        <translation>Enid Bagnold</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="111"/>
         <source>Critics are men who watch a battle from a high place then come down and shoot the survivors.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Kritiki so ljudje, ki bitko opazujejo z višine, nato pa se spustijo in postrelijo preživele.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="112"/>
@@ -5177,190 +5190,190 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="136"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="140"/>
         <source>Ernest Hemingway</source>
-        <translation type="unfinished"></translation>
+        <translation>Ernest Hemingway</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="115"/>
         <source>It’s none of their business that you have to learn to write. Let them think you were born that way.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ni njihova stvar, da se morate naučiti pisati. Naj mislijo, da ste se takšni že rodili.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="119"/>
         <source>Life breaks us all but in the end we are stronger in the broken places.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Življenje nas vse lomi, vendar smo na koncu močnejši na polomljenih mestih.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="123"/>
         <source>The best people possess a feeling for beauty, the courage to take risks, the discipline to tell the truth, the capacity for sacrifice. Ironically, their virtues make them vulnerable; they are often wounded, sometimes destroyed.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Najboljši ljudje imajo občutek za lepoto, pogum za tveganje, disciplino, da povedo resnico, sposobnost žrtvovanja. Ironično je, da so zaradi svojih vrlin ranljivi; pogosto so ranjeni, včasih uničeni.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="127"/>
         <source>The first draft of anything is shit.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Prva roka vsega je sranje.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="131"/>
         <source>We are all apprentices in a craft where no one ever becomes a master.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Vsi smo vajenci v obrti, v kateri nihče nikoli ne postane mojster.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="135"/>
         <source>When writing a novel a writer should create living people; people, not characters. A character is a caricature.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pisatelj mora pri pisanju romana ustvariti žive ljudi; ljudi, ne likov. Lik je karikatura.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="139"/>
         <source>You must be prepared to work always without applause.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pripravljeni morate biti delati ves čas brez aplavza.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="143"/>
         <source>We wouldn’t have done it if we didn’t think we could have fun with it.</source>
         <extracomment>Cite of the Ethan Coen</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ne bi se tega lotila, če ne bi mislila, da se bova pri tem zabavala.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="144"/>
         <source>Ethan Coen</source>
-        <translation type="unfinished"></translation>
+        <translation>Ethan Coen</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="147"/>
         <source>The last thing I want to see at the movies is a version of my reality. I don’t want to see art imitating life.</source>
         <extracomment>Cite of the Fran Walsh</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Zadnja stvar, ki jo želim videti v kinu, je različica moje resničnosti. Nočem, da bi umetnost posnemala življenje.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="148"/>
         <source>Fran Walsh</source>
-        <translation type="unfinished"></translation>
+        <translation>Fran Walsh</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="151"/>
         <source>I became quite successful very young, and it was mainly because I was so enthusiastic and I just worked so hard at it.</source>
         <extracomment>Cite of the Francis Ford Coppola</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Zelo mlad sem postal zelo uspešen, predvsem zato, ker sem bil tako navdušen in sem tako trdo delal.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="152"/>
         <source>Francis Ford Coppola</source>
-        <translation type="unfinished"></translation>
+        <translation>Francis Ford Coppola</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="155"/>
         <source> I inherited the knowledge that sometimes (talents) not only skip a generation, but sometimes run screaming from it. Ironically, it was the singing non-ability that helped feed my love of laughter.</source>
         <extracomment>Cite of the Fred Astaire</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Podedoval sem spoznanje, da včasih (talenti) ne le preskočijo generacijo, ampak včasih pred njo kriče bežijo. Ironično je, da je prav nesposobnost petja pomagala nahraniti mojo ljubezen do smeha.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="156"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="160"/>
         <source>Fred Astaire</source>
-        <translation type="unfinished"></translation>
+        <translation>Fred Astaire</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="159"/>
         <source>Either the camera will dance, or I will.</source>
         <extracomment>Cite of the Fred Astaire</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ali bo plesala kamera ali pa jaz.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="163"/>
         <source>Dialogue is a necessary evil.</source>
         <extracomment>Cite of the Fred Zinnemann</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Dialog je nujno zlo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="164"/>
         <source>Fred Zinnemann</source>
-        <translation type="unfinished"></translation>
+        <translation>Fred Zinnemann</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="167"/>
         <source>When I sit down to write a book, I do not say to myself, ‘I am going to produce a work of art.’ I write it because there is some lie that I want to expose, some fact to which I want to draw attention, and my initial concern is to get a hearing.</source>
         <extracomment>Cite of the George Orwell</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ko se usedem, da bi napisal knjigo, si ne rečem: »Ustvaril bom umetniško delo«. Napišem jo zato, ker želim razkriti neko laž, neko dejstvo, na katero želim opozoriti, in moja prvotna skrb je, da ljudje prisluhnejo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="168"/>
         <source>George Orwell</source>
-        <translation type="unfinished"></translation>
+        <translation>George Orwell</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="171"/>
         <source>Keep a small can of WD-40 on your desk—away from any open flames—to remind yourself that if you don’t write daily, you will get rusty.</source>
         <extracomment>Cite of the George Singleton</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Na pisalni mizi, daleč od odprtega ognja, hranite majhno pločevinko WD-40 ter se tako opomnite, da boste zarjaveli, če ne boste pisali vsak dan.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="172"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="176"/>
         <source>George Singleton</source>
-        <translation type="unfinished"></translation>
+        <translation>George Singleton</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="175"/>
         <source>You do not have to explain every single drop of water contained in a rain barrel. You have to explain one drop—H2O. The reader will get it.</source>
         <extracomment>Cite of the George Singleton</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ni vam treba razložiti vsake kapljice vode, ki jo vsebuje sod za deževnico. Razložiti morate eno kapljico - H2O. Bralec bo to razumel.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="179"/>
         <source>Each writer is born with a repertory company in his head. Shakespeare has perhaps 20 players. … I have 10 or so, and that’s a lot. As you get older, you become more skillful at casting them.</source>
         <extracomment>Cite of the Gore Vidal</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Vsak pisatelj se rodi z gledališko zasedbo v glavi. Shakespeare ima morda 20 igralcev. ... Jaz jih imam približno 10 in to je veliko. Ko postaneš starejši, postaneš bolj spreten pri njihovem zasedanju.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="180"/>
         <source>Gore Vidal</source>
-        <translation type="unfinished"></translation>
+        <translation>Gore Vidal</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="183"/>
         <source>Let your characters talk to each other and do things. Spend time with them — they’ll tell you who they are and what they’re up to.</source>
         <extracomment>Cite of the Greta Gerwig</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Naj se vaši liki med seboj pogovarjajo in počnejo različne stvari. Preživite čas z njimi - povedali vam bodo, kdo so in kaj počnejo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="184"/>
         <source>Greta Gerwig</source>
-        <translation type="unfinished"></translation>
+        <translation>Greta Gerwig</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="187"/>
         <source>To me, art and storytelling serve primal, spiritual functions in my daily life. Whether I’m telling a bedtime story to my kids or trying to mount a movie or write a short story or a novel, I take it very seriously.</source>
         <extracomment>Cite of the Guillermo del Toro</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Umetnost in pripovedovanje zgodb imata v mojem vsakdanjem življenju primarno, duhovno funkcijo. Ne glede na to, ali svojim otrokom pripovedujem pravljico za lahko noč ali poskušam posneti film ali napisati kratko zgodbo ali roman, to jemljem zelo resno.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="188"/>
         <source>Guillermo del Toro</source>
-        <translation type="unfinished"></translation>
+        <translation>Guillermo del Toro</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="191"/>
         <source>There are no dull subjects, only dull writers</source>
         <extracomment>Cite of the H. L. Mencken</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ni dolgočasnih tem, so le dolgočasni pisci.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="192"/>
         <source>H. L. Mencken</source>
-        <translation type="unfinished"></translation>
+        <translation>H. L. Mencken</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="195"/>
         <source>Characters make their own plot. The dimensions of the characters determine the action of the novel.</source>
         <extracomment>Cite of the Harper Lee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Liki si sami ustvarijo zaplet. Razsežnosti likov določajo dogajanje v romanu.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="196"/>
@@ -5368,297 +5381,297 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="204"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="208"/>
         <source>Harper Lee</source>
-        <translation type="unfinished"></translation>
+        <translation>Harper Lee</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="199"/>
         <source>I would advise anyone who aspires to a writing career that before developing his talent he would be wise to develop a thick hide.</source>
         <extracomment>Cite of the Harper Lee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Vsem, ki se želijo poklicno ukvarjati s pisanjem, svetujem, da pred razvijanjem svojega talenta pridobijo debelo kožo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="203"/>
         <source>It’s not necessary to tell all you know.</source>
         <extracomment>Cite of the Harper Lee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ni nujno, da poveste vse, kar veste.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="207"/>
         <source>You never really understand a person until you consider things from his point of view.</source>
         <extracomment>Cite of the Harper Lee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Nikoli zares ne razumeš človeka, dokler ne razmišljaš o stvareh z njegovega zornega kota.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="211"/>
         <source>The creation of a single world comes from a huge number of fragments and chaos.</source>
         <extracomment>Cite of the Hayao Miyazaki</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Posamični svet nastane iz ogromnega števila drobcev in kaosa.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="212"/>
         <source>Hayao Miyazaki</source>
-        <translation type="unfinished"></translation>
+        <translation>Hajao Mijazaki</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="215"/>
         <source>Write while the heat is in you. … The writer who postpones the recording of his thoughts uses an iron which has cooled to burn a hole with.</source>
         <extracomment>Cite of the Henry David Thoreau</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pišite, dokler ste razgreti. ... Pisatelj, ki odlaša z zapisovanjem svojih misli, uporablja za kovanje ohlajeno železo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="216"/>
         <source>Henry David Thoreau</source>
-        <translation type="unfinished"></translation>
+        <translation>Henry David Thoreau</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="219"/>
         <source>Not a wasted word. This has been a main point to my literary thinking all my life.</source>
         <extracomment>Cite of the Hunter S. Thompson</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Niti ene zapravljene besede. To je bila osrednja točka mojega literarnega razmišljanja vse življenje.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="220"/>
         <source>Hunter S. Thompson</source>
-        <translation type="unfinished"></translation>
+        <translation>Hunter S. Thompson</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="223"/>
         <source>Genius gives birth, talent delivers. What Rembrandt or Van Gogh saw in the night can never be seen again. Born writers of the future are amazed already at what they’re seeing now, what we’ll all see in time for the first time, and then see imitated many times by made writers.</source>
         <extracomment>Cite of the Jack Kerouac</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Genij rojeva, talent dostavlja. Kar sta Rembrandt ali Van Gogh videla ponoči, ni več mogoče videti. Rojeni pisatelji prihodnosti se že zdaj čudijo temu, kar vidijo zdaj, kar bomo čez čas vsi prvič uzrli, nato pa videli, kako jih bodo večkrat posnemali narejeni pisatelji.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="224"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="228"/>
         <source>Jack Kerouac</source>
-        <translation type="unfinished"></translation>
+        <translation>Jack Kerouac</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="227"/>
         <source>It ain’t whatcha write, it’s the way atcha write it.</source>
         <extracomment>Cite of the Jack Kerouac</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ne gre za to, kaj napišeš, temveč za način, kako to napišeš.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="231"/>
         <source>A story should have a beginning, a middle, and an end, but not necessarily in that order.</source>
         <extracomment>Cite of the Jean-Luc Godard</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Zgodba mora imeti začetek, sredino in konec, vendar ne nujno v tem zaporedju.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="232"/>
         <source>Jean-Luc Godard</source>
-        <translation type="unfinished"></translation>
+        <translation>Jean-Luc Godard</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="235"/>
         <source>There is only one plot—things are not what they seem.</source>
         <extracomment>Cite of the Jim Thompson</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Obstaja samo en zaplet - stvari niso takšne, kot se zdijo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="236"/>
         <source>Jim Thompson</source>
-        <translation type="unfinished"></translation>
+        <translation>Jim Thompson</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="239"/>
         <source>Long patience and application saturated with your heart’s blood—you will either write or you will not—and the only way to find out whether you will or not is to try.</source>
         <extracomment>Cite of the Jim Tully, WD</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Dolgo potrpljenje in vlaganje, prepojeno s srčnostjo - ali boste pisali ali pa ne boste - in edini način, da ugotovite, ali boste pisali ali ne, je, da poskusite.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="240"/>
         <source>Jim Tully, WD</source>
-        <translation type="unfinished"></translation>
+        <translation>Jim Tully, WD</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="243"/>
         <source>The characters are the result of two things — first, we elaborate them into fairly well-defined people through their dialogue, then they happen all over again, when the actor interprets them.</source>
         <extracomment>Cite of the Joel Coen</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Liki so rezultat dveh stvari - najprej jih skozi dialoge oblikujemo v dokaj jasno opredeljene osebe, nato pa se znova pojavijo, ko jih interpretira igralec.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="244"/>
         <source>Joel Coen</source>
-        <translation type="unfinished"></translation>
+        <translation>Joel Coen</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="247"/>
         <source>I often say that a lot of my job, as a screenwriter, is sort of being a stock picker, in that I need to figure out what movies are probably going to get made because otherwise, I’m spending a lot of my time on something that’s trapped in 12-point courier.</source>
         <extracomment>Cite of the John August</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pogosto pravim, da je moj poklic scenarista v veliki meri nekakšno izbiranje delnic, saj moram ugotoviti, kateri filmi bodo verjetno posneti, ker sicer veliko časa porabim za nekaj, kar je ujeto v pisavi courier, 12 točk.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="248"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="252"/>
         <source>John August</source>
-        <translation type="unfinished"></translation>
+        <translation>John August</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="251"/>
         <source>I think the greatest barrier I’ve always faced as a writer is just starting. Like all of us, I can just procrastinate and find some excuse for not actually getting started.</source>
         <extracomment>Cite of the John August</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Mislim, da je največja ovira, s katero sem se vedno soočal kot pisec, to, da moram začeti. Tako kot vsi ostali lahko odlašam in si poiščem kakšen izgovor, da ne začnem pisati.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="255"/>
         <source>In England, I am a horror movie director. In Germany, I am a filmmaker. In the US, I am a bum.</source>
         <extracomment>Cite of the John Carpenter</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>V Angliji sem režiser grozljivk. V Nemčiji sem filmski režiser. V ZDA sem niče.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="256"/>
         <source>John Carpenter</source>
-        <translation type="unfinished"></translation>
+        <translation>John Carpenter</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="259"/>
         <source>Feydeau’s one rule of playwriting: Character A: My life is perfect as long as I don’t see Character B. Knock Knock. Enter Character B.</source>
         <extracomment>Cite of the John Guare</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Feydeaujevo edino pravilo za pisanje dramskih besedil: Lik A: Moje življenje je popolno, dokler ne vidim lika B. Tok tok. Vstopi lik B.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="260"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="264"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="268"/>
         <source>John Guare</source>
-        <translation type="unfinished"></translation>
+        <translation>John Guare</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="263"/>
         <source>James Joyce wrote the definitive work about Dublin while he was living in Switzerland. We&apos;re all where we come from. We all have our roots.</source>
         <extracomment>Cite of the John Guare</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>James Joyce je najpomembnejše delo o Dublinu napisal, ko je živel v Švici. Vsi smo tam, od koder prihajamo. Vsi imamo svoje korenine.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="267"/>
         <source>You can read ten books and finally come across one detail, and it&apos;s like, &quot;now everything else makes sense. Now I know where I am.&quot;</source>
         <extracomment>Cite of the John Guare</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Lahko prebereš deset knjig in na koncu naletiš na eno podrobnost, da se ti zazdi, da »je zdaj vse drugo dobilo smisel. Zdaj vem, kje sem.«</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="271"/>
         <source>I’ve noticed that the truth works… If you’re being yourself and you’re just using your own emotions, they can feel it. If you’re doing fake, they can feel it. It took me a while in comedy to realize that your truth is more powerful than your mask.</source>
         <extracomment>Cite of the Jordan Peele</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Opazil sem, da resnica deluje ... Če si sam svoj in uporabljaš lastna čustva, lahko to čutijo. Če se pretvarjaš, lahko to čutijo. Pri komediji sem potreboval nekaj časa, da sem spoznal, da je tvoja resnica močnejša od tvoje maske.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="272"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="276"/>
         <source>Jordan Peele</source>
-        <translation type="unfinished"></translation>
+        <translation>Jordan Peele</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="275"/>
         <source>That’s my advice with dealing with writer’s block. Follow the fun. If you aren’t having fun, you are doing it wrong.</source>
         <extracomment>Cite of the Jordan Peele</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>To je moj nasvet za spopadanje z ustvarjalno blokado. Sledite užitku. Če se ne zabavate, to počnete narobe.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="279"/>
         <source>Always be yourself…unless you suck</source>
         <extracomment>Cite of the Joss Whedon</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Vedno bodite sami svoji ... razen če ste zanič.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="280"/>
         <source>Joss Whedon</source>
-        <translation type="unfinished"></translation>
+        <translation>Joss Whedon</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="283"/>
         <source>The first sentence can’t be written until the final sentence is written.</source>
         <extracomment>Cite of the Joyce Carol Oates</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Prve povedi ni mogoče napisati, dokler ni napisana zadnja poved.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="284"/>
         <source>Joyce Carol Oates</source>
-        <translation type="unfinished"></translation>
+        <translation>Joyce Carol Oates</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="287"/>
         <source>Style is to forget all styles.</source>
         <extracomment>Cite of the Jules Renard</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Slog je pozabiti na vse sloge.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="288"/>
         <source>Jules Renard</source>
-        <translation type="unfinished"></translation>
+        <translation>Jules Renard</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="291"/>
         <source>Write. Rewrite. When not writing or rewriting, read. I know of no shortcuts.</source>
         <extracomment>Cite of the Larry L. King</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pišite. Pišite novo verzijo. Ko ne pišete ali pišete nove verzije, berite. Ne poznam nobenih bližnjic.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="292"/>
         <source>Larry L. King</source>
-        <translation type="unfinished"></translation>
+        <translation>Larry L. King</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="295"/>
         <source>One thing that helps is to give myself permission to write badly. I tell myself that I’m going to do my five or 10 pages no matter what, and that I can always tear them up the following morning if I want. I’ll have lost nothing—writing and tearing up five pages would leave me no further behind than if I took the day off.</source>
         <extracomment>Cite of the Lawrence Block</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ena od stvari, ki mi pomaga, je, da si dovolim pisati slabo. Rečem si, da bom ne glede na vse napisal svojih pet ali deset strani in da jih lahko naslednje jutro, če hočem, vedno raztrgam. Ničesar ne bom izgubil – če napišem in raztrgam pet strani, ne bom zaostajal nič bolj, kot če bi si vzel prost dan.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="296"/>
         <source>Lawrence Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Lawrence Block</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="299"/>
         <source>Plot is people. Human emotions and desires founded on the realities of life, working at cross purposes, getting hotter and fiercer as they strike against each other until finally there’s an explosion—that’s Plot.</source>
         <extracomment>Cite of the Leigh Brackett</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Zaplet so ljudje. Človeška čustva in želje, ki temeljijo na realnosti življenja, delujejo navzkrižno, postajajo vse bolj vroči in srditi, ko se spopadajo drug z drugim, dokler ne pride do eksplozije – to je zaplet.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="300"/>
         <source>Leigh Brackett</source>
-        <translation type="unfinished"></translation>
+        <translation>Leigh Brackett</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="303"/>
         <source>Your first obligation as a writer is to tell the truth and to tell a good story.</source>
         <extracomment>Cite of the Lena Waithe</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Vaša prva pisateljska dolžnost je govoriti resnico in pripovedovati dobro zgodbo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="304"/>
         <source>Lena Waithe</source>
-        <translation type="unfinished"></translation>
+        <translation>Lena Waithe</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="307"/>
         <source>One rule of screenwriting: does the reader want to turn the page?</source>
         <extracomment>Cite of the Leslie Dixon</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Eno od pravil scenaristike: ali bralec želi obrniti stran?</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="308"/>
         <source>Leslie Dixon</source>
-        <translation type="unfinished"></translation>
+        <translation>Leslie Dixon</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="311"/>
         <source>Don’t expect the puppets of your mind to become the people of your story. If they are not realities in your own mind, there is no mysterious alchemy in ink and paper that will turn wooden figures into flesh and blood.</source>
         <extracomment>Cite of the Leslie Gordon Barnard</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ne pričakujte, da bodo lutke v vaših mislih postale ljudje v vaši zgodbi. Če niso resničnost v vašem umu, ni skrivnostne alkimije med črnilom in papirjem, ki bi lesene figure spremenila v meso in kri.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="312"/>
         <source>Leslie Gordon Barnard</source>
-        <translation type="unfinished"></translation>
+        <translation>Leslie Gordon Barnard</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="315"/>
         <source>Animals are less alone with roaring than we are with all these words.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Živali so z rjovenjem manj osamljene kot mi z vsemi temi besedami.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="316"/>
@@ -5669,49 +5682,49 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="336"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="340"/>
         <source>Margaret Laurence</source>
-        <translation type="unfinished"></translation>
+        <translation>Margaret Laurence</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="319"/>
         <source>Follow your heart, and you perish.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Sledi svojemu srcu in propadla boš.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="323"/>
         <source>I&apos;ve never been able to force a novel. I always had the sense something being given to me. You can&apos;t sit around and wait until inspiration strikes, but neither can you force into being something that isn&apos;t there.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Nikoli mi ni uspelo izsiliti romana. Vedno sem imela občutek, da mi je nekaj dano. Ne moreš sedeti in čakati, da pride navdih, a tudi ne moreš izsiliti nečesa, česar ni.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="327"/>
         <source>If I hadn&apos;t had my children, I wouldn&apos;t have written more and better, I would have written less and worse.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če ne bi imela otrok, ne bi pisala več in bolje, ampak manj in slabše.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="331"/>
         <source>The struggle is not lost. I believe we have to live, as long as we live, in the expectation and hope of changing the world for the better. That may sound naive. It may even sound sentimental. Never mind: I believe it. What are we to live for, except life itself? And, with all our doubts, with all our flaws, with all our problems, I believe that we will carry on, with God&apos;s help.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Boj ni izgubljen. Verjamem, da moramo živeti, dokler živimo, v pričakovanju in upanju, da bomo spremenili svet na bolje. To se morda sliši naivno. Morda se sliši celo sentimentalno. Ni važno: verjamem v to. Za kaj naj živimo, če ne za življenje samo? In ob vseh naših dvomih, slabostih in težavah verjamem, da bomo z Božjo pomočjo nadaljevali.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="335"/>
         <source>What goes on inside isn&apos;t ever the same as what goes on outside.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>To, kar se dogaja znotraj, ni vedno enako tistemu, kar se dogaja zunaj.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="339"/>
         <source>When I say work I only mean writing. Everything else is just odd jobs.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ko rečem delo, mislim samo na pisanje. Vse drugo so le priložnostna dela.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="343"/>
         <source>Courage is resistance to fear, mastery of fear – not absence of fear.</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pogum je odpor proti strahu, obvladovanje strahu in ne odsotnost strahu.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="344"/>
@@ -5722,173 +5735,173 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="364"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="368"/>
         <source>Mark Twain</source>
-        <translation type="unfinished"></translation>
+        <translation>Mark Twain</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="347"/>
         <source>First get your facts, then distort them at your leisure</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Najprej se seznanite z dejstvi, nato pa jih izkrivljajte po lastni presoji.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="351"/>
         <source>Get your facts first, then you can distort them as you please.</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Najprej se seznanite z dejstvi, nato pa jih izkrivljajte po lastni presoji.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="355"/>
         <source>I have never let my schooling interfere with my education.</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Nikoli nisem dovolil, da bi me šolanje oviralo pri izobraževanju.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="359"/>
         <source>If you tell the truth, you don’t have to remember anything.</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če govorite resnico, se vam ni treba ničesar spominjati.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="363"/>
         <source>The secret of getting ahead is getting started.</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Skrivnost napredka je v tem, da začnete.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="367"/>
         <source>To succeed in life, you need two things: ignorance and confidence.</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Za uspeh v življenju potrebujete dve stvari: nevednost in samozavest.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="371"/>
         <source>There is no greater agony than bearing an untold story inside you.</source>
         <extracomment>Cite of the Maya Angelou</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ni večje agonije kot nositi v sebi neizpovedano zgodbo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="372"/>
         <source>Maya Angelou</source>
-        <translation type="unfinished"></translation>
+        <translation>Maya Angelou</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="375"/>
         <source>You have to be true to your instinctive way of writing. You have to find your identity.</source>
         <extracomment>Cite of the Michaela Coel</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ostati morate zvesti svojemu instinktivnemu načinu pisanja. Najti morate svojo identiteto.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="376"/>
         <source>Michaela Coel</source>
-        <translation type="unfinished"></translation>
+        <translation>Michaela Coel</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="379"/>
         <source>I just have my characters say my controversial opinions and then hide behind them.</source>
         <extracomment>Cite of the Mindy Kaling</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Svoje like enostavno pustim povedati moja kontroverzna mnenja in se nato skrivam za njimi.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="380"/>
         <source>Mindy Kaling</source>
-        <translation type="unfinished"></translation>
+        <translation>Mindy Kaling</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="383"/>
         <source>As a young journalist, I thought that stories were simply what happened. As a screenwriter, I realized that we create stories by imposing narrative on the events that happen around us.</source>
         <extracomment>Cite of the Nora Ephron</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Kot mlada novinarka sem mislila, da so zgodbe preprosto to, kar se je zgodilo. Kot scenarist sem spoznala, da zgodbe ustvarjamo tako, da dogodkom, ki se odvijajo okoli nas, vsiljujemo pripoved.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="384"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="388"/>
         <source>Nora Ephron</source>
-        <translation type="unfinished"></translation>
+        <translation>Nora Ephron</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="387"/>
         <source>My mother wanted us to understand that the tragedies of your life one day have the potential to be comic stories the next.</source>
         <extracomment>Cite of the Nora Ephron</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Mama je želela, da bi razumeli, da lahko tragedije iz našega življenja postanejo naslednji dan komične zgodbe.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="391"/>
         <source>Here&apos;s an outdated quote! -- &quot;A typewriter needs only paper; a camera uses film, requires subsidiary equipment by the truckload and Wellington several hundreds of technicians. That is always the central fact about the filmmakers opposed to any other artist: he can never afford his own tools.&quot;</source>
         <extracomment>Cite of the Orson Welles</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Tukaj je zastarel citat! - »Pisalni stroj potrebuje le papir, kamera pa film, pomožno opremo, ki jo je treba za več tovornjakov in več sto tehnikov. To je vedno osrednje dejstvo o režiserju v nasprotju s katerim koli drugim umetnikom: nikoli si ne more privoščiti lastnega orodja.«</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="392"/>
         <source>Orson Welles</source>
-        <translation type="unfinished"></translation>
+        <translation>Orson Welles</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="395"/>
         <source>I could be just a writer very easily. I am not a writer. I am a screenwriter, which is half a filmmaker. … But it is not an art form, because screenplays are not works of art. They are invitations to others to collaborate on a work of art.</source>
         <extracomment>Cite of the Paul Schrader</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Z lahkoto bi lahko bil samo pisatelj. Nisem pisatelj. Sem scenarist, kar je polovica filmskega ustvarjalca. ... Vendar to ni umetniška oblika, saj scenariji niso umetniška dela. So vabila drugim, da sodelujejo pri ustvarjanju umetniškega dela.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="396"/>
         <source>Paul Schrader</source>
-        <translation type="unfinished"></translation>
+        <translation>Paul Schrader</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="399"/>
         <source>We don’t need books to make films. It’s the last thing we want — it turns cinema into the bastard art of illustration.</source>
         <extracomment>Cite of the Peter Greenaway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Za snemanje filmov ne potrebujemo knjig. To je zadnja stvar, ki si jo želimo - film se tako spremeni v pankrtstko umetnost ilustriranja.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="400"/>
         <source>Peter Greenaway</source>
-        <translation type="unfinished"></translation>
+        <translation>Peter Greenaway</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="403"/>
         <source>If a nation loses its storytellers, it loses its childhood.</source>
         <extracomment>Cite of the Peter Handke</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če narod izgubi pripovedovalce zgodb, izgubi svoje otroštvo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="404"/>
         <source>Peter Handke</source>
-        <translation type="unfinished"></translation>
+        <translation>Peter Handke</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="407"/>
         <source>The road to hell is paved with works-in-progress.</source>
         <extracomment>Cite of the Philip Roth</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pot v pekel je tlakovana z deli v nastajanju.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="408"/>
         <source>Philip Roth</source>
-        <translation type="unfinished"></translation>
+        <translation>Philip Roth</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="411"/>
         <source>[T]he element of surprise is the most important thing and what keeps me interested in writing. I can feel if I’ve written that predictable or boring line, and I will carry that around with me all day.</source>
         <extracomment>Cite of the Phoebe Waller-Bridge</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Element presenečenja je najpomembnejši in je tisto, kar me pri pisanju zanima. Čutim, da sem napisala tisto predvidljivo ali dolgočasno vrstico, in to nosim s seboj ves dan.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="412"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="416"/>
         <source>Phoebe Waller-Bridge</source>
-        <translation type="unfinished"></translation>
+        <translation>Phoebe Waller-Bridge</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="415"/>
         <source>Once you know what makes someone angry, you can tell a lot about that person.</source>
         <extracomment>Cite of the Phoebe Waller-Bridge</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ko veste, kaj osebo razjezi, lahko o njej veliko poveste.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="419"/>
         <source>A writer should have this little voice inside of you saying, Tell the truth. Reveal a few secrets here.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pisec mora imeti v sebi glas, ki pravi: »Povej resnico. Tu razkrij nekaj skrivnosti.«</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="420"/>
@@ -5904,90 +5917,90 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="460"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="464"/>
         <source>Quentin Tarantino</source>
-        <translation type="unfinished"></translation>
+        <translation>Quentin Tarantino</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="423"/>
         <source>Everything I learned as an actor, I have basically applied to writing.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Vse, česar sem se naučil kot igralec, sem v bistvu uporabil pri pisanju.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="427"/>
         <source>I consider myself a student of cinema. It’s almost like I am going for my professorship in cinema, and the day I die is the day I graduate. It is a lifelong study.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Imam se za študenta filma. Skoraj tako, kot da bi želel postati profesor na področju filma, in dan, ko bom umrl, bo dan, ko bom diplomiral. To je vseživljenjski študij.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="431"/>
         <source>I don’t think there’s anything to be afraid of. Failure brings great rewards — in the life of an artist.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Mislim, da se ni treba ničesar bati. Neuspeh prinaša velike nagrade – v življenju umetnika.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="435"/>
         <source>I steal from every movie ever made.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Kradem iz vseh filmov, ki so bili kdajkoli posneti.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="439"/>
         <source>I’ve made a choice, so far, to go on this road alone. Because this is my time. This is my time to make movies.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Doslej sem se odločil, da bom to pot prehodil sam. Ker je to moj čas. To je moj čas za snemanje filmov.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="443"/>
         <source>If you just love movies enough, you can make a good one.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če imaš dovolj rad filme, lahko posnameš dober film.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="447"/>
         <source>Movies are not about the weekend that they’re released, and in the grand scheme of things, that’s probably the most unimportant time of a film’s life.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pri filmih ne gre za konec tedna, ko so premierno predvajani, in v širšem smislu je to verjetno najbolj nepomemben čas v življenju filma.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="451"/>
         <source>There are a lot of bad screenplays, so if you write a good screenplay people are going to respond to it.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Obstaja veliko slabih scenarijev, zato se bodo ljudje odzvali, če napišete dober scenarij.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="455"/>
         <source>To me, movies and music go hand in hand. When I’m writing a script, one of the first things I do is find the music I’m going to play for the opening sequence.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Zame sta film in glasba neločljivo povezana. Ko pišem scenarij, je ena od prvih stvari, ki jih naredim, da poiščem glasbo, ki jo bom predvajal v uvodnem prizoru.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="459"/>
         <source>Trying to make a feature film yourself with no money is the best film school you can do.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če poskusite sami posneti celovečerni film brez denarja, je to najboljša filmska šola, ki jo lahko opravite.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="463"/>
         <source>You know, my problem with most screenwriting is it is a blueprint. It’s like they’re afraid to write the damn thing. And I’m a writer. That’s what I do. I want it to be written. I want it to work on the page first and foremost. So when I’m writing the script, I’m not thinking about the viewer watching the movie. I’m thinking about the reader reading the script.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Veste, moj problem z večino scenarijev je, da je to načrt. Zdi se, kot da se bojijo napisati to prekleto stvar. In jaz sem scenarist. To je tisto, kar počnem. Hočem, da je napisano. Predvsem hočem, da deluje na papirju. Ko pišem scenarij, ne razmišljam o gledalcu, ki gleda film. Razmišljam o bralcu, ki bere scenarij.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="467"/>
         <source>People say, ‘What advice do you have for people who want to be writers?’ I say, they don’t really need advice, they know they want to be writers, and they’re gonna do it. Those people who know that they really want to do this and are cut out for it, they know it.</source>
         <extracomment>Cite of the R.L. Stine</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ljudje pravijo: »Kaj svetujete ljudem, ki želijo postati pisatelji?« Jaz pravim, da ne potrebujejo nasvetov, saj vedo, da želijo biti pisatelji, in to bodo tudi storili. Tisti ljudje, ki vedo, da si to res želijo in da so za to ustvarjeni, to vedo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="468"/>
         <source>R.L. Stine</source>
-        <translation type="unfinished"></translation>
+        <translation>R.L. Stine</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="471"/>
         <source>I don’t believe in being serious about anything. I think life is too serious to be taken seriously.</source>
         <extracomment>Cite of the Ray Bradbury, WD</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ne verjamem, da je treba vse jemati resno. Mislim, da je življenje preveč resno, da bi ga jemali resno.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="472"/>
@@ -5995,64 +6008,64 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="480"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="484"/>
         <source>Ray Bradbury, WD</source>
-        <translation type="unfinished"></translation>
+        <translation>Ray Bradbury, WD</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="475"/>
         <source>I don’t need an alarm clock. My ideas wake me.</source>
         <extracomment>Cite of the Ray Bradbury, WD</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ne potrebujem budilke. Zbudijo me moje ideje.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="479"/>
         <source>Just write every day of your life. Read intensely. Then see what happens. Most of my friends who are put on that diet have very pleasant careers.</source>
         <extracomment>Cite of the Ray Bradbury, WD</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pišite vsak dan svojega življenja. Intenzivno berite. Potem poglejte, kaj se bo zgodilo. Večina mojih prijateljev, ki so se podvrgli tej dieti, ima zelo prijetno kariero.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="483"/>
         <source>Let the world burn through you. Throw the prism light, white hot, on paper.</source>
         <extracomment>Cite of the Ray Bradbury, WD</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Naj svet žari skozi vas. Vrzite svetlobo prizme, razžarjeno do beline, na papir.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="487"/>
         <source>The wise screen writer is he who wears his second-best suit, artistically speaking, and doesn’t take things too much to heart. He should have a touch of cynicism, but only a touch. The complete cynic is as useless to Hollywood as he is to himself. He should do the best he can without straining at it. He should be scrupulously honest about his work, but he should not expect scrupulous honesty in return. He won’t get it. And when he has had enough, he should say goodbye with a smile, because for all he knows he may want to go back.</source>
         <extracomment>Cite of the Raymond Chandler</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pameten scenarist je tisti, ki nosi svojo drugo najboljšo obleko in si stvari ne jemlje preveč k srcu. V njem mora biti kanček cinizma, vendar le kanček. Popolni cinik je za Hollywood tako neuporaben kot samemu sebi. Narediti bi moral najboljše, kar zmore, ne da bi se pri tem naprezal. Pri svojem delu naj bo skrajno iskren, vendar naj ne pričakuje skrajne iskrenosti v zameno. Ne bo je dobil. In ko mu bo dovolj, naj se poslovi z nasmeškom, saj se bo morda želel vrniti.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="488"/>
         <source>Raymond Chandler</source>
-        <translation type="unfinished"></translation>
+        <translation>Raymond Chandler</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="491"/>
         <source>I’m out there to clean the plate. Once they’ve read what I’ve written on a subject, I want them to think, ‘That’s it!’ I think the highest aspiration people in our trade can have is that once they’ve written a story, nobody will ever try it again.</source>
         <extracomment>Cite of the Richard Ben Cramer</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Tam sem zato, da stvari postavim na svoje mesto. Ko preberejo, kar sem napisal o neki temi, želim, da si mislijo: »To je to!« Mislim, da je največja želja, ki jo lahko imajo ljudje v našem poklicu, da ko enkrat napišejo zgodbo, tega nihče ne bo več niti poskusil.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="492"/>
         <source>Richard Ben Cramer</source>
-        <translation type="unfinished"></translation>
+        <translation>Richard Ben Cramer</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="495"/>
         <source>You sell a screenplay like you sell a car. If someone drives it off a cliff, that’s it.</source>
         <extracomment>Cite of the Rita Mae Brown</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Scenarij prodate tako kot avto. Če ga nekdo zapelje s pečine, je to pač to.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="496"/>
         <source>Rita Mae Brown</source>
-        <translation type="unfinished"></translation>
+        <translation>Rita Mae Brown</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="499"/>
         <source>... don’t care if a reader hates one of my stories, just as long as he finishes the book.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>... ni mi mar, če bralec sovraži katero od mojih zgodb, samo da knjigo prebere do konca.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="500"/>
@@ -6069,345 +6082,345 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="544"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="548"/>
         <source>Roald Dahl</source>
-        <translation type="unfinished"></translation>
+        <translation>Roald Dahl</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="503"/>
         <source>A life is made up of a great number of small incidents, and a small number of great ones.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Življenje je sestavljeno iz velikega števila majhnih in majhnega števila velikih dogodkov.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="507"/>
         <source>A little magic can take you a long way.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Z malo čarovnije lahko pridete daleč.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="511"/>
         <source>A little nonsense now and then is relished by the wisest men.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Nekaj neumnosti si občasno privoščijo tudi najmodrejši ljudje.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="515"/>
         <source>A person who has good thoughts cannot ever be ugly. You can have a wonky nose and a crooked mouth and a double chin and stick-out teeth, but if you have good thoughts they will shine out of your face like sunbeams and you will always look lovely.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Oseba, ki ima lepe misli, ne more biti grda. Lahko imaš ukrivljen nos, zakrivljena usta, dvojno brado in štrleče zobe, toda če imaš lepe misli, ti bodo sijale z obraza kot sončni žarki in vedno boš videti čudovito.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="519"/>
         <source>Don&apos;t gobblefunk around with words.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ne gobezdajte z besedami.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="523"/>
         <source>Grown ups are complicated creatures, full of quirks and secrets.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Odrasli so zapletena bitja, polna nenavadnosti in skrivnosti.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="527"/>
         <source>I think probably kindness is my number one attribute in a human being. I&apos;ll put it before any of the things like courage or bravery or generosity or anything else.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Verjetno je prijaznost zame najpomembnejša človeška lastnost. Postavil bi jo pred vse druge lastnosti, kot so pogum, hrabrost, velikodušnost ali karkoli drugega.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="531"/>
         <source>If you are going to get anywhere in life you have to read a lot of books.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če želite v življenju kaj doseči, morate prebrati veliko knjig.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="535"/>
         <source>Kindness - that simple word. To be kind - it covers everything, to my mind. If you&apos;re kind that&apos;s it.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Prijaznost - ta preprosta beseda. Biti prijazen - po mojem mnenju zajema vse. Če si prijazen, je to vse.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="539"/>
         <source>Somewhere inside all of us is the power to change the world.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Nekje v vsakem od nas je moč, da spremenimo svet.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="543"/>
         <source>Those who don&apos;t believe in magic will never find it.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Kdor ne verjame v čarobnost, je ne bo nikoli našel.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="547"/>
         <source>We make realities out of our dreams and dreams out of our realities. We are the dreamers of the dream.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Iz naših sanj ustvarjamo resničnost in sanje iz naše resničnosti. Mi smo sanjači sanj.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="551"/>
         <source>I don’t think screenplay writing is the same as writing — I mean, I think it’s blueprinting.</source>
         <extracomment>Cite of the Robert Altman</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Mislim, da pisanje scenarija ni isto kot pisanje - mislim, da gre za načrtovanje.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="552"/>
         <source>Robert Altman</source>
-        <translation type="unfinished"></translation>
+        <translation>Robert Altman</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="555"/>
         <source>The most ordinary word, when put into place, suddenly acquires brilliance. That is the brilliance with which your images must shine.</source>
         <extracomment>Cite of the Robert Bresson</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Najbolj običajna beseda, umeščena na svoje mesto, nenadoma dobi sijaj. To je sijaj, s katerim morajo sijati vaše podobe.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="556"/>
         <source>Robert Bresson</source>
-        <translation type="unfinished"></translation>
+        <translation>Robert Bresson</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="559"/>
         <source>If the story you’re telling, is the story you’re telling, you’re in deep shit.</source>
         <extracomment>Cite of the Robert McKee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če je zgodba, ki jo pripovedujete, zgodba, ki jo pripovedujete, ste v dreku.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="560"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="564"/>
         <source>Robert McKee</source>
-        <translation type="unfinished"></translation>
+        <translation>Robert McKee</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="563"/>
         <source>Writing is a marathon, not a sprint.</source>
         <extracomment>Cite of the Robert McKee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pisanje je maraton, ne šprint.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="567"/>
         <source>Do not be told something is impossible. There is always a way.</source>
         <extracomment>Cite of the Robert Rodriguez</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Naj vam ne govorijo, da nekaj ni možno. Vedno obstaja način.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="568"/>
         <source>Robert Rodriguez</source>
-        <translation type="unfinished"></translation>
+        <translation>Robert Rodriguez</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="571"/>
         <source>My three Ps: passion, patience, perseverance. You have to do this if you’ve got to be a filmmaker.</source>
         <extracomment>Cite of the Robert Wise</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Moje tri -sti: strast, potrpežljivost, vztrajnost. Če želite postati filmski režiser, morate to imeti.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="572"/>
         <source>Robert Wise</source>
-        <translation type="unfinished"></translation>
+        <translation>Robert Wise</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="575"/>
         <source>You don’t learn how to write a screenplay by just reading screenplays and watching movies. It’s about developing the kind of mind that sees and makes drama. You can do this in a kind of holistic way by reading history and theology and psychology, reading great fiction and poetry, and plays. You develop an eye for the structures of everything and look for the patterns that help you become a dramatist.</source>
         <extracomment>Cite of the Robin Swicord</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pisanja scenarijev se ne naučite samo z branjem scenarijev in gledanjem filmov. Gre za razvijanje uma, ki vidi in ustvarja dramo. To lahko storite na nekakšen celosten način z branjem zgodovine, teologije in psihologije, z branjem odličnega leposlovja, poezije in dramskih besedil. Razvijate oko za strukture vsega in iščete vzorce, ki vam pomagajo postati dramatik.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="576"/>
         <source>Robin Swicord</source>
-        <translation type="unfinished"></translation>
+        <translation>Robin Swicord</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="579"/>
         <source>You can make a movie about anything, as long as it has a hook to hang the advertising on.</source>
         <extracomment>Cite of the Roger Corman</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Film lahko posnamete o čemer koli, če le ima nekaj, na kar lahko pripnete oglaševanje.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="580"/>
         <source>Roger Corman</source>
-        <translation type="unfinished"></translation>
+        <translation>Roger Corman</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="583"/>
         <source>Cinema should make you forget you are sitting in a theater.</source>
         <extracomment>Cite of the Roman Polanski</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Film vas mora pripraviti do tega, da pozabite, da sedite v kinodvorani.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="584"/>
         <source>Roman Polanski</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman Polanski</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="587"/>
         <source>With all of my work, it always takes a while for people to get it. It goes from, ‘What the hell is that?’ to ‘Oh, I like that.’</source>
         <extracomment>Cite of the Ryan Murphy</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pri vseh mojih delih vedno traja nekaj časa, da ljudje dojamejo. Od: »Kaj za vraga je to?« do: »O, to mi je všeč.«</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="588"/>
         <source>Ryan Murphy</source>
-        <translation type="unfinished"></translation>
+        <translation>Ryan Murphy</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="591"/>
         <source>The greatest part of a writer’s time is spent in reading, in order to write; a man will turn over half a library to make one book.</source>
         <extracomment>Cite of the Samuel Johnson</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Največ časa pisatelj porabi za branje, da bi lahko pisal; človek preobrne pol knjižnice, da bi napisal eno knjigo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="592"/>
         <source>Samuel Johnson</source>
-        <translation type="unfinished"></translation>
+        <translation>Samuel Johnson</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="595"/>
         <source>It seems that the greatest difficulty is to find the end. Don’t try to find it, it’s there already.</source>
         <extracomment>Cite of the Sofia Coppola</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Zdi se, da je največja težava najti konec. Ne poskušajte ga najti, saj je že tam.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="596"/>
         <source>Sofia Coppola</source>
-        <translation type="unfinished"></translation>
+        <translation>Sofia Coppola</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="599"/>
         <source>A lot of times you get credit for stuff in your movies you didn’t intend to be there.</source>
         <extracomment>Cite of the Spike Lee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Velikokrat dobiš priznanje za stvari v svojih filmih, ki jih tam nisi nameraval imeti.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="600"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="604"/>
         <source>Spike Lee</source>
-        <translation type="unfinished"></translation>
+        <translation>Spike Lee</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="603"/>
         <source>A spine to my films that’s become more evident to me is that many are about the choices that people make… You go this way, or that way, and either way, there’s going to be consequences.</source>
         <extracomment>Cite of the Spike Lee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pri mojih filmih se vedno bolj zavedam, da gre v večini primerov za odločitve, ki jih ljudje sprejemajo ... Greš v to ali ono smer in v vsakem primeru bodo posledice.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="607"/>
         <source>If it can be written, or thought, it can be filmed.</source>
         <extracomment>Cite of the Stanley Kubrick</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če se lahko napiše ali misli, se lahko tudi posname.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="608"/>
         <source>Stanley Kubrick</source>
-        <translation type="unfinished"></translation>
+        <translation>Stanley Kubrick</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="611"/>
         <source>Making people believe the unbelievable is no trick</source>
         <extracomment>Cite of the Stephen King</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Prepričati ljudi, da verjamejo v neverjetne stvari, ni noben trik.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="612"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="616"/>
         <source>Stephen King</source>
-        <translation type="unfinished"></translation>
+        <translation>Stephen King</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="615"/>
         <source>When your story is ready for rewrite, cut it to the bone. Get rid of every ounce of excess fat. This is going to hurt; revising a story down to the bare essentials is always a little like murdering children, but it must be done.</source>
         <extracomment>Cite of the Stephen King</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ko je zgodba pripravljena za predelavo, jo skrajšajte do potankosti. Znebite se vsake grama odvečne maščobe. To bo bolelo; popravljanje zgodbe do osnovnih elementov je vedno podobno morjenju otrok, vendar je to treba storiti.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="619"/>
         <source>All readers come to fiction as willing accomplices to your lies. Such is the basic goodwill contract made the moment we pick up a work of fiction.</source>
         <extracomment>Cite of the Steve Almond</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Vsi bralci pristopijo k fikciji kot prostovoljni sostorilci vaših laži. Takšna je osnovna prostovoljna pogodba, sklenjena v trenutku, ko vzamemo v roke fikcijsko delo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="620"/>
         <source>Steve Almond</source>
-        <translation type="unfinished"></translation>
+        <translation>Steve Almond</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="623"/>
         <source>What a person does is what he is, not what he says.</source>
         <extracomment>Cite of the Syd Field</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Človek je to, kar počne, in ne to, kar govori.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="624"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="628"/>
         <source>Syd Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Syd Field</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="627"/>
         <source>Writing a screenplay is like climbing a mountain. When you’re climbing, all you can see is the rock in front of you and the rock directly above you. You can’t see where you’ve come from or where you’re going.</source>
         <extracomment>Cite of the Syd Field</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pisanje scenarija je kot vzpon na goro. Ko plezaš, vidiš le skalo pred seboj in skalo neposredno nad seboj. Ne vidiš, od kod si prišel in kam greš.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="631"/>
         <source>My world is not spectacle and explosion. It’s two people talking.</source>
         <extracomment>Cite of the Taika Waititi</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Moj svet ni spektakel ali eksplozija. To sta dve osebi, ki se pogovarjata.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="632"/>
         <source>Taika Waititi</source>
-        <translation type="unfinished"></translation>
+        <translation>Taika Waititi</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="635"/>
         <source>I do not over-intellectualize the production process. I try to keep it simple: Tell the damned story.</source>
         <extracomment>Cite of the Tom Clancy</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Produkcijskega procesa ne intelektualiziram preveč. Poskušam ga poenostaviti: povej prekleto zgodbo.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="636"/>
         <source>Tom Clancy</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom Clancy</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="639"/>
         <source>Every secret of a writer’s soul, every experience of his life, every quality of his mind, is written large in his works.</source>
         <extracomment>Cite of the Virginia Woolf</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Vsaka skrivnost pisateljeve duše, vsaka izkušnja njegovega življenja, vsaka lastnost njegovega uma je močno zapisana v njegovih delih.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="640"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="644"/>
         <source>Virginia Woolf</source>
-        <translation type="unfinished"></translation>
+        <translation>Virginia Woolf</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="643"/>
         <source>Literature is strewn with the wreckage of men who have minded beyond reason the opinions of others.</source>
         <extracomment>Cite of the Virginia Woolf</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Literatura je posejana z razbitinami moških, ki so se nadvse ozirali na mnenja drugih.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="647"/>
         <source>Screenplay writing is not an art form. It’s a skill; it’s carpentry; it’s structure. I don’t mean to knock it — it ain’t easy. But if it’s all you do, if you only write screenplays, it is ultimately denigrating to the soul. You may get lucky and get rich, but you sure won’t get happy.</source>
         <extracomment>Cite of the William Goldman</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Pisanje scenarija ni umetnost. Je veščina, je tesarstvo, je struktura. Nočem ga omalovaževati - ni lahko. Toda če je to vse, kar počneš, če pišeš samo scenarije, je to na koncu podcenjujoče za dušo. Morda boš imel srečo in obogatel, zagotovo pa ne boš srečen.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="648"/>
         <source>William Goldman</source>
-        <translation type="unfinished"></translation>
+        <translation>William Goldman</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="651"/>
         <source>Cheat your landlord if you can and must, but do not try to shortchange the Muse. It cannot be done. You can’t fake quality any more than you can fake a good meal.</source>
         <extracomment>Cite of the William S. Burroughs</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Če lahko in morate, goljufajte svojega najemodajalca, vendar ne poskušajte ogoljufati Muze. Tega ni mogoče storiti. Kakovosti ne morete ponarediti, tako kot ne morete ponarediti dobrega obroka.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="652"/>
         <source>William S. Burroughs</source>
-        <translation type="unfinished"></translation>
+        <translation>William S. Burroughs</translation>
     </message>
 </context>
 <context>
@@ -6443,18 +6456,18 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Splitter</name>
     <message>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="585"/>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="586"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="602"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="603"/>
         <source>Show hidden panel</source>
         <translation>Pokaži skrito podokno</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="587"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="604"/>
         <source>Hide left panel</source>
         <translation>Skrij levo podokno</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="588"/>
+        <location filename="../../corelib/ui/widgets/splitter/splitter.cpp" line="605"/>
         <source>Hide right panel</source>
         <translation>Skrij desno podokno</translation>
     </message>
@@ -6607,7 +6620,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="160"/>
         <source>The Logline Generator is powered by</source>
-        <translation>Generator enovrstičnega povzetka poganja</translation>
+        <translation>Tvorca premise poganja</translation>
     </message>
     <message>
         <location filename="../ui/about_application_dialog.cpp" line="164"/>
@@ -8010,7 +8023,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ApplicationView</name>
     <message>
-        <location filename="../ui/application_view.cpp" line="264"/>
+        <location filename="../ui/application_view.cpp" line="273"/>
         <source>Turn off full screen</source>
         <translation>Izklopi celozaslonski način</translation>
     </message>
@@ -8139,17 +8152,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="116"/>
         <source>Perfect logline length</source>
-        <translation>Popolna dolžina enovrstičnega povzetka</translation>
+        <translation>Popolna dolžina premise</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="118"/>
         <source>Good logline length</source>
-        <translation>Dobra dolžina enovrstičnega povzetka</translation>
+        <translation>Dobra dolžina premise</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="120"/>
         <source>Recommended logline length is 30 words</source>
-        <translation>Priporočena dolžina enovrstičnega povzetka je 30 besed</translation>
+        <translation>Priporočena dolžina premise je 30 besed</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="122"/>
@@ -8174,12 +8187,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="223"/>
         <source>Logline</source>
-        <translation>Enovrstični povzetek</translation>
+        <translation>Premisa</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="224"/>
         <source>Generate logline</source>
-        <translation>Ustvari enovrstični povzetek</translation>
+        <translation>Ustvari premiso</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="225"/>
@@ -8386,7 +8399,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="792"/>
         <source>Action duration</source>
-        <translation>Trajanje dejanj</translation>
+        <translation>Trajanje dogajanja</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_sidebar.cpp" line="793"/>
@@ -9017,482 +9030,482 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharacterInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="622"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="688"/>
         <source>Apply new character name</source>
         <translation>Uveljavi novo ime lika</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="628"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2055"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="694"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2121"/>
         <source>Select character color</source>
         <translation>Izberite barvo lika</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2051"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2117"/>
         <source>Unlock access to extended character profile</source>
         <translation>Odkleni dostop do razširjenega profila lika</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2054"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2120"/>
         <source>Name</source>
         <translation>Ime</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2056"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2122"/>
         <source>Story role</source>
         <translation>Vloga v zgodbi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="484"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="550"/>
         <source>Primary</source>
         <translation>primarne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="484"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="550"/>
         <source>Secondary</source>
         <translation>sekundarne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="484"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="550"/>
         <source>Tertiary</source>
         <translation>terciarne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="484"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="489"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="550"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="555"/>
         <source>Undefined</source>
         <translation>Nedoločeno</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="643"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2060"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="709"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2126"/>
         <source>Age</source>
         <translation>Starost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="649"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2061"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="715"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2127"/>
         <source>Gender</source>
         <translation>Spol</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="489"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="555"/>
         <source>Male</source>
         <translation>Moški</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="489"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="555"/>
         <source>Female</source>
         <translation>Ženski</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="489"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="555"/>
         <source>Other</source>
         <translation>Drugo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2052"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2152"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2118"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2218"/>
         <source>AI assistant</source>
         <translation>Asistent umetne inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2065"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2131"/>
         <source>One sentence description</source>
         <translation>Opis v eni povedi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2066"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2132"/>
         <source>Long description</source>
         <translation>Daljši opis</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2068"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2134"/>
         <source>Add photo +</source>
         <translation>Dodaj fotografijo +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2068"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2134"/>
         <source>Change photo...</source>
         <translation>Spremeni fotografijo ...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2069"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2135"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
         <translation>Ali želite izbrisati glavno fotografijo lika?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2070"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2136"/>
         <source>Select an area for the character main photo</source>
         <translation>Izberite področje za glavno fotografijo lika</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2072"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2138"/>
         <source>Photos</source>
         <translation>Fotografije</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2074"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2140"/>
         <source>Personal info</source>
         <translation>Osebni podatki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2075"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2141"/>
         <source>Real name</source>
         <translation>Resnično ime</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2076"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2142"/>
         <source>Date of birth</source>
         <translation>Datum rojstva</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2077"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2143"/>
         <source>Place of birth</source>
         <translation>Kraj rojstva</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2078"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2144"/>
         <source>Ethnicity/race</source>
         <translation>Etničnost/rasa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2079"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2145"/>
         <source>Family</source>
         <translation>Družina</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2081"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2147"/>
         <source>Physique</source>
         <translation>Fizična pojavnost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2082"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2148"/>
         <source>Height</source>
         <translation>Višina</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2083"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2149"/>
         <source>Weight</source>
         <translation>Teža</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2084"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2150"/>
         <source>Body</source>
         <translation>Telo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2085"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2151"/>
         <source>Skin tone</source>
         <translation>Barva kože</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2086"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2152"/>
         <source>Hair style</source>
         <translation>Vrsta frizure</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2087"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2153"/>
         <source>Hair color</source>
         <translation>Barva las</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2088"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2154"/>
         <source>Eye shape</source>
         <translation>Oblika oči</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2089"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2155"/>
         <source>Eye color</source>
         <translation>Barva oči</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2090"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2156"/>
         <source>Facial shape</source>
         <translation>Oblika obraza</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2091"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2157"/>
         <source>Distinguish feature</source>
         <translation>Razločevalna poteza</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2092"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2158"/>
         <source>Other facial features</source>
         <translation>Druge poteze obraza</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2093"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2159"/>
         <source>Posture</source>
         <translation>Drža</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2094"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2160"/>
         <source>Other physical appearance</source>
         <translation>Druge fizične značilnosti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2096"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2162"/>
         <source>Life</source>
         <translation>Življenje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2097"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2163"/>
         <source>Skills</source>
         <translation>Veščine</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2098"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2164"/>
         <source>How skills developed</source>
         <translation>Kako je razvil_a spretnosti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2099"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2165"/>
         <source>Incompetence</source>
         <translation>Nekompetentnost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2100"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2166"/>
         <source>Strength/talent</source>
         <translation>Prednost/talent</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2101"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2167"/>
         <source>Weakness</source>
         <translation>Slabost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2102"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2168"/>
         <source>Hobbies</source>
         <translation>Hobiji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2103"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2169"/>
         <source>Habits</source>
         <translation>Navade</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2104"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2170"/>
         <source>Health</source>
         <translation>Zdravje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2105"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2171"/>
         <source>Speech</source>
         <translation>Govor</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2106"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2172"/>
         <source>Pet</source>
         <translation>Domača žival</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2107"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2173"/>
         <source>Dress</source>
         <translation>Oblačila</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2108"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2174"/>
         <source>Something always carried/weapon/tools</source>
         <translation>Nekaj, kar ima vedno pri sebi/orožje/orodje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2109"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2175"/>
         <source>Accessories</source>
         <translation>Dodatki (uhani, šali, ...)</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2110"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2176"/>
         <source>Area of residence/environment</source>
         <translation>Območje stanovanja/okolje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2111"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2177"/>
         <source>Home description</source>
         <translation>Opis doma</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2112"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2178"/>
         <source>Neighborhood</source>
         <translation>Soseska</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2113"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2179"/>
         <source>Organization involved</source>
         <translation>Zahtevana organiziranost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2114"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2180"/>
         <source>Income</source>
         <translation>Prihodki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2115"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2181"/>
         <source>Job/occupation</source>
         <translation>Služba/poklic</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2116"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2182"/>
         <source>Job rank/position</source>
         <translation>Položaj v službi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2117"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2183"/>
         <source>Job satisfaction</source>
         <translation>Zadovoljstvo v službi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2119"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2185"/>
         <source>Attitude</source>
         <translation>Način razmišljanja/stališče</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2120"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2186"/>
         <source>Personality</source>
         <translation>Osebnost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2121"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2187"/>
         <source>Moral</source>
         <translation>Morala</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2122"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2188"/>
         <source>Motivation</source>
         <translation>Motivacija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2123"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2189"/>
         <source>Discouragement</source>
         <translation>Razočaranje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2124"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2190"/>
         <source>Philosophy</source>
         <translation>Filozofija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2125"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2191"/>
         <source>Greatest fear</source>
         <translation>Največji strah</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2126"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2192"/>
         <source>Self control</source>
         <translation>Samonadzor</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2127"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2193"/>
         <source>Intelligence level</source>
         <translation>Raven inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2128"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2194"/>
         <source>Confidence level</source>
         <translation>Raven zaupanja</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2130"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2196"/>
         <source>Biography</source>
         <translation>Biografija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2131"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2197"/>
         <source>Childhood</source>
         <translation>Otroštvo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2132"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2198"/>
         <source>Important past event</source>
         <translation>Pomemben dogodek iz preteklosti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2133"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2199"/>
         <source>Best accomplishment</source>
         <translation>Največji dosežek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2134"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2200"/>
         <source>Other accomplishment</source>
         <translation>Drug dosežek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2135"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2201"/>
         <source>Worst moment</source>
         <translation>Najhujši trenutek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2136"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2202"/>
         <source>Failure</source>
         <translation>Neuspeh</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2137"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2203"/>
         <source>Secrets</source>
         <translation>Skrivnosti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2138"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2204"/>
         <source>Best memories</source>
         <translation>Najlepši spomin</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2139"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2205"/>
         <source>Worst memories</source>
         <translation>Najhujši spomin</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2141"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2207"/>
         <source>Story</source>
         <translation>Zgodba</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2142"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2208"/>
         <source>Short term goal</source>
         <translation>Kratkoročni cilj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2143"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2209"/>
         <source>Long term goal</source>
         <translation>Dolgoročni cilj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2144"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2210"/>
         <source>Initial beliefs</source>
         <translation>Začetno prepričanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2145"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2211"/>
         <source>Changed beliefs</source>
         <translation>Spremenjeno prepričanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2146"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2212"/>
         <source>What leads to change</source>
         <translation>Kaj povzroči spremembo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2147"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2213"/>
         <source>First appearance</source>
         <translation>Prvi vtis</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2148"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2214"/>
         <source>Plot involvement</source>
         <translation>Vpletenost v zaplet</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2149"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2215"/>
         <source>Conflict</source>
         <translation>Konflikt</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2150"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2216"/>
         <source>Most defining moment</source>
         <translation>Najbolj določujoč trenutek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2155"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2221"/>
         <source>Give AI a short description of the character you want it to elaborate.</source>
         <translation>Podajte umetni inteligenci opis lika, za katerega želite, da mu doda podrobnosti.</translation>
     </message>
@@ -9885,17 +9898,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="117"/>
         <source>Perfect logline length</source>
-        <translation>Popolna dolžina enovrstičnega povzetka</translation>
+        <translation>Popolna dolžina premise</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="119"/>
         <source>Good logline length</source>
-        <translation>Dobra dolžina enovrstičnega povzetka</translation>
+        <translation>Dobra dolžina premise</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="121"/>
         <source>Recommended logline length is 30 words</source>
-        <translation>Priporočena dolžina enovrstičnega povzetka je 30 besed</translation>
+        <translation>Priporočena dolžina premise je 30 besed</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="123"/>
@@ -9920,12 +9933,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="224"/>
         <source>Logline</source>
-        <translation>Enovrstični povzetek</translation>
+        <translation>Premisa</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="225"/>
         <source>Generate logline</source>
-        <translation>Ustvari enovrstični povzetek</translation>
+        <translation>Ustvari premiso</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="226"/>
@@ -10704,177 +10717,177 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateDocumentDialog</name>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="150"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="155"/>
         <source>Add folder</source>
         <translation>Dodaj mapo</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="151"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="156"/>
         <source>Add text</source>
         <translation>Dodaj besedilo</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="152"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="157"/>
         <source>Add character</source>
         <translation>Dodaj lik</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="153"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="158"/>
         <source>Add location</source>
         <translation>Dodaj lokacijo</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="154"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="159"/>
         <source>Add world</source>
         <translation>Dodaj svet</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="155"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="160"/>
         <source>Add screenplay</source>
         <translation>Dodaj scenarij</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="156"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="161"/>
         <source>Add comic book</source>
         <translation>Dodaj strip</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="157"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="162"/>
         <source>Add audioplay</source>
         <translation>Dodaj radijsko igro</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="158"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="163"/>
         <source>Add stageplay</source>
         <translation>Dodaj odrsko besedilo</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="159"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="164"/>
         <source>Add novel</source>
         <translation>Dodaj roman</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="160"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="165"/>
         <source>Add mind map</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj miselni vzorec</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="161"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="166"/>
         <source>Add image gallery</source>
         <translation>Dodaj galerijo slik</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="165"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="170"/>
         <source>Create a folder to group documents inside the story.</source>
         <translation>Ustvarite mapo za združevanje dokumentov v okviru iste zgodbe.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="167"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="172"/>
         <source>Create a plain text document to write out ideas and notes.</source>
         <translation>Ustvarite dokument z navadnim besedilom za zapiske zamisli in opomb.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="169"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="174"/>
         <source>Create a document with full character&apos;s description to track his relations and follow his journey within the story.</source>
         <translation>Ustvarite dokument s polnim opisom lika, da sledite njegovim odnosom in njegovemu popotovanju skozi zgodbo.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="172"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="177"/>
         <source>Create a document to note down the location&apos;s description and keep the details.</source>
         <translation>Ustvarite dokument, da si zabeležite opis lokacije in hranite podrobnosti o njej.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="174"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="179"/>
         <source>Create a document with detailed world description to keep all the notes in one place</source>
         <translation>Ustvarite dokument s podrobnim opisom sveta, da boste hranili vse zapiske na enem mestu</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="177"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="182"/>
         <source>Create a document set to streamline your work on the feature film, series, or animation.</source>
         <translation>Ustvarite nabor dokumentov, da poenotite svoje delo na celovečernem filmu, seriji ali animiranem projektu.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="180"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="185"/>
         <source>Create a document set to streamline your work on the comic book, graphic novel, or manga.</source>
         <translation>Ustvarite nabor dokumentov, da poenostavite svoje delo na stripu, grafičnem romanu ali mangi.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="183"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="188"/>
         <source>Create a document set to streamline your work on the audio drama, or podcast.</source>
         <translation>Ustvarite dokument, v katerem osredotočate svoje delo na radijski igri ali podkastu.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="185"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="190"/>
         <source>Create a document set to streamline your work on the stage play, or musical.</source>
         <translation>Ustvarite dokument, v katerem osredotočate svoje delo na dramskem besedilu ali mjuziklu.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="187"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="192"/>
         <source>Create a document set to streamline your work on the fiction book.</source>
         <translation>Ustvarite dokument, v katerem osredotočate svoje delo na leposlovni knjigi.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="189"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="194"/>
         <source>Create a mind map to brainstorm ideas and plan your story development.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustvarite miselni vzorec, v katerem boste zbirali ideje in načrtovali razvoj zgodbe.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="191"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="196"/>
         <source>Create a moodboard with atmospheric images or photos.</source>
         <translation>Ustvarite kolaž vizualij (angl. moodboard) z atmosferskimi slikami ali fotografijami</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="267"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="272"/>
         <source>The character should have a name</source>
         <translation>Lik mora imeti ime</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="269"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="274"/>
         <source>The location should have a name</source>
         <translation>Lokacija mora imeti ime</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="271"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="276"/>
         <source>The world should have a name</source>
         <translation>Svet mora imeti ime</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="311"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="342"/>
         <source>Insert into</source>
         <translation>Vstavi v</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="333"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="364"/>
         <source>Story</source>
         <translation>Zgodba</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="334"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="365"/>
         <source>World of story</source>
         <translation>Svet zgodbe</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="335"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="366"/>
         <source>Structure &amp; notes</source>
         <translation>Struktura in opombe</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="337"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="368"/>
         <source>Add document</source>
         <translation>Dodaj dokument</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="344"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="375"/>
         <source>Name</source>
         <translation>Ime</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="345"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="376"/>
         <source>Cancel</source>
         <translation>Prekliči</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="346"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="377"/>
         <source>Create</source>
         <translation>Ustvari</translation>
     </message>
@@ -10934,7 +10947,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="228"/>
         <source>Mind map</source>
-        <translation type="unfinished"></translation>
+        <translation>Miselni vzorec</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="233"/>
@@ -11317,42 +11330,42 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="299"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="303"/>
         <source>Translation is ready for %1%</source>
         <translation>Na voljo je prevod za jezik %1%</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="309"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="313"/>
         <source>Select file with translation</source>
         <translation>Izberite datoteko s prevodom</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="311"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="315"/>
         <source>Compiled Qt translation files</source>
         <translation>Prevedene prevodne datoteke Qt</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="345"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="349"/>
         <source>Change application language</source>
         <translation>Spremenite jezik programa</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="348"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="352"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Ne najdete želenega jezika? Preberite si, kako ga lahko dodate sami.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="350"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="354"/>
         <source>Improve</source>
         <translation>Izboljšaj</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="351"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="355"/>
         <source>Browse</source>
         <translation>Prebrskaj</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="352"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="356"/>
         <source>Close</source>
         <translation>Zapri</translation>
     </message>
@@ -11383,142 +11396,142 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="307"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="316"/>
         <source>Apply new location name</source>
         <translation>Uveljavi novo ime prizorišča</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="705"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="714"/>
         <source>Name</source>
         <translation>Ime</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="706"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="715"/>
         <source>Story role</source>
         <translation>Vloga v zgodbi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="262"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="271"/>
         <source>Primary</source>
         <translation>primarne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="262"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="271"/>
         <source>Secondary</source>
         <translation>sekundarne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="262"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="271"/>
         <source>Tertiary</source>
         <translation>terciarne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="262"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="271"/>
         <source>Undefined</source>
         <translation>Nedoločeno</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="703"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="712"/>
         <source>Unlock access to extended location profile</source>
         <translation>Odkleni dostop do razširjenega profila lokacije</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="710"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="719"/>
         <source>One sentence description</source>
         <translation>Opis v eni povedi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="711"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="720"/>
         <source>Long description</source>
         <translation>Daljši opis</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="712"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="721"/>
         <source>Add photo +</source>
         <translation>Dodaj fotografijo +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="712"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="721"/>
         <source>Change photo...</source>
         <translation>Spremeni fotografijo ...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="713"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="722"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
         <translation>Ali želite izbrisati glavno fotografijo lokacije?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="714"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="723"/>
         <source>Select an area for the location main photo</source>
         <translation>Izberite področje za glavno fotografijo lokacije</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="716"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="725"/>
         <source>Photos</source>
         <translation>Fotografije</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="718"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="727"/>
         <source>Sense info</source>
         <translation>Podatki o zaznavi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="719"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="728"/>
         <source>Sight</source>
         <translation>Vid</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="720"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="729"/>
         <source>Smell</source>
         <translation>Vonj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="721"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="730"/>
         <source>Sound</source>
         <translation>Zvok</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="722"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="731"/>
         <source>Taste</source>
         <translation>Okus</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="723"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="732"/>
         <source>Touch</source>
         <translation>Dotik</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="725"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="734"/>
         <source>Geography info</source>
         <translation>Zemljepisni podatki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="726"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="735"/>
         <source>Location</source>
         <translation>Prizorišče</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="727"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="736"/>
         <source>Climate</source>
         <translation>Klima</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="728"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="737"/>
         <source>Landmark</source>
         <translation>Znamenitost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="729"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="738"/>
         <source>Nearby places</source>
         <translation>Bližnji kraji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="731"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="740"/>
         <source>Background info</source>
         <translation>Podatki o ozadju</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="732"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="741"/>
         <source>History</source>
         <translation>Zgodovina</translation>
     </message>
@@ -11888,12 +11901,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="739"/>
         <source>Share your logline</source>
-        <translation>Delite svoj enovrstični povzetek z drugimi</translation>
+        <translation>Delite svojo premiso z drugimi</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="742"/>
         <source>Check out my new logline</source>
-        <translation>Preveri moj novi enovrstični povzetek</translation>
+        <translation>Poglej mojo novo premiso</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="768"/>
@@ -11904,7 +11917,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="810"/>
         <source>Logline generator</source>
-        <translation>Tvorec povzetka</translation>
+        <translation>Tvorec premise</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="813"/>
@@ -11940,7 +11953,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="819"/>
         <source>Typically this includes the character&apos;s function or job, and some weakness and/or strength. Loglines only have character names if the names are already a part of popular culture.</source>
-        <translation>To običajno vključuje funkcijo ali službo lika ter kakšno njegovo/njeno šibkost in/ali prednost. Vsebuje ime lika, samo če je ime že del popularne kulture.</translation>
+        <translation>To običajno vključuje funkcijo ali službo lika ter kakšno njegovo/njeno šibkost in/ali prednost. Premisa vsebuje ime lika, samo če je ime že del popularne kulture.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="823"/>
@@ -11980,12 +11993,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="839"/>
         <source>Even if theme is important in most stories, it is not critical to a basic logline. And often theme is established further down the development process. Leave it out for now, or try something and change it later.</source>
-        <translation>Četudi je tema pomembna za večino zgodb, ni kritično pomembna za osnovni enovrstični povzetek. Pogosto se tema vzpostavi šele v postopku razvoja. Zaenkrat jo lahko izpustite ali pa poskusite z eno, saj jo lahko kasneje spremenite.</translation>
+        <translation>Četudi je tema pomembna za večino zgodb, ni kritično pomembna za osnovno premiso. Pogosto se tema vzpostavi šele v postopku razvoja. Zaenkrat jo lahko izpustite ali pa poskusite z eno, saj jo lahko kasneje spremenite.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="843"/>
         <source>What is the main Action / Goal?</source>
-        <translation>Kaj je glavna naloga / dejanje?</translation>
+        <translation>Kaj je glavna naloga / dejanje ali cilj?</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="845"/>
@@ -11995,7 +12008,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="847"/>
         <source>The main action or goal is &apos;what the story is about&apos; for the broad audience. It is that part of the story we can visualise when we hear the logline, and which (hopefully) makes us want to see the film or show episode. It is the objective the main character will pursue for most of the time.</source>
-        <translation>Glavna naloga ali cilj je tisto  »o čemer govori zgodba« za širše občinstvo. To je tisti del zgodbe, ki ga lahko vizualiziramo, ko slišimo enovrstični povzetek in ki nas (upajmo) prepriča, da želimo videti film ali epizodo serije. Glavna naloga je tisto, k čemer bo glavni liki največ časa stremel.</translation>
+        <translation>Glavna naloga ali cilj je tisto  »o čemer govori zgodba« za širše občinstvo. To je tisti del zgodbe, ki ga lahko vizualiziramo, ko slišimo premiso in ki nas (upajmo) prepriča, da želimo videti film ali epizodo serije. Glavna naloga je tisto, k čemer bo glavni liki največ časa stremel.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="852"/>
@@ -12065,17 +12078,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="876"/>
         <source>To make the logline work, write this as a full sentence like in the examples.</source>
-        <translation>Da bi enovrstični povzetek deloval, ga zapišite kot zaključeno poved, podano v primerih.</translation>
+        <translation>Da bi premisa delovala, jo zapišite kot zaključeno poved, podano v primerih.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="877"/>
         <source>Often the stakes are clear from the Main Event. But in some cases, adding negative stakes adds urgency to the logline, ultimately improving its emotional impact.</source>
-        <translation>Pogosto so zastavki jasni iz glavnega dogodka. Vendar časih dodajanje negativnih zastavkov krepi resnost/nujnost kratkega povzetka, kar na koncu izboljša njegov čustveni učinek.</translation>
+        <translation>Pogosto so zastavki jasni iz glavnega dogodka. Vendar časih dodajanje negativnih zastavkov krepi resnost/nujnost premise, kar na koncu izboljša njen čustveni učinek.</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="893"/>
         <source>Your logline is cooked!</source>
-        <translation>Vaš povzetek je pripravljen!</translation>
+        <translation>Vaša premisa je pripravljena!</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="895"/>
@@ -12102,110 +12115,110 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <name>Ui::MenuView</name>
     <message>
         <location filename="../ui/menu_view.cpp" line="322"/>
-        <location filename="../ui/menu_view.cpp" line="548"/>
+        <location filename="../ui/menu_view.cpp" line="555"/>
         <source>Hide developers version</source>
         <translation>Skrij razvijalske različice</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="323"/>
-        <location filename="../ui/menu_view.cpp" line="549"/>
+        <location filename="../ui/menu_view.cpp" line="556"/>
         <source>Show developers version</source>
         <translation>Pokaži razvijalske različice</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="398"/>
-        <location filename="../ui/menu_view.cpp" line="522"/>
+        <location filename="../ui/menu_view.cpp" line="532"/>
         <source>All changes saved</source>
         <translation>Vse spremembe so shranjene</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="398"/>
-        <location filename="../ui/menu_view.cpp" line="521"/>
+        <location filename="../ui/menu_view.cpp" line="531"/>
         <source>Save changes</source>
         <translation>Shrani spremembe</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="517"/>
+        <location filename="../ui/menu_view.cpp" line="527"/>
         <source>Sign in</source>
         <translation>Prijavi</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="518"/>
+        <location filename="../ui/menu_view.cpp" line="528"/>
         <source>Stories</source>
         <translation>Zgodbe</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="519"/>
+        <location filename="../ui/menu_view.cpp" line="529"/>
         <source>Create story</source>
         <translation>Ustvari zgodbo</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="520"/>
+        <location filename="../ui/menu_view.cpp" line="530"/>
         <source>Open story</source>
         <translation>Odpri zgodbo</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="525"/>
+        <location filename="../ui/menu_view.cpp" line="535"/>
         <source>Save current story as...</source>
         <translation>Shrani trenutno zgodbo kot ...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="526"/>
+        <location filename="../ui/menu_view.cpp" line="536"/>
         <source>Import...</source>
         <translation>Uvozi ...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="528"/>
+        <location filename="../ui/menu_view.cpp" line="537"/>
         <source>Export current document...</source>
         <translation>Izvozi trenutni dokument ...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="531"/>
+        <location filename="../ui/menu_view.cpp" line="538"/>
         <source>Toggle full screen</source>
         <translation>Preklopi celozaslonsko</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="534"/>
+        <location filename="../ui/menu_view.cpp" line="541"/>
         <source>Application settings</source>
         <translation>Nastavitve programa</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="536"/>
+        <location filename="../ui/menu_view.cpp" line="543"/>
         <source>Show writing statistics</source>
         <translation>Pokaži statistiko pisanja</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="537"/>
+        <location filename="../ui/menu_view.cpp" line="544"/>
         <source>Show writing sprint timer</source>
         <translation>Pokaži časovnik šprinta pisanja</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="538"/>
+        <location filename="../ui/menu_view.cpp" line="545"/>
         <source>Show notifications</source>
         <translation>Pokaži obvestila</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="541"/>
+        <location filename="../ui/menu_view.cpp" line="548"/>
         <source>Version</source>
         <translation>Različica</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="542"/>
+        <location filename="../ui/menu_view.cpp" line="549"/>
         <source>About</source>
         <translation>O programu</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="544"/>
+        <location filename="../ui/menu_view.cpp" line="551"/>
         <source>Back to main menu</source>
         <translation>Nazaj na glavni meni</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="545"/>
+        <location filename="../ui/menu_view.cpp" line="552"/>
         <source>Notifications</source>
         <translation>Obvestila</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="546"/>
+        <location filename="../ui/menu_view.cpp" line="553"/>
         <source>Notifications preferences</source>
         <translation>Nastavitve obveščanja</translation>
     </message>
@@ -12230,7 +12243,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="620"/>
         <source>Parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Parametri</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="621"/>
@@ -12240,42 +12253,42 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="623"/>
         <source>Mind map name</source>
-        <translation type="unfinished"></translation>
+        <translation>Naslov miselnega vzorca</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="624"/>
         <source>Mind map description</source>
-        <translation type="unfinished"></translation>
+        <translation>Opis miselnega vzorca</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="627"/>
         <source>To see node info and all their connections, select concrete node.</source>
-        <translation type="unfinished"></translation>
+        <translation>Če želite videti podatke o vozlišču in vse njegove povezave, izberite želeno vozlišče.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="628"/>
         <source>To see connection details, select concrete connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Če želite videti podrobnosti povezave, izberite posamezno povezavo.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="631"/>
         <source>To create a new connection, hold the Option button and move one node to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za izdelavo nove povezave držite pritisnjeno izmenjalko (tipka Option) in premaknite eno vozlišče k drugemu.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="634"/>
         <source>To create a new connection, hold the Alt button and move one node to another.</source>
-        <translation type="unfinished"></translation>
+        <translation>Za izdelavo nove povezave držite pritisnjeno izmenjalko (tipka Alt) in premaknite eno vozlišče k drugemu.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="640"/>
         <source>Node text</source>
-        <translation type="unfinished"></translation>
+        <translation>Besedilo vozlišča</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="641"/>
         <source>Node details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti vozlišča</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="643"/>
@@ -12286,12 +12299,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="644"/>
         <source>Connection text</source>
-        <translation type="unfinished"></translation>
+        <translation>Besedilo povezave</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="645"/>
         <source>Connection details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti povezave</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="648"/>
@@ -12301,12 +12314,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="649"/>
         <source>Group details</source>
-        <translation type="unfinished"></translation>
+        <translation>Podrobnosti skupine</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="651"/>
         <source>Give AI a short description of the idea or question you want it to provide ideas about.</source>
-        <translation type="unfinished"></translation>
+        <translation>Podajte umetni inteligenci kratek opis ideje ali vprašanja, za katero želite, da mu poda zamisli.</translation>
     </message>
 </context>
 <context>
@@ -12315,18 +12328,18 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="151"/>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="258"/>
         <source>New node</source>
-        <translation type="unfinished"></translation>
+        <translation>Novo vozlišče</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="265"/>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="758"/>
         <source>Add child node</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj podrejeno vozlišče</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="271"/>
         <source>Add sibling node</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj enakovredno vozlišče</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="292"/>
@@ -12341,22 +12354,22 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="593"/>
         <source>Writing ideas</source>
-        <translation type="unfinished"></translation>
+        <translation>Ideje za pisanje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="612"/>
         <source>Ideas</source>
-        <translation type="unfinished"></translation>
+        <translation>Ideje</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="752"/>
         <source>Unlock ability to edit mind map</source>
-        <translation type="unfinished"></translation>
+        <translation>Odklenite možnost urejanja miselnih vzorcev</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="755"/>
         <source>Add node</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj vozlišče</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="759"/>
@@ -12376,12 +12389,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="768"/>
         <source>Show connections titles only for the selected nodes</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaži naslove povezav samo za izbrana vozlišča</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="769"/>
         <source>Save mind map to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Shrani miselni vzorec kot sliko</translation>
     </message>
 </context>
 <context>
@@ -12684,17 +12697,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="120"/>
         <source>Perfect logline length</source>
-        <translation>Popolna dolžina enovrstičnega povzetka</translation>
+        <translation>Popolna dolžina premise</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="122"/>
         <source>Good logline length</source>
-        <translation>Dobra dolžina enovrstičnega povzetka</translation>
+        <translation>Dobra dolžina premise</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="124"/>
         <source>Recommended logline length is 30 words</source>
-        <translation>Priporočena dolžina enovrstičnega povzetka je 30 besed</translation>
+        <translation>Priporočena dolžina premise je 30 besed</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="126"/>
@@ -12719,12 +12732,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="235"/>
         <source>Logline</source>
-        <translation>Enovrstični povzetek</translation>
+        <translation>Premisa</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="236"/>
         <source>Generate logline</source>
-        <translation>Ustvari enovrstični povzetek</translation>
+        <translation>Ustvari premiso</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="237"/>
@@ -13273,8 +13286,8 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="232"/>
-        <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="233"/>
+        <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="234"/>
+        <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="235"/>
         <source>Back to navigator</source>
         <translation>Nazaj h krmarju</translation>
     </message>
@@ -13302,37 +13315,37 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Pokaži seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1341"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1338"/>
         <source>Writing text</source>
         <translation>Pisanje besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1666"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1663"/>
         <source>Formatting</source>
         <translation>Oblikovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1667"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1664"/>
         <source>Scene parameters</source>
         <translation>Parametri prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1668"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1665"/>
         <source>Comments</source>
         <translation>Komentarji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1669"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1666"/>
         <source>AI assistant</source>
         <translation>Asistent umetne inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1670"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1667"/>
         <source>Bookmarks</source>
         <translation>Zaznamki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1673"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1670"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>Začnite z iztočnico npr. »Napiši roman o ...« ali »Napiši poglavje o ...«.</translation>
     </message>
@@ -13856,7 +13869,7 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="162"/>
         <source>Tagline, logline or something similar</source>
-        <translation>Slogan, enovrstični povzetek ali podobno.</translation>
+        <translation>Slogan, premisa ali podobno.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/project_information/project_information_view.cpp" line="163"/>
@@ -14935,7 +14948,7 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="364"/>
         <source>Treatment</source>
-        <translation>Treatment</translation>
+        <translation>Scenosled</translation>
     </message>
     <message>
         <location filename="../ui/export/screenplay_export_dialog.cpp" line="365"/>
@@ -15051,17 +15064,17 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="120"/>
         <source>Perfect logline length</source>
-        <translation>Popolna dolžina enovrstičnega povzetka</translation>
+        <translation>Popolna dolžina premise</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="122"/>
         <source>Good logline length</source>
-        <translation>Dobra dolžina enovrstičnega povzetka</translation>
+        <translation>Dobra dolžina premise</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="124"/>
         <source>Recommended logline length is 30 words</source>
-        <translation>Priporočena dolžina enovrstičnega povzetka je 30 besed</translation>
+        <translation>Priporočena dolžina premise je 30 besed</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="126"/>
@@ -15086,12 +15099,12 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="235"/>
         <source>Logline</source>
-        <translation>Enovrstični povzetek</translation>
+        <translation>Premisa</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="236"/>
         <source>Generate logline</source>
-        <translation>Ustvari enovrstični povzetek</translation>
+        <translation>Ustvari premiso</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="237"/>
@@ -15106,7 +15119,7 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="239"/>
         <source>Treatment</source>
-        <translation>Treatment</translation>
+        <translation>Scenosled</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="240"/>
@@ -15378,7 +15391,7 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="830"/>
         <source>Action duration</source>
-        <translation>Trajanje dejanj</translation>
+        <translation>Trajanje dogajanja</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_sidebar.cpp" line="831"/>
@@ -16691,998 +16704,1020 @@ SEANSE</translation>
 <context>
     <name>Ui::SettingsView</name>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1701"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1736"/>
         <source>Choose the folder where backups will be saved</source>
         <translation>Izberite mapo, kjer bodo shranjene varnostne kopije</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1819"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1985"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2318"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2490"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2677"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2836"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1854"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2020"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2353"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2525"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2712"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2875"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1827"/>
-        <location filename="../ui/settings/settings_view.cpp" line="1993"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2326"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2498"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2685"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2844"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1862"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2028"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2361"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2533"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2720"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2883"/>
         <source>Create new template based on current</source>
         <translation>Ustvari novo predlogo na temelju trenutne</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1834"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2000"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2333"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2505"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2692"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2851"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1869"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2035"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2368"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2540"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2727"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2890"/>
         <source>Save to file</source>
         <translation>Shrani v datoteko</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1840"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2006"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2339"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2511"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2698"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2857"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1875"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2041"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2374"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2546"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2733"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2896"/>
         <source>Remove</source>
         <translation>Odstrani</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="1847"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2013"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2346"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2518"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2705"/>
-        <location filename="../ui/settings/settings_view.cpp" line="2864"/>
+        <location filename="../ui/settings/settings_view.cpp" line="1882"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2048"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2381"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2553"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2740"/>
+        <location filename="../ui/settings/settings_view.cpp" line="2903"/>
         <source>Load template from file</source>
         <translation>Naloži predlogo iz datoteke</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3900"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4002"/>
         <source>Application settings</source>
         <translation>Nastavitve programa</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3901"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4003"/>
         <source>Language</source>
         <translation>Jezik</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3905"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4007"/>
         <source>Make application interface compact</source>
         <translation>Strni vmesnik programa</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3914"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4016"/>
         <source>Qty</source>
         <translation>Kol.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3915"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4017"/>
         <source>Text editing</source>
         <translation>Urejanje besedila</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3916"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4018"/>
         <source>Show documents pages</source>
         <translation>Pokaži strani dokumentov</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3917"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4019"/>
         <source>Use typewriter sound for keys pressing</source>
         <translation>Tipkanje naj zveni kot pri pisalnem stroju</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3918"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4020"/>
         <source>Spell check</source>
         <translation>Preveri črkovanje</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3919"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4021"/>
         <source>Spelling dictionary</source>
         <translation>Slovar za preverjanje črkovanja</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3921"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4023"/>
         <source>Afrikaans</source>
         <translation>afrikanski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3922"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4024"/>
         <source>Aragonese</source>
         <translation>aragonski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3923"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4025"/>
         <source>Arabic</source>
         <translation>arabski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3924"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4026"/>
         <source>Asturian</source>
         <translation>asturijski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3925"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4027"/>
         <source>Azerbaijani</source>
         <translation>azerbajdžanski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3926"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4028"/>
         <source>Belarusian</source>
         <translation>beloruski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3927"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4029"/>
         <source>Bulgarian</source>
         <translation>bolgarski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3928"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4030"/>
         <source>Bengali</source>
         <translation>bengalski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3929"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4031"/>
         <source>Tibetan</source>
         <translation>tibetanski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3930"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4032"/>
         <source>Breton</source>
         <translation>bretonski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3931"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4033"/>
         <source>Bosnian</source>
         <translation>bosanski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3932"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4034"/>
         <source>Catalan (Valencian)</source>
         <translation>katalonski (valencijski)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3933"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4035"/>
         <source>Catalan</source>
         <translation>katalonski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3934"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4036"/>
         <source>Czech</source>
         <translation>češki</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3935"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4037"/>
         <source>Welsh</source>
         <translation>valižanski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3936"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4038"/>
         <source>Danish</source>
         <translation>danski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3937"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4039"/>
         <source>German (Austria)</source>
         <translation>nemški (Avstrija)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3938"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4040"/>
         <source>German (Switzerland)</source>
         <translation>nemški (Švica)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3939"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4041"/>
         <source>German</source>
         <translation>nemški</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3940"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4042"/>
         <source>Greek (Polytonic)</source>
         <translation>grški (politonski)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3941"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4043"/>
         <source>Greek</source>
         <translation>grški</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3942"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4044"/>
         <source>English (Australia)</source>
         <translation>angleški (Avstralija)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3943"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4045"/>
         <source>English (Canada)</source>
         <translation>angleški (Kanada)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3944"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4046"/>
         <source>English (United Kingdom)</source>
         <translation>angleški (Združeno kraljestvo)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3945"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4047"/>
         <source>English (New Zealand)</source>
         <translation>angleški (Nova Zelandija)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3946"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4048"/>
         <source>English (South Africa)</source>
         <translation>angleški (Južna Afrika)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3947"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4049"/>
         <source>English (United States)</source>
         <translation>angleški (ZDA)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3948"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4050"/>
         <source>Esperanto</source>
         <translation>esperanto</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3949"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4051"/>
         <source>Spanish (Argentina)</source>
         <translation>španski (Argentina)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3950"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4052"/>
         <source>Spanish (Bolivia)</source>
         <translation>španski (Bolivija)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3951"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4053"/>
         <source>Spanish (Chile)</source>
         <translation>španski (Čile)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3952"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4054"/>
         <source>Spanish (Colombia)</source>
         <translation>španski (Kolumbija)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3953"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4055"/>
         <source>Spanish (Costa Rica)</source>
         <translation>španski (Kostarika)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3954"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4056"/>
         <source>Spanish (Cuba)</source>
         <translation>španski (Kuba)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3955"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4057"/>
         <source>Spanish (Dominican Republic)</source>
         <translation>španski (Dominikanska republika)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3956"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4058"/>
         <source>Spanish (Ecuador)</source>
         <translation>španski (Ekvador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3957"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4059"/>
         <source>Spanish (Guatemala)</source>
         <translation>španski (Gvatemala)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3958"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4060"/>
         <source>Spanish (Honduras)</source>
         <translation>španski (Honduras)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3959"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4061"/>
         <source>Spanish (Mexico)</source>
         <translation>španski (Mehika)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3960"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4062"/>
         <source>Spanish (Nicaragua)</source>
         <translation>španski (Nikaragva)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3961"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4063"/>
         <source>Spanish (Panama)</source>
         <translation>španski (Panama)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3962"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4064"/>
         <source>Spanish (Peru)</source>
         <translation>španski (Peru)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3963"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4065"/>
         <source>Spanish (Philippines)</source>
         <translation>španski (Filipini)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3964"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4066"/>
         <source>Spanish (Puerto Rico)</source>
         <translation>španski (Portoriko)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3965"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4067"/>
         <source>Spanish (Paraguay)</source>
         <translation>španski (Paragvaj)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3966"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4068"/>
         <source>Spanish (El Salvador)</source>
         <translation>španski (Salvador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3967"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4069"/>
         <source>Spanish (United States)</source>
         <translation>španski (ZDA)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3968"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4070"/>
         <source>Spanish (Uruguay)</source>
         <translation>španski (Urugvaj)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3969"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4071"/>
         <source>Spanish (Venezuela)</source>
         <translation>španski (Venezuela)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3970"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4072"/>
         <source>Spanish</source>
         <translation>španski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3971"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4073"/>
         <source>Estonian</source>
         <translation>estonski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3972"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4074"/>
         <source>Basque</source>
         <translation>baskovski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3973"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4075"/>
         <source>Persian</source>
         <translation>perzijski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3974"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4076"/>
         <source>Faroese</source>
         <translation>ferski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3975"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4077"/>
         <source>French</source>
         <translation>francoski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3976"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4078"/>
         <source>Friulian</source>
         <translation>furlanski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3977"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4079"/>
         <source>Western Frisian</source>
         <translation>zahodnofrizijski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3978"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4080"/>
         <source>Irish</source>
         <translation>irski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3979"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4081"/>
         <source>Gaelic</source>
         <translation>gelski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3980"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4082"/>
         <source>Galician</source>
         <translation>galicijski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3981"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4083"/>
         <source>Gujarati</source>
         <translation>gudžaratski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3982"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4084"/>
         <source>Guarani</source>
         <translation>gvaranski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3983"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4085"/>
         <source>Hebrew</source>
         <translation>hebrejski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3984"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4086"/>
         <source>Hindi</source>
         <translation>hindujski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3985"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4087"/>
         <source>Croatian</source>
         <translation>hrvaški</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3986"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4088"/>
         <source>Hungarian</source>
         <translation>madžarski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3987"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4089"/>
         <source>Armenian</source>
         <translation>armenski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3988"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4090"/>
         <source>Armenian (Western)</source>
         <translation>armenski (zahodni)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3989"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4091"/>
         <source>Interlingua</source>
         <translation>interligualski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3990"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4092"/>
         <source>Indonesian</source>
         <translation>indonezijski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3991"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4093"/>
         <source>Icelandic</source>
         <translation>islandski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3992"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4094"/>
         <source>Italian</source>
         <translation>italijanski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3993"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4095"/>
         <source>Georgian</source>
         <translation>gruzijski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3994"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4096"/>
         <source>Kazakh</source>
         <translation>kazaški</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3995"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4097"/>
         <source>Kurdish</source>
         <translation>kurdski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3996"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4098"/>
         <source>Korean</source>
         <translation>korejski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3997"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4099"/>
         <source>Latin</source>
         <translation>latinski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3998"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4100"/>
         <source>Luxembourgish</source>
         <translation>luksemburški</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3999"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4101"/>
         <source>Lao</source>
         <translation>laoški</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4000"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4102"/>
         <source>Lithuanian</source>
         <translation>litovski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4001"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4103"/>
         <source>Latgalian</source>
         <translation>latgalski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4002"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4104"/>
         <source>Latvian</source>
         <translation>latvijski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4003"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4105"/>
         <source>Macedonian</source>
         <translation>makedonski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4004"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4106"/>
         <source>Mongolian</source>
         <translation>mongolski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4005"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4107"/>
         <source>Maltese</source>
         <translation>malteški</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4006"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4010"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4108"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4112"/>
         <source>Norwegian</source>
         <translation>norveški</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4007"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4109"/>
         <source>Low German</source>
         <translation>nizkonemški</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4008"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4110"/>
         <source>Nepali</source>
         <translation>nepalski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4009"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4111"/>
         <source>Dutch</source>
         <translation>nizozemski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4011"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4113"/>
         <source>Occitan</source>
         <translation>oksitanski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4012"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4114"/>
         <source>Polish</source>
         <translation>poljski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4013"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4115"/>
         <source>Portuguese (Brazilian)</source>
         <translation>portugalski (Brazilija)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4014"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4116"/>
         <source>Portuguese</source>
         <translation>portugalski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4015"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4117"/>
         <source>Quechua</source>
         <translation>kečuanski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4016"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4118"/>
         <source>Romanian</source>
         <translation>romunski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4017"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4119"/>
         <source>Russian (with Yo)</source>
         <translation>ruski (z jo)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4018"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4120"/>
         <source>Russian</source>
         <translation>ruski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4019"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4121"/>
         <source>Kinyarwanda</source>
         <translation>kinjaruandski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4020"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4122"/>
         <source>Sinhala</source>
         <translation>sinhalski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4021"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4123"/>
         <source>Slovak</source>
         <translation>slovaški</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4022"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4124"/>
         <source>Slovenian</source>
         <translation>slovenski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4023"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4125"/>
         <source>Albanian</source>
         <translation>albanski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4024"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4126"/>
         <source>Serbian (Latin)</source>
         <translation>srbski (latinica)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4025"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4127"/>
         <source>Serbian</source>
         <translation>srbski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4026"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4128"/>
         <source>Swedish (Finland)</source>
         <translation>švedski (Finska)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4027"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4129"/>
         <source>Swedish</source>
         <translation>švedski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4028"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4130"/>
         <source>Swahili</source>
         <translation>svahilski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4029"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4131"/>
         <source>Tamil</source>
         <translation>tamilski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4030"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4132"/>
         <source>Telugu</source>
         <translation>teluški</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4031"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4133"/>
         <source>Thai</source>
         <translation>tajski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4032"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4134"/>
         <source>Turkmen</source>
         <translation>turkmenski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4033"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4135"/>
         <source>Klingon (Latin)</source>
         <translation>klingonski (latinica)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4034"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4136"/>
         <source>Klingon</source>
         <translation>klingonski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4035"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4137"/>
         <source>Turkish</source>
         <translation>turški</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4036"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4138"/>
         <source>Ukrainian</source>
         <translation>ukrajinski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4037"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4139"/>
         <source>Vietnamese</source>
         <translation>vietnamski</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4047"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4149"/>
         <source>User interface</source>
         <translation>Uporabniški vmesnik</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4048"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4150"/>
         <source>Manage user dictionary</source>
         <translation>Upravljaj uporabniški slovar</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4053"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4155"/>
         <source>Automatic text corrections</source>
         <translation>Samodejni popravki besedila</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4054"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4156"/>
         <source>Capitalize single &quot;i&quot; letter</source>
         <translation>Posamično črko »i« spremeni v veliko črko</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4055"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4157"/>
         <source>Replace three single dots with ellipsis</source>
         <translation>Zamenjaj tri pike s tropičjem</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4056"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4158"/>
         <source>Replace vertical quotation marks to curly ones</source>
         <translation>Zamenjaj ravne narekovaje z zavitimi</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4057"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4159"/>
         <source>Replace two dashes with em dash</source>
         <translation>Zamenjaj dva vezaja s pomišljajem</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4058"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4160"/>
         <source>Avoid multiple spaces</source>
         <translation>Izogibaj se več presledkom</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4065"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4167"/>
         <source>Turn on/off text and folders module</source>
         <translation>Vključi/izključi modul besedila in map</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4079"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4181"/>
         <source>Turn on/off screenplay module</source>
         <translation>Vključi/izključi modul scenarija</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4089"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4191"/>
         <source>Add a continuation (CONT&apos;D) to dialogues separated by an action</source>
-        <translation>Dodaj oznako nadaljevanja (NADALJ.) dialogom, ki ga prekinja dejanje.</translation>
+        <translation>Dodaj oznako nadaljevanja (NADALJ.) dialogom, ki ga prekinja dogajanje.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4091"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4193"/>
         <source>Automatically correct screenplay text on page breaks</source>
         <translation>Samodejno popravi besedilo scenarija na prelomih strani</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4099"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4156"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4180"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4209"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4201"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4258"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4282"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4311"/>
         <source>Show characters suggestions in empty paragraph</source>
         <translation>Pokaži predloge likov v praznem odstavku</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4101"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4203"/>
         <source>Use opening bracket in dialogue to switch to parenthetical</source>
-        <translation>Uporabi uvodni oklepaj v dialogu za preklop v didaskalije/način govora</translation>
+        <translation>Uporabi uvodni oklepaj v dialogu za preklop v navodilo igralcu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4102"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4204"/>
         <source>Screenplay navigator</source>
         <translation>Krmar po scenariju</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4103"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4205"/>
         <source>Show beats</source>
         <translation>Pokaži koščke</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4104"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4206"/>
         <source>in treatment</source>
-        <translation>v treatmentu</translation>
+        <translation>v scenosledu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4105"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4207"/>
         <source>in screenplay</source>
         <translation>v scenariju</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4126"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4228"/>
         <source>Calculate duration based on the custom rules</source>
         <translation>Izračunaj trajanje na osnovi pravil po meri</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4127"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4229"/>
         <source>For action</source>
         <translation>Za dejanja</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4128"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4230"/>
         <source>Per entry</source>
         <translation>Na vnos</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4130"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4135"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4139"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4232"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4237"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4241"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4131"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4233"/>
         <source>Each 50 characters</source>
         <translation>Vsakih 50 znakov</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4133"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4235"/>
         <source>For dialogue</source>
         <translation>Za dialoge</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4137"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4239"/>
         <source>For scene heading</source>
         <translation>Za naslove prizora</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4143"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4245"/>
         <source>Turn on/off comic book module</source>
         <translation>Vključi/izključi modul stripa</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4165"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4267"/>
         <source>Audioplay module</source>
         <translation>Modul Radijska igra</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4166"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4268"/>
         <source>Turn on/off audioplay module</source>
         <translation>Vključi/izključi modul radijske igre</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4171"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4273"/>
         <source>Show block numbers</source>
         <translation>Pokaži številke blokov</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4172"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4274"/>
         <source>Continue block numbers through document</source>
         <translation>Nadaljuj številčenje blokov po dokumentu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4219"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4321"/>
         <source>Novel module</source>
         <translation>Modul Roman</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4220"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4322"/>
         <source>Turn on/off novel module</source>
         <translation>Vključi/izključi modul romana</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4235"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4336"/>
+        <source>characters</source>
+        <translation>znaki</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4337"/>
+        <source>characters with spaces</source>
+        <translation>znaki s presledki</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4341"/>
+        <source>Application</source>
+        <translation type="unfinished">Program</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4344"/>
+        <source>Action</source>
+        <translation type="unfinished">Dogajanje</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4348"/>
         <source>Simple text editor</source>
         <translation>Urejevalnik enostavnega besedila</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4241"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4253"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4265"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4277"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4289"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4301"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4354"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4366"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4378"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4390"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4402"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4414"/>
         <source>If you press in empty paragraph</source>
-        <translation>Če pritisnete v prazen odstavek</translation>
+        <translation>Če pritisnete v praznem odstavku</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4259"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4372"/>
         <source>Comic book editor</source>
         <translation>Urejevalnik stripa</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4271"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4384"/>
         <source>Audioplay editor</source>
         <translation>Urejevalnik radijske igre</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4283"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4396"/>
         <source>Stageplay editor</source>
         <translation>Urejevalnik dramskega besedila</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4295"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4408"/>
         <source>Novel editor</source>
         <translation>Urejevalnik romana</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4181"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4283"/>
         <source>Audioplay navigator</source>
         <translation>Krmar po radijski igri</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4190"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4292"/>
         <source>Calculate duration based on the count of words</source>
         <translation>Izračunaj trajanje glede na število besed</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4192"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4294"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4335"/>
         <source>words</source>
-        <translation>besed</translation>
+        <translation>besede</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4196"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4298"/>
         <source>Stageplay module</source>
         <translation>Modul Dramsko besedilo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4197"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4299"/>
         <source>Turn on/off stageplay module</source>
         <translation>Vključi/izključi modul dramskega besedila</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4210"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4312"/>
         <source>Stageplay navigator</source>
         <translation>Krmar po dramskem besedilu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4247"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4360"/>
         <source>Screenplay editor</source>
         <translation>Urejevalnik scenarija</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4238"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4250"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4262"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4274"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4286"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4298"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4351"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4363"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4375"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4387"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4399"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4411"/>
         <source>Block name</source>
-        <translation>Blokiraj ime</translation>
+        <translation>Ime sloga</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4239"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4251"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4263"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4275"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4287"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4299"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4345"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4352"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4364"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4376"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4388"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4400"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4412"/>
         <source>Shortcut</source>
         <translation>Tipke za bližnjico</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4240"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4252"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4264"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4276"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4288"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4300"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4353"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4365"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4377"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4389"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4401"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4413"/>
         <source>If you press in paragraphs end</source>
-        <translation>Če pritisnete na konec odstavka</translation>
+        <translation>Če pritisnete na koncu odstavka</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4244"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4256"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4268"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4280"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4292"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4304"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4357"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4369"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4381"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4393"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4405"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4417"/>
         <source>Add paragraph</source>
         <translation>Dodaj odstavek</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4245"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4257"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4269"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4281"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4293"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4305"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4358"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4370"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4382"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4394"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4406"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4418"/>
         <source>Change to</source>
         <translation>Spremeni v</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3902"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4004"/>
         <source>Size of the user interface elements:</source>
         <translation>Velikost elementov uporabniškega vmesnika:</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3903"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4005"/>
         <source>small</source>
         <translation>majhna</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3904"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4006"/>
         <source>big</source>
         <translation>velika</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3906"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4008"/>
         <source>Save changes &amp; backups</source>
         <translation>Shrani spremembe in varnostne kopije</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3907"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4009"/>
         <source>Automatically save changes as soon as possible</source>
         <translation>Čim prej samodejno shrani spremembe</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3909"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4011"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
@@ -17691,237 +17726,242 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
 Če delate brez premora, shranjuje projekt vsake tri minute.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3912"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4014"/>
         <source>Save backups</source>
         <translation>Shrani varnostne kopije</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="3913"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4015"/>
         <source>Backups folder path</source>
         <translation>Pot mape za varnostne kopije</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4050"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4152"/>
         <source>Focus current paragraph</source>
         <translation>Pozornost na trenutni odstavek</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4052"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4154"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
         <translation>Uporabi drsenje pisalnega stroja (ohranja vrstico, v kateri je kazalka, sredi zaslona)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4060"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4162"/>
         <source>Components</source>
         <translation>Komponente</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4064"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4166"/>
         <source>Simple text module</source>
         <translation>Modul Enostavno besedilo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4066"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4080"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4144"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4167"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4198"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4221"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4168"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4182"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4246"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4269"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4300"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4323"/>
         <source>Text editor</source>
         <translation>Urejevalnik besedila</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4067"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4081"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4145"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4168"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4199"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4222"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4169"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4183"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4247"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4270"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4301"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4324"/>
         <source>Default template</source>
         <translation>Privzeta predloga</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4069"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4083"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4147"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4170"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4201"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4224"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4171"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4185"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4249"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4272"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4303"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4326"/>
         <source>Available actions for the selected template</source>
         <translation>Dejanja na voljo za izbrano predlogo</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4084"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4106"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4182"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4211"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4186"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4208"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4284"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4313"/>
         <source>Show scene number</source>
         <translation>Pokaži številko prizora</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4085"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4187"/>
         <source>on the left</source>
         <translation>na levi</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4086"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4188"/>
         <source>on the right</source>
         <translation>na desni</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4087"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4148"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4189"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4250"/>
         <source>Show dialogue number</source>
         <translation>Pokaži številko dialoga</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4049"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4151"/>
         <source>Highlight current line</source>
         <translation>Poudari trenutno vrstico</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4070"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4157"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4225"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4172"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4259"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4327"/>
         <source>Navigator</source>
         <translation>Krmar</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4071"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4173"/>
         <source>Show chapter text, lines</source>
         <translation>Pokaži besedilo, vrstice poglavja</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4078"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4180"/>
         <source>Screenplay module</source>
         <translation>Modul Scenarij</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4092"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4194"/>
         <source>Save characters &amp; locations on typing</source>
         <translation>Shrani like in prizorišča ob tipkanju</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4094"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4196"/>
         <source>Show hints for all characters &amp; locations, or only for</source>
         <translation>Pokaži namige za vse like in prizorišča ali samo za</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4095"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4152"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4176"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4205"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4197"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4254"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4278"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4307"/>
         <source>primary</source>
         <translation>primarne</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4096"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4153"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4177"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4206"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4198"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4255"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4279"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4308"/>
         <source>secondary</source>
         <translation>sekundarne</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4097"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4154"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4178"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4207"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4199"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4256"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4280"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4309"/>
         <source>tertiary</source>
         <translation>terciarne</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4107"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4183"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4212"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4226"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4209"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4285"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4314"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4328"/>
         <source>Show scene text, lines</source>
         <translation>Pokaži besedilo, dialog prizora</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4113"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4189"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4215"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4291"/>
         <source>Duration</source>
         <translation>Trajanje</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4114"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4216"/>
         <source>Calculate duration based on the count of pages</source>
         <translation>Izračunaj trajanje na osnovi števila strani</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4115"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4121"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4191"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4217"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4223"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4293"/>
         <source>at the rate of</source>
         <translation>pri čemer</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4116"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4218"/>
         <source>pages</source>
         <translation>stran</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4117"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4124"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4193"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4219"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4226"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4295"/>
         <source>has duration</source>
         <translation>traja</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4118"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4125"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4129"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4132"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4134"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4136"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4138"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4140"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4194"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4220"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4227"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4231"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4234"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4236"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4238"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4240"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4242"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4296"/>
         <source>seconds</source>
         <translation>s</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4120"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4222"/>
         <source>Calculate duration based on the count of letters</source>
         <translation>Izračunaj trajanje na osnovi števila znakov</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4122"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4224"/>
         <source>letters</source>
         <translation>znakov</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4123"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4225"/>
         <source>including spaces</source>
         <translation>vključno s presledki</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4142"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4244"/>
         <source>Comic book module</source>
         <translation>Modul Strip</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4149"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4173"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4202"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4251"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4275"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4304"/>
         <source>Save characters on typing</source>
         <translation>Shrani like ob tipkanju</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4151"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4175"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4204"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4253"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4277"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4306"/>
         <source>Show hints for all characters, or only for</source>
         <translation>Pokaži namige za vse like ali samo za</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4158"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4260"/>
         <source>Show panel text, lines</source>
         <translation>Pokaži besedilo, črte okvirja</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4233"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4334"/>
+        <source>Scene content counter type</source>
+        <translation>Vrsta števca vsebine prizora</translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4339"/>
         <source>Shortcuts</source>
         <translation>Tipke za bližnjice</translation>
     </message>
@@ -18240,17 +18280,17 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="117"/>
         <source>Perfect logline length</source>
-        <translation>Popolna dolžina enovrstičnega povzetka</translation>
+        <translation>Popolna dolžina premise</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="119"/>
         <source>Good logline length</source>
-        <translation>Dobra dolžina enovrstičnega povzetka</translation>
+        <translation>Dobra dolžina premise</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="121"/>
         <source>Recommended logline length is 30 words</source>
-        <translation>Priporočena dolžina enovrstičnega povzetka je 30 besed</translation>
+        <translation>Priporočena dolžina premise je 30 besed</translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="123"/>
@@ -18275,12 +18315,12 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="227"/>
         <source>Logline</source>
-        <translation>Enovrstični povzetek</translation>
+        <translation>Premisa</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="228"/>
         <source>Generate logline</source>
-        <translation>Ustvari enovrstični povzetek</translation>
+        <translation>Ustvari premiso</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="229"/>
@@ -18987,313 +19027,313 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
 <context>
     <name>Ui::WorldInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="465"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="500"/>
         <source>Apply new world name</source>
         <translation>Uveljavi novo ime sveta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1301"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1336"/>
         <source>Unlock access to extended world profile</source>
         <translation>Odkleni dostop do razširjenega profila sveta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1303"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1338"/>
         <source>Name</source>
         <translation>Ime</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1304"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1339"/>
         <source>One sentence description</source>
         <translation>Opis v eni povedi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1305"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1340"/>
         <source>Long description</source>
         <translation>Daljši opis</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1306"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1341"/>
         <source>Add photo +</source>
         <translation>Dodaj fotografijo +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1306"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1341"/>
         <source>Change photo...</source>
         <translation>Spremeni fotografijo ...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1307"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1342"/>
         <source>Do you want to delete the world&apos;s main photo?</source>
         <translation>Ali želite izbrisati glavno fotografijo sveta?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1308"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1343"/>
         <source>Select an area for the world main photo</source>
         <translation>Izberite področje za glavno fotografijo sveta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1310"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1345"/>
         <source>Photos</source>
         <translation>Fotografije</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1312"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1347"/>
         <source>World description</source>
         <translation>Opis sveta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1313"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1348"/>
         <source>Overview</source>
         <translation>Pregled</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1314"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1349"/>
         <source>Earth like?</source>
         <translation>Je podoben Zemlji?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1315"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1350"/>
         <source>World history</source>
         <translation>Zgodovina sveta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1316"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1351"/>
         <source>World mood</source>
         <translation>Vzdušje sveta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1318"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1353"/>
         <source>Nature</source>
         <translation>Narava</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1319"/>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1363"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1354"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1398"/>
         <source>Basic info</source>
         <translation>Osnovni podatki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1320"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1355"/>
         <source>Biology</source>
         <translation>Biologija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1321"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1356"/>
         <source>Physics</source>
         <translation>Fizika</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1322"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1357"/>
         <source>Astronomy</source>
         <translation>Astronomija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1323"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1358"/>
         <source>Geography</source>
         <translation>Zemljepis</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1324"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1359"/>
         <source>Races</source>
         <translation>Rase</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1325"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1360"/>
         <source>Flora</source>
         <translation>Rastlinstvo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1326"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1361"/>
         <source>Animals</source>
         <translation>Živalstvo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1327"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1362"/>
         <source>Natural resources</source>
         <translation>Naravni viri</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1328"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1363"/>
         <source>Climate</source>
         <translation>Klima</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1330"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1365"/>
         <source>Culture</source>
         <translation>Kultura</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1331"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1366"/>
         <source>Religions and beliefs</source>
         <translation>Verstva in verovanja</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1332"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1367"/>
         <source>Ethics and values</source>
         <translation>Etika in vrednote</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1333"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1368"/>
         <source>Languages</source>
         <translation>Jeziki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1334"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1369"/>
         <source>Class/caste system</source>
         <translation>Razredni/kastni sistem</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1336"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1371"/>
         <source>System info</source>
         <translation>Podatki o sistemu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1337"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1372"/>
         <source>Technology</source>
         <translation>Tehnologija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1338"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1373"/>
         <source>Economy</source>
         <translation>Ekonomija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1339"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1374"/>
         <source>Trade</source>
         <translation>Trgovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1340"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1375"/>
         <source>Business</source>
         <translation>Poslovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1341"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1376"/>
         <source>Industry</source>
         <translation>Industrija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1342"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1377"/>
         <source>Currency</source>
         <translation>Valuta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1343"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1378"/>
         <source>Education</source>
         <translation>Šolstvo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1344"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1379"/>
         <source>Communication method</source>
         <translation>Metoda komuniciranja</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1345"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1380"/>
         <source>Art</source>
         <translation>Umetnost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1346"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1381"/>
         <source>Entertainment</source>
         <translation>Zabava</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1347"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1382"/>
         <source>Travel</source>
         <translation>Potovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1348"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1383"/>
         <source>Science</source>
         <translation>Znanost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1350"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1385"/>
         <source>Politics info</source>
         <translation>Podatki o politiki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1351"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1386"/>
         <source>Government format</source>
         <translation>Oblika vladavine</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1352"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1387"/>
         <source>Government history</source>
         <translation>Zgodovina vladanja</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1353"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1388"/>
         <source>Laws and justice system</source>
         <translation>Zakonodaja in pravosodni sistem</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1354"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1389"/>
         <source>Foreign relations</source>
         <translation>Mednarodni odnosi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1355"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1390"/>
         <source>People perception of government</source>
         <translation>Kako ljudje vidijo vladajoče</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1356"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1391"/>
         <source>Propaganda</source>
         <translation>Propaganda</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1357"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1392"/>
         <source>Anti-government organisations</source>
         <translation>Protivladne organizacije</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1358"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1393"/>
         <source>Past war</source>
         <translation>Pretekla vojna</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1359"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1394"/>
         <source>Current war</source>
         <translation>Trenutna vojna</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1360"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1395"/>
         <source>Potential war</source>
         <translation>Potencialna vojna</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1362"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1397"/>
         <source>Magic</source>
         <translation>Magično</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1364"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1399"/>
         <source>Magic rule</source>
         <translation>Pravilo čarobnega</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1365"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1400"/>
         <source>Who can use</source>
         <translation>Kdo lahko uporablja</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1366"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1401"/>
         <source>Effect to world</source>
         <translation>Vpliv na svet</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1367"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1402"/>
         <source>Effect to society</source>
         <translation>Vpliv na družbo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1368"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1403"/>
         <source>Effect to technology</source>
         <translation>Vpliv na tehnologijo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1369"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1404"/>
         <source>Magic types</source>
         <translation>Vrste čarobnega</translation>
     </message>
@@ -19504,7 +19544,7 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="389"/>
         <source>Save worlds map to image</source>
-        <translation type="unfinished"></translation>
+        <translation>Shrani zemljevid svetov kot sliko</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="391"/>

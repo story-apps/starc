@@ -34,6 +34,7 @@ TRANSLATIONS += \
     core/translations/translation_hi.ts \
     core/translations/translation_hr.ts \
     core/translations/translation_hu.ts \
+    core/translations/translation_hy.ts \
     core/translations/translation_id.ts \
     core/translations/translation_it.ts \
     core/translations/translation_ko.ts \
@@ -44,6 +45,7 @@ TRANSLATIONS += \
     core/translations/translation_ro_RO.ts \
     core/translations/translation_ru.ts \
     core/translations/translation_sl.ts \
+    core/translations/translation_sv.ts \
     core/translations/translation_ta.ts \
     core/translations/translation_te.ts \
     core/translations/translation_tl_PH.ts \
