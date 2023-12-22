@@ -1195,7 +1195,7 @@ QVariant SettingsStorage::Implementation::cachedValue(const QString& _key,
     const QVariantMap& cachedValues
         = _settingsPlace == SettingsPlace::Application ? cachedValuesApp : cachedValuesDb;
     _ok = cachedValues.contains(_key);
-    return cachedValuesApp.value(_key);
+    return cachedValues.value(_key);
 }
 
 void SettingsStorage::Implementation::cacheValue(const QString& _key, const QVariant& _value,
