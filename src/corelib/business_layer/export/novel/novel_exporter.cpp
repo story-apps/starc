@@ -15,11 +15,12 @@ namespace BusinessLayer {
 
 TextDocument* NovelExporter::createDocument(const ExportOptions& _exportOptions) const
 {
-    Q_UNUSED(_exportOptions)
+    const auto& exportOptions = static_cast<const NovelExportOptions&>(_exportOptions);
 
     auto document = new NovelTextDocument;
     document->setCorrectionOptions(
         settingsValue(DataStorageLayer::kComponentsNovelEditorCorrectTextOnPageBreaksKey).toBool());
+    document->setOutlineDocument(exportOptions.includeOutline);
     return document;
 }
 
