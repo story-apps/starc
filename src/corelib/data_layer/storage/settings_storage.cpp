@@ -243,7 +243,7 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::ChapterHeading5, "Ctrl+5");
         addShortcut(BusinessLayer::TextParagraphType::ChapterHeading6, "Ctrl+6");
         addShortcut(BusinessLayer::TextParagraphType::Text, "Ctrl+7");
-        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Shift+0");
         //
         defaultValues.insert(kComponentsSimpleTextAvailableKey, true);
         //
@@ -517,7 +517,7 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Lyrics, "Ctrl+7");
         addShortcut(BusinessLayer::TextParagraphType::Shot, "Ctrl+8");
         addShortcut(BusinessLayer::TextParagraphType::Transition, "Ctrl+9");
-        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Shift+0");
         addShortcut(BusinessLayer::TextParagraphType::SequenceHeading, "Ctrl+Space");
         addShortcut(BusinessLayer::TextParagraphType::ActHeading, "Ctrl+Shift+Space");
         //
@@ -689,7 +689,7 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Description, "Ctrl+3");
         addShortcut(BusinessLayer::TextParagraphType::Character, "Ctrl+4");
         addShortcut(BusinessLayer::TextParagraphType::Dialogue, "Ctrl+5");
-        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Shift+0");
         //
         defaultValues.insert(kComponentsComicBookAvailableKey, true);
         //
@@ -816,7 +816,7 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Sound, "Ctrl+4");
         addShortcut(BusinessLayer::TextParagraphType::Music, "Ctrl+5");
         addShortcut(BusinessLayer::TextParagraphType::Cue, "Ctrl+6");
-        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Shift+0");
         //
         defaultValues.insert(kComponentsAudioplayAvailableKey, true);
         //
@@ -953,7 +953,7 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::Parenthetical, "Ctrl+3");
         addShortcut(BusinessLayer::TextParagraphType::Dialogue, "Ctrl+4");
         addShortcut(BusinessLayer::TextParagraphType::Action, "Ctrl+5");
-        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Shift+0");
         //
         defaultValues.insert(kComponentsStageplayAvailableKey, true);
         //
@@ -1156,7 +1156,7 @@ SettingsStorage::Implementation::Implementation()
         addShortcut(BusinessLayer::TextParagraphType::SceneHeading, "Ctrl+1");
         addShortcut(BusinessLayer::TextParagraphType::BeatHeading, "Ctrl+Shift+1");
         addShortcut(BusinessLayer::TextParagraphType::Text, "Ctrl+2");
-        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Esc");
+        addShortcut(BusinessLayer::TextParagraphType::InlineNote, "Ctrl+Shift+0");
         addShortcut(BusinessLayer::TextParagraphType::ChapterHeading, "Ctrl+Space");
         addShortcut(BusinessLayer::TextParagraphType::PartHeading, "Ctrl+Shift+Space");
         //
