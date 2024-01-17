@@ -9,7 +9,7 @@
 # Welcome to Story Architect
   
 
-Hello and welcome to **Starc's** GitHub page. Story Architect is a project created by the authors of an open source screenwriting tool [**Kit Scenarist**](https://github.com/dimkanovikov/KITScenarist) and is currently under development with its current release being alpha. It's an advanced text editor for script writers working professionally in film, theatre, radio or writing for comic books.
+Hello and welcome to **Starc's** GitHub page. Story Architect is a project created by the authors of an open source screenwriting tool [**Kit Scenarist**](https://github.com/dimkanovikov/KITScenarist) and is currently under development with its current release being alpha. It's an advanced text editor for script writers working professionally in film, novel, theatre, radio or writing for comic books.
 
 > **Story Architect** is still a work in progress. Keep in mind that some features are not yet implemented and the UI, translations and current functionalities are being polished. Stay tuned for future releases, and follow our [website](https://starc.app/) for additional infromation. 
 
