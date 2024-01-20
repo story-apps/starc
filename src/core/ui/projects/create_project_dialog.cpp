@@ -240,6 +240,12 @@ QString CreateProjectDialog::projectName() const
     return d->projectName->text();
 }
 
+void CreateProjectDialog::setProjectName(const QString& _name)
+{
+    d->projectName->setText(_name);
+    d->projectName->selectAll();
+}
+
 QString CreateProjectDialog::projectFolder() const
 {
     return d->projectFolder->text();

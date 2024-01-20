@@ -29,6 +29,7 @@ public:
      * @brief Название нового проекта
      */
     QString projectName() const;
+    void setProjectName(const QString& _name);
 
     /**
      * @brief Папка, куда будет сохраняться новый проект

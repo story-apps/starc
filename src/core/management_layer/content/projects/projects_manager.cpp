@@ -779,6 +779,8 @@ void ProjectsManager::createProject()
     d->createProjectDialog = new Ui::CreateProjectDialog(d->topLevelWidget);
     d->createProjectDialog->setProjectType(
         settingsValue(DataStorageLayer::kProjectTypeKey).toInt());
+    //: Dummy title for name of a new project
+    d->createProjectDialog->setProjectName(tr("Unnamed"));
     d->createProjectDialog->setProjectFolder(
         settingsValue(DataStorageLayer::kProjectSaveFolderKey).toString());
     d->createProjectDialog->setImportFolder(
