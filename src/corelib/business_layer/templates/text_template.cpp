@@ -999,6 +999,7 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
         synopsisTemplate->setParagraphStyle(blockStyle);
 
         headingFont.setPixelSize(headingFont.pixelSize() + MeasurementHelper::ptToPx(2));
+        headingBlockStyle.setFont(headingFont);
     }
 }
 
