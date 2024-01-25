@@ -804,7 +804,22 @@ void ProjectsManager::createProject()
 
         if (d->createProjectDialog->isLocal()) {
             //
-            // ... проверим, можно ли создавать проекты в заданной папке
+            // ... если папки, в которую пользователь хочет сохранить проект не существует
+            //
+            if (!QDir(d->createProjectDialog->projectFolder()).exists()) {
+                //
+                // ... пробуем создать её, а если не удалось создать, то покажем проблему в диалоге
+                //
+                const auto isDirCreated
+                    = QDir::root().mkpath(d->createProjectDialog->projectFolder());
+                if (!isDirCreated) {
+                    d->createProjectDialog->showProjectFolderError();
+                    return;
+                }
+            }
+
+            //
+            // ... далее проверим, можно ли создавать проекты в заданной папке
             //
             const auto projectPath = d->newProjectPath(d->createProjectDialog->projectName(),
                                                        d->createProjectDialog->projectFolder());
