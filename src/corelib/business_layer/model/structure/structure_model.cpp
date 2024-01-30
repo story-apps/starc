@@ -876,6 +876,16 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     //
     switch (dropTarget->type()) {
     //
+    // ... внутрь персонажей, локаций и миров можно вставлять только соответствующие документы,
+    //     это проверяется выше, любые другие документы нельзя сюда вставлять
+    //
+    case Domain::DocumentObjectType::Characters:
+    case Domain::DocumentObjectType::Locations:
+    case Domain::DocumentObjectType::Worlds: {
+        return false;
+    }
+
+    //
     // ... внутрь сценария ничего нельзя вложить
     //
     case Domain::DocumentObjectType::Screenplay:
