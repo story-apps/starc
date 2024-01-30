@@ -146,6 +146,7 @@ void WritingSessionManager::Implementation::processStatistics()
     //
     uint lastX = 0;
     const auto overviewStart = QDateTime::currentDateTime().addDays(-30);
+    bool hasStats = false;
     for (const auto& session : std::as_const(sessionStatistics)) {
         const auto newX = session.startDateTime.date().startOfDay().toTime_t();
         if (newX != lastX) {
@@ -177,8 +178,20 @@ void WritingSessionManager::Implementation::processStatistics()
                 wordsOverview.first = std::min(wordsOverview.first, session.words);
                 wordsOverview.second = std::max(wordsOverview.second, session.words);
             }
+
+            //
+            // ... фиксируем момент, что нашли стату
+            //
+            hasStats = true;
         }
     }
+    if (!hasStats) {
+        durationOverview = { {}, {} };
+        wordsOverview = { 0, 0 };
+    }
+    last30DaysOverview.duration = durationOverview;
+    last30DaysOverview.words = wordsOverview;
+
     //
     // ... затем собираем детальную стату по девайсам
     //
@@ -244,12 +257,6 @@ void WritingSessionManager::Implementation::processStatistics()
         data.y = { summaryY.begin(), summaryY.end() };
         plot.data.append(data);
     }
-
-    //
-    // Сохраняем данные для последующего отображения
-    //
-    last30DaysOverview.duration = durationOverview;
-    last30DaysOverview.words = wordsOverview;
 }
 
 
