@@ -130,7 +130,7 @@ QWidget* CreateDraftDialog::focusedWidgetAfterShow() const
 
 QWidget* CreateDraftDialog::lastFocusableWidget() const
 {
-    return d->createButton;
+    return d->createButton->isEnabled() ? d->createButton : d->cancelButton;
 }
 
 void CreateDraftDialog::updateTranslations()
