@@ -542,6 +542,8 @@ void StageplayTextCorrector::Implementation::correctPageBreaks(int _position)
         // Пропускаем невидимые блоки
         //
         if (!block.isVisible()) {
+            isFirstChangedBlock = false;
+
             blockItems[currentBlockInfo.number] = {};
 
             block = block.next();
@@ -1835,9 +1837,15 @@ void StageplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBloc
         paragraphType = TextParagraphType::BeatHeadingShadow;
         break;
     }
-    case TextParagraphType::ActHeading:
+    case TextParagraphType::ActHeading: {
+        paragraphType = TextParagraphType::ActHeadingShadow;
+        break;
+    }
+    case TextParagraphType::SequenceHeading: {
+        paragraphType = TextParagraphType::SequenceHeadingShadow;
+        break;
+    }
     case TextParagraphType::ActFooter:
-    case TextParagraphType::SequenceHeading:
     case TextParagraphType::SequenceFooter: {
         paragraphType = TextParagraphType::Action;
         break;

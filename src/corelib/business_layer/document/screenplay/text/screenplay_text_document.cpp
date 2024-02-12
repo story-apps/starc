@@ -118,8 +118,10 @@ QSet<TextParagraphType> ScreenplayTextDocument::visibleBlocksTypes() const
             TextParagraphType::BeatHeading,
             TextParagraphType::BeatHeadingShadowTreatment,
             TextParagraphType::ActHeading,
+            TextParagraphType::ActHeadingShadowTreatment,
             TextParagraphType::ActFooter,
             TextParagraphType::SequenceHeading,
+            TextParagraphType::SequenceHeadingShadowTreatment,
             TextParagraphType::SequenceFooter,
         };
     }
@@ -141,8 +143,10 @@ QSet<TextParagraphType> ScreenplayTextDocument::visibleBlocksTypes() const
             TextParagraphType::InlineNote,
             TextParagraphType::UnformattedText,
             TextParagraphType::ActHeading,
+            TextParagraphType::ActHeadingShadow,
             TextParagraphType::ActFooter,
             TextParagraphType::SequenceHeading,
+            TextParagraphType::SequenceHeadingShadow,
             TextParagraphType::SequenceFooter,
             TextParagraphType::PageSplitter,
         };
@@ -162,8 +166,10 @@ QSet<TextParagraphType> ScreenplayTextDocument::visibleBlocksTypes() const
         TextParagraphType::InlineNote,
         TextParagraphType::UnformattedText,
         TextParagraphType::ActHeading,
+        TextParagraphType::ActHeadingShadow,
         TextParagraphType::ActFooter,
         TextParagraphType::SequenceHeading,
+        TextParagraphType::SequenceHeadingShadow,
         TextParagraphType::SequenceFooter,
         TextParagraphType::PageSplitter,
     };

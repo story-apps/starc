@@ -177,8 +177,11 @@ bool ScreenplayTextEdit::Implementation::canSplitParagraph(
         && blockType != TextParagraphType::SceneHeadingShadow
         && blockType != TextParagraphType::BeatHeading
         && blockType != TextParagraphType::BeatHeadingShadow
-        && blockType != TextParagraphType::ActHeading && blockType != TextParagraphType::ActFooter
+        && blockType != TextParagraphType::ActHeading
+        && blockType != TextParagraphType::ActHeadingShadow
+        && blockType != TextParagraphType::ActFooter
         && blockType != TextParagraphType::SequenceHeading
+        && blockType != TextParagraphType::SequenceHeadingShadow
         && blockType != TextParagraphType::SequenceFooter;
 }
 

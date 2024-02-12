@@ -57,8 +57,13 @@ enum class TextParagraphType {
     // Группирующие блоки
     //
     ActHeading, //!< Заголовок акта
+    ActHeadingShadow, //!< Заголовк акта, для вспомогательных разрывов в сценарии
+    ActHeadingShadowTreatment, //!< Заголовк акта, для вспомогательных разрывов в поэпизоднике
     ActFooter, //!< Окончание акта
     SequenceHeading, //!< Заголовок папки
+    SequenceHeadingShadow, //!< Заголовок папки, для вспомогательных разрывов в сценарии
+    SequenceHeadingShadowTreatment, //!< Заголовок папки, для вспомогательных разрывов в
+                                    //!< поэпизоднике
     SequenceFooter, //!< Окончание папки
     PartHeading, //!< Заголовок части
     PartFooter, //!< Окончание части

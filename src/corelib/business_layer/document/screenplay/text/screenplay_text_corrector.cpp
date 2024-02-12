@@ -758,6 +758,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
         // Пропускаем невидимые блоки
         //
         if (!block.isVisible()) {
+            isFirstChangedBlock = false;
+
             blockItems[currentBlockInfo.number] = {};
 
             block = block.next();
@@ -2193,9 +2195,23 @@ void ScreenplayTextCorrector::Implementation::moveBlockToNextPage(const QTextBlo
             : TextParagraphType::BeatHeadingShadow;
         break;
     }
-    case TextParagraphType::ActHeading:
+    case TextParagraphType::ActHeading: {
+        auto screenplay = qobject_cast<ScreenplayTextDocument*>(document());
+        Q_ASSERT(screenplay);
+        paragraphType = screenplay->isTreatmentDocument()
+            ? TextParagraphType::ActHeadingShadowTreatment
+            : TextParagraphType::ActHeadingShadow;
+        break;
+    }
+    case TextParagraphType::SequenceHeading: {
+        auto screenplay = qobject_cast<ScreenplayTextDocument*>(document());
+        Q_ASSERT(screenplay);
+        paragraphType = screenplay->isTreatmentDocument()
+            ? TextParagraphType::SequenceHeadingShadowTreatment
+            : TextParagraphType::SequenceHeadingShadow;
+        break;
+    }
     case TextParagraphType::ActFooter:
-    case TextParagraphType::SequenceHeading:
     case TextParagraphType::SequenceFooter: {
         paragraphType = TextParagraphType::Action;
         break;

@@ -493,6 +493,8 @@ void NovelTextCorrector::Implementation::correctPageBreaks(int _position)
         // Пропускаем невидимые блоки
         //
         if (!block.isVisible()) {
+            isFirstChangedBlock = false;
+
             blockItems[currentBlockInfo.number] = {};
 
             block = block.next();

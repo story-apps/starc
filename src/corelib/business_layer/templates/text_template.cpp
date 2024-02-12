@@ -1139,6 +1139,24 @@ void TextTemplate::load(const QString& _fromFile)
         auto beatHeadingShadowTreatmentStyle = beatHeadingShadowStyle;
         beatHeadingShadowTreatmentStyle.setType(TextParagraphType::BeatHeadingShadowTreatment);
         setParagraphStyle(beatHeadingShadowTreatmentStyle);
+        //
+        auto actHeadingShadowStyle = d->paragraphsStyles.value(TextParagraphType::ActHeading);
+        actHeadingShadowStyle.setType(TextParagraphType::ActHeadingShadow);
+        setParagraphStyle(actHeadingShadowStyle);
+        //
+        auto actHeadingShadowTreatmentStyle = actHeadingShadowStyle;
+        actHeadingShadowTreatmentStyle.setType(TextParagraphType::ActHeadingShadowTreatment);
+        setParagraphStyle(actHeadingShadowTreatmentStyle);
+        //
+        auto sequenceHeadingShadowStyle
+            = d->paragraphsStyles.value(TextParagraphType::SequenceHeading);
+        sequenceHeadingShadowStyle.setType(TextParagraphType::SequenceHeadingShadow);
+        setParagraphStyle(sequenceHeadingShadowStyle);
+        //
+        auto sequenceHeadingShadowTreatmentStyle = sequenceHeadingShadowStyle;
+        sequenceHeadingShadowTreatmentStyle.setType(
+            TextParagraphType::SequenceHeadingShadowTreatment);
+        setParagraphStyle(sequenceHeadingShadowTreatmentStyle);
 
         auto panelHeadingShadowStyle = d->paragraphsStyles.value(TextParagraphType::PanelHeading);
         panelHeadingShadowStyle.setType(TextParagraphType::PanelHeadingShadow);

@@ -113,7 +113,7 @@ QSet<TextParagraphType> NovelTextDocument::visibleBlocksTypes() const
     if (d->isOutlineDocument) {
         return {
             TextParagraphType::SceneHeading,   TextParagraphType::SceneHeadingShadowTreatment,
-            TextParagraphType::BeatHeading,    TextParagraphType::BeatHeadingShadow,
+            TextParagraphType::BeatHeading,    TextParagraphType::BeatHeadingShadowTreatment,
             TextParagraphType::PartHeading,    TextParagraphType::PartFooter,
             TextParagraphType::ChapterHeading, TextParagraphType::ChapterFooter,
         };

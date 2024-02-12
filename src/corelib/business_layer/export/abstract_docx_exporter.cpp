@@ -386,8 +386,17 @@ QString AbstractDocxExporter::Implementation::docxText(QMap<int, QStringList>& _
         case TextParagraphType::SceneHeadingShadowTreatment: {
             return TextParagraphType::SceneHeading;
         }
-        case TextParagraphType::BeatHeadingShadow: {
+        case TextParagraphType::BeatHeadingShadow:
+        case TextParagraphType::BeatHeadingShadowTreatment: {
             return TextParagraphType::BeatHeading;
+        }
+        case TextParagraphType::ActHeadingShadow:
+        case TextParagraphType::ActHeadingShadowTreatment: {
+            return TextParagraphType::ActHeading;
+        }
+        case TextParagraphType::SequenceHeadingShadow:
+        case TextParagraphType::SequenceHeadingShadowTreatment: {
+            return TextParagraphType::SequenceHeading;
         }
         case TextParagraphType::PanelHeadingShadow: {
             return TextParagraphType::PanelHeading;
