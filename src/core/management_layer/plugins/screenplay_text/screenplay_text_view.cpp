@@ -1739,7 +1739,7 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
                 });
 
         //
-        // Обновляем тсоимость генерации синопсиса при изменении модели
+        // Обновляем стоимость генерации синопсиса при изменении модели
         //
         auto updateSynopsisPrice = [this] {
             d->aiAssistantView->setGenerationSynopsisOptions(

@@ -1051,7 +1051,7 @@ void AudioplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
         d->reconfigureBlockNumbersVisibility();
     }
     if (_changedSettingsKeys.isEmpty()) {
-        d->textEdit->setCorrectionOptions(true);
+        d->textEdit->setCorrectionOptions(false);
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(

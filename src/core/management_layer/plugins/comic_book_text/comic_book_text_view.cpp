@@ -1049,7 +1049,7 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
             true,
             settingsValue(DataStorageLayer::kComponentsComicBookEditorShowDialogueNumberKey)
                 .toBool(),
-            true);
+            false);
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(

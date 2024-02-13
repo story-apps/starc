@@ -1017,7 +1017,7 @@ void StageplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
     }
 
     if (_changedSettingsKeys.isEmpty()) {
-        d->textEdit->setCorrectionOptions(true);
+        d->textEdit->setCorrectionOptions(false);
     }
     if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
