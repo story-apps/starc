@@ -23,6 +23,10 @@ QString uuidFilter(const QUuid& _uuid)
 {
     return QString(" WHERE uuid = '%1' ").arg(_uuid.toString());
 }
+QString documentFilter(const QUuid& _documentUuid)
+{
+    return QString(" WHERE fk_document_uuid = '%1'").arg(_documentUuid.toString());
+}
 QString documentFilter(const QUuid& _documentUuid, int _changeIndex)
 {
     //
@@ -84,6 +88,20 @@ Domain::DocumentChangeObject* DocumentChangeMapper::find(const QUuid& _documentU
     }
 
     return static_cast<DocumentChangeObject*>(domainObjects.first());
+}
+
+QVector<Domain::DocumentChangeObject*> DocumentChangeMapper::findAll(const QUuid& _documentUuid)
+{
+    const auto domainObjects = abstractFind(documentFilter(_documentUuid));
+    if (domainObjects.isEmpty()) {
+        return {};
+    }
+
+    QVector<Domain::DocumentChangeObject*> changes;
+    for (auto domainObject : domainObjects) {
+        changes.append(static_cast<DocumentChangeObject*>(domainObject));
+    }
+    return changes;
 }
 
 QVector<Domain::DocumentChangeObject*> DocumentChangeMapper::findAllUnsynced(

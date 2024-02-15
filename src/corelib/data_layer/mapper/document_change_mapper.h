@@ -19,6 +19,7 @@ public:
     Domain::DocumentChangeObject* find(const Domain::Identifier& _id);
     Domain::DocumentChangeObject* find(const QUuid& _uuid);
     Domain::DocumentChangeObject* find(const QUuid& _documentUuid, int _changeIndex);
+    QVector<Domain::DocumentChangeObject*> findAll(const QUuid& _documentUuid);
     QVector<Domain::DocumentChangeObject*> findAllUnsynced(const QUuid& _documentUuid);
 
     QVector<QUuid> unsyncedDocuments();
