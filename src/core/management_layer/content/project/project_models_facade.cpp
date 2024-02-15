@@ -227,11 +227,14 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ScreenplayTitlePage: {
-            auto titlePageModel = new BusinessLayer::ScreenplayTitlePageModel;
-
             const auto titlePageItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(titlePageItem);
+            if (titlePageItem == nullptr) {
+                return nullptr;
+            }
+
             Q_ASSERT(titlePageItem->parent());
+
+            auto titlePageModel = new BusinessLayer::ScreenplayTitlePageModel;
             const auto parentUuid = titlePageItem->parent()->uuid();
 
             //
@@ -246,11 +249,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ScreenplaySynopsis: {
-            auto synopsisModel = new BusinessLayer::ScreenplaySynopsisModel;
-
             const auto synopsisItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(synopsisItem);
+            if (synopsisItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(synopsisItem->parent());
+
+            auto synopsisModel = new BusinessLayer::ScreenplaySynopsisModel;
             const auto parentUuid = synopsisItem->parent()->uuid();
 
             //
@@ -271,7 +276,9 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             isDocumentAlias = true;
 
             const auto treatmentItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(treatmentItem);
+            if (treatmentItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(treatmentItem->parent());
             //
             // ... модель сценария
@@ -298,11 +305,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ScreenplayText: {
-            auto screenplayModel = new BusinessLayer::ScreenplayTextModel;
-
             const auto screenplayItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(screenplayItem);
+            if (screenplayItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(screenplayItem->parent());
+
+            auto screenplayModel = new BusinessLayer::ScreenplayTextModel;
             const auto parentUuid = screenplayItem->parent()->uuid();
 
             //
@@ -370,10 +379,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ScreenplayStatistics: {
-            auto statisticsModel = new BusinessLayer::ScreenplayStatisticsModel;
-
             const auto statisticsItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(statisticsItem);
+            if (statisticsItem == nullptr) {
+                return nullptr;
+            }
+
+            auto statisticsModel = new BusinessLayer::ScreenplayStatisticsModel;
             const auto screenplayItem = statisticsItem->parent();
             Q_ASSERT(screenplayItem);
             QUuid screenplayTextItemUuid;
@@ -421,11 +432,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ComicBookTitlePage: {
-            auto titlePageModel = new BusinessLayer::ComicBookTitlePageModel;
-
             const auto titlePageItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(titlePageItem);
+            if (titlePageItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(titlePageItem->parent());
+
+            auto titlePageModel = new BusinessLayer::ComicBookTitlePageModel;
             const auto parentUuid = titlePageItem->parent()->uuid();
 
             //
@@ -440,11 +453,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ComicBookSynopsis: {
-            auto synopsisModel = new BusinessLayer::ComicBookSynopsisModel;
-
             const auto sinopsisItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(sinopsisItem);
+            if (sinopsisItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(sinopsisItem->parent());
+
+            auto synopsisModel = new BusinessLayer::ComicBookSynopsisModel;
             const auto parentUuid = sinopsisItem->parent()->uuid();
 
             //
@@ -459,11 +474,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ComicBookText: {
-            auto comicBookModel = new BusinessLayer::ComicBookTextModel;
-
             const auto comicBookItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(comicBookItem);
+            if (comicBookItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(comicBookItem->parent());
+
+            auto comicBookModel = new BusinessLayer::ComicBookTextModel;
             const auto parentUuid = comicBookItem->parent()->uuid();
 
             //
@@ -519,10 +536,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ComicBookStatistics: {
-            auto statisticsModel = new BusinessLayer::ComicBookStatisticsModel;
-
             const auto statisticsItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(statisticsItem);
+            if (statisticsItem == nullptr) {
+                return nullptr;
+            }
+
+            auto statisticsModel = new BusinessLayer::ComicBookStatisticsModel;
             const auto comicBookItem = statisticsItem->parent();
             Q_ASSERT(comicBookItem);
             QUuid comicBookTextItemUuid;
@@ -570,11 +589,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::AudioplayTitlePage: {
-            auto titlePageModel = new BusinessLayer::AudioplayTitlePageModel;
-
             const auto titlePageItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(titlePageItem);
+            if (titlePageItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(titlePageItem->parent());
+
+            auto titlePageModel = new BusinessLayer::AudioplayTitlePageModel;
             const auto parentUuid = titlePageItem->parent()->uuid();
 
             //
@@ -595,11 +616,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::AudioplaySynopsis: {
-            auto synopsisModel = new BusinessLayer::AudioplaySynopsisModel;
-
             const auto synopsisItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(synopsisItem);
+            if (synopsisItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(synopsisItem->parent());
+
+            auto synopsisModel = new BusinessLayer::AudioplaySynopsisModel;
             const auto parentUuid = synopsisItem->parent()->uuid();
 
             //
@@ -614,11 +637,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::AudioplayText: {
-            auto audioplayModel = new BusinessLayer::AudioplayTextModel;
-
             const auto audioplayItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(audioplayItem);
+            if (audioplayItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(audioplayItem->parent());
+
+            auto audioplayModel = new BusinessLayer::AudioplayTextModel;
             const auto parentUuid = audioplayItem->parent()->uuid();
 
             //
@@ -663,10 +688,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::AudioplayStatistics: {
-            auto statisticsModel = new BusinessLayer::AudioplayStatisticsModel;
-
             const auto statisticsItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(statisticsItem);
+            if (statisticsItem == nullptr) {
+                return nullptr;
+            }
+
+            auto statisticsModel = new BusinessLayer::AudioplayStatisticsModel;
             const auto audioplayItem = statisticsItem->parent();
             Q_ASSERT(audioplayItem);
             QUuid audioplayTextItemUuid;
@@ -714,11 +741,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::StageplayTitlePage: {
-            auto titlePageModel = new BusinessLayer::StageplayTitlePageModel;
-
             const auto titlePageItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(titlePageItem);
+            if (titlePageItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(titlePageItem->parent());
+
+            auto titlePageModel = new BusinessLayer::StageplayTitlePageModel;
             const auto parentUuid = titlePageItem->parent()->uuid();
 
             //
@@ -739,11 +768,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::StageplaySynopsis: {
-            auto synopsisModel = new BusinessLayer::StageplaySynopsisModel;
-
             const auto synopsisItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(synopsisItem);
+            if (synopsisItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(synopsisItem->parent());
+
+            auto synopsisModel = new BusinessLayer::StageplaySynopsisModel;
             const auto parentUuid = synopsisItem->parent()->uuid();
 
             //
@@ -758,11 +789,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::StageplayText: {
-            auto stageplayModel = new BusinessLayer::StageplayTextModel;
-
             const auto stageplayItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(stageplayItem);
+            if (stageplayItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(stageplayItem->parent());
+
+            auto stageplayModel = new BusinessLayer::StageplayTextModel;
             const auto parentUuid = stageplayItem->parent()->uuid();
 
             //
@@ -807,10 +840,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::StageplayStatistics: {
-            auto statisticsModel = new BusinessLayer::StageplayStatisticsModel;
-
             const auto statisticsItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(statisticsItem);
+            if (statisticsItem == nullptr) {
+                return nullptr;
+            }
+
+            auto statisticsModel = new BusinessLayer::StageplayStatisticsModel;
             const auto stageplayItem = statisticsItem->parent();
             Q_ASSERT(stageplayItem);
             QUuid stageplayTextItemUuid;
@@ -859,11 +894,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::NovelTitlePage: {
-            auto titlePageModel = new BusinessLayer::NovelTitlePageModel;
-
             const auto titlePageItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(titlePageItem);
+            if (titlePageItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(titlePageItem->parent());
+
+            auto titlePageModel = new BusinessLayer::NovelTitlePageModel;
             const auto parentUuid = titlePageItem->parent()->uuid();
 
             //
@@ -878,11 +915,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::NovelSynopsis: {
-            auto synopsisModel = new BusinessLayer::NovelSynopsisModel;
-
             const auto synopsisItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(synopsisItem);
+            if (synopsisItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(synopsisItem->parent());
+
+            auto synopsisModel = new BusinessLayer::NovelSynopsisModel;
             const auto parentUuid = synopsisItem->parent()->uuid();
 
             //
@@ -903,8 +942,11 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             isDocumentAlias = true;
 
             const auto treatmentItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(treatmentItem);
+            if (treatmentItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(treatmentItem->parent());
+
             //
             // ... модель сценария
             //
@@ -930,11 +972,13 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::NovelText: {
-            auto novelModel = new BusinessLayer::NovelTextModel;
-
             const auto novelItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(novelItem);
+            if (novelItem == nullptr) {
+                return nullptr;
+            }
             Q_ASSERT(novelItem->parent());
+
+            auto novelModel = new BusinessLayer::NovelTextModel;
             const auto parentUuid = novelItem->parent()->uuid();
 
             //
@@ -998,10 +1042,12 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::NovelStatistics: {
-            auto statisticsModel = new BusinessLayer::NovelStatisticsModel;
-
             const auto statisticsItem = d->projectStructureModel->itemForUuid(_document->uuid());
-            Q_ASSERT(statisticsItem);
+            if (statisticsItem == nullptr) {
+                return nullptr;
+            }
+
+            auto statisticsModel = new BusinessLayer::NovelStatisticsModel;
             const auto novelItem = statisticsItem->parent();
             Q_ASSERT(novelItem);
             QUuid novelTextItemUuid;
@@ -1190,7 +1236,12 @@ QVector<BusinessLayer::AbstractModel*> ProjectModelsFacade::modelsFor(
     QVector<BusinessLayer::AbstractModel*> models;
     const auto documents = DataStorageLayer::StorageFacade::documentStorage()->documents(_type);
     for (const auto document : documents) {
-        models.append(modelFor(document));
+        auto model = modelFor(document);
+        if (model == nullptr) {
+            continue;
+        }
+
+        models.append(model);
     }
     return models;
 }
