@@ -130,6 +130,12 @@ SOURCES += \
     business_layer/export/comic_book/comic_book_docx_exporter.cpp \
     business_layer/export/comic_book/comic_book_exporter.cpp \
     business_layer/export/comic_book/comic_book_pdf_exporter.cpp \
+    business_layer/export/locations/location_docx_exporter.cpp \
+    business_layer/export/locations/location_exporter.cpp \
+    business_layer/export/locations/location_pdf_exporter.cpp \
+    business_layer/export/locations/locations_docx_exporter.cpp \
+    business_layer/export/locations/locations_exporter.cpp \
+    business_layer/export/locations/locations_pdf_exporter.cpp \
     business_layer/export/novel/novel_docx_exporter.cpp \
     business_layer/export/novel/novel_exporter.cpp \
     business_layer/export/novel/novel_pdf_exporter.cpp \
@@ -450,6 +456,14 @@ HEADERS += \
     business_layer/export/comic_book/comic_book_exporter.h \
     business_layer/export/comic_book/comic_book_pdf_exporter.h \
     business_layer/export/export_options.h \
+    business_layer/export/locations/location_docx_exporter.h \
+    business_layer/export/locations/location_export_options.h \
+    business_layer/export/locations/location_exporter.h \
+    business_layer/export/locations/location_pdf_exporter.h \
+    business_layer/export/locations/locations_docx_exporter.h \
+    business_layer/export/locations/locations_export_options.h \
+    business_layer/export/locations/locations_exporter.h \
+    business_layer/export/locations/locations_pdf_exporter.h \
     business_layer/export/novel/novel_docx_exporter.h \
     business_layer/export/novel/novel_export_options.h \
     business_layer/export/novel/novel_exporter.h \

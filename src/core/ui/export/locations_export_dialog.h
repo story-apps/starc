@@ -4,26 +4,32 @@
 
 
 namespace BusinessLayer {
-struct CharacterExportOptions;
-}
+class AbstractModel;
+struct LocationsExportOptions;
+} // namespace BusinessLayer
 
 namespace Ui {
 
 /**
  * @brief Диалог настройки параметров экспорта
  */
-class CharacterExportDialog : public AbstractDialog
+class LocationsExportDialog : public AbstractDialog
 {
     Q_OBJECT
 
 public:
-    explicit CharacterExportDialog(QWidget* _parent = nullptr);
-    ~CharacterExportDialog() override;
+    explicit LocationsExportDialog(QWidget* _parent = nullptr);
+    ~LocationsExportDialog() override;
+
+    /**
+     * @brief Задать модель локаций для отображения списка
+     */
+    void setModel(BusinessLayer::AbstractModel* _model) const;
 
     /**
      * @brief Получить опции экспорта
      */
-    BusinessLayer::CharacterExportOptions exportOptions() const;
+    BusinessLayer::LocationsExportOptions exportOptions() const;
 
     /**
      * @brief Нужно ли открыть экспортированный документ после экспорта

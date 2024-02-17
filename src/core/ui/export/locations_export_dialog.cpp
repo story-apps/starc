@@ -1,6 +1,6 @@
-#include "characters_export_dialog.h"
+#include "locations_export_dialog.h"
 
-#include <business_layer/export/characters/characters_export_options.h>
+#include <business_layer/export/locations/locations_export_options.h>
 #include <business_layer/model/abstract_model.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -24,13 +24,11 @@
 namespace Ui {
 
 namespace {
-const QString kGroupKey = "widgets/characters-export-dialog/";
-const QString kCharactersKey = kGroupKey + "characters";
+const QString kGroupKey = "widgets/locations-export-dialog/";
+const QString kLocationsKey = kGroupKey + "locations";
 const QString kFormatKey = kGroupKey + "format";
 const QString kIncludeMainPhotoKey = kGroupKey + "include-main-photo";
 const QString kIncludeStoryRoleKey = kGroupKey + "include-story-role";
-const QString kIncludeAgeKey = kGroupKey + "include-age";
-const QString kIncludeGenderKey = kGroupKey + "include-gender";
 const QString kIncludeOneLineDescriptionKey = kGroupKey + "include-one-line-description";
 const QString kIncludeLongDescriptionKey = kGroupKey + "include-long-description";
 const QString kWatermarkKey = kGroupKey + "watermark";
@@ -38,7 +36,7 @@ const QString kWatermarkColorKey = kGroupKey + "watermark-color";
 const QString kOpenDocumentAfterExportKey = kGroupKey + "open-document-after-export";
 } // namespace
 
-class CharactersExportDialog::Implementation
+class LocationsExportDialog::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
@@ -46,16 +44,14 @@ public:
     void updateSelectAllState();
 
 
-    QScrollArea* charactersScrollArea = nullptr;
-    Widget* charactersContainer = nullptr;
-    QVBoxLayout* charactersLayout = nullptr;
-    CheckBox* selectAllCharacters = nullptr;
-    QVector<CheckBox*> characters;
+    QScrollArea* locationsScrollArea = nullptr;
+    Widget* locationsContainer = nullptr;
+    QVBoxLayout* locationsLayout = nullptr;
+    CheckBox* selectAllLocations = nullptr;
+    QVector<CheckBox*> locations;
     ComboBox* fileFormat = nullptr;
     CheckBox* includeMainPhoto = nullptr;
     CheckBox* includeStoryRole = nullptr;
-    CheckBox* includeAge = nullptr;
-    CheckBox* includeGender = nullptr;
     CheckBox* includeOneLineDescription = nullptr;
     CheckBox* includeLongDescription = nullptr;
     TextField* watermark = nullptr;
@@ -67,16 +63,14 @@ public:
     Button* exportButton = nullptr;
 };
 
-CharactersExportDialog::Implementation::Implementation(QWidget* _parent)
-    : charactersScrollArea(new QScrollArea(_parent))
-    , charactersContainer(new Widget(charactersScrollArea))
-    , charactersLayout(new QVBoxLayout)
-    , selectAllCharacters(new CheckBox(charactersContainer))
+LocationsExportDialog::Implementation::Implementation(QWidget* _parent)
+    : locationsScrollArea(new QScrollArea(_parent))
+    , locationsContainer(new Widget(locationsScrollArea))
+    , locationsLayout(new QVBoxLayout)
+    , selectAllLocations(new CheckBox(locationsContainer))
     , fileFormat(new ComboBox(_parent))
     , includeMainPhoto(new CheckBox(_parent))
     , includeStoryRole(new CheckBox(_parent))
-    , includeAge(new CheckBox(_parent))
-    , includeGender(new CheckBox(_parent))
     , includeOneLineDescription(new CheckBox(_parent))
     , includeLongDescription(new CheckBox(_parent))
     , watermark(new TextField(_parent))
@@ -89,20 +83,20 @@ CharactersExportDialog::Implementation::Implementation(QWidget* _parent)
     QPalette palette;
     palette.setColor(QPalette::Base, Qt::transparent);
     palette.setColor(QPalette::Window, Qt::transparent);
-    charactersScrollArea->setPalette(palette);
-    charactersScrollArea->setFrameShape(QFrame::NoFrame);
-    charactersScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    charactersScrollArea->setVerticalScrollBar(new ScrollBar);
-    charactersScrollArea->setWidget(charactersContainer);
-    charactersScrollArea->setWidgetResizable(true);
-    charactersLayout->setContentsMargins({});
-    charactersLayout->addWidget(selectAllCharacters);
-    charactersLayout->setSpacing(0);
-    charactersLayout->addStretch();
-    charactersContainer->setLayout(charactersLayout);
+    locationsScrollArea->setPalette(palette);
+    locationsScrollArea->setFrameShape(QFrame::NoFrame);
+    locationsScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    locationsScrollArea->setVerticalScrollBar(new ScrollBar);
+    locationsScrollArea->setWidget(locationsContainer);
+    locationsScrollArea->setWidgetResizable(true);
+    locationsLayout->setContentsMargins({});
+    locationsLayout->addWidget(selectAllLocations);
+    locationsLayout->setSpacing(0);
+    locationsLayout->addStretch();
+    locationsContainer->setLayout(locationsLayout);
 
-    new Shadow(Qt::TopEdge, charactersScrollArea);
-    new Shadow(Qt::BottomEdge, charactersScrollArea);
+    new Shadow(Qt::TopEdge, locationsScrollArea);
+    new Shadow(Qt::BottomEdge, locationsScrollArea);
 
 
     fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
@@ -124,12 +118,12 @@ CharactersExportDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addWidget(exportButton, 0, Qt::AlignVCenter);
 }
 
-void CharactersExportDialog::Implementation::updateSelectAllState()
+void LocationsExportDialog::Implementation::updateSelectAllState()
 {
     bool hasChecked = false;
     bool hasUnchecked = false;
-    for (const auto characterCheckBox : std::as_const(characters)) {
-        if (characterCheckBox->isChecked()) {
+    for (const auto locationCheckBox : std::as_const(locations)) {
+        if (locationCheckBox->isChecked()) {
             hasChecked = true;
         } else {
             hasUnchecked = true;
@@ -137,10 +131,10 @@ void CharactersExportDialog::Implementation::updateSelectAllState()
     }
 
     if (hasChecked && hasUnchecked) {
-        selectAllCharacters->setIndeterminate();
+        selectAllLocations->setIndeterminate();
     } else {
-        QSignalBlocker signalBlocker(selectAllCharacters);
-        selectAllCharacters->setChecked(hasChecked);
+        QSignalBlocker signalBlocker(selectAllLocations);
+        selectAllLocations->setChecked(hasChecked);
     }
 }
 
@@ -148,7 +142,7 @@ void CharactersExportDialog::Implementation::updateSelectAllState()
 // ****
 
 
-CharactersExportDialog::CharactersExportDialog(QWidget* _parent)
+LocationsExportDialog::LocationsExportDialog(QWidget* _parent)
     : AbstractDialog(_parent)
     , d(new Implementation(this))
 {
@@ -157,12 +151,10 @@ CharactersExportDialog::CharactersExportDialog(QWidget* _parent)
 
     int row = 0;
     int column = 0;
-    contentsLayout()->addWidget(d->charactersScrollArea, row, column++, 9, 1);
+    contentsLayout()->addWidget(d->locationsScrollArea, row, column++, 7, 1);
     contentsLayout()->addWidget(d->fileFormat, row++, column);
     contentsLayout()->addWidget(d->includeMainPhoto, row++, column);
     contentsLayout()->addWidget(d->includeStoryRole, row++, column);
-    contentsLayout()->addWidget(d->includeAge, row++, column);
-    contentsLayout()->addWidget(d->includeGender, row++, column);
     contentsLayout()->addWidget(d->includeOneLineDescription, row++, column);
     contentsLayout()->addWidget(d->includeLongDescription, row++, column);
     contentsLayout()->addWidget(d->watermark, row++, column, Qt::AlignTop);
@@ -170,15 +162,15 @@ CharactersExportDialog::CharactersExportDialog(QWidget* _parent)
     column = 0;
     contentsLayout()->addLayout(d->buttonsLayout, row++, column, 1, 2);
 
-    connect(d->selectAllCharacters, &CheckBox::checkedChanged, this,
+    connect(d->selectAllLocations, &CheckBox::checkedChanged, this,
             [this](bool _checked, bool _indeterminate) {
                 if (_indeterminate) {
                     return;
                 }
 
-                for (auto characterCheckBox : std::as_const(d->characters)) {
-                    QSignalBlocker signalBlocker(characterCheckBox);
-                    characterCheckBox->setChecked(_checked);
+                for (auto locationCheckBox : std::as_const(d->locations)) {
+                    QSignalBlocker signalBlocker(locationCheckBox);
+                    locationCheckBox->setChecked(_checked);
                 }
             });
     auto updateParametersVisibility = [this] {
@@ -216,8 +208,8 @@ CharactersExportDialog::CharactersExportDialog(QWidget* _parent)
     connect(d->watermarkColorPopup, &ColorPickerPopup::selectedColorChanged, this,
             [this](const QColor& _color) { d->watermark->setTrailingIconColor(_color); });
     //
-    connect(d->exportButton, &Button::clicked, this, &CharactersExportDialog::exportRequested);
-    connect(d->cancelButton, &Button::clicked, this, &CharactersExportDialog::canceled);
+    connect(d->exportButton, &Button::clicked, this, &LocationsExportDialog::exportRequested);
+    connect(d->cancelButton, &Button::clicked, this, &LocationsExportDialog::canceled);
 
     updateParametersVisibility();
 
@@ -227,8 +219,6 @@ CharactersExportDialog::CharactersExportDialog(QWidget* _parent)
     d->fileFormat->setCurrentIndex(fileFormatIndex);
     d->includeMainPhoto->setChecked(settings.value(kIncludeMainPhotoKey, true).toBool());
     d->includeStoryRole->setChecked(settings.value(kIncludeStoryRoleKey, true).toBool());
-    d->includeAge->setChecked(settings.value(kIncludeAgeKey, true).toBool());
-    d->includeGender->setChecked(settings.value(kIncludeGenderKey, true).toBool());
     d->includeOneLineDescription->setChecked(
         settings.value(kIncludeOneLineDescriptionKey, true).toBool());
     d->includeLongDescription->setChecked(
@@ -242,19 +232,17 @@ CharactersExportDialog::CharactersExportDialog(QWidget* _parent)
     d->watermark->setTrailingIconColor(d->watermarkColorPopup->selectedColor());
 }
 
-CharactersExportDialog::~CharactersExportDialog()
+LocationsExportDialog::~LocationsExportDialog()
 {
     QSettings settings;
-    QVariantMap characters;
-    for (const auto characterCheckBox : std::as_const(d->characters)) {
-        characters[characterCheckBox->text()] = characterCheckBox->isChecked();
+    QVariantMap locations;
+    for (const auto locationCheckBox : std::as_const(d->locations)) {
+        locations[locationCheckBox->text()] = locationCheckBox->isChecked();
     }
-    settings.setValue(kCharactersKey, characters);
+    settings.setValue(kLocationsKey, locations);
     settings.setValue(kFormatKey, d->fileFormat->currentIndex().row());
     settings.setValue(kIncludeMainPhotoKey, d->includeMainPhoto->isChecked());
     settings.setValue(kIncludeStoryRoleKey, d->includeStoryRole->isChecked());
-    settings.setValue(kIncludeAgeKey, d->includeAge->isChecked());
-    settings.setValue(kIncludeGenderKey, d->includeGender->isChecked());
     settings.setValue(kIncludeOneLineDescriptionKey, d->includeOneLineDescription->isChecked());
     settings.setValue(kIncludeLongDescriptionKey, d->includeLongDescription->isChecked());
     settings.setValue(kWatermarkKey, d->watermark->text());
@@ -262,63 +250,61 @@ CharactersExportDialog::~CharactersExportDialog()
     settings.setValue(kOpenDocumentAfterExportKey, d->openDocumentAfterExport->isChecked());
 }
 
-void CharactersExportDialog::setModel(BusinessLayer::AbstractModel* _model) const
+void LocationsExportDialog::setModel(BusinessLayer::AbstractModel* _model) const
 {
-    qDeleteAll(d->characters);
-    d->characters.clear();
+    qDeleteAll(d->locations);
+    d->locations.clear();
 
-    d->selectAllCharacters->setChecked(true);
+    d->selectAllLocations->setChecked(true);
     for (int row = 0; row < _model->rowCount(); ++row) {
-        auto characterCheckBox = new CheckBox(d->charactersContainer);
-        characterCheckBox->setBackgroundColor(DesignSystem::color().background());
-        characterCheckBox->setTextColor(DesignSystem::color().onBackground());
-        characterCheckBox->setText(_model->index(row, 0).data().toString());
-        characterCheckBox->setChecked(true);
-        connect(characterCheckBox, &CheckBox::checkedChanged, this,
+        auto locationCheckBox = new CheckBox(d->locationsContainer);
+        locationCheckBox->setBackgroundColor(Ui::DesignSystem::color().background());
+        locationCheckBox->setTextColor(Ui::DesignSystem::color().onBackground());
+        locationCheckBox->setText(_model->index(row, 0).data().toString());
+        locationCheckBox->setChecked(true);
+        connect(locationCheckBox, &CheckBox::checkedChanged, this,
                 [this] { d->updateSelectAllState(); });
 
         // 1 - чекбокс "Выделить всех"
-        d->charactersLayout->insertWidget(1 + d->characters.size(), characterCheckBox);
+        d->locationsLayout->insertWidget(1 + d->locations.size(), locationCheckBox);
 
-        d->characters.append(characterCheckBox);
+        d->locations.append(locationCheckBox);
     }
 
     //
     // Если список персонажей не изменился с прошлого раза, то восстановим значения
     //
     QSettings settings;
-    const auto characters = settings.value(kCharactersKey).toMap();
-    bool isSame = d->characters.size() == characters.size();
+    const auto locations = settings.value(kLocationsKey).toMap();
+    bool isSame = d->locations.size() == locations.size();
     if (isSame) {
-        for (int index = 0; index < d->characters.size(); ++index) {
-            if (!characters.contains(d->characters[index]->text())) {
+        for (int index = 0; index < d->locations.size(); ++index) {
+            if (!locations.contains(d->locations[index]->text())) {
                 isSame = false;
                 break;
             }
         }
     }
     if (isSame) {
-        for (int index = 0; index < d->characters.size(); ++index) {
-            d->characters[index]->setChecked(characters[d->characters[index]->text()].toBool());
+        for (int index = 0; index < d->locations.size(); ++index) {
+            d->locations[index]->setChecked(locations[d->locations[index]->text()].toBool());
         }
     }
 }
 
-BusinessLayer::CharactersExportOptions CharactersExportDialog::exportOptions() const
+BusinessLayer::LocationsExportOptions LocationsExportDialog::exportOptions() const
 {
-    BusinessLayer::CharactersExportOptions options;
-    options.characters.clear();
-    for (const auto characterCheckBox : std::as_const(d->characters)) {
-        if (characterCheckBox->isChecked()) {
-            options.characters.append(characterCheckBox->text());
+    BusinessLayer::LocationsExportOptions options;
+    options.locations.clear();
+    for (const auto locationCheckBox : std::as_const(d->locations)) {
+        if (locationCheckBox->isChecked()) {
+            options.locations.append(locationCheckBox->text());
         }
     }
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
     options.includeMainPhoto = d->includeMainPhoto->isVisible() && d->includeMainPhoto->isChecked();
     options.includeStoryRole = d->includeStoryRole->isChecked();
-    options.includeAge = d->includeAge->isChecked();
-    options.includeGender = d->includeGender->isChecked();
     options.includeOneLineDescription = d->includeOneLineDescription->isChecked();
     options.includeLongDescription = d->includeLongDescription->isChecked();
     options.watermark = d->watermark->text();
@@ -326,31 +312,29 @@ BusinessLayer::CharactersExportOptions CharactersExportDialog::exportOptions() c
     return options;
 }
 
-bool CharactersExportDialog::openDocumentAfterExport() const
+bool LocationsExportDialog::openDocumentAfterExport() const
 {
     return d->openDocumentAfterExport->isChecked();
 }
 
-QWidget* CharactersExportDialog::focusedWidgetAfterShow() const
+QWidget* LocationsExportDialog::focusedWidgetAfterShow() const
 {
     return d->fileFormat;
 }
 
-QWidget* CharactersExportDialog::lastFocusableWidget() const
+QWidget* LocationsExportDialog::lastFocusableWidget() const
 {
     return d->exportButton;
 }
 
-void CharactersExportDialog::updateTranslations()
+void LocationsExportDialog::updateTranslations()
 {
-    setTitle(tr("Export characters"));
+    setTitle(tr("Export locations"));
 
-    d->selectAllCharacters->setText(tr("Select all"));
+    d->selectAllLocations->setText(tr("Select all"));
     d->fileFormat->setLabel(tr("Format"));
     d->includeMainPhoto->setText(tr("Include main photo"));
     d->includeStoryRole->setText(tr("Include story role"));
-    d->includeAge->setText(tr("Include age"));
-    d->includeGender->setText(tr("Include gender"));
     d->includeOneLineDescription->setText(tr("Include one line description"));
     d->includeLongDescription->setText(tr("Include long description"));
     d->watermark->setLabel(tr("Watermark"));
@@ -360,57 +344,55 @@ void CharactersExportDialog::updateTranslations()
     d->cancelButton->setText(tr("Cancel"));
 }
 
-void CharactersExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+void LocationsExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
     setContentMaximumWidth(topLevelWidget()->width() * 0.7);
 
-    d->charactersContainer->setBackgroundColor(DesignSystem::color().background());
+    d->locationsContainer->setBackgroundColor(DesignSystem::color().background());
 
-    auto titleMargins = DesignSystem::label().margins().toMargins();
-    titleMargins.setTop(DesignSystem::layout().px8());
+    auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
+    titleMargins.setTop(Ui::DesignSystem::layout().px8());
     titleMargins.setBottom(0);
 
     for (auto textField : std::vector<TextField*>{
              d->fileFormat,
              d->watermark,
          }) {
-        textField->setBackgroundColor(DesignSystem::color().onBackground());
-        textField->setTextColor(DesignSystem::color().onBackground());
+        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+        textField->setTextColor(Ui::DesignSystem::color().onBackground());
     }
     for (auto combobox : {
              d->fileFormat,
          }) {
-        combobox->setPopupBackgroundColor(DesignSystem::color().background());
+        combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
     }
 
     for (auto checkBox : {
-             d->selectAllCharacters,
+             d->selectAllLocations,
              d->includeMainPhoto,
              d->includeStoryRole,
-             d->includeAge,
-             d->includeGender,
              d->includeOneLineDescription,
              d->includeLongDescription,
              d->openDocumentAfterExport,
          }) {
-        checkBox->setBackgroundColor(DesignSystem::color().background());
-        checkBox->setTextColor(DesignSystem::color().onBackground());
+        checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
+        checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
     for (auto button : { d->exportButton, d->cancelButton }) {
-        button->setBackgroundColor(DesignSystem::color().accent());
-        button->setTextColor(DesignSystem::color().accent());
+        button->setBackgroundColor(Ui::DesignSystem::color().accent());
+        button->setTextColor(Ui::DesignSystem::color().accent());
     }
 
-    d->watermarkColorPopup->setBackgroundColor(DesignSystem::color().background());
-    d->watermarkColorPopup->setTextColor(DesignSystem::color().onBackground());
+    d->watermarkColorPopup->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->watermarkColorPopup->setTextColor(Ui::DesignSystem::color().onBackground());
 
-    contentsLayout()->setSpacing(static_cast<int>(DesignSystem::layout().px8()));
-    d->buttonsLayout->setContentsMargins(QMarginsF(0.0, DesignSystem::layout().px12(),
-                                                   DesignSystem::layout().px16(),
-                                                   DesignSystem::layout().px12())
+    contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
+    d->buttonsLayout->setContentsMargins(QMarginsF(0.0, Ui::DesignSystem::layout().px12(),
+                                                   Ui::DesignSystem::layout().px16(),
+                                                   Ui::DesignSystem::layout().px12())
                                              .toMargins());
 }
 

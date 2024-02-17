@@ -13,6 +13,12 @@
 #include <business_layer/export/comic_book/comic_book_export_options.h>
 #include <business_layer/export/comic_book/comic_book_pdf_exporter.h>
 #include <business_layer/export/export_options.h>
+#include <business_layer/export/locations/location_docx_exporter.h>
+#include <business_layer/export/locations/location_export_options.h>
+#include <business_layer/export/locations/location_pdf_exporter.h>
+#include <business_layer/export/locations/locations_docx_exporter.h>
+#include <business_layer/export/locations/locations_export_options.h>
+#include <business_layer/export/locations/locations_pdf_exporter.h>
 #include <business_layer/export/novel/novel_docx_exporter.h>
 #include <business_layer/export/novel/novel_export_options.h>
 #include <business_layer/export/novel/novel_pdf_exporter.h>
@@ -32,6 +38,8 @@
 #include <business_layer/model/characters/characters_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
+#include <business_layer/model/locations/location_model.h>
+#include <business_layer/model/locations/locations_model.h>
 #include <business_layer/model/novel/novel_information_model.h>
 #include <business_layer/model/novel/text/novel_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
@@ -48,6 +56,8 @@
 #include <ui/export/character_export_dialog.h>
 #include <ui/export/characters_export_dialog.h>
 #include <ui/export/comic_book_export_dialog.h>
+#include <ui/export/location_export_dialog.h>
+#include <ui/export/locations_export_dialog.h>
 #include <ui/export/novel_export_dialog.h>
 #include <ui/export/screenplay_export_dialog.h>
 #include <ui/export/simple_text_export_dialog.h>
@@ -94,6 +104,8 @@ public:
     void exportSimpleText(BusinessLayer::AbstractModel* _model);
     void exportCharacter(BusinessLayer::AbstractModel* _model);
     void exportCharacters(BusinessLayer::AbstractModel* _model);
+    void exportLocation(BusinessLayer::AbstractModel* _model);
+    void exportLocations(BusinessLayer::AbstractModel* _model);
 
     //
     // Данные
@@ -111,6 +123,8 @@ public:
     Ui::SimpleTextExportDialog* simpleTextExportDialog = nullptr;
     Ui::CharacterExportDialog* characterExportDialog = nullptr;
     Ui::CharactersExportDialog* charactersExportDialog = nullptr;
+    Ui::LocationExportDialog* locationExportDialog = nullptr;
+    Ui::LocationsExportDialog* locationsExportDialog = nullptr;
 };
 
 ExportManager::Implementation::Implementation(ExportManager* _parent, QWidget* _topLevelWidget)
@@ -1327,6 +1341,271 @@ void ExportManager::Implementation::exportCharacters(BusinessLayer::AbstractMode
     charactersExportDialog->showDialog();
 }
 
+void ExportManager::Implementation::exportLocation(BusinessLayer::AbstractModel* _model)
+{
+    using namespace BusinessLayer;
+
+    if (locationExportDialog == nullptr) {
+        locationExportDialog = new Ui::LocationExportDialog(topLevelWidget);
+        connect(
+            locationExportDialog, &Ui::LocationExportDialog::exportRequested, locationExportDialog,
+            [this, _model] {
+                auto exportOptions = locationExportDialog->exportOptions();
+
+                //
+                // Предоставим пользователю возможность выбрать файл, куда он будет экспортировать
+                //
+                QString exportFilter;
+                QString exportExtension;
+                switch (exportOptions.fileFormat) {
+                default:
+                case ExportFileFormat::Pdf: {
+                    exportFilter = DialogHelper::pdfFilter();
+                    exportExtension = ExtensionHelper::pdf();
+                    break;
+                }
+                case ExportFileFormat::Docx: {
+                    exportFilter = DialogHelper::msWordFilter();
+                    exportExtension = ExtensionHelper::msOfficeOpenXml();
+                    break;
+                }
+                }
+                const auto locationModel = qobject_cast<BusinessLayer::LocationModel*>(_model);
+                const auto projectExportFolder
+                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                auto modelExportFile
+                    = QString("%1/%2.%3")
+                          .arg(projectExportFolder, locationModel->name(), exportExtension);
+                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                if (!modelExportFile.endsWith(exportExtension)) {
+                    const auto dotIndex = modelExportFile.lastIndexOf('.');
+                    if (dotIndex == -1) {
+                        modelExportFile += '.';
+                    } else {
+                        modelExportFile = modelExportFile.mid(0, dotIndex + 1);
+                    }
+                    modelExportFile += exportExtension;
+                }
+                auto exportFilePath = QFileDialog::getSaveFileName(
+                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                if (exportFilePath.isEmpty()) {
+                    return;
+                }
+
+                //
+                // Сохраним файл, в который экспортировали данную модель
+                //
+                setSettingsValue(exportModelKey(_model), exportFilePath);
+
+                //
+                // Если файл был выбран
+                //
+                exportOptions.filePath = exportFilePath;
+                //
+                // ... проверяем возможность записи в файл
+                //
+                QFile file(exportFilePath);
+                const bool canWrite = file.open(QIODevice::WriteOnly);
+                file.close();
+                if (!canWrite) {
+                    //
+                    // ... предупреждаем
+                    //
+                    QString errorMessage;
+                    const QFileInfo fileInfo(exportFilePath);
+                    if (fileInfo.exists()) {
+                        errorMessage = tr("Can't write to file. Looks like it's opened by another "
+                                          "application. Please close it and retry the export.");
+                    } else {
+                        errorMessage = tr("Can't write to file. Check permissions to write in the "
+                                          "chosen folder or choose another folder.");
+                    }
+                    StandardDialog::information(topLevelWidget, tr("Export error"), errorMessage);
+                    return;
+                }
+
+                //
+                // ... обновим папку, куда в следующий раз он предположительно опять будет
+                //     экспортировать
+                //
+                setSettingsValue(DataStorageLayer::kProjectExportFolderKey,
+                                 QFileInfo(exportFilePath).dir().absolutePath());
+                //
+                // ... и экспортируем документ
+                //
+                QScopedPointer<BusinessLayer::AbstractExporter> exporter;
+                switch (exportOptions.fileFormat) {
+                default:
+                case ExportFileFormat::Pdf: {
+                    exporter.reset(new BusinessLayer::LocationPdfExporter);
+                    break;
+                }
+                case ExportFileFormat::Docx: {
+                    exporter.reset(new BusinessLayer::LocationDocxExporter);
+                    break;
+                }
+                }
+                if (exporter.isNull()) {
+                    return;
+                }
+                exporter->exportTo(locationModel, exportOptions);
+
+                //
+                // Если необходимо, откроем экспортированный документ
+                //
+                if (locationExportDialog->openDocumentAfterExport()) {
+                    QDesktopServices::openUrl(QUrl::fromLocalFile(exportOptions.filePath));
+                }
+                //
+                // ... и закрываем диалог экспорта
+                //
+                locationExportDialog->hideDialog();
+            });
+        connect(locationExportDialog, &Ui::LocationExportDialog::canceled, locationExportDialog,
+                &Ui::LocationExportDialog::hideDialog);
+        connect(locationExportDialog, &Ui::LocationExportDialog::disappeared, locationExportDialog,
+                [this] {
+                    locationExportDialog->deleteLater();
+                    locationExportDialog = nullptr;
+                });
+    }
+
+    locationExportDialog->showDialog();
+}
+
+void ExportManager::Implementation::exportLocations(BusinessLayer::AbstractModel* _model)
+{
+    using namespace BusinessLayer;
+
+    if (locationsExportDialog == nullptr) {
+        locationsExportDialog = new Ui::LocationsExportDialog(topLevelWidget);
+        connect(
+            locationsExportDialog, &Ui::LocationsExportDialog::exportRequested,
+            locationsExportDialog, [this, _model] {
+                auto exportOptions = locationsExportDialog->exportOptions();
+
+                //
+                // Предоставим пользователю возможность выбрать файл, куда он будет экспортировать
+                //
+                QString exportFilter;
+                QString exportExtension;
+                switch (exportOptions.fileFormat) {
+                default:
+                case ExportFileFormat::Pdf: {
+                    exportFilter = DialogHelper::pdfFilter();
+                    exportExtension = ExtensionHelper::pdf();
+                    break;
+                }
+                case ExportFileFormat::Docx: {
+                    exportFilter = DialogHelper::msWordFilter();
+                    exportExtension = ExtensionHelper::msOfficeOpenXml();
+                    break;
+                }
+                }
+                const auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(_model);
+                const auto projectExportFolder
+                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                auto modelExportFile
+                    = QString("%1/%2.%3")
+                          .arg(projectExportFolder, tr("Locations"), exportExtension);
+                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                if (!modelExportFile.endsWith(exportExtension)) {
+                    const auto dotIndex = modelExportFile.lastIndexOf('.');
+                    if (dotIndex == -1) {
+                        modelExportFile += '.';
+                    } else {
+                        modelExportFile = modelExportFile.mid(0, dotIndex + 1);
+                    }
+                    modelExportFile += exportExtension;
+                }
+                auto exportFilePath = QFileDialog::getSaveFileName(
+                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
+                if (exportFilePath.isEmpty()) {
+                    return;
+                }
+
+                //
+                // Сохраним файл, в который экспортировали данную модель
+                //
+                setSettingsValue(exportModelKey(_model), exportFilePath);
+
+                //
+                // Если файл был выбран
+                //
+                exportOptions.filePath = exportFilePath;
+                //
+                // ... проверяем возможность записи в файл
+                //
+                QFile file(exportFilePath);
+                const bool canWrite = file.open(QIODevice::WriteOnly);
+                file.close();
+                if (!canWrite) {
+                    //
+                    // ... предупреждаем
+                    //
+                    QString errorMessage;
+                    const QFileInfo fileInfo(exportFilePath);
+                    if (fileInfo.exists()) {
+                        errorMessage = tr("Can't write to file. Looks like it's opened by another "
+                                          "application. Please close it and retry the export.");
+                    } else {
+                        errorMessage = tr("Can't write to file. Check permissions to write in the "
+                                          "chosen folder or choose another folder.");
+                    }
+                    StandardDialog::information(topLevelWidget, tr("Export error"), errorMessage);
+                    return;
+                }
+
+                //
+                // ... обновим папку, куда в следующий раз он предположительно опять будет
+                //     экспортировать
+                //
+                setSettingsValue(DataStorageLayer::kProjectExportFolderKey,
+                                 QFileInfo(exportFilePath).dir().absolutePath());
+                //
+                // ... и экспортируем документ
+                //
+                QScopedPointer<BusinessLayer::AbstractExporter> exporter;
+                switch (exportOptions.fileFormat) {
+                default:
+                case ExportFileFormat::Pdf: {
+                    exporter.reset(new BusinessLayer::LocationsPdfExporter);
+                    break;
+                }
+                case ExportFileFormat::Docx: {
+                    exporter.reset(new BusinessLayer::LocationsDocxExporter);
+                    break;
+                }
+                }
+                if (exporter.isNull()) {
+                    return;
+                }
+                exporter->exportTo(locationsModel, exportOptions);
+
+                //
+                // Если необходимо, откроем экспортированный документ
+                //
+                if (locationsExportDialog->openDocumentAfterExport()) {
+                    QDesktopServices::openUrl(QUrl::fromLocalFile(exportOptions.filePath));
+                }
+                //
+                // ... и закрываем диалог экспорта
+                //
+                locationsExportDialog->hideDialog();
+            });
+        connect(locationsExportDialog, &Ui::LocationsExportDialog::canceled, locationsExportDialog,
+                &Ui::LocationsExportDialog::hideDialog);
+        connect(locationsExportDialog, &Ui::LocationsExportDialog::disappeared,
+                locationsExportDialog, [this] {
+                    locationsExportDialog->deleteLater();
+                    locationsExportDialog = nullptr;
+                });
+    }
+
+    locationsExportDialog->setModel(_model);
+    locationsExportDialog->showDialog();
+}
+
 
 // ****
 
@@ -1379,6 +1658,8 @@ bool ExportManager::canExportDocument(BusinessLayer::AbstractModel* _model) cons
     //
     case Domain::DocumentObjectType::Character:
     case Domain::DocumentObjectType::Characters:
+    case Domain::DocumentObjectType::Location:
+    case Domain::DocumentObjectType::Locations:
         return true;
 
     default:
@@ -1433,6 +1714,16 @@ void ExportManager::exportDocument(BusinessLayer::AbstractModel* _model)
 
     case Domain::DocumentObjectType::Characters: {
         d->exportCharacters(_model);
+        break;
+    }
+
+    case Domain::DocumentObjectType::Location: {
+        d->exportLocation(_model);
+        break;
+    }
+
+    case Domain::DocumentObjectType::Locations: {
+        d->exportLocations(_model);
         break;
     }
 

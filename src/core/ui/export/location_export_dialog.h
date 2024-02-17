@@ -4,7 +4,7 @@
 
 
 namespace BusinessLayer {
-struct CharacterExportOptions;
+struct LocationExportOptions;
 }
 
 namespace Ui {
@@ -12,18 +12,18 @@ namespace Ui {
 /**
  * @brief Диалог настройки параметров экспорта
  */
-class CharacterExportDialog : public AbstractDialog
+class LocationExportDialog : public AbstractDialog
 {
     Q_OBJECT
 
 public:
-    explicit CharacterExportDialog(QWidget* _parent = nullptr);
-    ~CharacterExportDialog() override;
+    explicit LocationExportDialog(QWidget* _parent = nullptr);
+    ~LocationExportDialog() override;
 
     /**
      * @brief Получить опции экспорта
      */
-    BusinessLayer::CharacterExportOptions exportOptions() const;
+    BusinessLayer::LocationExportOptions exportOptions() const;
 
     /**
      * @brief Нужно ли открыть экспортированный документ после экспорта

@@ -87,6 +87,8 @@ SOURCES += \
     ui/export/character_export_dialog.cpp \
     ui/export/characters_export_dialog.cpp \
     ui/export/comic_book_export_dialog.cpp \
+    ui/export/location_export_dialog.cpp \
+    ui/export/locations_export_dialog.cpp \
     ui/export/novel_export_dialog.cpp \
     ui/export/screenplay_export_dialog.cpp \
     ui/export/simple_text_export_dialog.cpp \
@@ -173,6 +175,8 @@ HEADERS += \
     ui/export/character_export_dialog.h \
     ui/export/characters_export_dialog.h \
     ui/export/comic_book_export_dialog.h \
+    ui/export/location_export_dialog.h \
+    ui/export/locations_export_dialog.h \
     ui/export/novel_export_dialog.h \
     ui/export/screenplay_export_dialog.h \
     ui/export/simple_text_export_dialog.h \
