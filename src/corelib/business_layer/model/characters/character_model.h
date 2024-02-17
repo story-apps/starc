@@ -40,7 +40,9 @@ public:
     QString details = {};
 };
 
-
+/**
+ * @brief Диалоги персонажа из сценариев
+ */
 class CORE_LIBRARY_EXPORT CharacterDialogues
 {
 public:
