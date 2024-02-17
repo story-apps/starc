@@ -61,3 +61,6 @@
 [submodule "src/core/management_layer/plugins/mind_map"]
     path = src/core/management_layer/plugins/mind_map
     url = git@github.com:story-apps/starc-mind-map-plugin.git
+[submodule "src/core/management_layer/plugins/location_scenes"]
+    path = src/core/management_layer/plugins/location_scenes
+    url = git@github.com:story-apps/starc-location-scenes-plugin.git

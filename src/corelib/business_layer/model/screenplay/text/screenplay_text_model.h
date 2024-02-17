@@ -59,6 +59,11 @@ public:
     QVector<QString> findCharactersFromText() const override;
 
     /**
+     * @brief Получить список сцен локации
+     */
+    QVector<QModelIndex> locationScenes(const QString& _name) const override;
+
+    /**
      * @brief Найти все локации сценария
      */
     QVector<QString> findLocationsFromText() const override;

@@ -1145,6 +1145,8 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                     [this, locationModel](const QString& _oldName, const QString& _newName) {
                         emit locationNameChanged(locationModel, _oldName, _newName);
                     });
+            connect(locationModel, &BusinessLayer::LocationModel::scenesUpdateRequested, this,
+                    [this, locationModel] { emit locationScenesUpdateRequested(locationModel); });
 
             model = locationModel;
             break;

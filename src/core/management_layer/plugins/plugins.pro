@@ -56,6 +56,9 @@ exists (locations_map/locations_map.pro) {
 exists (location_information/location_information.pro) {
     SUBDIRS += location_information
 }
+exists (location_scenes/location_scenes.pro) {
+    SUBDIRS += location_scenes
+}
 
 exists (worlds_map/worlds_map.pro) {
     SUBDIRS += worlds_map

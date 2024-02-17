@@ -86,6 +86,11 @@ public:
     virtual void updateLocationName(const QString& _oldName, const QString& _newName) = 0;
 
     /**
+     * @brief Получить список сцен локации
+     */
+    virtual QVector<QModelIndex> locationScenes(const QString& _name) const = 0;
+
+    /**
      * @brief Найти все локации сценария
      */
     virtual QVector<QString> findLocationsFromText() const = 0;

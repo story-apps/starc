@@ -40,6 +40,7 @@ const QString kCharacterDialoguesMime = QStringLiteral("application/x-starc/edit
 const QString kLocationsMapMime = QStringLiteral("application/x-starc/editor/locations/map");
 const QString kLocationEditorMime = QStringLiteral("application/x-starc/editor/location/information");
 const QString kLocationNavigatorMime = QStringLiteral("application/x-starc/navigator/location/information");
+const QString kLocationScenesMime = QStringLiteral("application/x-starc/editor/location/scenes");
 //
 const QString kWorldsMapMime = QStringLiteral("application/x-starc/editor/worlds/map");
 const QString kWorldEditorMime = QStringLiteral("application/x-starc/editor/world/information");
@@ -174,10 +175,11 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         //
         { "application/x-starc/document/characters",  { { kCharactersRelationsMime, u8"\U000F0D3D" } } },
         { "application/x-starc/document/character",  { { kCharacterEditorMime, u8"\U000f02fd" },
-                                                       { kCharacterDialoguesMime, u8"\U000F017C" }} },
+                                                       { kCharacterDialoguesMime, u8"\U000F017C" } } },
         //
         { "application/x-starc/document/locations",  { { kLocationsMapMime, u8"\U000F0982" } } },
-        { "application/x-starc/document/location",   { { kLocationEditorMime, u8"\U000f02fd" } } },
+        { "application/x-starc/document/location",   { { kLocationEditorMime, u8"\U000f02fd" },
+                                                       { kLocationScenesMime, u8"\U000F0571" } } },
         //
         { "application/x-starc/document/worlds",  { { kWorldsMapMime, u8"\U000F01E7" } } },
         { "application/x-starc/document/world",   { { kWorldEditorMime, u8"\U000F01E7" } } },
@@ -259,6 +261,7 @@ const QHash<QString, QString> kMimeToPlugin
         { kLocationsMapMime, "*locationsmapplugin*" },
         { kLocationEditorMime, "*locationinformationplugin*" },
         { kLocationNavigatorMime, "*locationstructureplugin*" },
+        { kLocationScenesMime, "*locationscenesplugin*" },
         //
         { kWorldsMapMime, "*worldsmapplugin*" },
         { kWorldEditorMime, "*worldinformationplugin*" },
@@ -603,7 +606,9 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                   QApplication::translate("ProjectPluginsBuilder", "Locations map") } } },
             { "application/x-starc/document/location",
               { { kLocationEditorMime,
-                  QApplication::translate("ProjectPluginsBuilder", "Location information") } } },
+                  QApplication::translate("ProjectPluginsBuilder", "Location information") },
+                { kLocationScenesMime,
+                  QApplication::translate("ProjectPluginsBuilder", "Location scenes") } } },
             //
             { "application/x-starc/document/worlds",
               { { kWorldsMapMime,

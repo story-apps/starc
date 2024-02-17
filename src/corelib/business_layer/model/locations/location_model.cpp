@@ -59,6 +59,12 @@ public:
     QString landmark;
     QString nearbyPlaces;
     QString history;
+
+    //
+    // Ридонли параметры
+    //
+
+    QVector<LocationScenes> scenes;
 };
 
 
@@ -79,6 +85,16 @@ bool LocationRoute::operator==(const LocationRoute& _other) const
 bool LocationRoute::operator!=(const LocationRoute& _other) const
 {
     return !(*this == _other);
+}
+
+
+// ****
+
+
+bool LocationScenes::operator==(const LocationScenes& _other) const
+{
+    return documentUuid == _other.documentUuid && documentName == _other.documentName
+        && scenesIndexes == _other.scenesIndexes;
 }
 
 
@@ -507,6 +523,26 @@ void LocationModel::setHistory(const QString& _text)
     }
     d->history = _text;
     emit historyChanged(d->history);
+}
+
+QVector<LocationScenes> LocationModel::scenes() const
+{
+    return d->scenes;
+}
+
+void LocationModel::setScenes(const QVector<LocationScenes>& _scenes)
+{
+    if (d->scenes == _scenes) {
+        return;
+    }
+
+    d->scenes = _scenes;
+    emit scenesChanged(d->scenes);
+}
+
+void LocationModel::updateDialogues()
+{
+    emit scenesUpdateRequested();
 }
 
 void LocationModel::initImageWrapper()

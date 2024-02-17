@@ -217,6 +217,12 @@ void NovelTextModel::updateLocationName(const QString& _oldName, const QString& 
     Q_UNUSED(_newName)
 }
 
+QVector<QModelIndex> NovelTextModel::locationScenes(const QString& _name) const
+{
+    Q_UNUSED(_name)
+    return {};
+}
+
 QVector<QString> NovelTextModel::findLocationsFromText() const
 {
     return {};

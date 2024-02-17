@@ -415,6 +415,40 @@ QVector<QString> ScreenplayTextModel::findCharactersFromText() const
     return characters;
 }
 
+QVector<QModelIndex> ScreenplayTextModel::locationScenes(const QString& _name) const
+{
+    QVector<QModelIndex> modelIndexes;
+    for (int row = 0; row < rowCount(); ++row) {
+        modelIndexes.append(index(row, 0));
+    }
+    QVector<QModelIndex> dialoguesIndexes;
+    while (!modelIndexes.isEmpty()) {
+        const auto itemIndex = modelIndexes.takeFirst();
+        const auto item = itemForIndex(itemIndex);
+        if (item->type() == TextModelItemType::Group) {
+            const auto groupItem = static_cast<TextModelGroupItem*>(item);
+            switch (groupItem->groupType()) {
+            case TextGroupType::Scene: {
+                if (_name == ScreenplaySceneHeadingParser::location(groupItem->heading())) {
+                    dialoguesIndexes.append(itemIndex);
+                }
+                break;
+            }
+
+            default: {
+                break;
+            }
+            }
+        }
+
+        for (int childRow = 0; childRow < rowCount(itemIndex); ++childRow) {
+            modelIndexes.append(index(childRow, 0, itemIndex));
+        }
+    }
+
+    return dialoguesIndexes;
+}
+
 QVector<QString> ScreenplayTextModel::findLocationsFromText() const
 {
     QVector<QString> locations;

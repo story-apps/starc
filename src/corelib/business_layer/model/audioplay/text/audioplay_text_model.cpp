@@ -401,6 +401,12 @@ void AudioplayTextModel::updateLocationName(const QString& _oldName, const QStri
     Q_UNUSED(_newName)
 }
 
+QVector<QModelIndex> AudioplayTextModel::locationScenes(const QString& _name) const
+{
+    Q_UNUSED(_name);
+    return {};
+}
+
 QVector<QString> AudioplayTextModel::findLocationsFromText() const
 {
     return {};

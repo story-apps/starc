@@ -365,6 +365,12 @@ void StageplayTextModel::updateLocationName(const QString& _oldName, const QStri
     Q_UNUSED(_newName)
 }
 
+QVector<QModelIndex> StageplayTextModel::locationScenes(const QString& _name) const
+{
+    Q_UNUSED(_name)
+    return {};
+}
+
 QVector<QString> StageplayTextModel::findLocationsFromText() const
 {
     return {};

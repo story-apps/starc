@@ -2426,6 +2426,39 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     }
                 }
             });
+    connect(&d->modelsFacade, &ProjectModelsFacade::locationScenesUpdateRequested, this,
+            [this](BusinessLayer::AbstractModel* _location) {
+                if (_location == nullptr) {
+                    return;
+                }
+                auto location = qobject_cast<BusinessLayer::LocationModel*>(_location);
+
+                //
+                // Найти все модели где может встречаться локация и извлечь её сцены
+                //
+                QVector<BusinessLayer::LocationScenes> documentScenes;
+                const auto screenplayModels
+                    = d->modelsFacade.modelsFor(Domain::DocumentObjectType::ScreenplayText);
+                for (auto model : screenplayModels) {
+                    auto screenplay = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
+                    const auto scenes = screenplay->locationScenes(location->name());
+                    if (scenes.isEmpty()) {
+                        continue;
+                    }
+
+                    auto documentName = screenplay->informationModel()->name();
+                    if (const auto screenplayItem
+                        = d->projectStructureModel->itemForUuid(screenplay->document()->uuid());
+                        screenplayItem->name() != tr("Screenplay")) {
+                        documentName.append(
+                            QString(" [%1 %2]").arg(tr("draft"), screenplayItem->name()));
+                    }
+
+                    documentScenes.append({ screenplay->document()->uuid(), documentName, scenes });
+                }
+
+                location->setScenes(documentScenes);
+            });
     connect(&d->modelsFacade, &ProjectModelsFacade::createWorldRequested, this,
             [this](const QString& _name, const QByteArray& _content) {
                 d->addDocumentToContainer(Domain::DocumentObjectType::Worlds,

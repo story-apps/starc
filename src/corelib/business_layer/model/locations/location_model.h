@@ -41,6 +41,19 @@ public:
 };
 
 /**
+ * @brief Сцены локации
+ */
+class CORE_LIBRARY_EXPORT LocationScenes
+{
+public:
+    bool operator==(const LocationScenes& _other) const;
+
+    QUuid documentUuid;
+    QString documentName;
+    QVector<QModelIndex> scenesIndexes;
+};
+
+/**
  * @brief Модель данных локации
  */
 class CORE_LIBRARY_EXPORT LocationModel : public AbstractModel
@@ -140,6 +153,16 @@ public:
     QString history() const;
     void setHistory(const QString& _text);
     Q_SIGNAL void historyChanged(const QString& _text);
+
+    //
+    // Сцены
+    //
+    QVector<LocationScenes> scenes() const;
+    void setScenes(const QVector<LocationScenes>& _scenes);
+    Q_SIGNAL void scenesChanged(const QVector<BusinessLayer::LocationScenes>& _scenes);
+    //
+    void updateDialogues();
+    Q_SIGNAL void scenesUpdateRequested();
 
 protected:
     /**
