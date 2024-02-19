@@ -197,8 +197,10 @@ void FastFormatWidget::Implementation::updateButtons()
 
     //
     // Настроим минимальный размер панели быстрого форматирования
+    // NOTE: делаем это отложенно, чтобы лейаут успел пересчитать идеальные размеры кнопок
     //
-    q->setMinimumSize(q->sizeHint());
+    QMetaObject::invokeMethod(
+        q, [this] { q->setMinimumSize(q->sizeHint()); }, Qt::QueuedConnection);
 }
 
 
