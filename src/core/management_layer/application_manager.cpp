@@ -1730,7 +1730,7 @@ bool ApplicationManager::Implementation::tryLockProject(const QString& _path)
 {
     const QFileInfo projectFileInfo(_path);
     lockFile.reset(new QLockFile(
-        QString("%1/.~lock.%2").arg(projectFileInfo.absolutePath(), projectFileInfo.fileName())));
+        QString("%1/%2.lock").arg(projectFileInfo.absolutePath(), projectFileInfo.fileName())));
     if (!lockFile->tryLock()) {
         StandardDialog::information(applicationView, {},
                                     tr("This file can't be open at this moment, because it is "
@@ -1746,7 +1746,7 @@ bool ApplicationManager::Implementation::tryLockProjectOnOpen(const QString& _pa
 {
     const QFileInfo projectFileInfo(_path);
     lockFile.reset(new QLockFile(
-        QString("%1/.~lock.%2").arg(projectFileInfo.absolutePath(), projectFileInfo.fileName())));
+        QString("%1/%2.lock").arg(projectFileInfo.absolutePath(), projectFileInfo.fileName())));
     if (!lockFile->tryLock()) {
         //
         // В некоторых случаях, после падения приложения (особенно в маке), файл блокировки не
