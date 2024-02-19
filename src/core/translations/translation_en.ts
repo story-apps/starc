@@ -243,7 +243,7 @@
         <translation>Text</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="1155"/>
+        <location filename="../../corelib/business_layer/templates/text_template.cpp" line="1174"/>
         <source>Copy of </source>
         <translation>Copy of </translation>
     </message>
@@ -1306,6 +1306,97 @@
         <source>draft</source>
         <extracomment>Draft screenplay imported from KIT Scenarist file</extracomment>
         <translation>draft</translation>
+    </message>
+</context>
+<context>
+    <name>BusinessLayer::LocationExporter</name>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="127"/>
+        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="144"/>
+        <source>primary location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="132"/>
+        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="149"/>
+        <source>secondary location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="137"/>
+        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="154"/>
+        <source>tertiary location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="199"/>
+        <source>Sense info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="200"/>
+        <source>Sight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="201"/>
+        <source>Smell</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="202"/>
+        <source>Sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="203"/>
+        <source>Taste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="204"/>
+        <source>Touch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="208"/>
+        <source>Geography info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="209"/>
+        <source>Location</source>
+        <translation type="unfinished">Location</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="210"/>
+        <source>Climate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="211"/>
+        <source>Landmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="212"/>
+        <source>Nearby places</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="215"/>
+        <source>Background info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="216"/>
+        <source>History</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="221"/>
+        <source>Additional photos</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2778,11 +2869,11 @@
         <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1055"/>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="990"/>
         <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="970"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1165"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1168"/>
         <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1047"/>
         <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="922"/>
         <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1111"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1174"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1177"/>
         <source>End of</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2901,136 +2992,136 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1198"/>
+        <location filename="../management_layer/application_manager.cpp" line="1208"/>
         <source>in cloud</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1199"/>
+        <location filename="../management_layer/application_manager.cpp" line="1209"/>
         <source>Read only</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1209"/>
+        <location filename="../management_layer/application_manager.cpp" line="1219"/>
         <source> - changed</source>
         <translation> - changed</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1265"/>
-        <location filename="../management_layer/application_manager.cpp" line="1284"/>
-        <location filename="../management_layer/application_manager.cpp" line="1476"/>
+        <location filename="../management_layer/application_manager.cpp" line="1275"/>
+        <location filename="../management_layer/application_manager.cpp" line="1294"/>
+        <location filename="../management_layer/application_manager.cpp" line="1486"/>
         <source>Saving error</source>
         <translation>Saving error</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1266"/>
+        <location filename="../management_layer/application_manager.cpp" line="1276"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1285"/>
+        <location filename="../management_layer/application_manager.cpp" line="1295"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1358"/>
+        <location filename="../management_layer/application_manager.cpp" line="1368"/>
         <source>Project was modified. Save changes?</source>
         <translation>Project was modified. Save changes?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1359"/>
+        <location filename="../management_layer/application_manager.cpp" line="1369"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1360"/>
+        <location filename="../management_layer/application_manager.cpp" line="1370"/>
         <source>Don&apos;t save</source>
         <translation>Don&apos;t save</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1361"/>
+        <location filename="../management_layer/application_manager.cpp" line="1371"/>
         <source>Save</source>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1436"/>
+        <location filename="../management_layer/application_manager.cpp" line="1446"/>
         <source>Choose file to save story</source>
         <translation>Choose file to save story</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1477"/>
+        <location filename="../management_layer/application_manager.cpp" line="1487"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Can&apos;t save the story to the file %1. Please check permissions and retry.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1527"/>
+        <location filename="../management_layer/application_manager.cpp" line="1537"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1532"/>
+        <location filename="../management_layer/application_manager.cpp" line="1542"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1536"/>
+        <location filename="../management_layer/application_manager.cpp" line="1546"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1540"/>
+        <location filename="../management_layer/application_manager.cpp" line="1550"/>
         <source>Create project error</source>
         <translation>Create project error</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1726"/>
-        <location filename="../management_layer/application_manager.cpp" line="1749"/>
+        <location filename="../management_layer/application_manager.cpp" line="1736"/>
+        <location filename="../management_layer/application_manager.cpp" line="1759"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1752"/>
+        <location filename="../management_layer/application_manager.cpp" line="1762"/>
         <source>Ignore and open</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1848"/>
+        <location filename="../management_layer/application_manager.cpp" line="1858"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1865"/>
+        <location filename="../management_layer/application_manager.cpp" line="1875"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1866"/>
+        <location filename="../management_layer/application_manager.cpp" line="1876"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1869"/>
+        <location filename="../management_layer/application_manager.cpp" line="1879"/>
         <source>Never ask again</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1870"/>
+        <location filename="../management_layer/application_manager.cpp" line="1880"/>
         <source>Keep .%1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1871"/>
+        <location filename="../management_layer/application_manager.cpp" line="1881"/>
         <source>Switch to .STARC</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3130"/>
+        <location filename="../management_layer/application_manager.cpp" line="3140"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3111"/>
-        <location filename="../management_layer/application_manager.cpp" line="3132"/>
+        <location filename="../management_layer/application_manager.cpp" line="3121"/>
+        <location filename="../management_layer/application_manager.cpp" line="3142"/>
         <source>Continue offline</source>
         <translation></translation>
     </message>
@@ -3046,12 +3137,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3109"/>
+        <location filename="../management_layer/application_manager.cpp" line="3119"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3112"/>
+        <location filename="../management_layer/application_manager.cpp" line="3122"/>
         <source>Renew subscription</source>
         <translation>Renew subscription</translation>
     </message>
@@ -3338,13 +3429,19 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2092"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2248"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2098"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2219"/>
+        <source>Generating script (chapter %1 from %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2271"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2427"/>
         <source>Processing text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2201"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2380"/>
         <source>Generating image</source>
         <translation></translation>
     </message>
@@ -3361,57 +3458,70 @@
 <context>
     <name>ManagementLayer::ExportManager</name>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="180"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="360"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="514"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="674"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="832"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="972"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1111"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1243"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="194"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="374"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="528"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="688"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="846"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="986"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1125"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1257"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1390"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1522"/>
         <source>Choose the file to export</source>
         <translation>Choose the file to export</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="239"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="387"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="541"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="701"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="859"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="999"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1138"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1270"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="253"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="401"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="555"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="715"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="873"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1013"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1152"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1284"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1417"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1549"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="242"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="390"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="544"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="704"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="862"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1002"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1141"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1273"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="256"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="404"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="558"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="718"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="876"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1016"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1155"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1287"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1420"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1552"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="245"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="393"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="547"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="707"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="865"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1005"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1144"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1276"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="259"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="407"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="561"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="721"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="879"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1019"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1158"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1290"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1423"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1555"/>
         <source>Export error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1231"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1245"/>
         <source>Characters</source>
         <translation type="unfinished">Characters</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1510"/>
+        <source>Locations</source>
+        <translation type="unfinished">Locations</translation>
     </message>
 </context>
 <context>
@@ -3507,6 +3617,24 @@
         <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="270"/>
         <source>Yes, delete</source>
         <translation>Yes, delete</translation>
+    </message>
+</context>
+<context>
+    <name>ManagementLayer::LocationScenesManager</name>
+    <message>
+        <location filename="../management_layer/plugins/location_scenes/location_scenes_manager.cpp" line="73"/>
+        <source>Upgrade the app to the PRO version to access location scenes module.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_scenes/location_scenes_manager.cpp" line="74"/>
+        <source>Maybe later</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_scenes/location_scenes_manager.cpp" line="75"/>
+        <source>Upgrade</source>
+        <translation type="unfinished">Upgrade</translation>
     </message>
 </context>
 <context>
@@ -3870,6 +3998,7 @@ If you want to continue editing novel text, switch to the corresponding module v
         <location filename="../management_layer/content/project/project_manager.cpp" line="2300"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="2321"/>
         <location filename="../management_layer/content/project/project_manager.cpp" line="2342"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2454"/>
         <source>draft</source>
         <translation>draft</translation>
     </message>
@@ -3881,28 +4010,29 @@ If you want to continue editing novel text, switch to the corresponding module v
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3021"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3054"/>
         <source>Title page</source>
         <translation>Title page</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3023"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3056"/>
         <source>Synopsis</source>
         <translation>Synopsis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3035"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3068"/>
         <source>Treatment</source>
         <translation>Treatment</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3298"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3331"/>
         <source>Conflicted version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="2277"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3026"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2452"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3059"/>
         <source>Screenplay</source>
         <translation>Screenplay</translation>
     </message>
@@ -3917,7 +4047,7 @@ If you want to continue editing novel text, switch to the corresponding module v
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3029"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3062"/>
         <source>Statistics</source>
         <translation>Statistics</translation>
     </message>
@@ -4031,7 +4161,13 @@ If you want to continue editing novel text, switch to the corresponding module v
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="851"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="783"/>
+        <source>Unnamed</source>
+        <extracomment>Dummy title for name of a new project</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="868"/>
         <source>Choose the file to open</source>
         <translation>Choose the file to open</translation>
     </message>
@@ -4786,7 +4922,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ManagementLayer::WritingSessionManager</name>
     <message>
-        <location filename="../management_layer/content/writing_session/writing_session_manager.cpp" line="212"/>
+        <location filename="../management_layer/content/writing_session/writing_session_manager.cpp" line="225"/>
         <source>Total words</source>
         <translation></translation>
     </message>
@@ -4881,33 +5017,24 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="468"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="471"/>
         <source>Information about project</source>
         <translation>Information about project</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="470"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="473"/>
         <source>Project collaborators</source>
         <translation>Project collaborators</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="474"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="477"/>
         <source>Information about screenplay</source>
         <translation>Information about screenplay</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="476"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="479"/>
         <source>Screenplay parameters</source>
         <translation>Screenplay parameters</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="479"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="510"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="530"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="550"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="570"/>
-        <source>Title page text</source>
-        <translation>Title page text</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="482"/>
@@ -4915,148 +5042,162 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../management_layer/plugins_builder.cpp" line="533"/>
         <location filename="../management_layer/plugins_builder.cpp" line="553"/>
         <location filename="../management_layer/plugins_builder.cpp" line="573"/>
+        <source>Title page text</source>
+        <translation>Title page text</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins_builder.cpp" line="485"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="516"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="536"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="556"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="576"/>
         <source>Synopsis text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="487"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="578"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="490"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="581"/>
         <source>Beats</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="496"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="587"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="499"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="590"/>
         <source>Timeline</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="498"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="501"/>
         <source>Breakdown</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="505"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="508"/>
         <source>Information about comic book</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="507"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="510"/>
         <source>Comic book parameters</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="516"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="519"/>
         <source>Comic book text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="525"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="528"/>
         <source>Information about audioplay</source>
         <translation>Information about audio drama</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="527"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="530"/>
         <source>Audioplay parameters</source>
         <translation>Audio drama parameters</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="536"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="539"/>
         <source>Audioplay text</source>
         <translation>Audio drama text</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="545"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="548"/>
         <source>Information about stageplay</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="547"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="550"/>
         <source>Stageplay parameters</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="556"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="559"/>
         <source>Stageplay text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="565"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="568"/>
         <source>Information about novel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="567"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="570"/>
         <source>Novel parameters</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="576"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="579"/>
         <source>Outline text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="583"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="586"/>
         <source>Novel text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="594"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="597"/>
         <source>Characters relations</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="597"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="600"/>
         <source>Character information</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="599"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="602"/>
         <source>Character dialogues</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="603"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="606"/>
         <source>Locations map</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="606"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="609"/>
         <source>Location information</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="610"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="611"/>
+        <source>Location scenes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins_builder.cpp" line="615"/>
         <source>Worlds map</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="613"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="618"/>
         <source>World information</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="617"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="622"/>
         <source>Folder text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="620"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="625"/>
         <source>Document text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="624"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="629"/>
         <source>Recycle bin summary info</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="627"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="632"/>
         <source>Mind map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="630"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="635"/>
         <source>Images gallery</source>
         <translation></translation>
     </message>
@@ -5065,32 +5206,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation type="vanished">Text</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="485"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="488"/>
         <source>Treatment text</source>
         <translation>Treatment text</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="492"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="495"/>
         <source>Screenplay text</source>
         <translation>Screenplay text</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="489"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="494"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="518"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="538"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="558"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="580"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="585"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="492"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="497"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="521"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="541"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="561"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="583"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="588"/>
         <source>Cards</source>
         <translation>Cards</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="501"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="521"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="541"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="561"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="590"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="504"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="524"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="544"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="564"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="593"/>
         <source>Statistics</source>
         <translation>Statistics</translation>
     </message>
@@ -7582,7 +7723,7 @@ from 2 Gb</translation>
 <context>
     <name>Ui::AiAssistantView</name>
     <message numerus="yes">
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="990"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1056"/>
         <source>%n word(s) available</source>
         <translation>
             <numerusform>%n word available</numerusform>
@@ -7590,915 +7731,927 @@ from 2 Gb</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="991"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1057"/>
         <source>No words available</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="996"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1019"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1024"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1062"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1087"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1092"/>
         <source>Rephrase</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="997"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1026"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1029"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1063"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1094"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1097"/>
         <source>Expand</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="998"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1031"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1034"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1064"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1099"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1102"/>
         <source>Shorten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="999"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1025"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1030"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1035"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1036"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1041"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1046"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1206"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1065"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1093"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1098"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1103"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1104"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1109"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1114"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1274"/>
         <source>Insert</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1000"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1042"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1045"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1066"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1110"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1113"/>
         <source>Summarize</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1001"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1047"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1205"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1067"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1115"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1273"/>
         <source>Translate</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1002"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1207"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1068"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1275"/>
         <source>Generate synopsis</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1003"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1040"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1213"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1214"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1220"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1221"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1229"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1230"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1232"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1069"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1282"/>
+        <source>Generate script</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1070"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1108"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1281"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1284"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1285"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1291"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1292"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1300"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1301"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1303"/>
         <source>Generate</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1017"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1085"/>
         <source>Go back to list of assistant functions</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1020"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1088"/>
         <source>Text to rephrase</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1021"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1089"/>
         <source>Rephrase in style of</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1022"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1090"/>
         <source>Keep empty to avoid style changing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1023"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1091"/>
         <source>Rephrased text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1027"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1095"/>
         <source>Text to expand</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1028"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1096"/>
         <source>Expanded text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1032"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1100"/>
         <source>Text to shorten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1033"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1101"/>
         <source>Shortened text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1037"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1105"/>
         <source>Text before inserted</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1038"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1106"/>
         <source>Text after inserted</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1039"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1107"/>
         <source>Inserted text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1043"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1111"/>
         <source>Text to summarize</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1044"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1112"/>
         <source>Summarized text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1048"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1116"/>
         <source>Text to translate</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1049"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1117"/>
         <source>Translate to</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1052"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1120"/>
         <source>Afrikaans</source>
         <translation>Afrikaans</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1053"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1121"/>
         <source>Albanian</source>
         <translation>Albanian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1054"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1122"/>
         <source>Amharic</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1055"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1123"/>
         <source>Arabic</source>
         <translation>Arabic</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1056"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1124"/>
         <source>Armenian</source>
         <translation>Armenian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1057"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1125"/>
         <source>Assamese</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1058"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1126"/>
         <source>Aymara</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1059"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1127"/>
         <source>Azerbaijani</source>
         <translation>Azerbaijani</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1060"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1128"/>
         <source>Bambara</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1061"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1129"/>
         <source>Basque</source>
         <translation>Basque</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1062"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1130"/>
         <source>Belarusian</source>
         <translation>Belarusian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1063"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1131"/>
         <source>Bengali</source>
         <translation>Bengali</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1064"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1132"/>
         <source>Bhojpuri</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1065"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1133"/>
         <source>Bosnian</source>
         <translation>Bosnian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1066"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1134"/>
         <source>Bulgarian</source>
         <translation>Bulgarian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1067"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1135"/>
         <source>Catalan</source>
         <translation>Catalan</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1068"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1136"/>
         <source>Cebuano</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1069"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1137"/>
         <source>Chinese (Simplified)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1070"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1138"/>
         <source>Chinese (Traditional)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1071"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1139"/>
         <source>Corsican</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1072"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1140"/>
         <source>Croatian</source>
         <translation>Croatian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1073"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1141"/>
         <source>Czech</source>
         <translation>Czech</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1074"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1142"/>
         <source>Danish</source>
         <translation>Danish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1075"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1143"/>
         <source>Dhivehi</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1076"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1144"/>
         <source>Dogri</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1077"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1145"/>
         <source>Dutch</source>
         <translation>Dutch</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1078"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1146"/>
         <source>English</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1079"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1147"/>
         <source>Esperanto</source>
         <translation>Esperanto</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1080"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1148"/>
         <source>Estonian</source>
         <translation>Estonian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1081"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1149"/>
         <source>Ewe</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1082"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1150"/>
         <source>Filipino (Tagalog)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1083"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1151"/>
         <source>Finnish</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1084"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1152"/>
         <source>French</source>
         <translation>French</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1085"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1153"/>
         <source>Frisian</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1086"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1154"/>
         <source>Galician</source>
         <translation>Galician</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1087"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1155"/>
         <source>Georgian</source>
         <translation>Georgian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1088"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1156"/>
         <source>German</source>
         <translation>German</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1089"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1157"/>
         <source>Greek</source>
         <translation>Greek</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1090"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1158"/>
         <source>Guarani</source>
         <translation>Guarani</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1091"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1159"/>
         <source>Gujarati</source>
         <translation>Gujarati</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1092"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1160"/>
         <source>Haitian Creole</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1093"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1161"/>
         <source>Hausa</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1094"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1162"/>
         <source>Hawaiian</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1095"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1163"/>
         <source>Hebrew</source>
         <translation>Hebrew</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1096"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1164"/>
         <source>Hindi</source>
         <translation>Hindi</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1097"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1165"/>
         <source>Hmong</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1098"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1166"/>
         <source>Hungarian</source>
         <translation>Hungarian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1099"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1167"/>
         <source>Icelandic</source>
         <translation>Icelandic</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1100"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1168"/>
         <source>Igbo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1101"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1169"/>
         <source>Ilocano</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1102"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1170"/>
         <source>Indonesian</source>
         <translation>Indonesian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1103"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1171"/>
         <source>Irish</source>
         <translation>Irish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1104"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1172"/>
         <source>Italian</source>
         <translation>Italian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1105"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1173"/>
         <source>Japanese</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1106"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1174"/>
         <source>Javanese</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1107"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1175"/>
         <source>Kannada</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1108"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1176"/>
         <source>Kazakh</source>
         <translation>Kazakh</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1109"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1177"/>
         <source>Khmer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1110"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1178"/>
         <source>Kinyarwanda</source>
         <translation>Kinyarwanda</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1111"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1179"/>
         <source>Konkani</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1112"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1180"/>
         <source>Korean</source>
         <translation>Korean</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1113"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1181"/>
         <source>Krio</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1114"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1182"/>
         <source>Kurdish</source>
         <translation>Kurdish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1115"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1183"/>
         <source>Kurdish (Sorani)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1116"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1184"/>
         <source>Kyrgyz</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1117"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1185"/>
         <source>Lao</source>
         <translation>Lao</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1118"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1186"/>
         <source>Latin</source>
         <translation>Latin</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1119"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1187"/>
         <source>Latvian</source>
         <translation>Latvian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1120"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1188"/>
         <source>Lingala</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1121"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1189"/>
         <source>Lithuanian</source>
         <translation>Lithuanian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1122"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1190"/>
         <source>Luganda</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1123"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1191"/>
         <source>Luxembourgish</source>
         <translation>Luxembourgish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1124"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1192"/>
         <source>Macedonian</source>
         <translation>Macedonian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1125"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1193"/>
         <source>Maithili</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1126"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1194"/>
         <source>Malagasy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1127"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1195"/>
         <source>Malay</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1128"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1196"/>
         <source>Malayalam</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1129"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1197"/>
         <source>Maltese</source>
         <translation>Maltese</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1130"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1198"/>
         <source>Maori</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1131"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1199"/>
         <source>Marathi</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1132"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1200"/>
         <source>Meiteilon (Manipuri)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1133"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1201"/>
         <source>Mizo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1134"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1202"/>
         <source>Mongolian</source>
         <translation>Mongolian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1135"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1203"/>
         <source>Myanmar (Burmese)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1136"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1204"/>
         <source>Nepali</source>
         <translation>Nepali</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1137"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1205"/>
         <source>Norwegian</source>
         <translation>Norwegian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1138"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1206"/>
         <source>Nyanja (Chichewa)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1139"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1207"/>
         <source>Odia (Oriya)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1140"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1208"/>
         <source>Oromo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1141"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1209"/>
         <source>Pashto</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1142"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1210"/>
         <source>Persian</source>
         <translation>Persian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1143"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1211"/>
         <source>Polish</source>
         <translation>Polish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1144"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1212"/>
         <source>Portuguese (Portugal, Brazil)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1145"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1213"/>
         <source>Punjabi</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1146"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1214"/>
         <source>Quechua</source>
         <translation>Quechua</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1147"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1215"/>
         <source>Romanian</source>
         <translation>Romanian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1148"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1216"/>
         <source>Russian</source>
         <translation>Russian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1149"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1217"/>
         <source>Samoan</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1150"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1218"/>
         <source>Sanskrit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1151"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1219"/>
         <source>Scots Gaelic</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1152"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1220"/>
         <source>Sepedi</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1153"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1221"/>
         <source>Serbian</source>
         <translation>Serbian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1154"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1222"/>
         <source>Sesotho</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1155"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1223"/>
         <source>Shona</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1156"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1224"/>
         <source>Sindhi</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1157"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1225"/>
         <source>Sinhala (Sinhalese)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1158"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1226"/>
         <source>Slovak</source>
         <translation>Slovak</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1159"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1227"/>
         <source>Slovenian</source>
         <translation>Slovenian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1160"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1228"/>
         <source>Somali</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1161"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1229"/>
         <source>Spanish</source>
         <translation>Spanish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1162"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1230"/>
         <source>Sundanese</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1163"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1231"/>
         <source>Swahili</source>
         <translation>Swahili</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1164"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1232"/>
         <source>Swedish</source>
         <translation>Swedish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1165"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1233"/>
         <source>Tagalog (Filipino)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1166"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1234"/>
         <source>Tajik</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1167"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1235"/>
         <source>Tamil</source>
         <translation>Tamil</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1168"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1236"/>
         <source>Tatar</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1169"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1237"/>
         <source>Telugu</source>
         <translation>Telugu</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1170"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1238"/>
         <source>Thai</source>
         <translation>Thai</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1171"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1239"/>
         <source>Tigrinya</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1172"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1240"/>
         <source>Tsonga</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1173"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1241"/>
         <source>Turkish</source>
         <translation>Turkish</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1174"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1242"/>
         <source>Turkmen</source>
         <translation>Turkmen</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1175"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1243"/>
         <source>Twi (Akan)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1176"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1244"/>
         <source>Ukrainian</source>
         <translation>Ukrainian</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1177"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1245"/>
         <source>Urdu</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1178"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1246"/>
         <source>Uyghur</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1179"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1247"/>
         <source>Uzbek</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1180"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1248"/>
         <source>Vietnamese</source>
         <translation>Vietnamese</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1181"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1249"/>
         <source>Welsh</source>
         <translation>Welsh</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1182"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1250"/>
         <source>Xhosa</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1183"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1251"/>
         <source>Yiddish</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1184"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1252"/>
         <source>Yoruba</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1185"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1253"/>
         <source>Zulu</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1204"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1272"/>
         <source>Translated text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1208"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1276"/>
         <source>Synopsis length</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1209"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1277"/>
         <source>short (20 words per scene)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1210"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1278"/>
         <source>medium (45 words per scene)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1211"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1279"/>
         <source>unlimitted</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1212"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1280"/>
         <source>Synopsis</source>
         <translation>Synopsis</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1215"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1222"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1231"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1283"/>
+        <source>Script</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1286"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1293"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1302"/>
         <source>Prompt</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1216"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1287"/>
         <source>Insert result</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1217"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1288"/>
         <source>at the beginning of the document</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1218"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1289"/>
         <source>at the cursor position</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1219"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1290"/>
         <source>at the end of the document</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1223"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1294"/>
         <source>Personal info</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1224"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1295"/>
         <source>Physique</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1225"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1296"/>
         <source>Life</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1226"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1297"/>
         <source>Attitude</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1227"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1298"/>
         <source>Biography</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1228"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1299"/>
         <source>Photo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1234"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1305"/>
         <source>purchase</source>
         <translation></translation>
     </message>
@@ -9435,12 +9588,12 @@ from 2 Gb</translation>
 <context>
     <name>Ui::CharacterDialoguesView</name>
     <message>
-        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="346"/>
-        <source>Unlock ability to edit characters relations</source>
-        <translation></translation>
+        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="354"/>
+        <source>Unlock ability to use characters dialogues</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="347"/>
+        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="355"/>
         <source>Update character dialogues list</source>
         <translation></translation>
     </message>
@@ -11745,17 +11898,17 @@ from 2 Gb</translation>
         <translation>The story&apos;s name can&apos;t be empty. Fill it, please.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="282"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="288"/>
         <source>Since connection to the cloud service unavailable, you only can create new story on the local computer.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="313"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="319"/>
         <source>Outside the team</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="351"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="357"/>
         <source>The story will be created on the local computer.</source>
         <translation>The story will be created on the local computer.</translation>
     </message>
@@ -11768,7 +11921,7 @@ from 2 Gb</translation>
         <translation type="vanished">Renew subscription</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="352"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="358"/>
         <source>to create stories in the cloud.</source>
         <translation></translation>
     </message>
@@ -11777,62 +11930,62 @@ from 2 Gb</translation>
         <translation type="vanished">Sign in</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="354"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="360"/>
         <source>Subscribe to CLOUD version</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="381"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="387"/>
         <source>Can&apos;t create project in this folder, choose another one</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="396"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="402"/>
         <source>Create new story</source>
         <translation>Create new story</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="398"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="404"/>
         <source>Type of story</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="404"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="410"/>
         <source>Not set</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="409"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="415"/>
         <source>Screenplay</source>
         <translation>Screenplay</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="414"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="420"/>
         <source>Comic book</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="419"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="425"/>
         <source>Audioplay</source>
         <translation>Audio drama</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="424"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="430"/>
         <source>Stageplay</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="429"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="435"/>
         <source>Novel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="435"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="441"/>
         <source>Name of the story</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="436"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="442"/>
         <source>Save story on the local computer</source>
         <translation></translation>
     </message>
@@ -11845,47 +11998,47 @@ from 2 Gb</translation>
         <translation type="vanished">Save story in the local computer</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="437"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="443"/>
         <source>Save story in the cloud</source>
         <translation>Save story in the cloud</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="438"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="444"/>
         <source>Choose the team to place the story in it</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="439"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="445"/>
         <source>Location of the new story file</source>
         <translation>Location of the new story file</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="441"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="447"/>
         <source>Choose the folder where the new story will be placed</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="442"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="448"/>
         <source>Choose file with story to import</source>
         <translation>Choose file with story to import</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="443"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="449"/>
         <source>Choose file for importing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="444"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="450"/>
         <source>Advanced options</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="445"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="451"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="446"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="452"/>
         <source>Create</source>
         <translation>Create</translation>
     </message>
@@ -12117,44 +12270,102 @@ from 2 Gb</translation>
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="303"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="306"/>
         <source>Translation is ready for %1%</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="313"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="316"/>
         <source>Select file with translation</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="315"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="318"/>
         <source>Compiled Qt translation files</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="349"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="352"/>
         <source>Change application language</source>
         <translation>Change application language</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="352"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="355"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Did not find your preffered language? Read how you can add it yourself.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="354"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="357"/>
         <source>Improve</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="355"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="358"/>
         <source>Browse</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="356"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="359"/>
         <source>Close</source>
         <translation>Close</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::LocationExportDialog</name>
+    <message>
+        <location filename="../ui/export/location_export_dialog.cpp" line="229"/>
+        <source>Export location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/location_export_dialog.cpp" line="231"/>
+        <source>Format</source>
+        <translation type="unfinished">Format</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/location_export_dialog.cpp" line="232"/>
+        <source>Include main photo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/location_export_dialog.cpp" line="233"/>
+        <source>additional photos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/location_export_dialog.cpp" line="234"/>
+        <source>Include sense info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/location_export_dialog.cpp" line="235"/>
+        <source>Include geography info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/location_export_dialog.cpp" line="236"/>
+        <source>Include background info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/location_export_dialog.cpp" line="237"/>
+        <source>Watermark</source>
+        <translation type="unfinished">Watermark</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/location_export_dialog.cpp" line="239"/>
+        <source>Open document after export</source>
+        <translation type="unfinished">Open document after export</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/location_export_dialog.cpp" line="240"/>
+        <source>Export</source>
+        <translation type="unfinished">Export</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/location_export_dialog.cpp" line="241"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancel</translation>
     </message>
 </context>
 <context>
@@ -12321,6 +12532,77 @@ from 2 Gb</translation>
         <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="741"/>
         <source>History</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Ui::LocationScenesView</name>
+    <message>
+        <location filename="../management_layer/plugins/location_scenes/location_scenes_view.cpp" line="338"/>
+        <source>Unlock ability to use locations scenes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_scenes/location_scenes_view.cpp" line="339"/>
+        <source>Update location scenes list</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Ui::LocationsExportDialog</name>
+    <message>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="332"/>
+        <source>Export locations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="334"/>
+        <source>Select all</source>
+        <translation type="unfinished">Select all</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="335"/>
+        <source>Format</source>
+        <translation type="unfinished">Format</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="336"/>
+        <source>Include main photo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="337"/>
+        <source>Include story role</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="338"/>
+        <source>Include one line description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="339"/>
+        <source>Include long description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="340"/>
+        <source>Watermark</source>
+        <translation type="unfinished">Watermark</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="342"/>
+        <source>Open document after export</source>
+        <translation type="unfinished">Open document after export</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="343"/>
+        <source>Export</source>
+        <translation type="unfinished">Export</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="344"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancel</translation>
     </message>
 </context>
 <context>
@@ -14102,57 +14384,65 @@ from 2 Gb</translation>
 <context>
     <name>Ui::NovelTextView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="337"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="338"/>
         <source>Hide scene parameters</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="338"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="339"/>
         <source>Show scene parameters</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="339"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="340"/>
         <source>Hide bookmarks list</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="340"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="341"/>
         <source>Show bookmarks list</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1338"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1346"/>
         <source>Writing text</source>
         <translation></translation>
     </message>
+    <message numerus="yes">
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1571"/>
+        <source>Script generation will takes %n word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1663"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1684"/>
         <source>Formatting</source>
         <translation>Formatting</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1664"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1685"/>
         <source>Scene parameters</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1665"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1686"/>
         <source>Comments</source>
         <translation>Comments</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1666"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1687"/>
         <source>AI assistant</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1667"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1688"/>
         <source>Bookmarks</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1670"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1691"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation></translation>
     </message>
@@ -14168,228 +14458,228 @@ from 2 Gb</translation>
         <translation type="vanished">Setup user interface</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="596"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="843"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="598"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="845"/>
         <source>Translation is ready for %1%</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="638"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="640"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="646"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="648"/>
         <source>Email invalid</source>
         <translation>Email invalid</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="650"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="652"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="674"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="676"/>
         <source>Choose image</source>
         <translation>Choose image</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="675"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="677"/>
         <source>Images</source>
         <translation>Images</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="684"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="686"/>
         <source>Select an area for the avatar</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="700"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="702"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>Username can&apos;t be empty, please fill it</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="837"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="839"/>
         <source>Welcome to the Story Architect</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="838"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="840"/>
         <source>Let&apos;s configure something before start</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="839"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="841"/>
         <source>Language</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="845"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="847"/>
         <source>Choose application theme</source>
         <translation>Choose application theme</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="846"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="848"/>
         <source>Setup size of the user interface elements</source>
         <translation>Setup size of the user interface elements</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="847"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="849"/>
         <source>small</source>
         <translation>small</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="848"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="850"/>
         <source>big</source>
         <translation>big</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="849"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="867"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="879"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="886"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="851"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="869"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="881"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="888"/>
         <source>Continue</source>
         <translation>Continue</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="852"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="854"/>
         <source>Sign in to get access to the extended
 FREE, PRO and CLOUD features</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="866"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="868"/>
         <source>I want to receive STARC news</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="853"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="855"/>
         <source>Such as writing sprints, writing statistics, worldbuilding tools, story development tools, collaboration and more</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="855"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="857"/>
         <source>Email</source>
         <translation>Email</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="856"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="858"/>
         <source>Confirmation code</source>
         <translation>Confirmation code</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="857"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="859"/>
         <source>Sign up</source>
         <translation>Sign up</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="858"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="860"/>
         <source>Send code again</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="859"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="861"/>
         <source>Continue without sign in</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="861"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="863"/>
         <source>Set up your account</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="862"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="864"/>
         <source>Personalize your workspace</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="863"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="865"/>
         <source>Change avatar</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="864"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="866"/>
         <source>Your name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="865"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="867"/>
         <source>Your bio</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="869"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="871"/>
         <source>Customize your workspace</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="870"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="882"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="872"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="884"/>
         <source>Feel at home</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="872"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="874"/>
         <source>Story Architect provides tools for working with any form of writing. Choose which ones you plan to use:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="874"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="876"/>
         <source>Screenplay</source>
         <translation>Screenplay</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="875"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="877"/>
         <source>Comic book</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="876"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="878"/>
         <source>Audioplay</source>
         <translation>Audio drama</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="877"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="879"/>
         <source>Stageplay</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="878"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="880"/>
         <source>Novel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="881"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="883"/>
         <source>Customize your work environment</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="884"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="886"/>
         <source>We&apos;ll help you get used to STARC by leveraging your experience with other applications.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="887"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="889"/>
         <source>Application</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="888"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="890"/>
         <source>Adapt the interface and workflow</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="890"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="892"/>
         <source>Before you get started</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="891"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="893"/>
         <source>Feel our care</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="893"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="895"/>
         <source>You should know that Story Architect cares about the safety of your work, so the app:
 
 • automatically saves changes every three seconds when there is no activity
@@ -14402,22 +14692,22 @@ This will help to protect your creativity in any unforeseen situation.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="901"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="903"/>
         <source>Thanks I&apos;ll know</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="903"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="905"/>
         <source>Follow us on social media</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="904"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="906"/>
         <source>Let&apos;s unite to make the best app for writers</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="905"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="907"/>
         <source>Be the first to know our news, fresh updates and special offers.
 
 Get in touch with our technical support, share your feedback and suggest improvements.
@@ -14426,7 +14716,7 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="915"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="917"/>
         <source>Start writing</source>
         <translation>Start writing</translation>
     </message>
@@ -16924,44 +17214,44 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1585"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1606"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1588"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1609"/>
         <source>Merge paragraph</source>
         <translation>Merge paragraph</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1587"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1608"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1590"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1611"/>
         <source>Split paragraph</source>
         <translation>Split paragraph</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1552"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1635"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1555"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1638"/>
         <source>Bookmark</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1556"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1639"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1559"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1642"/>
         <source>Add</source>
         <translation>Add</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1562"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1645"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1565"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1648"/>
         <source>Edit</source>
         <translation>Edit</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1568"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1651"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1571"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1654"/>
         <source>Remove</source>
         <translation>Remove</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1575"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1658"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1578"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1661"/>
         <source>Show/hide list</source>
         <translation></translation>
     </message>
@@ -17956,736 +18246,736 @@ STARTED</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4002"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4008"/>
         <source>Application settings</source>
         <translation>Application settings</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4003"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4009"/>
         <source>Language</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4007"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4013"/>
         <source>Make application interface compact</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4016"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4022"/>
         <source>Qty</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4017"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4023"/>
         <source>Text editing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4018"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4024"/>
         <source>Show documents pages</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4019"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4025"/>
         <source>Use typewriter sound for keys pressing</source>
         <translation>Use typewriter sound for keys pressing</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4020"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4026"/>
         <source>Spell check</source>
         <translation>Spell check</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4021"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4027"/>
         <source>Spelling dictionary</source>
         <translation>Spelling dictionary</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4023"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4029"/>
         <source>Afrikaans</source>
         <translation>Afrikaans</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4024"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4030"/>
         <source>Aragonese</source>
         <translation>Aragonese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4025"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4031"/>
         <source>Arabic</source>
         <translation>Arabic</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4026"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4032"/>
         <source>Asturian</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4027"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4033"/>
         <source>Azerbaijani</source>
         <translation>Azerbaijani</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4028"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4034"/>
         <source>Belarusian</source>
         <translation>Belarusian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4029"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4035"/>
         <source>Bulgarian</source>
         <translation>Bulgarian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4030"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4036"/>
         <source>Bengali</source>
         <translation>Bengali</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4031"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4037"/>
         <source>Tibetan</source>
         <translation>Tibetan</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4032"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4038"/>
         <source>Breton</source>
         <translation>Breton</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4033"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4039"/>
         <source>Bosnian</source>
         <translation>Bosnian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4034"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4040"/>
         <source>Catalan (Valencian)</source>
         <translation>Catalan (Valencian)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4035"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4041"/>
         <source>Catalan</source>
         <translation>Catalan</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4036"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4042"/>
         <source>Czech</source>
         <translation>Czech</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4037"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4043"/>
         <source>Welsh</source>
         <translation>Welsh</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4038"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4044"/>
         <source>Danish</source>
         <translation>Danish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4039"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4045"/>
         <source>German (Austria)</source>
         <translation>German (Austria)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4040"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4046"/>
         <source>German (Switzerland)</source>
         <translation>German (Switzerland)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4041"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4047"/>
         <source>German</source>
         <translation>German</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4042"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4048"/>
         <source>Greek (Polytonic)</source>
         <translation>Greek (Polytonic)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4043"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4049"/>
         <source>Greek</source>
         <translation>Greek</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4044"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4050"/>
         <source>English (Australia)</source>
         <translation>English (Australia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4045"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4051"/>
         <source>English (Canada)</source>
         <translation>English (Canada)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4046"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4052"/>
         <source>English (United Kingdom)</source>
         <translation>English (United Kingdom)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4047"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4053"/>
         <source>English (New Zealand)</source>
         <translation>English (New Zealand)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4048"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4054"/>
         <source>English (South Africa)</source>
         <translation>English (South Africa)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4049"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4055"/>
         <source>English (United States)</source>
         <translation>English (United States)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4050"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4056"/>
         <source>Esperanto</source>
         <translation>Esperanto</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4051"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4057"/>
         <source>Spanish (Argentina)</source>
         <translation>Spanish (Argentina)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4052"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4058"/>
         <source>Spanish (Bolivia)</source>
         <translation>Spanish (Bolivia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4053"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4059"/>
         <source>Spanish (Chile)</source>
         <translation>Spanish (Chile)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4054"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4060"/>
         <source>Spanish (Colombia)</source>
         <translation>Spanish (Colombia)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4055"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4061"/>
         <source>Spanish (Costa Rica)</source>
         <translation>Spanish (Costa Rica)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4056"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4062"/>
         <source>Spanish (Cuba)</source>
         <translation>Spanish (Cuba)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4057"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4063"/>
         <source>Spanish (Dominican Republic)</source>
         <translation>Spanish (Dominican Republic)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4058"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4064"/>
         <source>Spanish (Ecuador)</source>
         <translation>Spanish (Ecuador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4059"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4065"/>
         <source>Spanish (Guatemala)</source>
         <translation>Spanish (Guatemala)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4060"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4066"/>
         <source>Spanish (Honduras)</source>
         <translation>Spanish (Honduras)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4061"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4067"/>
         <source>Spanish (Mexico)</source>
         <translation>Spanish (Mexico)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4062"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4068"/>
         <source>Spanish (Nicaragua)</source>
         <translation>Spanish (Nicaragua)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4063"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4069"/>
         <source>Spanish (Panama)</source>
         <translation>Spanish (Panama)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4064"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4070"/>
         <source>Spanish (Peru)</source>
         <translation>Spanish (Peru)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4065"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4071"/>
         <source>Spanish (Philippines)</source>
         <translation>Spanish (Philippines)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4066"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4072"/>
         <source>Spanish (Puerto Rico)</source>
         <translation>Spanish (Puerto Rico)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4067"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4073"/>
         <source>Spanish (Paraguay)</source>
         <translation>Spanish (Paraguay)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4068"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4074"/>
         <source>Spanish (El Salvador)</source>
         <translation>Spanish (El Salvador)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4069"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4075"/>
         <source>Spanish (United States)</source>
         <translation>Spanish (United States)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4070"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4076"/>
         <source>Spanish (Uruguay)</source>
         <translation>Spanish (Uruguay)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4071"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4077"/>
         <source>Spanish (Venezuela)</source>
         <translation>Spanish (Venezuela)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4072"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4078"/>
         <source>Spanish</source>
         <translation>Spanish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4073"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4079"/>
         <source>Estonian</source>
         <translation>Estonian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4074"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4080"/>
         <source>Basque</source>
         <translation>Basque</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4075"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4081"/>
         <source>Persian</source>
         <translation>Persian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4076"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4082"/>
         <source>Faroese</source>
         <translation>Faroese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4077"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4083"/>
         <source>French</source>
         <translation>French</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4078"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4084"/>
         <source>Friulian</source>
         <translation>Friulian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4079"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4085"/>
         <source>Western Frisian</source>
         <translation>Western Frisian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4080"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4086"/>
         <source>Irish</source>
         <translation>Irish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4081"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4087"/>
         <source>Gaelic</source>
         <translation>Gaelic</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4082"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4088"/>
         <source>Galician</source>
         <translation>Galician</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4083"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4089"/>
         <source>Gujarati</source>
         <translation>Gujarati</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4084"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4090"/>
         <source>Guarani</source>
         <translation>Guarani</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4085"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4091"/>
         <source>Hebrew</source>
         <translation>Hebrew</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4086"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4092"/>
         <source>Hindi</source>
         <translation>Hindi</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4087"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4093"/>
         <source>Croatian</source>
         <translation>Croatian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4088"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4094"/>
         <source>Hungarian</source>
         <translation>Hungarian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4089"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4095"/>
         <source>Armenian</source>
         <translation>Armenian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4090"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4096"/>
         <source>Armenian (Western)</source>
         <translation>Armenian (Western)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4091"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4097"/>
         <source>Interlingua</source>
         <translation>Interlingua</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4092"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4098"/>
         <source>Indonesian</source>
         <translation>Indonesian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4093"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4099"/>
         <source>Icelandic</source>
         <translation>Icelandic</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4094"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4100"/>
         <source>Italian</source>
         <translation>Italian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4095"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4101"/>
         <source>Georgian</source>
         <translation>Georgian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4096"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4102"/>
         <source>Kazakh</source>
         <translation>Kazakh</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4097"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4103"/>
         <source>Kurdish</source>
         <translation>Kurdish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4098"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4104"/>
         <source>Korean</source>
         <translation>Korean</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4099"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4105"/>
         <source>Latin</source>
         <translation>Latin</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4100"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4106"/>
         <source>Luxembourgish</source>
         <translation>Luxembourgish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4101"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4107"/>
         <source>Lao</source>
         <translation>Lao</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4102"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4108"/>
         <source>Lithuanian</source>
         <translation>Lithuanian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4103"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4109"/>
         <source>Latgalian</source>
         <translation>Latgalian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4104"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4110"/>
         <source>Latvian</source>
         <translation>Latvian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4105"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4111"/>
         <source>Macedonian</source>
         <translation>Macedonian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4106"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4112"/>
         <source>Mongolian</source>
         <translation>Mongolian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4107"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4113"/>
         <source>Maltese</source>
         <translation>Maltese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4108"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4112"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4114"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4118"/>
         <source>Norwegian</source>
         <translation>Norwegian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4109"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4115"/>
         <source>Low German</source>
         <translation>Low German</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4110"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4116"/>
         <source>Nepali</source>
         <translation>Nepali</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4111"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4117"/>
         <source>Dutch</source>
         <translation>Dutch</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4113"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4119"/>
         <source>Occitan</source>
         <translation>Occitan</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4114"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4120"/>
         <source>Polish</source>
         <translation>Polish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4115"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4121"/>
         <source>Portuguese (Brazilian)</source>
         <translation>Portuguese (Brazilian)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4116"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4122"/>
         <source>Portuguese</source>
         <translation>Portuguese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4117"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4123"/>
         <source>Quechua</source>
         <translation>Quechua</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4118"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4124"/>
         <source>Romanian</source>
         <translation>Romanian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4119"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4125"/>
         <source>Russian (with Yo)</source>
         <translation>Russian (with Yo)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4120"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4126"/>
         <source>Russian</source>
         <translation>Russian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4121"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4127"/>
         <source>Kinyarwanda</source>
         <translation>Kinyarwanda</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4122"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4128"/>
         <source>Sinhala</source>
         <translation>Sinhala</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4123"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4129"/>
         <source>Slovak</source>
         <translation>Slovak</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4124"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4130"/>
         <source>Slovenian</source>
         <translation>Slovenian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4125"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4131"/>
         <source>Albanian</source>
         <translation>Albanian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4126"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4132"/>
         <source>Serbian (Latin)</source>
         <translation>Serbian (Latin)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4127"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4133"/>
         <source>Serbian</source>
         <translation>Serbian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4128"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4134"/>
         <source>Swedish (Finland)</source>
         <translation>Swedish (Finland)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4129"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4135"/>
         <source>Swedish</source>
         <translation>Swedish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4130"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4136"/>
         <source>Swahili</source>
         <translation>Swahili</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4131"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4137"/>
         <source>Tamil</source>
         <translation>Tamil</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4132"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4138"/>
         <source>Telugu</source>
         <translation>Telugu</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4133"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4139"/>
         <source>Thai</source>
         <translation>Thai</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4134"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4140"/>
         <source>Turkmen</source>
         <translation>Turkmen</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4135"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4141"/>
         <source>Klingon (Latin)</source>
         <translation>Klingon (Latin)</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4136"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4142"/>
         <source>Klingon</source>
         <translation>Klingon</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4137"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4143"/>
         <source>Turkish</source>
         <translation>Turkish</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4138"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4144"/>
         <source>Ukrainian</source>
         <translation>Ukrainian</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4139"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4145"/>
         <source>Vietnamese</source>
         <translation>Vietnamese</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4149"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4155"/>
         <source>User interface</source>
         <translation>User interface</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4150"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4156"/>
         <source>Manage user dictionary</source>
         <translation>Manage user dictionary</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4155"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4161"/>
         <source>Automatic text corrections</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4156"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4162"/>
         <source>Capitalize single &quot;i&quot; letter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4157"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4163"/>
         <source>Replace three single dots with ellipsis</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4158"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4164"/>
         <source>Replace vertical quotation marks to curly ones</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4159"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4165"/>
         <source>Replace two dashes with em dash</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4160"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4166"/>
         <source>Avoid multiple spaces</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4167"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4173"/>
         <source>Turn on/off text and folders module</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4181"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4187"/>
         <source>Turn on/off screenplay module</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4191"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4197"/>
         <source>Add a continuation (CONT&apos;D) to dialogues separated by an action</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4193"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4199"/>
         <source>Automatically correct screenplay text on page breaks</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4201"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4258"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4282"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4311"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4207"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4264"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4288"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4317"/>
         <source>Show characters suggestions in empty paragraph</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4336"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4342"/>
         <source>characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4337"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4343"/>
         <source>characters with spaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4341"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4347"/>
         <source>Application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4344"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4350"/>
         <source>Action</source>
         <translation type="unfinished">Action</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4372"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4378"/>
         <source>Comic book editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4384"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4390"/>
         <source>Audioplay editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4396"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4402"/>
         <source>Stageplay editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4408"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4414"/>
         <source>Novel editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18700,235 +18990,194 @@ STARTED</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4194"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4200"/>
         <source>Save characters &amp; locations on typing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4196"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4202"/>
         <source>Show hints for all characters &amp; locations, or only for</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4197"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4254"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4278"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4307"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4203"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4260"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4284"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4313"/>
         <source>primary</source>
         <translation>primary</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4198"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4255"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4279"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4308"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4204"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4261"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4285"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4314"/>
         <source>secondary</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4199"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4256"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4280"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4309"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4205"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4262"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4286"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4315"/>
         <source>tertiary</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4203"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4209"/>
         <source>Use opening bracket in dialogue to switch to parenthetical</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4204"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4210"/>
         <source>Screenplay navigator</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4205"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4211"/>
         <source>Show beats</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4206"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4212"/>
         <source>in treatment</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4207"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4213"/>
         <source>in screenplay</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4228"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4234"/>
         <source>Calculate duration based on the custom rules</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4229"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4235"/>
         <source>For action</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4230"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4236"/>
         <source>Per entry</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4232"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4237"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4241"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4238"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4243"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4247"/>
         <source>+</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4233"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4239"/>
         <source>Each 50 characters</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4235"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4241"/>
         <source>For dialogue</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4239"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4245"/>
         <source>For scene heading</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4245"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4251"/>
         <source>Turn on/off comic book module</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4251"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4275"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4304"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4257"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4281"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4310"/>
         <source>Save characters on typing</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4253"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4277"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4306"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4259"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4283"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4312"/>
         <source>Show hints for all characters, or only for</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4267"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4273"/>
         <source>Audioplay module</source>
         <translation>Audio drama module</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4268"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4274"/>
         <source>Turn on/off audioplay module</source>
         <translation>Turn on/off audio drama module</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4273"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4279"/>
         <source>Show block numbers</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4274"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4280"/>
         <source>Continue block numbers through document</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4283"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4289"/>
         <source>Audioplay navigator</source>
         <translation>Audio drama navigator</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4292"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4298"/>
         <source>Calculate duration based on the count of words</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4294"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4335"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4300"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4341"/>
         <source>words</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4298"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4304"/>
         <source>Stageplay module</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4299"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4305"/>
         <source>Turn on/off stageplay module</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4312"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4318"/>
         <source>Stageplay navigator</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4321"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4327"/>
         <source>Novel module</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4322"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4328"/>
         <source>Turn on/off novel module</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4334"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4340"/>
         <source>Scene content counter type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4348"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4354"/>
         <source>Simple text editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4360"/>
-        <source>Screenplay editor</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4351"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4363"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4375"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4387"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4399"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4411"/>
-        <source>Block name</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4345"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4352"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4364"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4376"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4388"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4400"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4412"/>
-        <source>Shortcut</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4353"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4365"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4377"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4389"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4401"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4413"/>
-        <source>If you press in paragraphs end</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4354"/>
         <location filename="../ui/settings/settings_view.cpp" line="4366"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4378"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4390"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4402"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4414"/>
-        <source>If you press in empty paragraph</source>
+        <source>Screenplay editor</source>
         <translation></translation>
     </message>
     <message>
@@ -18938,16 +19187,57 @@ STARTED</source>
         <location filename="../ui/settings/settings_view.cpp" line="4393"/>
         <location filename="../ui/settings/settings_view.cpp" line="4405"/>
         <location filename="../ui/settings/settings_view.cpp" line="4417"/>
-        <source>Add paragraph</source>
+        <source>Block name</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4351"/>
         <location filename="../ui/settings/settings_view.cpp" line="4358"/>
         <location filename="../ui/settings/settings_view.cpp" line="4370"/>
         <location filename="../ui/settings/settings_view.cpp" line="4382"/>
         <location filename="../ui/settings/settings_view.cpp" line="4394"/>
         <location filename="../ui/settings/settings_view.cpp" line="4406"/>
         <location filename="../ui/settings/settings_view.cpp" line="4418"/>
+        <source>Shortcut</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4359"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4371"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4383"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4395"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4407"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4419"/>
+        <source>If you press in paragraphs end</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4360"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4372"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4384"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4396"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4408"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4420"/>
+        <source>If you press in empty paragraph</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4363"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4375"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4387"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4399"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4411"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4423"/>
+        <source>Add paragraph</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/settings/settings_view.cpp" line="4364"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4376"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4388"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4400"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4412"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4424"/>
         <source>Change to</source>
         <translation></translation>
     </message>
@@ -18956,32 +19246,32 @@ STARTED</source>
         <translation type="vanished">Theme</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4004"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4010"/>
         <source>Size of the user interface elements:</source>
         <translation>Size of the user interface elements:</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4005"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4011"/>
         <source>small</source>
         <translation>small</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4006"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4012"/>
         <source>big</source>
         <translation>big</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4008"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4014"/>
         <source>Save changes &amp; backups</source>
         <translation>Save changes &amp; backups</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4009"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4015"/>
         <source>Automatically save changes as soon as possible</source>
         <translation>Automatically save changes as soon as possible</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4011"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4017"/>
         <source>Autosave works very accurately.
 It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</source>
@@ -18990,91 +19280,91 @@ It saves the project every 3 seconds if you do not use your mouse or keyboard.
 If you work with no interruptions it saves the project every 3 minutes.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4014"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4020"/>
         <source>Save backups</source>
         <translation>Save backups</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4015"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4021"/>
         <source>Backups folder path</source>
         <translation>Backups folder path</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4152"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4158"/>
         <source>Focus current paragraph</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4154"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4160"/>
         <source>Use typewriter scrolling (keeps line with the cursor on the screen center)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4162"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4168"/>
         <source>Components</source>
         <translation>Components</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4166"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4172"/>
         <source>Simple text module</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4168"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4182"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4246"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4269"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4300"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4323"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4174"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4188"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4252"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4275"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4306"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4329"/>
         <source>Text editor</source>
         <translation>Text editor</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4169"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4183"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4247"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4270"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4301"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4324"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4175"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4189"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4253"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4276"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4307"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4330"/>
         <source>Default template</source>
         <translation>Default template</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4171"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4185"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4249"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4272"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4303"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4326"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4177"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4191"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4255"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4278"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4309"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4332"/>
         <source>Available actions for the selected template</source>
         <translation>Available actions for the selected template</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4186"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4208"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4284"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4313"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4192"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4214"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4290"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4319"/>
         <source>Show scene number</source>
         <translation>Show scene number</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4187"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4193"/>
         <source>on the left</source>
         <translation>on the left</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4188"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4194"/>
         <source>on the right</source>
         <translation>on the right</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4189"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4250"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4195"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4256"/>
         <source>Show dialogue number</source>
         <translation>Show dialogue number</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4151"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4157"/>
         <source>Highlight current line</source>
         <translation>Highlight current line</translation>
     </message>
@@ -19083,100 +19373,100 @@ If you work with no interruptions it saves the project every 3 minutes.</transla
         <translation type="vanished">Simple Text module</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4172"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4259"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4327"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4178"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4265"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4333"/>
         <source>Navigator</source>
         <translation>Navigator</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4173"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4179"/>
         <source>Show chapter text, lines</source>
         <translation>Show chapter text, lines</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4180"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4186"/>
         <source>Screenplay module</source>
         <translation>Screenplay module</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4209"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4285"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4314"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4328"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4215"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4291"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4320"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4334"/>
         <source>Show scene text, lines</source>
         <translation>Show scene text, lines</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4215"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4291"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4221"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4297"/>
         <source>Duration</source>
         <translation>Duration</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4216"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4222"/>
         <source>Calculate duration based on the count of pages</source>
         <translation>Calculate duration based on the count of pages</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4217"/>
         <location filename="../ui/settings/settings_view.cpp" line="4223"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4293"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4229"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4299"/>
         <source>at the rate of</source>
         <translation>at the rate of</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4218"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4224"/>
         <source>pages</source>
         <translation>pages</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4219"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4226"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4295"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4225"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4232"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4301"/>
         <source>has duration</source>
         <translation>has duration</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4220"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4227"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4231"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4234"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4236"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4238"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4226"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4233"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4237"/>
         <location filename="../ui/settings/settings_view.cpp" line="4240"/>
         <location filename="../ui/settings/settings_view.cpp" line="4242"/>
-        <location filename="../ui/settings/settings_view.cpp" line="4296"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4244"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4246"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4248"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4302"/>
         <source>seconds</source>
         <translation>seconds</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4222"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4228"/>
         <source>Calculate duration based on the count of letters</source>
         <translation>Calculate duration based on the count of letters</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4224"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4230"/>
         <source>letters</source>
         <translation>letters</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4225"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4231"/>
         <source>including spaces</source>
         <translation>including spaces</translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4244"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4250"/>
         <source>Comic book module</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4260"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4266"/>
         <source>Show panel text, lines</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/settings/settings_view.cpp" line="4339"/>
+        <location filename="../ui/settings/settings_view.cpp" line="4345"/>
         <source>Shortcuts</source>
         <translation>Shortcuts</translation>
     </message>
