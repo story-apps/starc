@@ -1985,6 +1985,9 @@ void ApplicationManager::Implementation::closeCurrentProject()
 
     writingSessionManager->finishSession();
 
+    markChangesSaved(true);
+    updateWindowTitle();
+
     state = ApplicationState::Working;
 }
 
@@ -2651,11 +2654,7 @@ void ApplicationManager::initConnections()
                 d->saveIfNeeded(callback);
             });
     connect(d->projectsManager.data(), &ProjectsManager::closeCurrentProjectRequested, this,
-            [this] {
-                d->closeCurrentProject();
-                d->markChangesSaved(true);
-                d->updateWindowTitle();
-            });
+            [this] { d->closeCurrentProject(); });
 
     //
     // Менеджер проекта
@@ -2955,17 +2954,20 @@ void ApplicationManager::initConnections()
     connect(d->accountManager.data(), &AccountManager::terminateSessionRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::terminateSession);
     connect(d->accountManager.data(), &AccountManager::logoutRequested, this, [this] {
-        d->showLastContent();
+        if (d->projectsManager->currentProject() != nullptr
+            && d->projectsManager->currentProject()->isRemote()) {
+            d->saveChanges();
+            d->closeCurrentProject();
+            d->showProjects();
+        } else {
+            d->showLastContent();
+        }
+
         d->cloudServiceManager->logout();
         d->accountManager->clearAccountInfo();
         d->menuView->setSignInVisible(true);
         d->menuView->setAccountVisible(false);
         d->projectManager->checkAvailabilityToEdit();
-        if (d->projectsManager->currentProject() != nullptr
-            && d->projectsManager->currentProject()->isRemote()) {
-            d->closeCurrentProject();
-            d->showProjects();
-        }
         d->projectsManager->setTeams({});
         d->projectsManager->setCloudProjects({});
         d->projectsManager->setProjectsInCloudCanBeCreated(false, Domain::SubscriptionType::Free);
@@ -3038,8 +3040,6 @@ void ApplicationManager::initConnections()
                 if (d->projectsManager->currentProject() != nullptr
                     && d->projectsManager->currentProject()->id() == _projectId) {
                     d->closeCurrentProject();
-                    d->markChangesSaved(true);
-                    d->updateWindowTitle();
                     d->showProjects();
                 }
                 d->projectsManager->removeProject(_projectId);
