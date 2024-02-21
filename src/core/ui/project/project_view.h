@@ -26,6 +26,11 @@ public:
     void showDefaultPage();
 
     /**
+     * @brief Показать страницу с информацией о том, что документ загружается
+     */
+    void showDocumentLoadingPage();
+
+    /**
      * @brief Показать страницу с информацией о том, что это ещё не реализовано
      */
     void showNotImplementedPage();

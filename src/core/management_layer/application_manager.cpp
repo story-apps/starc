@@ -23,6 +23,7 @@
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_change_object.h>
 #include <domain/document_object.h>
+#include <domain/objects_builder.h>
 #include <domain/starcloud_api.h>
 #include <include/custom_events.h>
 #include <interfaces/management_layer/i_document_manager.h>
@@ -3174,14 +3175,21 @@ void ApplicationManager::initConnections()
                     return;
                 }
                 QVector<Domain::DocumentObject*> documentsToUpdate;
+                QVector<Domain::DocumentObject*> temporaryDocuments;
                 for (const auto& documentToSync : std::as_const(documentsToSync)) {
                     const auto document = d->projectManager->documentToSync(documentToSync);
                     //
-                    // Если документ не удалось вытащить из базы, значит он ещё не был
-                    // синхронизирован
+                    // Если документ не удалось вытащить из базы
                     //
                     if (document == nullptr) {
-                        d->cloudServiceManager->openDocument(currentProject->id(), documentToSync);
+                        //
+                        // ... значит он ещё не был синхронизирован и для него нужна болванка,
+                        //     чтобы запросить его с сервера в вместе с остальными документами
+                        //
+                        auto temporaryDocument = Domain::ObjectsBuilder::createDocument(
+                            {}, documentToSync, Domain::DocumentObjectType::Undefined, {}, {});
+                        documentsToUpdate.append(temporaryDocument);
+                        temporaryDocuments.append(temporaryDocument);
                     }
                     //
                     // А если есть, то значит его инстанс уже есть в базе и его надо обновить
@@ -3191,6 +3199,10 @@ void ApplicationManager::initConnections()
                     }
                 }
                 d->cloudServiceManager->openDocuments(currentProject->id(), documentsToUpdate);
+                //
+                // ... очищаем все временные объекты
+                //
+                qDeleteAll(temporaryDocuments);
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentReceived,
             d->projectManager.data(), &ProjectManager::mergeDocumentInfo);

@@ -24,6 +24,10 @@ public:
     Body1Label* defaultPageBodyLabel = nullptr;
     Body1LinkLabel* defaultPageAddItemButton = nullptr;
 
+    Widget* documentLoadingPage = nullptr;
+    H6Label* documentLoadingPageTitleLabel = nullptr;
+    Body1Label* documentLoadingPageBodyLabel = nullptr;
+
     Widget* notImplementedPage = nullptr;
     H6Label* notImplementedPageTitleLabel = nullptr;
     Body1Label* notImplementedPageBodyLabel = nullptr;
@@ -42,6 +46,9 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
     , defaultPageTitleLabel(new H6Label(defaultPage))
     , defaultPageBodyLabel(new Body1Label(defaultPage))
     , defaultPageAddItemButton(new Body1LinkLabel(defaultPage))
+    , documentLoadingPage(new Widget(_parent))
+    , documentLoadingPageTitleLabel(new H6Label(documentLoadingPage))
+    , documentLoadingPageBodyLabel(new Body1Label(documentLoadingPage))
     , notImplementedPage(new Widget(_parent))
     , notImplementedPageTitleLabel(new H6Label(notImplementedPage))
     , notImplementedPageBodyLabel(new Body1Label(notImplementedPage))
@@ -52,6 +59,8 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
 {
     defaultPage->setFocusPolicy(Qt::StrongFocus);
     defaultPageBodyLabel->setAlignment(Qt::AlignCenter);
+    documentLoadingPage->setFocusPolicy(Qt::StrongFocus);
+    documentLoadingPageBodyLabel->setAlignment(Qt::AlignCenter);
     notImplementedPage->setFocusPolicy(Qt::StrongFocus);
     notImplementedPageBodyLabel->setAlignment(Qt::AlignCenter);
     documentVersions->hide();
@@ -76,6 +85,22 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
         bodyLayout->addStretch();
         bodyLayout->addWidget(defaultPageBodyLabel, 0, Qt::AlignHCenter);
         bodyLayout->addWidget(defaultPageAddItemButton, 0, Qt::AlignHCenter);
+        bodyLayout->addStretch();
+        layout->addLayout(bodyLayout);
+        layout->addStretch();
+    }
+
+    {
+        QVBoxLayout* layout = new QVBoxLayout(documentLoadingPage);
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addStretch();
+        layout->addWidget(documentLoadingPageTitleLabel, 0, Qt::AlignHCenter);
+        QHBoxLayout* bodyLayout = new QHBoxLayout;
+        bodyLayout->setContentsMargins({});
+        bodyLayout->setSpacing(0);
+        bodyLayout->addStretch();
+        bodyLayout->addWidget(documentLoadingPageBodyLabel, 0, Qt::AlignHCenter);
         bodyLayout->addStretch();
         layout->addLayout(bodyLayout);
         layout->addStretch();
@@ -121,6 +146,7 @@ ProjectView::ProjectView(QWidget* _parent)
     setAnimationType(AnimationType::FadeThrough);
 
     addWidget(d->defaultPage);
+    addWidget(d->documentLoadingPage);
     addWidget(d->notImplementedPage);
     addWidget(d->documentEditorPage);
 
@@ -158,6 +184,11 @@ ProjectView::~ProjectView() = default;
 void ProjectView::showDefaultPage()
 {
     setCurrentWidget(d->defaultPage);
+}
+
+void ProjectView::showDocumentLoadingPage()
+{
+    setCurrentWidget(d->documentLoadingPage);
 }
 
 void ProjectView::showNotImplementedPage()
@@ -270,6 +301,10 @@ void ProjectView::updateTranslations()
     d->defaultPageBodyLabel->setText(tr("Choose an item to edit, or"));
     d->defaultPageAddItemButton->setText(tr("create a new one"));
 
+    d->documentLoadingPageTitleLabel->setText(tr("Document content loading..."));
+    d->documentLoadingPageBodyLabel->setText(
+        tr("Please, wait a while and document editor will be activated."));
+
     d->notImplementedPageTitleLabel->setText(
         tr("Ooops... looks like editor of this document not implemented yet."));
     d->notImplementedPageBodyLabel->setText(
@@ -298,6 +333,18 @@ void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         0, static_cast<int>(DesignSystem::layout().px16()), 0, 0);
     d->defaultPageAddItemButton->setBackgroundColor(DesignSystem::color().surface());
     d->defaultPageAddItemButton->setTextColor(DesignSystem::color().accent());
+
+    d->documentLoadingPage->setBackgroundColor(DesignSystem::color().surface());
+    d->documentLoadingPageBodyLabel->setContentsMargins(
+        0, static_cast<int>(DesignSystem::layout().px16()),
+        static_cast<int>(DesignSystem::layout().px4()), 0);
+    for (auto label : std::vector<Widget*>{
+             d->documentLoadingPageTitleLabel,
+             d->documentLoadingPageBodyLabel,
+         }) {
+        label->setBackgroundColor(DesignSystem::color().surface());
+        label->setTextColor(DesignSystem::color().onSurface());
+    }
 
     d->notImplementedPage->setBackgroundColor(DesignSystem::color().surface());
     d->notImplementedPageBodyLabel->setContentsMargins(

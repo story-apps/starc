@@ -354,6 +354,11 @@ public:
      * @brief Список активных соавторов
      */
     QHash<QString, Domain::CursorInfo> collaboratorsCursors;
+
+    /**
+     * @brief Количество последовательно обновлённых документов
+     */
+    int mergedDocuments = 0;
 };
 
 ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _parent,
@@ -3220,6 +3225,8 @@ QVector<Domain::DocumentObject*> ProjectManager::unsyncedDocuments() const
 
 void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo)
 {
+    Log::trace("Merge content for document %1", _documentInfo.uuid.toString());
+
     const auto syncDatetime = QDateTime::currentDateTimeUtc();
 
     Domain::DocumentObject* document = nullptr;
@@ -3461,7 +3468,12 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     // TODO: Вынести в отдельный поток применение массовых изменений? либо как-то уведомлять
     //       пользователя о том, что сейчас идёт синхронизация данных проекта
     //
-    QApplication::processEvents();
+    if (d->mergedDocuments == 10) {
+        d->mergedDocuments = 1;
+        QApplication::processEvents();
+    } else {
+        ++d->mergedDocuments;
+    }
 }
 
 void ProjectManager::applyDocumentChanges(const Domain::DocumentInfo& _documentInfo)
@@ -4014,7 +4026,7 @@ void ProjectManager::showView(const QModelIndex& _index)
     // Откроем документ на редактирование в первом из представлений
     //
     if (views.isEmpty()) {
-        d->view.active->showNotImplementedPage();
+        d->view.active->showDocumentLoadingPage();
         return;
     }
     showView(_index, {}, views.first().mimeType);
@@ -4082,7 +4094,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     updateCurrentDocument(d->modelsFacade.modelFor(itemForShow->uuid()), viewMimeType);
     if (d->view.activeModel == nullptr) {
-        d->view.active->showNotImplementedPage();
+        d->view.active->showDocumentLoadingPage();
         d->view.active->setVersionsVisible(false);
         return;
     }
@@ -4266,7 +4278,7 @@ void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item
     //
     updateCurrentDocument(d->modelsFacade.modelFor(_item->uuid()), viewMimeType);
     if (d->view.activeModel == nullptr) {
-        d->view.active->showNotImplementedPage();
+        d->view.active->showDocumentLoadingPage();
         return;
     }
 
