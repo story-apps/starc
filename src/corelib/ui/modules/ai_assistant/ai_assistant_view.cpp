@@ -93,6 +93,7 @@ public:
     Button* openSummarizeButton = nullptr;
     Button* openTranslateButton = nullptr;
     Button* openGenerateSynopsisButton = nullptr;
+    Button* openGenerateScriptButton = nullptr;
     Button* openGenerateButton = nullptr;
 
     Page* rephrasePage = nullptr;
@@ -150,6 +151,12 @@ public:
     Button* generateSynopsisButton = nullptr;
     QHBoxLayout* generateSynopsisButtonsLayout = nullptr;
 
+    Page* generateScriptPage = nullptr;
+    Body1Label* generateScriptHintLabel = nullptr;
+    TextField* generateScriptResultText = nullptr;
+    Button* generateScriptButton = nullptr;
+    QHBoxLayout* generateScriptButtonsLayout = nullptr;
+
     GenerationViewType generationViewType = GenerationViewType::Text;
 
     Page* generateTextPage = nullptr;
@@ -195,6 +202,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     , openSummarizeButton(new Button(buttonsPage))
     , openTranslateButton(new Button(buttonsPage))
     , openGenerateSynopsisButton(new Button(buttonsPage))
+    , openGenerateScriptButton(new Button(buttonsPage))
     , openGenerateButton(new Button(buttonsPage))
     //
     , rephrasePage(new Page(pages))
@@ -252,6 +260,12 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     , generateSynopsisButton(new Button(summarizePage))
     , generateSynopsisButtonsLayout(new QHBoxLayout)
     //
+    , generateScriptPage(new Page(pages))
+    , generateScriptHintLabel(new Body1Label(generateScriptPage))
+    , generateScriptResultText(new TextField(summarizePage))
+    , generateScriptButton(new Button(summarizePage))
+    , generateScriptButtonsLayout(new QHBoxLayout)
+    //
     , generateTextPage(new Page(pages))
     , generateTextPromptHintLabel(new Body1Label(generateTextPage))
     , generateTextPromptText(new TextField(generateTextPage))
@@ -293,6 +307,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     pages->addWidget(summarizePage);
     pages->addWidget(translatePage);
     pages->addWidget(generateSynopsisPage);
+    pages->addWidget(generateScriptPage);
     pages->addWidget(generateTextPage);
     pages->addWidget(generateCharacterPage);
     pages->addWidget(generateMindMapPage);
@@ -305,6 +320,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         openSummarizeButton->setIcon(u8"\U000F0DD0");
         openTranslateButton->setIcon(u8"\U000F05CA");
         openGenerateSynopsisButton->setIcon(u8"\U000F021A");
+        openGenerateScriptButton->setIcon(u8"\U000F0BC2");
         openGenerateButton->setIcon(u8"\U000F027F");
         for (auto button : {
                  openRephraseButton,
@@ -314,11 +330,13 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
                  openSummarizeButton,
                  openTranslateButton,
                  openGenerateSynopsisButton,
+                 openGenerateScriptButton,
                  openGenerateButton,
              }) {
             button->setFlat(true);
         }
         openGenerateSynopsisButton->hide();
+        openGenerateScriptButton->hide();
 
         auto layout = new QVBoxLayout(buttonsPage);
         layout->setContentsMargins({});
@@ -330,6 +348,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         layout->addWidget(openSummarizeButton);
         layout->addWidget(openTranslateButton);
         layout->addWidget(openGenerateSynopsisButton);
+        layout->addWidget(openGenerateScriptButton);
         layout->addWidget(openGenerateButton);
         layout->addStretch();
     }
@@ -488,6 +507,22 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     }
 
     {
+        generateScriptResultText->setEnterMakesNewLine(true);
+        generateScriptResultText->hide();
+        generateScriptButtonsLayout->setContentsMargins({});
+        generateScriptButtonsLayout->setSpacing(0);
+        generateScriptButtonsLayout->addStretch();
+        generateScriptButtonsLayout->addWidget(generateScriptButton);
+
+
+        auto layout = generateScriptPage->contentsLayout;
+        layout->addWidget(generateScriptHintLabel);
+        layout->addWidget(generateScriptResultText);
+        layout->addLayout(generateScriptButtonsLayout);
+        layout->addStretch();
+    }
+
+    {
         generateTextPromptText->setEnterMakesNewLine(true);
         generateTextPromptText->setWordCount("0/1000");
         generateTextInsertAtCursor->setChecked(true);
@@ -634,6 +669,12 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
         QTimer::singleShot(d->pages->animationDuration(), d->generateSynopsisButton,
                            qOverload<>(&Button::setFocus));
     });
+    connect(d->openGenerateScriptButton, &Button::clicked, this, [this] {
+        d->generateScriptResultText->hide();
+        d->pages->setCurrentWidget(d->generateScriptPage);
+        QTimer::singleShot(d->pages->animationDuration(), d->generateScriptButton,
+                           qOverload<>(&Button::setFocus));
+    });
     connect(d->openGenerateButton, &Button::clicked, this, [this] {
         switch (d->generationViewType) {
         case GenerationViewType::Text: {
@@ -666,6 +707,7 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
              d->summarizePage,
              d->translatePage,
              d->generateSynopsisPage,
+             d->generateScriptPage,
              d->generateTextPage,
              d->generateCharacterPage,
              d->generateMindMapPage,
@@ -788,6 +830,13 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
                 updateResultWordCounter(textField);
             });
     //
+    connect(d->generateScriptButton, &Button::clicked, this,
+            [this] { emit generateScriptRequested(); });
+    connect(d->generateScriptResultText, &TextField::textChanged, this,
+            [textField = d->generateScriptResultText, updateResultWordCounter] {
+                updateResultWordCounter(textField);
+            });
+    //
     auto updateGenerateTextWordCounters = [this, updateWordCounter] {
         const auto sourceTextWordCount = updateWordCounter(d->generateTextPromptText);
         d->generateTextButton->setEnabled(sourceTextWordCount <= 1000);
@@ -847,6 +896,7 @@ void AiAssistantView::setReadOnly(bool _readOnly)
              d->summarizePage,
              d->translatePage,
              d->generateSynopsisPage,
+             d->generateScriptPage,
              d->generateTextPage,
              d->generateCharacterPage,
              d->generateMindMapPage,
@@ -874,9 +924,19 @@ void AiAssistantView::setSynopsisGenerationAvaiable(bool _available)
     d->openGenerateSynopsisButton->setVisible(_available);
 }
 
+void AiAssistantView::setScriptGenerationAvaiable(bool _available)
+{
+    d->openGenerateScriptButton->setVisible(_available);
+}
+
 void AiAssistantView::setGenerationSynopsisOptions(const QString& _hint)
 {
     d->generateSynopsisHintLabel->setText(_hint);
+}
+
+void AiAssistantView::setGenerationScriptOptions(const QString& _hint)
+{
+    d->generateScriptHintLabel->setText(_hint);
 }
 
 void AiAssistantView::setGenerationViewType(GenerationViewType _type)
@@ -983,6 +1043,12 @@ void AiAssistantView::setGenerateSynopsisResult(const QString& _text)
     d->generateSynopsisResultText->show();
 }
 
+void AiAssistantView::setGenerateScriptResult(const QString& _text)
+{
+    d->generateScriptResultText->setText(_text);
+    d->generateScriptResultText->show();
+}
+
 void AiAssistantView::setAvailableWords(int _availableWords)
 {
     d->availableWords = _availableWords;
@@ -1000,6 +1066,7 @@ void AiAssistantView::updateTranslations()
     d->openSummarizeButton->setText(tr("Summarize"));
     d->openTranslateButton->setText(tr("Translate"));
     d->openGenerateSynopsisButton->setText(tr("Generate synopsis"));
+    d->openGenerateScriptButton->setText(tr("Generate script"));
     d->openGenerateButton->setText(tr("Generate"));
 
     for (auto page : {
@@ -1010,6 +1077,7 @@ void AiAssistantView::updateTranslations()
              d->summarizePage,
              d->translatePage,
              d->generateSynopsisPage,
+             d->generateScriptPage,
              d->generateTextPage,
              d->generateCharacterPage,
              d->generateMindMapPage,
@@ -1211,6 +1279,9 @@ void AiAssistantView::updateTranslations()
     d->generateSynopsisLengthDefault->setText(tr("unlimitted"));
     d->generateSynopsisResultText->setLabel(tr("Synopsis"));
     d->generateSynopsisButton->setText(tr("Generate"));
+    d->generateScriptPage->titleLabel->setText(tr("Generate script"));
+    d->generateScriptResultText->setLabel(tr("Script"));
+    d->generateScriptButton->setText(tr("Generate"));
     d->generateTextPage->titleLabel->setText(tr("Generate"));
     d->generateTextPromptText->setLabel(tr("Prompt"));
     d->generateTextInsertLabel->setText(tr("Insert result"));
@@ -1255,6 +1326,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->openSummarizeButton,
              d->openTranslateButton,
              d->openGenerateSynopsisButton,
+             d->openGenerateScriptButton,
              d->openGenerateButton,
          }) {
         button->setBackgroundColor(ColorHelper::nearby(DesignSystem::color().primary()));
@@ -1269,6 +1341,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->summarizePage,
              d->translatePage,
              d->generateSynopsisPage,
+             d->generateScriptPage,
              d->generateTextPage,
              d->generateCharacterPage,
              d->generateMindMapPage,
@@ -1281,20 +1354,31 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         page->titleLabel->setTextColor(DesignSystem::color().onPrimary());
     }
     d->generateSynopsisPage->contentsLayout->setSpacing(0);
+    d->generateScriptPage->contentsLayout->setSpacing(0);
     d->generateTextPage->contentsLayout->setSpacing(0);
     d->generateCharacterPage->contentsLayout->setSpacing(0);
     d->generateMindMapPage->contentsLayout->setSpacing(0);
 
     for (auto textField : std::vector<TextField*>{
-             d->rephraseSourceText,        d->rephraseStyleText,
-             d->rephraseResultText,        d->expandSourceText,
-             d->expandResultText,          d->shortenSourceText,
-             d->shortenResultText,         d->insertAfterText,
-             d->insertBeforeText,          d->insertResultText,
-             d->summarizeSourceText,       d->summarizeResultText,
-             d->translateSourceText,       d->translateLanguage,
-             d->translateResultText,       d->generateSynopsisResultText,
-             d->generateTextPromptText,    d->generateCharacterPromptText,
+             d->rephraseSourceText,
+             d->rephraseStyleText,
+             d->rephraseResultText,
+             d->expandSourceText,
+             d->expandResultText,
+             d->shortenSourceText,
+             d->shortenResultText,
+             d->insertAfterText,
+             d->insertBeforeText,
+             d->insertResultText,
+             d->summarizeSourceText,
+             d->summarizeResultText,
+             d->translateSourceText,
+             d->translateLanguage,
+             d->translateResultText,
+             d->generateSynopsisResultText,
+             d->generateScriptResultText,
+             d->generateTextPromptText,
+             d->generateCharacterPromptText,
              d->generateMindMapPromptText,
          }) {
         textField->setBackgroundColor(DesignSystem::color().onPrimary());
@@ -1316,6 +1400,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->translateButton,
              d->translateInsertButton,
              d->generateSynopsisButton,
+             d->generateScriptButton,
              d->generateTextButton,
              d->generateCharacterButton,
              d->generateMindMapButton,
@@ -1332,6 +1417,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->summarizeButtonsLayout,
              d->translateButtonsLayout,
              d->generateSynopsisButtonsLayout,
+             d->generateScriptButtonsLayout,
              d->generateTextButtonsLayout,
              d->generateCharacterButtonsLayout,
              d->generateMindMapButtonsLayout,
@@ -1342,23 +1428,15 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto widget : std::list<Widget*>{
-             d->generateSynopsisHintLabel,
-             d->generateSynopsisLenghtLabel,
-             d->generateSynopsisLengthShort,
-             d->generateSynopsisLengthMedium,
-             d->generateSynopsisLengthDefault,
-             d->generateTextPromptHintLabel,
-             d->generateTextInsertLabel,
-             d->generateTextInsertAtBegin,
-             d->generateTextInsertAtCursor,
-             d->generateTextInsertAtEnd,
-             d->generateCharacterPromptHintLabel,
-             d->generateCharacterPersonalInfo,
-             d->generateCharacterPhysique,
-             d->generateCharacterAttitude,
-             d->generateCharacterLife,
-             d->generateCharacterBiography,
-             d->generateCharacterPhoto,
+             d->generateSynopsisHintLabel,      d->generateSynopsisLenghtLabel,
+             d->generateSynopsisLengthShort,    d->generateSynopsisLengthMedium,
+             d->generateSynopsisLengthDefault,  d->generateScriptHintLabel,
+             d->generateTextPromptHintLabel,    d->generateTextInsertLabel,
+             d->generateTextInsertAtBegin,      d->generateTextInsertAtCursor,
+             d->generateTextInsertAtEnd,        d->generateCharacterPromptHintLabel,
+             d->generateCharacterPersonalInfo,  d->generateCharacterPhysique,
+             d->generateCharacterAttitude,      d->generateCharacterLife,
+             d->generateCharacterBiography,     d->generateCharacterPhoto,
              d->generateMindMapPromptHintLabel,
          }) {
         widget->setBackgroundColor(DesignSystem::color().primary());
@@ -1366,6 +1444,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
     for (auto label : {
              d->generateSynopsisHintLabel,
+             d->generateScriptHintLabel,
              d->generateTextPromptHintLabel,
              d->generateCharacterPromptHintLabel,
              d->generateMindMapPromptHintLabel,

@@ -72,6 +72,46 @@ QPair<int, int> NovelTextModelFolderItem::charactersCount() const
     return d->charactersCount;
 }
 
+QString NovelTextModelFolderItem::text() const
+{
+    QString text;
+    for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
+        auto child = childAt(childIndex);
+        switch (child->type()) {
+        case TextModelItemType::Folder: {
+            auto folderItem = static_cast<NovelTextModelFolderItem*>(child);
+            if (!text.isEmpty()) {
+                text += "\n\n";
+            }
+            text += folderItem->text();
+            break;
+        }
+
+        case TextModelItemType::Group: {
+            auto childItem = static_cast<TextModelGroupItem*>(child);
+            if (!text.isEmpty()) {
+                text += "\n\n";
+            }
+            text += childItem->text();
+            break;
+        }
+
+        case TextModelItemType::Text: {
+            auto childItem = static_cast<NovelTextModelTextItem*>(child);
+            if (!text.isEmpty()) {
+                text += "\n";
+            }
+            text += childItem->text();
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+    return text;
+}
+
 QVariant NovelTextModelFolderItem::data(int _role) const
 {
     switch (_role) {

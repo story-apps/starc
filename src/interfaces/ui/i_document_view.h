@@ -104,6 +104,9 @@ public:
     virtual void setGeneratedSynopsis(const QString& _text)
     {
     }
+    virtual void setGeneratedScript(const QString& _text)
+    {
+    }
     virtual void setGeneratedText(const QString& _text)
     {
     }

@@ -265,6 +265,7 @@ NovelTextView::Implementation::Implementation(NovelTextView* _q)
     commentsView->setModel(commentsModel);
     commentsView->hide();
     aiAssistantView->hide();
+    aiAssistantView->setScriptGenerationAvaiable(true);
     bookmarksView->setModel(bookmarksModel);
     bookmarksView->hide();
 
@@ -1185,6 +1186,8 @@ NovelTextView::NovelTextView(QWidget* _parent)
             &NovelTextView::summarizeTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
             &NovelTextView::translateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::generateScriptRequested, this,
+            &NovelTextView::generateScriptRequested);
     connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
             &NovelTextView::generateTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
@@ -1329,6 +1332,11 @@ void NovelTextView::setSummarizedText(const QString& _text)
 void NovelTextView::setTranslatedText(const QString& _text)
 {
     d->aiAssistantView->setTransateResult(_text);
+}
+
+void NovelTextView::setGeneratedScript(const QString& _text)
+{
+    d->aiAssistantView->setGenerateScriptResult(_text);
 }
 
 void NovelTextView::setGeneratedText(const QString& _text)
@@ -1554,6 +1562,19 @@ void NovelTextView::setModel(BusinessLayer::NovelTextModel* _model)
 
                     d->showParametersFor(updatedItem);
                 });
+
+        //
+        // Обновляем стоимость генерации сценария при изменении модели
+        //
+        auto updateSynopsisPrice = [this] {
+            d->aiAssistantView->setGenerationScriptOptions(
+                tr("Script generation will takes %n word(s)", 0, d->model->wordsCount()));
+        };
+        connect(d->model, &BusinessLayer::NovelTextModel::modelReset, this, updateSynopsisPrice);
+        connect(d->model, &BusinessLayer::NovelTextModel::dataChanged, this, updateSynopsisPrice);
+        connect(d->model, &BusinessLayer::NovelTextModel::rowsInserted, this, updateSynopsisPrice);
+        connect(d->model, &BusinessLayer::NovelTextModel::rowsMoved, this, updateSynopsisPrice);
+        connect(d->model, &BusinessLayer::NovelTextModel::rowsRemoved, this, updateSynopsisPrice);
 
         //
         // Перед началом сброса документа запоминаем текущую позицию курсора

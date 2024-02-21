@@ -192,6 +192,7 @@ public:
     void setSummarizeedText(const QString& _text);
     void setTranslatedText(const QString& _text);
     void setGeneratedSynopsis(const QString& _text);
+    void setGeneratedScript(const QString& _text);
     void setGeneratedText(const QString& _text);
     void setGeneratedImage(const QPixmap& _image);
 
@@ -292,6 +293,7 @@ signals:
     void translateTextRequested(const QString& _text, const QString& _languageCode);
     void generateSynopsisRequested(const QVector<QString>& _scenes, int _maxWordsPerScene,
                                    int _wordsRequired);
+    void generateScriptRequested(const QVector<QString>& _scenes, int _wordsRequired);
     void generateTextRequested(const QString& _promptPrefix, const QString& _prompt,
                                const QString& _promptSuffix);
     void generateImageRequested(const QString& _promptPrefix, const QString& _prompt,

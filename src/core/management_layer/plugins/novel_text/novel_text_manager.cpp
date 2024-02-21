@@ -4,7 +4,10 @@
 
 #include <business_layer/model/novel/novel_dictionaries_model.h>
 #include <business_layer/model/novel/text/novel_text_model.h>
+#include <business_layer/model/novel/text/novel_text_model_folder_item.h>
+#include <business_layer/model/novel/text/novel_text_model_scene_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
@@ -177,6 +180,54 @@ Ui::NovelTextView* NovelTextManager::Implementation::createView(
             &NovelTextManager::summarizeTextRequested);
     connect(view, &Ui::NovelTextView::translateTextRequested, q,
             &NovelTextManager::translateTextRequested);
+    connect(view, &Ui::NovelTextView::generateScriptRequested, q, [this, view] {
+        //
+        // TODO: вырезать строку со списком персонажей
+        //
+        const auto model = modelForView(view);
+        QVector<QString> scenes;
+        std::function<void(const QModelIndex&)> findScenes;
+        findScenes = [&findScenes, model, &scenes](const QModelIndex& _parentItemIndex) {
+            for (int row = 0; row < model->rowCount(_parentItemIndex); ++row) {
+                const auto itemIndex = model->index(row, 0, _parentItemIndex);
+                const auto item = model->itemForIndex(itemIndex);
+                switch (item->type()) {
+                case BusinessLayer::TextModelItemType::Folder: {
+                    const auto folderItem
+                        = static_cast<const BusinessLayer::NovelTextModelFolderItem*>(item);
+                    //
+                    // Если в папке много вложений, то обрабатываем каждое по отдельности
+                    //
+                    if (folderItem->charactersCount().second > 10000) {
+                        findScenes(itemIndex);
+                    }
+                    //
+                    // ... а если достаточно, чтобы нейронка переварила, берём текст папки целиком
+                    //
+                    else {
+                        scenes.append(folderItem->text());
+                    }
+                    break;
+                }
+
+                case BusinessLayer::TextModelItemType::Group: {
+                    if (item->subtype() == static_cast<int>(BusinessLayer::TextGroupType::Scene)) {
+                        const auto sceneItem
+                            = static_cast<const BusinessLayer::NovelTextModelSceneItem*>(item);
+                        scenes.append(sceneItem->text());
+                    }
+                    break;
+                }
+
+                default: {
+                    break;
+                }
+                }
+            }
+        };
+        findScenes({});
+        emit q->generateScriptRequested(scenes, model->wordsCount());
+    });
     connect(view, &Ui::NovelTextView::generateTextRequested, q,
             [this](const QString& _text) { emit q->generateTextRequested({}, _text, {}); });
     connect(view, &Ui::NovelTextView::buyCreditsRequested, q,

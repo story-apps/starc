@@ -13,7 +13,7 @@ namespace BusinessLayer {
 class NovelTextModel;
 
 /**
- * @brief Класс элементов папок модели сценария
+ * @brief Класс элементов папок модели романа
  */
 class CORE_LIBRARY_EXPORT NovelTextModelFolderItem : public TextModelFolderItem
 {
@@ -50,6 +50,12 @@ public:
      * @brief Количество символов
      */
     QPair<int, int> charactersCount() const;
+
+    /**
+     * @brief Текст папки
+     * @note Текст собирается на лету, использовать в крайних случаях
+     */
+    QString text() const;
 
     /**
      * @brief Определяем интерфейс получения данных папки

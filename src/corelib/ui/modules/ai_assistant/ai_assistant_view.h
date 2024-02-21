@@ -52,9 +52,19 @@ public:
     void setSynopsisGenerationAvaiable(bool _available);
 
     /**
+     * @brief Настроить доступность возможности генерации сценария
+     */
+    void setScriptGenerationAvaiable(bool _available);
+
+    /**
      * @brief Задать подсказку для генерации синопсиса
      */
     void setGenerationSynopsisOptions(const QString& _hint);
+
+    /**
+     * @brief Задать подсказку для генерации сценария
+     */
+    void setGenerationScriptOptions(const QString& _hint);
 
     /**
      * @brief Задать тип представления генерации контента
@@ -86,6 +96,7 @@ public:
     void setSummarizeResult(const QString& _text);
     void setTransateResult(const QString& _text);
     void setGenerateSynopsisResult(const QString& _text);
+    void setGenerateScriptResult(const QString& _text);
 
     /**
      * @brief Задать количество доступных слов для генерации
@@ -127,6 +138,11 @@ signals:
      * @brief Пользователь хочет сгенерировать синопсис
      */
     void generateSynopsisRequested(int _maxWordsPerScene);
+
+    /**
+     * @brief Пользователь хочет сгенерировать сценарий из романа
+     */
+    void generateScriptRequested();
 
     /**
      * @brief Пользователь хочет сгенерировать текст по запросу
