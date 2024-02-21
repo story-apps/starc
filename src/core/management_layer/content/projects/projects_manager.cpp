@@ -717,33 +717,57 @@ void ProjectsManager::setTeams(const QVector<Domain::TeamInfo>& _teams)
 
 void ProjectsManager::addOrUpdateTeam(const Domain::TeamInfo& _teamInfo)
 {
-    bool hasTeam = false;
     //
-    //  Проходим все верхнеуровневые элементы
+    // Обновим список команд для модели проектов
     //
-    for (int row = 0; row < d->projects->rowCount(); ++row) {
-        const auto itemIndex = d->projects->index(row);
-        const auto item = d->projects->itemForIndex(itemIndex);
-        if (item->type() != BusinessLayer::ProjectsModelItemType::Team) {
-            continue;
-        }
+    {
+        bool hasTeam = false;
+        //
+        //  Проходим все верхнеуровневые элементы
+        //
+        for (int row = 0; row < d->projects->rowCount(); ++row) {
+            const auto itemIndex = d->projects->index(row);
+            const auto item = d->projects->itemForIndex(itemIndex);
+            if (item->type() != BusinessLayer::ProjectsModelItemType::Team) {
+                continue;
+            }
 
-        auto projectTeam = static_cast<BusinessLayer::ProjectsModelTeamItem*>(item);
-        if (projectTeam->id() == _teamInfo.id) {
+            auto projectTeam = static_cast<BusinessLayer::ProjectsModelTeamItem*>(item);
+            if (projectTeam->id() == _teamInfo.id) {
+                projectTeam->setTeamInfo(_teamInfo);
+                d->projects->updateItem(projectTeam);
+                hasTeam = true;
+                break;
+            }
+        }
+        //
+        // ... если команды не нашлось, то нужно создать
+        //
+        if (!hasTeam) {
+            auto projectTeam = new BusinessLayer::ProjectsModelTeamItem;
             projectTeam->setTeamInfo(_teamInfo);
-            d->projects->updateItem(projectTeam);
-            hasTeam = true;
-            break;
+            d->projects->prependItem(projectTeam);
         }
     }
 
     //
-    // ... если команды не нашлось, то нужно создать
+    // Обновим список команд для диалога создания проектов
     //
-    if (!hasTeam) {
-        auto projectTeam = new BusinessLayer::ProjectsModelTeamItem;
-        projectTeam->setTeamInfo(_teamInfo);
-        d->projects->prependItem(projectTeam);
+    {
+        bool hasTeam = false;
+        for (int index = 0; index < d->teamsForProjects.size(); ++index) {
+            if (d->teamsForProjects[index].id == _teamInfo.id) {
+                d->teamsForProjects[index] = _teamInfo;
+                hasTeam = true;
+                break;
+            }
+        }
+        //
+        // ... если команды не нашлось, то нужно создать
+        //
+        if (!hasTeam) {
+            d->teamsForProjects.append(_teamInfo);
+        }
     }
 }
 
@@ -760,6 +784,13 @@ void ProjectsManager::hideTeam(int _id)
         if (projectTeam->id() == _id) {
             d->projects->removeItem(projectTeam);
             return;
+        }
+    }
+
+    for (int index = 0; index < d->teamsForProjects.size(); ++index) {
+        if (d->teamsForProjects[index].id == _id) {
+            d->teamsForProjects.removeAt(index);
+            break;
         }
     }
 }
