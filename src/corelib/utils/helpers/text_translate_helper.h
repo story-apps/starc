@@ -62,4 +62,15 @@ private:
      */
     void translateImpl(const QString& _text, const QString& _sourceLanguage,
                        const QString& _targetLanguage);
+
+private:
+    /**
+     * @brief Части исходного текста (разбитые в соответствии с ограничениями на перевод)
+     */
+    QVector<QString> m_sourceTextParts;
+
+    /**
+     * @brief Перевод текста
+     */
+    QVector<Translation> m_translationParts;
 };

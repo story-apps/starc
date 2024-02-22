@@ -16,6 +16,11 @@
 namespace {
 
 /**
+ * @brief Максимальное количество символов, которые можно поместить в один запрос
+ */
+constexpr auto kMaximumCharactersPerRequest = 2500;
+
+/**
  * @brief Таймаут извлечения переводчиков из очереди (40 в минуту)
  */
 constexpr auto kDequeTimeoutMsec = 60000 / 40;
@@ -159,6 +164,11 @@ void TranslationQueue::enque(TextTranslateHelper* _translator, const QString& _t
 
 void TranslationQueue::deque()
 {
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
+        return;
+    }
+
     //
     // Если в очереди больше никого нет, отдыхаем
     //
@@ -246,6 +256,51 @@ void TextTranslateHelper::translateFromEnglish(const QString& _text, const QStri
 void TextTranslateHelper::translateImpl(const QString& _text, const QString& _sourceLanguage,
                                         const QString& _targetLanguage)
 {
+    //
+    // Если это новый запрос на перевод, подготовим части для перевода
+    //
+    if (m_sourceTextParts.isEmpty()) {
+        //
+        // ... очистим предыдущий перевод
+        //
+        m_translationParts.clear();
+        //
+        // ... если нечего переводить, то прерываем операцию
+        //
+        if (_text.simplified().isEmpty()) {
+            return;
+        }
+        //
+        // ... подготовим части исходного текста для перевода
+        //
+        auto sourceText = _text;
+        while (!sourceText.isEmpty()) {
+            if (sourceText.length() < kMaximumCharactersPerRequest) {
+                m_sourceTextParts.append(sourceText);
+                sourceText.clear();
+            } else {
+                auto sourceTextPart = sourceText.left(kMaximumCharactersPerRequest);
+                const QSet<QString> sentenceThreshold = { ".", "!", "?", "…", "\n" };
+                while (!sourceTextPart.isEmpty()
+                       && !sentenceThreshold.contains(sourceTextPart.right(1))) {
+                    sourceTextPart.chop(1);
+                }
+                const int partLength = sourceTextPart.isEmpty() ? kMaximumCharactersPerRequest
+                                                                : sourceTextPart.length();
+                m_sourceTextParts.append(sourceText.left(partLength));
+                sourceText.remove(0, partLength);
+            }
+        }
+    }
+
+    //
+    // Подготовим текст для перевода
+    //
+    const auto textToTranslate = m_sourceTextParts.takeFirst();
+
+    //
+    // Готовим запрос для перевода
+    //
     auto request = new NetworkRequest;
     //
     // Настраиваем прокси и используем маленький таймаут, чтобы не ждать долго и переходить к
@@ -257,11 +312,13 @@ void TextTranslateHelper::translateImpl(const QString& _text, const QString& _so
     connect(
         request,
         static_cast<void (NetworkRequest::*)(QByteArray, QUrl)>(&NetworkRequest::downloadComplete),
-        this, [this, _text, _sourceLanguage, _targetLanguage](const QByteArray& _response) {
-            auto translateWithNextProxy = [this, _text, _sourceLanguage, _targetLanguage] {
-                nextProxy();
-                translate(_text, _sourceLanguage, _targetLanguage);
-            };
+        this,
+        [this, textToTranslate, _sourceLanguage, _targetLanguage](const QByteArray& _response) {
+            auto translateWithNextProxy
+                = [this, textToTranslate, _sourceLanguage, _targetLanguage] {
+                      nextProxy();
+                      translate(textToTranslate, _sourceLanguage, _targetLanguage);
+                  };
 
             if (_response.isEmpty()) {
                 translateWithNextProxy();
@@ -270,26 +327,37 @@ void TextTranslateHelper::translateImpl(const QString& _text, const QString& _so
 
             const auto translationsJson = QJsonDocument::fromJson(_response).array();
             if (translationsJson.isEmpty()) {
+                qDebug() << _response;
+                return;
                 translateWithNextProxy();
                 return;
             }
 
-            QVector<Translation> translation;
             for (const auto& sentencesJson : translationsJson.at(0).toArray()) {
                 const auto sentenceJson = sentencesJson.toArray();
                 const auto sourceSentence = sentenceJson.at(1).toString();
                 const auto targetSentence = sentenceJson.at(0).toString();
 
                 if (!sourceSentence.isEmpty() && !targetSentence.isEmpty()) {
-                    translation.append({ sourceSentence, targetSentence });
+                    m_translationParts.append({ sourceSentence, targetSentence });
                 }
             }
 
+            //
+            // При необходимости переходим к переводу следующей части
+            //
+            if (!m_sourceTextParts.isEmpty()) {
+                translateImpl({}, _sourceLanguage, _targetLanguage);
+                return;
+            }
+
+            //
+            // А если все части перевели, то уведомляем пользователя о завершении перевода
+            //
             const auto sourceLanguage = _sourceLanguage == kAutoLanguage
                 ? translationsJson.at(2).toString()
                 : _sourceLanguage;
-
-            emit translated(translation, sourceLanguage);
+            emit translated(m_translationParts, sourceLanguage);
         });
     connect(request, &NetworkRequest::finished, request, &NetworkRequest::deleteLater);
 
@@ -298,6 +366,6 @@ void TextTranslateHelper::translateImpl(const QString& _text, const QString& _so
     url.setQuery(QStringLiteral("client=gtx&ie=UTF-8&oe=UTF-8&dt=bd&dt=ex&dt=ld&dt=md&dt=rw&dt=rm&"
                                 "dt=ss&dt=t&dt=at&dt=qc&sl=%1&tl=%2&hl=%3&q=%4")
                      .arg(_sourceLanguage, _targetLanguage, _targetLanguage,
-                          QUrl::toPercentEncoding(_text)));
+                          QUrl::toPercentEncoding(textToTranslate)));
     request->loadAsync(url);
 }
