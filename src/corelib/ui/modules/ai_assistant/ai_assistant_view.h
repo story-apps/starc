@@ -96,7 +96,6 @@ public:
     void setSummarizeResult(const QString& _text);
     void setTransateResult(const QString& _text);
     void setGenerateSynopsisResult(const QString& _text);
-    void setGenerateScriptResult(const QString& _text);
 
     /**
      * @brief Задать количество доступных слов для генерации

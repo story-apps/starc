@@ -172,10 +172,13 @@ void ImportManager::import()
     d->showImportDialogFor(importFilePath);
 }
 
-void ImportManager::import(const QString& _filePath)
+void ImportManager::import(const QString& _filePath, bool _importDocuments)
 {
     BusinessLayer::ScreenplayImportOptions options;
     options.filePath = _filePath;
+    options.importCharacters = _importDocuments;
+    options.importLocations = _importDocuments;
+    options.importResearch = _importDocuments;
     d->import(options);
 }
 

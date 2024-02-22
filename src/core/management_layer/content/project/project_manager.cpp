@@ -3836,21 +3836,6 @@ void ProjectManager::setGeneratedSynopsis(const QString& _text)
     }
 }
 
-void ProjectManager::setGeneratedScript(const QString& _text)
-{
-    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
-    Ui::IDocumentView* view = nullptr;
-    if (d->view.active == d->view.left) {
-        view = plugin->view(d->view.activeModel);
-    } else {
-        view = plugin->secondaryView(d->view.activeModel);
-    }
-
-    if (view != nullptr) {
-        view->setGeneratedScript(_text);
-    }
-}
-
 void ProjectManager::setGeneratedText(const QString& _text)
 {
     auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);

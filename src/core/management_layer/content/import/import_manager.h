@@ -24,7 +24,7 @@ public:
     /**
      * @brief Импортировать все возможные данные из указанного файла
      */
-    void import(const QString& _filePath);
+    void import(const QString& _filePath, bool _importDocuments = true);
 
 signals:
     /**

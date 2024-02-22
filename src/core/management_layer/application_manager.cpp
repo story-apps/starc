@@ -3366,8 +3366,20 @@ void ApplicationManager::initConnections()
             d->projectManager.data(), &ProjectManager::setTranslatedText);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::synopsisGenerated,
             d->projectManager.data(), &ProjectManager::setGeneratedSynopsis);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::scriptGenerated,
-            d->projectManager.data(), &ProjectManager::setGeneratedScript);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::scriptGenerated, this,
+            [this](const QString& _text) {
+                const auto scriptFilePath
+                    = QStandardPaths::writableLocation(QStandardPaths::TempLocation)
+                    + QDir::separator() + tr("Screenplay") + ".fountain";
+                QFile file(scriptFilePath);
+                if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                    file.write(_text.toUtf8());
+                    file.close();
+
+                    const bool importDocuments = false;
+                    d->importManager->import(scriptFilePath, importDocuments);
+                }
+            });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textGenerated,
             d->projectManager.data(), &ProjectManager::setGeneratedText);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::imageGenerated,

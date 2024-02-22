@@ -192,7 +192,6 @@ public:
     void setSummarizeedText(const QString& _text);
     void setTranslatedText(const QString& _text);
     void setGeneratedSynopsis(const QString& _text);
-    void setGeneratedScript(const QString& _text);
     void setGeneratedText(const QString& _text);
     void setGeneratedImage(const QPixmap& _image);
 

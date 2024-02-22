@@ -26,29 +26,34 @@ namespace {
 /**
  * @brief С чего может начинаться название сцены
  */
-const QStringList kSceneHeadings = {
-    QCoreApplication::translate("BusinessLayer::FountainImporter", "INT"),
-    QCoreApplication::translate("BusinessLayer::FountainImporter", "EXT"),
-    QCoreApplication::translate("BusinessLayer::FountainImporter", "EST"),
-    QCoreApplication::translate("BusinessLayer::FountainImporter", "INT./EXT"),
-    QCoreApplication::translate("BusinessLayer::FountainImporter", "INT/EXT"),
-    QCoreApplication::translate("BusinessLayer::FountainImporter", "EXT./INT"),
-    QCoreApplication::translate("BusinessLayer::FountainImporter", "EXT/INT"),
-    QCoreApplication::translate("BusinessLayer::FountainImporter", "I/E"),
-};
+QStringList sceneHeadingsDictionary()
+{
+    return {
+        QCoreApplication::translate("BusinessLayer::FountainImporter", "INT"),
+        QCoreApplication::translate("BusinessLayer::FountainImporter", "EXT"),
+        QCoreApplication::translate("BusinessLayer::FountainImporter", "EST"),
+        QCoreApplication::translate("BusinessLayer::FountainImporter", "INT./EXT"),
+        QCoreApplication::translate("BusinessLayer::FountainImporter", "INT/EXT"),
+        QCoreApplication::translate("BusinessLayer::FountainImporter", "EXT./INT"),
+        QCoreApplication::translate("BusinessLayer::FountainImporter", "EXT/INT"),
+        QCoreApplication::translate("BusinessLayer::FountainImporter", "I/E"),
+    };
+}
 
 /**
  * @brief Ключит титульной страницы
  */
-const QHash<QString, QString> kTitleKeys({ std::make_pair(QString("Title"), QString("name")),
-                                           std::make_pair(QString("Author"), QString("author")),
-                                           std::make_pair(QString("Authors"), QString("author")),
-                                           std::make_pair(QString("Draft date"), QString("year")),
-                                           std::make_pair(QString("Copyright"), QString("year")),
-                                           std::make_pair(QString("Contact"), QString("contacts")),
-                                           std::make_pair(QString("Credit"), QString("genre")),
-                                           std::make_pair(QString("Source"),
-                                                          QString("additional_info")) });
+QHash<QString, QString> titleKeysDictionary()
+{
+    return { std::make_pair(QString("Title"), QString("name")),
+             std::make_pair(QString("Author"), QString("author")),
+             std::make_pair(QString("Authors"), QString("author")),
+             std::make_pair(QString("Draft date"), QString("year")),
+             std::make_pair(QString("Copyright"), QString("year")),
+             std::make_pair(QString("Contact"), QString("contacts")),
+             std::make_pair(QString("Credit"), QString("genre")),
+             std::make_pair(QString("Source"), QString("additional_info")) };
+}
 
 const QString kTripleWhitespace = QLatin1String("   ");
 const QString kDoubleWhitespace = QLatin1String("  ");
@@ -974,7 +979,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
 
         default: {
             bool startsWithHeading = false;
-            for (const QString& sceneHeading : kSceneHeadings) {
+            for (const QString& sceneHeading : sceneHeadingsDictionary()) {
                 if (paragraphs[i].startsWith(sceneHeading)) {
                     startsWithHeading = true;
                     break;
@@ -1307,7 +1312,7 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
 
         default: {
             bool startsWithHeading = false;
-            for (const QString& sceneHeading : kSceneHeadings) {
+            for (const QString& sceneHeading : sceneHeadingsDictionary()) {
                 if (paragraphs[i].startsWith(sceneHeading)) {
                     startsWithHeading = true;
                     break;

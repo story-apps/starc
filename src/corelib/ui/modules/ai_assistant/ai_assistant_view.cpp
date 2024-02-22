@@ -153,7 +153,6 @@ public:
 
     Page* generateScriptPage = nullptr;
     Body1Label* generateScriptHintLabel = nullptr;
-    TextField* generateScriptResultText = nullptr;
     Button* generateScriptButton = nullptr;
     QHBoxLayout* generateScriptButtonsLayout = nullptr;
 
@@ -262,7 +261,6 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     //
     , generateScriptPage(new Page(pages))
     , generateScriptHintLabel(new Body1Label(generateScriptPage))
-    , generateScriptResultText(new TextField(summarizePage))
     , generateScriptButton(new Button(summarizePage))
     , generateScriptButtonsLayout(new QHBoxLayout)
     //
@@ -507,8 +505,6 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     }
 
     {
-        generateScriptResultText->setEnterMakesNewLine(true);
-        generateScriptResultText->hide();
         generateScriptButtonsLayout->setContentsMargins({});
         generateScriptButtonsLayout->setSpacing(0);
         generateScriptButtonsLayout->addStretch();
@@ -517,7 +513,6 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
 
         auto layout = generateScriptPage->contentsLayout;
         layout->addWidget(generateScriptHintLabel);
-        layout->addWidget(generateScriptResultText);
         layout->addLayout(generateScriptButtonsLayout);
         layout->addStretch();
     }
@@ -670,7 +665,6 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
                            qOverload<>(&Button::setFocus));
     });
     connect(d->openGenerateScriptButton, &Button::clicked, this, [this] {
-        d->generateScriptResultText->hide();
         d->pages->setCurrentWidget(d->generateScriptPage);
         QTimer::singleShot(d->pages->animationDuration(), d->generateScriptButton,
                            qOverload<>(&Button::setFocus));
@@ -832,10 +826,6 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
     //
     connect(d->generateScriptButton, &Button::clicked, this,
             [this] { emit generateScriptRequested(); });
-    connect(d->generateScriptResultText, &TextField::textChanged, this,
-            [textField = d->generateScriptResultText, updateResultWordCounter] {
-                updateResultWordCounter(textField);
-            });
     //
     auto updateGenerateTextWordCounters = [this, updateWordCounter] {
         const auto sourceTextWordCount = updateWordCounter(d->generateTextPromptText);
@@ -1041,12 +1031,6 @@ void AiAssistantView::setGenerateSynopsisResult(const QString& _text)
 {
     d->generateSynopsisResultText->setText(_text);
     d->generateSynopsisResultText->show();
-}
-
-void AiAssistantView::setGenerateScriptResult(const QString& _text)
-{
-    d->generateScriptResultText->setText(_text);
-    d->generateScriptResultText->show();
 }
 
 void AiAssistantView::setAvailableWords(int _availableWords)
@@ -1280,7 +1264,6 @@ void AiAssistantView::updateTranslations()
     d->generateSynopsisResultText->setLabel(tr("Synopsis"));
     d->generateSynopsisButton->setText(tr("Generate"));
     d->generateScriptPage->titleLabel->setText(tr("Generate script"));
-    d->generateScriptResultText->setLabel(tr("Script"));
     d->generateScriptButton->setText(tr("Generate"));
     d->generateTextPage->titleLabel->setText(tr("Generate"));
     d->generateTextPromptText->setLabel(tr("Prompt"));
@@ -1360,25 +1343,15 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->generateMindMapPage->contentsLayout->setSpacing(0);
 
     for (auto textField : std::vector<TextField*>{
-             d->rephraseSourceText,
-             d->rephraseStyleText,
-             d->rephraseResultText,
-             d->expandSourceText,
-             d->expandResultText,
-             d->shortenSourceText,
-             d->shortenResultText,
-             d->insertAfterText,
-             d->insertBeforeText,
-             d->insertResultText,
-             d->summarizeSourceText,
-             d->summarizeResultText,
-             d->translateSourceText,
-             d->translateLanguage,
-             d->translateResultText,
-             d->generateSynopsisResultText,
-             d->generateScriptResultText,
-             d->generateTextPromptText,
-             d->generateCharacterPromptText,
+             d->rephraseSourceText,        d->rephraseStyleText,
+             d->rephraseResultText,        d->expandSourceText,
+             d->expandResultText,          d->shortenSourceText,
+             d->shortenResultText,         d->insertAfterText,
+             d->insertBeforeText,          d->insertResultText,
+             d->summarizeSourceText,       d->summarizeResultText,
+             d->translateSourceText,       d->translateLanguage,
+             d->translateResultText,       d->generateSynopsisResultText,
+             d->generateTextPromptText,    d->generateCharacterPromptText,
              d->generateMindMapPromptText,
          }) {
         textField->setBackgroundColor(DesignSystem::color().onPrimary());

@@ -1334,11 +1334,6 @@ void NovelTextView::setTranslatedText(const QString& _text)
     d->aiAssistantView->setTransateResult(_text);
 }
 
-void NovelTextView::setGeneratedScript(const QString& _text)
-{
-    d->aiAssistantView->setGenerateScriptResult(_text);
-}
-
 void NovelTextView::setGeneratedText(const QString& _text)
 {
     const QLatin1String textWritingTaskKey("text-writing-task");

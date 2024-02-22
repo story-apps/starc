@@ -39,7 +39,6 @@ public:
     void setInsertedText(const QString& _text) override;
     void setSummarizedText(const QString& _text) override;
     void setTranslatedText(const QString& _text) override;
-    void setGeneratedScript(const QString& _text) override;
     void setGeneratedText(const QString& _text) override;
     /** @} */
 
