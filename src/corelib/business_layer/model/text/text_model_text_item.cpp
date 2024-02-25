@@ -402,7 +402,15 @@ QByteArray TextModelTextItem::Implementation::buildXml(int _from, int _length)
         }
 
         //
-        // Корректируем заметки, которые будут сохранены,
+        // Если необходимого форматирования по факту нет, то пропускаем этот формат
+        //
+        if (!format.isBold && !format.isItalic && !format.isUnderline && !format.isStrikethrough
+            && !(!format.font.family.isEmpty() && format.font.size > 0)) {
+            continue;
+        }
+
+        //
+        // Корректируем форматы, которые будут сохранены,
         // т.к. начало и конец сохраняемого блока могут отличаться
         //
         auto formatToSave = format;
