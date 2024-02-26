@@ -58,6 +58,11 @@ QString ExtensionHelper::celtx()
     return QLatin1String("celtx");
 }
 
+QString ExtensionHelper::markdown()
+{
+    return QLatin1String("md");
+}
+
 QString ExtensionHelper::plainText()
 {
     return QLatin1String("txt");

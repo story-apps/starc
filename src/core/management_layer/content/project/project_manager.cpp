@@ -3074,6 +3074,41 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
         _treatment.toUtf8());
 }
 
+void ProjectManager::addNovel(const QString& _name, const QString& _text)
+{
+    //
+    // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
+    //
+
+    using namespace Domain;
+
+    auto createItem = [](DocumentObjectType _type, const QString& _name) {
+        auto uuid = QUuid::createUuid();
+        const auto visible = true;
+        const auto readOnly = false;
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly);
+    };
+
+    auto rootItem = d->projectStructureModel->itemForIndex({});
+    auto novelItem = createItem(DocumentObjectType::Novel, _name);
+    d->projectStructureModel->appendItem(novelItem, rootItem);
+
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::NovelTitlePage, tr("Title page")), novelItem, {});
+    auto synopsisItem = createItem(DocumentObjectType::NovelSynopsis, tr("Synopsis"));
+    d->projectStructureModel->appendItem(synopsisItem, novelItem, {});
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::NovelText, tr("Novel")),
+                                         novelItem, _text.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::NovelStatistics, tr("Statistics")), novelItem, {});
+    //
+    // Вставляем план после всех документов, т.к. он является алиасом к документу романа
+    // и чтобы его сконструировать, нужны другие документы
+    //
+    d->projectStructureModel->insertItem(
+        createItem(DocumentObjectType::NovelOutline, tr("Outline")), synopsisItem, {});
+}
+
 BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
 {
     auto scriptTextModel
@@ -4230,6 +4265,12 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             connect(documentManager, SIGNAL(generateSynopsisRequested(QVector<QString>, int, int)),
                     this, SIGNAL(generateSynopsisRequested(QVector<QString>, int, int)),
                     Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal(
+                "generateNovelRequested(QVector<QString>,int)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(generateNovelRequested(QVector<QString>, int)), this,
+                    SIGNAL(generateNovelRequested(QVector<QString>, int)), Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal(
                 "generateScriptRequested(QVector<QString>,int)")

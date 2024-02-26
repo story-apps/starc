@@ -120,6 +120,7 @@ signals:
     void summarizeTextRequested(const QString& _text);
     void translateTextRequested(const QString& _text, const QString& _languageCode);
     void generateSynopsisRequested(int _maxWordsPerScene);
+    void generateNovelRequested();
     void generateTextRequested(const QString& _text);
 
     /**

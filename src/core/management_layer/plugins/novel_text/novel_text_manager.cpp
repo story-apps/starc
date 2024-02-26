@@ -181,13 +181,10 @@ Ui::NovelTextView* NovelTextManager::Implementation::createView(
     connect(view, &Ui::NovelTextView::translateTextRequested, q,
             &NovelTextManager::translateTextRequested);
     connect(view, &Ui::NovelTextView::generateScriptRequested, q, [this, view] {
-        //
-        // TODO: вырезать строку со списком персонажей
-        //
         const auto model = modelForView(view);
-        QVector<QString> scenes;
-        std::function<void(const QModelIndex&)> findScenes;
-        findScenes = [&findScenes, model, &scenes](const QModelIndex& _parentItemIndex) {
+        QVector<QString> chapter;
+        std::function<void(const QModelIndex&)> findChapters;
+        findChapters = [&findChapters, model, &chapter](const QModelIndex& _parentItemIndex) {
             for (int row = 0; row < model->rowCount(_parentItemIndex); ++row) {
                 const auto itemIndex = model->index(row, 0, _parentItemIndex);
                 const auto item = model->itemForIndex(itemIndex);
@@ -199,13 +196,13 @@ Ui::NovelTextView* NovelTextManager::Implementation::createView(
                     // Если в папке много вложений, то обрабатываем каждое по отдельности
                     //
                     if (folderItem->charactersCount().second > 10000) {
-                        findScenes(itemIndex);
+                        findChapters(itemIndex);
                     }
                     //
                     // ... а если достаточно, чтобы нейронка переварила, берём текст папки целиком
                     //
                     else {
-                        scenes.append(folderItem->text());
+                        chapter.append(folderItem->text());
                     }
                     break;
                 }
@@ -214,7 +211,7 @@ Ui::NovelTextView* NovelTextManager::Implementation::createView(
                     if (item->subtype() == static_cast<int>(BusinessLayer::TextGroupType::Scene)) {
                         const auto sceneItem
                             = static_cast<const BusinessLayer::NovelTextModelSceneItem*>(item);
-                        scenes.append(sceneItem->text());
+                        chapter.append(sceneItem->text());
                     }
                     break;
                 }
@@ -225,8 +222,8 @@ Ui::NovelTextView* NovelTextManager::Implementation::createView(
                 }
             }
         };
-        findScenes({});
-        emit q->generateScriptRequested(scenes, model->wordsCount());
+        findChapters({});
+        emit q->generateScriptRequested(chapter, model->wordsCount());
     });
     connect(view, &Ui::NovelTextView::generateTextRequested, q,
             [this](const QString& _text) { emit q->generateTextRequested({}, _text, {}); });

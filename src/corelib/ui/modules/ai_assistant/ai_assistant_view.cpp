@@ -93,6 +93,7 @@ public:
     Button* openSummarizeButton = nullptr;
     Button* openTranslateButton = nullptr;
     Button* openGenerateSynopsisButton = nullptr;
+    Button* openGenerateNovelButton = nullptr;
     Button* openGenerateScriptButton = nullptr;
     Button* openGenerateButton = nullptr;
 
@@ -151,6 +152,11 @@ public:
     Button* generateSynopsisButton = nullptr;
     QHBoxLayout* generateSynopsisButtonsLayout = nullptr;
 
+    Page* generateNovelPage = nullptr;
+    Body1Label* generateNovelHintLabel = nullptr;
+    Button* generateNovelButton = nullptr;
+    QHBoxLayout* generateNovelButtonsLayout = nullptr;
+
     Page* generateScriptPage = nullptr;
     Body1Label* generateScriptHintLabel = nullptr;
     Button* generateScriptButton = nullptr;
@@ -201,6 +207,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     , openSummarizeButton(new Button(buttonsPage))
     , openTranslateButton(new Button(buttonsPage))
     , openGenerateSynopsisButton(new Button(buttonsPage))
+    , openGenerateNovelButton(new Button(buttonsPage))
     , openGenerateScriptButton(new Button(buttonsPage))
     , openGenerateButton(new Button(buttonsPage))
     //
@@ -259,9 +266,14 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     , generateSynopsisButton(new Button(summarizePage))
     , generateSynopsisButtonsLayout(new QHBoxLayout)
     //
+    , generateNovelPage(new Page(pages))
+    , generateNovelHintLabel(new Body1Label(generateNovelPage))
+    , generateNovelButton(new Button(generateNovelPage))
+    , generateNovelButtonsLayout(new QHBoxLayout)
+    //
     , generateScriptPage(new Page(pages))
     , generateScriptHintLabel(new Body1Label(generateScriptPage))
-    , generateScriptButton(new Button(summarizePage))
+    , generateScriptButton(new Button(generateScriptPage))
     , generateScriptButtonsLayout(new QHBoxLayout)
     //
     , generateTextPage(new Page(pages))
@@ -305,6 +317,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     pages->addWidget(summarizePage);
     pages->addWidget(translatePage);
     pages->addWidget(generateSynopsisPage);
+    pages->addWidget(generateNovelPage);
     pages->addWidget(generateScriptPage);
     pages->addWidget(generateTextPage);
     pages->addWidget(generateCharacterPage);
@@ -318,6 +331,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         openSummarizeButton->setIcon(u8"\U000F0DD0");
         openTranslateButton->setIcon(u8"\U000F05CA");
         openGenerateSynopsisButton->setIcon(u8"\U000F021A");
+        openGenerateNovelButton->setIcon(u8"\U000F05DA");
         openGenerateScriptButton->setIcon(u8"\U000F0BC2");
         openGenerateButton->setIcon(u8"\U000F027F");
         for (auto button : {
@@ -328,12 +342,14 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
                  openSummarizeButton,
                  openTranslateButton,
                  openGenerateSynopsisButton,
+                 openGenerateNovelButton,
                  openGenerateScriptButton,
                  openGenerateButton,
              }) {
             button->setFlat(true);
         }
         openGenerateSynopsisButton->hide();
+        openGenerateNovelButton->hide();
         openGenerateScriptButton->hide();
 
         auto layout = new QVBoxLayout(buttonsPage);
@@ -346,6 +362,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         layout->addWidget(openSummarizeButton);
         layout->addWidget(openTranslateButton);
         layout->addWidget(openGenerateSynopsisButton);
+        layout->addWidget(openGenerateNovelButton);
         layout->addWidget(openGenerateScriptButton);
         layout->addWidget(openGenerateButton);
         layout->addStretch();
@@ -501,6 +518,19 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         layout->addWidget(generateSynopsisLengthDefault);
         layout->addWidget(generateSynopsisResultText);
         layout->addLayout(generateSynopsisButtonsLayout);
+        layout->addStretch();
+    }
+
+    {
+        generateNovelButtonsLayout->setContentsMargins({});
+        generateNovelButtonsLayout->setSpacing(0);
+        generateNovelButtonsLayout->addStretch();
+        generateNovelButtonsLayout->addWidget(generateNovelButton);
+
+
+        auto layout = generateNovelPage->contentsLayout;
+        layout->addWidget(generateNovelHintLabel);
+        layout->addLayout(generateNovelButtonsLayout);
         layout->addStretch();
     }
 
@@ -664,6 +694,11 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
         QTimer::singleShot(d->pages->animationDuration(), d->generateSynopsisButton,
                            qOverload<>(&Button::setFocus));
     });
+    connect(d->openGenerateNovelButton, &Button::clicked, this, [this] {
+        d->pages->setCurrentWidget(d->generateNovelPage);
+        QTimer::singleShot(d->pages->animationDuration(), d->generateNovelButton,
+                           qOverload<>(&Button::setFocus));
+    });
     connect(d->openGenerateScriptButton, &Button::clicked, this, [this] {
         d->pages->setCurrentWidget(d->generateScriptPage);
         QTimer::singleShot(d->pages->animationDuration(), d->generateScriptButton,
@@ -701,6 +736,7 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
              d->summarizePage,
              d->translatePage,
              d->generateSynopsisPage,
+             d->generateNovelPage,
              d->generateScriptPage,
              d->generateTextPage,
              d->generateCharacterPage,
@@ -824,6 +860,9 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
                 updateResultWordCounter(textField);
             });
     //
+    connect(d->generateNovelButton, &Button::clicked, this,
+            [this] { emit generateNovelRequested(); });
+    //
     connect(d->generateScriptButton, &Button::clicked, this,
             [this] { emit generateScriptRequested(); });
     //
@@ -886,6 +925,7 @@ void AiAssistantView::setReadOnly(bool _readOnly)
              d->summarizePage,
              d->translatePage,
              d->generateSynopsisPage,
+             d->generateNovelPage,
              d->generateScriptPage,
              d->generateTextPage,
              d->generateCharacterPage,
@@ -914,6 +954,11 @@ void AiAssistantView::setSynopsisGenerationAvaiable(bool _available)
     d->openGenerateSynopsisButton->setVisible(_available);
 }
 
+void AiAssistantView::setNovelGenerationAvaiable(bool _available)
+{
+    d->openGenerateNovelButton->setVisible(_available);
+}
+
 void AiAssistantView::setScriptGenerationAvaiable(bool _available)
 {
     d->openGenerateScriptButton->setVisible(_available);
@@ -922,6 +967,11 @@ void AiAssistantView::setScriptGenerationAvaiable(bool _available)
 void AiAssistantView::setGenerationSynopsisOptions(const QString& _hint)
 {
     d->generateSynopsisHintLabel->setText(_hint);
+}
+
+void AiAssistantView::setGenerationNovelOptions(const QString& _hint)
+{
+    d->generateNovelHintLabel->setText(_hint);
 }
 
 void AiAssistantView::setGenerationScriptOptions(const QString& _hint)
@@ -1050,6 +1100,7 @@ void AiAssistantView::updateTranslations()
     d->openSummarizeButton->setText(tr("Summarize"));
     d->openTranslateButton->setText(tr("Translate"));
     d->openGenerateSynopsisButton->setText(tr("Generate synopsis"));
+    d->openGenerateNovelButton->setText(tr("Generate novel"));
     d->openGenerateScriptButton->setText(tr("Generate script"));
     d->openGenerateButton->setText(tr("Generate"));
 
@@ -1061,6 +1112,7 @@ void AiAssistantView::updateTranslations()
              d->summarizePage,
              d->translatePage,
              d->generateSynopsisPage,
+             d->generateNovelPage,
              d->generateScriptPage,
              d->generateTextPage,
              d->generateCharacterPage,
@@ -1263,6 +1315,8 @@ void AiAssistantView::updateTranslations()
     d->generateSynopsisLengthDefault->setText(tr("unlimitted"));
     d->generateSynopsisResultText->setLabel(tr("Synopsis"));
     d->generateSynopsisButton->setText(tr("Generate"));
+    d->generateNovelPage->titleLabel->setText(tr("Generate novel"));
+    d->generateNovelButton->setText(tr("Generate"));
     d->generateScriptPage->titleLabel->setText(tr("Generate script"));
     d->generateScriptButton->setText(tr("Generate"));
     d->generateTextPage->titleLabel->setText(tr("Generate"));
@@ -1309,6 +1363,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->openSummarizeButton,
              d->openTranslateButton,
              d->openGenerateSynopsisButton,
+             d->openGenerateNovelButton,
              d->openGenerateScriptButton,
              d->openGenerateButton,
          }) {
@@ -1324,6 +1379,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->summarizePage,
              d->translatePage,
              d->generateSynopsisPage,
+             d->generateNovelPage,
              d->generateScriptPage,
              d->generateTextPage,
              d->generateCharacterPage,
@@ -1373,6 +1429,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->translateButton,
              d->translateInsertButton,
              d->generateSynopsisButton,
+             d->generateNovelButton,
              d->generateScriptButton,
              d->generateTextButton,
              d->generateCharacterButton,
@@ -1390,6 +1447,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->summarizeButtonsLayout,
              d->translateButtonsLayout,
              d->generateSynopsisButtonsLayout,
+             d->generateNovelButtonsLayout,
              d->generateScriptButtonsLayout,
              d->generateTextButtonsLayout,
              d->generateCharacterButtonsLayout,
@@ -1401,15 +1459,25 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto widget : std::list<Widget*>{
-             d->generateSynopsisHintLabel,      d->generateSynopsisLenghtLabel,
-             d->generateSynopsisLengthShort,    d->generateSynopsisLengthMedium,
-             d->generateSynopsisLengthDefault,  d->generateScriptHintLabel,
-             d->generateTextPromptHintLabel,    d->generateTextInsertLabel,
-             d->generateTextInsertAtBegin,      d->generateTextInsertAtCursor,
-             d->generateTextInsertAtEnd,        d->generateCharacterPromptHintLabel,
-             d->generateCharacterPersonalInfo,  d->generateCharacterPhysique,
-             d->generateCharacterAttitude,      d->generateCharacterLife,
-             d->generateCharacterBiography,     d->generateCharacterPhoto,
+             d->generateSynopsisHintLabel,
+             d->generateSynopsisLenghtLabel,
+             d->generateSynopsisLengthShort,
+             d->generateSynopsisLengthMedium,
+             d->generateSynopsisLengthDefault,
+             d->generateNovelHintLabel,
+             d->generateScriptHintLabel,
+             d->generateTextPromptHintLabel,
+             d->generateTextInsertLabel,
+             d->generateTextInsertAtBegin,
+             d->generateTextInsertAtCursor,
+             d->generateTextInsertAtEnd,
+             d->generateCharacterPromptHintLabel,
+             d->generateCharacterPersonalInfo,
+             d->generateCharacterPhysique,
+             d->generateCharacterAttitude,
+             d->generateCharacterLife,
+             d->generateCharacterBiography,
+             d->generateCharacterPhoto,
              d->generateMindMapPromptHintLabel,
          }) {
         widget->setBackgroundColor(DesignSystem::color().primary());
@@ -1417,6 +1485,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
     for (auto label : {
              d->generateSynopsisHintLabel,
+             d->generateNovelHintLabel,
              d->generateScriptHintLabel,
              d->generateTextPromptHintLabel,
              d->generateCharacterPromptHintLabel,

@@ -52,6 +52,11 @@ public:
     void setSynopsisGenerationAvaiable(bool _available);
 
     /**
+     * @brief Настроить доступность возможности генерации романа
+     */
+    void setNovelGenerationAvaiable(bool _available);
+
+    /**
      * @brief Настроить доступность возможности генерации сценария
      */
     void setScriptGenerationAvaiable(bool _available);
@@ -60,6 +65,11 @@ public:
      * @brief Задать подсказку для генерации синопсиса
      */
     void setGenerationSynopsisOptions(const QString& _hint);
+
+    /**
+     * @brief Задать подсказку для генерации романа
+     */
+    void setGenerationNovelOptions(const QString& _hint);
 
     /**
      * @brief Задать подсказку для генерации сценария
@@ -137,6 +147,11 @@ signals:
      * @brief Пользователь хочет сгенерировать синопсис
      */
     void generateSynopsisRequested(int _maxWordsPerScene);
+
+    /**
+     * @brief Пользователь хочет сгенерировать роман из сценария
+     */
+    void generateNovelRequested();
 
     /**
      * @brief Пользователь хочет сгенерировать сценарий из романа

@@ -245,6 +245,41 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
             findScenes({});
             emit q->generateSynopsisRequested(scenes, _maxWordsPerScene, model->wordsCount());
         });
+    connect(view, &Ui::ScreenplayTextView::generateNovelRequested, q, [this, view] {
+        //
+        // TODO: вырезать строку со списком персонажей
+        //
+        const auto model = modelForView(view);
+        QVector<QString> scenes;
+        std::function<void(const QModelIndex&)> findScenes;
+        findScenes = [&findScenes, model, &scenes](const QModelIndex& _parentItemIndex) {
+            for (int row = 0; row < model->rowCount(_parentItemIndex); ++row) {
+                const auto itemIndex = model->index(row, 0, _parentItemIndex);
+                const auto item = model->itemForIndex(itemIndex);
+                switch (item->type()) {
+                case BusinessLayer::TextModelItemType::Folder: {
+                    findScenes(itemIndex);
+                    break;
+                }
+
+                case BusinessLayer::TextModelItemType::Group: {
+                    if (item->subtype() == static_cast<int>(BusinessLayer::TextGroupType::Scene)) {
+                        const auto sceneItem
+                            = static_cast<const BusinessLayer::ScreenplayTextModelSceneItem*>(item);
+                        scenes.append(sceneItem->text());
+                    }
+                    break;
+                }
+
+                default: {
+                    break;
+                }
+                }
+            }
+        };
+        findScenes({});
+        emit q->generateNovelRequested(scenes, model->wordsCount());
+    });
     connect(view, &Ui::ScreenplayTextView::generateTextRequested, q, [this](const QString& _text) {
         emit q->generateTextRequested({}, _text, ". Write result in fountain format.");
     });

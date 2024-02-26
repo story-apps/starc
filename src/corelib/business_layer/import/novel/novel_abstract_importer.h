@@ -28,7 +28,7 @@ public:
     /**
      * @brief Импорт сценариев из заданного документа
      */
-    virtual Document importDocument(const NovelImportOptions& _options) const = 0;
+    virtual Document importNovels(const NovelImportOptions& _options) const = 0;
 };
 
 } // namespace BusinessLayer

@@ -110,6 +110,11 @@ public:
                        const QString& _treatment, const QString& _text);
 
     /**
+     * @brief Добавить данные по роману
+     */
+    void addNovel(const QString& _name, const QString& _text);
+
+    /**
      * @brief Модель документа для экспорта
      * @note Маппим модели для случаев, когда у пользователя выбрана титульная страница, чтобы
      *       экспортировался сам скрипт
@@ -292,7 +297,8 @@ signals:
     void translateTextRequested(const QString& _text, const QString& _languageCode);
     void generateSynopsisRequested(const QVector<QString>& _scenes, int _maxWordsPerScene,
                                    int _wordsRequired);
-    void generateScriptRequested(const QVector<QString>& _scenes, int _wordsRequired);
+    void generateNovelRequested(const QVector<QString>& _scenes, int _wordsRequired);
+    void generateScriptRequested(const QVector<QString>& _chapters, int _wordsRequired);
     void generateTextRequested(const QString& _promptPrefix, const QString& _prompt,
                                const QString& _promptSuffix);
     void generateImageRequested(const QString& _promptPrefix, const QString& _prompt,

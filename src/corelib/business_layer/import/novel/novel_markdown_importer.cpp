@@ -8,11 +8,12 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <QXmlStreamWriter>
 
 namespace BusinessLayer {
 
-NovelAbstractImporter::Document NovelMarkdownImporter::importDocument(
+NovelAbstractImporter::Document NovelMarkdownImporter::importNovels(
     const NovelImportOptions& _options) const
 {
     //
@@ -60,11 +61,22 @@ NovelAbstractImporter::Document NovelMarkdownImporter::importNovel(const QString
             continue;
         }
 
-        writer.writeStartElement(toString(TextParagraphType::Text));
-        writer.writeStartElement(xml::kValueTag);
-        writer.writeCDATA(TextHelper::toHtmlEscaped(paragraph));
-        writer.writeEndElement();
-        writer.writeEndElement();
+        if (paragraph.startsWith("#")) {
+            auto paragraphText = paragraph;
+            paragraphText.remove(QRegularExpression("^#{1,}\\s{0,}"));
+
+            writer.writeStartElement(toString(TextParagraphType::SceneHeading));
+            writer.writeStartElement(xml::kValueTag);
+            writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
+            writer.writeEndElement();
+            writer.writeEndElement();
+        } else {
+            writer.writeStartElement(toString(TextParagraphType::Text));
+            writer.writeStartElement(xml::kValueTag);
+            writer.writeCDATA(TextHelper::toHtmlEscaped(paragraph));
+            writer.writeEndElement();
+            writer.writeEndElement();
+        }
     }
     writer.writeEndDocument();
 

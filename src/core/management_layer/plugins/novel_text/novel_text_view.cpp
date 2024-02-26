@@ -1561,15 +1561,16 @@ void NovelTextView::setModel(BusinessLayer::NovelTextModel* _model)
         //
         // Обновляем стоимость генерации сценария при изменении модели
         //
-        auto updateSynopsisPrice = [this] {
+        auto updateGenerationPrice = [this] {
             d->aiAssistantView->setGenerationScriptOptions(
-                tr("Script generation will takes %n word(s)", 0, d->model->wordsCount()));
+                tr("Script generation will take %n word(s)", 0, d->model->wordsCount()));
         };
-        connect(d->model, &BusinessLayer::NovelTextModel::modelReset, this, updateSynopsisPrice);
-        connect(d->model, &BusinessLayer::NovelTextModel::dataChanged, this, updateSynopsisPrice);
-        connect(d->model, &BusinessLayer::NovelTextModel::rowsInserted, this, updateSynopsisPrice);
-        connect(d->model, &BusinessLayer::NovelTextModel::rowsMoved, this, updateSynopsisPrice);
-        connect(d->model, &BusinessLayer::NovelTextModel::rowsRemoved, this, updateSynopsisPrice);
+        connect(d->model, &BusinessLayer::NovelTextModel::modelReset, this, updateGenerationPrice);
+        connect(d->model, &BusinessLayer::NovelTextModel::dataChanged, this, updateGenerationPrice);
+        connect(d->model, &BusinessLayer::NovelTextModel::rowsInserted, this,
+                updateGenerationPrice);
+        connect(d->model, &BusinessLayer::NovelTextModel::rowsMoved, this, updateGenerationPrice);
+        connect(d->model, &BusinessLayer::NovelTextModel::rowsRemoved, this, updateGenerationPrice);
 
         //
         // Перед началом сброса документа запоминаем текущую позицию курсора

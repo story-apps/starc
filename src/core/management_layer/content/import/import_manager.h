@@ -24,7 +24,8 @@ public:
     /**
      * @brief Импортировать все возможные данные из указанного файла
      */
-    void import(const QString& _filePath, bool _importDocuments = true);
+    void importScreenplay(const QString& _filePath, bool _importDocuments = true);
+    void importNovel(const QString& _filePath);
 
 signals:
     /**
@@ -43,6 +44,11 @@ signals:
     void screenplayImported(const QString& _name, const QString& _titlePage,
                             const QString& _synopsis, const QString& _treatment,
                             const QString& _screenplay);
+
+    /**
+     * @brief Роман загружен
+     */
+    void novelImported(const QString& _name, const QString& _screenplay);
 
 private:
     class Implementation;

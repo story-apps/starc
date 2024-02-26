@@ -22,6 +22,7 @@ public:
     static QString openDocumentXml();
     static QString fountain();
     static QString celtx();
+    static QString markdown();
     static QString plainText();
     static QString pdf();
     static QString png();

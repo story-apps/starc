@@ -1833,7 +1833,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     // При необходимости импортируем данные из заданного файла
     //
     if (shouldPerformImport) {
-        importManager->import(_importFilePath);
+        importManager->importScreenplay(_importFilePath);
 
         //
         // ... а после импорта пробуем повторно восстановить состояние,
@@ -2697,6 +2697,8 @@ void ApplicationManager::initConnections()
             &ProjectManager::addLocation);
     connect(d->importManager.data(), &ImportManager::screenplayImported, d->projectManager.data(),
             &ProjectManager::addScreenplay);
+    connect(d->importManager.data(), &ImportManager::novelImported, d->projectManager.data(),
+            &ProjectManager::addNovel);
 
     //
     // Менеджер настроек
@@ -3346,6 +3348,8 @@ void ApplicationManager::initConnections()
             d->cloudServiceManager.data(), &CloudServiceManager::aiTranslateText);
     connect(d->projectManager.data(), &ProjectManager::generateSynopsisRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiGenerateSynopsis);
+    connect(d->projectManager.data(), &ProjectManager::generateNovelRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::aiGenerateNovel);
     connect(d->projectManager.data(), &ProjectManager::generateScriptRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiGenerateScript);
     connect(d->projectManager.data(), &ProjectManager::generateTextRequested,
@@ -3366,6 +3370,19 @@ void ApplicationManager::initConnections()
             d->projectManager.data(), &ProjectManager::setTranslatedText);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::synopsisGenerated,
             d->projectManager.data(), &ProjectManager::setGeneratedSynopsis);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::novelGenerated, this,
+            [this](const QString& _text) {
+                const auto novelFilePath
+                    = QStandardPaths::writableLocation(QStandardPaths::TempLocation)
+                    + QDir::separator() + tr("Novel") + ".md";
+                QFile file(novelFilePath);
+                if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                    file.write(_text.toUtf8());
+                    file.close();
+
+                    d->importManager->importNovel(novelFilePath);
+                }
+            });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::scriptGenerated, this,
             [this](const QString& _text) {
                 const auto scriptFilePath
@@ -3377,7 +3394,7 @@ void ApplicationManager::initConnections()
                     file.close();
 
                     const bool importDocuments = false;
-                    d->importManager->import(scriptFilePath, importDocuments);
+                    d->importManager->importScreenplay(scriptFilePath, importDocuments);
                 }
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textGenerated,

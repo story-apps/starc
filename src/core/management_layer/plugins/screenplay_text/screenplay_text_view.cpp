@@ -279,6 +279,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     commentsView->hide();
     aiAssistantView->hide();
     aiAssistantView->setSynopsisGenerationAvaiable(true);
+    aiAssistantView->setNovelGenerationAvaiable(true);
     bookmarksView->setModel(bookmarksModel);
     bookmarksView->hide();
     dictionariesView->hide();
@@ -1260,6 +1261,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             &ScreenplayTextView::translateTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::generateSynopsisRequested, this,
             &ScreenplayTextView::generateSynopsisRequested);
+    connect(d->aiAssistantView, &AiAssistantView::generateNovelRequested, this,
+            &ScreenplayTextView::generateNovelRequested);
     connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
             &ScreenplayTextView::generateTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
@@ -1741,20 +1744,22 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
         //
         // Обновляем стоимость генерации синопсиса при изменении модели
         //
-        auto updateSynopsisPrice = [this] {
+        auto updateGenerationPrice = [this] {
             d->aiAssistantView->setGenerationSynopsisOptions(
-                tr("Synopsis generation will takes %n word(s)", 0, d->model->wordsCount()));
+                tr("Synopsis generation will take %n word(s)", 0, d->model->wordsCount()));
+            d->aiAssistantView->setGenerationNovelOptions(
+                tr("Novel generation will take %n word(s)", 0, d->model->wordsCount()));
         };
         connect(d->model, &BusinessLayer::ScreenplayTextModel::modelReset, this,
-                updateSynopsisPrice);
+                updateGenerationPrice);
         connect(d->model, &BusinessLayer::ScreenplayTextModel::dataChanged, this,
-                updateSynopsisPrice);
+                updateGenerationPrice);
         connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsInserted, this,
-                updateSynopsisPrice);
+                updateGenerationPrice);
         connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsMoved, this,
-                updateSynopsisPrice);
+                updateGenerationPrice);
         connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsRemoved, this,
-                updateSynopsisPrice);
+                updateGenerationPrice);
 
         //
         // Перед началом сброса документа запоминаем текущую позицию курсора
