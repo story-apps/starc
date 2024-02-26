@@ -70,8 +70,8 @@ public:
     QPointer<Ui::CreateProjectDialog> createProjectDialog;
 
     bool isCloudProjectNameChanged = false;
-    bool isCloudProjectLoglineChnaged = false;
-    bool isCloudProjectCoverChnaged = false;
+    bool isCloudProjectLoglineChanged = false;
+    bool isCloudProjectCoverChanged = false;
     Debouncer cloudProjectChangeDebouncer;
 };
 
@@ -424,14 +424,14 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
 
         const auto name = d->isCloudProjectNameChanged ? d->currentProject->name() : QString();
         const auto logline
-            = d->isCloudProjectLoglineChnaged ? d->currentProject->logline() : QString();
-        const auto cover = d->isCloudProjectCoverChnaged
+            = d->isCloudProjectLoglineChanged ? d->currentProject->logline() : QString();
+        const auto cover = d->isCloudProjectCoverChanged
             ? ImageHelper::bytesFromImage(d->currentProject->poster())
             : QByteArray();
 
-        d->isCloudProjectCoverChnaged = false;
-        d->isCloudProjectLoglineChnaged = false;
-        d->isCloudProjectCoverChnaged = false;
+        d->isCloudProjectCoverChanged = false;
+        d->isCloudProjectLoglineChanged = false;
+        d->isCloudProjectCoverChanged = false;
 
         emit updateCloudProjectRequested(d->currentProject->id(), name, logline, cover);
     });
@@ -1296,7 +1296,7 @@ void ProjectsManager::setCurrentProjectLogline(const QString& _logline)
     d->projects->updateItem(d->currentProject);
 
     if (d->currentProject->isRemote()) {
-        d->isCloudProjectLoglineChnaged = true;
+        d->isCloudProjectLoglineChanged = true;
         d->cloudProjectChangeDebouncer.orderWork();
     }
 }
@@ -1315,7 +1315,7 @@ void ProjectsManager::setCurrentProjectCover(const QPixmap& _cover)
     }
 
     if (d->currentProject->isRemote()) {
-        d->isCloudProjectCoverChnaged = true;
+        d->isCloudProjectCoverChanged = true;
         d->cloudProjectChangeDebouncer.orderWork();
     }
 }

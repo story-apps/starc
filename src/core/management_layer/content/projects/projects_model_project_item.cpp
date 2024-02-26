@@ -2,6 +2,7 @@
 
 #include <domain/starcloud_api.h>
 #include <interfaces/management_layer/i_document_manager.h>
+#include <utils/helpers/image_helper.h>
 
 #include <QApplication>
 #include <QDateTime>
@@ -135,8 +136,15 @@ QString ProjectsModelProjectItem::posterPath() const
 
 void ProjectsModelProjectItem::setPosterPath(const QString& _path)
 {
-    if (d->posterPath == _path) {
-        return;
+    if (!d->poster.isNull() && d->posterPath == _path) {
+        //
+        // Если постер уже был инициилизирован, но путь не изменился, проверяем реальное сходство
+        // двух изображений, чтобы покрыть кейс, когда постер обновился на сервере и теперь его
+        // нужно обновить локально, но при этом путь остался тем же самым
+        //
+        if (ImageHelper::isImagesEqual(d->poster, QPixmap(d->posterPath))) {
+            return;
+        }
     }
 
     d->posterPath = _path;
