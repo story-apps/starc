@@ -5,6 +5,7 @@
 #include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <utils/logging.h>
 #include <utils/shugar.h>
 #include <utils/tools/model_index_path.h>
 
@@ -70,6 +71,14 @@ public:
         QVector<TextModelTextItem*> items;
 
 
+        /**
+         * @brief Валидна ли заметка, вокруг которой сформирована обёртка
+         */
+        bool isValid() const;
+
+        /**
+         * @brief Сравнить две обёртки между собой
+         */
         bool operator==(const ReviewMarkWrapper& _other) const;
     };
     /**
@@ -638,6 +647,11 @@ void CommentsModel::Implementation::processSourceModelDataChanged(const QModelIn
     }
 }
 
+bool CommentsModel::Implementation::ReviewMarkWrapper::isValid() const
+{
+    return !reviewMark.comments.isEmpty();
+}
+
 bool CommentsModel::Implementation::ReviewMarkWrapper::operator==(
     const CommentsModel::Implementation::ReviewMarkWrapper& _other) const
 {
@@ -1009,6 +1023,11 @@ QVariant CommentsModel::data(const QModelIndex& _index, int _role) const
     }
 
     const auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
+    if (!reviewMarkWrapper.isValid()) {
+        Log::critical("Invalid or empty review mark detected");
+        return {};
+    }
+
     switch (_role) {
     case ReviewMarkAuthorNameRole: {
         return reviewMarkWrapper.reviewMark.comments.constFirst().author;
