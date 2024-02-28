@@ -275,6 +275,9 @@ bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
         return true;
     }
 
+    qDebug(qUtf8Printable(newContent));
+    //    newContent.replace("<undefined>", "<text>").replace("</undefined>", "</text>");
+
     beginResetModelTransaction();
     clearDocument();
     document()->setContent(newContent);

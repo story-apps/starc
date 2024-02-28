@@ -164,11 +164,11 @@ const QSet<AbstractCardItem*>& CardsGraphicsScene::mouseGrabberItems() const
 
 void CardsGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent* _event)
 {
+    QGraphicsScene::mousePressEvent(_event);
+
     if (d->isReadOnly) {
         return;
     }
-
-    QGraphicsScene::mousePressEvent(_event);
 
     if (auto movedCard = static_cast<AbstractCardItem*>(mouseGrabberItem())) {
         std::function<void(AbstractCardItem*)> addCardWithChildrenToMoveList;
@@ -189,13 +189,22 @@ void CardsGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent* _event)
     }
 }
 
-void CardsGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
+void CardsGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent* _event)
 {
     if (d->isReadOnly) {
         return;
     }
 
+    QGraphicsScene::mouseMoveEvent(_event);
+}
+
+void CardsGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
+{
     QGraphicsScene::mouseReleaseEvent(_event);
+
+    if (d->isReadOnly) {
+        return;
+    }
 
     d->mouseGrabberItems.clear();
 }

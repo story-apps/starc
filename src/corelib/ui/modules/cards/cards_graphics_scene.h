@@ -77,6 +77,7 @@ signals:
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* _event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* _event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* _event) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* _event) override;
 
