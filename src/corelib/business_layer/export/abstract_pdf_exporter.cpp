@@ -119,6 +119,11 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
         const QRectF fullWidthPageRect(0, pageYPos, _body.width(), _body.height());
         _painter->setClipRect(fullWidthPageRect);
 
+        //
+        // Наличие невидимых блоков в маке может давать неверный результат по layout::hitTest,
+        // поэтому для него делаем дополнительную проверку
+        //
+#ifndef Q_OS_MAC
         const int blockPos = pageYPos == 0
             ? 0
             : layout->hitTest(
@@ -128,6 +133,28 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
                                 q->documentTemplate(_exportOptions).pageMargins().top())),
                 Qt::FuzzyHit);
         QTextBlock block = _document->findBlock(std::max(0, blockPos));
+#else
+        QTextBlock block;
+        if (pageYPos > 0) {
+            int blockPos = 0;
+            auto topY = pageYPos
+                + MeasurementHelper::mmToPx(
+                            q->documentTemplate(_exportOptions).pageMargins().top());
+            auto y = topY;
+            constexpr int repeats = 20;
+            for (int repeat = 0; repeat < repeats; ++repeat) {
+                blockPos = layout->hitTest(QPoint(0, y), Qt::FuzzyHit);
+                block = _document->findBlock(std::max(0, blockPos));
+                const auto blockLineHeight = TextHelper::fineLineSpacing(block.charFormat().font());
+                if (abs(layout->blockBoundingRect(block).top() - topY) < blockLineHeight) {
+                    break;
+                }
+
+                constexpr int movementDelta = 20;
+                y += movementDelta;
+            }
+        }
+#endif
         while (block.isValid()) {
             const auto paragraphType = TextBlockStyle::forBlock(block);
             QRectF blockRect = layout->blockBoundingRect(block);
