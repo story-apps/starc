@@ -37,6 +37,9 @@ signals:
     void collaboratorClicked(const QString& _cursorId);
 
 protected:
+    /**
+     * @brief Переопределяем для корректировки положения тулбара при изменении рамера родителя
+     */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
 
     /**

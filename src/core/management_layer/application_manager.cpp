@@ -3311,12 +3311,11 @@ void ApplicationManager::initConnections()
                                                      _cursorData);
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::cursorsChanged, this,
-            [this](int _projectId, const QUuid& _documentUuid,
-                   const QVector<Domain::CursorInfo>& _cursors) {
+            [this](int _projectId, const QVector<Domain::CursorInfo>& _cursors) {
                 if (const auto currentProject = d->projectsManager->currentProject();
                     currentProject != nullptr && currentProject->isRemote()
                     && currentProject->id() == _projectId) {
-                    d->projectManager->setCursors(_documentUuid, _cursors);
+                    d->projectManager->setCursors(_cursors);
                 }
             });
 

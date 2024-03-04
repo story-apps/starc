@@ -291,6 +291,7 @@ struct CursorInfo {
     QString cursorId;
     QString email;
     QString name;
+    QUuid documentUuid;
     QByteArray cursorData;
     QDateTime updatedAt;
 };

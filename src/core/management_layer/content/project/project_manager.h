@@ -175,7 +175,7 @@ public:
     /**
      * @brief Задать курсоры соавторов
      */
-    void setCursors(const QUuid& _document, const QVector<Domain::CursorInfo>& _cursors);
+    void setCursors(const QVector<Domain::CursorInfo>& _cursors);
 
     /**
      * @brief Очистить курсоры соавторов

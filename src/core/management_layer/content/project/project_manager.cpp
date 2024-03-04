@@ -52,6 +52,7 @@
 #include <ui/widgets/splitter/splitter.h>
 #include <utils/logging.h>
 #include <utils/shugar.h>
+#include <utils/tools/debouncer.h>
 
 #include <QAction>
 #include <QApplication>
@@ -71,6 +72,7 @@ namespace {
 const QLatin1String kCurrentViewMimeTypeKey("view-mime-type");
 const QLatin1String kVersionsVisibleKey("versions-visible");
 const QLatin1String kCurrentVersionKey("current-version");
+constexpr int kCollaboratorsUpdateTimeoutMs = 60 * 1000;
 
 /**
  * @brief Является ли заданный элемент текстовым
@@ -351,9 +353,14 @@ public:
     mutable QHash<QUuid, QVector<Domain::DocumentChangeObject*>> changesForSync;
 
     /**
-     * @brief Список активных соавторов
+     * @brief Список активных соавторов <уид устройства, курсор>
      */
     QHash<QString, Domain::CursorInfo> collaboratorsCursors;
+
+    /**
+     * @brief Дебаунсер для проверки активных соавторов
+     */
+    Debouncer collaboratorsUpdateDebouncer;
 
     /**
      * @brief Количество последовательно обновлённых документов
@@ -380,6 +387,7 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
     , projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel))
     , modelsFacade(projectStructureModel, &documentImageStorage)
     , pluginsBuilder(_pluginsBuilder)
+    , collaboratorsUpdateDebouncer(kCollaboratorsUpdateTimeoutMs)
 {
     toolBar->hide();
     navigator->hide();
@@ -2634,6 +2642,12 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             [this](const QUuid& _uuid) { emit uploadDocumentRequested(_uuid, false); });
     connect(&d->documentImageStorage, &DataStorageLayer::DocumentImageStorage::imageRequested, this,
             [this](const QUuid& _uuid) { emit downloadDocumentRequested(_uuid); });
+    //
+    // Соединения со список соавторов
+    //
+    connect(&d->collaboratorsUpdateDebouncer, &Debouncer::gotWork, this, [this] {
+        setCursors({ d->collaboratorsCursors.begin(), d->collaboratorsCursors.end() });
+    });
 }
 
 ProjectManager::~ProjectManager() = default;
@@ -3715,14 +3729,14 @@ QVector<QUuid> ProjectManager::documentBundle(const QUuid& _documentUuid) const
     return documents;
 }
 
-void ProjectManager::setCursors(const QUuid& _document, const QVector<Domain::CursorInfo>& _cursors)
+void ProjectManager::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
     //
     // Отобразить список активных соавторов
     //
     // ... но сперва фильтранём всех
     //
-    const auto showThreshold = QDateTime::currentDateTime().addSecs(-3 * 60);
+    const auto showThreshold = QDateTime::currentDateTime().addSecs(-1 * 60);
     for (auto cursorIter = d->collaboratorsCursors.begin();
          cursorIter != d->collaboratorsCursors.end();) {
         if (cursorIter->updatedAt < showThreshold) {
@@ -3735,23 +3749,38 @@ void ProjectManager::setCursors(const QUuid& _document, const QVector<Domain::Cu
     // ... добавим новопришедших
     //
     for (const auto& cursor : _cursors) {
+        //
+        // ... при этом дополнительно проверяем, не сидит ли там кто-то, кто уже не актуален
+        //
+        if (cursor.updatedAt < showThreshold) {
+            continue;
+        }
+
         d->collaboratorsCursors[cursor.cursorId] = cursor;
     }
     //
     // ... и обновим
     //
-    d->collaboratorsToolBar->setCollaborators(d->collaboratorsCursors.values().toVector());
+    const QVector<Domain::CursorInfo> activeCursors(d->collaboratorsCursors.begin(),
+                                                    d->collaboratorsCursors.end());
+    d->collaboratorsToolBar->setCollaborators(activeCursors);
 
     //
-    // Если активен редактор документа, где есть соавтор, отобразить в нём его курсор
+    // Устновим курсоры в открытые редакторы
     //
-    if (d->view.activeModel != nullptr && d->view.activeModel->document() != nullptr
-        && d->view.activeModel->document()->uuid() == _document) {
-        if (d->view.active == d->view.left) {
-            d->pluginsBuilder.setCursors(_cursors, d->view.activeViewMimeType);
-        } else {
-            d->pluginsBuilder.setSecondaryViewCursors(_cursors, d->view.activeViewMimeType);
-        }
+    if (d->view.active == d->view.left) {
+        d->pluginsBuilder.setCursors(activeCursors, d->view.activeViewMimeType);
+        d->pluginsBuilder.setSecondaryViewCursors(activeCursors, d->view.inactiveViewMimeType);
+    } else {
+        d->pluginsBuilder.setSecondaryViewCursors(activeCursors, d->view.activeViewMimeType);
+        d->pluginsBuilder.setCursors(activeCursors, d->view.inactiveViewMimeType);
+    }
+
+    //
+    // Если есть соавторы, то запланируем принудительное обновление их курсоров
+    //
+    if (!d->collaboratorsCursors.isEmpty()) {
+        d->collaboratorsUpdateDebouncer.orderWork();
     }
 }
 
@@ -4154,6 +4183,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     view->setProjectInfo(d->isProjectRemote, d->isProjectOwner, d->allowGrantAccessToProject);
     Log::trace("Set editing mode");
     view->setEditingMode(d->documentEditingMode(itemForShow));
+    Log::trace("Set view cursors");
+    view->setCursors({ d->collaboratorsCursors.begin(), d->collaboratorsCursors.end() });
     Log::trace("Set document versions");
     d->view.active->setDocumentVersions(aliasedItem->versions());
     Log::trace("Show view");
@@ -4344,6 +4375,7 @@ void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item
     }
     view->setEditingMode(_item->isReadOnly() ? DocumentEditingMode::Read
                                              : d->documentEditingMode(_item));
+    view->setCursors({ d->collaboratorsCursors.begin(), d->collaboratorsCursors.end() });
     d->view.active->showEditor(view->asQWidget());
 
     //
