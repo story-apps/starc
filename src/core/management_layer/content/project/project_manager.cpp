@@ -2645,6 +2645,28 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     //
     // Соединения со список соавторов
     //
+    connect(d->collaboratorsToolBar, &Ui::CollaboratorsToolBar::collaboratorClicked, this,
+            [this](const QString& _cursorId) {
+                if (!d->collaboratorsCursors.contains(_cursorId)) {
+                    return;
+                }
+
+                //
+                // Покажем нужный документ
+                //
+                const auto collaboratorCursor = d->collaboratorsCursors.value(_cursorId);
+                activateLink(QUuid(collaboratorCursor.documentUuid), {}, {});
+                //
+                // и сместим курсор к положению соавтора
+                //
+                if (d->view.active == d->view.left) {
+                    d->pluginsBuilder.setViewCurrentCursor(collaboratorCursor,
+                                                           d->view.activeViewMimeType);
+                } else {
+                    d->pluginsBuilder.setSecondaryViewCurrentCursor(collaboratorCursor,
+                                                                    d->view.activeViewMimeType);
+                }
+            });
     connect(&d->collaboratorsUpdateDebouncer, &Debouncer::gotWork, this, [this] {
         setCursors({ d->collaboratorsCursors.begin(), d->collaboratorsCursors.end() });
     });
@@ -3769,11 +3791,11 @@ void ProjectManager::setCursors(const QVector<Domain::CursorInfo>& _cursors)
     // Устновим курсоры в открытые редакторы
     //
     if (d->view.active == d->view.left) {
-        d->pluginsBuilder.setCursors(activeCursors, d->view.activeViewMimeType);
+        d->pluginsBuilder.setViewCursors(activeCursors, d->view.activeViewMimeType);
         d->pluginsBuilder.setSecondaryViewCursors(activeCursors, d->view.inactiveViewMimeType);
     } else {
         d->pluginsBuilder.setSecondaryViewCursors(activeCursors, d->view.activeViewMimeType);
-        d->pluginsBuilder.setCursors(activeCursors, d->view.inactiveViewMimeType);
+        d->pluginsBuilder.setViewCursors(activeCursors, d->view.inactiveViewMimeType);
     }
 
     //

@@ -92,12 +92,20 @@ public:
     void toggleSecondaryViewFullScreen(bool _isFullScreen, const QString& _viewMimeType) const;
 
     /**
-     * @brief Активировать полноэкранный режим
+     * @brief Задать курсоры соавторов
      */
-    void setCursors(const QVector<Domain::CursorInfo>& _cursors,
-                    const QString& _viewMimeType) const;
+    void setViewCursors(const QVector<Domain::CursorInfo>& _cursors,
+                        const QString& _viewMimeType) const;
     void setSecondaryViewCursors(const QVector<Domain::CursorInfo>& _cursors,
                                  const QString& _viewMimeType) const;
+
+    /**
+     * @brief Показать заданный курсор соавтора
+     */
+    void setViewCurrentCursor(const Domain::CursorInfo& _cursor,
+                              const QString& _viewMimeType) const;
+    void setSecondaryViewCurrentCursor(const Domain::CursorInfo& _cursor,
+                                       const QString& _viewMimeType) const;
 
     /**
      * @brief Выбрать заданный элемент в представлении заданного майм типа

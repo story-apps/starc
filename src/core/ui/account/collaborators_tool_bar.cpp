@@ -196,7 +196,7 @@ void CollaboratorsToolBar::paintEvent(QPaintEvent* _event)
 
 void CollaboratorsToolBar::mouseReleaseEvent(QMouseEvent* _event)
 {
-    if (rect().contains(_event->pos())) {
+    if (!rect().contains(_event->pos())) {
         return;
     }
 

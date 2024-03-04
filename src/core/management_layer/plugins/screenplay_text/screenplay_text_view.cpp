@@ -1379,6 +1379,11 @@ void ScreenplayTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
     d->textEdit->setCursors(_cursors);
 }
 
+void ScreenplayTextView::setCurrentCursor(const Domain::CursorInfo& _cursor)
+{
+    setCursorPosition(_cursor.cursorData.toInt());
+}
+
 void ScreenplayTextView::setCurrentModelIndex(const QModelIndex& _index)
 {
     if (d->toolbar->isItemIsolationEnabled()) {

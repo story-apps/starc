@@ -67,6 +67,13 @@ public:
     }
 
     /**
+     * @brief Пользователь хочет увидеть заданный курсор
+     */
+    virtual void setCurrentCursor(const Domain::CursorInfo& _cursor)
+    {
+    }
+
+    /**
      * @brief Сделать элемент модели с заданным индексом текущим
      */
     virtual void setCurrentModelIndex(const QModelIndex& _index)
@@ -110,6 +117,16 @@ public:
     virtual void setGeneratedImage(const QPixmap& _image)
     {
     }
+
+
+    //
+    // Сигналы, на которые может реагировать менеджер приложения
+    //
+
+    //
+    // @brief Изменилась позиция курсора
+    //
+    // void cursorChanged(const QByteArray& _cursorData);
 };
 
 } // namespace Ui
