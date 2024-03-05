@@ -7,6 +7,8 @@
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/tools/debouncer.h>
 
+#include <QApplication>
+#include <QDomDocument>
 #include <QScopedValueRollback>
 
 namespace BusinessLayer {
@@ -275,8 +277,34 @@ bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
         return true;
     }
 
-    qDebug(qUtf8Printable(newContent));
-    //    newContent.replace("<undefined>", "<text>").replace("</undefined>", "</text>");
+    {
+        QDomDocument document;
+        QString error;
+        int line = 0;
+        int column = 0;
+        const auto isXmlFine = document.setContent(newContent, &error, &line, &column);
+        if (!isXmlFine) {
+            qDebug("***********");
+            qDebug("Problem with patch applying happened");
+            qDebug("Current document xml is (toXml()):");
+            qDebug(qUtf8Printable(toXml()));
+            qDebug("\n\n\n\n");
+            qDebug("Input content is (_content):");
+            qDebug(qUtf8Printable(_content));
+            qDebug("\n\n\n\n");
+            for (int i = 0; i < _patches.size(); ++i) {
+                qDebug(QString("Input patch number %1 is (_patches[%1]):").arg(i).toUtf8());
+                qDebug(qUtf8Printable(_patches[i]));
+                qDebug("\n\n\n\n");
+            }
+            qDebug("New content is (newContent):");
+            qDebug(qUtf8Printable(newContent));
+            QVector<int> crashReason;
+            crashReason.removeAt(10);
+
+            QApplication::instance()->quit();
+        }
+    }
 
     beginResetModelTransaction();
     clearDocument();
