@@ -32,7 +32,7 @@ namespace {
 /**
  * @brief Список символов пунктуации, разделяющие предложения
  */
-const QRegularExpression kPunctuationCharacter("([.]|[!]|[?]|[:]|[;]|[…]|[\"]|['])");
+const QRegularExpression kPunctuationCharacter("([.]|[!]|[?]|[:]|[;]|[…])[^\"']");
 
 /**
  * @brief Автоматически добавляемые продолжения в диалогах
