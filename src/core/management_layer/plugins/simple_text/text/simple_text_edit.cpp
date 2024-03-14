@@ -10,6 +10,7 @@
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <domain/document_object.h>
 #include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
@@ -703,6 +704,13 @@ void SimpleTextEdit::paintEvent(QPaintEvent* _event)
     painter.setClipRect(QRectF(), Qt::NoClip);
     if (!d->collaboratorsCursorInfo.isEmpty()) {
         for (const auto& cursorInfo : std::as_const(d->collaboratorsCursorInfo)) {
+            //
+            // Пропускаем курсоры из других документов
+            //
+            if (cursorInfo.documentUuid != d->model->document()->uuid()) {
+                continue;
+            }
+
             //
             // Пропускаем курсоры, которые находятся за пределами экрана
             //

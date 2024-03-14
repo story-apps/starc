@@ -1492,6 +1492,13 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
     if (!d->collaboratorsCursorInfo.isEmpty()) {
         for (const auto& cursorInfo : std::as_const(d->collaboratorsCursorInfo)) {
             //
+            // Пропускаем курсоры из других документов
+            //
+            if (cursorInfo.documentUuid != d->model->document()->uuid()) {
+                continue;
+            }
+
+            //
             // Пропускаем курсоры, которые находятся за пределами экрана
             //
             const auto cursorPosition = cursorInfo.cursorData.toInt();

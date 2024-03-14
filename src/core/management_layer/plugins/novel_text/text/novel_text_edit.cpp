@@ -6,6 +6,7 @@
 #include <business_layer/document/novel/text/novel_text_document.h>
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <domain/document_object.h>
 //#include <business_layer/export/novel/novel_export_options.h>
 //#include <business_layer/export/novel/novel_fountain_exporter.h>
 #include <business_layer/import/novel/novel_markdown_importer.h>
@@ -1412,6 +1413,13 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
     painter.setClipRect(QRectF(), Qt::NoClip);
     if (!d->collaboratorsCursorInfo.isEmpty()) {
         for (const auto& cursorInfo : std::as_const(d->collaboratorsCursorInfo)) {
+            //
+            // Пропускаем курсоры из других документов
+            //
+            if (cursorInfo.documentUuid != d->model->document()->uuid()) {
+                continue;
+            }
+
             //
             // Пропускаем курсоры, которые находятся за пределами экрана
             //
