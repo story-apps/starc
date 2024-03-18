@@ -689,7 +689,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
         // который он должен будет использовать после объединения с верхним
         //
         cursor.setPosition(bottomCursorPosition);
-        TextHelper::applyTextFormattingForBlock(cursor, topBlock.charFormat());
+        TextHelper::applyTextFormattingForBlock(cursor, targetStyle.charFormat());
 
         //
         // Подсчитать количество группирующих элементов входящих в выделение
