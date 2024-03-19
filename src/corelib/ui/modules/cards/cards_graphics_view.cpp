@@ -204,7 +204,23 @@ AbstractCardItem* CardsGraphicsView::Implementation::insertCard(const QModelInde
     //
     if (cardIter == modelItemsToCards.end()) {
         card = q->createCardFor(_index);
+        //
+        // Если карточку не удалось создать
+        //
         if (card == nullptr) {
+            //
+            // ... но у неё есть дети
+            //
+            if (model->rowCount(_index) > 0) {
+                //
+                // ... то пробуем добавить детей
+                //
+                bool isChildsVisible = true;
+                for (int childRow = 0; childRow < model->rowCount(_index); ++childRow) {
+                    const auto childItemIndex = model->index(childRow, 0, _index);
+                    insertCard(childItemIndex, isChildsVisible);
+                }
+            }
             return nullptr;
         }
 
@@ -268,7 +284,7 @@ AbstractCardItem* CardsGraphicsView::Implementation::insertCard(const QModelInde
         isChildsVisible = card->isOpened();
     }
     for (int childRow = 0; childRow < model->rowCount(_index); ++childRow) {
-        auto childItemIndex = model->index(childRow, 0, _index);
+        const auto childItemIndex = model->index(childRow, 0, _index);
         auto child = insertCard(childItemIndex, isChildsVisible);
         if (child != nullptr) {
             child->setContainer(card);
