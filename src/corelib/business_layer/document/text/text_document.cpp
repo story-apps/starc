@@ -2311,11 +2311,10 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                                 d->model->prependItem(childItem, previousItem);
                             }
                             //
-                            // Если перед удаляемым была сцена или папка, то в её конец
+                            // Если перед удаляемым была сцена, то в её конец
                             //
                             else if (previousItem != nullptr
-                                     && (previousItem->type() == TextModelItemType::Folder
-                                         || previousItem->type() == TextModelItemType::Group)) {
+                                     && previousItem->type() == TextModelItemType::Group) {
                                 d->model->appendItem(childItem, previousItem);
                             }
                             //

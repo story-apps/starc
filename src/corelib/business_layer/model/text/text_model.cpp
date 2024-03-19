@@ -1686,9 +1686,15 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
 
             if (lastItem->type() == TextModelItemType::Group) {
                 //
-                // ... корректируем уровень групп при необходимости
+                // ... папку вставляем после группы
                 //
-                if (item->type() == TextModelItemType::Group) {
+                if (item->type() == TextModelItemType::Folder) {
+                    insertItem(item, lastItem);
+                }
+                //
+                // ... группу вставляем в соответствии с её уровнем
+                //
+                else if (item->type() == TextModelItemType::Group) {
                     auto lastItemGroup = static_cast<TextModelGroupItem*>(lastItem);
                     auto itemGroup = static_cast<TextModelGroupItem*>(item);
                     if (lastItemGroup->level() < itemGroup->level()) {
@@ -1699,7 +1705,11 @@ int TextModel::insertFromMime(const QModelIndex& _index, int _positionInBlock,
                         Q_ASSERT(false);
                         insertItem(item, lastItem);
                     }
-                } else {
+                }
+                //
+                // ... остальные вставляем внутрь
+                //
+                else {
                     appendItem(item, lastItem);
                 }
             } else {
