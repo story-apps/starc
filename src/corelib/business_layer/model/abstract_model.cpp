@@ -277,6 +277,9 @@ bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
         return true;
     }
 
+    //
+    // Если применение патча, привело к поломке xml, то нахуй такой патч
+    //
     {
         QDomDocument document;
         QString error;
@@ -284,25 +287,22 @@ bool AbstractModel::mergeDocumentChanges(const QByteArray _content,
         int column = 0;
         const auto isXmlFine = document.setContent(newContent, &error, &line, &column);
         if (!isXmlFine) {
-            qDebug("***********");
-            qDebug("Problem with patch applying happened");
-            qDebug("Current document xml is (toXml()):");
-            qDebug(qUtf8Printable(toXml()));
-            qDebug("\n\n\n\n");
-            qDebug("Input content is (_content):");
-            qDebug(qUtf8Printable(_content));
-            qDebug("\n\n\n\n");
+            qWarning("***********");
+            qWarning("Problem with patch applying happened");
+            qWarning("Current document xml is (toXml()):");
+            qWarning(qUtf8Printable(toXml()));
+            qWarning("\n\n\n\n");
+            qWarning("Input content is (_content):");
+            qWarning(qUtf8Printable(_content));
+            qWarning("\n\n\n\n");
             for (int i = 0; i < _patches.size(); ++i) {
-                qDebug(QString("Input patch number %1 is (_patches[%1]):").arg(i).toUtf8());
-                qDebug(qUtf8Printable(_patches[i]));
-                qDebug("\n\n\n\n");
+                qWarning(QString("Input patch number %1 is (_patches[%1]):").arg(i).toUtf8());
+                qWarning(qUtf8Printable(QByteArray::fromPercentEncoding(_patches[i])));
+                qWarning("\n\n\n\n");
             }
-            qDebug("New content is (newContent):");
-            qDebug(qUtf8Printable(newContent));
-            QVector<int> crashReason;
-            crashReason.removeAt(10);
-
-            QApplication::instance()->quit();
+            qWarning("New content is (newContent):");
+            qWarning(qUtf8Printable(newContent));
+            return false;
         }
     }
 
