@@ -88,7 +88,8 @@ public:
     /**
      * @brief Оформить текст как предложение (первая заглавная, остальные строчные)
      */
-    static QString toSentenceCase(const QString& _text, bool _capitalizeEveryWord = false);
+    static QString toSentenceCase(const QString& _text, bool _capitalizeEveryWord = false,
+                                  bool _capitalizeEverySentence = false);
 
     /**
      * @brief Определить количество слов в тексте

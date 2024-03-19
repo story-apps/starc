@@ -409,16 +409,64 @@ QChar TextHelper::smartToLower(const QChar& _char)
     return _char.toLower();
 }
 
-QString TextHelper::toSentenceCase(const QString& _text, bool _capitalizeEveryWord)
+QString TextHelper::toSentenceCase(const QString& _text, bool _capitalizeEveryWord,
+                                   bool _capitalizeEverySentence)
 {
     if (_text.isEmpty()) {
         return {};
     }
 
-    //
-    // TODO: реализовать возможность поднимать регистр каждого слова,
-    //       либо только после знаков препинания
-    //
+    if (_capitalizeEveryWord) {
+        bool isNextWord = true;
+        QString result;
+        for (int index = 0; index < _text.length(); ++index) {
+            const auto nextCharacter = _text[index];
+
+            if (nextCharacter.isSpace() || nextCharacter.isPunct()) {
+                isNextWord = true;
+                result += nextCharacter;
+                continue;
+            }
+
+            if (isNextWord) {
+                isNextWord = false;
+                result += smartToUpper(nextCharacter);
+            } else {
+                result += smartToLower(nextCharacter);
+            }
+        }
+
+        return result;
+    }
+
+    if (_capitalizeEverySentence) {
+        const QSet<QString> endOfSentence = { ".", "!", "?", "…" };
+        bool isFirstSentenceWord = true;
+        QString result;
+        for (int index = 0; index < _text.length(); ++index) {
+            const auto nextCharacter = _text[index];
+
+            if (nextCharacter.isSpace()) {
+                result += nextCharacter;
+                continue;
+            }
+
+            if (endOfSentence.contains(nextCharacter)) {
+                isFirstSentenceWord = true;
+                result += nextCharacter;
+                continue;
+            }
+
+            if (isFirstSentenceWord) {
+                isFirstSentenceWord = false;
+                result += smartToUpper(nextCharacter);
+            } else {
+                result += smartToLower(nextCharacter);
+            }
+        }
+
+        return result;
+    }
 
     return smartToUpper(_text[0]) + smartToLower(_text.mid(1));
 }
