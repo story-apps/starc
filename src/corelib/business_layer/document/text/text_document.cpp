@@ -2240,18 +2240,6 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     const int previousItemRow = itemRow - 1;
                     previousItem = itemParent->parent()->childAt(previousItemRow);
                 }
-                //
-                // Обработаем кейс, когда блоки находящиеся в папке в самом верху документа
-                // нужно вынести из папки -> пробуем вставить их в папку идущую после удаляемой
-                // папки
-                //
-                const bool needInsertInNextFolder = itemParent->type() == TextModelItemType::Folder
-                    && itemParent->hasParent() && itemParent->parent()->childCount() > itemRow + 1
-                    && itemParent->parent()->childAt(itemRow + 1)->type()
-                        == TextModelItemType::Folder;
-                if (needInsertInNextFolder) {
-                    previousItem = itemParent->parent()->childAt(itemRow + 1);
-                }
 
                 //
                 // Переносим дочерние элементы на уровень родительского элемента
@@ -2304,17 +2292,10 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     else {
                         if (lastMovedItem == nullptr) {
                             //
-                            // Если удаляемый был в папке, которая была в самом начале
-                            // документа, то в начало последующей папки
-                            //
-                            if (needInsertInNextFolder) {
-                                d->model->prependItem(childItem, previousItem);
-                            }
-                            //
                             // Если перед удаляемым была сцена, то в её конец
                             //
-                            else if (previousItem != nullptr
-                                     && previousItem->type() == TextModelItemType::Group) {
+                            if (previousItem != nullptr
+                                && previousItem->type() == TextModelItemType::Group) {
                                 d->model->appendItem(childItem, previousItem);
                             }
                             //
