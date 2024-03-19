@@ -6,6 +6,8 @@
 #include <business_layer/document/stageplay/text/stageplay_text_document.h>
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/export/stageplay/stageplay_export_options.h>
+#include <business_layer/export/stageplay/stageplay_fountain_exporter.h>
 #include <business_layer/import/stageplay/stageplay_fountain_importer.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
@@ -26,6 +28,7 @@
 
 #include <QAction>
 #include <QCoreApplication>
+#include <QDir>
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
@@ -39,6 +42,10 @@ using BusinessLayer::TextBlockStyle;
 using BusinessLayer::TextParagraphType;
 
 namespace Ui {
+
+namespace {
+const QLatin1String kMarkdownMimeType("text/markdown");
+}
 
 class StageplayTextEdit::Implementation
 {
@@ -1373,7 +1380,6 @@ QMimeData* StageplayTextEdit::createMimeDataFromSelection() const
 
     //
     // Сформируем в текстовом виде, для вставки наружу
-    // TODO: экспорт в фонтан
     //
     {
         QByteArray text;
@@ -1394,6 +1400,38 @@ QMimeData* StageplayTextEdit::createMimeDataFromSelection() const
                  && cursor.movePosition(QTextCursor::NextBlock));
 
         mimeData->setData("text/plain", text);
+    }
+
+    //
+    // Добавим фонтан
+    //
+    {
+        //
+        // Подготавливаем опции для экспорта в фонтан
+        //
+        BusinessLayer::StageplayExportOptions options;
+        options.filePath = QDir::temp().absoluteFilePath("clipboard.fountain");
+        options.includeTiltePage = false;
+        options.includeSynopsis = false;
+        //        options.showScenesNumbers = d->model->informationModel()->showSceneNumbers();
+        //
+        // ... сохраняем в формате фонтана
+        //
+        BusinessLayer::StageplayFountainExporter().exportTo(d->model, selection.from, selection.to,
+                                                            options);
+        //
+        // ... читаем сохранённый экспорт из файла
+        //
+        QFile file(options.filePath);
+        QByteArray text;
+        if (file.open(QIODevice::ReadOnly)) {
+            text = file.readAll();
+            file.close();
+        }
+
+        if (!text.isEmpty()) {
+            mimeData->setData(kMarkdownMimeType, text);
+        }
     }
 
     //
@@ -1447,8 +1485,9 @@ void StageplayTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Если простой текст
     //
-    else if (_source->hasText()) {
-        const auto text = _source->text();
+    else if (_source->hasFormat(kMarkdownMimeType) || _source->hasText()) {
+        const auto text = _source->hasFormat(kMarkdownMimeType) ? _source->data(kMarkdownMimeType)
+                                                                : _source->text();
 
         //
         // ... если строк несколько, то вставляем его, импортировав с фонтана

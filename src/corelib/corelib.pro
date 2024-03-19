@@ -149,6 +149,7 @@ SOURCES += \
     business_layer/export/simple_text/simple_text_pdf_exporter.cpp \
     business_layer/export/stageplay/stageplay_docx_exporter.cpp \
     business_layer/export/stageplay/stageplay_exporter.cpp \
+    business_layer/export/stageplay/stageplay_fountain_exporter.cpp \
     business_layer/export/stageplay/stageplay_pdf_exporter.cpp \
     business_layer/import/audioplay/audioplay_fountain_importer.cpp \
     business_layer/import/comic_book/comic_book_plain_text_importer.cpp \
@@ -480,6 +481,7 @@ HEADERS += \
     business_layer/export/stageplay/stageplay_docx_exporter.h \
     business_layer/export/stageplay/stageplay_export_options.h \
     business_layer/export/stageplay/stageplay_exporter.h \
+    business_layer/export/stageplay/stageplay_fountain_exporter.h \
     business_layer/export/stageplay/stageplay_pdf_exporter.h \
     business_layer/import/audioplay/audioplay_abstract_importer.h \
     business_layer/import/audioplay/audioplay_fountain_importer.h \
