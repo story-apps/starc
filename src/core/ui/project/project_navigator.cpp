@@ -256,6 +256,16 @@ void ProjectNavigator::setButtonEnabled(bool _enabled)
     d->emptyRecycleBinButton->setEnabled(!d->isReadOnly && _enabled);
 }
 
+void ProjectNavigator::expandAll()
+{
+    d->tree->expandAll();
+}
+
+void ProjectNavigator::collapseAll()
+{
+    d->tree->collapseAll();
+}
+
 bool ProjectNavigator::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (_watched == d->tree && _event->type() == QEvent::ToolTip) {

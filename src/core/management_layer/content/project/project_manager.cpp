@@ -638,6 +638,20 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         }
     }
 
+    //
+    // При клике в любое место можно развернуть или свернуть все элементы
+    //
+    auto expandAll = new QAction(tr("Expand all"));
+    expandAll->setSeparator(!menuActions.isEmpty());
+    expandAll->setIconText(u8"\U000F004C");
+    connect(expandAll, &QAction::triggered, navigator, &Ui::ProjectNavigator::expandAll);
+    menuActions.append(expandAll);
+
+    auto collapseAll = new QAction(tr("Collapse all"));
+    collapseAll->setIconText(u8"\U000F0044");
+    connect(collapseAll, &QAction::triggered, navigator, &Ui::ProjectNavigator::collapseAll);
+    menuActions.append(collapseAll);
+
     navigator->setContextMenuActions(menuActions);
 }
 

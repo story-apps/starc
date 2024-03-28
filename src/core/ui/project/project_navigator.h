@@ -82,6 +82,16 @@ public:
      */
     void setButtonEnabled(bool _enabled);
 
+    /**
+     * @brief Развернуть все элементы
+     */
+    void expandAll();
+
+    /**
+     * @brief Свернуть все элементы
+     */
+    void collapseAll();
+
 signals:
     /**
      * @brief Пользователь выбрал заданный элемент структуры
