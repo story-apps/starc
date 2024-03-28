@@ -29,7 +29,10 @@ jobs:
 
       - name: Checkout Sources for pull request event
         if: ${{ github.event_name == 'pull_request' }}
-        uses: actions/checkout@master
+        uses: actions/checkout@master   
+        with:
+          submodules: recursive
+          fetch-depth: 0
 
       - name: Add info about dev build to the env
         shell: bash
