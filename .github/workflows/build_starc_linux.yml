@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-20.04
     timeout-minutes: 60
     steps:
-      - name: Checkout Sources for push or create tag event
+      - name: Checkout sources for push or create tag event
         if: ${{ github.event_name != 'pull_request' }}
         uses: actions/checkout@master
         with:
@@ -27,12 +27,16 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Checkout Sources for pull request event
+      - name: Checkout sources for pull request event
         if: ${{ github.event_name == 'pull_request' }}
-        uses: actions/checkout@master   
-        with:
-          submodules: recursive
-          fetch-depth: 0
+        uses: actions/checkout@master
+
+      - name: Checkout submodules for pull request event
+        if: ${{ github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          cd src
+          git submodule foreach --recursive 'git pull origin master || :'
 
       - name: Add info about dev build to the env
         shell: bash

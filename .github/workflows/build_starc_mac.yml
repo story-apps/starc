@@ -34,6 +34,13 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Checkout submodules for pull request event
+        if: ${{ github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          cd src
+          git submodule foreach --recursive 'git pull origin master || :'
+
       - name: Add info about dev build to the env
         shell: bash
         run: |
