@@ -61,8 +61,10 @@ You can also add things like title page for your script, movie poster and other 
 ## Build instructions
 
 
-    git clone --recurse-submodules https://github.com/story-apps/starc
+    git clone git@github.com:story-apps/starc.git
     cd starc
+    git submodule foreach --recursive 'git pull origin master || :'
+    cd starc/src
     qmake && make
 
 # Support the project
