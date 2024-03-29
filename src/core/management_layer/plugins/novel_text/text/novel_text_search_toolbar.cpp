@@ -228,6 +228,16 @@ QString NovelTextSearchToolbar::replaceText() const
     return d->replaceText->text();
 }
 
+void NovelTextSearchToolbar::setSearchText(const QString& _text)
+{
+    d->searchText->setText(_text);
+}
+
+void NovelTextSearchToolbar::selectSearchText()
+{
+    d->searchText->selectAll();
+}
+
 bool NovelTextSearchToolbar::eventFilter(QObject* _watched, QEvent* _event)
 {
     switch (_event->type()) {
