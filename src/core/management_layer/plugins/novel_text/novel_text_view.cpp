@@ -4,6 +4,7 @@
 #include "text/novel_text_edit_shortcuts_manager.h"
 #include "text/novel_text_edit_toolbar.h"
 #include "text/novel_text_search_manager.h"
+#include "text/novel_text_search_toolbar.h"
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
@@ -133,6 +134,11 @@ public:
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
                        const QString& _comment);
+
+    /**
+     * @brief Сменить панель инструментов на панель поиска
+     */
+    void switchToSearchTollbar();
 
 
     NovelTextView* q = nullptr;
@@ -588,6 +594,19 @@ void NovelTextView::Implementation::addReviewMark(const QColor& _textColor,
     scalableWrapper->setFocus();
 }
 
+void NovelTextView::Implementation::switchToSearchTollbar()
+{
+    toolbarAnimation->switchToolbars(toolbar->searchIcon(), toolbar->searchIconPosition(), toolbar,
+                                     searchManager->toolbar());
+    auto searchToolbar = qobject_cast<NovelTextSearchToolbar*>(searchManager->toolbar());
+    if (const auto selectedText = textEdit->textCursor().selectedText(); !selectedText.isEmpty()) {
+        searchToolbar->setSearchText(selectedText);
+        searchToolbar->selectSearchText();
+    } else {
+        searchToolbar->selectSearchText();
+    }
+}
+
 
 // ****
 
@@ -666,11 +685,8 @@ NovelTextView::NovelTextView(QWidget* _parent)
                 const bool animate = false;
                 d->textEdit->ensureCursorVisible(d->textEdit->textCursor(), animate);
             });
-    connect(d->toolbar, &NovelTextEditToolbar::searchPressed, this, [this] {
-        d->toolbarAnimation->switchToolbars(d->toolbar->searchIcon(),
-                                            d->toolbar->searchIconPosition(), d->toolbar,
-                                            d->searchManager->toolbar());
-    });
+    connect(d->toolbar, &NovelTextEditToolbar::searchPressed, this,
+            [this] { d->switchToSearchTollbar(); });
     //
     connect(d->searchManager, &BusinessLayer::NovelTextSearchManager::hideToolbarRequested, this,
             [this] { d->toolbarAnimation->switchToolbarsBack(); });

@@ -46,6 +46,16 @@ public:
      */
     QString replaceText() const;
 
+    /**
+     * @brief Установить текст в поле поиска
+     */
+    void setSearchText(const QString& _text);
+
+    /**
+     * @brief Выделить текст в поле поиска
+     */
+    void selectSearchText();
+
 signals:
     /**
      * @brief Пользователь хочет закрыть панель поиска
