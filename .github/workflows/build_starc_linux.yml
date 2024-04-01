@@ -31,12 +31,12 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/checkout@master
 
+
       - name: Checkout submodules for pull request event
         if: ${{ github.event_name == 'pull_request' }}
         shell: bash
         run: |
-          cd src
-          git submodule foreach --recursive 'git pull origin master || :'
+          git submodule update --init --recursive src/3rd_party/qbreakpad/
 
       - name: Add info about dev build to the env
         shell: bash

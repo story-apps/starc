@@ -63,8 +63,8 @@ You can also add things like title page for your script, movie poster and other 
 
     git clone git@github.com:story-apps/starc.git
     cd starc
-    git submodule foreach --recursive 'git pull origin master || :'
-    cd starc/src
+    git submodule update --init --recursive src/3rd_party/qbreakpad/
+    cd src
     qmake && make
 
 # Support the project
