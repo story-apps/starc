@@ -117,10 +117,12 @@ QString DialogHelper::filtersForOpenProject()
                                  {
                                      ExtensionHelper::starc(),
                                      ExtensionHelper::fountain(),
+                                     ExtensionHelper::plainText(),
                                  });
     for (const auto& filter : {
              starcProjectFilter(),
              fountainFilter(),
+             plainTextFilter(),
          }) {
         filters.append(";;");
         filters.append(filter);
