@@ -3,8 +3,6 @@
 #include "text/novel_text_edit.h"
 #include "text/novel_text_edit_shortcuts_manager.h"
 #include "text/novel_text_edit_toolbar.h"
-#include "text/novel_text_search_manager.h"
-#include "text/novel_text_search_toolbar.h"
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
@@ -31,6 +29,8 @@
 #include <ui/modules/fast_format_widget/fast_format_widget.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <ui/widgets/search_tool_bar/search_in_type_manager.h>
+#include <ui/widgets/search_tool_bar/search_in_type_toolbar.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
@@ -163,7 +163,7 @@ public:
     // Панели инструментов
     //
     NovelTextEditToolbar* toolbar = nullptr;
-    BusinessLayer::NovelTextSearchManager* searchManager = nullptr;
+    BusinessLayer::SearchInTypeManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
@@ -208,7 +208,7 @@ NovelTextView::Implementation::Implementation(NovelTextView* _q)
     , shortcutsManager(textEdit)
     , scalableWrapper(new ScalableWrapper(textEdit, _q))
     , toolbar(new NovelTextEditToolbar(scalableWrapper))
-    , searchManager(new BusinessLayer::NovelTextSearchManager(scalableWrapper, textEdit))
+    , searchManager(new BusinessLayer::SearchInTypeManager(scalableWrapper, textEdit))
     , toolbarAnimation(new FloatingToolbarAnimator(_q))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
     , commentsToolbar(new CommentsToolbar(_q))
@@ -598,7 +598,7 @@ void NovelTextView::Implementation::switchToSearchTollbar()
 {
     toolbarAnimation->switchToolbars(toolbar->searchIcon(), toolbar->searchIconPosition(), toolbar,
                                      searchManager->toolbar());
-    auto searchToolbar = qobject_cast<NovelTextSearchToolbar*>(searchManager->toolbar());
+    auto searchToolbar = qobject_cast<SearchInTypeToolbar*>(searchManager->toolbar());
     if (const auto selectedText = textEdit->textCursor().selectedText(); !selectedText.isEmpty()) {
         searchToolbar->setSearchText(selectedText);
         searchToolbar->selectSearchText();
@@ -685,10 +685,15 @@ NovelTextView::NovelTextView(QWidget* _parent)
                 const bool animate = false;
                 d->textEdit->ensureCursorVisible(d->textEdit->textCursor(), animate);
             });
-    connect(d->toolbar, &NovelTextEditToolbar::searchPressed, this,
-            [this] { d->switchToSearchTollbar(); });
+//    connect(d->toolbar, &NovelTextEditToolbar::searchPressed, this,
+//            [this] { d->switchToSearchTollbar(); });
+    connect(d->toolbar, &NovelTextEditToolbar::searchPressed, this, [this] {
+        d->toolbarAnimation->switchToolbars(d->toolbar->searchIcon(),
+                                            d->toolbar->searchIconPosition(), d->toolbar,
+                                            d->searchManager->toolbar());
+    });
     //
-    connect(d->searchManager, &BusinessLayer::NovelTextSearchManager::hideToolbarRequested, this,
+    connect(d->searchManager, &BusinessLayer::SearchInTypeManager::hideToolbarRequested, this,
             [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
     connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,

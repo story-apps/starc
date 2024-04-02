@@ -4,7 +4,6 @@
 #include "text/screenplay_text_edit_shortcuts_manager.h"
 #include "text/screenplay_text_edit_toolbar.h"
 #include "text/screenplay_text_scrollbar_manager.h"
-#include "text/screenplay_text_search_manager.h"
 #include "ui/dictionaries_view.h"
 
 #include <business_layer/document/text/text_block_data.h>
@@ -32,6 +31,7 @@
 #include <ui/modules/fast_format_widget/fast_format_widget.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <ui/widgets/search_tool_bar/search_in_type_manager.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
@@ -164,7 +164,7 @@ public:
     // Панели инструментов
     //
     ScreenplayTextEditToolbar* toolbar = nullptr;
-    BusinessLayer::ScreenplayTextSearchManager* searchManager = nullptr;
+    BusinessLayer::SearchInTypeManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
@@ -211,7 +211,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     , scalableWrapper(new ScalableWrapper(textEdit, _q))
     , screenplayTextScrollbarManager(new ScreenplayTextScrollBarManager(scalableWrapper))
     , toolbar(new ScreenplayTextEditToolbar(scalableWrapper))
-    , searchManager(new BusinessLayer::ScreenplayTextSearchManager(scalableWrapper, textEdit))
+    , searchManager(new BusinessLayer::SearchInTypeManager(scalableWrapper, textEdit))
     , toolbarAnimation(new FloatingToolbarAnimator(_q))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
     , commentsToolbar(new CommentsToolbar(_q))
@@ -733,7 +733,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                                             d->searchManager->toolbar());
     });
     //
-    connect(d->searchManager, &BusinessLayer::ScreenplayTextSearchManager::hideToolbarRequested,
+    connect(d->searchManager, &BusinessLayer::SearchManager::hideToolbarRequested,
             this, [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
     connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,

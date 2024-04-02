@@ -3,7 +3,6 @@
 #include "text/comic_book_text_edit.h"
 #include "text/comic_book_text_edit_shortcuts_manager.h"
 #include "text/comic_book_text_edit_toolbar.h"
-#include "text/comic_book_text_search_manager.h"
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
@@ -25,6 +24,7 @@
 #include <ui/modules/fast_format_widget/fast_format_widget.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <ui/widgets/search_tool_bar/search_in_type_manager.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
@@ -144,7 +144,7 @@ public:
     // Панели инструментов
     //
     ComicBookTextEditToolbar* toolbar = nullptr;
-    BusinessLayer::ComicBookTextSearchManager* searchManager = nullptr;
+    BusinessLayer::SearchInTypeManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
@@ -186,7 +186,7 @@ ComicBookTextView::Implementation::Implementation(ComicBookTextView* _q)
     , shortcutsManager(textEdit)
     , scalableWrapper(new ScalableWrapper(textEdit, _q))
     , toolbar(new ComicBookTextEditToolbar(scalableWrapper))
-    , searchManager(new BusinessLayer::ComicBookTextSearchManager(scalableWrapper, textEdit))
+    , searchManager(new BusinessLayer::SearchInTypeManager(scalableWrapper, textEdit))
     , toolbarAnimation(new FloatingToolbarAnimator(_q))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
     , commentsToolbar(new CommentsToolbar(_q))
@@ -564,7 +564,7 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
                                             d->searchManager->toolbar());
     });
     //
-    connect(d->searchManager, &BusinessLayer::ComicBookTextSearchManager::hideToolbarRequested,
+    connect(d->searchManager, &BusinessLayer::SearchManager::hideToolbarRequested,
             this, [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
     connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,

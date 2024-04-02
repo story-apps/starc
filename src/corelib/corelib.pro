@@ -356,6 +356,10 @@ SOURCES += \
     ui/widgets/resizable_widget/resizable_widget.cpp \
     ui/widgets/scalable_graphics_view/scalable_graphics_view.cpp \
     ui/widgets/scroll_bar/scroll_bar.cpp \
+    ui/widgets/search_tool_bar/search_in_type_manager.cpp \
+    ui/widgets/search_tool_bar/search_in_type_toolbar.cpp \
+    ui/widgets/search_tool_bar/search_manager.cpp \
+    ui/widgets/search_tool_bar/search_toolbar.cpp \
     ui/widgets/shadow/shadow.cpp \
     ui/widgets/slider/slider.cpp \
     ui/widgets/splitter/splitter.cpp \
@@ -706,6 +710,10 @@ HEADERS += \
     ui/widgets/resizable_widget/resizable_widget.h \
     ui/widgets/scalable_graphics_view/scalable_graphics_view.h \
     ui/widgets/scroll_bar/scroll_bar.h \
+    ui/widgets/search_tool_bar/search_in_type_manager.h \
+    ui/widgets/search_tool_bar/search_in_type_toolbar.h \
+    ui/widgets/search_tool_bar/search_manager.h \
+    ui/widgets/search_tool_bar/search_toolbar.h \
     ui/widgets/shadow/shadow.h \
     ui/widgets/slider/slider.h \
     ui/widgets/splitter/splitter.h \
