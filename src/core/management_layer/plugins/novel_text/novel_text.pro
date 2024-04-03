@@ -50,8 +50,6 @@ HEADERS += \
     text/novel_text_edit.h \
     text/novel_text_edit_shortcuts_manager.h \
     text/novel_text_edit_toolbar.h \
-    text/novel_text_search_manager.h \
-    text/novel_text_search_toolbar.h \
 
 SOURCES += \
     novel_text_manager.cpp \
@@ -73,8 +71,6 @@ SOURCES += \
     text/novel_text_edit.cpp \
     text/novel_text_edit_shortcuts_manager.cpp \
     text/novel_text_edit_toolbar.cpp \
-    text/novel_text_search_manager.cpp \
-    text/novel_text_search_toolbar.cpp \
 
 mac {
     load(resolve_target)

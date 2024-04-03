@@ -3,7 +3,6 @@
 #include "text/novel_outline_edit.h"
 #include "text/novel_outline_edit_shortcuts_manager.h"
 #include "text/novel_outline_edit_toolbar.h"
-#include "text/novel_outline_search_manager.h"
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
@@ -28,6 +27,7 @@
 #include <ui/modules/comments/comments_toolbar.h>
 #include <ui/modules/comments/comments_view.h>
 #include <ui/modules/fast_format_widget/fast_format_widget.h>
+#include <ui/modules/search_toolbar/search_manager.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -155,7 +155,7 @@ public:
     // Панели инструментов
     //
     NovelOutlineEditToolbar* toolbar = nullptr;
-    BusinessLayer::NovelOutlineSearchManager* searchManager = nullptr;
+    BusinessLayer::SearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
@@ -199,7 +199,7 @@ NovelOutlineView::Implementation::Implementation(NovelOutlineView* _q)
     , shortcutsManager(textEdit)
     , scalableWrapper(new ScalableWrapper(textEdit, _q))
     , toolbar(new NovelOutlineEditToolbar(scalableWrapper))
-    , searchManager(new BusinessLayer::NovelOutlineSearchManager(scalableWrapper, textEdit))
+    , searchManager(new BusinessLayer::SearchManager(scalableWrapper, textEdit))
     , toolbarAnimation(new FloatingToolbarAnimator(_q))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
     , commentsToolbar(new CommentsToolbar(_q))
@@ -647,9 +647,10 @@ NovelOutlineView::NovelOutlineView(QWidget* _parent)
         d->toolbarAnimation->switchToolbars(d->toolbar->searchIcon(),
                                             d->toolbar->searchIconPosition(), d->toolbar,
                                             d->searchManager->toolbar());
+        d->searchManager->activateSearhToolbar();
     });
     //
-    connect(d->searchManager, &BusinessLayer::NovelOutlineSearchManager::hideToolbarRequested, this,
+    connect(d->searchManager, &BusinessLayer::SearchManager::hideToolbarRequested, this,
             [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
     connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,
@@ -1654,6 +1655,11 @@ void NovelOutlineView::updateTranslations()
     //
     d->currentParagraphType = BusinessLayer::TextParagraphType::Undefined;
     d->updateToolBarCurrentParagraphTypeName();
+
+    d->searchManager->setSearchInBlockTypes(
+        { { tr("In the whole text"), BusinessLayer::TextParagraphType::Undefined },
+          { tr("In scene heading"), BusinessLayer::TextParagraphType::SceneHeading },
+          { tr("In beats"), BusinessLayer::TextParagraphType::BeatHeading } });
 }
 
 void NovelOutlineView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

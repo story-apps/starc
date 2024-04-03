@@ -3,8 +3,6 @@
 #include "text/novel_text_edit.h"
 #include "text/novel_text_edit_shortcuts_manager.h"
 #include "text/novel_text_edit_toolbar.h"
-#include "text/novel_text_search_manager.h"
-#include "text/novel_text_search_toolbar.h"
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
@@ -29,6 +27,7 @@
 #include <ui/modules/comments/comments_toolbar.h>
 #include <ui/modules/comments/comments_view.h>
 #include <ui/modules/fast_format_widget/fast_format_widget.h>
+#include <ui/modules/search_toolbar/search_manager.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -135,11 +134,6 @@ public:
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
                        const QString& _comment);
 
-    /**
-     * @brief Сменить панель инструментов на панель поиска
-     */
-    void switchToSearchTollbar();
-
 
     NovelTextView* q = nullptr;
 
@@ -163,7 +157,7 @@ public:
     // Панели инструментов
     //
     NovelTextEditToolbar* toolbar = nullptr;
-    BusinessLayer::NovelTextSearchManager* searchManager = nullptr;
+    BusinessLayer::SearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
@@ -208,7 +202,7 @@ NovelTextView::Implementation::Implementation(NovelTextView* _q)
     , shortcutsManager(textEdit)
     , scalableWrapper(new ScalableWrapper(textEdit, _q))
     , toolbar(new NovelTextEditToolbar(scalableWrapper))
-    , searchManager(new BusinessLayer::NovelTextSearchManager(scalableWrapper, textEdit))
+    , searchManager(new BusinessLayer::SearchManager(scalableWrapper, textEdit))
     , toolbarAnimation(new FloatingToolbarAnimator(_q))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
     , commentsToolbar(new CommentsToolbar(_q))
@@ -594,19 +588,6 @@ void NovelTextView::Implementation::addReviewMark(const QColor& _textColor,
     scalableWrapper->setFocus();
 }
 
-void NovelTextView::Implementation::switchToSearchTollbar()
-{
-    toolbarAnimation->switchToolbars(toolbar->searchIcon(), toolbar->searchIconPosition(), toolbar,
-                                     searchManager->toolbar());
-    auto searchToolbar = qobject_cast<NovelTextSearchToolbar*>(searchManager->toolbar());
-    if (const auto selectedText = textEdit->textCursor().selectedText(); !selectedText.isEmpty()) {
-        searchToolbar->setSearchText(selectedText);
-        searchToolbar->selectSearchText();
-    } else {
-        searchToolbar->selectSearchText();
-    }
-}
-
 
 // ****
 
@@ -685,10 +666,14 @@ NovelTextView::NovelTextView(QWidget* _parent)
                 const bool animate = false;
                 d->textEdit->ensureCursorVisible(d->textEdit->textCursor(), animate);
             });
-    connect(d->toolbar, &NovelTextEditToolbar::searchPressed, this,
-            [this] { d->switchToSearchTollbar(); });
+    connect(d->toolbar, &NovelTextEditToolbar::searchPressed, this, [this] {
+        d->toolbarAnimation->switchToolbars(d->toolbar->searchIcon(),
+                                            d->toolbar->searchIconPosition(), d->toolbar,
+                                            d->searchManager->toolbar());
+        d->searchManager->activateSearhToolbar();
+    });
     //
-    connect(d->searchManager, &BusinessLayer::NovelTextSearchManager::hideToolbarRequested, this,
+    connect(d->searchManager, &BusinessLayer::SearchManager::hideToolbarRequested, this,
             [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
     connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,
@@ -1715,6 +1700,11 @@ void NovelTextView::updateTranslations()
     //
     d->currentParagraphType = BusinessLayer::TextParagraphType::Undefined;
     d->updateToolBarCurrentParagraphTypeName();
+
+    d->searchManager->setSearchInBlockTypes(
+        { { tr("In the whole text"), BusinessLayer::TextParagraphType::Undefined },
+          { tr("In scene heading"), BusinessLayer::TextParagraphType::SceneHeading },
+          { tr("In text"), BusinessLayer::TextParagraphType::Text } });
 }
 
 void NovelTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

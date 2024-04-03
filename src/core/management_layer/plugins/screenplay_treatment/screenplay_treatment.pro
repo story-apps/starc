@@ -47,9 +47,7 @@ HEADERS += \
     text/handlers/standard_key_handler.h \
     text/screenplay_treatment_edit.h \
     text/screenplay_treatment_edit_shortcuts_manager.h \
-    text/screenplay_treatment_edit_toolbar.h \
-    text/screenplay_treatment_search_manager.h \
-    text/screenplay_treatment_search_toolbar.h
+    text/screenplay_treatment_edit_toolbar.h
 
 SOURCES += \
     screenplay_treatment_manager.cpp \
@@ -68,9 +66,7 @@ SOURCES += \
     text/handlers/standard_key_handler.cpp \
     text/screenplay_treatment_edit.cpp \
     text/screenplay_treatment_edit_shortcuts_manager.cpp \
-    text/screenplay_treatment_edit_toolbar.cpp \
-    text/screenplay_treatment_search_manager.cpp \
-    text/screenplay_treatment_search_toolbar.cpp
+    text/screenplay_treatment_edit_toolbar.cpp
 
 mac {
     load(resolve_target)

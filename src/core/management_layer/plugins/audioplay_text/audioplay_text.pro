@@ -50,9 +50,7 @@ HEADERS += \
     text/audioplay_text_edit.h \
     text/audioplay_text_edit_shortcuts_manager.h \
     text/audioplay_text_edit_toolbar.h \
-    text/audioplay_text_scrollbar_manager.h \
-    text/audioplay_text_search_manager.h \
-    text/audioplay_text_search_toolbar.h
+    text/audioplay_text_scrollbar_manager.h
 
 SOURCES += \
     audioplay_text_manager.cpp \
@@ -73,9 +71,7 @@ SOURCES += \
     text/audioplay_text_edit.cpp \
     text/audioplay_text_edit_shortcuts_manager.cpp \
     text/audioplay_text_edit_toolbar.cpp \
-    text/audioplay_text_scrollbar_manager.cpp \
-    text/audioplay_text_search_manager.cpp \
-    text/audioplay_text_search_toolbar.cpp
+    text/audioplay_text_scrollbar_manager.cpp
 
 mac {
     load(resolve_target)

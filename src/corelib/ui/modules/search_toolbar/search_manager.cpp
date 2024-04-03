@@ -1,10 +1,10 @@
-#include "comic_book_text_search_manager.h"
+#include "search_manager.h"
 
-#include "comic_book_text_edit.h"
-#include "comic_book_text_search_toolbar.h"
+#include "search_toolbar.h"
 
 #include <business_layer/document/text/text_cursor.h>
-#include <business_layer/templates/comic_book_template.h>
+#include <business_layer/templates/novel_template.h>
+#include <business_layer/templates/text_template.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QTextBlock>
@@ -12,10 +12,10 @@
 
 namespace BusinessLayer {
 
-class ComicBookTextSearchManager::Implementation
+class SearchManager::Implementation
 {
 public:
-    Implementation(QWidget* _parent, Ui::ComicBookTextEdit* _textEdit);
+    Implementation(QWidget* _parent, BaseTextEdit* _textEdit);
 
     /**
      * @brief Получить тип блока, в котором будем искать
@@ -31,44 +31,34 @@ public:
     /**
      * @brief Панель поиска
      */
-    Ui::ComicBookTextSearchToolbar* toolbar = nullptr;
+    Ui::SearchToolbar* toolbar = nullptr;
 
     /**
      * @brief Текстовый редактор, где будет осуществляться поиск
      */
-    Ui::ComicBookTextEdit* textEdit = nullptr;
+    BaseTextEdit* textEdit = nullptr;
 
     /**
      * @brief Последний искомый текст
      */
     QString m_lastSearchText;
+
+    QVector<TextParagraphType> blockTypes;
 };
 
-ComicBookTextSearchManager::Implementation::Implementation(QWidget* _parent,
-                                                           Ui::ComicBookTextEdit* _textEdit)
-    : toolbar(new Ui::ComicBookTextSearchToolbar(_parent))
+SearchManager::Implementation::Implementation(QWidget* _parent, BaseTextEdit* _textEdit)
+    : toolbar(new Ui::SearchToolbar(_parent))
     , textEdit(_textEdit)
 {
     toolbar->hide();
 }
 
-TextParagraphType ComicBookTextSearchManager::Implementation::searchInType() const
+TextParagraphType SearchManager::Implementation::searchInType() const
 {
-    switch (toolbar->searchInType()) {
-    default:
-        return TextParagraphType::Undefined;
-    case 1:
-        return TextParagraphType::PanelHeading;
-    case 2:
-        return TextParagraphType::Description;
-    case 3:
-        return TextParagraphType::Character;
-    case 4:
-        return TextParagraphType::Dialogue;
-    }
+    return blockTypes.value(toolbar->searchInType(), TextParagraphType::Undefined);
 }
 
-void ComicBookTextSearchManager::Implementation::findText(bool _backward)
+void SearchManager::Implementation::findText(bool _backward)
 {
     const QString searchText = toolbar->searchText();
     if (searchText.isEmpty()) {
@@ -161,24 +151,21 @@ void ComicBookTextSearchManager::Implementation::findText(bool _backward)
 // ****
 
 
-ComicBookTextSearchManager::ComicBookTextSearchManager(QWidget* _parent,
-                                                       Ui::ComicBookTextEdit* _textEdit)
+SearchManager::SearchManager(QWidget* _parent, BaseTextEdit* _textEdit)
     : QObject(_parent)
     , d(new Implementation(_parent, _textEdit))
 {
-    connect(d->toolbar, &Ui::ComicBookTextSearchToolbar::closePressed, this,
-            &ComicBookTextSearchManager::hideToolbarRequested);
-    connect(d->toolbar, &Ui::ComicBookTextSearchToolbar::focusTextRequested, _parent,
+    connect(d->toolbar, &Ui::SearchToolbar::closePressed, this,
+            &SearchManager::hideToolbarRequested);
+    connect(d->toolbar, &Ui::SearchToolbar::focusTextRequested, _parent,
             qOverload<>(&QWidget::setFocus));
-    connect(d->toolbar, &Ui::ComicBookTextSearchToolbar::findTextRequested, this,
-            [this] { d->findText(); });
-    connect(d->toolbar, &Ui::ComicBookTextSearchToolbar::findNextRequested, this,
-            [this] { d->findText(); });
-    connect(d->toolbar, &Ui::ComicBookTextSearchToolbar::findPreviousRequested, this, [this] {
+    connect(d->toolbar, &Ui::SearchToolbar::findTextRequested, this, [this] { d->findText(); });
+    connect(d->toolbar, &Ui::SearchToolbar::findNextRequested, this, [this] { d->findText(); });
+    connect(d->toolbar, &Ui::SearchToolbar::findPreviousRequested, this, [this] {
         const bool backward = true;
         d->findText(backward);
     });
-    connect(d->toolbar, &Ui::ComicBookTextSearchToolbar::replaceOnePressed, this, [this] {
+    connect(d->toolbar, &Ui::SearchToolbar::replaceOnePressed, this, [this] {
         const QString searchText = d->toolbar->searchText();
         auto cursor = d->textEdit->textCursor();
         bool selectedTextEqual = d->toolbar->isCaseSensitive()
@@ -190,7 +177,7 @@ ComicBookTextSearchManager::ComicBookTextSearchManager(QWidget* _parent,
             d->findText();
         }
     });
-    connect(d->toolbar, &Ui::ComicBookTextSearchToolbar::replaceAllPressed, this, [this] {
+    connect(d->toolbar, &Ui::SearchToolbar::replaceAllPressed, this, [this] {
         const QString searchText = d->toolbar->searchText();
         const QString replaceText = d->toolbar->replaceText();
         if (searchText == replaceText) {
@@ -235,16 +222,39 @@ ComicBookTextSearchManager::ComicBookTextSearchManager(QWidget* _parent,
     });
 }
 
-ComicBookTextSearchManager::~ComicBookTextSearchManager() = default;
+SearchManager::~SearchManager() = default;
 
-Widget* ComicBookTextSearchManager::toolbar() const
+void SearchManager::activateSearhToolbar()
 {
-    return d->toolbar;
+    if (const auto selectedText = d->textEdit->textCursor().selectedText();
+        !selectedText.isEmpty()) {
+        d->toolbar->setSearchText(selectedText);
+        d->toolbar->selectSearchText();
+    } else {
+        d->toolbar->selectSearchText();
+    }
 }
 
-void ComicBookTextSearchManager::setReadOnly(bool _readOnly)
+void SearchManager::setSearchInBlockTypes(
+    const QVector<QPair<QString, TextParagraphType>>& _blockTypes)
+{
+    d->blockTypes.clear();
+    QStringList list;
+    foreach (QPair type, _blockTypes) {
+        list.append(type.first);
+        d->blockTypes.append(type.second);
+    }
+    d->toolbar->setPopupStringList(list);
+}
+
+void SearchManager::setReadOnly(bool _readOnly)
 {
     d->toolbar->setReadOnly(_readOnly);
+}
+
+Widget* SearchManager::toolbar() const
+{
+    return d->toolbar;
 }
 
 } // namespace BusinessLayer
