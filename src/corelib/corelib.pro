@@ -315,6 +315,8 @@ SOURCES += \
     ui/modules/logline_generator/logline_generator_dialog.cpp \
     ui/modules/cards/card_item_parameters_view.cpp \
     ui/modules/script_text_edit/script_text_edit.cpp \
+    ui/modules/search_toolbar/search_manager.cpp \
+    ui/modules/search_toolbar/search_toolbar.cpp \
     ui/widgets/animations/click_animation.cpp \
     ui/widgets/app_bar/app_bar.cpp \
     ui/widgets/button/button.cpp \
@@ -665,6 +667,8 @@ HEADERS += \
     ui/modules/logline_generator/logline_generator_dialog.h \
     ui/modules/cards/card_item_parameters_view.h \
     ui/modules/script_text_edit/script_text_edit.h \
+    ui/modules/search_toolbar/search_manager.h \
+    ui/modules/search_toolbar/search_toolbar.h \
     ui/widgets/animations/click_animation.h \
     ui/widgets/app_bar/app_bar.h \
     ui/widgets/button/button.h \

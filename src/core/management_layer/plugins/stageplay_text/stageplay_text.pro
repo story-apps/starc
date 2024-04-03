@@ -47,9 +47,7 @@ HEADERS += \
     text/handlers/unformatted_text_handler.h \
     text/stageplay_text_edit.h \
     text/stageplay_text_edit_shortcuts_manager.h \
-    text/stageplay_text_edit_toolbar.h \
-    text/stageplay_text_search_manager.h \
-    text/stageplay_text_search_toolbar.h
+    text/stageplay_text_edit_toolbar.h
 
 SOURCES += \
     stageplay_text_manager.cpp \
@@ -68,9 +66,7 @@ SOURCES += \
     text/handlers/unformatted_text_handler.cpp \
     text/stageplay_text_edit.cpp \
     text/stageplay_text_edit_shortcuts_manager.cpp \
-    text/stageplay_text_edit_toolbar.cpp \
-    text/stageplay_text_search_manager.cpp \
-    text/stageplay_text_search_toolbar.cpp
+    text/stageplay_text_edit_toolbar.cpp
 
 mac {
     load(resolve_target)

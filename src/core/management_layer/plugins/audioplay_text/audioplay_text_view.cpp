@@ -4,7 +4,6 @@
 #include "text/audioplay_text_edit_shortcuts_manager.h"
 #include "text/audioplay_text_edit_toolbar.h"
 #include "text/audioplay_text_scrollbar_manager.h"
-#include "text/audioplay_text_search_manager.h"
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
@@ -24,6 +23,7 @@
 #include <ui/modules/comments/comments_toolbar.h>
 #include <ui/modules/comments/comments_view.h>
 #include <ui/modules/fast_format_widget/fast_format_widget.h>
+#include <ui/modules/search_toolbar/search_manager.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -146,7 +146,7 @@ public:
     // Панели инструментов
     //
     AudioplayTextEditToolbar* toolbar = nullptr;
-    BusinessLayer::AudioplayTextSearchManager* searchManager = nullptr;
+    BusinessLayer::SearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
@@ -189,7 +189,7 @@ AudioplayTextView::Implementation::Implementation(AudioplayTextView* _q)
     , scalableWrapper(new ScalableWrapper(textEdit, _q))
     , audioplayTextScrollbarManager(new AudioplayTextScrollBarManager(scalableWrapper))
     , toolbar(new AudioplayTextEditToolbar(scalableWrapper))
-    , searchManager(new BusinessLayer::AudioplayTextSearchManager(scalableWrapper, textEdit))
+    , searchManager(new BusinessLayer::SearchManager(scalableWrapper, textEdit))
     , toolbarAnimation(new FloatingToolbarAnimator(_q))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
     , commentsToolbar(new CommentsToolbar(_q))
@@ -572,10 +572,11 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
         d->toolbarAnimation->switchToolbars(d->toolbar->searchIcon(),
                                             d->toolbar->searchIconPosition(), d->toolbar,
                                             d->searchManager->toolbar());
+        d->searchManager->activateSearhToolbar();
     });
     //
-    connect(d->searchManager, &BusinessLayer::AudioplayTextSearchManager::hideToolbarRequested,
-            this, [this] { d->toolbarAnimation->switchToolbarsBack(); });
+    connect(d->searchManager, &BusinessLayer::SearchManager::hideToolbarRequested, this,
+            [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
     connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,
             [this](const QColor& _color) { d->addReviewMark(_color, {}, {}); });
@@ -1320,6 +1321,12 @@ void AudioplayTextView::updateTranslations()
     //
     d->currentParagraphType = BusinessLayer::TextParagraphType::Undefined;
     d->updateToolBarCurrentParagraphTypeName();
+
+    d->searchManager->setSearchInBlockTypes(
+        { { tr("In the whole text"), BusinessLayer::TextParagraphType::Undefined },
+          { tr("In scene heading"), BusinessLayer::TextParagraphType::SceneHeading },
+          { tr("In character"), BusinessLayer::TextParagraphType::Character },
+          { tr("In dialogue"), BusinessLayer::TextParagraphType::Dialogue } });
 }
 
 void AudioplayTextView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

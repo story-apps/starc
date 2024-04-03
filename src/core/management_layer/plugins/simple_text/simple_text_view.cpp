@@ -3,7 +3,6 @@
 #include "text/simple_text_edit.h"
 #include "text/simple_text_edit_shortcuts_manager.h"
 #include "text/simple_text_edit_toolbar.h"
-#include "text/simple_text_search_manager.h"
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
@@ -22,6 +21,7 @@
 #include <ui/modules/comments/comments_toolbar.h>
 #include <ui/modules/comments/comments_view.h>
 #include <ui/modules/fast_format_widget/fast_format_widget.h>
+#include <ui/modules/search_toolbar/search_manager.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
@@ -141,7 +141,7 @@ public:
     // Панели инструментов
     //
     SimpleTextEditToolbar* toolbar = nullptr;
-    BusinessLayer::SimpleTextSearchManager* searchManager = nullptr;
+    BusinessLayer::SearchManager* searchManager = nullptr;
     FloatingToolbarAnimator* toolbarAnimation = nullptr;
     BusinessLayer::TextParagraphType currentParagraphType
         = BusinessLayer::TextParagraphType::Undefined;
@@ -183,7 +183,7 @@ SimpleTextView::Implementation::Implementation(SimpleTextView* _q)
     , shortcutsManager(textEdit)
     , scalableWrapper(new ScalableWrapper(textEdit, _q))
     , toolbar(new SimpleTextEditToolbar(scalableWrapper))
-    , searchManager(new BusinessLayer::SimpleTextSearchManager(scalableWrapper, textEdit))
+    , searchManager(new BusinessLayer::SearchManager(scalableWrapper, textEdit))
     , toolbarAnimation(new FloatingToolbarAnimator(_q))
     , paragraphTypesModel(new QStandardItemModel(toolbar))
     , commentsToolbar(new CommentsToolbar(_q))
@@ -533,9 +533,10 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
         d->toolbarAnimation->switchToolbars(d->toolbar->searchIcon(),
                                             d->toolbar->searchIconPosition(), d->toolbar,
                                             d->searchManager->toolbar());
+        d->searchManager->activateSearhToolbar();
     });
     //
-    connect(d->searchManager, &BusinessLayer::SimpleTextSearchManager::hideToolbarRequested, this,
+    connect(d->searchManager, &BusinessLayer::SearchManager::hideToolbarRequested, this,
             [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
     connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,

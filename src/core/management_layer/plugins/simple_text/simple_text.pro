@@ -43,9 +43,7 @@ HEADERS += \
     text/handlers/text_handler.h \
     text/simple_text_edit.h \
     text/simple_text_edit_shortcuts_manager.h \
-    text/simple_text_edit_toolbar.h \
-    text/simple_text_search_manager.h \
-    text/simple_text_search_toolbar.h
+    text/simple_text_edit_toolbar.h
 
 SOURCES += \
     simple_text_manager.cpp \
@@ -60,9 +58,7 @@ SOURCES += \
     text/handlers/text_handler.cpp \
     text/simple_text_edit.cpp \
     text/simple_text_edit_shortcuts_manager.cpp \
-    text/simple_text_edit_toolbar.cpp \
-    text/simple_text_search_manager.cpp \
-    text/simple_text_search_toolbar.cpp
+    text/simple_text_edit_toolbar.cpp
 
 mac {
     load(resolve_target)

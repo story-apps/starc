@@ -2,19 +2,18 @@
 
 #include <ui/widgets/floating_tool_bar/floating_tool_bar.h>
 
-
 namespace Ui {
 
 /**
- * @brief Панель поиска по тексту сценария
+ * @brief Панель поиска по тексту
  */
-class NovelTextSearchToolbar : public FloatingToolBar
+class CORE_LIBRARY_EXPORT SearchToolbar : public FloatingToolBar
 {
     Q_OBJECT
 
 public:
-    explicit NovelTextSearchToolbar(QWidget* _parent = nullptr);
-    ~NovelTextSearchToolbar() override;
+    explicit SearchToolbar(QWidget* _parent = nullptr);
+    ~SearchToolbar() override;
 
     /**
      * @brief Настроить режим редактирования
@@ -25,6 +24,7 @@ public:
      * @brief Возвращаем фокус после поиска
      */
     void refocus();
+
 
     /**
      * @brief Текст для поиска
@@ -55,6 +55,11 @@ public:
      * @brief Выделить текст в поле поиска
      */
     void selectSearchText();
+
+    /**
+     * @brief Задать список строк для попапа
+     */
+    void setPopupStringList(const QStringList& _list);
 
 signals:
     /**
