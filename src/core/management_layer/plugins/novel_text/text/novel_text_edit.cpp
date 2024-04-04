@@ -7,8 +7,8 @@
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <domain/document_object.h>
-//#include <business_layer/export/novel/novel_export_options.h>
-//#include <business_layer/export/novel/novel_fountain_exporter.h>
+// #include <business_layer/export/novel/novel_export_options.h>
+// #include <business_layer/export/novel/novel_fountain_exporter.h>
 #include <business_layer/import/novel/novel_markdown_importer.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
@@ -723,17 +723,6 @@ bool NovelTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         redo();
     }
     //
-    // ... вырезать текст
-    //
-    else if (_event == QKeySequence::Cut) {
-        BusinessLayer::TextCursor cursor = textCursor();
-        if (cursor.hasSelection()) {
-            copy();
-            cursor.removeCharacters(this);
-            d->model->saveChanges();
-        }
-    }
-    //
     // ... вставить текст
     //
     else if (_event == QKeySequence::Paste) {
@@ -745,6 +734,9 @@ bool NovelTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     else {
         isEventHandled = ScriptTextEdit::keyPressEventReimpl(_event);
+        if (_event == QKeySequence::Cut) {
+            d->model->saveChanges();
+        }
     }
 
     return isEventHandled;

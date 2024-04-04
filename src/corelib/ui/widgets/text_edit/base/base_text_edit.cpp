@@ -706,6 +706,31 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
              && _event->modifiers().testFlag(Qt::ShiftModifier)) {
         textCursor().insertText(QChar(QChar::LineSeparator));
     }
+    //
+    // ... копировать весь абзац, если текст не выделен
+    //
+    else if (auto cursor = textCursor(); _event == QKeySequence::Copy && !cursor.hasSelection()) {
+        const int position = cursor.position();
+        cursor.select(QTextCursor::BlockUnderCursor);
+        setTextCursor(cursor);
+        copy();
+        cursor.setPosition(position);
+        setTextCursor(cursor);
+    }
+    //
+    // ... вырезать текст
+    //
+    else if (_event == QKeySequence::Cut) {
+        QTextCursor cursor = textCursor();
+        //
+        // ... если текст не выделен, вырезать весь абзац
+        //
+        if (!cursor.hasSelection()) {
+            cursor.select(QTextCursor::BlockUnderCursor);
+        }
+        setTextCursor(cursor);
+        cut();
+    }
 #ifdef Q_OS_MAC
     //
     // Control + Option + . для вставки точки независимо от раскладки
