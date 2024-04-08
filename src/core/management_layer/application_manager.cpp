@@ -1479,8 +1479,14 @@ void ApplicationManager::Implementation::saveAs()
     //
     // Изначально высвечивается текущее имя проекта
     //
+
+    if (projectsManager->currentProject() == nullptr) {
+        Log::info("Incorrect use of the saveAs method");
+        return;
+    }
     const auto currentProject = projectsManager->currentProject();
     QString projectPath = currentProject->path();
+
     switch (currentProject->projectType()) {
     //
     // Для теневых проектов добавляем расширение старка, чтобы пользователя не пугал вопрос о
@@ -1491,10 +1497,10 @@ void ApplicationManager::Implementation::saveAs()
         break;
     }
 
-    //
-    // Для удаленных проектов используем имя проекта + id проекта
-    // и сохраняем в папку вновь создаваемых проектов
-    //
+               //
+               // Для удаленных проектов используем имя проекта + id проекта
+               // и сохраняем в папку вновь создаваемых проектов
+               //
     case BusinessLayer::ProjectType::Cloud: {
         const auto projectsFolderPath
             = settingsValue(DataStorageLayer::kProjectSaveFolderKey).toString();
@@ -1511,9 +1517,9 @@ void ApplicationManager::Implementation::saveAs()
     }
     }
 
-    //
-    // Получим имя файла для сохранения
-    //
+           //
+           // Получим имя файла для сохранения
+           //
     QString saveAsProjectFilePath
         = QFileDialog::getSaveFileName(applicationView, tr("Choose file to save story"),
                                        projectPath, DialogHelper::starcProjectFilter());
@@ -1521,31 +1527,31 @@ void ApplicationManager::Implementation::saveAs()
         return;
     }
 
-    //
-    // Если файл выбран
-    //
+           //
+           // Если файл выбран
+           //
 
-    //
-    // Установим расширение, если не задано
-    //
+           //
+           // Установим расширение, если не задано
+           //
     if (!saveAsProjectFilePath.endsWith(BusinessLayer::ProjectsModelProjectItem::extension())) {
         saveAsProjectFilePath.append(BusinessLayer::ProjectsModelProjectItem::extension());
     }
 
-    //
-    // Если пользователь указал тот же путь, ничего не делаем
-    // NOTE: проверяем именно через QFileInfo, т.к. пути могут выглядеть по разному и сравнивать
-    //       строк итут некорректно
-    //
+           //
+           // Если пользователь указал тот же путь, ничего не делаем
+           // NOTE: проверяем именно через QFileInfo, т.к. пути могут выглядеть по разному и сравнивать
+           //       строк итут некорректно
+           //
     if (QFileInfo(saveAsProjectFilePath) == QFileInfo(currentProject->path())) {
         return;
     }
 
-    //
-    // Cохраняем в новый файл
-    //
-    // ... если файл существовал, удалим его для удаления данных в нём
-    //
+           //
+           // Cохраняем в новый файл
+           //
+           // ... если файл существовал, удалим его для удаления данных в нём
+           //
     if (QFile::exists(saveAsProjectFilePath)) {
         QFile::remove(saveAsProjectFilePath);
     }
@@ -1561,9 +1567,9 @@ void ApplicationManager::Implementation::saveAs()
         return;
     }
 
-    //
-    // Откроем копию текущего проекта
-    //
+           //
+           // Откроем копию текущего проекта
+           //
     openProject(saveAsProjectFilePath);
 }
 
@@ -2070,6 +2076,10 @@ void ApplicationManager::Implementation::importProject()
 
 void ApplicationManager::Implementation::exportCurrentDocument()
 {
+    if (projectsManager->currentProject() == nullptr) {
+        Log::info("Incorrect use of the exportCurrentDocument method");
+        return;
+    }
     exportManager->exportDocument(projectManager->currentModelForExport());
 }
 
