@@ -674,6 +674,8 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
         // TODO: Ещё сюда нужно писать версию открытого документа, если это не текущая версия
         //
         window->setWindowTitle(view.activeModel->documentName());
+
+        this->view.windows.append(window);
     }
 }
 
