@@ -46,9 +46,7 @@ HEADERS += \
     text/handlers/standard_key_handler.h \
     text/novel_outline_edit.h \
     text/novel_outline_edit_shortcuts_manager.h \
-    text/novel_outline_edit_toolbar.h \
-    text/novel_outline_search_manager.h \
-    text/novel_outline_search_toolbar.h
+    text/novel_outline_edit_toolbar.h
 
 SOURCES += \
     novel_outline_manager.cpp \
@@ -66,9 +64,7 @@ SOURCES += \
     text/handlers/standard_key_handler.cpp \
     text/novel_outline_edit.cpp \
     text/novel_outline_edit_shortcuts_manager.cpp \
-    text/novel_outline_edit_toolbar.cpp \
-    text/novel_outline_search_manager.cpp \
-    text/novel_outline_search_toolbar.cpp
+    text/novel_outline_edit_toolbar.cpp
 
 mac {
     load(resolve_target)
