@@ -659,17 +659,6 @@ bool StageplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         redo();
     }
     //
-    // ... вырезать текст
-    //
-    else if (_event == QKeySequence::Cut) {
-        BusinessLayer::TextCursor cursor = textCursor();
-        if (cursor.hasSelection()) {
-            copy();
-            cursor.removeCharacters(this);
-            d->model->saveChanges();
-        }
-    }
-    //
     // ... вставить текст
     //
     else if (_event == QKeySequence::Paste) {
@@ -681,6 +670,9 @@ bool StageplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     else {
         isEventHandled = ScriptTextEdit::keyPressEventReimpl(_event);
+        if (_event == QKeySequence::Cut) {
+            d->model->saveChanges();
+        }
     }
 
     return isEventHandled;
