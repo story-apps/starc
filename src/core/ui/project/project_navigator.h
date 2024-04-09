@@ -92,6 +92,11 @@ public:
      */
     void collapseAll();
 
+    /**
+     * @brief Получить список индексов выделенных элементов
+     */
+    QList<QModelIndex> selectedIndexes() const;
+
 signals:
     /**
      * @brief Пользователь выбрал заданный элемент структуры
