@@ -63,7 +63,6 @@
 #include <QLockFile>
 #include <QMainWindow>
 #include <QMenu>
-#include <QMenuBar>
 #include <QProcess>
 #include <QScopedPointer>
 #include <QShortcut>
@@ -105,11 +104,6 @@ public:
      * @brief Настроить док-меню
      */
     void initDockMenu();
-
-    /**
-     * @brief Настроить MenuBar для MacOS
-     */
-    void initMacMenuBar();
 
     /**
      * @brief Отправить инфу о запуске приложения в статистику
@@ -319,11 +313,6 @@ public:
     QMenu* dockMenu = nullptr;
 
     /**
-     * @brief MunuBar для MacOS
-     */
-    QMenuBar* mac_menuBar = nullptr;
-
-    /**
      * @brief Интерфейс приложения
      */
     Ui::ApplicationView* applicationView = nullptr;
@@ -405,7 +394,6 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
 #endif
 {
     initDockMenu();
-    initMacMenuBar();
 
     menuView->setShowDevVersions(notificationsManager->showDevVersions());
     menuView->setImportShortcut(shortcutsManager->importShortcut());
@@ -481,53 +469,6 @@ QAction* findAction(QMenu* menu, const QString& actionName) {
         }
     }
     return nullptr;
-}
-
-void ApplicationManager::Implementation::initMacMenuBar()
-{
-#ifdef Q_OS_MAC
-
-    mac_menuBar = new QMenuBar(nullptr);
-    mac_menuBar->setNativeMenuBar(true);
-
-    //
-    // Создаем пункты меню
-    //
-    QMenu* appMenu = mac_menuBar->addMenu("Story Architect");
-    QMenu* fileMenu = mac_menuBar->addMenu(tr("File"));
-
-    //
-    // Добавляем действия в пункты меню
-    //
-    // Основной пункт меню с нeзвазванием "Story Architect"
-    fileMenu->addSeparator();
-    QAction* preferencesAction = appMenu->addAction(tr("Preferences..."));
-    // Меню "File"
-    QAction*  storiesAction = fileMenu->addAction(tr("Stories"));
-    QAction*  createStoryAction = fileMenu->addAction(tr("Create story"));
-    QAction*  openStoryAction = fileMenu->addAction(tr("Open story"));
-    fileMenu->addSeparator();
-    QAction*  saveChangesAction = fileMenu->addAction(tr("Save changes"));
-    QAction*  saveAsAction = fileMenu->addAction(tr("Save current story as..."));
-    fileMenu->addSeparator();
-    QAction*  importAction = fileMenu->addAction(tr("Import..."));
-    QAction*  exportCurrentDocumentAction = fileMenu->addAction(tr("Export current document"));
-
-    // Настраивааем связь сигналов MenuBar со слотами действий
-    connect(preferencesAction, &QAction::triggered, q, [this] { showSettings(); });
-    // Меню File
-    connect(storiesAction, &QAction::triggered, q, [this] { showProjects(); });
-    connect(createStoryAction, &QAction::triggered, q, [this] { createProject(); });
-    connect(openStoryAction, &QAction::triggered, q, [this] { openProject(); });
-    connect(saveChangesAction, &QAction::triggered, q, [this] { saveChanges(); });
-    // TODO: Предусмотреть ситуацию, когда файл не открыт. Не показывать активность кнопки
-    connect(saveAsAction, &QAction::triggered, q, [this] {  saveAs();});
-    connect(importAction, &QAction::triggered, q, [this] { importProject(); });
-    // TODO: Предусмотреть ситуацию, когда файл не открыт. Не показывать активность кнопки
-    connect(exportCurrentDocumentAction, &QAction::triggered, q, [this] { exportCurrentDocument(); });
-
-#endif
-
 }
 
 void ApplicationManager::Implementation::sendStartupStatistics()

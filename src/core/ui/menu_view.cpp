@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QBoxLayout>
 #include <QKeyEvent>
+#include <QMenuBar>
 #include <QScrollArea>
 #include <QTimer>
 
@@ -74,6 +75,10 @@ public:
     QVBoxLayout* notificationsLayout = nullptr;
 
     QAction* showDevVersions = nullptr;
+
+    #ifdef Q_OS_MAC
+        QMenuBar* menuBar = nullptr;
+    #endif
 };
 
 MenuView::Implementation::Implementation(QWidget* _parent)
@@ -106,6 +111,10 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     , notificationsViewport(UiHelper::createScrollArea(_parent))
     , notificationsLayout(new QVBoxLayout)
     , showDevVersions(new QAction(_parent))
+    ,
+      #ifdef Q_OS_MAC
+        menuBar(new QMenuBar)
+      #endif
 {
     //
     // Настроим страницу меню
@@ -247,6 +256,7 @@ MenuView::MenuView(QWidget* _parent)
     : StackWidget(_parent)
     , d(new Implementation(this))
 {
+
 #ifdef CLOUD_SERVICE_MANAGER
     d->signIn->setVisible(true);
     d->projects->setSeparator(true);
@@ -325,13 +335,24 @@ MenuView::MenuView(QWidget* _parent)
     });
 
     setVisible(false);
+
+    //
+    // Добавляем ManuBar для MacOS
+    //
+    #ifdef Q_OS_MAC
+        createMenuBar();
+    #endif
 }
 
 MenuView::~MenuView() = default;
 
+
 void MenuView::setAccountVisible(bool _visible)
 {
     d->drawer->setAccountVisible(_visible);
+    #ifdef Q_OS_MAC
+        d->menuBar->update();
+    #endif
 }
 
 void MenuView::setAvatar(const QPixmap& _avatar)
@@ -351,11 +372,16 @@ void MenuView::setAccountEmail(const QString& _email)
 
 void MenuView::setSignInVisible(bool _visible)
 {
-#ifdef CLOUD_SERVICE_MANAGER
-    d->signIn->setVisible(_visible);
-#else
-    Q_UNUSED(_visible)
-#endif
+    #ifdef CLOUD_SERVICE_MANAGER
+        d->signIn->setVisible(_visible);
+    #else
+        Q_UNUSED(_visible)
+    #endif
+
+    #ifdef Q_OS_MAC
+        d->menuBar->update();
+    #endif
+
 }
 
 void MenuView::checkProjects()
@@ -373,6 +399,13 @@ void MenuView::setProjectActionsVisible(bool _visible)
     d->importProject->setVisible(_visible);
     d->fullScreen->setVisible(_visible);
     d->drawer->updateGeometry();
+
+
+    #ifdef Q_OS_MAC
+        d->menuBar->update();
+    #endif
+
+
 }
 
 void MenuView::checkProject()
@@ -593,6 +626,60 @@ void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->notificationsFilterButton->setContentsMargins(
         isLeftToRight() ? 0 : Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4(),
         isLeftToRight() ? Ui::DesignSystem::layout().px4() : 0, 0);
+}
+
+void MenuView::createMenuBar() {
+
+    d->menuBar->setNativeMenuBar(true);
+
+    //
+    // Создаем пункты меню
+    //
+    QMenu* appMenu = d->menuBar->addMenu("Story Architect");
+    QMenu* fileMenu = d->menuBar->addMenu(tr("File"));
+    QMenu* viewMenu = d->menuBar->addMenu(tr("View"));
+    QMenu* actionsMenu = d->menuBar->addMenu(tr("Account actions"));
+
+    //
+    // Добавляем действия в пункты меню
+    //
+
+    // Основной пункт меню с нeзвазванием "Story Architect"
+    QAction* aboutAppAction = new QAction(tr("About Story Architect"), this);
+    connect(aboutAppAction, &QAction::triggered, this, [this] {
+        auto dialog = new AboutApplicationDialog(parentWidget());
+        connect(dialog, &Ui::AboutApplicationDialog::disappeared, dialog,
+                &Ui::AboutApplicationDialog::deleteLater);
+        dialog->showDialog();
+    });
+    appMenu->addAction(aboutAppAction);
+    appMenu->addSeparator();
+    appMenu->addAction(d->settings);
+    QAction* preferencesAction = appMenu->addAction("Preferences");
+    connect(preferencesAction, &QAction::triggered, this, [this]{ emit settingsPressed(); });
+
+    // Меню "File"
+    fileMenu->addAction(d->projects);
+    fileMenu->addAction(d->createProject);
+    fileMenu->addAction(d->openProject);
+    fileMenu->addAction(d->saveProject);
+    fileMenu->addAction(d->saveProjectAs);
+    fileMenu->addSeparator();
+    fileMenu->addAction(d->importProject);
+    fileMenu->addAction(d->exportCurrentDocument);
+
+    // Меню View
+    viewMenu->addAction(d->fullScreen);
+
+    // Меню Account actions
+    #ifdef CLOUD_SERVICE_MANAGER
+        actionsMenu->addAction(d->signIn);
+        actionsMenu->addAction(d->chat);
+        actionsMenu->addAction(d->notifications);
+        actionsMenu->addSeparator();
+        actionsMenu->addAction(d->writingStatistics);
+        actionsMenu->addAction(d->writingSprint);
+    #endif
 }
 
 } // namespace Ui

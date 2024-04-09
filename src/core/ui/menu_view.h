@@ -230,6 +230,11 @@ protected:
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
+    /**
+     * @brief Добавить MenuBar
+     */
+    void createMenuBar();
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
