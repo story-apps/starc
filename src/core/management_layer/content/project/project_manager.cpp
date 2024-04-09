@@ -118,6 +118,42 @@ QString documentSettingsKey(const QUuid& _documentUuid, const QString& _key)
     return projectSettingsKey(_documentUuid.toString() + "/" + _key);
 }
 
+/**
+ * @brief Можно ли удалять документ
+ */
+bool canDocumentBeRemoved(BusinessLayer::StructureModelItem* _item)
+{
+    const QSet<Domain::DocumentObjectType> cantBeRemovedItems = {
+        Domain::DocumentObjectType::Project,
+        Domain::DocumentObjectType::Characters,
+        Domain::DocumentObjectType::Locations,
+        Domain::DocumentObjectType::Worlds,
+        Domain::DocumentObjectType::ScreenplayTitlePage,
+        Domain::DocumentObjectType::ScreenplaySynopsis,
+        Domain::DocumentObjectType::ScreenplayTreatment,
+        Domain::DocumentObjectType::ScreenplayText,
+        Domain::DocumentObjectType::ScreenplayStatistics,
+        Domain::DocumentObjectType::ComicBookTitlePage,
+        Domain::DocumentObjectType::ComicBookSynopsis,
+        Domain::DocumentObjectType::ComicBookText,
+        Domain::DocumentObjectType::ComicBookStatistics,
+        Domain::DocumentObjectType::AudioplayTitlePage,
+        Domain::DocumentObjectType::AudioplaySynopsis,
+        Domain::DocumentObjectType::AudioplayText,
+        Domain::DocumentObjectType::AudioplayStatistics,
+        Domain::DocumentObjectType::StageplayTitlePage,
+        Domain::DocumentObjectType::StageplaySynopsis,
+        Domain::DocumentObjectType::StageplayText,
+        Domain::DocumentObjectType::StageplayStatistics,
+        Domain::DocumentObjectType::NovelTitlePage,
+        Domain::DocumentObjectType::NovelSynopsis,
+        Domain::DocumentObjectType::NovelOutline,
+        Domain::DocumentObjectType::NovelText,
+        Domain::DocumentObjectType::NovelStatistics,
+    };
+    return !cantBeRemovedItems.contains(_item->type());
+}
+
 } // namespace
 
 class ProjectManager::Implementation
@@ -195,9 +231,13 @@ public:
     void removeVersion(const QModelIndex& _itemIndex, int _versionIndex);
 
     /**
+     * @brief Удалить выделенные документы
+     */
+    void removeSelectedDocuments();
+
+    /**
      * @brief Удалить документ
      */
-    void removeDocument(const QModelIndex& _itemIndex);
     void removeDocument(BusinessLayer::StructureModelItem* _item, bool _force);
     void removeDocumentImpl(BusinessLayer::StructureModelItem* _item);
 
@@ -506,42 +546,30 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         connect(addDocument, &QAction::triggered, q, [this] { this->addDocument(); });
         menuActions.append(addDocument);
 
-        const QSet<Domain::DocumentObjectType> cantBeRemovedItems = {
-            Domain::DocumentObjectType::Project,
-            Domain::DocumentObjectType::Characters,
-            Domain::DocumentObjectType::Locations,
-            Domain::DocumentObjectType::Worlds,
-            Domain::DocumentObjectType::ScreenplayTitlePage,
-            Domain::DocumentObjectType::ScreenplaySynopsis,
-            Domain::DocumentObjectType::ScreenplayTreatment,
-            Domain::DocumentObjectType::ScreenplayText,
-            Domain::DocumentObjectType::ScreenplayStatistics,
-            Domain::DocumentObjectType::ComicBookTitlePage,
-            Domain::DocumentObjectType::ComicBookSynopsis,
-            Domain::DocumentObjectType::ComicBookText,
-            Domain::DocumentObjectType::ComicBookStatistics,
-            Domain::DocumentObjectType::AudioplayTitlePage,
-            Domain::DocumentObjectType::AudioplaySynopsis,
-            Domain::DocumentObjectType::AudioplayText,
-            Domain::DocumentObjectType::AudioplayStatistics,
-            Domain::DocumentObjectType::StageplayTitlePage,
-            Domain::DocumentObjectType::StageplaySynopsis,
-            Domain::DocumentObjectType::StageplayText,
-            Domain::DocumentObjectType::StageplayStatistics,
-            Domain::DocumentObjectType::NovelTitlePage,
-            Domain::DocumentObjectType::NovelSynopsis,
-            Domain::DocumentObjectType::NovelOutline,
-            Domain::DocumentObjectType::NovelText,
-            Domain::DocumentObjectType::NovelStatistics,
-        };
-        if (_index.isValid() && !cantBeRemovedItems.contains(currentItem->type())) {
-            auto removeDocument = new QAction(tr("Remove document"));
-            removeDocument->setSeparator(true);
-            removeDocument->setIconText(u8"\U000f01b4");
-            removeDocument->setEnabled(enabled);
-            connect(removeDocument, &QAction::triggered, q,
-                    [this, currentItemIndex] { this->removeDocument(currentItemIndex); });
-            menuActions.append(removeDocument);
+        if (_index.isValid()) {
+            //
+            // Если хотя бы один выделенный элемент можно удалить, добавим действие
+            //
+            bool addRemoveAction = false;
+            for (const auto index : navigator->selectedIndexes()) {
+                const auto currentItemIndex = projectStructureProxyModel->mapToSource(index);
+                const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
+                if (canDocumentBeRemoved(currentItem)) {
+                    addRemoveAction = true;
+                    break;
+                }
+            }
+            if (addRemoveAction) {
+                auto removeDocument
+                    = new QAction(navigator->selectedIndexes().size() > 1 ? tr("Remove documents")
+                                                                          : tr("Remove document"));
+                removeDocument->setSeparator(true);
+                removeDocument->setIconText(u8"\U000f01b4");
+                removeDocument->setEnabled(enabled);
+                connect(removeDocument, &QAction::triggered, q,
+                        [this] { this->removeSelectedDocuments(); });
+                menuActions.append(removeDocument);
+            }
         }
     }
 
@@ -1041,15 +1069,45 @@ void ProjectManager::Implementation::removeVersion(const QModelIndex& _itemIndex
     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
-void ProjectManager::Implementation::removeDocument(const QModelIndex& _itemIndex)
+void ProjectManager::Implementation::removeSelectedDocuments()
 {
-    auto item = projectStructureModel->itemForIndex(_itemIndex);
-    if (item == nullptr) {
-        return;
+    //
+    // Собираем выделенные элементы для удаления
+    //
+    QList<BusinessLayer::StructureModelItem*> itemList;
+    for (const auto index : navigator->selectedIndexes()) {
+        const auto itemIndex = projectStructureProxyModel->mapToSource(index);
+
+        //
+        // Если хотя бы один из родительских элементов уже содержится в списке,
+        // то потомка добавлять не нужно, т.к. он и так будет удален
+        //
+        bool shouldToAdd = true;
+        auto parentItemIndex = itemIndex.parent();
+        while (parentItemIndex.isValid()) {
+            if (itemList.contains(projectStructureModel->itemForIndex(parentItemIndex))) {
+                shouldToAdd = false;
+                break;
+            }
+            parentItemIndex = parentItemIndex.parent();
+        }
+        if (const auto item = projectStructureModel->itemForIndex(itemIndex);
+            shouldToAdd && canDocumentBeRemoved(item)) {
+            itemList.append(item);
+        }
     }
 
-    const bool forceRemove = false;
-    removeDocument(item, forceRemove);
+    //
+    // Удаляем собранные элементы
+    //
+    for (auto item : itemList) {
+        if (item == nullptr) {
+            continue;
+        }
+
+        const bool forceRemove = false;
+        removeDocument(item, forceRemove);
+    }
 }
 
 void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureModelItem* _item,
