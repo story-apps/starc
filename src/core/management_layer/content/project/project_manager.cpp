@@ -663,6 +663,10 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
 
     Log::info("Activate plugin \"%1\" in new window", view.activeViewMimeType);
     auto windowView = pluginsBuilder.activateWindowView(view.activeViewMimeType, view.activeModel);
+    if (windowView == nullptr) {
+        return;
+    }
+
     if (auto window = windowView->asQWidget()) {
         window->resize(800, 600);
         window->show();
