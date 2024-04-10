@@ -27,7 +27,6 @@
 #include <domain/starcloud_api.h>
 #include <include/custom_events.h>
 #include <interfaces/management_layer/i_document_manager.h>
-#include <ui/about_application_dialog.h>
 #include <ui/account/connection_status_tool_bar.h>
 #include <ui/application_style.h>
 #include <ui/application_view.h>
@@ -459,16 +458,6 @@ void ApplicationManager::Implementation::initDockMenu()
     }
 
 #endif
-}
-
-// Вспомогательная функция для поиска действия в меню по имени
-QAction* findAction(QMenu* menu, const QString& actionName) {
-    foreach (QAction* action, menu->actions()) {
-        if (action->text() == actionName) {
-            return action;
-        }
-    }
-    return nullptr;
 }
 
 void ApplicationManager::Implementation::sendStartupStatistics()
