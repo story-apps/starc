@@ -13920,7 +13920,7 @@ This will help to protect your creativity in any unforeseen situation.</source>
 
 • автоматически создаёт резервные копии локальных и облачных проектов в папке &quot;%1&quot;
 
-Эти меры помогут сберечь плоды вашего творчества в любо неприятной ситуации.</translation>
+Эти меры помогут сберечь плоды вашего творчества в любой неприятной ситуации.</translation>
     </message>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="903"/>
