@@ -120,7 +120,7 @@ QWidget* ApplicationView::view() const
     return d->view;
 }
 
-void ApplicationView::slideViewOut()
+int ApplicationView::slideViewOut()
 {
     const auto finalWidth = DesignSystem::layout().px(1200);
     auto navigatorWidthAnimation = new QVariantAnimation(this);
@@ -161,6 +161,8 @@ void ApplicationView::slideViewOut()
     animation->start(QAbstractAnimation::DeleteWhenStopped);
 
     d->view->show();
+
+    return animation->duration();
 }
 
 void ApplicationView::setHideNavigationButtonAvailable(bool _available)

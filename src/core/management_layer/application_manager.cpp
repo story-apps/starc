@@ -2594,7 +2594,16 @@ void ApplicationManager::initConnections()
                          Ui::DesignSystem::scaleFactor());
 
         d->showContent();
-        d->applicationView->slideViewOut();
+        const int duration = d->applicationView->slideViewOut();
+        //
+        // Ждем, чтобы геометрия успела загрузиться, и сохраняем её.
+        // Без этого после аварийного завершения при первом запуске (если вдруг такое случится)
+        // левая панель будет занимать весь экран
+        //
+        QTimer::singleShot(duration, this, [this] {
+            setSettingsValues(DataStorageLayer::kApplicationViewStateKey,
+                              d->applicationView->saveState());
+        });
     });
 
     //
