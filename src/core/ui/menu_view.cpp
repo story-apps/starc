@@ -33,7 +33,7 @@ namespace Ui {
 class MenuView::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(MenuView* _parent);
 
     /**
      * @brief Создание MenuBar
@@ -82,8 +82,8 @@ public:
     QAction* showDevVersions = nullptr;
 };
 
-MenuView::Implementation::Implementation(QWidget* _parent)
-    : q(dynamic_cast<MenuView*>(_parent))
+MenuView::Implementation::Implementation(MenuView* _parent)
+    : q(_parent)
     , menuPage(UiHelper::createScrollArea(_parent))
     , drawer(new Drawer(_parent))
     , signIn(new QAction)
