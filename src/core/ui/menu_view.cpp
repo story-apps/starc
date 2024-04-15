@@ -567,6 +567,14 @@ void MenuView::updateTranslations()
 
     d->showDevVersions->setText(d->showDevVersions->isChecked() ? tr("Hide developers version")
                                                                 : tr("Show developers version"));
+
+    #ifdef CLOUD_SERVICE_MANAGER
+        d->signIn->setText(tr("SignIn"));
+        d->chat->setText(tr("Account"));
+        d->notifications->setText(tr("Notifications"));
+        d->writingStatistics->setText(tr("Writing statistics"));
+        d->writingSprint->setText(tr("Writing sprint"));
+    #endif
 }
 
 void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
