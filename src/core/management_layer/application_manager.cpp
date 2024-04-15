@@ -60,7 +60,6 @@
 #include <QKeyEvent>
 #include <QLocale>
 #include <QLockFile>
-#include <QMainWindow>
 #include <QMenu>
 #include <QProcess>
 #include <QScopedPointer>
@@ -1411,7 +1410,7 @@ void ApplicationManager::Implementation::saveAs()
     //
 
     if (projectsManager->currentProject() == nullptr) {
-        Log::info("Incorrect use of the saveAs method");
+        Log::info("The current project is not defined and saving cannot be performed.");
         return;
     }
     const auto currentProject = projectsManager->currentProject();
@@ -1471,7 +1470,7 @@ void ApplicationManager::Implementation::saveAs()
     //
     // Если пользователь указал тот же путь, ничего не делаем
     // NOTE: проверяем именно через QFileInfo, т.к. пути могут выглядеть по разному и сравнивать
-    // строк итут некорректно
+    //       строки тут некорректно
     //
     if (QFileInfo(saveAsProjectFilePath) == QFileInfo(currentProject->path())) {
         return;
@@ -2007,7 +2006,7 @@ void ApplicationManager::Implementation::importProject()
 void ApplicationManager::Implementation::exportCurrentDocument()
 {
     if (projectsManager->currentProject() == nullptr) {
-        Log::info("Incorrect use of the exportCurrentDocument method");
+        Log::info("The current project is not defined and export cannot be performed.");
         return;
     }
     exportManager->exportDocument(projectManager->currentModelForExport());
