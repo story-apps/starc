@@ -568,13 +568,11 @@ void MenuView::updateTranslations()
     d->showDevVersions->setText(d->showDevVersions->isChecked() ? tr("Hide developers version")
                                                                 : tr("Show developers version"));
 
-    #ifdef CLOUD_SERVICE_MANAGER
-        d->signIn->setText(tr("SignIn"));
-        d->chat->setText(tr("Account"));
-        d->notifications->setText(tr("Notifications"));
-        d->writingStatistics->setText(tr("Writing statistics"));
-        d->writingSprint->setText(tr("Writing sprint"));
-    #endif
+    d->signIn->setText(tr("SignIn"));
+    d->chat->setText(tr("Account"));
+    d->notifications->setText(tr("Notifications"));
+    d->writingStatistics->setText(tr("Writing statistics"));
+    d->writingSprint->setText(tr("Writing sprint"));
 }
 
 void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -637,16 +635,27 @@ void MenuView::Implementation::createMenuBar()
     appMenu->addAction(aboutAppAction);
     appMenu->addSeparator();
     QAction* settingsAction = new QAction();
-    settingsAction->setText(tr("Settings"));
+    settingsAction->setText(tr("Preferences"));
     connect(settingsAction, &QAction::triggered, parent, &MenuView::settingsPressed);
+    settingsAction->setMenuRole(QAction::ApplicationSpecificRole);
     appMenu->addAction(settingsAction);
 
     #ifdef CLOUD_SERVICE_MANAGER
+        signIn->setMenuRole(QAction::ApplicationSpecificRole);
         appMenu->addAction(signIn);
+
+        chat->setMenuRole(QAction::ApplicationSpecificRole);
         appMenu->addAction(chat);
+
+        notifications->setMenuRole(QAction::ApplicationSpecificRole);
         appMenu->addAction(notifications);
+
         appMenu->addSeparator();
+
+        writingStatistics->setMenuRole(QAction::ApplicationSpecificRole);
         appMenu->addAction(writingStatistics);
+
+        writingSprint->setMenuRole(QAction::ApplicationSpecificRole);
         appMenu->addAction(writingSprint);
     #endif
 
