@@ -78,7 +78,7 @@ public:
 
     // Создание MenuBar
     void createMenuBar();
-    MenuView* parent;
+    MenuView* q;
 };
 
 MenuView::Implementation::Implementation(QWidget* _parent)
@@ -111,7 +111,7 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     , notificationsViewport(UiHelper::createScrollArea(_parent))
     , notificationsLayout(new QVBoxLayout)
     , showDevVersions(new QAction(_parent))
-    , parent(dynamic_cast<MenuView*>(_parent))
+    , q(dynamic_cast<MenuView*>(_parent))
 {
 
     //
@@ -636,7 +636,7 @@ void MenuView::Implementation::createMenuBar()
     appMenu->addSeparator();
     QAction* settingsAction = new QAction();
     settingsAction->setText(tr("Preferences"));
-    connect(settingsAction, &QAction::triggered, parent, &MenuView::settingsPressed);
+    connect(settingsAction, &QAction::triggered, q, &MenuView::settingsPressed);
     settingsAction->setMenuRole(QAction::ApplicationSpecificRole);
     appMenu->addAction(settingsAction);
 
