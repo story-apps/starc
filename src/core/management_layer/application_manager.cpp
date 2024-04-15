@@ -1405,14 +1405,14 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
 
 void ApplicationManager::Implementation::saveAs()
 {
-    //
-    // Изначально высвечивается текущее имя проекта
-    //
-
     if (projectsManager->currentProject() == nullptr) {
         Log::info("The current project is not defined and saving cannot be performed.");
         return;
     }
+
+    //
+    // Изначально высвечивается текущее имя проекта
+    //
     const auto currentProject = projectsManager->currentProject();
     QString projectPath = currentProject->path();
 
@@ -2185,7 +2185,6 @@ ApplicationManager::ApplicationManager(QObject* _parent)
 #endif
     Log::init(loggingLevel, logFilePath);
 
-
     QString applicationVersion = "0.7.1";
 #if defined(DEV_BUILD) && DEV_BUILD > 0
     applicationVersion += QString(" dev %1").arg(DEV_BUILD);
@@ -2197,7 +2196,6 @@ ApplicationManager::ApplicationManager(QObject* _parent)
               QSysInfo().currentCpuArchitecture());
 
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
-
 
     //
     // Загрузим шрифты в базу шрифтов программы, если их там ещё нет

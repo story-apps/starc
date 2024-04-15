@@ -4,7 +4,6 @@
 #include "notifications/credits_view.h"
 #include "notifications/release_view.h"
 #include "notifications/subscription_view.h"
-#include "ui/settings/settings_view.h"
 
 #include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
@@ -29,13 +28,19 @@
 #include <QScrollArea>
 #include <QTimer>
 
-
 namespace Ui {
 
 class MenuView::Implementation
 {
 public:
     explicit Implementation(QWidget* _parent);
+
+    /**
+     * @brief Создание MenuBar
+     */
+    void createMenuBar();
+
+    MenuView* q = nullptr;
 
     QScrollArea* menuPage = nullptr;
 
@@ -75,14 +80,11 @@ public:
     QVBoxLayout* notificationsLayout = nullptr;
 
     QAction* showDevVersions = nullptr;
-
-    // Создание MenuBar
-    void createMenuBar();
-    MenuView* q;
 };
 
 MenuView::Implementation::Implementation(QWidget* _parent)
-    : menuPage(UiHelper::createScrollArea(_parent))
+    : q(dynamic_cast<MenuView*>(_parent))
+    , menuPage(UiHelper::createScrollArea(_parent))
     , drawer(new Drawer(_parent))
     , signIn(new QAction)
     , projects(new QAction)
@@ -111,9 +113,7 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     , notificationsViewport(UiHelper::createScrollArea(_parent))
     , notificationsLayout(new QVBoxLayout)
     , showDevVersions(new QAction(_parent))
-    , q(dynamic_cast<MenuView*>(_parent))
 {
-
     //
     // Настроим страницу меню
     //
@@ -249,7 +249,6 @@ MenuView::Implementation::Implementation(QWidget* _parent)
 
 // ****
 
-
 MenuView::MenuView(QWidget* _parent)
     : StackWidget(_parent)
     , d(new Implementation(this))
@@ -261,7 +260,6 @@ MenuView::MenuView(QWidget* _parent)
     setAnimationType(StackWidget::AnimationType::Slide);
     setCurrentWidget(d->menuPage);
     addWidget(d->notificationsPage);
-
 
     connect(d->drawer, &Drawer::accountPressed, this, &MenuView::accountPressed);
     connect(d->signIn, &QAction::triggered, this, &MenuView::signInPressed);
@@ -334,13 +332,12 @@ MenuView::MenuView(QWidget* _parent)
     setVisible(false);
 
     //
-    // Добавляем ManuBar
+    // Добавляем MenuBar
     //
     d->createMenuBar();
 }
 
 MenuView::~MenuView() = default;
-
 
 void MenuView::setAccountVisible(bool _visible)
 {
@@ -364,11 +361,11 @@ void MenuView::setAccountEmail(const QString& _email)
 
 void MenuView::setSignInVisible(bool _visible)
 {
-    #ifdef CLOUD_SERVICE_MANAGER
-        d->signIn->setVisible(_visible);
-    #else
-        Q_UNUSED(_visible)
-    #endif
+#ifdef CLOUD_SERVICE_MANAGER
+    d->signIn->setVisible(_visible);
+#else
+    Q_UNUSED(_visible)
+#endif
 }
 
 void MenuView::checkProjects()
@@ -568,7 +565,6 @@ void MenuView::updateTranslations()
     d->showDevVersions->setText(d->showDevVersions->isChecked() ? tr("Hide developers version")
                                                                 : tr("Show developers version"));
 
-    d->signIn->setText(tr("SignIn"));
     d->chat->setText(tr("Account"));
     d->notifications->setText(tr("Notifications"));
     d->writingStatistics->setText(tr("Writing statistics"));
@@ -614,11 +610,9 @@ void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         isLeftToRight() ? Ui::DesignSystem::layout().px4() : 0, 0);
 }
 
-// Создание MenuBar
 void MenuView::Implementation::createMenuBar()
 {
-
-    #ifdef Q_OS_MAC
+#ifdef Q_OS_MAC
 
     QMenuBar* menuBar = new QMenuBar;
     menuBar->setNativeMenuBar(true);
@@ -640,24 +634,24 @@ void MenuView::Implementation::createMenuBar()
     settingsAction->setMenuRole(QAction::ApplicationSpecificRole);
     appMenu->addAction(settingsAction);
 
-    #ifdef CLOUD_SERVICE_MANAGER
-        signIn->setMenuRole(QAction::ApplicationSpecificRole);
-        appMenu->addAction(signIn);
+#ifdef CLOUD_SERVICE_MANAGER
+    signIn->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(signIn);
 
-        chat->setMenuRole(QAction::ApplicationSpecificRole);
-        appMenu->addAction(chat);
+    chat->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(chat);
 
-        notifications->setMenuRole(QAction::ApplicationSpecificRole);
-        appMenu->addAction(notifications);
+    notifications->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(notifications);
 
-        appMenu->addSeparator();
+    appMenu->addSeparator();
 
-        writingStatistics->setMenuRole(QAction::ApplicationSpecificRole);
-        appMenu->addAction(writingStatistics);
+    writingStatistics->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(writingStatistics);
 
-        writingSprint->setMenuRole(QAction::ApplicationSpecificRole);
-        appMenu->addAction(writingSprint);
-    #endif
+    writingSprint->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(writingSprint);
+#endif
 
     // Меню "File"
     QMenu* fileMenu = menuBar->addMenu(tr("File"));
@@ -673,9 +667,7 @@ void MenuView::Implementation::createMenuBar()
     // Меню View
     QMenu* viewMenu = menuBar->addMenu(tr("View"));
     viewMenu->addAction(fullScreen);
-
-    #endif
+#endif
 }
-
 
 } // namespace Ui
