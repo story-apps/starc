@@ -1,0 +1,81 @@
+name: Starc
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+# if: ${{ false }}
+
+jobs:
+  build_linux_arm64:
+    name: Starc (linux_arm64)
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout sources for push or create tag event
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.ACTION_RUNNER }}
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Checkout sources for pull request event
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@master
+
+
+      - name: Checkout submodules for pull request event
+        if: ${{ github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          git submodule update --init --recursive src/3rd_party/qbreakpad/
+
+      - name: Add info about dev build to the env
+        shell: bash
+        run: |
+          echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
+
+      - name: Install Qt, Compile Starc
+        uses: pguyot/arm-runner-action@v2
+        with:
+          cpu: cortex-a53
+          cpu_info: cpuinfo/raspberrypi_zero2_w_arm64
+          base_image: raspios_lite_arm64:latest
+          image_additional_mb: 2048
+          copy_artifact_path: output
+          commands: |
+            build/linux/installqt.sh
+            export CC=clang
+            mkdir -p output
+            build/linux/makelinux.sh '5.15.2' arm64
+            find output -type d -exec chmod a+rwx {} \;
+            find output -type f -exec chmod a+rw {} \;
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux packages
+          path: output/*.tar.gz
+
+      - name: Publish artifacts to the dev stream and notify clients
+        if: startsWith(github.ref, 'refs/tags/') != true
+        shell: bash
+        run: |
+          for file in output/*.tar.gz; do
+            curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "name_for_file=$(basename $file)" -F "file_bin=@$file" https://starc.app/api/app/updates/publish
+          done
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=linux" -F "version=${{env.APP_VERSION}} dev ${{env.DEV_BUILD}}" https://starc.app/api/app/updates/notify
+
+      - name: Publish artifacts to the GitHub releases
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: output/*.tar.gz
+
+      - name: Notify clients that stable release published
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=linux" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
