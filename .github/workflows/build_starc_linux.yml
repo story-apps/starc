@@ -31,7 +31,6 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/checkout@master
 
-
       - name: Checkout submodules for pull request event
         if: ${{ github.event_name == 'pull_request' }}
         shell: bash
@@ -93,11 +92,19 @@ jobs:
           cd build/linux
           ./make-starc-app-image.sh ${{env.APP_VERSION}}
 
+      - name: Make .deb Package
+        shell: bash
+        run: |
+          cd build/linux
+          ./make-starc-deb-package.sh ${{env.APP_VERSION}}
+
       - name: Collect artifacts
         uses: actions/upload-artifact@v3
         with:
           name: linux packages
-          path: build/linux/starc-setup.AppImage
+          path: |
+            build/linux/starc-setup.AppImage
+            build/linux/starc-setup.deb
 
       - name: Publish artifacts to the dev stream and notify clients
         if: startsWith(github.ref, 'refs/tags/') != true
@@ -110,7 +117,9 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: build/linux/starc-setup.AppImage
+          files: |
+            build/linux/starc-setup.AppImage
+            build/linux/starc-setup.deb
 
       - name: Notify clients that stable release published
         if: startsWith(github.ref, 'refs/tags/')
