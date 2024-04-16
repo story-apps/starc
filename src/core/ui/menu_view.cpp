@@ -662,10 +662,13 @@ void MenuView::Implementation::createMenuBar()
     fileMenu->addAction(projects);
     fileMenu->addAction(createProject);
     fileMenu->addAction(openProject);
+    saveProject->setShortcut(QKeySequence("⌘S"));
     fileMenu->addAction(saveProject);
     fileMenu->addAction(saveProjectAs);
     fileMenu->addSeparator();
+    importProject->setShortcut(QKeySequence("⌥I"));
     fileMenu->addAction(importProject);
+    exportCurrentDocument->setShortcut(QKeySequence("⌥E"));
     fileMenu->addAction(exportCurrentDocument);
 
     // Меню View
