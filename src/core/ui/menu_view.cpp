@@ -24,17 +24,23 @@
 #include <QApplication>
 #include <QBoxLayout>
 #include <QKeyEvent>
+#include <QMenuBar>
 #include <QScrollArea>
 #include <QTimer>
-
 
 namespace Ui {
 
 class MenuView::Implementation
 {
 public:
-    explicit Implementation(QWidget* _parent);
+    explicit Implementation(MenuView* _parent);
 
+    /**
+     * @brief Создание MenuBar
+     */
+    void createMenuBar();
+
+    MenuView* q = nullptr;
 
     QScrollArea* menuPage = nullptr;
 
@@ -50,6 +56,7 @@ public:
     QAction* importProject = nullptr;
     QAction* fullScreen = nullptr;
     QAction* settings = nullptr;
+    QAction* aboutApplicationAction = nullptr;
 
     QAction* writingStatistics = nullptr;
     QAction* writingSprint = nullptr;
@@ -76,8 +83,9 @@ public:
     QAction* showDevVersions = nullptr;
 };
 
-MenuView::Implementation::Implementation(QWidget* _parent)
-    : menuPage(UiHelper::createScrollArea(_parent))
+MenuView::Implementation::Implementation(MenuView* _parent)
+    : q(_parent)
+    , menuPage(UiHelper::createScrollArea(_parent))
     , drawer(new Drawer(_parent))
     , signIn(new QAction)
     , projects(new QAction)
@@ -90,6 +98,7 @@ MenuView::Implementation::Implementation(QWidget* _parent)
     , importProject(new QAction)
     , fullScreen(new QAction)
     , settings(new QAction)
+    , aboutApplicationAction(new QAction)
     , writingStatistics(new QAction)
     , writingSprint(new QAction)
     , chat(new QAction)
@@ -242,7 +251,6 @@ MenuView::Implementation::Implementation(QWidget* _parent)
 
 // ****
 
-
 MenuView::MenuView(QWidget* _parent)
     : StackWidget(_parent)
     , d(new Implementation(this))
@@ -254,7 +262,6 @@ MenuView::MenuView(QWidget* _parent)
     setAnimationType(StackWidget::AnimationType::Slide);
     setCurrentWidget(d->menuPage);
     addWidget(d->notificationsPage);
-
 
     connect(d->drawer, &Drawer::accountPressed, this, &MenuView::accountPressed);
     connect(d->signIn, &QAction::triggered, this, &MenuView::signInPressed);
@@ -277,12 +284,14 @@ MenuView::MenuView(QWidget* _parent)
         emit notificationsPressed();
     });
     //
-    connect(d->aboutApp, &Body2LinkLabel::clicked, this, [this] {
+
+    connect(d->aboutApplicationAction, &QAction::triggered, this, [this] {
         auto dialog = new AboutApplicationDialog(parentWidget());
         connect(dialog, &Ui::AboutApplicationDialog::disappeared, dialog,
                 &Ui::AboutApplicationDialog::deleteLater);
         dialog->showDialog();
     });
+    connect(d->aboutApp, &Body2LinkLabel::clicked, d->aboutApplicationAction, &QAction::trigger);
 
     connect(this, &MenuView::accountPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::projectsPressed, this, &MenuView::closeMenu);
@@ -325,6 +334,11 @@ MenuView::MenuView(QWidget* _parent)
     });
 
     setVisible(false);
+
+    //
+    // Добавляем MenuBar
+    //
+    d->createMenuBar();
 }
 
 MenuView::~MenuView() = default;
@@ -554,6 +568,11 @@ void MenuView::updateTranslations()
 
     d->showDevVersions->setText(d->showDevVersions->isChecked() ? tr("Hide developers version")
                                                                 : tr("Show developers version"));
+
+    d->chat->setText(tr("Account"));
+    d->notifications->setText(tr("Notifications"));
+    d->writingStatistics->setText(tr("Writing statistics"));
+    d->writingSprint->setText(tr("Writing sprint"));
 }
 
 void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -593,6 +612,68 @@ void MenuView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->notificationsFilterButton->setContentsMargins(
         isLeftToRight() ? 0 : Ui::DesignSystem::layout().px4(), Ui::DesignSystem::layout().px4(),
         isLeftToRight() ? Ui::DesignSystem::layout().px4() : 0, 0);
+}
+
+void MenuView::Implementation::createMenuBar()
+{
+#ifdef Q_OS_MAC
+
+    QMenuBar* menuBar = new QMenuBar;
+    menuBar->setNativeMenuBar(true);
+
+    //
+    // Создаем пункты меню
+    //
+
+    // Основной пункт меню с нeзвазванием "Story Architect"
+    QMenu* appMenu = menuBar->addMenu("Story Architect");
+    aboutApplicationAction->setText(tr("About Story Architect"));
+    aboutApplicationAction->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(aboutApplicationAction);
+    appMenu->addSeparator();
+    QAction* settingsAction = new QAction();
+    settingsAction->setText(tr("Preferences"));
+    connect(settingsAction, &QAction::triggered, q, &MenuView::settingsPressed);
+    settingsAction->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(settingsAction);
+
+#ifdef CLOUD_SERVICE_MANAGER
+    signIn->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(signIn);
+
+    chat->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(chat);
+
+    notifications->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(notifications);
+
+    appMenu->addSeparator();
+
+    writingStatistics->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(writingStatistics);
+
+    writingSprint->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(writingSprint);
+#endif
+
+    // Меню "File"
+    QMenu* fileMenu = menuBar->addMenu(tr("File"));
+    fileMenu->addAction(projects);
+    fileMenu->addAction(createProject);
+    fileMenu->addAction(openProject);
+    saveProject->setShortcut(QKeySequence("⌘S"));
+    fileMenu->addAction(saveProject);
+    fileMenu->addAction(saveProjectAs);
+    fileMenu->addSeparator();
+    importProject->setShortcut(QKeySequence("⌥I"));
+    fileMenu->addAction(importProject);
+    exportCurrentDocument->setShortcut(QKeySequence("⌥E"));
+    fileMenu->addAction(exportCurrentDocument);
+
+    // Меню View
+    QMenu* viewMenu = menuBar->addMenu(tr("View"));
+    viewMenu->addAction(fullScreen);
+#endif
 }
 
 } // namespace Ui

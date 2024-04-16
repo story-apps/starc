@@ -1405,11 +1405,17 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
 
 void ApplicationManager::Implementation::saveAs()
 {
+    if (projectsManager->currentProject() == nullptr) {
+        Log::info("The current project is not defined and saving cannot be performed.");
+        return;
+    }
+
     //
     // Изначально высвечивается текущее имя проекта
     //
     const auto currentProject = projectsManager->currentProject();
     QString projectPath = currentProject->path();
+
     switch (currentProject->projectType()) {
     //
     // Для теневых проектов добавляем расширение старка, чтобы пользователя не пугал вопрос о
@@ -1464,7 +1470,7 @@ void ApplicationManager::Implementation::saveAs()
     //
     // Если пользователь указал тот же путь, ничего не делаем
     // NOTE: проверяем именно через QFileInfo, т.к. пути могут выглядеть по разному и сравнивать
-    //       строк итут некорректно
+    //       строки тут некорректно
     //
     if (QFileInfo(saveAsProjectFilePath) == QFileInfo(currentProject->path())) {
         return;
@@ -1999,6 +2005,10 @@ void ApplicationManager::Implementation::importProject()
 
 void ApplicationManager::Implementation::exportCurrentDocument()
 {
+    if (projectsManager->currentProject() == nullptr) {
+        Log::info("The current project is not defined and export cannot be performed.");
+        return;
+    }
     exportManager->exportDocument(projectManager->currentModelForExport());
 }
 
@@ -2175,7 +2185,6 @@ ApplicationManager::ApplicationManager(QObject* _parent)
 #endif
     Log::init(loggingLevel, logFilePath);
 
-
     QString applicationVersion = "0.7.1";
 #if defined(DEV_BUILD) && DEV_BUILD > 0
     applicationVersion += QString(" dev %1").arg(DEV_BUILD);
@@ -2187,7 +2196,6 @@ ApplicationManager::ApplicationManager(QObject* _parent)
               QSysInfo().currentCpuArchitecture());
 
     QApplication::setStyle(new ApplicationStyle(QStyleFactory::create("Fusion")));
-
 
     //
     // Загрузим шрифты в базу шрифтов программы, если их там ещё нет
