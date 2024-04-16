@@ -627,10 +627,9 @@ void MenuView::Implementation::createMenuBar()
 
     // Основной пункт меню с нeзвазванием "Story Architect"
     QMenu* appMenu = menuBar->addMenu("Story Architect");
-    QAction* aboutAppAction = new QAction();
-    aboutAppAction->setText(tr("About Story Architect"));
-    connect(aboutAppAction, &QAction::triggered, aboutApplicationAction, &QAction::triggered);
-    appMenu->addAction(aboutAppAction);
+    aboutApplicationAction->setText(tr("About Story Architect"));
+    aboutApplicationAction->setMenuRole(QAction::ApplicationSpecificRole);
+    appMenu->addAction(aboutApplicationAction);
     appMenu->addSeparator();
     QAction* settingsAction = new QAction();
     settingsAction->setText(tr("Preferences"));
