@@ -18,7 +18,7 @@ QVector<TextParagraphType> NovelDocxExporter::paragraphTypes() const
         TextParagraphType::InlineNote,    TextParagraphType::PartHeading,
         TextParagraphType::PartFooter,    TextParagraphType::ChapterHeading,
         TextParagraphType::ChapterFooter, TextParagraphType::SceneHeading,
-        TextParagraphType::Text,
+        TextParagraphType::BeatHeading,   TextParagraphType::Text,
     };
 }
 
