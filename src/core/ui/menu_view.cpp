@@ -56,6 +56,7 @@ public:
     QAction* importProject = nullptr;
     QAction* fullScreen = nullptr;
     QAction* settings = nullptr;
+    QAction* aboutApplicationAction = nullptr;
 
     QAction* writingStatistics = nullptr;
     QAction* writingSprint = nullptr;
@@ -97,6 +98,7 @@ MenuView::Implementation::Implementation(MenuView* _parent)
     , importProject(new QAction)
     , fullScreen(new QAction)
     , settings(new QAction)
+    , aboutApplicationAction(new QAction)
     , writingStatistics(new QAction)
     , writingSprint(new QAction)
     , chat(new QAction)
@@ -282,12 +284,14 @@ MenuView::MenuView(QWidget* _parent)
         emit notificationsPressed();
     });
     //
-    connect(d->aboutApp, &Body2LinkLabel::clicked, this, [this] {
+
+    connect(d->aboutApplicationAction, &QAction::triggered, this, [this] {
         auto dialog = new AboutApplicationDialog(parentWidget());
         connect(dialog, &Ui::AboutApplicationDialog::disappeared, dialog,
                 &Ui::AboutApplicationDialog::deleteLater);
         dialog->showDialog();
     });
+    connect(d->aboutApp, &Body2LinkLabel::clicked, d->aboutApplicationAction, &QAction::trigger);
 
     connect(this, &MenuView::accountPressed, this, &MenuView::closeMenu);
     connect(this, &MenuView::projectsPressed, this, &MenuView::closeMenu);
@@ -625,7 +629,7 @@ void MenuView::Implementation::createMenuBar()
     QMenu* appMenu = menuBar->addMenu("Story Architect");
     QAction* aboutAppAction = new QAction();
     aboutAppAction->setText(tr("About Story Architect"));
-    connect(aboutAppAction, &QAction::triggered, aboutApp, &Body2LinkLabel::clicked);
+    connect(aboutAppAction, &QAction::triggered, aboutApplicationAction, &QAction::triggered);
     appMenu->addAction(aboutAppAction);
     appMenu->addSeparator();
     QAction* settingsAction = new QAction();
