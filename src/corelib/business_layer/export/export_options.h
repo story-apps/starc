@@ -16,6 +16,7 @@ enum class ExportFileFormat {
     Docx,
     Fdx,
     Fountain,
+    Markdown,
 };
 
 /**

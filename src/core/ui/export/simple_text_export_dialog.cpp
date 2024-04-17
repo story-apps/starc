@@ -34,6 +34,11 @@ class SimpleTextExportDialog::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Получить формат файла в соответствии со строкой комбобокса
+     */
+    BusinessLayer::ExportFileFormat currentFileFormat();
+
 
     ComboBox* fileFormat = nullptr;
     CheckBox* includeInlineNotes = nullptr;
@@ -59,7 +64,7 @@ SimpleTextExportDialog::Implementation::Implementation(QWidget* _parent)
     , exportButton(new Button(_parent))
 {
     fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    auto formatsModel = new QStringListModel({ "PDF", "DOCX" });
+    auto formatsModel = new QStringListModel({ "PDF", "DOCX", "Markdown" });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
     watermark->setSpellCheckPolicy(SpellCheckPolicy::Manual);
@@ -72,6 +77,22 @@ SimpleTextExportDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton, 0, Qt::AlignVCenter);
     buttonsLayout->addWidget(exportButton, 0, Qt::AlignVCenter);
+}
+
+BusinessLayer::ExportFileFormat SimpleTextExportDialog::Implementation::currentFileFormat()
+{
+    switch (fileFormat->currentIndex().row()) {
+    default:
+    case 0: {
+        return BusinessLayer::ExportFileFormat::Pdf;
+    }
+    case 1: {
+        return BusinessLayer::ExportFileFormat::Docx;
+    }
+    case 2: {
+        return BusinessLayer::ExportFileFormat::Markdown;
+    }
+    }
 }
 
 
@@ -99,22 +120,30 @@ SimpleTextExportDialog::SimpleTextExportDialog(QWidget* _parent)
         auto isPrintInlineNotesVisible = true;
         auto isPrintReviewMarksVisible = true;
         auto isWatermarkVisible = true;
-        switch (d->fileFormat->currentIndex().row()) {
+        switch (d->currentFileFormat()) {
         //
         // PDF
         //
         default:
-        case 0: {
+        case BusinessLayer::ExportFileFormat::Pdf: {
             //
             // ... всё видимое
             //
             break;
         }
-
         //
         // DOCX
         //
-        case 1: {
+        case BusinessLayer::ExportFileFormat::Docx: {
+            isWatermarkVisible = false;
+            break;
+        }
+        //
+        // Markdown
+        //
+        case BusinessLayer::ExportFileFormat::Markdown: {
+            isPrintInlineNotesVisible = false;
+            isPrintReviewMarksVisible = false;
             isWatermarkVisible = false;
             break;
         }
@@ -165,8 +194,7 @@ SimpleTextExportDialog::~SimpleTextExportDialog()
 BusinessLayer::ExportOptions SimpleTextExportDialog::exportOptions() const
 {
     BusinessLayer::ExportOptions options;
-    options.fileFormat
-        = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
+    options.fileFormat = d->currentFileFormat();
     options.includeInlineNotes = d->includeInlineNotes->isChecked();
     options.includeReviewMarks = d->includeReviewMarks->isChecked();
     options.watermark = d->watermark->text();

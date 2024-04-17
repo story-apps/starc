@@ -28,6 +28,7 @@
 #include <business_layer/export/screenplay/screenplay_fountain_exporter.h>
 #include <business_layer/export/screenplay/screenplay_pdf_exporter.h>
 #include <business_layer/export/simple_text/simple_text_docx_exporter.h>
+#include <business_layer/export/simple_text/simple_text_markdown_exporter.h>
 #include <business_layer/export/simple_text/simple_text_pdf_exporter.h>
 #include <business_layer/export/stageplay/stageplay_docx_exporter.h>
 #include <business_layer/export/stageplay/stageplay_export_options.h>
@@ -965,6 +966,11 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
                     exportExtension = ExtensionHelper::msOfficeOpenXml();
                     break;
                 }
+                case ExportFileFormat::Markdown: {
+                    exportFilter = DialogHelper::markdownFilter();
+                    exportExtension = ExtensionHelper::markdown();
+                    break;
+                }
                 }
                 const auto simpleTextModel = qobject_cast<BusinessLayer::SimpleTextModel*>(_model);
                 const auto projectExportFolder
@@ -1045,6 +1051,10 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
                 }
                 case ExportFileFormat::Docx: {
                     exporter.reset(new BusinessLayer::SimpleTextDocxExporter);
+                    break;
+                }
+                case ExportFileFormat::Markdown: {
+                    exporter.reset(new BusinessLayer::SimpleTextMarkdownExporter);
                     break;
                 }
                 }

@@ -111,6 +111,12 @@ QString DialogHelper::xlsxFilter()
                       ExtensionHelper::xlsx());
 }
 
+QString DialogHelper::markdownFilter()
+{
+    return makeFilter(QApplication::translate("DialogHelper", "Markdown"),
+                      ExtensionHelper::markdown());
+}
+
 QString DialogHelper::filtersForOpenProject()
 {
     QString filters = makeFilter(QApplication::translate("DialogHelper", "All supported files"),
