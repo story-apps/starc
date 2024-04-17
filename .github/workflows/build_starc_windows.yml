@@ -54,7 +54,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          choco install openssl
+          choco install openssl --version=3.2.1
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
