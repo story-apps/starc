@@ -28,6 +28,7 @@ public:
     static QString pdfFilter();
     static QString pngFilter();
     static QString xlsxFilter();
+    static QString markdownFilter();
 
     /**
      * @brief Получить список фильтров файлов которые приложение может открыть
