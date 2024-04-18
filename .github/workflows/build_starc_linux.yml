@@ -93,6 +93,12 @@ jobs:
           cd build/linux
           ./make-starc-x86_64-deb-package.sh ${{env.APP_VERSION}}
 
+      - name: Make .deb Package
+        shell: bash
+        run: |
+          cd build/linux
+          ./make-starc-deb-package.sh ${{env.APP_VERSION}}
+
       - name: Collect artifacts
         uses: actions/upload-artifact@v3
         with:
