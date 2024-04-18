@@ -6,15 +6,28 @@ env:
 on:
   push:
     branches:
-      - test
+      - master
+      - main
+
+# if: ${{ false }}
 
 jobs:
   build_linux_arm64:
     name: Starc (linux_arm64)
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout sources
-        uses: actions/checkout@v2
+      - name: Checkout sources for push or create tag event
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.ACTION_RUNNER }}
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Checkout sources for pull request event
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@master
+
 
       - name: Checkout submodules for pull request event
         if: ${{ github.event_name == 'pull_request' }}
