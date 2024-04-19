@@ -1946,16 +1946,21 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
     // Если изменение касается таблицы, но в списке элементов нет закрывающего таблицу элемента,
     // добавим его вручную, чтобы корректно отработал алгоритм корректировки текста
     //
-    bool needToAddSplitterEnd = false;
+    int splitterStartCount = 0;
+    int splitterEndCount = 0;
     for (const auto& item : oldItemsPlain) {
         if (item->type() != TextModelItemType::Splitter) {
             continue;
         }
 
         const auto splitterItem = static_cast<TextModelSplitterItem*>(item);
-        needToAddSplitterEnd = splitterItem->splitterType() == TextModelSplitterItemType::Start;
+        if (splitterItem->splitterType() == TextModelSplitterItemType::Start) {
+            ++splitterStartCount;
+        } else {
+            ++splitterEndCount;
+        }
     }
-    if (needToAddSplitterEnd) {
+    if (splitterEndCount < splitterStartCount) {
         auto splitterEndItem = [this] {
             auto item = createSplitterItem();
             item->setSplitterType(TextModelSplitterItemType::End);
