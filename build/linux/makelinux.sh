@@ -41,6 +41,9 @@ ls -l "$1" || true
 rm -rf "$1"
 }
 
+
+sudo mkdir -p /opt/anaconda3/bin && sudo ln -s /usr/bin/qmake /opt/anaconda3/bin/qmake
+
 run linux-"$2" "$2"
 
 if [ -d Qt ] ; then
