@@ -33,33 +33,246 @@ const QStringList sceneHeadingStart = {
 };
 
 /**
- * @brief Преобразовать заданный формат в строку
+ * @brief Форматы, которые подерживает fountain
  */
-static QString formatToString(const QTextCharFormat& _format)
+enum TextSelectionTypes {
+    Bold,
+    Italic,
+    Underline,
+};
+
+/**
+ * @brief Символы форматирования
+ */
+static const QVector<QPair<TextSelectionTypes, QString>> kFormatSymbols{
+    { Bold, "**" },
+    { Italic, "*" },
+    { Underline, "_" },
+};
+
+//
+// Формируем закрывающую форматную строку
+//
+static QString closeFormatString(const QVector<QTextLayout::FormatRange>& formats, int _formatIndex)
 {
+    //
+    // Собираем текущие форматы
+    //
+    QSet<TextSelectionTypes> currentFormats;
+    if (formats[_formatIndex].format.font().bold()) {
+        currentFormats.insert(TextSelectionTypes::Bold);
+    }
+    if (formats[_formatIndex].format.font().italic()) {
+        currentFormats.insert(TextSelectionTypes::Italic);
+    }
+    if (formats[_formatIndex].format.font().underline()) {
+        currentFormats.insert(TextSelectionTypes::Underline);
+    }
+
     QString formatString;
-    if (_format.font().bold()) {
-        formatString += "**";
+
+    //
+    // Смотрим в какой последовательности начинаются текущие форматы
+    // и в соответствии с этим формируем форматную строку
+    //
+    for (int index = _formatIndex - 1; index >= 0 && !currentFormats.isEmpty(); --index) {
+        if (!formats[index].format.font().bold()
+            && currentFormats.contains(TextSelectionTypes::Bold)) {
+            formatString.append(kFormatSymbols[TextSelectionTypes::Bold].second);
+            currentFormats.remove(TextSelectionTypes::Bold);
+        }
+        if (!formats[index].format.font().italic()
+            && currentFormats.contains(TextSelectionTypes::Italic)) {
+            formatString.append(kFormatSymbols[TextSelectionTypes::Italic].second);
+            currentFormats.remove(TextSelectionTypes::Italic);
+        }
+        if (!formats[index].format.font().underline()
+            && currentFormats.contains(TextSelectionTypes::Underline)) {
+            formatString.append(kFormatSymbols[TextSelectionTypes::Underline].second);
+            currentFormats.remove(TextSelectionTypes::Underline);
+        }
     }
-    if (_format.font().italic()) {
-        formatString += "*";
+
+    //
+    // ... если первый формат такой же, как и текущий, то в цикле он обработан не был
+    //
+    if (!currentFormats.isEmpty()) {
+        if (currentFormats.contains(TextSelectionTypes::Bold)) {
+            formatString.append(kFormatSymbols[TextSelectionTypes::Bold].second);
+        }
+        if (currentFormats.contains(TextSelectionTypes::Italic)) {
+            formatString.append(kFormatSymbols[TextSelectionTypes::Italic].second);
+        }
+        if (currentFormats.contains(TextSelectionTypes::Underline)) {
+            formatString.append(kFormatSymbols[TextSelectionTypes::Underline].second);
+        }
     }
-    if (_format.font().underline()) {
-        formatString += "_";
+
+    return formatString;
+}
+
+//
+// Формируем открывающую форматную строку
+//
+static QString openFormatString(const QVector<QTextLayout::FormatRange>& formats, int _formatIndex)
+{
+    //
+    // Собираем текущие форматы
+    //
+    QSet<TextSelectionTypes> currentFormats;
+    if (formats[_formatIndex].format.font().bold()) {
+        currentFormats.insert(TextSelectionTypes::Bold);
+    }
+    if (formats[_formatIndex].format.font().italic()) {
+        currentFormats.insert(TextSelectionTypes::Italic);
+    }
+    if (formats[_formatIndex].format.font().underline()) {
+        currentFormats.insert(TextSelectionTypes::Underline);
+    }
+
+    QString formatString;
+
+    //
+    // Смотрим в какой последовательности заканчиваются текущие форматы
+    // и в соответствии с этим формируем форматную строку
+    //
+    for (int index = _formatIndex + 1; index < formats.size() && !currentFormats.isEmpty();
+         ++index) {
+        if (!formats[index].format.font().bold()
+            && currentFormats.contains(TextSelectionTypes::Bold)) {
+            formatString.prepend(kFormatSymbols[TextSelectionTypes::Bold].second);
+            currentFormats.remove(TextSelectionTypes::Bold);
+        }
+        if (!formats[index].format.font().italic()
+            && currentFormats.contains(TextSelectionTypes::Italic)) {
+            formatString.prepend(kFormatSymbols[TextSelectionTypes::Italic].second);
+            currentFormats.remove(TextSelectionTypes::Italic);
+        }
+        if (!formats[index].format.font().underline()
+            && currentFormats.contains(TextSelectionTypes::Underline)) {
+            formatString.prepend(kFormatSymbols[TextSelectionTypes::Underline].second);
+            currentFormats.remove(TextSelectionTypes::Underline);
+        }
+    }
+
+    //
+    // ... если последний формат такой же, как и текущий, то в цикле он обработан не был
+    //
+    if (!currentFormats.isEmpty()) {
+        if (currentFormats.contains(TextSelectionTypes::Bold)) {
+            formatString.prepend(kFormatSymbols[TextSelectionTypes::Bold].second);
+        }
+        if (currentFormats.contains(TextSelectionTypes::Italic)) {
+            formatString.prepend(kFormatSymbols[TextSelectionTypes::Italic].second);
+        }
+        if (currentFormats.contains(TextSelectionTypes::Underline)) {
+            formatString.prepend(kFormatSymbols[TextSelectionTypes::Underline].second);
+        }
+    }
+
+    return formatString;
+}
+
+/**
+ * @brief Преобразовать разницу в двух форматах в строку, открывающую формат
+ */
+static QString formatsOpenDiffToString(const QTextCharFormat& _current,
+                                       const QTextCharFormat& _next)
+{
+    QTextCharFormat diff;
+    diff.setFontWeight(!_current.font().bold() && _next.font().bold() ? QFont::Bold
+                                                                      : QFont::Normal);
+    diff.setFontItalic(!_current.font().italic() && _next.font().italic());
+    diff.setFontUnderline(!_current.font().underline() && _next.font().underline());
+
+    QString formatString;
+    if (diff.font().bold()) {
+        formatString.prepend(kFormatSymbols[TextSelectionTypes::Bold].second);
+    }
+    if (diff.font().italic()) {
+        formatString.prepend(kFormatSymbols[TextSelectionTypes::Italic].second);
+    }
+    if (diff.font().underline()) {
+        formatString.prepend(kFormatSymbols[TextSelectionTypes::Underline].second);
     }
     return formatString;
 }
 
 /**
- * @brief Преобразовать разницу в двух форматах в строку
+ * @brief Преобразовать разницу в двух форматах в строку, закрывающую формат
  */
-static QString formatsDiffToString(const QTextCharFormat& _current, const QTextCharFormat& _next)
+static QString formatsCloseDiffToString(const QTextCharFormat& _current,
+                                        const QTextCharFormat& _next)
 {
     QTextCharFormat diff;
-    diff.setFontWeight(_current.font().bold() ^ _next.font().bold() ? QFont::Bold : QFont::Normal);
-    diff.setFontItalic(_current.font().italic() ^ _next.font().italic());
-    diff.setFontUnderline(_current.font().underline() ^ _next.font().underline());
-    return formatToString(diff);
+    diff.setFontWeight(_current.font().bold() && !_next.font().bold() ? QFont::Bold
+                                                                      : QFont::Normal);
+    diff.setFontItalic(_current.font().italic() && !_next.font().italic());
+    diff.setFontUnderline(_current.font().underline() && !_next.font().underline());
+
+    QString formatString;
+    if (diff.font().bold()) {
+        formatString.append(kFormatSymbols[TextSelectionTypes::Bold].second);
+    }
+    if (diff.font().italic()) {
+        formatString.append(kFormatSymbols[TextSelectionTypes::Italic].second);
+    }
+    if (diff.font().underline()) {
+        formatString.append(kFormatSymbols[TextSelectionTypes::Underline].second);
+    }
+
+    return formatString;
+}
+
+/**
+ * @brief Заэкранировать специальные символы в заданном диапазоне
+ * @return Количество заэкранированных символов
+ */
+static int escapeCharacters(QString& _paragraph, int _begin, int _end)
+{
+    int count = 0;
+    const QSet<QChar> escapedCharacters = { '*', '_' };
+    for (int index = _end; index >= _begin; --index) {
+        if (escapedCharacters.contains(_paragraph[index])) {
+            _paragraph.insert(index, '\\');
+            ++count;
+        }
+    }
+    return count;
+}
+
+/**
+ * @brief Получить индекс для вставки открывающего формата
+ */
+static int openFormatIndex(const QString& _paragraph,
+                           const QTextLayout::FormatRange _nextFormatRange)
+{
+    int index = _nextFormatRange.start;
+    //
+    // Вставлять открывающую форматную строку будем непосредственно перед непробельными
+    // символами следующего формата, иначе Markdown неправильно нас поймет
+    //
+    while (_paragraph[index].isSpace()) {
+        ++index;
+    }
+    return index;
+}
+
+/**
+ * @brief Получить индекс для вставки закрывающего формата
+ */
+static int closeFormatIndex(const QString& _paragraph,
+                            const QTextLayout::FormatRange _currentFormatRange)
+{
+    int index = _currentFormatRange.start + _currentFormatRange.length;
+    //
+    // Вставлять закрывающую форматную строку будем сразу после непробельных символов текущего
+    // формата
+    //
+    while (_paragraph[index - 1].isSpace()) {
+        --index;
+    }
+    return index;
 }
 
 } // namespace
@@ -177,6 +390,13 @@ void ScreenplayFountainExporter::exportTo(AbstractModel* _model, int _fromPositi
                 fullBlockComment = false;
 
                 //
+                // При вставке форматных строк будем экранировать специальные символы (начиная с
+                // конца), чтобы они не сбивали форматирование. Для этого заведем переменную,
+                // отслеживающую положение обработанной части
+                //
+                int escapedRange = paragraphText.size() - 1;
+
+                //
                 // Обрабатывать форматирование надо с конца, чтобы не сбилась их позиция вставки
                 //
                 for (int formatIndex = formats.size() - 1; formatIndex >= 0; --formatIndex) {
@@ -213,28 +433,79 @@ void ScreenplayFountainExporter::exportTo(AbstractModel* _model, int _fromPositi
                     //
                     // Пишем закрывающий формат
                     //
-                    // Смотрим на последующее форматирование
+                    // Смотрим на следующий формат
                     //
                     const int nextFormatIndex = formatIndex + 1;
                     //
-                    // ... если было, то сравниваем форматы и пишем только необходимое (то,
+                    // ... если он есть, то сравниваем форматы и пишем только необходимое (то,
                     // которое не дублируется с последующим)
                     //
                     if (nextFormatIndex < formats.size()
                         && (formats[formatIndex].start + formats[formatIndex].length
                             == formats[nextFormatIndex].start)) {
-                        paragraphText.insert(formats[formatIndex].start
-                                                 + formats[formatIndex].length,
-                                             formatsDiffToString(formats[formatIndex].format,
-                                                                 formats[nextFormatIndex].format));
+
+                        //
+                        // Получаем индекс для вставки открывающей форматной строки следующего
+                        // формата
+                        //
+                        const int nextFormatStartIndex
+                            = openFormatIndex(paragraphText, formats[nextFormatIndex]);
+
+                        //
+                        // Экранируем специальные символы до индекса (со стороны конца)
+                        //
+                        escapeCharacters(paragraphText, nextFormatStartIndex, escapedRange);
+                        escapedRange = nextFormatStartIndex - 1;
+
+                        //
+                        // Вставляем открывающую форматную строку следующего формата
+                        //
+                        paragraphText.insert(
+                            nextFormatStartIndex,
+                            formatsOpenDiffToString(formats[formatIndex].format,
+                                                    formats[nextFormatIndex].format));
+
+                        //
+                        // Получаем индекс для вставки закрывающей форматной строки текущего формата
+                        //
+                        const int formatEndIndex
+                            = closeFormatIndex(paragraphText, formats[formatIndex]);
+
+                        //
+                        // Экранируем специальные символы до индекса (со стороны конца)
+                        //
+                        escapeCharacters(paragraphText, formatEndIndex, escapedRange);
+                        escapedRange = formatEndIndex - 1;
+
+                        //
+                        // Вставляем закрывающую форматную строку текущего формата
+                        //
+                        paragraphText.insert(
+                            formatEndIndex,
+                            formatsCloseDiffToString(formats[formatIndex].format,
+                                                     formats[nextFormatIndex].format));
                     }
                     //
-                    // ... если его не было, то формируем полностью
+                    // ... а если это последний формат блока, то формируем полностью
                     //
                     else {
-                        paragraphText.insert(formats[formatIndex].start
-                                                 + formats[formatIndex].length,
-                                             formatToString(formats[formatIndex].format));
+                        //
+                        // Получаем индекс для вставки закрывающей форматной строки текущего формата
+                        //
+                        const int formatEndIndex
+                            = closeFormatIndex(paragraphText, formats[formatIndex]);
+
+                        //
+                        // Экранируем специальные символы до индекса (со стороны конца)
+                        //
+                        escapeCharacters(paragraphText, formatEndIndex, escapedRange);
+                        escapedRange = formatEndIndex - 1;
+
+                        //
+                        // Вставляем закрывающую форматную строку текущего формата
+                        //
+                        paragraphText.insert(formatEndIndex,
+                                             closeFormatString(formats, formatIndex));
                     }
 
                     //
@@ -246,7 +517,7 @@ void ScreenplayFountainExporter::exportTo(AbstractModel* _model, int _fromPositi
                     //
                     // ... если есть, то ничего не пишем
                     //
-                    if (prevFormatIndex > 0
+                    if (prevFormatIndex >= 0
                         && (formats[prevFormatIndex].start + formats[prevFormatIndex].length
                             == formats[formatIndex].start)) {
                         //
@@ -258,10 +529,30 @@ void ScreenplayFountainExporter::exportTo(AbstractModel* _model, int _fromPositi
                     // ... если нет, то пишем открывающий формат
                     //
                     else {
-                        paragraphText.insert(formats[formatIndex].start,
-                                             formatToString(formats[formatIndex].format));
+                        //
+                        // Получаем индекс для вставки открывающей форматной строки текущего формата
+                        //
+                        const int currentFormatStartIndex
+                            = openFormatIndex(paragraphText, formats[formatIndex]);
+
+                        //
+                        // Экранируем специальные символы до индекса (со стороны конца)
+                        //
+                        escapeCharacters(paragraphText, currentFormatStartIndex, escapedRange);
+                        escapedRange = currentFormatStartIndex - 1;
+
+                        //
+                        // Вставляем открывающую форматную строку текущего формата
+                        //
+                        paragraphText.insert(currentFormatStartIndex,
+                                             openFormatString(formats, formatIndex));
                     }
                 }
+
+                //
+                // Экранируем специальные символы до конца, если остались непроверенные
+                //
+                escapeCharacters(paragraphText, 0, escapedRange);
             }
 
             //
@@ -431,10 +722,9 @@ void ScreenplayFountainExporter::exportTo(AbstractModel* _model, int _fromPositi
                 //
                 // Формат
                 //
-                const QTextCharFormat paragraphFormat = formats.first().format;
-                const QString paragraphFormatText = formatToString(paragraphFormat);
+
                 //
-                // ... начало
+                // ... определяем начало
                 //
                 int formatStartIndex = 0;
                 const QStringList prefixes = { "\n",     ".",     "@",    "= ",  "~ ", "/*",
@@ -444,9 +734,9 @@ void ScreenplayFountainExporter::exportTo(AbstractModel* _model, int _fromPositi
                         formatStartIndex += prefix.length();
                     }
                 }
-                paragraphText.insert(formatStartIndex, paragraphFormatText);
+
                 //
-                // ... конец
+                // ... определяем конец
                 //
                 int formatEndIndex = paragraphText.length();
                 const QStringList postfixes = { "\n", "*/", "\n" };
@@ -456,10 +746,23 @@ void ScreenplayFountainExporter::exportTo(AbstractModel* _model, int _fromPositi
                         formatEndIndex -= postfix.length();
                     }
                 }
-                paragraphText.insert(formatEndIndex, paragraphFormatText);
+
+                //
+                // ... экранируем специальные символы
+                //
+                const int escapedCount
+                    = escapeCharacters(paragraphText, formatStartIndex, formatEndIndex);
+
+                //
+                // ... вставляем форматные строки
+                //
+                paragraphText.insert(formatEndIndex + escapedCount, closeFormatString(formats, 0));
+                paragraphText.insert(formatStartIndex, openFormatString(formats, 0));
+
                 //
                 // Заметки
                 //
+                const QTextCharFormat paragraphFormat = formats.first().format;
                 const QStringList comments
                     = paragraphFormat.property(TextBlockStyle::PropertyComments).toStringList();
                 for (const QString& comment : comments) {
