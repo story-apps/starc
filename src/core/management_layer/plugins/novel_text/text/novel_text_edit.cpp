@@ -6,9 +6,8 @@
 #include <business_layer/document/novel/text/novel_text_document.h>
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
-#include <domain/document_object.h>
-// #include <business_layer/export/novel/novel_export_options.h>
-// #include <business_layer/export/novel/novel_fountain_exporter.h>
+#include <business_layer/export/export_options.h>
+#include <business_layer/export/novel/novel_markdown_exporter.h>
 #include <business_layer/import/novel/novel_markdown_importer.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/characters/characters_model.h>
@@ -21,6 +20,7 @@
 #include <business_layer/model/text/text_model_group_item.h>
 #include <business_layer/templates/novel_template.h>
 #include <business_layer/templates/templates_facade.h>
+#include <domain/document_object.h>
 #include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
@@ -1553,8 +1553,36 @@ QMimeData* NovelTextEdit::createMimeDataFromSelection() const
     }
 
     //
-    // FIXME: Добавим маркдаун
+    // Добавим markdown
     //
+    {
+        //
+        // Подготавливаем опции для экспорта в markdown
+        //
+        BusinessLayer::ExportOptions options;
+        options.filePath = QDir::temp().absoluteFilePath("clipboard.md");
+        options.includeTiltePage = false;
+        options.includeReviewMarks = false;
+        options.includeInlineNotes = false;
+        //
+        // ... сохраняем в формате markdown
+        //
+        BusinessLayer::NovelMarkdownExporter().exportTo(d->model, selection.from, selection.to,
+                                                        options);
+        //
+        // ... читаем сохранённый экспорт из файла
+        //
+        QFile file(options.filePath);
+        QByteArray text;
+        if (file.open(QIODevice::ReadOnly)) {
+            text = file.readAll();
+            file.close();
+        }
+
+        if (!text.isEmpty()) {
+            mimeData->setData("text/markdown", text);
+        }
+    }
 
     //
     // Поместим в буфер данные о тексте в специальном формате

@@ -41,6 +41,11 @@ public:
     explicit Implementation(QWidget* _parent);
 
     /**
+     * @brief Получить формат файла в соответствии со строкой комбобокса
+     */
+    BusinessLayer::ExportFileFormat currentFileFormat();
+
+    /**
      * @brief Получить список сцен для печати
      */
     QVector<QString> scenesToPrint() const;
@@ -83,7 +88,7 @@ NovelExportDialog::Implementation::Implementation(QWidget* _parent)
     , exportButton(new Button(_parent))
 {
     fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    auto formatsModel = new QStringListModel({ "PDF", "DOCX" });
+    auto formatsModel = new QStringListModel({ "PDF", "DOCX", "Markdown" });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
     ornamentalBreak->setSpellCheckPolicy(SpellCheckPolicy::Manual);
@@ -97,6 +102,22 @@ NovelExportDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton, 0, Qt::AlignVCenter);
     buttonsLayout->addWidget(exportButton, 0, Qt::AlignVCenter);
+}
+
+BusinessLayer::ExportFileFormat NovelExportDialog::Implementation::currentFileFormat()
+{
+    switch (fileFormat->currentIndex().row()) {
+    default:
+    case 0: {
+        return BusinessLayer::ExportFileFormat::Pdf;
+    }
+    case 1: {
+        return BusinessLayer::ExportFileFormat::Docx;
+    }
+    case 2: {
+        return BusinessLayer::ExportFileFormat::Markdown;
+    }
+    }
 }
 
 QVector<QString> NovelExportDialog::Implementation::scenesToPrint() const
@@ -175,22 +196,30 @@ NovelExportDialog::NovelExportDialog(QWidget* _parent)
         auto isPrintReviewMarksVisible = true;
         auto exportConcreteScenesVisible = true;
         auto isWatermarkVisible = true;
-        switch (d->fileFormat->currentIndex().row()) {
+        switch (d->currentFileFormat()) {
         //
         // PDF
         //
         default:
-        case 0: {
+        case BusinessLayer::ExportFileFormat::Pdf: {
             //
             // ... всё видимое
             //
             break;
         }
-
-            //
-            // DOCX
-            //
-        case 1: {
+        //
+        // DOCX
+        //
+        case BusinessLayer::ExportFileFormat::Docx: {
+            isWatermarkVisible = false;
+            break;
+        }
+        //
+        // Markdown
+        //
+        case BusinessLayer::ExportFileFormat::Markdown: {
+            isPrintInlineNotesVisible = false;
+            isPrintReviewMarksVisible = false;
             isWatermarkVisible = false;
             break;
         }
@@ -274,8 +303,7 @@ NovelExportDialog::~NovelExportDialog()
 BusinessLayer::NovelExportOptions NovelExportDialog::exportOptions() const
 {
     BusinessLayer::NovelExportOptions options;
-    options.fileFormat
-        = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
+    options.fileFormat = d->currentFileFormat();
     options.includeTiltePage = d->includeTitlePage->isChecked();
     options.includeSynopsis = d->includeSynopsis->isChecked();
     options.includeText = d->includeOutline->isChecked() || d->includeNovel->isChecked();

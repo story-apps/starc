@@ -21,6 +21,7 @@
 #include <business_layer/export/locations/locations_pdf_exporter.h>
 #include <business_layer/export/novel/novel_docx_exporter.h>
 #include <business_layer/export/novel/novel_export_options.h>
+#include <business_layer/export/novel/novel_markdown_exporter.h>
 #include <business_layer/export/novel/novel_pdf_exporter.h>
 #include <business_layer/export/screenplay/screenplay_docx_exporter.h>
 #include <business_layer/export/screenplay/screenplay_export_options.h>
@@ -825,6 +826,11 @@ void ExportManager::Implementation::exportNovel(BusinessLayer::AbstractModel* _m
                     exportExtension = ExtensionHelper::msOfficeOpenXml();
                     break;
                 }
+                case ExportFileFormat::Markdown: {
+                    exportFilter = DialogHelper::markdownFilter();
+                    exportExtension = ExtensionHelper::markdown();
+                    break;
+                }
                 }
                 const auto novelTextModel = qobject_cast<BusinessLayer::NovelTextModel*>(_model);
                 const auto projectExportFolder
@@ -908,6 +914,10 @@ void ExportManager::Implementation::exportNovel(BusinessLayer::AbstractModel* _m
                 }
                 case ExportFileFormat::Docx: {
                     exporter.reset(new BusinessLayer::NovelDocxExporter);
+                    break;
+                }
+                case ExportFileFormat::Markdown: {
+                    exporter.reset(new BusinessLayer::NovelMarkdownExporter);
                     break;
                 }
                 }
