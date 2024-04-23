@@ -121,9 +121,10 @@ void CreateDocumentDialogOption::paintEvent(QPaintEvent* _event)
     //
     // Текст
     //
-    const QRectF textRect(
-        contentsRect().left(), contentsRect().top() + DesignSystem::layout().px(75),
-        contentsRect().width(), contentsRect().height() - DesignSystem::layout().px(75));
+    const QRectF textRect(contentsRect().left() + DesignSystem::layout().px8(),
+                          contentsRect().top() + DesignSystem::layout().px(75),
+                          contentsRect().width() - DesignSystem::layout().px16(),
+                          contentsRect().height() - DesignSystem::layout().px(75));
     painter.setFont(DesignSystem::font().subtitle2());
     painter.drawText(textRect, Qt::AlignHCenter | Qt::AlignTop | Qt::TextWordWrap, d->documentName);
 
