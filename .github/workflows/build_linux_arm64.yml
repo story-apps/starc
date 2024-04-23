@@ -49,16 +49,8 @@ jobs:
           image_additional_mb: 2048
           copy_artifact_path: output
           commands: |
-            apt-get install -y git
-            chmod +x build/linux/installqt.sh
-            build/linux/installqt.sh
-            export CC=clang
-            mkdir -p output
-            git submodule update --init --recursive src/3rd_party/qbreakpad
-            chmod +x build/linux/makelinux.sh
-            build/linux/makelinux.sh '5.15.2' arm64
-            find output -type d -exec chmod a+rwx {} \;
-            find output -type f -exec chmod a+rw {} \;
+            chmod +x build/linux/make-starc-arm64-tar-image.sh
+            ./build/linux/make-starc-arm64-tar-image.sh
 
       - name: Collect artifacts
         uses: actions/upload-artifact@v3
