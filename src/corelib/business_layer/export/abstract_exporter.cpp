@@ -171,11 +171,6 @@ TextDocument* AbstractExporter::prepareDocument(AbstractModel* _model,
             //
             auto blockFormat = block.blockFormat();
             //
-            // ... сбросим тип
-            //
-            blockFormat.setProperty(TextBlockStyle::PropertyType,
-                                    static_cast<int>(TextParagraphType::Undefined));
-            //
             // ... вставляем блок
             //
             if (cursor.atStart()) {

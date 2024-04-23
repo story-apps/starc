@@ -7,6 +7,9 @@ namespace BusinessLayer {
 
 class CORE_LIBRARY_EXPORT NovelExporter : virtual public AbstractExporter
 {
+public:
+    ~NovelExporter() override;
+
 protected:
     /**
      * @brief Создать документ для экспорта

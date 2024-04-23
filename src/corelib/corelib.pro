@@ -117,6 +117,7 @@ SOURCES += \
     business_layer/document/text/text_document.cpp \
     business_layer/export/abstract_docx_exporter.cpp \
     business_layer/export/abstract_exporter.cpp \
+    business_layer/export/abstract_markdown_exporter.cpp \
     business_layer/export/abstract_pdf_exporter.cpp \
     business_layer/export/audioplay/audioplay_docx_exporter.cpp \
     business_layer/export/audioplay/audioplay_exporter.cpp \
@@ -138,6 +139,7 @@ SOURCES += \
     business_layer/export/locations/locations_pdf_exporter.cpp \
     business_layer/export/novel/novel_docx_exporter.cpp \
     business_layer/export/novel/novel_exporter.cpp \
+    business_layer/export/novel/novel_markdown_exporter.cpp \
     business_layer/export/novel/novel_pdf_exporter.cpp \
     business_layer/export/screenplay/screenplay_docx_exporter.cpp \
     business_layer/export/screenplay/screenplay_exporter.cpp \
@@ -445,6 +447,7 @@ HEADERS += \
     business_layer/document/text/text_document.h \
     business_layer/export/abstract_docx_exporter.h \
     business_layer/export/abstract_exporter.h \
+    business_layer/export/abstract_markdown_exporter.h \
     business_layer/export/abstract_pdf_exporter.h \
     business_layer/export/audioplay/audioplay_docx_exporter.h \
     business_layer/export/audioplay/audioplay_export_options.h \
@@ -474,6 +477,7 @@ HEADERS += \
     business_layer/export/novel/novel_docx_exporter.h \
     business_layer/export/novel/novel_export_options.h \
     business_layer/export/novel/novel_exporter.h \
+    business_layer/export/novel/novel_markdown_exporter.h \
     business_layer/export/novel/novel_pdf_exporter.h \
     business_layer/export/screenplay/screenplay_docx_exporter.h \
     business_layer/export/screenplay/screenplay_export_options.h \

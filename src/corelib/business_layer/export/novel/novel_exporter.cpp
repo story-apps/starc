@@ -10,8 +10,12 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
+#include <QTextBlock>
+
 
 namespace BusinessLayer {
+
+NovelExporter::~NovelExporter() = default;
 
 TextDocument* NovelExporter::createDocument(const ExportOptions& _exportOptions) const
 {
@@ -95,6 +99,18 @@ bool NovelExporter::prepareBlock(const ExportOptions& _exportOptions, TextCursor
         }
     }
 
+    //
+    // Удаляем невидимые блоки
+    //
+    if (!_cursor.block().isVisible()) {
+        _cursor.select(QTextCursor::BlockUnderCursor);
+        if (_cursor.hasSelection()) {
+            _cursor.deleteChar();
+            return true;
+        }
+    }
+
     return false;
 }
+
 } // namespace BusinessLayer
