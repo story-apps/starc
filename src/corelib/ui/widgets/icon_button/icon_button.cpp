@@ -120,6 +120,11 @@ void IconButton::setCustomFont(const QFont& _font)
     update();
 }
 
+void IconButton::click()
+{
+    emit clicked();
+}
+
 QSize IconButton::sizeHint() const
 {
     return QRectF({}, Ui::DesignSystem::iconButton().size())

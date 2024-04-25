@@ -353,6 +353,35 @@ void StackWidget::addWidget(QWidget* _widget)
     _widget->hide();
 }
 
+void StackWidget::prependWidget(QWidget* _widget)
+{
+    if (d->widgets.contains(_widget)) {
+        return;
+    }
+
+    d->widgets.prepend(_widget);
+    _widget->installEventFilter(this);
+    _widget->setParent(this);
+    _widget->resize(size());
+
+    updateGeometry();
+
+    _widget->hide();
+}
+
+void StackWidget::takeWidget(QWidget* _widget)
+{
+    if (!d->widgets.contains(_widget)) {
+        return;
+    }
+
+    Q_ASSERT(d->currentWidget != _widget);
+
+    d->widgets.takeAt(d->widgets.indexOf(_widget));
+    _widget->removeEventFilter(this);
+    _widget->setParent(nullptr);
+}
+
 bool StackWidget::containsWidget(QWidget* _widget)
 {
     return d->widgets.contains(_widget);

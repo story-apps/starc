@@ -38,6 +38,11 @@ public:
     void setCustomFont(const QFont& _font);
 
     /**
+     * @brief Имитировать клик пользователя на кнопке для испускания сигнала
+     */
+    void click();
+
+    /**
      * @brief Переопределяем для корректного подсчёта размера в компоновщиках
      */
     QSize sizeHint() const override;

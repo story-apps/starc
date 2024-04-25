@@ -197,9 +197,9 @@ void TextField::Implementation::reconfigure()
     labelTopLeftAnimation.setStartValue(labelCurrentTopLeft);
     labelTopLeftAnimation.setEndValue(labelNewTopLeft);
 
-    iconDecorationAnimation.setRadiusInterval(Ui::DesignSystem::textField().iconSize().height()
-                                                  / 2.0,
-                                              Ui::DesignSystem::radioButton().height() / 2.0);
+    iconDecorationAnimation.setRadiusInterval(
+        Ui::DesignSystem::textField().iconSize().height() * 0.5,
+        Ui::DesignSystem::textField().iconSize().height() * 0.8);
 
     finishAnimationIfInvisible();
 
@@ -761,7 +761,9 @@ void TextField::clear()
     cursor.deleteChar();
     document()->clearUndoRedoStacks();
 
-    d->animateLabelToBottom();
+    if (d->placeholder.isEmpty()) {
+        d->animateLabelToBottom();
+    }
     d->finishAnimationIfInvisible();
 }
 
@@ -924,6 +926,11 @@ void TextField::paintEvent(QPaintEvent* _event)
         const auto passwdRect = d->inputTextRect();
         painter.drawText(passwdRect, Qt::AlignLeft | Qt::AlignBottom,
                          QString(text().length(), QString("●").front()));
+
+        //
+        // TODO: рисовать курсор
+        //
+
         painter.end();
     }
 
@@ -946,7 +953,9 @@ void TextField::paintEvent(QPaintEvent* _event)
 
         QColor labelColor = d->textDisabledColor;
         if (!d->error.isEmpty()) {
-            labelColor = Ui::DesignSystem::color().error();
+            labelColor = ColorHelper::transparent(
+                Ui::DesignSystem::color().error(),
+                isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity());
         } else if (!d->labelColorAnimation.currentValue().isNull()) {
             labelColor = d->labelColorAnimation.currentValue().value<QColor>();
         }
@@ -1012,8 +1021,10 @@ void TextField::paintEvent(QPaintEvent* _event)
     //
     if (!d->helper.isEmpty() || !d->wordCount.isEmpty() || !d->error.isEmpty()) {
         painter.setFont(Ui::DesignSystem::font().caption());
-        const QColor color
-            = !d->error.isEmpty() ? Ui::DesignSystem::color().error() : d->textDisabledColor;
+        const QColor color = !d->error.isEmpty() ? (ColorHelper::transparent(
+                                 Ui::DesignSystem::color().error(),
+                                 isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity()))
+                                                 : d->textDisabledColor;
         painter.setPen(color);
         const QRectF textRect(d->contentMargins().left() + d->margins().left(),
                               height() - d->contentMargins().bottom()

@@ -43,6 +43,17 @@ public:
     void addWidget(QWidget* _widget);
 
     /**
+     * @brief Добавить виджет в начало стека
+     * @note При этом виджет не делается текущим
+     */
+    void prependWidget(QWidget* _widget);
+
+    /**
+     * @brief Извлечь виджет из стека
+     */
+    void takeWidget(QWidget* _widget);
+
+    /**
      * @brief Содержится ли заданный виджет в стэке
      */
     bool containsWidget(QWidget* _widget);
