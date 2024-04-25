@@ -336,6 +336,9 @@ SOURCES += \
     ui/widgets/color_picker/color_picker_popup.cpp \
     ui/widgets/combo_box/combo_box.cpp \
     ui/widgets/context_menu/context_menu.cpp \
+    ui/widgets/date_picker/date_picker.cpp \
+    ui/widgets/date_picker/date_picker_popup.cpp \
+    ui/widgets/date_picker/month_days_widget.cpp \
     ui/widgets/dialog/abstract_dialog.cpp \
     ui/widgets/dialog/dialog.cpp \
     ui/widgets/dialog/standard_dialog.cpp \
@@ -689,6 +692,9 @@ HEADERS += \
     ui/widgets/color_picker/color_picker_popup.h \
     ui/widgets/combo_box/combo_box.h \
     ui/widgets/context_menu/context_menu.h \
+    ui/widgets/date_picker/date_picker.h \
+    ui/widgets/date_picker/date_picker_popup.h \
+    ui/widgets/date_picker/month_days_widget.h \
     ui/widgets/dialog/abstract_dialog.h \
     ui/widgets/dialog/dialog.h \
     ui/widgets/dialog/standard_dialog.h \
