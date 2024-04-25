@@ -273,6 +273,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     sidebarContent->addWidget(dictionariesView);
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
+    itemParametersView->setStartDateTimeVisible(false);
     itemParametersView->setStampVisible(false);
     itemParametersView->hide();
     commentsView->setModel(commentsModel);

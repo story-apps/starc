@@ -3,6 +3,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/color_picker/color_picker_popup.h>
+#include <ui/widgets/date_picker/date_picker_popup.h>
 #include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -15,6 +16,7 @@
 #include <utils/helpers/text_helper.h>
 #include <utils/helpers/ui_helper.h>
 
+#include <QDateTime>
 #include <QScrollArea>
 #include <QStandardItemModel>
 #include <QStringListModel>
@@ -72,6 +74,9 @@ public:
     QVector<TextField*> beats;
     TextField* storyDay = nullptr;
     QStringListModel* allStoryDaysModel = nullptr;
+    bool isStartDateTimeVisible = true;
+    TextField* startDateTime = nullptr;
+    DatePickerPopup* datePickerPopup = nullptr;
     bool isStampVisible = true;
     TextField* stamp = nullptr;
     bool isNumberingVisible = true;
@@ -99,6 +104,8 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
     , beats({ new TextField(content) })
     , storyDay(new TextField(content))
     , allStoryDaysModel(new QStringListModel(storyDay))
+    , startDateTime(new TextField(content))
+    , datePickerPopup(new DatePickerPopup(content))
     , stamp(new TextField(content))
     , numberingTitle(new Subtitle2Label(content))
     , autoNumbering(new Toggle(content))
@@ -128,11 +135,13 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
         description,
         beats.constFirst(),
         storyDay,
+        startDateTime,
         stamp,
     });
     description->setEnterMakesNewLine(true);
     storyDay->setCompleterActive(true);
     storyDay->completer()->setModel(allStoryDaysModel);
+    startDateTime->setTrailingIcon(u8"\U000F0B67");
     autoNumbering->setChecked(true);
     customNumber->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     customNumber->hide();
@@ -156,6 +165,7 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
     contentLayout->addWidget(description);
     contentLayout->addWidget(beats.constFirst());
     contentLayout->addWidget(storyDay);
+    contentLayout->addWidget(startDateTime);
     contentLayout->addWidget(stamp);
     {
         auto layout = new QHBoxLayout;
@@ -264,6 +274,75 @@ CardItemParametersView::CardItemParametersView(QWidget* _parent)
             [this] { emit beatChanged(0, d->beats.constFirst()->text()); });
     connect(d->storyDay, &TextField::textChanged, this,
             [this] { emit storyDayChanged(d->storyDay->text()); });
+    connect(d->startDateTime, &TextField::textChanged, this, [this] {
+        emit startDateTimeChanged(QDateTime::fromString(d->startDateTime->text(), "dd.MM.yyyy"));
+    });
+    auto initDatePicker = [this](TextField* _editor) {
+        d->datePickerPopup->disconnect();
+
+        connect(d->datePickerPopup, &DatePickerPopup::selectedDateChanged, _editor,
+                [_editor](const QDate& _date) { _editor->setText(_date.toString("dd.MM.yyyy")); });
+
+        if (auto date = QDate::fromString(_editor->text(), "dd.MM.yyyy"); date.isValid()) {
+            d->datePickerPopup->setCurrentDate(date);
+            d->datePickerPopup->setSelectedDate(date);
+        } else {
+            d->datePickerPopup->setCurrentDate(QDate::currentDate());
+            d->datePickerPopup->setSelectedDate({});
+        }
+        d->datePickerPopup->showPopup(_editor, Qt::AlignBottom | Qt::AlignRight);
+    };
+    for (auto dateTextField : {
+             d->startDateTime,
+         }) {
+        connect(dateTextField, &TextField::trailingIconPressed, this,
+                [dateTextField, initDatePicker] { initDatePicker(dateTextField); });
+        connect(dateTextField, &TextField::textChanged, dateTextField, [dateTextField] {
+            dateTextField->clearError();
+
+            const auto sourceText = dateTextField->text();
+            auto text = sourceText;
+            //
+            // Убираем не числа
+            //
+            for (int i = text.length() - 1; i >= 0; --i) {
+                if (!text[i].isDigit()) {
+                    text.remove(i, 1);
+                }
+            }
+            //
+            // Убираем лишние символы
+            //
+            if (text.length() > 8) {
+                text = text.left(8);
+            }
+            //
+            // Добавляем точки
+            //
+            for (int i = 0; i < text.length(); ++i) {
+                if (i == 2 || i == 5) {
+                    text.insert(i, '.');
+                }
+            }
+
+            if (sourceText != text) {
+                auto cursorPosition = dateTextField->textCursor().position();
+                //
+                dateTextField->setText(text);
+                //
+                if (sourceText.length() < text.length()) {
+                    //
+                    // ... если новый текст длиннее чем исходный, значит добавили тут символов и
+                    //     курсор нужно сдвинуть на кол-во добавленных символов
+                    //
+                    cursorPosition += text.length() - sourceText.length();
+                }
+                auto cursor = dateTextField->textCursor();
+                cursor.setPosition(cursorPosition);
+                dateTextField->setTextCursor(cursor);
+            }
+        });
+    }
     connect(d->stamp, &TextField::textChanged, this,
             [this] { emit stampChanged(d->stamp->text()); });
     connect(d->numberingTitle, &AbstractLabel::clicked, this, [this] {
@@ -327,6 +406,7 @@ void CardItemParametersView::setItemType(CardItemType _type)
             beat->setVisible(false);
         }
         d->storyDay->setVisible(false);
+        d->startDateTime->setVisible(false);
         d->stamp->setVisible(d->isStampVisible && true);
         d->numberingTitle->setVisible(d->isNumberingVisible && false);
         d->autoNumbering->setVisible(d->isNumberingVisible && false);
@@ -346,6 +426,7 @@ void CardItemParametersView::setItemType(CardItemType _type)
             beat->setVisible(true);
         }
         d->storyDay->setVisible(true);
+        d->startDateTime->setVisible(d->isStartDateTimeVisible && true);
         d->stamp->setVisible(d->isStampVisible && true);
         d->numberingTitle->setVisible(d->isNumberingVisible && true);
         d->autoNumbering->setVisible(d->isNumberingVisible && true);
@@ -481,6 +562,21 @@ void CardItemParametersView::setStoryDay(const QString& _storyDay,
     }
 }
 
+void CardItemParametersView::setStartDateTimeVisible(bool _visible)
+{
+    d->isStartDateTimeVisible = _visible;
+    d->startDateTime->setVisible(d->isStartDateTimeVisible);
+}
+
+void CardItemParametersView::setStartDateTime(const QDateTime& _startDateTime)
+{
+    if (d->startDateTime->text() == _startDateTime.toString("dd.MM.yyyy")) {
+        return;
+    }
+
+    d->startDateTime->setText(_startDateTime.toString("dd.MM.yyyy"));
+}
+
 void CardItemParametersView::setStampVisible(bool _visible)
 {
     d->isStampVisible = _visible;
@@ -576,6 +672,7 @@ void CardItemParametersView::setReadOnly(bool _readOnly)
         cardBeat->setEnabled(enabled);
     }
     d->storyDay->setEnabled(enabled);
+    d->startDateTime->setEnabled(enabled);
     d->stamp->setEnabled(enabled);
     d->autoNumbering->setEnabled(enabled);
     d->customNumber->setEnabled(enabled);
@@ -663,6 +760,8 @@ void CardItemParametersView::updateTranslations()
     d->description->setLabel(tr("Description"));
     d->initCardBeats();
     d->storyDay->setLabel(tr("Story day"));
+    d->startDateTime->setLabel(tr("Start date"));
+    d->startDateTime->setPlaceholderText("DD.MM.YYYY");
     d->stamp->setLabel(tr("Stamp"));
     d->numberingTitle->setText(tr("Auto scene numbering"));
     d->customNumber->setLabel(tr("Scene number"));
@@ -719,6 +818,7 @@ void CardItemParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _e
              d->heading,
              d->description,
              d->storyDay,
+             d->startDateTime,
              d->stamp,
              d->customNumber,
          }) {
@@ -732,6 +832,9 @@ void CardItemParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _e
     //
     d->storyDay->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
     d->storyDay->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
+    //
+    d->datePickerPopup->setBackgroundColor(DesignSystem::color().background());
+    d->datePickerPopup->setTextColor(DesignSystem::color().onBackground());
     //
     d->initCardBeats();
     //

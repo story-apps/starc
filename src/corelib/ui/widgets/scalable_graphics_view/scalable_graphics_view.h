@@ -49,7 +49,7 @@ public:
     /**
      * @brief Загрузить состояние
      */
-    void restoreState(const QByteArray& _state);
+    virtual void restoreState(const QByteArray& _state);
 
     /**
      * @brief Сохранить сцену в картинку

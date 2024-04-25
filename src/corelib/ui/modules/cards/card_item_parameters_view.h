@@ -71,6 +71,13 @@ public:
     Q_SIGNAL void storyDayChanged(const QString& _storyDay);
 
     /**
+     * @brief Дата и время начала события
+     */
+    void setStartDateTimeVisible(bool _visible);
+    void setStartDateTime(const QDateTime& _startDateTime);
+    Q_SIGNAL void startDateTimeChanged(const QDateTime& _startDateTime);
+
+    /**
      * @brief Штамп
      */
     void setStampVisible(bool _visible);

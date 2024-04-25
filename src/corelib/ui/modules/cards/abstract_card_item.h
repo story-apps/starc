@@ -28,6 +28,11 @@ public:
     virtual qreal headerHeight() const;
 
     /**
+     * @brief Позиция карточки при упорядочивании линиями
+     */
+    virtual qreal positionOnLine() const;
+
+    /**
      * @brief Является ли элемент верхнеуровневым (акты)
      */
     virtual bool isTopLevel() const;

@@ -288,6 +288,19 @@ const QString kComponentsScreenplayCardsCardsSpacingKey
     = kComponentsScreenplayCardsKey + QStringLiteral("/cards-spacing");
 const QString kComponentsScreenplayCardsCardsInRowKey
     = kComponentsScreenplayCardsKey + QStringLiteral("/cards-in-row");
+// ... редактор таймлайна
+const QString kComponentsScreenplayTimelineKey
+    = kComponentsScreenplayKey + QStringLiteral("/timeline");
+const QString kComponentsScreenplayTimelineSplitterStateKey
+    = kComponentsScreenplayTimelineKey + QStringLiteral("/splitter-state");
+const QString kComponentsScreenplayTimelineArrangeHorizontalKey
+    = kComponentsScreenplayTimelineKey + QStringLiteral("/arrange-horiontal");
+const QString kComponentsScreenplayTimelineCardsSizeKey
+    = kComponentsScreenplayTimelineKey + QStringLiteral("/cards-size");
+const QString kComponentsScreenplayTimelineCardsRatioKey
+    = kComponentsScreenplayTimelineKey + QStringLiteral("/cards-ratio");
+const QString kComponentsScreenplayTimelineCardsSpacingKey
+    = kComponentsScreenplayTimelineKey + QStringLiteral("/cards-spacing");
 // ... статистика
 const QString kComponentsScreenplayStatisticsKey
     = kComponentsScreenplayKey + QStringLiteral("/statistics");

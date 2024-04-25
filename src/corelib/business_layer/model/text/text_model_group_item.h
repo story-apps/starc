@@ -9,6 +9,7 @@
 #include <optional>
 
 class QColor;
+class QDateTime;
 class QUuid;
 class QXmlStreamReader;
 
@@ -72,6 +73,7 @@ public:
         GroupColorRole,
         GroupInlineNotesSizeRole,
         GroupReviewMarksSizeRole,
+        GroupStartDateTimeRole,
         GroupUserRole,
     };
 
@@ -127,6 +129,12 @@ public:
      */
     QString storyDay() const;
     void setStoryDay(const QString& _storyDay);
+
+    /**
+     * @brief Дата начала события
+     */
+    QDateTime startDateTime() const;
+    void setStartDateTime(const QDateTime& _startDateTime);
 
     /**
      * @brief Штамп группы

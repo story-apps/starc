@@ -252,6 +252,7 @@ NovelOutlineView::Implementation::Implementation(NovelOutlineView* _q)
     fastFormatWidget->hide();
     fastFormatWidget->setParagraphTypesModel(paragraphTypesModel);
     itemParametersView->setNumberingVisible(false);
+    itemParametersView->setStartDateTimeVisible(false);
     itemParametersView->setStampVisible(false);
     itemParametersView->hide();
     commentsView->setModel(commentsModel);

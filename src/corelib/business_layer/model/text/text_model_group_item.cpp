@@ -9,6 +9,7 @@
 #include <business_layer/templates/screenplay_template.h>
 #include <utils/helpers/text_helper.h>
 
+#include <QDateTime>
 #include <QLocale>
 #include <QUuid>
 #include <QVariant>
@@ -64,6 +65,11 @@ public:
      * @brief День сценария
      */
     QString storyDay;
+
+    /**
+     * @brief Дата и время начала события
+     */
+    QDateTime startDateTime;
 
     /**
      * @brief Штамп на группе
@@ -324,6 +330,21 @@ void TextModelGroupItem::setStoryDay(const QString& _storyDay)
     setChanged(true);
 }
 
+QDateTime TextModelGroupItem::startDateTime() const
+{
+    return d->startDateTime;
+}
+
+void TextModelGroupItem::setStartDateTime(const QDateTime& _startDateTime)
+{
+    if (d->startDateTime == _startDateTime) {
+        return;
+    }
+
+    d->startDateTime = _startDateTime;
+    setChanged(true);
+}
+
 QString TextModelGroupItem::stamp() const
 {
     return d->stamp;
@@ -471,6 +492,13 @@ void TextModelGroupItem::readContent(QXmlStreamReader& _contentReader)
 
     if (currentTag == xml::kStoryDayTag) {
         d->storyDay = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
+        xml::readNextElement(_contentReader); // end
+        currentTag = xml::readNextElement(_contentReader); // next
+    }
+
+    if (currentTag == xml::kStartDateTimeTag) {
+        d->startDateTime
+            = QDateTime::fromString(xml::readContent(_contentReader).toString(), Qt::ISODateWithMs);
         xml::readNextElement(_contentReader); // end
         currentTag = xml::readNextElement(_contentReader); // next
     }
@@ -631,6 +659,11 @@ QByteArray TextModelGroupItem::xmlHeader(bool _clearUuid) const
                    .arg(xml::kStoryDayTag, TextHelper::toHtmlEscaped(d->storyDay))
                    .toUtf8();
     }
+    if (d->startDateTime.isValid()) {
+        xml += QString("<%1><![CDATA[%2]]></%1>\n")
+                   .arg(xml::kStartDateTimeTag, d->startDateTime.toString(Qt::ISODateWithMs))
+                   .toUtf8();
+    }
     if (!d->stamp.isEmpty()) {
         xml += QString("<%1><![CDATA[%2]]></%1>\n")
                    .arg(xml::kStampTag, TextHelper::toHtmlEscaped(d->stamp))
@@ -666,6 +699,7 @@ void TextModelGroupItem::copyFrom(TextModelItem* _item)
     d->color = groupItem->d->color;
     d->title = groupItem->title();
     d->storyDay = groupItem->d->storyDay;
+    d->startDateTime = groupItem->d->startDateTime;
     d->stamp = groupItem->d->stamp;
     d->tags = groupItem->d->tags;
 }
@@ -684,8 +718,8 @@ bool TextModelGroupItem::isEqual(TextModelItem* _item) const
         //
         //            && d->number == sceneItem->d->number
         && d->color == groupItem->d->color && d->title == groupItem->d->title
-        && d->storyDay == groupItem->d->storyDay && d->stamp == groupItem->d->stamp
-        && d->tags == groupItem->d->tags;
+        && d->storyDay == groupItem->d->storyDay && d->startDateTime == groupItem->d->startDateTime
+        && d->stamp == groupItem->d->stamp && d->tags == groupItem->d->tags;
 }
 
 void TextModelGroupItem::setHeading(const QString& _heading)

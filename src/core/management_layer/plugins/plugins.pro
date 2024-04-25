@@ -70,6 +70,9 @@ exists (world_information/world_information.pro) {
 exists (screenplay_cards/screenplay_cards.pro) {
     SUBDIRS += screenplay_cards
 }
+exists (screenplay_timeline/screenplay_timeline.pro) {
+    SUBDIRS += screenplay_timeline
+}
 exists (screenplay_breakdown/screenplay_breakdown.pro) {
     SUBDIRS += screenplay_breakdown
 }

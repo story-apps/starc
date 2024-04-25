@@ -6,6 +6,7 @@
 #include <include/custom_events.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
+#include <utils/shugar.h>
 #include <utils/tools/once.h>
 
 #include <QKeyEvent>
@@ -63,6 +64,7 @@ public:
     void reorderCard(const QModelIndex& _index);
     void reorderCardInRows(const QModelIndex& _index);
     void reorderCardInColumns(const QModelIndex& _index);
+    void reorderCardInHorizontalLines(const QModelIndex& _index);
 
     /**
      * @brief Упорядочить карточки
@@ -71,6 +73,7 @@ public:
     void reorderCardsImpl();
     void reorderCardsInRows();
     void reorderCardsInColumns();
+    void reorderCardsInHorizontalLines();
 
 
     CardsGraphicsView* q = nullptr;
@@ -84,8 +87,7 @@ public:
      * @brief Параметры отображения карточек
      */
     struct {
-        bool isLocked = true;
-        bool isRowView = true;
+        CardsGraphicsViewType type = CardsGraphicsViewType::Rows;
         //
         int sizeScale = 0;
         int ratio = 0;
@@ -97,6 +99,7 @@ public:
     } cardsOptions;
 
     QTimer reorderCardsDebounceTimer;
+    QByteArray pendingState;
 
     QPointer<QAbstractItemModel> model;
     QVector<AbstractCardItem*> cardsItems;
@@ -124,8 +127,14 @@ CardsGraphicsView::Implementation::Implementation(CardsGraphicsView* _parent,
 {
     reorderCardsDebounceTimer.setSingleShot(true);
     reorderCardsDebounceTimer.setInterval(0);
-    QObject::connect(&reorderCardsDebounceTimer, &QTimer::timeout, q,
-                     [this] { reorderCardsImpl(); });
+    QObject::connect(&reorderCardsDebounceTimer, &QTimer::timeout, q, [this] {
+        //
+        // Принудительно завершаем таймер, чтобы обновилось его значение активности
+        //
+        reorderCardsDebounceTimer.stop();
+
+        reorderCardsImpl();
+    });
 
     updateCardsOptions();
 }
@@ -365,10 +374,26 @@ void CardsGraphicsView::Implementation::reorderCard(const QModelIndex& _index)
     //
     // Собственно определим новое положение
     //
-    if (cardsOptions.isRowView) {
+    switch (cardsOptions.type) {
+    case CardsGraphicsViewType::Rows: {
         reorderCardInRows(_index);
-    } else {
+        break;
+    }
+
+    case CardsGraphicsViewType::Columns: {
         reorderCardInColumns(_index);
+        break;
+    }
+
+    case CardsGraphicsViewType::HorizontalLines: {
+        reorderCardInHorizontalLines(_index);
+        break;
+    }
+
+    default: {
+        Q_ASSERT(false);
+        break;
+    }
     }
 
     //
@@ -914,6 +939,10 @@ void CardsGraphicsView::Implementation::reorderCardInColumns(const QModelIndex& 
     }
 }
 
+void CardsGraphicsView::Implementation::reorderCardInHorizontalLines(const QModelIndex& _index)
+{
+}
+
 void CardsGraphicsView::Implementation::reorderCards()
 {
     reorderCardsDebounceTimer.start();
@@ -921,10 +950,34 @@ void CardsGraphicsView::Implementation::reorderCards()
 
 void CardsGraphicsView::Implementation::reorderCardsImpl()
 {
-    if (cardsOptions.isRowView) {
+    switch (cardsOptions.type) {
+    case CardsGraphicsViewType::Rows: {
         reorderCardsInRows();
-    } else {
+        break;
+    }
+
+    case CardsGraphicsViewType::Columns: {
         reorderCardsInColumns();
+        break;
+    }
+
+    case CardsGraphicsViewType::HorizontalLines: {
+        reorderCardsInHorizontalLines();
+        break;
+    }
+
+    default: {
+        Q_ASSERT(false);
+        break;
+    }
+    }
+
+    //
+    // Если необходимо, восстановим состояние вьюхи
+    //
+    if (!pendingState.isEmpty() && !reorderCardsDebounceTimer.isActive()) {
+        q->restoreState(pendingState);
+        pendingState.clear();
     }
 }
 
@@ -1546,6 +1599,151 @@ void CardsGraphicsView::Implementation::reorderCardsInColumns()
     scene->fitToContents();
 }
 
+void CardsGraphicsView::Implementation::reorderCardsInHorizontalLines()
+{
+    QSignalBlocker signalBlocker(scene);
+
+    //
+    // Определим хронологическую последовательность карточек
+    //
+    auto sortedCardsItems = cardsItems;
+    std::sort(sortedCardsItems.begin(), sortedCardsItems.end(),
+              [this](AbstractCardItem* _lhs, AbstractCardItem* _rhs) {
+                  if (_lhs->positionOnLine() == _rhs->positionOnLine()) {
+                      return cardsItems.indexOf(_lhs) < cardsItems.indexOf(_rhs);
+                  }
+                  return _lhs->positionOnLine() < _rhs->positionOnLine();
+              });
+
+    //
+    // Определим начало координат
+    //
+    qreal xDelta = 0.0;
+    for (const auto card : std::as_const(sortedCardsItems)) {
+        if (!qFuzzyCompare(card->positionOnLine(), 0.0)) {
+            xDelta = card->positionOnLine();
+            break;
+        }
+    }
+
+    //
+    // Определим видимую область экрана
+    //
+    const QRectF viewportRect = [this] {
+        if (scene->views().isEmpty()) {
+            return QRectF();
+        }
+
+        const QGraphicsView* view = scene->views().constFirst();
+        return view->mapToScene(view->viewport()->geometry()).boundingRect();
+    }();
+
+    //
+    // Определим расположение первой карточки в колонке
+    //
+    const auto isLeftToRight = q->isLeftToRight();
+
+    //
+    // Проходим все элементы (они упорядочены в хронологическом порядке)
+    //
+    qreal z = scene->firstZValue();
+    QVector<QRectF> cardsRects;
+    for (auto card : std::as_const(sortedCardsItems)) {
+        qreal x = qFuzzyCompare(card->positionOnLine(), 0.0)
+            ? 0
+            : ((card->positionOnLine() - xDelta) / (60 * 60 * 24));
+        qreal y = Ui::DesignSystem::projectCard().margins().bottom() + cardsOptions.size.height();
+        //
+        // Пропускаем невидимые карточки
+        //
+        if (card == nullptr || !card->isVisible()
+            || (card->container() != nullptr && !card->container()->isOpened())) {
+            continue;
+        }
+
+        //
+        // Корректируем размер карточки, если её сейчас не таскают конечно же
+        //
+        if (!movedCards.contains(card)) {
+            auto cardRect = card->rect();
+            cardRect.setSize(cardsOptions.size);
+            card->setRect(cardRect);
+        }
+
+        //
+        // Определим положение карточки
+        //
+        if (!cardsRects.isEmpty()) {
+            if (cardsRects.constLast().right() > x) {
+                y = cardsRects.constLast().top() - cardsOptions.spacing
+                    - cardsOptions.size.height();
+            }
+        }
+        //
+        // ... позиционируем карточку, если она не перемещается в данный момент
+        //     и новая позиция отличается от текущей
+        //
+        const QPointF newItemPosition(x, y);
+        if (!movedCards.contains(card) && card->pos() != newItemPosition) {
+            const QRectF itemRect(card->pos(), card->boundingRect().size());
+            const QRectF newItemRect(newItemPosition, card->boundingRect().size());
+            if (cardsAnimationsAvailable && scene->isActive()
+                && viewportRect.intersects(itemRect.united(newItemRect))
+                // карточки, которые были вставлены по ходу пьесы, нужно сразу на место ставить,
+                // чтобы они не вылетали из-за угла
+                && card->pos() != kInvalidPosition) {
+                //
+                // ... анимируем смещение
+                //
+                QPointer<QVariantAnimation>& moveAnimation = cardsAnimations[card];
+                if (moveAnimation.isNull()) {
+                    moveAnimation = new QVariantAnimation(scene);
+                    moveAnimation->setDuration(220);
+                    moveAnimation->setEasingCurve(QEasingCurve::OutQuad);
+                    QObject::connect(moveAnimation.data(), &QVariantAnimation::valueChanged, scene,
+                                     [this, card](const QVariant& _value) {
+                                         QSignalBlocker signalBlocker(scene);
+                                         card->setPos(_value.toPointF());
+                                     });
+                    QObject::connect(moveAnimation.data(), &QVariantAnimation::finished, q,
+                                     [this] { scene->fitToContents(); });
+                }
+                //
+                // ... при необходимости анимируем положение карточки
+                //
+                if (moveAnimation->endValue().toPointF() != newItemPosition) {
+                    if (moveAnimation->state() == QVariantAnimation::Running) {
+                        moveAnimation->pause();
+                    } else {
+                        moveAnimation->setStartValue(card->pos());
+                    }
+                    moveAnimation->setEndValue(newItemPosition);
+                    if (moveAnimation->state() == QVariantAnimation::Paused) {
+                        moveAnimation->resume();
+                    } else {
+                        moveAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+                    }
+                }
+            } else {
+                card->setPos(newItemPosition);
+            }
+        }
+        //
+        // ... расположим карточки, чтобы никто не пропадал под родителем
+        //
+        card->setZValue((movedCards.contains(card)) ? z + cardsItems.size() : z);
+
+        z = scene->nextZValue();
+
+        cardsRects.append(QRectF(newItemPosition, cardsOptions.size));
+    }
+
+    //
+    // Корректируем размер, чтобы все карточки персонажей были видны
+    //
+    scene->fitToContents();
+}
+
 
 // ****
 
@@ -1643,13 +1841,13 @@ void CardsGraphicsView::setAdditionalScrollingAvailable(bool _available)
     d->scene->setAdditionalScrollingAvailable(_available);
 }
 
-void CardsGraphicsView::setCardsRowView(bool _isRowView)
+void CardsGraphicsView::setCardsViewType(CardsGraphicsViewType _type)
 {
-    if (d->cardsOptions.isRowView == _isRowView) {
+    if (d->cardsOptions.type == _type) {
         return;
     }
 
-    d->cardsOptions.isRowView = _isRowView;
+    d->cardsOptions.type = _type;
     d->reorderCards();
 }
 
@@ -1700,6 +1898,57 @@ void CardsGraphicsView::setCardsInRow(int _cardsInRow)
 
     d->cardsOptions.cardsInRow = _cardsInRow;
     d->reorderCards();
+}
+
+QPair<qreal, qreal> CardsGraphicsView::cardsPositionsInterval() const
+{
+    //
+    // Определяем минимальную и максимальную по расположению карточки
+    //
+    Ui::AbstractCardItem* minimum = nullptr;
+    Ui::AbstractCardItem* maximum = nullptr;
+    for (const auto card : std::as_const(d->cardsItems)) {
+        const auto cardPosition = card->positionOnLine();
+        if (!qFuzzyCompare(cardPosition, 0.0)) {
+            if (minimum == nullptr || minimum->positionOnLine() > cardPosition) {
+                minimum = card;
+            }
+            if (maximum == nullptr || maximum->positionOnLine() < cardPosition) {
+                maximum = card;
+            }
+        }
+    }
+
+    //
+    // Если позиция не задана ни для одного элемента
+    //
+    if (minimum == nullptr || maximum == nullptr) {
+        return {};
+    }
+
+    //
+    // Определяем расположение карточек на холсте и считаем текущее положение холста по ним
+    //
+
+    //
+    // Если позиция задана только для одного элемента
+    //
+    if (minimum == maximum) { }
+
+    //
+    // Если позиция задана для нескольких элементов
+    //
+    auto cardPosition = [this](QGraphicsRectItem* _card) {
+        const auto cardAnimation = d->cardsAnimations[_card];
+        return mapFromScene(_card->scenePos());
+    };
+    const auto minimumX = cardPosition(minimum).x();
+    const auto maximumX = cardPosition(maximum).x();
+    const auto pxDistance
+        = (maximum->positionOnLine() - minimum->positionOnLine()) / (maximumX - minimumX);
+    const auto startPosition = minimum->positionOnLine() - minimumX * pxDistance;
+    const auto endPosition = startPosition + width() * pxDistance;
+    return { startPosition, endPosition };
 }
 
 QAbstractItemModel* CardsGraphicsView::model() const
@@ -1994,6 +2243,16 @@ void CardsGraphicsView::setFilter(const QString& _text, bool _caseSensitive, int
 void CardsGraphicsView::setReadOnly(bool _readOnly)
 {
     d->scene->setReadOnly(_readOnly);
+}
+
+void CardsGraphicsView::restoreState(const QByteArray& _state)
+{
+    if (d->reorderCardsDebounceTimer.isActive()) {
+        d->pendingState = _state;
+        return;
+    }
+
+    ScalableGraphicsView::restoreState(_state);
 }
 
 bool CardsGraphicsView::excludeFromFlatIndex(const QModelIndex& _index) const

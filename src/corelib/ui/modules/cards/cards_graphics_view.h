@@ -11,6 +11,16 @@ class AbstractCardItem;
 class CardsGraphicsScene;
 
 /**
+ * @brief Тип компоновки карточек
+ */
+enum class CORE_LIBRARY_EXPORT CardsGraphicsViewType {
+    Rows,
+    Columns,
+    HorizontalLines,
+    VerticalLines,
+};
+
+/**
  * @brief Представление сцены отношений персонажей
  */
 class CORE_LIBRARY_EXPORT CardsGraphicsView : public ScalableGraphicsView
@@ -34,7 +44,7 @@ public:
     /**
      * @brief Задать способ компоновки карточек
      */
-    void setCardsRowView(bool _isRowView);
+    void setCardsViewType(CardsGraphicsViewType _type);
 
     /**
      * @brief Размер карточек
@@ -56,6 +66,11 @@ public:
      * @note -1 - для отображения по границам экрана
      */
     void setCardsInRow(int _cardsInRow);
+
+    /**
+     * @brief Видимый интервал позиций карточек в линейном виде
+     */
+    QPair<qreal, qreal> cardsPositionsInterval() const;
 
     /**
      * @brief Модель карточек
@@ -87,6 +102,12 @@ public:
      * @brief Настроить возможность редактирования контента
      */
     void setReadOnly(bool _readOnly);
+
+    /**
+     * @brief Загрузить состояние
+     * @note Если запланировано упорядочивание карточек, то загрузка произойдёт после упорядочивания
+     */
+    void restoreState(const QByteArray& _state) override;
 
 signals:
     /**

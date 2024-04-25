@@ -57,6 +57,7 @@ const QString kScreenplayTreatmentCardsMime = QStringLiteral("application/x-star
 const QString kScreenplayTextEditorMime = QStringLiteral("application/x-starc/editor/screenplay/text/text");
 const QString kScreenplayTextNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/text");
 const QString kScreenplayTextCardsMime = QStringLiteral("application/x-starc/editor/screenplay/text/cards");
+const QString kScreenplayTextTimelineMime = QStringLiteral("application/x-starc/editor/screenplay/text/timeline");
 const QString kScreenplayTextBreakdownMime = QStringLiteral("application/x-starc/editor/screenplay/text/breakdown");
 const QString kScreenplayBreakdownNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/breakdown");
 const QString kScreenplayStatisticsViewMime = QStringLiteral("application/x-starc/view/screenplay/statistics");
@@ -107,6 +108,7 @@ const QHash<QString, QString> kEditorToNavigator
         { kScreenplayTreatmentCardsMime, kScreenplayTreatmentNavigatorMime },
         { kScreenplayTextEditorMime, kScreenplayTextNavigatorMime },
         { kScreenplayTextCardsMime, kScreenplayTextNavigatorMime },
+        { kScreenplayTextTimelineMime, kScreenplayTextNavigatorMime },
         { kScreenplayTextBreakdownMime, kScreenplayBreakdownNavigatorMime },
         { kScreenplayStatisticsViewMime, kScreenplayStatisticsNavigatorMime },
         { kComicBookTextEditorMime, kComicBookTextNavigatorMime },
@@ -136,7 +138,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
                                                                   /*{ "application/x-starc/editor/screenplay/beatboard", u8"\U000F13D2" }*/ } },
         { "application/x-starc/document/screenplay/text",       { { kScreenplayTextEditorMime, u8"\U000f09ed" },
                                                                   { kScreenplayTextCardsMime, u8"\U000f0554" },
-                                                                  /*{ "application/x-starc/editor/screenplay/timeline", u8"\U000F066C" },*/
+                                                                  { kScreenplayTextTimelineMime, u8"\U000F066C" },
                                                                   { kScreenplayTextBreakdownMime, u8"\U000F14DD" } } },
         { "application/x-starc/document/screenplay/statistics", { { kScreenplayStatisticsViewMime, u8"\U000f0127" } } },
         //
@@ -214,6 +216,7 @@ const QHash<QString, QString> kMimeToPlugin
         { kScreenplayTextEditorMime, "*screenplaytextplugin*" },
         { kScreenplayTextNavigatorMime, "*screenplaytextstructureplugin*" },
         { kScreenplayTextCardsMime, "*screenplaycardsplugin*" },
+        { kScreenplayTextTimelineMime, "*screenplaytimelineplugin*" },
         { kScreenplayTextBreakdownMime, "*screenplaybreakdownplugin*" },
         { kScreenplayBreakdownNavigatorMime, "*screenplaybreakdownstructureplugin*" },
         { kScreenplayStatisticsViewMime, "*screenplaystatisticsplugin*" },
@@ -495,7 +498,7 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                   QApplication::translate("ProjectPluginsBuilder", "Screenplay text") },
                 { kScreenplayTextCardsMime,
                   QApplication::translate("ProjectPluginsBuilder", "Cards") },
-                { "application/x-starc/editor/screenplay/timeline",
+                { kScreenplayTextTimelineMime,
                   QApplication::translate("ProjectPluginsBuilder", "Timeline") },
                 { kScreenplayTextBreakdownMime,
                   QApplication::translate("ProjectPluginsBuilder", "Breakdown") } } },
@@ -883,8 +886,10 @@ void PluginsBuilder::reconfigureScreenplayEditor(const QStringList& _changedSett
 {
     reconfigurePlugin(kScreenplayTitlePageEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTreatmentEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kScreenplayTreatmentCardsMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTextEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTextCardsMime, _changedSettingsKeys);
+    reconfigurePlugin(kScreenplayTextTimelineMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTextBreakdownMime, _changedSettingsKeys);
 }
 

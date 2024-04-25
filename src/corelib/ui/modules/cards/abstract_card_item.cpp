@@ -101,6 +101,11 @@ qreal AbstractCardItem::headerHeight() const
     return 0;
 }
 
+qreal AbstractCardItem::positionOnLine() const
+{
+    return 0;
+}
+
 bool AbstractCardItem::isTopLevel() const
 {
     return false;

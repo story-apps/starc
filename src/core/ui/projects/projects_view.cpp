@@ -102,7 +102,7 @@ void ProjectsView::Implementation::initProjectsPage()
 {
     projectsPage->hide();
     projectsPage->setScaleAvailable(false);
-    projectsPage->setCardsRowView(true);
+    projectsPage->setCardsViewType(CardsGraphicsViewType::Rows);
     projectsPage->setCardsInRow(-1);
     projectsPage->setCardsRatio(2);
     projectsPage->setCardsSize(60);
