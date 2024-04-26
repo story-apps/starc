@@ -66,6 +66,7 @@ public:
     void reorderCardInRows(const QModelIndex& _index);
     void reorderCardInColumns(const QModelIndex& _index);
     void reorderCardInHorizontalLines(const QModelIndex& _index);
+    void reorderCardInVerticalLines(const QModelIndex& _index);
 
     /**
      * @brief Упорядочить карточки
@@ -75,6 +76,7 @@ public:
     void reorderCardsInRows();
     void reorderCardsInColumns();
     void reorderCardsInHorizontalLines();
+    void reorderCardsInVerticalLines();
 
 
     CardsGraphicsView* q = nullptr;
@@ -398,6 +400,11 @@ void CardsGraphicsView::Implementation::reorderCard(const QModelIndex& _index)
 
     case CardsGraphicsViewType::HorizontalLines: {
         reorderCardInHorizontalLines(_index);
+        break;
+    }
+
+    case CardsGraphicsViewType::VerticalLines: {
+        reorderCardInVerticalLines(_index);
         break;
     }
 
@@ -952,7 +959,6 @@ void CardsGraphicsView::Implementation::reorderCardInColumns(const QModelIndex& 
 
 void CardsGraphicsView::Implementation::reorderCardInHorizontalLines(const QModelIndex& _index)
 {
-
     if (!_index.isValid()) {
         return;
     }
@@ -980,6 +986,35 @@ void CardsGraphicsView::Implementation::reorderCardInHorizontalLines(const QMode
     emit model->dataChanged(_index, _index);
 }
 
+void CardsGraphicsView::Implementation::reorderCardInVerticalLines(const QModelIndex& _index)
+{
+    if (!_index.isValid()) {
+        return;
+    }
+
+    auto movedCard = modelItemsToCards.value(_index.internalPointer());
+    if (movedCard == nullptr || !scene->mouseGrabberItems().contains(movedCard)) {
+        return;
+    }
+
+    //
+    // Ставим здесь проверку, чтобы функция не вызывалась рекурсивно, т.к. изменение элемента
+    // модели приводит к запуску алгоритма перераспределения карточки на холсте
+    //
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
+        return;
+    }
+
+    const auto positionsInterval = q->cardsPositionsInterval();
+    const auto pxDistance
+        = (positionsInterval.second - positionsInterval.first) / static_cast<qreal>(q->height());
+    const auto movedCardY = q->mapFromScene(movedCard->scenePos()).y();
+    const auto position = positionsInterval.first + movedCardY * pxDistance;
+    movedCard->setPositionOnLine(position);
+    emit model->dataChanged(_index, _index);
+}
+
 void CardsGraphicsView::Implementation::reorderCards()
 {
     reorderCardsDebounceTimer.start();
@@ -1000,6 +1035,11 @@ void CardsGraphicsView::Implementation::reorderCardsImpl()
 
     case CardsGraphicsViewType::HorizontalLines: {
         reorderCardsInHorizontalLines();
+        break;
+    }
+
+    case CardsGraphicsViewType::VerticalLines: {
+        reorderCardsInVerticalLines();
         break;
     }
 
@@ -1788,6 +1828,157 @@ void CardsGraphicsView::Implementation::reorderCardsInHorizontalLines()
     }
 }
 
+void CardsGraphicsView::Implementation::reorderCardsInVerticalLines()
+{
+    QSignalBlocker signalBlocker(scene);
+
+    //
+    // Определим хронологическую последовательность карточек
+    //
+    auto sortedCardsItems = cardsItems;
+    std::sort(sortedCardsItems.begin(), sortedCardsItems.end(),
+              [this](AbstractCardItem* _lhs, AbstractCardItem* _rhs) {
+                  if (_lhs->positionOnLine() == _rhs->positionOnLine()) {
+                      return cardsItems.indexOf(_lhs) < cardsItems.indexOf(_rhs);
+                  }
+                  return _lhs->positionOnLine() < _rhs->positionOnLine();
+              });
+
+    //
+    // Определим начало координат
+    //
+    qreal yDelta = 0.0;
+    for (const auto card : std::as_const(sortedCardsItems)) {
+        if (!qFuzzyCompare(card->positionOnLine(), 0.0)) {
+            yDelta = card->positionOnLine();
+            break;
+        }
+    }
+
+    //
+    // Определим видимую область экрана
+    //
+    const QRectF viewportRect = [this] {
+        if (scene->views().isEmpty()) {
+            return QRectF();
+        }
+
+        const QGraphicsView* view = scene->views().constFirst();
+        return view->mapToScene(view->viewport()->geometry()).boundingRect();
+    }();
+
+    //
+    // Определим расположение первой карточки в колонке
+    //
+    const auto isLeftToRight = q->isLeftToRight();
+
+    //
+    // Проходим все элементы (они упорядочены в хронологическом порядке)
+    //
+    qreal z = scene->firstZValue();
+    QVector<QRectF> cardsRects;
+    for (auto card : std::as_const(sortedCardsItems)) {
+        qreal x = Ui::DesignSystem::projectCard().margins().left() + cardsOptions.size.width();
+        qreal y = qFuzzyCompare(card->positionOnLine(), 0.0)
+            ? 0
+            : ((card->positionOnLine() - yDelta) / static_cast<qreal>(60 * 60 * 24));
+        //
+        // Пропускаем невидимые карточки
+        //
+        if (card == nullptr || !card->isVisible()
+            || (card->container() != nullptr && !card->container()->isOpened())) {
+            continue;
+        }
+
+        //
+        // Корректируем размер карточки, если её сейчас не таскают конечно же
+        //
+        if (!movedCards.contains(card)) {
+            auto cardRect = card->rect();
+            cardRect.setSize(cardsOptions.size);
+            card->setRect(cardRect);
+        }
+
+        //
+        // Определим положение карточки
+        //
+        if (!cardsRects.isEmpty()) {
+            if (cardsRects.constLast().bottom() > y) {
+                x = cardsRects.constLast().right() + cardsOptions.spacing;
+            }
+        }
+        //
+        // ... позиционируем карточку, если она не перемещается в данный момент
+        //     и новая позиция отличается от текущей
+        //
+        const QPointF newItemPosition(x, y);
+        if (!movedCards.contains(card) && card->pos() != newItemPosition) {
+            const QRectF itemRect(card->pos(), card->boundingRect().size());
+            const QRectF newItemRect(newItemPosition, card->boundingRect().size());
+            if (cardsAnimationsAvailable && scene->isActive()
+                && viewportRect.intersects(itemRect.united(newItemRect))
+                // карточки, которые были вставлены по ходу пьесы, нужно сразу на место ставить,
+                // чтобы они не вылетали из-за угла
+                && card->pos() != kInvalidPosition) {
+                //
+                // ... анимируем смещение
+                //
+                QPointer<QVariantAnimation>& moveAnimation = cardsAnimations[card];
+                if (moveAnimation.isNull()) {
+                    moveAnimation = new QVariantAnimation(scene);
+                    moveAnimation->setDuration(220);
+                    moveAnimation->setEasingCurve(QEasingCurve::OutQuad);
+                    QObject::connect(moveAnimation.data(), &QVariantAnimation::valueChanged, scene,
+                                     [this, card](const QVariant& _value) {
+                                         QSignalBlocker signalBlocker(scene);
+                                         card->setPos(_value.toPointF());
+                                     });
+                    QObject::connect(moveAnimation.data(), &QVariantAnimation::finished, q,
+                                     [this] { scene->fitToContents(); });
+                }
+                //
+                // ... при необходимости анимируем положение карточки
+                //
+                if (moveAnimation->endValue().toPointF() != newItemPosition) {
+                    if (moveAnimation->state() == QVariantAnimation::Running) {
+                        moveAnimation->pause();
+                    } else {
+                        moveAnimation->setStartValue(card->pos());
+                    }
+                    moveAnimation->setEndValue(newItemPosition);
+                    if (moveAnimation->state() == QVariantAnimation::Paused) {
+                        moveAnimation->resume();
+                    } else {
+                        moveAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+                    }
+                }
+            } else {
+                card->setPos(newItemPosition);
+            }
+        }
+        //
+        // ... расположим карточки, чтобы никто не пропадал под родителем
+        //
+        card->setZValue((movedCards.contains(card)) ? z + cardsItems.size() : z);
+
+        z = scene->nextZValue();
+
+        cardsRects.append(QRectF(newItemPosition, cardsOptions.size));
+    }
+
+    //
+    // Корректируем размер, чтобы все карточки персонажей были видны
+    //
+    scene->fitToContents();
+
+    //
+    // Если нет перетаскиваемых мышкой карточек, то сбросим интервал, чтобы обновить его
+    //
+    if (scene->mouseGrabberItems().isEmpty()) {
+        cardsPositionsInterval = {};
+    }
+}
+
 
 // ****
 
@@ -1956,6 +2147,11 @@ void CardsGraphicsView::setCardsInRow(int _cardsInRow)
 
 QPair<qreal, qreal> CardsGraphicsView::cardsPositionsInterval() const
 {
+    if (d->cardsOptions.type != CardsGraphicsViewType::HorizontalLines
+        && d->cardsOptions.type != CardsGraphicsViewType::VerticalLines) {
+        return {};
+    }
+
     //
     // Если хотя бы для одной карточки задана позиция на линии
     //
@@ -1980,14 +2176,25 @@ QPair<qreal, qreal> CardsGraphicsView::cardsPositionsInterval() const
         //
         const auto minimumPosition = cardWithPosition->positionOnLine();
         const auto maximumPosition = minimumPosition + 30 * 60 * 60 * 24;
-        const auto minimumX = mapFromScene(cardWithPosition->scenePos()).x();
-        const auto maximumPosTranslated = transform().map(
-            QPointF((maximumPosition - minimumPosition) / static_cast<qreal>(60 * 60 * 24), 0));
-        const auto maximumX = minimumX + maximumPosTranslated.x();
-        const auto pxDistance = (maximumPosition - minimumPosition) / (maximumX - minimumX);
-        d->cardsPositionsInterval.minimum = minimumPosition - minimumX * pxDistance;
-        d->cardsPositionsInterval.maximum
-            = d->cardsPositionsInterval.minimum + width() * pxDistance;
+        if (d->cardsOptions.type == CardsGraphicsViewType::HorizontalLines) {
+            const auto minimumX = mapFromScene(cardWithPosition->scenePos()).x();
+            const auto maximumPosTranslated = transform().map(
+                QPointF((maximumPosition - minimumPosition) / static_cast<qreal>(60 * 60 * 24), 0));
+            const auto maximumX = minimumX + maximumPosTranslated.x();
+            const auto pxDistance = (maximumPosition - minimumPosition) / (maximumX - minimumX);
+            d->cardsPositionsInterval.minimum = minimumPosition - minimumX * pxDistance;
+            d->cardsPositionsInterval.maximum
+                = d->cardsPositionsInterval.minimum + width() * pxDistance;
+        } else {
+            const auto minimumY = mapFromScene(cardWithPosition->scenePos()).y();
+            const auto maximumPosTranslated = transform().map(
+                QPointF(0, (maximumPosition - minimumPosition) / static_cast<qreal>(60 * 60 * 24)));
+            const auto maximumY = minimumY + maximumPosTranslated.y();
+            const auto pxDistance = (maximumPosition - minimumPosition) / (maximumY - minimumY);
+            d->cardsPositionsInterval.minimum = minimumPosition - minimumY * pxDistance;
+            d->cardsPositionsInterval.maximum
+                = d->cardsPositionsInterval.minimum + height() * pxDistance;
+        }
         return { d->cardsPositionsInterval.minimum, d->cardsPositionsInterval.maximum };
     }
 
