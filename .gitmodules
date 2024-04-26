@@ -64,3 +64,6 @@
 [submodule "src/core/management_layer/plugins/location_scenes"]
     path = src/core/management_layer/plugins/location_scenes
     url = git@github.com:story-apps/starc-location-scenes-plugin.git
+[submodule "src/core/management_layer/plugins/screenplay_timeline"]
+    path = src/core/management_layer/plugins/screenplay_timeline
+    url = git@github.com:story-apps/starc-screenplay-timeline-plugin.git
