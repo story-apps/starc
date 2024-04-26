@@ -31,6 +31,7 @@ public:
      * @brief Позиция карточки при упорядочивании линиями
      */
     virtual qreal positionOnLine() const;
+    virtual void setPositionOnLine(qreal _position);
 
     /**
      * @brief Является ли элемент верхнеуровневым (акты)

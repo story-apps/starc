@@ -106,6 +106,10 @@ qreal AbstractCardItem::positionOnLine() const
     return 0;
 }
 
+void AbstractCardItem::setPositionOnLine(qreal _position)
+{
+}
+
 bool AbstractCardItem::isTopLevel() const
 {
     return false;

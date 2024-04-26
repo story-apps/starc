@@ -8,6 +8,7 @@
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <utils/shugar.h>
 #include <utils/tools/once.h>
+#include <utils/tools/run_once.h>
 
 #include <QKeyEvent>
 #include <QModelIndex>
@@ -115,6 +116,16 @@ public:
         }
     } moveTarget;
     QSet<AbstractCardItem*> movedCards;
+
+    struct {
+        qreal minimum = 0.0;
+        qreal maximum = 0.0;
+
+        bool isValid()
+        {
+            return qFuzzyCompare(minimum, 0.0) != true || qFuzzyCompare(maximum, 0.0) != true;
+        }
+    } cardsPositionsInterval;
 
     bool cardsAnimationsAvailable = true;
     QHash<QGraphicsRectItem*, QPointer<QVariantAnimation>> cardsAnimations;
@@ -941,6 +952,32 @@ void CardsGraphicsView::Implementation::reorderCardInColumns(const QModelIndex& 
 
 void CardsGraphicsView::Implementation::reorderCardInHorizontalLines(const QModelIndex& _index)
 {
+
+    if (!_index.isValid()) {
+        return;
+    }
+
+    auto movedCard = modelItemsToCards.value(_index.internalPointer());
+    if (movedCard == nullptr || !scene->mouseGrabberItems().contains(movedCard)) {
+        return;
+    }
+
+    //
+    // Ставим здесь проверку, чтобы функция не вызывалась рекурсивно, т.к. изменение элемента
+    // модели приводит к запуску алгоритма перераспределения карточки на холсте
+    //
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
+        return;
+    }
+
+    const auto positionsInterval = q->cardsPositionsInterval();
+    const auto pxDistance
+        = (positionsInterval.second - positionsInterval.first) / static_cast<qreal>(q->width());
+    const auto movedCardX = q->mapFromScene(movedCard->scenePos()).x();
+    const auto position = positionsInterval.first + movedCardX * pxDistance;
+    movedCard->setPositionOnLine(position);
+    emit model->dataChanged(_index, _index);
 }
 
 void CardsGraphicsView::Implementation::reorderCards()
@@ -1651,7 +1688,7 @@ void CardsGraphicsView::Implementation::reorderCardsInHorizontalLines()
     for (auto card : std::as_const(sortedCardsItems)) {
         qreal x = qFuzzyCompare(card->positionOnLine(), 0.0)
             ? 0
-            : ((card->positionOnLine() - xDelta) / (60 * 60 * 24));
+            : ((card->positionOnLine() - xDelta) / static_cast<qreal>(60 * 60 * 24));
         qreal y = Ui::DesignSystem::projectCard().margins().bottom() + cardsOptions.size.height();
         //
         // Пропускаем невидимые карточки
@@ -1742,6 +1779,13 @@ void CardsGraphicsView::Implementation::reorderCardsInHorizontalLines()
     // Корректируем размер, чтобы все карточки персонажей были видны
     //
     scene->fitToContents();
+
+    //
+    // Если нет перетаскиваемых мышкой карточек, то сбросим интервал, чтобы обновить его
+    //
+    if (scene->mouseGrabberItems().isEmpty()) {
+        cardsPositionsInterval = {};
+    }
 }
 
 
@@ -1827,6 +1871,16 @@ CardsGraphicsView::CardsGraphicsView(CardsGraphicsScene* _scene, QWidget* _paren
 
         d->reorderCards();
     });
+    connect(horizontalScrollBar(), &QScrollBar::valueChanged, this, [this] {
+        if (d->cardsOptions.type == CardsGraphicsViewType::HorizontalLines) {
+            d->cardsPositionsInterval = {};
+        }
+    });
+    connect(verticalScrollBar(), &QScrollBar::valueChanged, this, [this] {
+        if (d->cardsOptions.type == CardsGraphicsViewType::VerticalLines) {
+            d->cardsPositionsInterval = {};
+        }
+    });
 }
 
 CardsGraphicsView::~CardsGraphicsView() = default;
@@ -1903,52 +1957,44 @@ void CardsGraphicsView::setCardsInRow(int _cardsInRow)
 QPair<qreal, qreal> CardsGraphicsView::cardsPositionsInterval() const
 {
     //
-    // Определяем минимальную и максимальную по расположению карточки
+    // Если хотя бы для одной карточки задана позиция на линии
     //
-    Ui::AbstractCardItem* minimum = nullptr;
-    Ui::AbstractCardItem* maximum = nullptr;
+    Ui::AbstractCardItem* cardWithPosition = nullptr;
     for (const auto card : std::as_const(d->cardsItems)) {
         const auto cardPosition = card->positionOnLine();
         if (!qFuzzyCompare(cardPosition, 0.0)) {
-            if (minimum == nullptr || minimum->positionOnLine() > cardPosition) {
-                minimum = card;
-            }
-            if (maximum == nullptr || maximum->positionOnLine() < cardPosition) {
-                maximum = card;
-            }
+            cardWithPosition = card;
+            break;
         }
     }
+    if (cardWithPosition != nullptr) {
+        //
+        // Если заполнено закешированное значение интервала, то используем его
+        //
+        if (d->cardsPositionsInterval.isValid()) {
+            return { d->cardsPositionsInterval.minimum, d->cardsPositionsInterval.maximum };
+        }
 
-    //
-    // Если позиция не задана ни для одного элемента
-    //
-    if (minimum == nullptr || maximum == nullptr) {
-        return {};
+        //
+        // В противном случае, рассчитываем интервал и кешируем
+        //
+        const auto minimumPosition = cardWithPosition->positionOnLine();
+        const auto maximumPosition = minimumPosition + 30 * 60 * 60 * 24;
+        const auto minimumX = mapFromScene(cardWithPosition->scenePos()).x();
+        const auto maximumPosTranslated = transform().map(
+            QPointF((maximumPosition - minimumPosition) / static_cast<qreal>(60 * 60 * 24), 0));
+        const auto maximumX = minimumX + maximumPosTranslated.x();
+        const auto pxDistance = (maximumPosition - minimumPosition) / (maximumX - minimumX);
+        d->cardsPositionsInterval.minimum = minimumPosition - minimumX * pxDistance;
+        d->cardsPositionsInterval.maximum
+            = d->cardsPositionsInterval.minimum + width() * pxDistance;
+        return { d->cardsPositionsInterval.minimum, d->cardsPositionsInterval.maximum };
     }
 
     //
-    // Определяем расположение карточек на холсте и считаем текущее положение холста по ним
+    // Если ни для одной карточки не задана позиция на линии, то считем, что интервал не определён
     //
-
-    //
-    // Если позиция задана только для одного элемента
-    //
-    if (minimum == maximum) { }
-
-    //
-    // Если позиция задана для нескольких элементов
-    //
-    auto cardPosition = [this](QGraphicsRectItem* _card) {
-        const auto cardAnimation = d->cardsAnimations[_card];
-        return mapFromScene(_card->scenePos());
-    };
-    const auto minimumX = cardPosition(minimum).x();
-    const auto maximumX = cardPosition(maximum).x();
-    const auto pxDistance
-        = (maximum->positionOnLine() - minimum->positionOnLine()) / (maximumX - minimumX);
-    const auto startPosition = minimum->positionOnLine() - minimumX * pxDistance;
-    const auto endPosition = startPosition + width() * pxDistance;
-    return { startPosition, endPosition };
+    return {};
 }
 
 QAbstractItemModel* CardsGraphicsView::model() const
