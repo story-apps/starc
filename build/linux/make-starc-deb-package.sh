@@ -1,43 +1,36 @@
 #!/bin/sh
 
-#
 # $1 - application version
-#
 
-#
 # Prepare folders structure
-#
-DEB_PACKAGE_DIR="debdir"
-mkdir -p $DEB_PACKAGE_DIR/DEBIAN
-mkdir -p $DEB_PACKAGE_DIR/usr/bin
-mkdir -p $DEB_PACKAGE_DIR/usr/lib/starc/plugins
-ls -l $DEB_PACKAGE_DIR
+APP_DIR="appdir"
+BIN_DIR="$APP_DIR/usr/bin"
+LIB_DIR="$APP_DIR/usr/lib"
+PLUGINS_DIR="$APP_DIR/usr/lib/plugins"
+mkdir -p $APP_DIR/DEBIAN $BIN_DIR $LIB_DIR $PLUGINS_DIR
 
-#
-# Copy application binaries
-#
-APP_BIN_DIR="../../src/_build"
-ls -l $APP_BIN_DIR
-cp $APP_BIN_DIR/starcapp $DEB_PACKAGE_DIR/usr/bin/starc
-cp $APP_BIN_DIR/libcorelib.so.1 $DEB_PACKAGE_DIR/usr/lib/starc/
-cp $APP_BIN_DIR/plugins/*.so $DEB_PACKAGE_DIR/usr/lib/starc/plugins/
-
-#
-# Create DEBIAN/control file
-#
-cat << EOF > $DEB_PACKAGE_DIR/DEBIAN/control
-Package: starc
+# Create control file
+echo "Package: starc
 Version: $1
 Section: base
 Priority: optional
-Architecture: amd64
-Depends: libqt5core5a (>= 5.15.2), libqt5gui5 (>= 5.15.2), libqt5widgets5 (>= 5.15.2)
-Maintainer: Your Name <your.email@example.com>
-Description: Starc Application
-EOF
+Architecture: x86_64
+Maintainer: StarcAppTeam <team@starc.app>
+Description: Starc Application" > $APP_DIR/DEBIAN/control
 
-#
-# Build .deb package
-#
-dpkg-deb --build $DEB_PACKAGE_DIR
-mv debdir.deb starc-setup.deb
+# Copy application binaries
+APP_BIN_DIR="../../src/_build"
+cp $APP_BIN_DIR/starcapp $BIN_DIR/starc
+cp $APP_BIN_DIR/libcorelib.so.1 $LIB_DIR/
+cp $APP_BIN_DIR/plugins/*.so $PLUGINS_DIR/
+
+# Copy flathub required files
+FLATHUB_DIR="flathub/share"
+cp -R $FLATHUB_DIR $APP_DIR
+
+# Copy qgnomeplatform library
+cp /usr/lib/x86_64-linux-gnu/libqgnomeplatform.so $LIB_DIR/
+
+# Create DEB package
+DEB_PACKAGE="starc-setup.deb"
+dpkg-deb --build $APP_DIR $DEB_PACKAGE
