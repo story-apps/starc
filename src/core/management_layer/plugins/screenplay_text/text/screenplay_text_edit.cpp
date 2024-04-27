@@ -1682,6 +1682,38 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
     }
 
     //
+    // Добавим фонтан
+    //
+    {
+        //
+        // Подготавливаем опции для экспорта в фонтан
+        //
+        BusinessLayer::ScreenplayExportOptions options;
+        options.filePath = QDir::temp().absoluteFilePath("clipboard.fountain");
+        options.includeTiltePage = false;
+        options.includeSynopsis = false;
+        options.showScenesNumbers = d->model->informationModel()->showSceneNumbers();
+        //
+        // ... сохраняем в формате фонтана
+        //
+        BusinessLayer::ScreenplayFountainExporter().exportTo(d->model, selection.from, selection.to,
+                                                             options);
+        //
+        // ... читаем сохранённый экспорт из файла
+        //
+        QFile file(options.filePath);
+        QByteArray text;
+        if (file.open(QIODevice::ReadOnly)) {
+            text = file.readAll();
+            file.close();
+        }
+
+        if (!text.isEmpty()) {
+            mimeData->setData(kMarkdownMimeType, text);
+        }
+    }
+
+    //
     // Поместим в буфер данные о тексте в специальном формате
     //
     {
