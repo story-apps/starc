@@ -43,6 +43,7 @@ class LocationModel::Implementation
 {
 public:
     QString name;
+    QColor color;
     LocationStoryRole storyRole = LocationStoryRole::Undefined;
     QString oneSentenceDescription;
     QString longDescription;
@@ -117,6 +118,7 @@ LocationModel::LocationModel(QObject* _parent)
     , d(new Implementation)
 {
     connect(this, &LocationModel::nameChanged, this, &LocationModel::updateDocumentContent);
+    connect(this, &LocationModel::colorChanged, this, &LocationModel::updateDocumentContent);
     connect(this, &LocationModel::storyRoleChanged, this, &LocationModel::updateDocumentContent);
     connect(this, &LocationModel::oneSentenceDescriptionChanged, this,
             &LocationModel::updateDocumentContent);
@@ -168,6 +170,22 @@ QString LocationModel::documentName() const
 void LocationModel::setDocumentName(const QString& _name)
 {
     setName(_name);
+}
+
+QColor LocationModel::color() const
+{
+    return d->color;
+}
+
+void LocationModel::setColor(const QColor& _color)
+{
+    if (d->color == _color) {
+        return;
+    }
+
+    d->color = _color;
+    emit colorChanged(d->color);
+    emit documentColorChanged(d->color);
 }
 
 LocationStoryRole LocationModel::storyRole() const
@@ -580,6 +598,9 @@ void LocationModel::initDocument()
         return documentNode.firstChildElement(_key).text();
     };
     d->name = load(kNameKey);
+    if (contains(kColorKey)) {
+        d->color = load(kColorKey);
+    }
     if (contains(kStoryRoleKey)) {
         d->storyRole = static_cast<LocationStoryRole>(load(kStoryRoleKey).toInt());
     }
@@ -655,6 +676,9 @@ QByteArray LocationModel::toXml() const
         xml += QString("<%1><![CDATA[%2]]></%1>\n").arg(_key, _value).toUtf8();
     };
     save(kNameKey, d->name);
+    if (d->color.isValid()) {
+        save(kColorKey, d->color.name());
+    }
     save(kStoryRoleKey, QString::number(static_cast<int>(d->storyRole)));
     save(kOneSentenceDescriptionKey, d->oneSentenceDescription);
     save(kLongDescriptionKey, d->longDescription);
@@ -716,6 +740,9 @@ ChangeCursor LocationModel::applyPatch(const QByteArray& _patch)
         return TextHelper::fromHtmlEscaped(documentNode.firstChildElement(_key).text());
     };
     setName(load(kNameKey));
+    if (contains(kColorKey)) {
+        setColor(load(kColorKey));
+    }
     if (contains(kStoryRoleKey)) {
         setStoryRole(static_cast<LocationStoryRole>(load(kStoryRoleKey).toInt()));
     }

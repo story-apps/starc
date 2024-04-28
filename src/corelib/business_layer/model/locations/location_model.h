@@ -70,6 +70,10 @@ public:
     QString documentName() const override;
     void setDocumentName(const QString& _name) override;
 
+    QColor color() const;
+    void setColor(const QColor& _color);
+    Q_SIGNAL void colorChanged(const QColor& _color);
+
     LocationStoryRole storyRole() const;
     void setStoryRole(LocationStoryRole _role);
     Q_SIGNAL void storyRoleChanged(BusinessLayer::LocationStoryRole _role);
