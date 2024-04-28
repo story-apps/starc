@@ -80,7 +80,6 @@ void DialogHandler::handleEnter(QKeyEvent*)
                     //
                     // Перейдём к следующему блоку
                     //
-                    editor()->moveCursor(QTextCursor::NextBlock);
                     editor()->addParagraph(jumpForEnter(TextParagraphType::Dialogue));
                 } else {
                     //! Внутри блока
@@ -165,6 +164,23 @@ void DialogHandler::handleTab(QKeyEvent*)
             }
         }
     }
+}
+
+void DialogHandler::handleBackspace(QKeyEvent* _event)
+{
+    //
+    // Если диалоги располагаются в таблице, то при нажатии бэкспейса в начале блока, просто
+    // переходим в конец предыдущего абзаца (предыдущей колонки)
+    //
+    auto cursor = editor()->textCursor();
+    if (editor()->comicBookTemplate().placeDialoguesInTable() && cursor.atBlockStart()
+        && !cursor.hasSelection()) {
+        cursor.movePosition(QTextCursor::PreviousCharacter);
+        editor()->setTextCursor(cursor);
+        return;
+    }
+
+    StandardKeyHandler::handleBackspace(_event);
 }
 
 } // namespace KeyProcessingLayer

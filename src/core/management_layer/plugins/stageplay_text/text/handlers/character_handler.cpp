@@ -280,7 +280,7 @@ void CharacterHandler::handleBackspace(QKeyEvent* _event)
     m_completionAllowed = true;
 }
 
-void CharacterHandler::handleOther(QKeyEvent*)
+void CharacterHandler::handleOther(QKeyEvent* _event)
 {
     //
     // Получим необходимые значения
@@ -295,9 +295,17 @@ void CharacterHandler::handleOther(QKeyEvent*)
     const QString cursorBackwardText = currentBlockText.left(cursor.positionInBlock());
 
     //
-    // Покажем подсказку, если это возможно
+    // На двоеточии заканчивается ввод имени персонажа
     //
-    complete(currentBlockText, cursorBackwardText);
+    if (_event != nullptr && _event->text() == ":" && cursorBackwardText.endsWith(':')) {
+        storeCharacter();
+        editor()->moveCursor(QTextCursor::NextBlock);
+    } else {
+        //
+        // Покажем подсказку, если это возможно
+        //
+        complete(currentBlockText, cursorBackwardText);
+    }
 }
 
 void CharacterHandler::handleInput(QInputMethodEvent*)

@@ -27,14 +27,17 @@ namespace {
 /**
  * @brief Вставить двоеточие в конец блока
  */
-void insertColonAtEnd(QTextCursor& _cursor)
+void insertColonAtEnd(QTextCursor& _cursor, bool _placeDialogsInTable)
 {
     _cursor.movePosition(QTextCursor::EndOfBlock);
     if (!_cursor.block().text().trimmed().endsWith(':')) {
         while (!_cursor.block().text().isEmpty() && _cursor.block().text().endsWith(' ')) {
             _cursor.deletePreviousChar();
         }
-        _cursor.insertText(":");
+
+        if (_placeDialogsInTable) {
+            _cursor.insertText(":");
+        }
     }
 }
 } // namespace
@@ -109,13 +112,28 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
             //
             // Добавим двоеточие после имени
             //
-            insertColonAtEnd(cursor);
+            insertColonAtEnd(cursor, editor()->comicBookTemplate().placeDialoguesInTable());
 
             //
             // Переходим в следующий блок
             //
             editor()->setTextCursor(cursor);
-            editor()->moveCursor(QTextCursor::NextBlock);
+
+            //
+            // Если диалоги располагаются в таблице
+            //
+            if (editor()->comicBookTemplate().placeDialoguesInTable()) {
+                //
+                // ... то переходим к следующему блоку, он уже отформатирован
+                //
+                editor()->moveCursor(QTextCursor::NextBlock);
+            }
+            //
+            // В противном случае, добавляем новый абзац
+            //
+            else {
+                editor()->addParagraph(jumpForEnter(TextParagraphType::Character));
+            }
         }
     } else {
         //! Подстановщик закрыт
@@ -150,12 +168,23 @@ void CharacterHandler::handleEnter(QKeyEvent* _event)
                     //
                     // Добавим двоеточие после имени
                     //
-                    insertColonAtEnd(cursor);
+                    insertColonAtEnd(cursor, editor()->comicBookTemplate().placeDialoguesInTable());
 
                     //
-                    // Переходим к следующему блоку, он уже отформатирован должным образом
+                    // Если диалоги располагаются в таблице
                     //
-                    editor()->moveCursor(QTextCursor::NextBlock);
+                    if (editor()->comicBookTemplate().placeDialoguesInTable()) {
+                        //
+                        // ... то переходим к следующему блоку, он уже отформатирован
+                        //
+                        editor()->moveCursor(QTextCursor::NextBlock);
+                    }
+                    //
+                    // В противном случае, добавляем новый абзац
+                    //
+                    else {
+                        editor()->addParagraph(jumpForEnter(TextParagraphType::Character));
+                    }
                 } else {
                     //! В начале блока
                     //! Внутри блока
@@ -227,12 +256,23 @@ void CharacterHandler::handleTab(QKeyEvent*)
                     //
                     // Добавим двоеточие после имени
                     //
-                    insertColonAtEnd(cursor);
+                    insertColonAtEnd(cursor, editor()->comicBookTemplate().placeDialoguesInTable());
 
                     //
-                    // Переходим к следующему блоку
+                    // Если диалоги располагаются в таблице
                     //
-                    editor()->moveCursor(QTextCursor::NextBlock);
+                    if (editor()->comicBookTemplate().placeDialoguesInTable()) {
+                        //
+                        // ... то переходим к следующему блоку, он уже отформатирован
+                        //
+                        editor()->moveCursor(QTextCursor::NextBlock);
+                    }
+                    //
+                    // В противном случае, добавляем новый абзац
+                    //
+                    else {
+                        editor()->addParagraph(jumpForTab(TextParagraphType::Character));
+                    }
                 } else {
                     //! В начале блока
                     //! Внутри блока

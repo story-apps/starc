@@ -353,30 +353,35 @@ void ComicBookTextEdit::addParagraph(BusinessLayer::TextParagraphType _type)
     }
 
     //
-    // Если вставляется персонаж, то разделяем страницу, для добавления реплики
+    // Если диалоги нужно размещать в таблице, переметим добавляемый диалог в таблицу
     //
-    if (_type == BusinessLayer::TextParagraphType::Character) {
-        const auto cursorPosition = textCursor().position();
-        d->document.splitParagraph(textCursor());
-        auto cursor = textCursor();
-        cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
-        setTextCursor(cursor);
-        cursor.movePosition(BusinessLayer::TextCursor::NextBlock);
-        d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
-    }
-    //
-    // Если вставляется реплика, то разделяем страницу и ставим курсор во вторую колонку
-    //
-    else if (_type == BusinessLayer::TextParagraphType::Dialogue) {
-        const auto cursorPosition = textCursor().position();
-        d->document.splitParagraph(textCursor());
-        auto cursor = textCursor();
-        cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
-        setTextCursor(cursor);
-        d->document.setParagraphType(BusinessLayer::TextParagraphType::Character, cursor);
-        cursor.movePosition(BusinessLayer::TextCursor::NextBlock);
-        d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
-        setTextCursor(cursor);
+    if (d->comicBookTemplate().placeDialoguesInTable()) {
+        //
+        // Если вставляется персонаж, то разделяем страницу, для добавления реплики
+        //
+        if (_type == BusinessLayer::TextParagraphType::Character) {
+            const auto cursorPosition = textCursor().position();
+            d->document.splitParagraph(textCursor());
+            auto cursor = textCursor();
+            cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
+            setTextCursor(cursor);
+            cursor.movePosition(BusinessLayer::TextCursor::NextBlock);
+            d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
+        }
+        //
+        // Если вставляется реплика, то разделяем страницу и ставим курсор во вторую колонку
+        //
+        else if (_type == BusinessLayer::TextParagraphType::Dialogue) {
+            const auto cursorPosition = textCursor().position();
+            d->document.splitParagraph(textCursor());
+            auto cursor = textCursor();
+            cursor.setPosition(cursorPosition + 1); // +1 чтобы войти внутрь таблицы
+            setTextCursor(cursor);
+            d->document.setParagraphType(BusinessLayer::TextParagraphType::Character, cursor);
+            cursor.movePosition(BusinessLayer::TextCursor::NextBlock);
+            d->document.setParagraphType(BusinessLayer::TextParagraphType::Dialogue, cursor);
+            setTextCursor(cursor);
+        }
     }
 
     //
@@ -418,7 +423,7 @@ void ComicBookTextEdit::setCurrentParagraphType(TextParagraphType _type)
     //
     // Меняем тип блока на персонажа
     //
-    if (_type == TextParagraphType::Character) {
+    if (d->comicBookTemplate().placeDialoguesInTable() && _type == TextParagraphType::Character) {
         //
         // Если текущий блок не в таблице, то создаём её и текущий блок помещаем в неё как персонажа
         //
@@ -441,7 +446,8 @@ void ComicBookTextEdit::setCurrentParagraphType(TextParagraphType _type)
     //
     // На реплику
     //
-    else if (_type == TextParagraphType::Dialogue) {
+    else if (d->comicBookTemplate().placeDialoguesInTable()
+             && _type == TextParagraphType::Dialogue) {
         //
         // Если текущий блок не в таблице, то создаём её и текущий блок помещаем в неё как персонажа
         //

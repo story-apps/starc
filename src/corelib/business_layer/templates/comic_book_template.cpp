@@ -22,10 +22,19 @@ QString ComicBookTemplate::name() const
     if (id() == "world") {
         return QCoreApplication::translate(
             "BusinessLayer::ComicBookTemplate",
-            "International template (page: A4; font: Courier Prime)");
+            "Classic international template (page: A4; font: Courier Prime)");
     } else if (id() == "us") {
+        return QCoreApplication::translate(
+            "BusinessLayer::ComicBookTemplate",
+            "Classic US template (page: Letter; font: Courier Prime)");
+    } else if (id() == "script_world") {
         return QCoreApplication::translate("BusinessLayer::ComicBookTemplate",
-                                           "US template (page: Letter; font: Courier Prime)");
+                                           "International template with screenplay like dialogues "
+                                           "(page: A4; font: Courier Prime)");
+    } else if (id() == "script_us") {
+        return QCoreApplication::translate(
+            "BusinessLayer::ComicBookTemplate",
+            "US template with screenplay like dialogues (page: Letter; font: Courier Prime)");
     } else {
         return TextTemplate::name();
     }

@@ -26,5 +26,7 @@
         <file>templates/novel/modern_a4</file>
         <file>templates/novel/modern_letter</file>
         <file>templates/screenplay/telugu</file>
+        <file>templates/comicbook/script_us</file>
+        <file>templates/comicbook/script_world</file>
     </qresource>
 </RCC>
