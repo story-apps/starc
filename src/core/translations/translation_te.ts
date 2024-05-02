@@ -1147,13 +1147,23 @@
     <name>BusinessLayer::ComicBookTemplate</name>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="23"/>
-        <source>International template (page: A4; font: Courier Prime)</source>
-        <translation>ఇంటర్నేషనల్ టెంప్లేట్  (page: A4; font: Courier Prime)</translation>
+        <source>Classic international template (page: A4; font: Courier Prime)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="27"/>
-        <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation>US టెంప్లేట్ (page: Letter ; font: Courier Prime)</translation>
+        <source>Classic US template (page: Letter; font: Courier Prime)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="31"/>
+        <source>International template with screenplay like dialogues (page: A4; font: Courier Prime)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="35"/>
+        <source>US template with screenplay like dialogues (page: Letter; font: Courier Prime)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1168,41 +1178,49 @@
     <name>BusinessLayer::FountainExporter</name>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="25"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="25"/>
         <source>INT</source>
         <translation>INT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="26"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="26"/>
         <source>EXT</source>
         <translation>EXT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="27"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="27"/>
         <source>EST</source>
         <translation>EST</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="28"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="28"/>
         <source>INT./EXT</source>
         <translation>INT/EXT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="29"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="29"/>
         <source>INT/EXT</source>
         <translation>INT/EXT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="30"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="30"/>
         <source>EXT./INT</source>
         <translation>EXT/INT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="31"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="31"/>
         <source>EXT/INT</source>
         <translation>EXT/INT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="32"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="32"/>
         <source>I/E</source>
         <translation>I/E</translation>
     </message>
@@ -1281,19 +1299,19 @@
         <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="127"/>
         <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="144"/>
         <source>primary location</source>
-        <translation type="unfinished"></translation>
+        <translation>ప్రైమరీ లొకేషన్ </translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="132"/>
         <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="149"/>
         <source>secondary location</source>
-        <translation type="unfinished"></translation>
+        <translation>సెకండరీ లొకేషన్ </translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="137"/>
         <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="154"/>
         <source>tertiary location</source>
-        <translation type="unfinished"></translation>
+        <translation>మూడవ లొకేషన్ </translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="199"/>
@@ -2532,6 +2550,104 @@
     </message>
 </context>
 <context>
+    <name>DatePicker</name>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="107"/>
+        <source>January</source>
+        <translation>జనవరి </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="110"/>
+        <source>February</source>
+        <translation>ఫిబ్రవరి </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="113"/>
+        <source>March</source>
+        <translation>మార్చి </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="116"/>
+        <source>April</source>
+        <translation>ఏప్రిల్ </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="119"/>
+        <source>May</source>
+        <translation>మే </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="122"/>
+        <source>June</source>
+        <translation>జూన్ </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="125"/>
+        <source>July</source>
+        <translation>జూలై </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="128"/>
+        <source>August</source>
+        <translation>ఆగస్ట్ </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="131"/>
+        <source>September</source>
+        <translation>సెప్టెంబర్ </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="134"/>
+        <source>October</source>
+        <translation>అక్టోబర్ </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="137"/>
+        <source>November</source>
+        <translation>నవంబర్ </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="140"/>
+        <source>December</source>
+        <translation>డిశంబర్ </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="302"/>
+        <source>Mon</source>
+        <translation>సోమ </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="303"/>
+        <source>Tue</source>
+        <translation>మంగళ </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="304"/>
+        <source>Wed</source>
+        <translation>బుధ </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="305"/>
+        <source>Thu</source>
+        <translation>గురు </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="306"/>
+        <source>Fri</source>
+        <translation>శుక్ర </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="307"/>
+        <source>Sat</source>
+        <translation>శని </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="308"/>
+        <source>Sun</source>
+        <translation>ఆది </translation>
+    </message>
+</context>
+<context>
     <name>DialogHelper</name>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="33"/>
@@ -2605,7 +2721,12 @@
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="116"/>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="133"/>
+        <source>Markdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="122"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="141"/>
         <source>All supported files</source>
         <translation>All supported files</translation>
     </message>
@@ -2734,14 +2855,14 @@
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
         <location filename="../../corelib/business_layer/export/abstract_exporter.cpp" line="282"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1055"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="990"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="970"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1168"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1048"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="989"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="962"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1160"/>
         <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1047"/>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="922"/>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1111"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1177"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="915"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1104"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1169"/>
         <source>End of</source>
         <translation>చివరకి</translation>
     </message>
@@ -2876,7 +2997,7 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="1276"/>
         <location filename="../management_layer/application_manager.cpp" line="1295"/>
-        <location filename="../management_layer/application_manager.cpp" line="1487"/>
+        <location filename="../management_layer/application_manager.cpp" line="1493"/>
         <source>Saving error</source>
         <translation>సేవ్ చెయ్యడంలో ఎర్రర్ </translation>
     </message>
@@ -2911,94 +3032,94 @@
         <translation>సేవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1447"/>
+        <location filename="../management_layer/application_manager.cpp" line="1453"/>
         <source>Choose file to save story</source>
         <translation>స్టోరీలో సేవ్ చెయ్యడానికి ఫైల్ ఎంచుకోండి. </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1488"/>
+        <location filename="../management_layer/application_manager.cpp" line="1494"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>కథను %1 ఫైల్‌కు సేవ్ చేయడం సాధ్యం కాదు. దయచేసి అనుమతులను తనిఖీ చేసి, మళ్లీ ప్రయత్నించండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1538"/>
+        <location filename="../management_layer/application_manager.cpp" line="1544"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>మీరు ఉనికిలో లేని ఫోల్డర్ %1లో ప్రాజెక్ట్‌ను సృష్టించడానికి ప్రయత్నించారు. దయచేసి, కొత్త ప్రాజెక్ట్ కోసం మరొక స్థానాన్ని ఎంచుకోండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1543"/>
+        <location filename="../management_layer/application_manager.cpp" line="1549"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>ఫైల్ వ్రాయబడదు. ఇది మరొక అప్లికేషన్ ద్వారా తెరవబడినట్లు కనిపిస్తోంది. దయచేసి దాన్ని మూసివేసి, కొత్త ప్రాజెక్ట్‌ని సృష్టించడానికి మళ్లీ ప్రయత్నించండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1547"/>
+        <location filename="../management_layer/application_manager.cpp" line="1553"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>ఫైల్ వ్రాయబడదు. దయచేసి, ఎంచుకున్న ఫోల్డర్‌లో వ్రాయడానికి అనువర్తనాన్ని తనిఖీ చేసి, అనుమతులను ఇవ్వండి లేదా కొత్త ప్రాజెక్ట్‌ను సేవ్ చేయడానికి మరొక ఫోల్డర్‌ని ఎంచుకోండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1551"/>
+        <location filename="../management_layer/application_manager.cpp" line="1557"/>
         <source>Create project error</source>
         <translation>ప్రాజెక్ట్ లోపాన్ని సృష్టించండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1737"/>
-        <location filename="../management_layer/application_manager.cpp" line="1760"/>
+        <location filename="../management_layer/application_manager.cpp" line="1743"/>
+        <location filename="../management_layer/application_manager.cpp" line="1766"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>ఈ ఫైల్ ఈ సమయంలో తెరవబడదు, ఎందుకంటే ఇది ఇప్పటికే అప్లికేషన్ యొక్క మరొక కాపీలో తెరిచి ఉంది.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1763"/>
+        <location filename="../management_layer/application_manager.cpp" line="1769"/>
         <source>Ignore and open</source>
         <translation>విస్మరించండి మరియు తెరవండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1859"/>
+        <location filename="../management_layer/application_manager.cpp" line="1865"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation>మీరు తెరవడానికి ప్రయత్నిస్తున్న ఫైల్‌కు వ్రాయడానికి అనుమతులు లేవు. ఫైల్ లక్షణాలను తనిఖీ చేయండి మరియు దానిని సవరించడానికి అనుమతించండి. ఇది సవరించదగినది కాదు కాబట్టి, ఇది చదవడానికి మాత్రమే మోడ్‌లో తెరవబడుతుంది.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1876"/>
+        <location filename="../management_layer/application_manager.cpp" line="1882"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation>మీరు .%1 ఫైల్ ఫార్మాట్‌ని ఉపయోగించడం కొనసాగించాలనుకుంటున్నారా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1877"/>
+        <location filename="../management_layer/application_manager.cpp" line="1883"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation>కొంత ప్రాజెక్ట్ డేటా .%1 ఆకృతిలో సేవ్ చేయబడదు. స్టోరీ ఆర్కిటెక్ట్ .%2 ఫార్మాట్‌ని ఉపయోగించమని మేము మీకు సిఫార్సు చేస్తున్నాము కాబట్టి ప్రాజెక్ట్ డేటా మొత్తం సరిగ్గా సేవ్ చేయబడుతుంది.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1880"/>
+        <location filename="../management_layer/application_manager.cpp" line="1886"/>
         <source>Never ask again</source>
         <translation>మళ్లీ అడగవద్దు</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1881"/>
+        <location filename="../management_layer/application_manager.cpp" line="1887"/>
         <source>Keep .%1</source>
         <translation>ఉంచండి .%1</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1882"/>
+        <location filename="../management_layer/application_manager.cpp" line="1888"/>
         <source>Switch to .STARC</source>
         <translation>.STARCకి మారండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3143"/>
+        <location filename="../management_layer/application_manager.cpp" line="3160"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>ప్రాజెక్ట్ యజమానుల క్లౌడ్ సేవా సభ్యత్వం గడువు ముగిసింది. వారు సబ్‌స్క్రిప్షన్‌ను పునరుద్ధరించిన వెంటనే మీరు ప్రాజెక్ట్‌తో పని చేయడం కొనసాగించవచ్చు.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3376"/>
+        <location filename="../management_layer/application_manager.cpp" line="3393"/>
         <source>Novel</source>
-        <translation type="unfinished">నవల</translation>
+        <translation>నవల</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3389"/>
+        <location filename="../management_layer/application_manager.cpp" line="3406"/>
         <source>Screenplay</source>
         <translation>స్క్రీన్ ప్లే </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3124"/>
-        <location filename="../management_layer/application_manager.cpp" line="3145"/>
+        <location filename="../management_layer/application_manager.cpp" line="3141"/>
+        <location filename="../management_layer/application_manager.cpp" line="3162"/>
         <source>Continue offline</source>
         <translation>ఆఫ్ లైన్ లో కొనసాగించండి </translation>
     </message>
@@ -3014,12 +3135,12 @@
         <translation>మిస్ అయిన ఫాంట్స్ లోడ్ అవుతున్నాయి </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3122"/>
+        <location filename="../management_layer/application_manager.cpp" line="3139"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>మీ క్లౌడ్ సేవా సభ్యత్వం గడువు ముగిసింది. ప్రాజెక్ట్‌తో పని చేయడం కొనసాగించడానికి సభ్యత్వాన్ని సక్రియం చేయండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3125"/>
+        <location filename="../management_layer/application_manager.cpp" line="3142"/>
         <source>Renew subscription</source>
         <translation>రెన్యూవల్ చేసుకోండి </translation>
     </message>
@@ -3238,7 +3359,7 @@
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="774"/>
         <source>CUT TO:</source>
-        <translation type="unfinished">CUT TO:</translation>
+        <translation>CUT TO:</translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="790"/>
@@ -3293,15 +3414,15 @@
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="2115"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2232"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2235"/>
         <source>Generating novel (scene %1 from %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>నవలని రూపొందిస్తోంది (%2 నుండి దృశ్యం% 1)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2286"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2405"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2289"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2408"/>
         <source>Generating script (chapter %1 from %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>స్క్రిప్ట్‌ని రూపొందిస్తోంది (%2 నుండి అధ్యాయం% 1)</translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="772"/>
@@ -3314,13 +3435,13 @@
         <translation>EXT.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2453"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2609"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2456"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2612"/>
         <source>Processing text</source>
         <translation>వచనాన్ని ప్రాసెస్ చేస్తోంది</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2562"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2565"/>
         <source>Generating image</source>
         <translation>చిత్రాన్ని రూపొందిస్తోంది</translation>
     </message>
@@ -3337,68 +3458,68 @@
 <context>
     <name>ManagementLayer::ExportManager</name>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="194"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="374"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="528"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="688"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="846"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="986"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1125"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1257"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1390"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1522"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="195"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="375"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="529"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="689"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="847"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="992"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1135"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1267"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1400"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1532"/>
         <source>Choose the file to export</source>
         <translation>Choose the file to export</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="253"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="401"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="555"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="715"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="873"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1013"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1152"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1284"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1417"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1549"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="254"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="402"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="556"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="716"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="874"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1019"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1162"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1294"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1427"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1559"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="256"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="404"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="558"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="718"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="876"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1016"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1155"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1287"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1420"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1552"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="257"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="405"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="559"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="719"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="877"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1022"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1165"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1297"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1430"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1562"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="259"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="407"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="561"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="721"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="879"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1019"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1158"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1290"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1423"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1555"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="260"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="408"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="562"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="722"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="880"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1025"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1168"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1300"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1433"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1565"/>
         <source>Export error</source>
         <translation>Export error</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1245"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1255"/>
         <source>Characters</source>
         <translation>క్యారెక్టర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1510"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1520"/>
         <source>Locations</source>
         <translation>లొకేషన్స్ </translation>
     </message>
@@ -3472,28 +3593,28 @@
         <translation>అప్ గ్రేడ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="225"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="228"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="227"/>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="269"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="230"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="274"/>
         <source>No</source>
         <translation>వద్దు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="228"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="231"/>
         <source>Yes</source>
         <translation>అవును </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="268"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="273"/>
         <source>Do you want to delete the location&apos;s photo?</source>
         <translation>లొకేషన్ ఫోటో డిలీట్ చెయ్యాలా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="270"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="275"/>
         <source>Yes, delete</source>
         <translation>అవును, డిలీట్ </translation>
     </message>
@@ -3503,7 +3624,7 @@
     <message>
         <location filename="../management_layer/plugins/location_scenes/location_scenes_manager.cpp" line="73"/>
         <source>Upgrade the app to the PRO version to access location scenes module.</source>
-        <translation type="unfinished"></translation>
+        <translation>లొకేషన్ సీన్స్ మాడ్యూల్‌ని యాక్సెస్ చేయడానికి యాప్‌ని PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_scenes/location_scenes_manager.cpp" line="74"/>
@@ -3524,17 +3645,17 @@
         <translation>లొకేషన్ మ్యాప్‌ని ఎడిట్ చేయడానికి యాప్‌ని PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="511"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="514"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="513"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="516"/>
         <source>No</source>
         <translation>వద్దు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="514"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="517"/>
         <source>Yes</source>
         <translation>అవును </translation>
     </message>
@@ -3619,7 +3740,7 @@ If you want to continue editing novel text, switch to the corresponding module v
         <translation>రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="603"/>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="609"/>
         <source>Go to text</source>
         <translation>టెక్స్ట్ కి  వెళ్లండి</translation>
     </message>
@@ -3693,244 +3814,259 @@ If you want to continue editing novel text, switch to the corresponding module v
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="462"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="502"/>
         <source>Find all characters</source>
         <translation>మొత్తం క్యారెక్టర్స్ చూడండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="468"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="508"/>
         <source>Add character</source>
         <translation>క్యారెక్టర్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="473"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="513"/>
         <source>Find all locations</source>
         <translation>మొత్తం లొకేషన్స్ చూడండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="479"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="519"/>
         <source>Add location</source>
         <translation>లొకేషన్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="485"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="525"/>
         <source>Empty recycle bin</source>
         <translation>రీ సైకిల్ బిన్ ఖాళీ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="503"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="543"/>
         <source>Add document</source>
         <translation>డాక్యుమెంట్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="538"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="565"/>
         <source>Remove document</source>
         <translation>డాక్యుమెంట్ రిమూవ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="553"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2108"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="581"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2184"/>
         <source>Create new draft</source>
         <translation>కొత్త డ్రాఫ్ట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="567"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="595"/>
         <source>Open in new window</source>
         <translation>కొత్త విండోలో ఓపెన్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="741"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="787"/>
         <source>Character with this name already exists</source>
         <translation>ఈ పేరుతో క్యారెక్టర్ ఉంది </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="751"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="797"/>
         <source>Location with this name already exists</source>
         <translation>ఈ పేరుతో లొకేషన్ ఆల్రెడీ ఉంది. </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="906"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="952"/>
         <source>Current draft</source>
         <translation>ప్రస్తుత డ్రాఫ్ట్</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="975"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1021"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation>Do you really want to remove document version &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1080"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1156"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>శాశ్వతంగా డాక్యుమెంట్ రిమూవ్ చెయ్యాలా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="976"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1081"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1540"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1022"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1157"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1616"/>
         <source>No</source>
         <translation>వద్దు </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="417"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="457"/>
         <source>Remove split</source>
         <translation>Remove split</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="418"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="458"/>
         <source>Split window</source>
         <translation>Split window</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="496"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="536"/>
         <source>Add folder</source>
         <translation>ఫోల్డర్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="624"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="564"/>
+        <source>Remove documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="652"/>
         <source>Share access</source>
         <translation>యాక్సెస్‌ను షేర్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="761"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="672"/>
+        <source>Expand all</source>
+        <translation>Expand all</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="678"/>
+        <source>Collapse all</source>
+        <translation>Collapse all</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="807"/>
         <source>World with this name already exists</source>
         <translation>ఈ పేరుతో ప్రపంచం ఇప్పటికే ఉంది</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="977"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1082"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1541"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1023"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1158"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1617"/>
         <source>Yes, remove</source>
         <translation>అవును, రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1299"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1375"/>
         <source>Characters from the text</source>
         <translation>Characters from the text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1309"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1385"/>
         <source>Characters that are not found in the text</source>
         <translation>Characters that are not found in the text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1322"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1398"/>
         <source>Save only characters from the text</source>
         <translation>Save only characters from the text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1323"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1399"/>
         <source>Save all characters</source>
         <translation>మొత్తం క్యారెక్టర్స్ సేవ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1324"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1456"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1400"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1532"/>
         <source>Change nothing</source>
         <translation>ఏమీ మార్చవద్దు </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1431"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1507"/>
         <source>Locations from the text</source>
         <translation>Locations from the text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1441"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1517"/>
         <source>Locations that are not found in the text</source>
         <translation>Locations that are not found in the text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1454"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1530"/>
         <source>Save only locations from the text</source>
         <translation>Save only locations from the text</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1455"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1531"/>
         <source>Save all locations</source>
         <translation>మొత్తం లొకేషన్స్ సేవ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1539"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1615"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>మీరు నిజంగా రీసైకిల్ బిన్ నుండి అన్ని డాక్యుమెంట్స్ శాశ్వతంగా తీసివేయాలనుకుంటున్నారా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2122"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2198"/>
         <source>Edit</source>
         <translation>ఎడిట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2132"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2208"/>
         <source>Remove</source>
         <translation>రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2292"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2313"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2334"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2355"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2467"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2368"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2389"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2410"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2431"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2543"/>
         <source>draft</source>
         <translation>డ్రాఫ్ట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2311"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2332"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2353"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2387"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2408"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2429"/>
         <source>Script</source>
         <translation>స్క్రిప్ట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3095"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3133"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3171"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3209"/>
         <source>Title page</source>
         <translation>టైటిల్ పేజీ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3097"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3134"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3173"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3210"/>
         <source>Synopsis</source>
         <translation>సారాంశం</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3109"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3185"/>
         <source>Treatment</source>
         <translation>ట్రీమ్ మెంట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3136"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3212"/>
         <source>Novel</source>
-        <translation type="unfinished">నవల</translation>
+        <translation>నవల</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3145"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3221"/>
         <source>Outline</source>
-        <translation type="unfinished">కథ అవుట్ లైన్ </translation>
+        <translation>కథ అవుట్ లైన్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3409"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3485"/>
         <source>Conflicted version</source>
         <translation>వివాదాస్పద సంస్కరణ</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2290"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2465"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3100"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2366"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2541"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3176"/>
         <source>Screenplay</source>
         <translation>స్క్రీన్ ప్లే </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="419"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="459"/>
         <source>Hide document drafts</source>
         <translation>డాక్యుమెంట్ డ్రాఫ్ట్‌లను దాచండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="420"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="460"/>
         <source>Show document drafts</source>
         <translation>డాక్యుమెంట్ డ్రాఫ్ట్‌లను చూపించు</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3103"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3139"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3179"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3215"/>
         <source>Statistics</source>
         <translation>గణాంకాలు </translation>
     </message>
@@ -4047,7 +4183,7 @@ If you want to continue editing novel text, switch to the corresponding module v
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="814"/>
         <source>Unnamed</source>
         <extracomment>Dummy title for name of a new project</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>పేరు పెట్టలేదు</translation>
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="899"/>
@@ -4475,7 +4611,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="605"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="611"/>
         <source>Go to text</source>
         <translation>టెక్స్ట్ కి  వెళ్లండి</translation>
     </message>
@@ -4564,6 +4700,46 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="374"/>
         <source>Screenplay</source>
         <translation>స్క్రీన్ ప్లే </translation>
+    </message>
+</context>
+<context>
+    <name>ManagementLayer::ScreenplayTimelineManager</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="119"/>
+        <source>Upgrade the app to the PRO version to edit screenplay timeline.
+
+If you want to continue editing screenplay text, switch to the corresponding module via icons on the top left toolbar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="122"/>
+        <source>Maybe later</source>
+        <translation>తర్వాత </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="123"/>
+        <source>Upgrade</source>
+        <translation>అప్ గ్రేడ్ </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="210"/>
+        <source>Add scene</source>
+        <translation>సన్నివేశాన్ని జోడించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="217"/>
+        <source>Color</source>
+        <translation>కలర్ </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="252"/>
+        <source>Remove</source>
+        <translation>తొలగించు </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="266"/>
+        <source>Go to text</source>
+        <translation>టెక్స్ట్ కి  వెళ్లండి</translation>
     </message>
 </context>
 <context>
@@ -4882,33 +5058,24 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="471"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="474"/>
         <source>Information about project</source>
         <translation>ప్రాజెక్ట్ గురించి సమాచారం</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="473"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="476"/>
         <source>Project collaborators</source>
         <translation>ప్రాజెక్ట్ సహకారులు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="477"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="480"/>
         <source>Information about screenplay</source>
         <translation>స్క్రీన్ ప్లే గురించి సమాచారం</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="479"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="482"/>
         <source>Screenplay parameters</source>
         <translation>స్క్రీన్ ప్లే పెరామీటర్స్ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="482"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="513"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="533"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="553"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="573"/>
-        <source>Title page text</source>
-        <translation>శీర్షిక పేజీ టెక్ట్స్ </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="485"/>
@@ -4916,183 +5083,192 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../management_layer/plugins_builder.cpp" line="536"/>
         <location filename="../management_layer/plugins_builder.cpp" line="556"/>
         <location filename="../management_layer/plugins_builder.cpp" line="576"/>
+        <source>Title page text</source>
+        <translation>శీర్షిక పేజీ టెక్ట్స్ </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins_builder.cpp" line="488"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="519"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="539"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="559"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="579"/>
         <source>Synopsis text</source>
         <translation>సారాంశం టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="490"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="581"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="493"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="584"/>
         <source>Beats</source>
         <translation>బీట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="499"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="590"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="502"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="593"/>
         <source>Timeline</source>
         <translation>టైమ్ లైన్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="501"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="504"/>
         <source>Breakdown</source>
         <translation>బ్రేక్ డౌన్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="508"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="511"/>
         <source>Information about comic book</source>
         <translation>కామిక్ బుక్ గురించి సమాచారం </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="510"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="513"/>
         <source>Comic book parameters</source>
         <translation>కామిక్ బుక్ పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="519"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="522"/>
         <source>Comic book text</source>
         <translation>కామిక్ బుక్ టెక్స్ట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="528"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="531"/>
         <source>Information about audioplay</source>
         <translation>ఆడియో ప్లే గురించి సమాచారం </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="530"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="533"/>
         <source>Audioplay parameters</source>
         <translation>ఆడియో ప్లే పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="539"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="542"/>
         <source>Audioplay text</source>
         <translation>ఆడియో ప్లే టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="548"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="551"/>
         <source>Information about stageplay</source>
         <translation>స్టేజ్ ప్లే గురించి సమాచారం </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="550"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="553"/>
         <source>Stageplay parameters</source>
         <translation>స్టీజ్ ప్లే పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="559"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="562"/>
         <source>Stageplay text</source>
         <translation>స్టేజ్ ప్లే టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="568"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="571"/>
         <source>Information about novel</source>
         <translation>నవల గురించి సమాచారం </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="570"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="573"/>
         <source>Novel parameters</source>
         <translation>నవల పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="579"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="582"/>
         <source>Outline text</source>
         <translation>అవుట్‌లైన్ టెక్స్ట్</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="586"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="589"/>
         <source>Novel text</source>
         <translation>నవల టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="597"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="600"/>
         <source>Characters relations</source>
         <translation>క్యారెక్టర్స్  సంబంధాలు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="600"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="603"/>
         <source>Character information</source>
         <translation>క్యారెక్టర్ సమాచారం </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="602"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="605"/>
         <source>Character dialogues</source>
         <translation>క్యారెక్టర్ డైలాగ్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="606"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="609"/>
         <source>Locations map</source>
         <translation>లొకేషన్స్ మ్యాప్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="609"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="612"/>
         <source>Location information</source>
         <translation>లొకేషన్ సమాచారం </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="611"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="614"/>
         <source>Location scenes</source>
-        <translation type="unfinished"></translation>
+        <translation>లొకేషన్ సీన్స్</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="615"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="618"/>
         <source>Worlds map</source>
         <translation>ప్రపంచ మ్యాప్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="618"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="621"/>
         <source>World information</source>
         <translation>ప్రపంచం యొక్క సమాచారం </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="622"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="625"/>
         <source>Folder text</source>
         <translation>ఫోల్డర్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="625"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="628"/>
         <source>Document text</source>
         <translation>డాక్యుమెంట్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="629"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="632"/>
         <source>Recycle bin summary info</source>
         <translation>రీ సైకిల్ బిన్ సమాచారం </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="632"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="635"/>
         <source>Mind map</source>
         <translation>మైండ్ మ్యాప్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="635"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="638"/>
         <source>Images gallery</source>
         <translation>ఇమేజ్ గ్యాలరీ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="488"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="491"/>
         <source>Treatment text</source>
         <translation>ట్రీట్ మెంట్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="495"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="498"/>
         <source>Screenplay text</source>
         <translation>స్క్రీన్ ప్లే టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="492"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="497"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="521"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="541"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="561"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="583"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="588"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="495"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="500"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="524"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="544"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="564"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="586"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="591"/>
         <source>Cards</source>
         <translation>కార్డ్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="504"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="524"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="544"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="564"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="593"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="507"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="527"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="547"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="567"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="596"/>
         <source>Statistics</source>
         <translation>గణాంకాలు </translation>
     </message>
@@ -5137,221 +5313,221 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="28"/>
         <source>Alice Wu</source>
-        <translation type="unfinished"></translation>
+        <translation>Alice Wu</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="31"/>
         <source>Know your literary tradition, savor it, steal from it, but when you sit down to write, forget about worshiping greatness and fetishizing masterpieces.</source>
         <extracomment>Cite of the Allegra Goodman</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>మీ సాహిత్యాల తెలుసుకోండి, దాన్ని ఆస్వాదించండి, దాని నుండి దొంగిలించండి, కానీ మీరు వ్రాయడానికి కూర్చున్నప్పుడు, గొప్పతనాన్ని ఆరాధించడం మరియు కళాఖండాలను సృష్టించడం  గురించి మరచిపోండి.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="32"/>
         <source>Allegra Goodman</source>
-        <translation type="unfinished"></translation>
+        <translation>Allegra Goodman</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="35"/>
         <source>To gain your own voice, you have to forget about having it heard.</source>
         <extracomment>Cite of the Allen Ginsberg</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>To gain your own voice, you have to forget about having it heard.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="36"/>
         <source>Allen Ginsberg</source>
-        <translation type="unfinished"></translation>
+        <translation>Allen Ginsberg</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="39"/>
         <source>I think the deeper you go into questions, the deeper or more interesting the questions get. And I think that’s the job of art.</source>
         <extracomment>Cite of the Andre Dubus III</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>మీరు ప్రశ్నల్లోకి ఎంత లోతుగా వెళితే, ప్రశ్నలు అంత లోతుగా లేదా మరింత ఆసక్తికరంగా ఉంటాయని నేను భావిస్తున్నాను. మరియు ఇది కళ యొక్క పని అని నేను అనుకుంటున్నాను.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="40"/>
         <source>Andre Dubus III</source>
-        <translation type="unfinished"></translation>
+        <translation>Andre Dubus III</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="43"/>
         <source>The most beautiful things are those that madness prompts and reason writes.</source>
         <extracomment>Cite of the Andre Gide</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>చాలా అందమైన విషయాలు పిచ్చిని ప్రేరేపించేవి మరియు కారణం వ్రాసేవి.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="44"/>
         <source>Andre Gide</source>
-        <translation type="unfinished"></translation>
+        <translation>Andre Gide</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="47"/>
         <source>Do not hoard what seems good for a later place in the book, or for another book; give it, give it all, give it now.</source>
         <extracomment>Cite of the Annie Dillard</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>పుస్తకంలో తర్వాత స్థానానికి లేదా మరొక పుస్తకం కోసం మంచిగా అనిపించిన వాటిని నిల్వ చేయవద్దు; ఇవ్వండి, అన్నీ ఇవ్వండి, ఇప్పుడే ఇవ్వండి.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="48"/>
         <source>Annie Dillard</source>
-        <translation type="unfinished"></translation>
+        <translation>Annie Dillard</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="51"/>
         <source>Out of the thousand writers huffing and puffing through movieland there are scarcely fifty men and women of wit or talent. The rest of the fraternity is deadwood. Yet, in a curious way, there is not much difference between the product of a good writer and a bad one. They both have to toe the same mark.</source>
         <extracomment>Cite of the Ben Hecht</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>సినిమా ల్యాండ్‌లో హఫ్ మరియు ఉబ్బితబ్బిబ్బవుతున్న వెయ్యి మంది రచయితలలో తెలివి లేదా ప్రతిభ ఉన్న పురుషులు మరియు మహిళలు దాదాపు యాభై మంది మాత్రమే ఉన్నారు. మిగిలిన సోదరభావం డెడ్‌వుడ్. అయినప్పటికీ, ఒక ఆసక్తికరమైన రీతిలో, మంచి రచయిత మరియు చెడ్డ వ్యక్తి యొక్క ఉత్పత్తికి మధ్య చాలా తేడా లేదు. వారిద్దరూ ఒకే గుర్తును వేయాలి.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="52"/>
         <source>Ben Hecht</source>
-        <translation type="unfinished"></translation>
+        <translation>Ben Hecht</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="55"/>
         <source>If you have a problem with the third act, the real problem is in the first act.</source>
         <extracomment>Cite of the Billy Wilder</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>మీ థర్డ్ యాక్ట్ లో ప్రాబ్లమ్ ఉంది అనిపిస్తే,నిజమైన ప్రాబ్లమ్ ఫస్ట్ యాక్ట్ లో ఉంది. </translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="56"/>
         <source>Billy Wilder</source>
-        <translation type="unfinished"></translation>
+        <translation>Billy Wilder</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="59"/>
         <source>I have a complex feeling about genre. I love it, but I hate it at the same time. I have the urge to make audiences thrill with the excitement of a genre, but I also try to betray and destroy the expectations placed on that genre.</source>
         <extracomment>Cite of the Bong Joon-Ho</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>నేను జానర్ గురించి సంక్లిష్టమైన అనుభూతిని కలిగి ఉన్నాను. నేను దానిని ప్రేమిస్తున్నాను, కానీ అదే సమయంలో నేను దానిని ద్వేషిస్తున్నాను. ఒక జానర్‌లో ఉన్న ఎక్సైట్‌మెంట్‌తో ప్రేక్షకులను థ్రిల్ చేయాలనే కోరిక నాకు ఉంది, కానీ నేను కూడా ఆ జానర్‌పై ఉన్న అంచనాలను ద్రోహం చేయడానికి మరియు నాశనం చేయడానికి ప్రయత్నిస్తాను.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="60"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="64"/>
         <source>Bong Joon-Ho</source>
-        <translation type="unfinished"></translation>
+        <translation>Bong Joon-Ho</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="63"/>
         <source>The multilevel, the conscious and the unconscious, is natural when I write scripts… when I come up with ideas and stories.</source>
         <extracomment>Cite of the Bong Joon-Ho</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>నేను స్క్రిప్ట్‌లు రాసేటప్పుడు... ఆలోచనలు మరియు కథలతో వచ్చినప్పుడు బహుళస్థాయి, స్పృహ మరియు అపస్మారక స్థితి సహజం.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="67"/>
         <source>Beware of advice — even this.</source>
         <extracomment>Cite of the Carl Sandburg</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>సలహాల విషయంలో జాగ్రత్తగా ఉండండి - దీని విషయంలో కూడా.. </translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="68"/>
         <source>Carl Sandburg</source>
-        <translation type="unfinished"></translation>
+        <translation>Carl Sandburg</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="71"/>
         <source>It’s so important just because what we see, we kind of validate; what we see, we can empathize with; what we see, we can sort of put ourselves into the shoes of. I think what I do as a storyteller and what we all do as storytellers is kind of fundamental to the fabric of society.</source>
         <extracomment>Cite of the Charise Castro Smith</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>ఇది చాలా ముఖ్యమైనది ఎందుకంటే మనం చూసేది, మేము ధృవీకరించే రకం; మనం చూసే దానితో మనం సానుభూతి పొందవచ్చు; మనం చూసే వాటిని మనం క్రమబద్ధీకరించుకోవచ్చు. కథకుడిగా నేను చేసేది మరియు కథకులుగా మనమందరం చేసేది సమాజ నిర్మాణానికి ఒక రకమైన ప్రాథమికమని నేను భావిస్తున్నాను.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="72"/>
         <source>Charise Castro Smith</source>
-        <translation type="unfinished"></translation>
+        <translation>Charise Castro Smith</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="75"/>
         <source>A screenplay is an exploration. It’s about the thing you don’t know. It’s a step into the abyss. It necessarily starts somewhere, anywhere; there is a starting point, but the rest is undetermined.</source>
         <extracomment>Cite of the Charlie Kaufman</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>స్క్రీన్ ప్లే అనేది మీకు తెలియని విషయం గురించి ఒక అన్వేషణ. ఇది అగాధంలోకి ఒక అడుగు. ఇది తప్పనిసరిగా ఎక్కడో, ఎక్కడైనా మొదలవుతుంది; ఒక ప్రారంభ స్థానం ఉంది, కానీ మిగిలినది నిర్ణయించబడలేదు.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="76"/>
         <source>Charlie Kaufman</source>
-        <translation type="unfinished"></translation>
+        <translation>Charlie Kaufman</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="79"/>
         <source>A good film script should be able to do completely without dialogue.</source>
         <extracomment>Cite of the David Mamet</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>మంచి సినిమా స్క్రిప్ట్ పూర్తిగా డైలాగ్ లేకుండా చేయగలగాలి.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="80"/>
         <source>David Mamet</source>
-        <translation type="unfinished"></translation>
+        <translation>David Mamet</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="83"/>
         <source>I care about subtext. If you get that right, the text will flow.</source>
         <extracomment>Cite of the Dee Rees</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>నేను సబ్‌టెక్స్ట్ గురించి శ్రద్ధ వహిస్తాను. మీరు దానిని సరిగ్గా పొందినట్లయితే, వచనం ప్రవహిస్తుంది.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="84"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="88"/>
         <source>Dee Rees</source>
-        <translation type="unfinished"></translation>
+        <translation>Dee Rees</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="87"/>
         <source>Writing is really freeing because it’s the only part of the process where it’s just you and the characters and you are by yourself in a room and you can just hash it out. There are no limitations.</source>
         <extracomment>Cite of the Dee Rees</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>రాయడం అనేది నిజంగా స్వేచ్ఛనిస్తుంది, ఎందుకంటే ఇది ప్రక్రియలో మీరు మరియు పాత్రలు మాత్రమే మరియు మీరు ఒక గదిలో మీరే ఉంటారు మరియు మీరు దానిని హ్యాష్ చేయవచ్చు. పరిమితులు లేవు.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="91"/>
         <source>There is no reason why challenging themes and engaging stories have to be mutually exclusive - in fact, each can fuel the other. As a filmmaker, I want to entertain people first and foremost. If out of that comes a greater awareness and understanding of a time or a circumstance, then the hope is that change can happen.</source>
         <extracomment>Cite of the Edward Zwick</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>సవాలు చేసే ఇతివృత్తాలు మరియు ఆకర్షణీయమైన కథనాలు పరస్పరం ప్రత్యేకంగా ఉండడానికి ఎటువంటి కారణం లేదు - వాస్తవానికి, ప్రతి ఒక్కటి మరొకదానికి ఆజ్యం పోస్తుంది. ఫిలిం మేకర్‌గా నేను ముందుగా ప్రజలను అలరించాలనుకుంటున్నాను. దాని నుండి ఒక సమయం లేదా పరిస్థితి గురించి ఎక్కువ అవగాహన మరియు అవగాహన వస్తే, అప్పుడు మార్పు జరగవచ్చు అని ఆశ.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="92"/>
         <source>Edward Zwick</source>
-        <translation type="unfinished"></translation>
+        <translation>Edward Zwick</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="95"/>
         <source>A lot of my ideas were crap, but bad ideas help get the ball rolling too. And bad ideas lead to better ideas.</source>
         <extracomment>Cite of the Elaine Loh</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>నా ఆలోచనలు చాలా చెత్తగా ఉన్నాయి, కానీ చెడు ఆలోచనలు కూడా బంతిని తిప్పడానికి సహాయపడతాయి. మరియు చెడు ఆలోచనలు మంచి ఆలోచనలకు దారితీస్తాయి.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="96"/>
         <source>Elaine Loh</source>
-        <translation type="unfinished"></translation>
+        <translation>Elaine Loh</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="99"/>
         <source>If it sounds like writing, I rewrite it.</source>
         <extracomment>Cite of the Elmore Leonard</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>రాసినట్లు అనిపిస్తే మళ్ళీ రాస్తాను.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="100"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="104"/>
         <source>Elmore Leonard</source>
-        <translation type="unfinished"></translation>
+        <translation>Elmore Leonard</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="103"/>
         <source>If it sounds like writing, I rewrite it. Or, if proper usage gets in the way, it may have to go. I can’t allow what we learned in English composition to disrupt the sound and rhythm of the narrative.</source>
         <extracomment>Cite of the Elmore Leonard</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>If it sounds like writing, I rewrite it. Or, if proper usage gets in the way, it may have to go. I can’t allow what we learned in English composition to disrupt the sound and rhythm of the narrative.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="107"/>
         <source>Who wants to become a writer? And why? Because it’s the answer to everything. … It’s the streaming reason for living. To note, to pin down, to build up, to create, to be astonished at nothing, to cherish the oddities, to let nothing go down the drain, to make something, to make a great flower out of life, even if it’s a cactus.</source>
         <extracomment>Cite of the Enid Bagnold</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Who wants to become a writer? And why? Because it’s the answer to everything. … It’s the streaming reason for living. To note, to pin down, to build up, to create, to be astonished at nothing, to cherish the oddities, to let nothing go down the drain, to make something, to make a great flower out of life, even if it’s a cactus.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="108"/>
         <source>Enid Bagnold</source>
-        <translation type="unfinished"></translation>
+        <translation>Enid Bagnold</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="111"/>
         <source>Critics are men who watch a battle from a high place then come down and shoot the survivors.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Critics are men who watch a battle from a high place then come down and shoot the survivors.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="112"/>
@@ -5363,190 +5539,190 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="136"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="140"/>
         <source>Ernest Hemingway</source>
-        <translation type="unfinished"></translation>
+        <translation>Ernest Hemingway</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="115"/>
         <source>It’s none of their business that you have to learn to write. Let them think you were born that way.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>It’s none of their business that you have to learn to write. Let them think you were born that way.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="119"/>
         <source>Life breaks us all but in the end we are stronger in the broken places.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Life breaks us all but in the end we are stronger in the broken places.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="123"/>
         <source>The best people possess a feeling for beauty, the courage to take risks, the discipline to tell the truth, the capacity for sacrifice. Ironically, their virtues make them vulnerable; they are often wounded, sometimes destroyed.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The best people possess a feeling for beauty, the courage to take risks, the discipline to tell the truth, the capacity for sacrifice. Ironically, their virtues make them vulnerable; they are often wounded, sometimes destroyed.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="127"/>
         <source>The first draft of anything is shit.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The first draft of anything is shit.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="131"/>
         <source>We are all apprentices in a craft where no one ever becomes a master.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>We are all apprentices in a craft where no one ever becomes a master.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="135"/>
         <source>When writing a novel a writer should create living people; people, not characters. A character is a caricature.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>When writing a novel a writer should create living people; people, not characters. A character is a caricature.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="139"/>
         <source>You must be prepared to work always without applause.</source>
         <extracomment>Cite of the Ernest Hemingway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>You must be prepared to work always without applause.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="143"/>
         <source>We wouldn’t have done it if we didn’t think we could have fun with it.</source>
         <extracomment>Cite of the Ethan Coen</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>We wouldn’t have done it if we didn’t think we could have fun with it.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="144"/>
         <source>Ethan Coen</source>
-        <translation type="unfinished"></translation>
+        <translation>Ethan Coen</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="147"/>
         <source>The last thing I want to see at the movies is a version of my reality. I don’t want to see art imitating life.</source>
         <extracomment>Cite of the Fran Walsh</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The last thing I want to see at the movies is a version of my reality. I don’t want to see art imitating life.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="148"/>
         <source>Fran Walsh</source>
-        <translation type="unfinished"></translation>
+        <translation>Fran Walsh</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="151"/>
         <source>I became quite successful very young, and it was mainly because I was so enthusiastic and I just worked so hard at it.</source>
         <extracomment>Cite of the Francis Ford Coppola</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I became quite successful very young, and it was mainly because I was so enthusiastic and I just worked so hard at it.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="152"/>
         <source>Francis Ford Coppola</source>
-        <translation type="unfinished"></translation>
+        <translation>Francis Ford Coppola</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="155"/>
         <source> I inherited the knowledge that sometimes (talents) not only skip a generation, but sometimes run screaming from it. Ironically, it was the singing non-ability that helped feed my love of laughter.</source>
         <extracomment>Cite of the Fred Astaire</extracomment>
-        <translation type="unfinished"></translation>
+        <translation> I inherited the knowledge that sometimes (talents) not only skip a generation, but sometimes run screaming from it. Ironically, it was the singing non-ability that helped feed my love of laughter.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="156"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="160"/>
         <source>Fred Astaire</source>
-        <translation type="unfinished"></translation>
+        <translation>Fred Astaire</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="159"/>
         <source>Either the camera will dance, or I will.</source>
         <extracomment>Cite of the Fred Astaire</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Either the camera will dance, or I will.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="163"/>
         <source>Dialogue is a necessary evil.</source>
         <extracomment>Cite of the Fred Zinnemann</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue is a necessary evil.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="164"/>
         <source>Fred Zinnemann</source>
-        <translation type="unfinished"></translation>
+        <translation>Fred Zinnemann</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="167"/>
         <source>When I sit down to write a book, I do not say to myself, ‘I am going to produce a work of art.’ I write it because there is some lie that I want to expose, some fact to which I want to draw attention, and my initial concern is to get a hearing.</source>
         <extracomment>Cite of the George Orwell</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>When I sit down to write a book, I do not say to myself, ‘I am going to produce a work of art.’ I write it because there is some lie that I want to expose, some fact to which I want to draw attention, and my initial concern is to get a hearing.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="168"/>
         <source>George Orwell</source>
-        <translation type="unfinished"></translation>
+        <translation>George Orwell</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="171"/>
         <source>Keep a small can of WD-40 on your desk—away from any open flames—to remind yourself that if you don’t write daily, you will get rusty.</source>
         <extracomment>Cite of the George Singleton</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Keep a small can of WD-40 on your desk—away from any open flames—to remind yourself that if you don’t write daily, you will get rusty.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="172"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="176"/>
         <source>George Singleton</source>
-        <translation type="unfinished"></translation>
+        <translation>George Singleton</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="175"/>
         <source>You do not have to explain every single drop of water contained in a rain barrel. You have to explain one drop—H2O. The reader will get it.</source>
         <extracomment>Cite of the George Singleton</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>You do not have to explain every single drop of water contained in a rain barrel. You have to explain one drop—H2O. The reader will get it.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="179"/>
         <source>Each writer is born with a repertory company in his head. Shakespeare has perhaps 20 players. … I have 10 or so, and that’s a lot. As you get older, you become more skillful at casting them.</source>
         <extracomment>Cite of the Gore Vidal</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Each writer is born with a repertory company in his head. Shakespeare has perhaps 20 players. … I have 10 or so, and that’s a lot. As you get older, you become more skillful at casting them.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="180"/>
         <source>Gore Vidal</source>
-        <translation type="unfinished"></translation>
+        <translation>Gore Vidal</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="183"/>
         <source>Let your characters talk to each other and do things. Spend time with them — they’ll tell you who they are and what they’re up to.</source>
         <extracomment>Cite of the Greta Gerwig</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Let your characters talk to each other and do things. Spend time with them — they’ll tell you who they are and what they’re up to.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="184"/>
         <source>Greta Gerwig</source>
-        <translation type="unfinished"></translation>
+        <translation>Greta Gerwig</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="187"/>
         <source>To me, art and storytelling serve primal, spiritual functions in my daily life. Whether I’m telling a bedtime story to my kids or trying to mount a movie or write a short story or a novel, I take it very seriously.</source>
         <extracomment>Cite of the Guillermo del Toro</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>To me, art and storytelling serve primal, spiritual functions in my daily life. Whether I’m telling a bedtime story to my kids or trying to mount a movie or write a short story or a novel, I take it very seriously.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="188"/>
         <source>Guillermo del Toro</source>
-        <translation type="unfinished"></translation>
+        <translation>Guillermo del Toro</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="191"/>
         <source>There are no dull subjects, only dull writers</source>
         <extracomment>Cite of the H. L. Mencken</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>There are no dull subjects, only dull writers</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="192"/>
         <source>H. L. Mencken</source>
-        <translation type="unfinished"></translation>
+        <translation>H. L. Mencken</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="195"/>
         <source>Characters make their own plot. The dimensions of the characters determine the action of the novel.</source>
         <extracomment>Cite of the Harper Lee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Characters make their own plot. The dimensions of the characters determine the action of the novel.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="196"/>
@@ -5554,297 +5730,297 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="204"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="208"/>
         <source>Harper Lee</source>
-        <translation type="unfinished"></translation>
+        <translation>Harper Lee</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="199"/>
         <source>I would advise anyone who aspires to a writing career that before developing his talent he would be wise to develop a thick hide.</source>
         <extracomment>Cite of the Harper Lee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I would advise anyone who aspires to a writing career that before developing his talent he would be wise to develop a thick hide.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="203"/>
         <source>It’s not necessary to tell all you know.</source>
         <extracomment>Cite of the Harper Lee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>It’s not necessary to tell all you know.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="207"/>
         <source>You never really understand a person until you consider things from his point of view.</source>
         <extracomment>Cite of the Harper Lee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>You never really understand a person until you consider things from his point of view.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="211"/>
         <source>The creation of a single world comes from a huge number of fragments and chaos.</source>
         <extracomment>Cite of the Hayao Miyazaki</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The creation of a single world comes from a huge number of fragments and chaos.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="212"/>
         <source>Hayao Miyazaki</source>
-        <translation type="unfinished"></translation>
+        <translation>Hayao Miyazaki</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="215"/>
         <source>Write while the heat is in you. … The writer who postpones the recording of his thoughts uses an iron which has cooled to burn a hole with.</source>
         <extracomment>Cite of the Henry David Thoreau</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Write while the heat is in you. … The writer who postpones the recording of his thoughts uses an iron which has cooled to burn a hole with.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="216"/>
         <source>Henry David Thoreau</source>
-        <translation type="unfinished"></translation>
+        <translation>Henry David Thoreau</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="219"/>
         <source>Not a wasted word. This has been a main point to my literary thinking all my life.</source>
         <extracomment>Cite of the Hunter S. Thompson</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Not a wasted word. This has been a main point to my literary thinking all my life.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="220"/>
         <source>Hunter S. Thompson</source>
-        <translation type="unfinished"></translation>
+        <translation>Hunter S. Thompson</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="223"/>
         <source>Genius gives birth, talent delivers. What Rembrandt or Van Gogh saw in the night can never be seen again. Born writers of the future are amazed already at what they’re seeing now, what we’ll all see in time for the first time, and then see imitated many times by made writers.</source>
         <extracomment>Cite of the Jack Kerouac</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Genius gives birth, talent delivers. What Rembrandt or Van Gogh saw in the night can never be seen again. Born writers of the future are amazed already at what they’re seeing now, what we’ll all see in time for the first time, and then see imitated many times by made writers.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="224"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="228"/>
         <source>Jack Kerouac</source>
-        <translation type="unfinished"></translation>
+        <translation>Jack Kerouac</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="227"/>
         <source>It ain’t whatcha write, it’s the way atcha write it.</source>
         <extracomment>Cite of the Jack Kerouac</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>It ain’t whatcha write, it’s the way atcha write it.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="231"/>
         <source>A story should have a beginning, a middle, and an end, but not necessarily in that order.</source>
         <extracomment>Cite of the Jean-Luc Godard</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>A story should have a beginning, a middle, and an end, but not necessarily in that order.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="232"/>
         <source>Jean-Luc Godard</source>
-        <translation type="unfinished"></translation>
+        <translation>Jean-Luc Godard</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="235"/>
         <source>There is only one plot—things are not what they seem.</source>
         <extracomment>Cite of the Jim Thompson</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>There is only one plot—things are not what they seem.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="236"/>
         <source>Jim Thompson</source>
-        <translation type="unfinished"></translation>
+        <translation>Jim Thompson</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="239"/>
         <source>Long patience and application saturated with your heart’s blood—you will either write or you will not—and the only way to find out whether you will or not is to try.</source>
         <extracomment>Cite of the Jim Tully, WD</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Long patience and application saturated with your heart’s blood—you will either write or you will not—and the only way to find out whether you will or not is to try.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="240"/>
         <source>Jim Tully, WD</source>
-        <translation type="unfinished"></translation>
+        <translation>Jim Tully, WD</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="243"/>
         <source>The characters are the result of two things — first, we elaborate them into fairly well-defined people through their dialogue, then they happen all over again, when the actor interprets them.</source>
         <extracomment>Cite of the Joel Coen</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The characters are the result of two things — first, we elaborate them into fairly well-defined people through their dialogue, then they happen all over again, when the actor interprets them.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="244"/>
         <source>Joel Coen</source>
-        <translation type="unfinished"></translation>
+        <translation>Joel Coen</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="247"/>
         <source>I often say that a lot of my job, as a screenwriter, is sort of being a stock picker, in that I need to figure out what movies are probably going to get made because otherwise, I’m spending a lot of my time on something that’s trapped in 12-point courier.</source>
         <extracomment>Cite of the John August</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I often say that a lot of my job, as a screenwriter, is sort of being a stock picker, in that I need to figure out what movies are probably going to get made because otherwise, I’m spending a lot of my time on something that’s trapped in 12-point courier.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="248"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="252"/>
         <source>John August</source>
-        <translation type="unfinished"></translation>
+        <translation>John August</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="251"/>
         <source>I think the greatest barrier I’ve always faced as a writer is just starting. Like all of us, I can just procrastinate and find some excuse for not actually getting started.</source>
         <extracomment>Cite of the John August</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I think the greatest barrier I’ve always faced as a writer is just starting. Like all of us, I can just procrastinate and find some excuse for not actually getting started.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="255"/>
         <source>In England, I am a horror movie director. In Germany, I am a filmmaker. In the US, I am a bum.</source>
         <extracomment>Cite of the John Carpenter</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>In England, I am a horror movie director. In Germany, I am a filmmaker. In the US, I am a bum.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="256"/>
         <source>John Carpenter</source>
-        <translation type="unfinished"></translation>
+        <translation>John Carpenter</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="259"/>
         <source>Feydeau’s one rule of playwriting: Character A: My life is perfect as long as I don’t see Character B. Knock Knock. Enter Character B.</source>
         <extracomment>Cite of the John Guare</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Feydeau’s one rule of playwriting: Character A: My life is perfect as long as I don’t see Character B. Knock Knock. Enter Character B.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="260"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="264"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="268"/>
         <source>John Guare</source>
-        <translation type="unfinished"></translation>
+        <translation>John Guare</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="263"/>
         <source>James Joyce wrote the definitive work about Dublin while he was living in Switzerland. We&apos;re all where we come from. We all have our roots.</source>
         <extracomment>Cite of the John Guare</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>James Joyce wrote the definitive work about Dublin while he was living in Switzerland. We&apos;re all where we come from. We all have our roots.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="267"/>
         <source>You can read ten books and finally come across one detail, and it&apos;s like, &quot;now everything else makes sense. Now I know where I am.&quot;</source>
         <extracomment>Cite of the John Guare</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>You can read ten books and finally come across one detail, and it&apos;s like, &quot;now everything else makes sense. Now I know where I am.&quot;</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="271"/>
         <source>I’ve noticed that the truth works… If you’re being yourself and you’re just using your own emotions, they can feel it. If you’re doing fake, they can feel it. It took me a while in comedy to realize that your truth is more powerful than your mask.</source>
         <extracomment>Cite of the Jordan Peele</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I’ve noticed that the truth works… If you’re being yourself and you’re just using your own emotions, they can feel it. If you’re doing fake, they can feel it. It took me a while in comedy to realize that your truth is more powerful than your mask.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="272"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="276"/>
         <source>Jordan Peele</source>
-        <translation type="unfinished"></translation>
+        <translation>Jordan Peele</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="275"/>
         <source>That’s my advice with dealing with writer’s block. Follow the fun. If you aren’t having fun, you are doing it wrong.</source>
         <extracomment>Cite of the Jordan Peele</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>That’s my advice with dealing with writer’s block. Follow the fun. If you aren’t having fun, you are doing it wrong.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="279"/>
         <source>Always be yourself…unless you suck</source>
         <extracomment>Cite of the Joss Whedon</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Always be yourself…unless you suck</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="280"/>
         <source>Joss Whedon</source>
-        <translation type="unfinished"></translation>
+        <translation>Joss Whedon</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="283"/>
         <source>The first sentence can’t be written until the final sentence is written.</source>
         <extracomment>Cite of the Joyce Carol Oates</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The first sentence can’t be written until the final sentence is written.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="284"/>
         <source>Joyce Carol Oates</source>
-        <translation type="unfinished"></translation>
+        <translation>Joyce Carol Oates</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="287"/>
         <source>Style is to forget all styles.</source>
         <extracomment>Cite of the Jules Renard</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Style is to forget all styles.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="288"/>
         <source>Jules Renard</source>
-        <translation type="unfinished"></translation>
+        <translation>Jules Renard</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="291"/>
         <source>Write. Rewrite. When not writing or rewriting, read. I know of no shortcuts.</source>
         <extracomment>Cite of the Larry L. King</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>రాయండి. మళ్ళీ రాయండి. ఇవి రెండూ చేయకపోతుంటే, చదవండి. నాకు ఎలాంటి షార్ట్ కట్స్ తెలీదు. </translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="292"/>
         <source>Larry L. King</source>
-        <translation type="unfinished"></translation>
+        <translation>Larry L. King</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="295"/>
         <source>One thing that helps is to give myself permission to write badly. I tell myself that I’m going to do my five or 10 pages no matter what, and that I can always tear them up the following morning if I want. I’ll have lost nothing—writing and tearing up five pages would leave me no further behind than if I took the day off.</source>
         <extracomment>Cite of the Lawrence Block</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>One thing that helps is to give myself permission to write badly. I tell myself that I’m going to do my five or 10 pages no matter what, and that I can always tear them up the following morning if I want. I’ll have lost nothing—writing and tearing up five pages would leave me no further behind than if I took the day off.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="296"/>
         <source>Lawrence Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Lawrence Block</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="299"/>
         <source>Plot is people. Human emotions and desires founded on the realities of life, working at cross purposes, getting hotter and fiercer as they strike against each other until finally there’s an explosion—that’s Plot.</source>
         <extracomment>Cite of the Leigh Brackett</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Plot is people. Human emotions and desires founded on the realities of life, working at cross purposes, getting hotter and fiercer as they strike against each other until finally there’s an explosion—that’s Plot.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="300"/>
         <source>Leigh Brackett</source>
-        <translation type="unfinished"></translation>
+        <translation>Leigh Brackett</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="303"/>
         <source>Your first obligation as a writer is to tell the truth and to tell a good story.</source>
         <extracomment>Cite of the Lena Waithe</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Your first obligation as a writer is to tell the truth and to tell a good story.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="304"/>
         <source>Lena Waithe</source>
-        <translation type="unfinished"></translation>
+        <translation>Lena Waithe</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="307"/>
         <source>One rule of screenwriting: does the reader want to turn the page?</source>
         <extracomment>Cite of the Leslie Dixon</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>One rule of screenwriting: does the reader want to turn the page?</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="308"/>
         <source>Leslie Dixon</source>
-        <translation type="unfinished"></translation>
+        <translation>Leslie Dixon</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="311"/>
         <source>Don’t expect the puppets of your mind to become the people of your story. If they are not realities in your own mind, there is no mysterious alchemy in ink and paper that will turn wooden figures into flesh and blood.</source>
         <extracomment>Cite of the Leslie Gordon Barnard</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Don’t expect the puppets of your mind to become the people of your story. If they are not realities in your own mind, there is no mysterious alchemy in ink and paper that will turn wooden figures into flesh and blood.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="312"/>
         <source>Leslie Gordon Barnard</source>
-        <translation type="unfinished"></translation>
+        <translation>Leslie Gordon Barnard</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="315"/>
         <source>Animals are less alone with roaring than we are with all these words.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Animals are less alone with roaring than we are with all these words.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="316"/>
@@ -5855,49 +6031,49 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="336"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="340"/>
         <source>Margaret Laurence</source>
-        <translation type="unfinished"></translation>
+        <translation>Margaret Laurence</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="319"/>
         <source>Follow your heart, and you perish.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Follow your heart, and you perish.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="323"/>
         <source>I&apos;ve never been able to force a novel. I always had the sense something being given to me. You can&apos;t sit around and wait until inspiration strikes, but neither can you force into being something that isn&apos;t there.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I&apos;ve never been able to force a novel. I always had the sense something being given to me. You can&apos;t sit around and wait until inspiration strikes, but neither can you force into being something that isn&apos;t there.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="327"/>
         <source>If I hadn&apos;t had my children, I wouldn&apos;t have written more and better, I would have written less and worse.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>If I hadn&apos;t had my children, I wouldn&apos;t have written more and better, I would have written less and worse.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="331"/>
         <source>The struggle is not lost. I believe we have to live, as long as we live, in the expectation and hope of changing the world for the better. That may sound naive. It may even sound sentimental. Never mind: I believe it. What are we to live for, except life itself? And, with all our doubts, with all our flaws, with all our problems, I believe that we will carry on, with God&apos;s help.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The struggle is not lost. I believe we have to live, as long as we live, in the expectation and hope of changing the world for the better. That may sound naive. It may even sound sentimental. Never mind: I believe it. What are we to live for, except life itself? And, with all our doubts, with all our flaws, with all our problems, I believe that we will carry on, with God&apos;s help.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="335"/>
         <source>What goes on inside isn&apos;t ever the same as what goes on outside.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>What goes on inside isn&apos;t ever the same as what goes on outside.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="339"/>
         <source>When I say work I only mean writing. Everything else is just odd jobs.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>When I say work I only mean writing. Everything else is just odd jobs.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="343"/>
         <source>Courage is resistance to fear, mastery of fear – not absence of fear.</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Courage is resistance to fear, mastery of fear – not absence of fear.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="344"/>
@@ -5908,173 +6084,173 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="364"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="368"/>
         <source>Mark Twain</source>
-        <translation type="unfinished"></translation>
+        <translation>Mark Twain</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="347"/>
         <source>First get your facts, then distort them at your leisure</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>First get your facts, then distort them at your leisure</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="351"/>
         <source>Get your facts first, then you can distort them as you please.</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Get your facts first, then you can distort them as you please.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="355"/>
         <source>I have never let my schooling interfere with my education.</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I have never let my schooling interfere with my education.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="359"/>
         <source>If you tell the truth, you don’t have to remember anything.</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>If you tell the truth, you don’t have to remember anything.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="363"/>
         <source>The secret of getting ahead is getting started.</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The secret of getting ahead is getting started.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="367"/>
         <source>To succeed in life, you need two things: ignorance and confidence.</source>
         <extracomment>Cite of the Mark Twain</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>To succeed in life, you need two things: ignorance and confidence.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="371"/>
         <source>There is no greater agony than bearing an untold story inside you.</source>
         <extracomment>Cite of the Maya Angelou</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>There is no greater agony than bearing an untold story inside you.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="372"/>
         <source>Maya Angelou</source>
-        <translation type="unfinished"></translation>
+        <translation>Maya Angelou</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="375"/>
         <source>You have to be true to your instinctive way of writing. You have to find your identity.</source>
         <extracomment>Cite of the Michaela Coel</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>You have to be true to your instinctive way of writing. You have to find your identity.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="376"/>
         <source>Michaela Coel</source>
-        <translation type="unfinished"></translation>
+        <translation>Michaela Coel</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="379"/>
         <source>I just have my characters say my controversial opinions and then hide behind them.</source>
         <extracomment>Cite of the Mindy Kaling</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I just have my characters say my controversial opinions and then hide behind them.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="380"/>
         <source>Mindy Kaling</source>
-        <translation type="unfinished"></translation>
+        <translation>Mindy Kaling</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="383"/>
         <source>As a young journalist, I thought that stories were simply what happened. As a screenwriter, I realized that we create stories by imposing narrative on the events that happen around us.</source>
         <extracomment>Cite of the Nora Ephron</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>As a young journalist, I thought that stories were simply what happened. As a screenwriter, I realized that we create stories by imposing narrative on the events that happen around us.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="384"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="388"/>
         <source>Nora Ephron</source>
-        <translation type="unfinished"></translation>
+        <translation>Nora Ephron</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="387"/>
         <source>My mother wanted us to understand that the tragedies of your life one day have the potential to be comic stories the next.</source>
         <extracomment>Cite of the Nora Ephron</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>My mother wanted us to understand that the tragedies of your life one day have the potential to be comic stories the next.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="391"/>
         <source>Here&apos;s an outdated quote! -- &quot;A typewriter needs only paper; a camera uses film, requires subsidiary equipment by the truckload and Wellington several hundreds of technicians. That is always the central fact about the filmmakers opposed to any other artist: he can never afford his own tools.&quot;</source>
         <extracomment>Cite of the Orson Welles</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Here&apos;s an outdated quote! -- &quot;A typewriter needs only paper; a camera uses film, requires subsidiary equipment by the truckload and Wellington several hundreds of technicians. That is always the central fact about the filmmakers opposed to any other artist: he can never afford his own tools.&quot;</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="392"/>
         <source>Orson Welles</source>
-        <translation type="unfinished"></translation>
+        <translation>Orson Welles</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="395"/>
         <source>I could be just a writer very easily. I am not a writer. I am a screenwriter, which is half a filmmaker. … But it is not an art form, because screenplays are not works of art. They are invitations to others to collaborate on a work of art.</source>
         <extracomment>Cite of the Paul Schrader</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I could be just a writer very easily. I am not a writer. I am a screenwriter, which is half a filmmaker. … But it is not an art form, because screenplays are not works of art. They are invitations to others to collaborate on a work of art.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="396"/>
         <source>Paul Schrader</source>
-        <translation type="unfinished"></translation>
+        <translation>Paul Schrader</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="399"/>
         <source>We don’t need books to make films. It’s the last thing we want — it turns cinema into the bastard art of illustration.</source>
         <extracomment>Cite of the Peter Greenaway</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>We don’t need books to make films. It’s the last thing we want — it turns cinema into the bastard art of illustration.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="400"/>
         <source>Peter Greenaway</source>
-        <translation type="unfinished"></translation>
+        <translation>Peter Greenaway</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="403"/>
         <source>If a nation loses its storytellers, it loses its childhood.</source>
         <extracomment>Cite of the Peter Handke</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>If a nation loses its storytellers, it loses its childhood.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="404"/>
         <source>Peter Handke</source>
-        <translation type="unfinished"></translation>
+        <translation>Peter Handke</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="407"/>
         <source>The road to hell is paved with works-in-progress.</source>
         <extracomment>Cite of the Philip Roth</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The road to hell is paved with works-in-progress.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="408"/>
         <source>Philip Roth</source>
-        <translation type="unfinished"></translation>
+        <translation>Philip Roth</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="411"/>
         <source>[T]he element of surprise is the most important thing and what keeps me interested in writing. I can feel if I’ve written that predictable or boring line, and I will carry that around with me all day.</source>
         <extracomment>Cite of the Phoebe Waller-Bridge</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>[T]he element of surprise is the most important thing and what keeps me interested in writing. I can feel if I’ve written that predictable or boring line, and I will carry that around with me all day.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="412"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="416"/>
         <source>Phoebe Waller-Bridge</source>
-        <translation type="unfinished"></translation>
+        <translation>Phoebe Waller-Bridge</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="415"/>
         <source>Once you know what makes someone angry, you can tell a lot about that person.</source>
         <extracomment>Cite of the Phoebe Waller-Bridge</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Once you know what makes someone angry, you can tell a lot about that person.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="419"/>
         <source>A writer should have this little voice inside of you saying, Tell the truth. Reveal a few secrets here.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>A writer should have this little voice inside of you saying, Tell the truth. Reveal a few secrets here.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="420"/>
@@ -6090,90 +6266,90 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="460"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="464"/>
         <source>Quentin Tarantino</source>
-        <translation type="unfinished"></translation>
+        <translation>Quentin Tarantino</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="423"/>
         <source>Everything I learned as an actor, I have basically applied to writing.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Everything I learned as an actor, I have basically applied to writing.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="427"/>
         <source>I consider myself a student of cinema. It’s almost like I am going for my professorship in cinema, and the day I die is the day I graduate. It is a lifelong study.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I consider myself a student of cinema. It’s almost like I am going for my professorship in cinema, and the day I die is the day I graduate. It is a lifelong study.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="431"/>
         <source>I don’t think there’s anything to be afraid of. Failure brings great rewards — in the life of an artist.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I don’t think there’s anything to be afraid of. Failure brings great rewards — in the life of an artist.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="435"/>
         <source>I steal from every movie ever made.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I steal from every movie ever made.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="439"/>
         <source>I’ve made a choice, so far, to go on this road alone. Because this is my time. This is my time to make movies.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I’ve made a choice, so far, to go on this road alone. Because this is my time. This is my time to make movies.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="443"/>
         <source>If you just love movies enough, you can make a good one.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>If you just love movies enough, you can make a good one.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="447"/>
         <source>Movies are not about the weekend that they’re released, and in the grand scheme of things, that’s probably the most unimportant time of a film’s life.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Movies are not about the weekend that they’re released, and in the grand scheme of things, that’s probably the most unimportant time of a film’s life.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="451"/>
         <source>There are a lot of bad screenplays, so if you write a good screenplay people are going to respond to it.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>There are a lot of bad screenplays, so if you write a good screenplay people are going to respond to it.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="455"/>
         <source>To me, movies and music go hand in hand. When I’m writing a script, one of the first things I do is find the music I’m going to play for the opening sequence.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>To me, movies and music go hand in hand. When I’m writing a script, one of the first things I do is find the music I’m going to play for the opening sequence.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="459"/>
         <source>Trying to make a feature film yourself with no money is the best film school you can do.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Trying to make a feature film yourself with no money is the best film school you can do.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="463"/>
         <source>You know, my problem with most screenwriting is it is a blueprint. It’s like they’re afraid to write the damn thing. And I’m a writer. That’s what I do. I want it to be written. I want it to work on the page first and foremost. So when I’m writing the script, I’m not thinking about the viewer watching the movie. I’m thinking about the reader reading the script.</source>
         <extracomment>Cite of the Quentin Tarantino</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>You know, my problem with most screenwriting is it is a blueprint. It’s like they’re afraid to write the damn thing. And I’m a writer. That’s what I do. I want it to be written. I want it to work on the page first and foremost. So when I’m writing the script, I’m not thinking about the viewer watching the movie. I’m thinking about the reader reading the script.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="467"/>
         <source>People say, ‘What advice do you have for people who want to be writers?’ I say, they don’t really need advice, they know they want to be writers, and they’re gonna do it. Those people who know that they really want to do this and are cut out for it, they know it.</source>
         <extracomment>Cite of the R.L. Stine</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>People say, ‘What advice do you have for people who want to be writers?’ I say, they don’t really need advice, they know they want to be writers, and they’re gonna do it. Those people who know that they really want to do this and are cut out for it, they know it.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="468"/>
         <source>R.L. Stine</source>
-        <translation type="unfinished"></translation>
+        <translation>R.L. Stine</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="471"/>
         <source>I don’t believe in being serious about anything. I think life is too serious to be taken seriously.</source>
         <extracomment>Cite of the Ray Bradbury, WD</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I don’t believe in being serious about anything. I think life is too serious to be taken seriously.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="472"/>
@@ -6181,64 +6357,64 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="480"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="484"/>
         <source>Ray Bradbury, WD</source>
-        <translation type="unfinished"></translation>
+        <translation>Ray Bradbury, WD</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="475"/>
         <source>I don’t need an alarm clock. My ideas wake me.</source>
         <extracomment>Cite of the Ray Bradbury, WD</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I don’t need an alarm clock. My ideas wake me.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="479"/>
         <source>Just write every day of your life. Read intensely. Then see what happens. Most of my friends who are put on that diet have very pleasant careers.</source>
         <extracomment>Cite of the Ray Bradbury, WD</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Just write every day of your life. Read intensely. Then see what happens. Most of my friends who are put on that diet have very pleasant careers.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="483"/>
         <source>Let the world burn through you. Throw the prism light, white hot, on paper.</source>
         <extracomment>Cite of the Ray Bradbury, WD</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Let the world burn through you. Throw the prism light, white hot, on paper.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="487"/>
         <source>The wise screen writer is he who wears his second-best suit, artistically speaking, and doesn’t take things too much to heart. He should have a touch of cynicism, but only a touch. The complete cynic is as useless to Hollywood as he is to himself. He should do the best he can without straining at it. He should be scrupulously honest about his work, but he should not expect scrupulous honesty in return. He won’t get it. And when he has had enough, he should say goodbye with a smile, because for all he knows he may want to go back.</source>
         <extracomment>Cite of the Raymond Chandler</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The wise screen writer is he who wears his second-best suit, artistically speaking, and doesn’t take things too much to heart. He should have a touch of cynicism, but only a touch. The complete cynic is as useless to Hollywood as he is to himself. He should do the best he can without straining at it. He should be scrupulously honest about his work, but he should not expect scrupulous honesty in return. He won’t get it. And when he has had enough, he should say goodbye with a smile, because for all he knows he may want to go back.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="488"/>
         <source>Raymond Chandler</source>
-        <translation type="unfinished"></translation>
+        <translation>Raymond Chandler</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="491"/>
         <source>I’m out there to clean the plate. Once they’ve read what I’ve written on a subject, I want them to think, ‘That’s it!’ I think the highest aspiration people in our trade can have is that once they’ve written a story, nobody will ever try it again.</source>
         <extracomment>Cite of the Richard Ben Cramer</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I’m out there to clean the plate. Once they’ve read what I’ve written on a subject, I want them to think, ‘That’s it!’ I think the highest aspiration people in our trade can have is that once they’ve written a story, nobody will ever try it again.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="492"/>
         <source>Richard Ben Cramer</source>
-        <translation type="unfinished"></translation>
+        <translation>Richard Ben Cramer</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="495"/>
         <source>You sell a screenplay like you sell a car. If someone drives it off a cliff, that’s it.</source>
         <extracomment>Cite of the Rita Mae Brown</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>You sell a screenplay like you sell a car. If someone drives it off a cliff, that’s it.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="496"/>
         <source>Rita Mae Brown</source>
-        <translation type="unfinished"></translation>
+        <translation>Rita Mae Brown</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="499"/>
         <source>... don’t care if a reader hates one of my stories, just as long as he finishes the book.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>... don’t care if a reader hates one of my stories, just as long as he finishes the book.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="500"/>
@@ -6255,345 +6431,345 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="544"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="548"/>
         <source>Roald Dahl</source>
-        <translation type="unfinished"></translation>
+        <translation>Roald Dahl</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="503"/>
         <source>A life is made up of a great number of small incidents, and a small number of great ones.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>A life is made up of a great number of small incidents, and a small number of great ones.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="507"/>
         <source>A little magic can take you a long way.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>A little magic can take you a long way.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="511"/>
         <source>A little nonsense now and then is relished by the wisest men.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>A little nonsense now and then is relished by the wisest men.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="515"/>
         <source>A person who has good thoughts cannot ever be ugly. You can have a wonky nose and a crooked mouth and a double chin and stick-out teeth, but if you have good thoughts they will shine out of your face like sunbeams and you will always look lovely.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>A person who has good thoughts cannot ever be ugly. You can have a wonky nose and a crooked mouth and a double chin and stick-out teeth, but if you have good thoughts they will shine out of your face like sunbeams and you will always look lovely.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="519"/>
         <source>Don&apos;t gobblefunk around with words.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Don&apos;t gobblefunk around with words.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="523"/>
         <source>Grown ups are complicated creatures, full of quirks and secrets.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Grown ups are complicated creatures, full of quirks and secrets.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="527"/>
         <source>I think probably kindness is my number one attribute in a human being. I&apos;ll put it before any of the things like courage or bravery or generosity or anything else.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I think probably kindness is my number one attribute in a human being. I&apos;ll put it before any of the things like courage or bravery or generosity or anything else.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="531"/>
         <source>If you are going to get anywhere in life you have to read a lot of books.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>If you are going to get anywhere in life you have to read a lot of books.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="535"/>
         <source>Kindness - that simple word. To be kind - it covers everything, to my mind. If you&apos;re kind that&apos;s it.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Kindness - that simple word. To be kind - it covers everything, to my mind. If you&apos;re kind that&apos;s it.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="539"/>
         <source>Somewhere inside all of us is the power to change the world.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Somewhere inside all of us is the power to change the world.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="543"/>
         <source>Those who don&apos;t believe in magic will never find it.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Those who don&apos;t believe in magic will never find it.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="547"/>
         <source>We make realities out of our dreams and dreams out of our realities. We are the dreamers of the dream.</source>
         <extracomment>Cite of the Roald Dahl</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>We make realities out of our dreams and dreams out of our realities. We are the dreamers of the dream.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="551"/>
         <source>I don’t think screenplay writing is the same as writing — I mean, I think it’s blueprinting.</source>
         <extracomment>Cite of the Robert Altman</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I don’t think screenplay writing is the same as writing — I mean, I think it’s blueprinting.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="552"/>
         <source>Robert Altman</source>
-        <translation type="unfinished"></translation>
+        <translation>Robert Altman</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="555"/>
         <source>The most ordinary word, when put into place, suddenly acquires brilliance. That is the brilliance with which your images must shine.</source>
         <extracomment>Cite of the Robert Bresson</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The most ordinary word, when put into place, suddenly acquires brilliance. That is the brilliance with which your images must shine.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="556"/>
         <source>Robert Bresson</source>
-        <translation type="unfinished"></translation>
+        <translation>Robert Bresson</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="559"/>
         <source>If the story you’re telling, is the story you’re telling, you’re in deep shit.</source>
         <extracomment>Cite of the Robert McKee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>If the story you’re telling, is the story you’re telling, you’re in deep shit.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="560"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="564"/>
         <source>Robert McKee</source>
-        <translation type="unfinished"></translation>
+        <translation>Robert McKee</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="563"/>
         <source>Writing is a marathon, not a sprint.</source>
         <extracomment>Cite of the Robert McKee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Writing is a marathon, not a sprint.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="567"/>
         <source>Do not be told something is impossible. There is always a way.</source>
         <extracomment>Cite of the Robert Rodriguez</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Do not be told something is impossible. There is always a way.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="568"/>
         <source>Robert Rodriguez</source>
-        <translation type="unfinished"></translation>
+        <translation>Robert Rodriguez</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="571"/>
         <source>My three Ps: passion, patience, perseverance. You have to do this if you’ve got to be a filmmaker.</source>
         <extracomment>Cite of the Robert Wise</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>My three Ps: passion, patience, perseverance. You have to do this if you’ve got to be a filmmaker.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="572"/>
         <source>Robert Wise</source>
-        <translation type="unfinished"></translation>
+        <translation>Robert Wise</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="575"/>
         <source>You don’t learn how to write a screenplay by just reading screenplays and watching movies. It’s about developing the kind of mind that sees and makes drama. You can do this in a kind of holistic way by reading history and theology and psychology, reading great fiction and poetry, and plays. You develop an eye for the structures of everything and look for the patterns that help you become a dramatist.</source>
         <extracomment>Cite of the Robin Swicord</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>You don’t learn how to write a screenplay by just reading screenplays and watching movies. It’s about developing the kind of mind that sees and makes drama. You can do this in a kind of holistic way by reading history and theology and psychology, reading great fiction and poetry, and plays. You develop an eye for the structures of everything and look for the patterns that help you become a dramatist.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="576"/>
         <source>Robin Swicord</source>
-        <translation type="unfinished"></translation>
+        <translation>Robin Swicord</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="579"/>
         <source>You can make a movie about anything, as long as it has a hook to hang the advertising on.</source>
         <extracomment>Cite of the Roger Corman</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>You can make a movie about anything, as long as it has a hook to hang the advertising on.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="580"/>
         <source>Roger Corman</source>
-        <translation type="unfinished"></translation>
+        <translation>Roger Corman</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="583"/>
         <source>Cinema should make you forget you are sitting in a theater.</source>
         <extracomment>Cite of the Roman Polanski</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Cinema should make you forget you are sitting in a theater.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="584"/>
         <source>Roman Polanski</source>
-        <translation type="unfinished"></translation>
+        <translation>Roman Polanski</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="587"/>
         <source>With all of my work, it always takes a while for people to get it. It goes from, ‘What the hell is that?’ to ‘Oh, I like that.’</source>
         <extracomment>Cite of the Ryan Murphy</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>With all of my work, it always takes a while for people to get it. It goes from, ‘What the hell is that?’ to ‘Oh, I like that.’</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="588"/>
         <source>Ryan Murphy</source>
-        <translation type="unfinished"></translation>
+        <translation>Ryan Murphy</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="591"/>
         <source>The greatest part of a writer’s time is spent in reading, in order to write; a man will turn over half a library to make one book.</source>
         <extracomment>Cite of the Samuel Johnson</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>The greatest part of a writer’s time is spent in reading, in order to write; a man will turn over half a library to make one book.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="592"/>
         <source>Samuel Johnson</source>
-        <translation type="unfinished"></translation>
+        <translation>Samuel Johnson</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="595"/>
         <source>It seems that the greatest difficulty is to find the end. Don’t try to find it, it’s there already.</source>
         <extracomment>Cite of the Sofia Coppola</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>It seems that the greatest difficulty is to find the end. Don’t try to find it, it’s there already.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="596"/>
         <source>Sofia Coppola</source>
-        <translation type="unfinished"></translation>
+        <translation>Sofia Coppola</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="599"/>
         <source>A lot of times you get credit for stuff in your movies you didn’t intend to be there.</source>
         <extracomment>Cite of the Spike Lee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>A lot of times you get credit for stuff in your movies you didn’t intend to be there.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="600"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="604"/>
         <source>Spike Lee</source>
-        <translation type="unfinished"></translation>
+        <translation>Spike Lee</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="603"/>
         <source>A spine to my films that’s become more evident to me is that many are about the choices that people make… You go this way, or that way, and either way, there’s going to be consequences.</source>
         <extracomment>Cite of the Spike Lee</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>A spine to my films that’s become more evident to me is that many are about the choices that people make… You go this way, or that way, and either way, there’s going to be consequences.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="607"/>
         <source>If it can be written, or thought, it can be filmed.</source>
         <extracomment>Cite of the Stanley Kubrick</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>If it can be written, or thought, it can be filmed.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="608"/>
         <source>Stanley Kubrick</source>
-        <translation type="unfinished"></translation>
+        <translation>Stanley Kubrick</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="611"/>
         <source>Making people believe the unbelievable is no trick</source>
         <extracomment>Cite of the Stephen King</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Making people believe the unbelievable is no trick</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="612"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="616"/>
         <source>Stephen King</source>
-        <translation type="unfinished"></translation>
+        <translation>Stephen King</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="615"/>
         <source>When your story is ready for rewrite, cut it to the bone. Get rid of every ounce of excess fat. This is going to hurt; revising a story down to the bare essentials is always a little like murdering children, but it must be done.</source>
         <extracomment>Cite of the Stephen King</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>When your story is ready for rewrite, cut it to the bone. Get rid of every ounce of excess fat. This is going to hurt; revising a story down to the bare essentials is always a little like murdering children, but it must be done.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="619"/>
         <source>All readers come to fiction as willing accomplices to your lies. Such is the basic goodwill contract made the moment we pick up a work of fiction.</source>
         <extracomment>Cite of the Steve Almond</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>All readers come to fiction as willing accomplices to your lies. Such is the basic goodwill contract made the moment we pick up a work of fiction.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="620"/>
         <source>Steve Almond</source>
-        <translation type="unfinished"></translation>
+        <translation>Steve Almond</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="623"/>
         <source>What a person does is what he is, not what he says.</source>
         <extracomment>Cite of the Syd Field</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>What a person does is what he is, not what he says.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="624"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="628"/>
         <source>Syd Field</source>
-        <translation type="unfinished"></translation>
+        <translation>Syd Field</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="627"/>
         <source>Writing a screenplay is like climbing a mountain. When you’re climbing, all you can see is the rock in front of you and the rock directly above you. You can’t see where you’ve come from or where you’re going.</source>
         <extracomment>Cite of the Syd Field</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Writing a screenplay is like climbing a mountain. When you’re climbing, all you can see is the rock in front of you and the rock directly above you. You can’t see where you’ve come from or where you’re going.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="631"/>
         <source>My world is not spectacle and explosion. It’s two people talking.</source>
         <extracomment>Cite of the Taika Waititi</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>My world is not spectacle and explosion. It’s two people talking.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="632"/>
         <source>Taika Waititi</source>
-        <translation type="unfinished"></translation>
+        <translation>Taika Waititi</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="635"/>
         <source>I do not over-intellectualize the production process. I try to keep it simple: Tell the damned story.</source>
         <extracomment>Cite of the Tom Clancy</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>I do not over-intellectualize the production process. I try to keep it simple: Tell the damned story.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="636"/>
         <source>Tom Clancy</source>
-        <translation type="unfinished"></translation>
+        <translation>Tom Clancy</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="639"/>
         <source>Every secret of a writer’s soul, every experience of his life, every quality of his mind, is written large in his works.</source>
         <extracomment>Cite of the Virginia Woolf</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Every secret of a writer’s soul, every experience of his life, every quality of his mind, is written large in his works.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="640"/>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="644"/>
         <source>Virginia Woolf</source>
-        <translation type="unfinished"></translation>
+        <translation>Virginia Woolf</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="643"/>
         <source>Literature is strewn with the wreckage of men who have minded beyond reason the opinions of others.</source>
         <extracomment>Cite of the Virginia Woolf</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Literature is strewn with the wreckage of men who have minded beyond reason the opinions of others.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="647"/>
         <source>Screenplay writing is not an art form. It’s a skill; it’s carpentry; it’s structure. I don’t mean to knock it — it ain’t easy. But if it’s all you do, if you only write screenplays, it is ultimately denigrating to the soul. You may get lucky and get rich, but you sure won’t get happy.</source>
         <extracomment>Cite of the William Goldman</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Screenplay writing is not an art form. It’s a skill; it’s carpentry; it’s structure. I don’t mean to knock it — it ain’t easy. But if it’s all you do, if you only write screenplays, it is ultimately denigrating to the soul. You may get lucky and get rich, but you sure won’t get happy.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="648"/>
         <source>William Goldman</source>
-        <translation type="unfinished"></translation>
+        <translation>William Goldman</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="651"/>
         <source>Cheat your landlord if you can and must, but do not try to shortchange the Muse. It cannot be done. You can’t fake quality any more than you can fake a good meal.</source>
         <extracomment>Cite of the William S. Burroughs</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Cheat your landlord if you can and must, but do not try to shortchange the Muse. It cannot be done. You can’t fake quality any more than you can fake a good meal.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="652"/>
         <source>William S. Burroughs</source>
-        <translation type="unfinished"></translation>
+        <translation>William S. Burroughs</translation>
     </message>
 </context>
 <context>
@@ -7337,13 +7513,13 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1103"/>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1318"/>
         <source>Generate novel</source>
-        <translation type="unfinished"></translation>
+        <translation>నవల రూపొందించండి</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1104"/>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1320"/>
         <source>Generate script</source>
-        <translation type="unfinished"></translation>
+        <translation>స్క్రిప్ట్‌ని రూపొందించండి</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1105"/>
@@ -8141,10 +8317,6 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>సారాంశం</translation>
     </message>
     <message>
-        <source>Script</source>
-        <translation type="vanished">స్క్రిప్ట్ </translation>
-    </message>
-    <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1323"/>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1330"/>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1339"/>
@@ -8210,7 +8382,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ApplicationView</name>
     <message>
-        <location filename="../ui/application_view.cpp" line="273"/>
+        <location filename="../ui/application_view.cpp" line="275"/>
         <source>Turn off full screen</source>
         <translation>ఫుల్ స్క్రీన్ ఆఫ్ చెయ్యండి </translation>
     </message>
@@ -8809,87 +8981,6 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
 </context>
 <context>
-    <name>Ui::AudioplayTextSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="316"/>
-        <source>Search without case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్ లేకుండా శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="317"/>
-        <source>Search with case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్‌తో శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="165"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="300"/>
-        <source>In the whole text</source>
-        <translation>మొత్తం  టెక్స్ట్ లో</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="293"/>
-        <source>Exit from search</source>
-        <translation>శోధన నుండి నిష్క్రమించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="296"/>
-        <source>Search</source>
-        <translation>సెర్చ్ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="297"/>
-        <source>Enter search phrase here</source>
-        <translation>సెర్చ్ చేయాల్సిన పదాన్ని  ఇక్కడ ఎంటర్  చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="301"/>
-        <source>In scene heading</source>
-        <translation>సీన్ హెడ్డింగ్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="302"/>
-        <source>In character</source>
-        <translation>క్యారెక్టర్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="303"/>
-        <source>In dialogue</source>
-        <translation>డైలాగ్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="308"/>
-        <source>Go to the next search result</source>
-        <translation>తదుపరి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="312"/>
-        <source>Go to the previous search result</source>
-        <translation>మునుపటి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="319"/>
-        <source>Replace with</source>
-        <translation>భర్తీ చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="320"/>
-        <source>Enter phrase to replace</source>
-        <translation>భర్తీ చేయాల్సిన పదాన్ని ఎంటర్  చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="321"/>
-        <source>Replace</source>
-        <translation>భర్తీ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="322"/>
-        <source>All</source>
-        <translation>మొత్తం </translation>
-    </message>
-</context>
-<context>
     <name>Ui::AudioplayTextStructureView</name>
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="141"/>
@@ -8905,34 +8996,54 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>బుక్ మార్క్ లిస్ట్ దాచండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="933"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="934"/>
         <source>Writing text</source>
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1302"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1303"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1303"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1304"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1304"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1305"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1305"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1306"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1308"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1309"/>
         <source>Start prompt from something like &quot;Write an audio drama about ...&quot;, or &quot;Write a radio drama about ...&quot;</source>
         <translation>&quot;గురించి ఆడియో డ్రామా వ్రాయండి ...&quot;, లేదా &quot;గురించి రేడియో డ్రామా వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1326"/>
+        <source>In the whole text</source>
+        <translation>మొత్తం  టెక్స్ట్ లో</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1327"/>
+        <source>In scene heading</source>
+        <translation>సీన్ హెడ్డింగ్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1328"/>
+        <source>In character</source>
+        <translation>క్యారెక్టర్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1329"/>
+        <source>In dialogue</source>
+        <translation>డైలాగ్ లో </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="306"/>
@@ -8999,89 +9110,94 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CardItemParametersView</name>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="201"/>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="663"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="211"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="760"/>
         <source>Description</source>
         <translation>వివరణ </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="205"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="215"/>
         <source>Each line is a separate beat</source>
         <translation>ప్రతి లైన్ ఒక ప్రత్యేక బీట్</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="643"/>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="661"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="740"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="758"/>
         <source>Heading</source>
         <translation>హెడ్డింగ్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="645"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="742"/>
         <source>Select item color</source>
         <translation>అంశం రంగును ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="650"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="747"/>
         <source>Title</source>
         <translation>టైటిల్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="651"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="748"/>
         <source>Human-readable name (hidden in text)</source>
         <translation>మనుషులు చదవగలిగే పేరు (టెక్స్ట్‌లో దాచబడింది)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="652"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="749"/>
         <source>Select scene color</source>
         <translation>సీన్  రంగును ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="662"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="759"/>
         <source>Header text (visible in text)</source>
         <translation>హెడర్ టెక్స్ట్ (టెక్స్ట్‌లో కనిపిస్తుంది)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="665"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="762"/>
         <source>Story day</source>
         <translation>కథ రోజు</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="666"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="763"/>
+        <source>Start date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="765"/>
         <source>Stamp</source>
         <translation>స్టాంప్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="667"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="766"/>
         <source>Auto scene numbering</source>
         <translation>ఆటో సీన్ నంబరింగ్</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="668"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="767"/>
         <source>Scene number</source>
         <translation>సీన్ నంబర్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="669"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="768"/>
         <source>Skip the number of this scene</source>
         <translation>ఈ సీన్ నంబర్ ను  స్కిప్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="671"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="770"/>
         <source>Skip logical number of this scene for determining the next scene number</source>
         <translation>తదుపరి సీన్ నంబర్ ను నిర్ణయించడానికి ఈ సీన్  యొక్క లాజికల్ సీన్ నంబర్ స్కిప్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="672"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="771"/>
         <source>Tags</source>
         <translation>ట్యాగ్స్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="673"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="772"/>
         <source>Add tag to the selected card</source>
         <translation>ఎంచుకున్న కార్డ్‌కు ట్యాగ్‌ని జోడించండి</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="674"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="773"/>
         <source>Tag name</source>
         <translation>ట్యాగ్ పేరు</translation>
     </message>
@@ -9091,7 +9207,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="354"/>
         <source>Unlock ability to use characters dialogues</source>
-        <translation type="unfinished"></translation>
+        <translation>క్యారెక్టర్  డైలాగ్‌లను ఉపయోగించగల సామర్థ్యాన్ని అన్‌లాక్ చేయండి</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="355"/>
@@ -9973,47 +10089,47 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharactersRelationsView</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="185"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="191"/>
         <source>Choose the file to save image</source>
         <translation>ఇమేజ్  సేవ్ చేయడానికి ఫైల్‌ను ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="391"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="397"/>
         <source>Unlock ability to edit characters relations</source>
         <translation>క్యారెక్టర్  సంబంధాలను సవరించే సామర్థ్యాన్ని అన్‌లాక్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="392"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="398"/>
         <source>Add character</source>
         <translation>క్యారెక్టర్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="393"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="399"/>
         <source>Add group</source>
         <translation>గ్రూప్ యాడ్ చెయ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="402"/>
         <source>Remove selected item</source>
         <translation>సెలక్ట్ చేసిన ఐటం రిమూవ్ చెయ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="397"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="413"/>
         <source>Show relations titles only for the selected characters</source>
         <translation>సెలక్ట్ చేసిన క్యారెక్టర్స్ యొక్క రిలేషన్ టైటిల్స్ చూపించు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="400"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="416"/>
         <source>Save relations scheme to image</source>
         <translation>సంబంధాల పథకాన్ని ఇమేజ్ కి  సేవ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="402"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="418"/>
         <source>Here will be a characters relations scheme.</source>
         <translation>ఇక్కడ క్యారెక్టర్  సంబంధాల స్కీమ్  ఉంటుంది.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="403"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="419"/>
         <source>It&apos;s time to create the first character!</source>
         <translation>ఇది మొదటి క్యారక్టర్  సృష్టించే సమయం!</translation>
     </message>
@@ -10206,7 +10322,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1069"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1068"/>
         <source>%n panels</source>
         <translation>
             <numerusform>%n ప్యానెల్లు</numerusform>
@@ -10214,27 +10330,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1248"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1254"/>
         <source>Bookmark</source>
         <translation>బుక్ మార్క్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1252"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1258"/>
         <source>Add</source>
         <translation>యాడ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1258"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1264"/>
         <source>Edit</source>
         <translation>ఎడిట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1263"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1269"/>
         <source>Remove</source>
         <translation>రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1270"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1276"/>
         <source>Show/hide list</source>
         <translation>షో/హైడ్ లిస్ట్ </translation>
     </message>
@@ -10308,92 +10424,6 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
 </context>
 <context>
-    <name>Ui::ComicBookTextSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="312"/>
-        <source>Search without case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్ లేకుండా శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="313"/>
-        <source>Search with case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్‌తో శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="165"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="299"/>
-        <source>In the whole text</source>
-        <translation>మొత్తం  టెక్స్ట్ లో</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="293"/>
-        <source>Exit from search</source>
-        <translation>శోధన నుండి నిష్క్రమించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="296"/>
-        <source>Search</source>
-        <translation>సెర్చ్ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="297"/>
-        <source>Enter search phrase here</source>
-        <translation>శోధన పదబంధాన్ని ఇక్కడ నమోదు చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="299"/>
-        <source>In scene heading</source>
-        <translation>సీన్ హెడ్డింగ్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="299"/>
-        <source>In action</source>
-        <translation>యాక్షన్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="300"/>
-        <source>In character</source>
-        <translation>క్యారెక్టర్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="300"/>
-        <source>In dialogue</source>
-        <translation>డైలాగ్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="304"/>
-        <source>Go to the next search result</source>
-        <translation>తదుపరి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="308"/>
-        <source>Go to the previous search result</source>
-        <translation>మునుపటి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="315"/>
-        <source>Replace with</source>
-        <translation>భర్తీ చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="316"/>
-        <source>Enter phrase to replace</source>
-        <translation>భర్తీ చేయాల్సిన పదాన్ని ఎంటర్  చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="317"/>
-        <source>Replace</source>
-        <translation>భర్తీ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="318"/>
-        <source>All</source>
-        <translation>మొత్తం </translation>
-    </message>
-</context>
-<context>
     <name>Ui::ComicBookTextStructureDelegate</name>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="352"/>
@@ -10420,34 +10450,59 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>బుక్ మార్క్ లిస్ట్ దాచండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="922"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="923"/>
         <source>Writing text</source>
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1299"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1300"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1300"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1301"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1301"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1302"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1302"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1303"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1305"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1306"/>
         <source>Start prompt from something like &quot;Write a comic book script about ...&quot;</source>
         <translation>&quot;దీని గురించి కామిక్ బుక్ స్క్రిప్ట్ వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1322"/>
+        <source>In the whole text</source>
+        <translation>మొత్తం  టెక్స్ట్ లో</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1323"/>
+        <source>In scene heading</source>
+        <translation>సీన్ హెడ్డింగ్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1324"/>
+        <source>In action</source>
+        <translation>యాక్షన్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1325"/>
+        <source>In character</source>
+        <translation>క్యారెక్టర్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1326"/>
+        <source>In dialogue</source>
+        <translation>డైలాగ్ లో </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="296"/>
@@ -11070,62 +11125,62 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateDocumentDialogOption</name>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="178"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="179"/>
         <source>Folder</source>
         <translation>ఫోల్డర్ </translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="183"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="184"/>
         <source>Text</source>
         <translation>టెక్స్ట్ </translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="188"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="189"/>
         <source>Character</source>
         <translation>క్యారెక్టర్ </translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="193"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="194"/>
         <source>Location</source>
         <translation>లొకేషన్ </translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="198"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="199"/>
         <source>World</source>
         <translation>ప్రపంచం </translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="203"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="204"/>
         <source>Screenplay</source>
         <translation>స్క్రీన్ ప్లే </translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="208"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="209"/>
         <source>Comic book</source>
         <translation>కామిక్ బుక్ </translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="213"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="214"/>
         <source>Audioplay</source>
         <translation>ఆడియో ప్లే </translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="218"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="219"/>
         <source>Stageplay</source>
         <translation>నాటకం </translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="223"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="224"/>
         <source>Novel</source>
         <translation>నవల</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="228"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="229"/>
         <source>Mind map</source>
         <translation>మైండ్ మ్యాప్ </translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="233"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="234"/>
         <source>Image gallery</source>
         <translation>ఇమేజ్ గ్యాలరీ </translation>
     </message>
@@ -11548,7 +11603,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/export/location_export_dialog.cpp" line="229"/>
         <source>Export location</source>
-        <translation type="unfinished"></translation>
+        <translation>ఎక్స్ పోర్ట్ చేసే లొకేషన్ </translation>
     </message>
     <message>
         <location filename="../ui/export/location_export_dialog.cpp" line="231"/>
@@ -11568,17 +11623,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/export/location_export_dialog.cpp" line="234"/>
         <source>Include sense info</source>
-        <translation type="unfinished"></translation>
+        <translation>ఇంద్రియ సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/location_export_dialog.cpp" line="235"/>
         <source>Include geography info</source>
-        <translation type="unfinished"></translation>
+        <translation>భౌగోళిక సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/location_export_dialog.cpp" line="236"/>
         <source>Include background info</source>
-        <translation type="unfinished"></translation>
+        <translation>నేపథ్య సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
         <location filename="../ui/export/location_export_dialog.cpp" line="237"/>
@@ -11627,142 +11682,152 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="316"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="321"/>
         <source>Apply new location name</source>
         <translation>కొత్త లొకేషన్ పేరు అప్లై చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="714"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="733"/>
         <source>Name</source>
         <translation>పేరు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="715"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="735"/>
         <source>Story role</source>
         <translation>కథా పాత్ర</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="276"/>
         <source>Primary</source>
         <translation>ప్రాథమిక పాత్ర </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="276"/>
         <source>Secondary</source>
         <translation>సెకండరీ పాత్ర </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="276"/>
         <source>Tertiary</source>
         <translation>తృతీయ పాత్ర </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="276"/>
         <source>Undefined</source>
         <translation>స్పష్టత లేదు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="712"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="327"/>
+        <source>Select character color</source>
+        <translation>క్యారెక్టర్ కలర్ ను సెలక్ట్ చెయ్యండి </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="731"/>
         <source>Unlock access to extended location profile</source>
         <translation>విస్తరించిన లొకేషన్ ప్రొఫైల్‌కి యాక్సెస్‌ని అన్‌లాక్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="719"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="734"/>
+        <source>Select location color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="739"/>
         <source>One sentence description</source>
         <translation>ఒక వాక్యంలో  వివరణ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="720"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="740"/>
         <source>Long description</source>
         <translation>సుదీర్ఘ వివరణ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="721"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="741"/>
         <source>Add photo +</source>
         <translation>ఫోటో యాడ్ చెయ్యండి +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="721"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="741"/>
         <source>Change photo...</source>
         <translation>ఫోటో మార్చండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="722"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="742"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
         <translation>మీరు లొకేషన్  యొక్క ప్రధాన ఫోటోను తొలగించాలనుకుంటున్నారా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="723"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="743"/>
         <source>Select an area for the location main photo</source>
         <translation>లొకేషన్ మెయిన్ ఫోటో కోసం డాక్యుమెంట్ ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="725"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="745"/>
         <source>Photos</source>
         <translation>ఫోటోస్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="727"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="747"/>
         <source>Sense info</source>
         <translation>సెన్స్ ఇన్ఫో </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="728"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="748"/>
         <source>Sight</source>
         <translation>దృష్టి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="729"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="749"/>
         <source>Smell</source>
         <translation>వాసన </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="730"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="750"/>
         <source>Sound</source>
         <translation>సౌండ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="731"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="751"/>
         <source>Taste</source>
         <translation>రుచి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="732"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="752"/>
         <source>Touch</source>
         <translation>స్పర్శ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="734"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="754"/>
         <source>Geography info</source>
         <translation>భౌగోళిక సమాచారం</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="735"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="755"/>
         <source>Location</source>
         <translation>లొకేషన్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="736"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="756"/>
         <source>Climate</source>
         <translation>వాతావరణం</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="737"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="757"/>
         <source>Landmark</source>
         <translation>మైలురాయి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="738"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="758"/>
         <source>Nearby places</source>
         <translation>సమీప ప్రదేశాలు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="740"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="760"/>
         <source>Background info</source>
         <translation>బ్యాగ్రౌండ్  సమాచారం</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="741"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="761"/>
         <source>History</source>
         <translation>చరిత్ర </translation>
     </message>
@@ -11772,12 +11837,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/location_scenes/location_scenes_view.cpp" line="338"/>
         <source>Unlock ability to use locations scenes</source>
-        <translation type="unfinished"></translation>
+        <translation>స్థానాల దృశ్యాలను ఉపయోగించగల సామర్థ్యాన్ని అన్‌లాక్ చేయండి</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/location_scenes/location_scenes_view.cpp" line="339"/>
         <source>Update location scenes list</source>
-        <translation type="unfinished"></translation>
+        <translation>లొకేషన్ సీన్స్ లిస్ట్ అప్ డేట్ చేయండి. </translation>
     </message>
 </context>
 <context>
@@ -11785,7 +11850,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/export/locations_export_dialog.cpp" line="332"/>
         <source>Export locations</source>
-        <translation type="unfinished"></translation>
+        <translation>లొకేషన్స్ ఎక్స్ పోర్ట్ చెయ్యండి </translation>
     </message>
     <message>
         <location filename="../ui/export/locations_export_dialog.cpp" line="334"/>
@@ -11841,164 +11906,174 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationsMapSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="339"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="340"/>
         <source>Apply new location name</source>
         <translation>కొత్త లొకేషన్ పేరు అప్లై చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="587"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="725"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="346"/>
+        <source>Select character color</source>
+        <translation>క్యారెక్టర్ కలర్ ను సెలక్ట్ చెయ్యండి </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="601"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="739"/>
         <source>To create a new route, hold the Option button and move one location to another.</source>
         <translation>కొత్త రూట్  సృష్టించడానికి, ఎంపిక బటన్‌ను నొక్కి పట్టుకుని, ఒక లొకేషన్ మరొక లొకేషన్ కి తరలించండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="590"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="728"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="604"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="742"/>
         <source>To create a new route, hold the Alt button and move one location to another.</source>
         <translation>కొత్త మార్గాన్ని సృష్టించడానికి, Alt బటన్‌ను నొక్కి, ఒక లొకేషన్ ని  మరొక లొకేషన్ కి  తరలించండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="594"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="608"/>
         <source>%1 has no routes with other locations</source>
         <translation>%1కి ఇతర స్థానాలతో మార్గాలు లేవు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="596"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="610"/>
         <source>What routes %1 has</source>
         <translation>%1 ఏయే మార్గాలను కలిగి ఉంది</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="602"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="755"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="616"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="770"/>
         <source>Open route details</source>
         <translation>రూట్ వివరాలను ఓపెన్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="662"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="663"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="667"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="668"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="676"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="677"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="681"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="682"/>
         <source>Show all %1&apos;s routes</source>
         <translation>అన్ని %1 మార్గాలను చూపు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="721"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="735"/>
         <source>To see location info and all their routes, select concrete location.</source>
         <translation>లొకేషన్ సమాచారం మరియు వాటి అన్ని మార్గాలను చూడటానికి, నిర్దిష్ట స్థానాన్ని ఎంచుకోండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="722"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="736"/>
         <source>To see route details, select concrete route.</source>
         <translation>మార్గం వివరాలను చూడటానికి, కాంక్రీట్ మార్గాన్ని ఎంచుకోండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="730"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="744"/>
         <source>Solid line</source>
         <translation>సాలిడ్ లైన్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="730"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="744"/>
         <source>Dash line</source>
         <translation>డాష్ లైన్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="730"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="744"/>
         <source>Dot line</source>
         <translation>డాట్ లైన్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="735"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="749"/>
         <source>Border line type</source>
         <translation>సరిహద్దు రేఖ రకం</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="736"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="750"/>
         <source>Group name</source>
         <translation>గ్రూప్ పేరు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="737"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="751"/>
         <source>Group description</source>
         <translation>గ్రూప్  వివరణ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="739"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="753"/>
         <source>Profile</source>
         <translation>ప్రొఫైల్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="740"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="754"/>
         <source>Routes</source>
         <translation>రూట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="742"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="756"/>
         <source>Add photo +</source>
         <translation>ఫోటో యాడ్ చెయ్యండి +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="742"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="756"/>
         <source>Change photo...</source>
         <translation>ఫోటో మార్చండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="743"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="757"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
         <translation>మీరు లొకేషన్  యొక్క ప్రధాన ఫోటోను తొలగించాలనుకుంటున్నారా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="744"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="758"/>
         <source>Select an area for the location main photo</source>
         <translation>లొకేషన్ మెయిన్ ఫోటో కోసం డాక్యుమెంట్ ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="745"/>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="759"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="774"/>
         <source>Name</source>
         <translation>పేరు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="746"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="760"/>
+        <source>Select location color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="761"/>
         <source>Story role</source>
         <translation>కథా పాత్ర</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="749"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="764"/>
         <source>Primary</source>
         <translation>ప్రాథమిక పాత్ర </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="749"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="764"/>
         <source>Secondary</source>
         <translation>సెకండరీ పాత్ర </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="749"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="764"/>
         <source>Tertiary</source>
         <translation>తృతీయ పాత్ర </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="749"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="764"/>
         <source>Undefined</source>
         <translation>స్పష్టత లేదు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="751"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="766"/>
         <source>One sentence description</source>
         <translation>ఒక వాక్యంలో  వివరణ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="752"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="767"/>
         <source>Long description</source>
         <translation>సుదీర్ఘ వివరణ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="758"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="773"/>
         <source>Line type</source>
         <translation>లైన్ టైప్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="760"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="775"/>
         <source>Details</source>
         <translation>డీటైల్స్ </translation>
     </message>
@@ -12006,47 +12081,47 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationsMapView</name>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="184"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="190"/>
         <source>Choose the file to save image</source>
         <translation>ఇమేజ్  సేవ్ చేయడానికి ఫైల్‌ను ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="388"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="394"/>
         <source>Unlock ability to edit locations map</source>
         <translation>రూట్  మ్యాప్‌ను సవరించగల సామర్థ్యాన్ని అన్‌లాక్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="389"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="395"/>
         <source>Add location</source>
         <translation>లొకేషన్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="390"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="396"/>
         <source>Add group</source>
         <translation>గ్రూప్ యాడ్ చెయ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="391"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="399"/>
         <source>Remove selected item</source>
         <translation>సెలక్ట్ చేసిన ఐటం రిమూవ్ చెయ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="410"/>
         <source>Show routes titles only for the selected locations</source>
         <translation>ఎంచుకున్న స్థానాలకు మాత్రమే మార్గాల శీర్షికలను చూపండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="397"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="413"/>
         <source>Save locations map to image</source>
         <translation>లొకేషన్స్ మ్యాప్‌ని ఇమేజ్‌కి సేవ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="399"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="415"/>
         <source>Here will be a locations map.</source>
         <translation>ఇక్కడ రూట్  మ్యాప్ ఉంటుంది.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="400"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="416"/>
         <source>It&apos;s time to create the first location!</source>
         <translation>ఇది మొదటి లొకేషన్  సృష్టించే సమయం!</translation>
     </message>
@@ -12416,113 +12491,149 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::MenuView</name>
     <message>
-        <location filename="../ui/menu_view.cpp" line="322"/>
-        <location filename="../ui/menu_view.cpp" line="555"/>
+        <location filename="../ui/menu_view.cpp" line="331"/>
+        <location filename="../ui/menu_view.cpp" line="569"/>
         <source>Hide developers version</source>
         <translation>డెవలపర్‌ల  వెర్షన్  దాచండి</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="323"/>
-        <location filename="../ui/menu_view.cpp" line="556"/>
+        <location filename="../ui/menu_view.cpp" line="332"/>
+        <location filename="../ui/menu_view.cpp" line="570"/>
         <source>Show developers version</source>
         <translation>డెవలపర్‌ల వెర్షన్  చూపు</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="398"/>
-        <location filename="../ui/menu_view.cpp" line="532"/>
+        <location filename="../ui/menu_view.cpp" line="412"/>
+        <location filename="../ui/menu_view.cpp" line="546"/>
         <source>All changes saved</source>
         <translation>అన్ని మార్పులు సేవ్ చేయబడ్డాయి</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="398"/>
-        <location filename="../ui/menu_view.cpp" line="531"/>
+        <location filename="../ui/menu_view.cpp" line="412"/>
+        <location filename="../ui/menu_view.cpp" line="545"/>
         <source>Save changes</source>
         <translation>మార్పులను సేవ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="527"/>
+        <location filename="../ui/menu_view.cpp" line="541"/>
         <source>Sign in</source>
         <translation>సైన్ ఇన్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="528"/>
+        <location filename="../ui/menu_view.cpp" line="542"/>
         <source>Stories</source>
         <translation>కథలు </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="529"/>
+        <location filename="../ui/menu_view.cpp" line="543"/>
         <source>Create story</source>
         <translation>కథని సృష్టించు </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="530"/>
+        <location filename="../ui/menu_view.cpp" line="544"/>
         <source>Open story</source>
         <translation>కథని ఓపెన్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="535"/>
+        <location filename="../ui/menu_view.cpp" line="549"/>
         <source>Save current story as...</source>
         <translation>ప్రస్తుత కథని ఈ విధంగా సేవ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="536"/>
+        <location filename="../ui/menu_view.cpp" line="550"/>
         <source>Import...</source>
         <translation>ఇంపోర్ట్ </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="537"/>
+        <location filename="../ui/menu_view.cpp" line="551"/>
         <source>Export current document...</source>
         <translation>ప్రస్తుత డాక్యుమెంట్ ని ఎక్స్ పోర్ట్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="538"/>
+        <location filename="../ui/menu_view.cpp" line="552"/>
         <source>Toggle full screen</source>
         <translation>టోగుల్ ఫుల్  స్క్రీన్</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="541"/>
+        <location filename="../ui/menu_view.cpp" line="555"/>
         <source>Application settings</source>
         <translation>అప్లికేషన్ సెట్టింగ్స్ </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="543"/>
+        <location filename="../ui/menu_view.cpp" line="557"/>
         <source>Show writing statistics</source>
         <translation>రైటింగ్ గణాంకాలు చూపు </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="544"/>
+        <location filename="../ui/menu_view.cpp" line="558"/>
         <source>Show writing sprint timer</source>
         <translation>రైటింగ్  స్ప్రింట్ టైమర్‌ని చూపించు</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="545"/>
+        <location filename="../ui/menu_view.cpp" line="559"/>
         <source>Show notifications</source>
         <translation>నోటిఫికేషన్స్ చూపు </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="548"/>
+        <location filename="../ui/menu_view.cpp" line="562"/>
         <source>Version</source>
         <translation>వెర్షన్ </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="549"/>
+        <location filename="../ui/menu_view.cpp" line="563"/>
         <source>About</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="551"/>
+        <location filename="../ui/menu_view.cpp" line="565"/>
         <source>Back to main menu</source>
         <translation>తిరిగి మెయిన్ మేన్యూ కి వెళ్ళు </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="552"/>
+        <location filename="../ui/menu_view.cpp" line="566"/>
+        <location filename="../ui/menu_view.cpp" line="573"/>
         <source>Notifications</source>
         <translation>నోటిఫికేషన్స్ </translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="553"/>
+        <location filename="../ui/menu_view.cpp" line="567"/>
         <source>Notifications preferences</source>
         <translation>నోటిఫికేషన్‌ల ప్రాధాన్యతలు</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="572"/>
+        <source>Account</source>
+        <translation>అకౌంట్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="574"/>
+        <source>Writing statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="575"/>
+        <source>Writing sprint</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="630"/>
+        <source>About Story Architect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="635"/>
+        <source>Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="660"/>
+        <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="674"/>
+        <source>View</source>
+        <translation>చూడు </translation>
     </message>
 </context>
 <context>
@@ -12628,73 +12739,73 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <name>Ui::MindMapView</name>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="151"/>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="258"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="264"/>
         <source>New node</source>
         <translation>కొత్త నోడ్</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="265"/>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="758"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="764"/>
         <source>Add child node</source>
         <translation>చైల్డ్ నోడ్‌ని జోడించండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="277"/>
         <source>Add sibling node</source>
         <translation>సిబ్లింగ్ నోడ్‌ని జోడించండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="292"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="298"/>
         <source>New group</source>
         <translation>కొత్త గ్రూప్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="316"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="322"/>
         <source>Choose the file to save image</source>
         <translation>ఇమేజ్  సేవ్ చేయడానికి ఫైల్‌ను ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="593"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="599"/>
         <source>Writing ideas</source>
         <translation>ఐడియాస్ రాయండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="612"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="618"/>
         <source>Ideas</source>
         <translation>ఐడియాలు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="752"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="758"/>
         <source>Unlock ability to edit mind map</source>
         <translation>మైడ్ మ్యాప్ ని ఎడిట్ చేసే సామర్థ్యాన్ని అన్ లాక్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="755"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="761"/>
         <source>Add node</source>
         <translation>నోడ్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="759"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="765"/>
         <source>Add group</source>
         <translation>గ్రూప్ యాడ్ చెయ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="762"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="768"/>
         <source>Remove selected item</source>
         <translation>సెలక్ట్ చేసిన ఐటం రిమూవ్ చెయ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="765"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="777"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="768"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="780"/>
         <source>Show connections titles only for the selected nodes</source>
         <translation>ఎంచుకున్న నోడ్‌ల కోసం మాత్రమే కనెక్షన్‌ల శీర్షికలను చూపండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="769"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="781"/>
         <source>Save mind map to image</source>
         <translation>మైండ్ మ్యాప్‌ని ఇమేజ్‌కి సేవ్ చేయండి</translation>
     </message>
@@ -12800,57 +12911,57 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelCardsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="197"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="198"/>
         <source>Please enter positive number</source>
         <translation>పాసిటివ్ నంబర్ ఎంటర్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="396"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="397"/>
         <source>View</source>
         <translation>చూడు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="397"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="398"/>
         <source>Lock cards positions</source>
         <translation>కార్డ్ పొజిషన్ లాక్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="398"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="399"/>
         <source>Arrange cards in rows</source>
         <translation>కార్డ్స్ ని నిలువుగా ఆరెంజ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="399"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="400"/>
         <source>Arrange cards in columns</source>
         <translation>కార్డ్స్ ని అడ్డంగా ఆరెంజ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="400"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="401"/>
         <source>Card size</source>
         <translation>కార్డ్ సైజ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="401"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="402"/>
         <source>Card ratio</source>
         <translation>కార్డ్ రేషియో </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="402"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="403"/>
         <source>Space between cards</source>
         <translation>కార్డ్స్ మధ్య స్పేస్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="403"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="404"/>
         <source>Arrange cards by</source>
         <translation>కార్డ్స్ ని ఈ విధంగా ఎరేంజ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="404"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="405"/>
         <source>in row</source>
         <translation>నిలువు వరుసలో </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="405"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="406"/>
         <source>Keep empty to fit cards on screen</source>
         <translation>స్క్రీన్‌పై కార్డ్‌లను అమర్చడానికి ఖాళీగా ఉంచండి</translation>
     </message>
@@ -12893,17 +13004,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>సెలక్ట్ చేసిన ఐటం రిమూవ్ చెయ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="187"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="195"/>
         <source>Search cards</source>
         <translation>కార్డ్స్ వెతకండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="191"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="199"/>
         <source>Print cards</source>
         <translation>కార్డ్స్ ప్రింట్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="194"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="202"/>
         <source>Save cards to image</source>
         <translation>కార్డులను ఇమేజ్ కి  సేవ్ చేయండి</translation>
     </message>
@@ -12911,7 +13022,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelCardsView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="273"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="279"/>
         <source>Choose the file to save image</source>
         <translation>ఇమేజ్  సేవ్ చేయడానికి ఫైల్‌ను ఎంచుకోండి</translation>
     </message>
@@ -13162,137 +13273,76 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
 </context>
 <context>
-    <name>Ui::NovelOutlineSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="154"/>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="306"/>
-        <source>Search without case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్ లేకుండా శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="155"/>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="307"/>
-        <source>Search with case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్‌తో శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="294"/>
-        <source>In the whole text</source>
-        <translation>మొత్తం  టెక్స్ట్ లో</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="288"/>
-        <source>Exit from search</source>
-        <translation>శోధన నుండి నిష్క్రమించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="291"/>
-        <source>Search</source>
-        <translation>సెర్చ్ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="292"/>
-        <source>Enter search phrase here</source>
-        <translation>శోధన పదబంధాన్ని ఇక్కడ నమోదు చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="294"/>
-        <source>In scene heading</source>
-        <translation>సీన్ హెడ్డింగ్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="294"/>
-        <source>In beats</source>
-        <translation>బీట్స్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="298"/>
-        <source>Go to the next search result</source>
-        <translation>తదుపరి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="302"/>
-        <source>Go to the previous search result</source>
-        <translation>మునుపటి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="309"/>
-        <source>Replace with</source>
-        <translation>భర్తీ చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="310"/>
-        <source>Enter phrase to replace</source>
-        <translation>భర్తీ చేయాల్సిన పదాన్ని ఎంటర్  చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="311"/>
-        <source>Replace</source>
-        <translation>భర్తీ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="312"/>
-        <source>All</source>
-        <translation>మొత్తం </translation>
-    </message>
-</context>
-<context>
     <name>Ui::NovelOutlineView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="320"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="321"/>
         <source>Hide scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ దాచండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="321"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="322"/>
         <source>Show scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ చూపు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="322"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="323"/>
         <source>Hide bookmarks list</source>
         <translation>బుక్ మార్క్ లిస్ట్ దాచండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="323"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="324"/>
         <source>Show bookmarks list</source>
         <translation>బుక్ మార్క్స్ లిస్ట్ చూపించండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1318"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1320"/>
         <source>Writing text</source>
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1635"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1637"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1636"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1638"/>
         <source>Scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1637"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1639"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1638"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1640"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1639"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1641"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1642"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1644"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>&quot;గురించి ఒక నవల వ్రాయండి ...&quot; లేదా &quot;గురించి ఒక అధ్యాయాన్ని వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1661"/>
+        <source>In the whole text</source>
+        <translation>మొత్తం  టెక్స్ట్ లో</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1662"/>
+        <source>In scene heading</source>
+        <translation>సీన్ హెడ్డింగ్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1663"/>
+        <source>In beats</source>
+        <translation>బీట్స్ లో </translation>
     </message>
 </context>
 <context>
@@ -13458,82 +13508,6 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
 </context>
 <context>
-    <name>Ui::NovelTextSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="311"/>
-        <source>Search without case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్ లేకుండా శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="312"/>
-        <source>Search with case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్‌తో శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="165"/>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="299"/>
-        <source>In the whole text</source>
-        <translation>మొత్తం  టెక్స్ట్ లో</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="293"/>
-        <source>Exit from search</source>
-        <translation>శోధన నుండి నిష్క్రమించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="296"/>
-        <source>Search</source>
-        <translation>సెర్చ్ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="297"/>
-        <source>Enter search phrase here</source>
-        <translation>శోధన పదబంధాన్ని ఇక్కడ నమోదు చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="299"/>
-        <source>In scene heading</source>
-        <translation>సీన్ హెడ్డింగ్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="299"/>
-        <source>In text</source>
-        <translation>టెక్స్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="303"/>
-        <source>Go to the next search result</source>
-        <translation>తదుపరి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="307"/>
-        <source>Go to the previous search result</source>
-        <translation>మునుపటి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="314"/>
-        <source>Replace with</source>
-        <translation>భర్తీ చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="315"/>
-        <source>Enter phrase to replace</source>
-        <translation>భర్తీ చేయాల్సిన పదాన్ని ఎంటర్  చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="316"/>
-        <source>Replace</source>
-        <translation>భర్తీ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="317"/>
-        <source>All</source>
-        <translation>మొత్తం </translation>
-    </message>
-</context>
-<context>
     <name>Ui::NovelTextStructureView</name>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="120"/>
@@ -13585,67 +13559,82 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelTextView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="338"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="339"/>
         <source>Hide scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ దాచండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="339"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="340"/>
         <source>Show scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ చూపు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="340"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="341"/>
         <source>Hide bookmarks list</source>
         <translation>బుక్ మార్క్ లిస్ట్ దాచండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="341"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="342"/>
         <source>Show bookmarks list</source>
         <translation>బుక్ మార్క్స్ లిస్ట్ చూపించండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1341"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1343"/>
         <source>Writing text</source>
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1566"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1568"/>
         <source>Script generation will take %n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>స్క్రిప్ట్ నిర్మాణం  %n పదం(లు) తీసుకుంటుంది</numerusform>
+            <numerusform>స్క్రిప్ట్ నిర్మాణం  %n పదం(లు) తీసుకుంటుంది</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1680"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1682"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1681"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1683"/>
         <source>Scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1682"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1684"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1683"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1685"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1684"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1686"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1687"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1689"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>&quot;గురించి ఒక నవల వ్రాయండి ...&quot; లేదా &quot;గురించి ఒక అధ్యాయాన్ని వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1706"/>
+        <source>In the whole text</source>
+        <translation>మొత్తం  టెక్స్ట్ లో</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1707"/>
+        <source>In scene heading</source>
+        <translation>సీన్ హెడ్డింగ్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1708"/>
+        <source>In text</source>
+        <translation>టెక్స్ లో </translation>
     </message>
 </context>
 <context>
@@ -14193,17 +14182,17 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectNavigator</name>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="264"/>
+        <location filename="../ui/project/project_navigator.cpp" line="279"/>
         <source>Show document structure</source>
         <translation>డాక్యుమెంట్ నిర్మాణాన్ని చూపించు</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="272"/>
+        <location filename="../ui/project/project_navigator.cpp" line="287"/>
         <source>Add document</source>
         <translation>డాక్యుమెంట్ యాడ్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="273"/>
+        <location filename="../ui/project/project_navigator.cpp" line="288"/>
         <source>Empty recycle bin</source>
         <translation>రీ సైకిల్ బిన్ ఖాళీ చెయ్యండి </translation>
     </message>
@@ -14242,12 +14231,12 @@ Discuss everything with fellow community of writers, share your work in progress
     <message>
         <location filename="../ui/project/project_view.cpp" line="304"/>
         <source>Document content loading...</source>
-        <translation type="unfinished"></translation>
+        <translation>డాక్యుమెంట్ కంటెంట్ లోడ్ అవుతోంది...</translation>
     </message>
     <message>
         <location filename="../ui/project/project_view.cpp" line="306"/>
         <source>Please, wait a while and document editor will be activated.</source>
-        <translation type="unfinished"></translation>
+        <translation>దయచేసి, కొంత సమయం వేచి ఉండండి మరియు డాక్యుమెంట్ ఎడిటర్ యాక్టివేట్  చేయబడుతుంది.</translation>
     </message>
     <message>
         <location filename="../ui/project/project_view.cpp" line="309"/>
@@ -14932,77 +14921,107 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayBreakdownView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="393"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="394"/>
         <source>Hide scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ దాచండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="395"/>
         <source>Show scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ చూపు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="395"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="396"/>
         <source>Hide bookmarks list</source>
         <translation>బుక్ మార్క్ లిస్ట్ దాచండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="396"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="397"/>
         <source>Show bookmarks list</source>
         <translation>బుక్ మార్క్స్ లిస్ట్ చూపించు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="398"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="399"/>
         <source>Hide screenplay dictionaries</source>
         <translation>స్క్రీన్ ప్లే నిఘంటువులను దాచండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="399"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="400"/>
         <source>Show screenplay dictionaries</source>
         <translation>స్క్రీన్ ప్లే నిఘంటువులను చూపించు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1150"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1151"/>
         <source>Do you really want to remove element &quot;%1&quot; from current scene?</source>
         <translation>మీరు నిజంగా ప్రస్తుత సీన్ నుండి &quot;% 1&quot; ఎలిమెంట్  తీసివేయాలనుకుంటున్నారా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2013"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2014"/>
         <source>Elements</source>
         <translation>ఎలిమెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1152"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2035"/>
+        <source>In the whole text</source>
+        <translation>మొత్తం  టెక్స్ట్ లో</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2036"/>
+        <source>In scene heading</source>
+        <translation>సీన్ హెడ్డింగ్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2037"/>
+        <source>In cast list</source>
+        <translation>తారాగణం జాబితాలో</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2038"/>
+        <source>In action</source>
+        <translation>యాక్షన్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2039"/>
+        <source>In character</source>
+        <translation>క్యారెక్టర్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2040"/>
+        <source>In dialogue</source>
+        <translation>డైలాగ్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1153"/>
         <source>No</source>
         <translation>వద్దు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1153"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1154"/>
         <source>Yes, remove</source>
         <translation>అవును, రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2014"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2015"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2015"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2016"/>
         <source>Scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2016"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2017"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2017"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2018"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2018"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2019"/>
         <source>Dictionaries</source>
         <translation>నిఘంటువులు</translation>
     </message>
@@ -15108,57 +15127,57 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayCardsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="197"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="199"/>
         <source>Please enter positive number</source>
         <translation>పాసిటివ్ నంబర్ ఎంటర్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="396"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="398"/>
         <source>View</source>
         <translation>చూడు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="397"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="399"/>
         <source>Lock cards positions</source>
         <translation>కార్డ్ పొజిషన్ లాక్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="398"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="400"/>
         <source>Arrange cards in rows</source>
         <translation>కార్డ్స్ ని నిలువుగా ఆరెంజ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="399"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="401"/>
         <source>Arrange cards in columns</source>
         <translation>కార్డ్స్ ని అడ్డంగా ఆరెంజ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="400"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="402"/>
         <source>Card size</source>
         <translation>కార్డ్ సైజ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="401"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="403"/>
         <source>Card ratio</source>
         <translation>కార్డ్ రేషియో </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="402"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="404"/>
         <source>Space between cards</source>
         <translation>కార్డ్స్ మధ్య స్పేస్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="403"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="405"/>
         <source>Arrange cards by</source>
         <translation>కార్డ్స్ ని ఈ విధంగా ఎరేంజ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="404"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="406"/>
         <source>in row</source>
         <translation>నిలువు వరుసలో </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="405"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="407"/>
         <source>Keep empty to fit cards on screen</source>
         <translation>స్క్రీన్‌పై కార్డ్‌లను అమర్చడానికి ఖాళీగా ఉంచండి</translation>
     </message>
@@ -15201,17 +15220,17 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation>సెలక్ట్ చేసిన ఐటం రిమూవ్ చెయ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="189"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="197"/>
         <source>Search cards</source>
         <translation>కార్డ్స్ వెతకండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="193"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="201"/>
         <source>Print cards</source>
         <translation>కార్డ్స్ ప్రింట్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="196"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="204"/>
         <source>Save cards to image</source>
         <translation>కార్డులను ఇమేజ్ కి  సేవ్ చేయండి</translation>
     </message>
@@ -15219,7 +15238,7 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayCardsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="278"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="284"/>
         <source>Choose the file to save image</source>
         <translation>ఇమేజ్  సేవ్ చేయడానికి ఫైల్‌ను ఎంచుకోండి</translation>
     </message>
@@ -16138,44 +16157,44 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1588"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1609"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1587"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1608"/>
         <source>Merge paragraph</source>
         <translation>పేరాను విలీనం చేయండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1590"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1611"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1589"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1610"/>
         <source>Split paragraph</source>
         <translation>స్ప్లిట్ పేరా</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1555"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1638"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1554"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1637"/>
         <source>Bookmark</source>
         <translation>బుక్ మార్క్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1559"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1642"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1558"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1641"/>
         <source>Add</source>
         <translation>యాడ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1565"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1648"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1564"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1647"/>
         <source>Edit</source>
         <translation>ఎడిట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1571"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1654"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1570"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1653"/>
         <source>Remove</source>
         <translation>రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1578"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1661"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1577"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1660"/>
         <source>Show/hide list</source>
         <translation>షో/హైడ్ లిస్ట్ </translation>
     </message>
@@ -16280,117 +16299,6 @@ Discuss everything with fellow community of writers, share your work in progress
     </message>
 </context>
 <context>
-    <name>Ui::ScreenplayTextSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="312"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="312"/>
-        <source>Search without case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్ లేకుండా శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="313"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="313"/>
-        <source>Search with case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్‌తో శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="165"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="299"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="165"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="299"/>
-        <source>In the whole text</source>
-        <translation>మొత్తం  టెక్స్ట్ లో</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="293"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="293"/>
-        <source>Exit from search</source>
-        <translation>శోధన నుండి నిష్క్రమించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="296"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="296"/>
-        <source>Search</source>
-        <translation>సెర్చ్ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="297"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="297"/>
-        <source>Enter search phrase here</source>
-        <translation>శోధన పదబంధాన్ని ఇక్కడ నమోదు చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="299"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="299"/>
-        <source>In scene heading</source>
-        <translation>సీన్ హెడ్డింగ్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="299"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="299"/>
-        <source>In cast list</source>
-        <translation>తారాగణం జాబితాలో</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="300"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="300"/>
-        <source>In action</source>
-        <translation>యాక్షన్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="300"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="300"/>
-        <source>In character</source>
-        <translation>క్యారెక్టర్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="300"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="300"/>
-        <source>In dialogue</source>
-        <translation>డైలాగ్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="304"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="304"/>
-        <source>Go to the next search result</source>
-        <translation>తదుపరి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="308"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="308"/>
-        <source>Go to the previous search result</source>
-        <translation>మునుపటి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="315"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="315"/>
-        <source>Replace with</source>
-        <translation>భర్తీ చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="316"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="316"/>
-        <source>Enter phrase to replace</source>
-        <translation>భర్తీ చేయాల్సిన పదాన్ని ఎంటర్  చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="317"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="317"/>
-        <source>Replace</source>
-        <translation>భర్తీ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="318"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="318"/>
-        <source>All</source>
-        <translation>మొత్తం </translation>
-    </message>
-</context>
-<context>
     <name>Ui::ScreenplayTextStructureView</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="121"/>
@@ -16441,123 +16349,280 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="388"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="389"/>
         <source>Hide scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ దాచండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="389"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="390"/>
         <source>Show scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ చూపు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="390"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="391"/>
         <source>Hide bookmarks list</source>
         <translation>బుక్ మార్క్ లిస్ట్ దాచండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="393"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="394"/>
         <source>Hide screenplay dictionaries</source>
         <translation>స్క్రీన్ ప్లే నిఘంటువులను దాచండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="395"/>
         <source>Show screenplay dictionaries</source>
         <translation>స్క్రీన్ ప్లే నిఘంటువులను చూపించు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1440"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1442"/>
         <source>Writing text</source>
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message numerus="yes">
-        <source>Synopsis generation will takes %n word(s)</source>
-        <translation type="vanished">
-            <numerusform>సారాంశం ఉత్పత్తి %n పదం(లు) పడుతుంది</numerusform>
-            <numerusform>సారాంశం ఉత్పత్తి %n పదం(లు) పడుతుంది</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1754"/>
-        <source>Synopsis generation will take %n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1756"/>
+        <source>Synopsis generation will take %n word(s)</source>
+        <translation>
+            <numerusform>సినాప్సిస్  %n పదం(లు) తీసుకుంటుంది</numerusform>
+            <numerusform>సినాప్సిస్  %n పదం(లు) తీసుకుంటుంది</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1758"/>
         <source>Novel generation will take %n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>నవల %n పదం(లు) తీసుకుంటుంది</numerusform>
+            <numerusform>నవల  %n పదం(లు) తీసుకుంటుంది</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1875"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1877"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1876"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1878"/>
         <source>Scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1877"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1879"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1878"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1880"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1879"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1881"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1880"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1882"/>
         <source>Dictionaries</source>
         <translation>నిఘంటువులు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1883"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1885"/>
         <source>Start prompt from something like &quot;Write a screenplay about ...&quot;, or &quot;Write a short movie screenplay about ...&quot;</source>
         <translation>&quot;దీని గురించి స్క్రీన్‌ప్లే వ్రాయండి ...&quot;, లేదా &quot;గురించి ఒక చిన్న సినిమా స్క్రీన్‌ప్లే వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్‌ను ప్రారంభించండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="391"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1902"/>
+        <source>In the whole text</source>
+        <translation>మొత్తం  టెక్స్ట్ లో</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1903"/>
+        <source>In scene heading</source>
+        <translation>సీన్ హెడ్డింగ్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1904"/>
+        <source>In cast list</source>
+        <translation>తారాగణం జాబితాలో</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1905"/>
+        <source>In action</source>
+        <translation>యాక్షన్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1906"/>
+        <source>In character</source>
+        <translation>క్యారెక్టర్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1907"/>
+        <source>In dialogue</source>
+        <translation>డైలాగ్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="392"/>
         <source>Show bookmarks list</source>
         <translation>బుక్ మార్క్స్ లిస్ట్ చూపించండి </translation>
     </message>
 </context>
 <context>
+    <name>Ui::ScreenplayTimelineSearchToolbar</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="122"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="242"/>
+        <source>Search without case sensitive</source>
+        <translation>కేస్ సెన్సిటివ్ లేకుండా శోధించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="123"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="243"/>
+        <source>Search with case sensitive</source>
+        <translation>కేస్ సెన్సిటివ్‌తో శోధించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="128"/>
+        <source>In the whole text</source>
+        <translation>మొత్తం  టెక్స్ట్ లో</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="231"/>
+        <source>Exit from search</source>
+        <translation>శోధన నుండి నిష్క్రమించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="234"/>
+        <source>Search</source>
+        <translation>సెర్చ్ </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="235"/>
+        <source>Enter search phrase here</source>
+        <translation>సెర్చ్ చేయాల్సిన పదాన్ని  ఇక్కడ ఎంటర్  చేయండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="237"/>
+        <source>In the whole card content</source>
+        <translation>మొత్తం కార్డ్ కంటెంట్‌లో</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="237"/>
+        <source>In titles &amp; headings</source>
+        <translation>టైటిల్స్  &amp; హెడ్డింగ్స్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="238"/>
+        <source>In text</source>
+        <translation>టెక్స్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="238"/>
+        <source>In tags</source>
+        <translation>ట్యాగ్స్ లో </translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScreenplayTimelineSidebar</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="328"/>
+        <source>View</source>
+        <translation>చూడు </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="329"/>
+        <source>Arrange timeline horizontal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="330"/>
+        <source>Arrange timeline vertical</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="331"/>
+        <source>Card size</source>
+        <translation>కార్డ్ సైజ్ </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="332"/>
+        <source>Card ratio</source>
+        <translation>కార్డ్ రేషియో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="333"/>
+        <source>Space between cards</source>
+        <translation>కార్డ్స్ మధ్య స్పేస్ </translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScreenplayTimelineToolbar</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="150"/>
+        <source>Unlock ability to edit screenplay cards</source>
+        <translation>స్క్రీన్‌ప్లే కార్డ్‌లను సవరించే సామర్థ్యాన్ని అన్‌లాక్ చేయండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="152"/>
+        <source>Undo last action</source>
+        <translation>చివరి చర్యను రద్దు చేయండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="156"/>
+        <source>Redo last action</source>
+        <translation>చివరి చర్యను పునరావృతం చేయండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="159"/>
+        <source>Add scene</source>
+        <translation>సన్నివేశాన్ని జోడించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="160"/>
+        <source>Remove selected item</source>
+        <translation>సెలక్ట్ చేసిన ఐటం రిమూవ్ చెయ్ </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="170"/>
+        <source>Search cards</source>
+        <translation>కార్డ్స్ వెతకండి </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="173"/>
+        <source>Save cards to image</source>
+        <translation>కార్డులను ఇమేజ్ కి  సేవ్ చేయండి</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScreenplayTimelineView</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_view.cpp" line="308"/>
+        <source>Choose the file to save image</source>
+        <translation>ఇమేజ్  సేవ్ చేయడానికి ఫైల్‌ను ఎంచుకోండి</translation>
+    </message>
+</context>
+<context>
     <name>Ui::ScreenplayTreatmentEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1219"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1218"/>
         <source>Bookmark</source>
         <translation>బుక్ మార్క్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1223"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1222"/>
         <source>Add</source>
         <translation>యాడ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1229"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1228"/>
         <source>Edit</source>
         <translation>ఎడిట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1235"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1234"/>
         <source>Remove</source>
         <translation>రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1242"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1241"/>
         <source>Show/hide list</source>
         <translation>షో/హైడ్ లిస్ట్ </translation>
     </message>
@@ -16631,137 +16696,136 @@ Discuss everything with fellow community of writers, share your work in progress
     </message>
 </context>
 <context>
-    <name>Ui::ScreenplayTreatmentSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="155"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="309"/>
-        <source>Search without case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్ లేకుండా శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="156"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="310"/>
-        <source>Search with case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్‌తో శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="161"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="297"/>
-        <source>In the whole text</source>
-        <translation>మొత్తం  టెక్స్ట్ లో</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="291"/>
-        <source>Exit from search</source>
-        <translation>శోధన నుండి నిష్క్రమించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="294"/>
-        <source>Search</source>
-        <translation>సెర్చ్ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="295"/>
-        <source>Enter search phrase here</source>
-        <translation>శోధన పదబంధాన్ని ఇక్కడ నమోదు చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="297"/>
-        <source>In scene heading</source>
-        <translation>సీన్ హెడ్డింగ్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="297"/>
-        <source>In beats</source>
-        <translation>బీట్స్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="301"/>
-        <source>Go to the next search result</source>
-        <translation>తదుపరి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="305"/>
-        <source>Go to the previous search result</source>
-        <translation>మునుపటి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="312"/>
-        <source>Replace with</source>
-        <translation>భర్తీ చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="313"/>
-        <source>Enter phrase to replace</source>
-        <translation>భర్తీ చేయాల్సిన పదాన్ని ఎంటర్  చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="314"/>
-        <source>Replace</source>
-        <translation>భర్తీ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="315"/>
-        <source>All</source>
-        <translation>మొత్తం </translation>
-    </message>
-</context>
-<context>
     <name>Ui::ScreenplayTreatmentView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="350"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="351"/>
         <source>Hide scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ దాచండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="351"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="352"/>
         <source>Show scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ చూపు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="352"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="353"/>
         <source>Hide bookmarks list</source>
         <translation>బుక్ మార్క్ లిస్ట్ దాచండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="353"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="354"/>
         <source>Show bookmarks list</source>
         <translation>బుక్ మార్క్స్ లిస్ట్ చూపించండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1344"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1345"/>
         <source>Writing text</source>
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1712"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1713"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1713"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1714"/>
         <source>Scene parameters</source>
         <translation>సీన్ పెరామీటర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1714"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1715"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1715"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1716"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1716"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1717"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1719"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1720"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>&quot;గురించి ఒక నవల వ్రాయండి ...&quot; లేదా &quot;గురించి ఒక అధ్యాయాన్ని వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1737"/>
+        <source>In the whole text</source>
+        <translation>మొత్తం  టెక్స్ట్ లో</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1738"/>
+        <source>In scene heading</source>
+        <translation>సీన్ హెడ్డింగ్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1739"/>
+        <source>In beats</source>
+        <translation>బీట్స్ లో </translation>
+    </message>
+</context>
+<context>
+    <name>Ui::SearchToolbar</name>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="193"/>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="329"/>
+        <source>Search without case sensitive</source>
+        <translation>కేస్ సెన్సిటివ్ లేకుండా శోధించండి</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="194"/>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="330"/>
+        <source>Search with case sensitive</source>
+        <translation>కేస్ సెన్సిటివ్‌తో శోధించండి</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="311"/>
+        <source>Exit from search</source>
+        <translation>శోధన నుండి నిష్క్రమించండి</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="314"/>
+        <source>Search</source>
+        <translation>సెర్చ్ </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="315"/>
+        <source>Enter search phrase here</source>
+        <translation>సెర్చ్ చేయాల్సిన పదాన్ని  ఇక్కడ ఎంటర్  చేయండి</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="321"/>
+        <source>Go to the next search result</source>
+        <translation>తదుపరి శోధన ఫలితానికి వెళ్లండి</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="325"/>
+        <source>Go to the previous search result</source>
+        <translation>మునుపటి శోధన ఫలితానికి వెళ్లండి</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="332"/>
+        <source>Replace with</source>
+        <translation>భర్తీ చేయండి</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="333"/>
+        <source>Enter phrase to replace</source>
+        <translation>భర్తీ చేయాల్సిన పదాన్ని ఎంటర్  చేయండి</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="334"/>
+        <source>Replace</source>
+        <translation>భర్తీ </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="335"/>
+        <source>All</source>
+        <translation>మొత్తం </translation>
     </message>
 </context>
 <context>
@@ -17853,12 +17917,12 @@ STARTED</translation>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4342"/>
         <source>characters</source>
-        <translation type="unfinished"></translation>
+        <translation>పదాలు </translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4343"/>
         <source>characters with spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>ఖాళీలతో సహా పదాలు </translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4347"/>
@@ -18259,7 +18323,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4340"/>
         <source>Scene content counter type</source>
-        <translation type="unfinished"></translation>
+        <translation>సీన్ కంటెంట్ కౌంటర్ టైప్ </translation>
     </message>
     <message>
         <location filename="../ui/settings/settings_view.cpp" line="4345"/>
@@ -18270,27 +18334,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::SimpleTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="767"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="770"/>
         <source>Bookmark</source>
         <translation>బుక్ మార్క్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="771"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="774"/>
         <source>Add</source>
         <translation>యాడ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="776"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="779"/>
         <source>Edit</source>
         <translation>ఎడిట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="781"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="784"/>
         <source>Remove</source>
         <translation>రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="788"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="791"/>
         <source>Show/hide list</source>
         <translation>షో/హైడ్ లిస్ట్ </translation>
     </message>
@@ -18366,104 +18430,44 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::SimpleTextExportDialog</name>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="194"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="222"/>
         <source>Export text document</source>
         <translation>టెక్ట్స్ డాక్యుమెంట్  ఎక్స్ పోర్ట్  చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="196"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="224"/>
         <source>Format</source>
         <translation>ఫార్మాట్ </translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="197"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="225"/>
         <source>Include inline notes</source>
         <translation>ఇన్‌లైన్ నోట్స్ చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="198"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="226"/>
         <source>Include review marks</source>
         <translation>రివ్యూ మార్క్స్ చేర్చండి </translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="199"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="227"/>
         <source>Watermark</source>
         <translation>వాటర్ మార్క్ </translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="201"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="229"/>
         <source>Open document after export</source>
         <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="202"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="230"/>
         <source>Export</source>
         <translation>ఎక్స్ పోర్ట్ </translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="203"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="231"/>
         <source>Cancel</source>
         <translation>క్యాన్సిల్ </translation>
-    </message>
-</context>
-<context>
-    <name>Ui::SimpleTextSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="121"/>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="235"/>
-        <source>Search without case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్ లేకుండా శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="122"/>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="236"/>
-        <source>Search with case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్‌తో శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="221"/>
-        <source>Exit from search</source>
-        <translation>శోధన నుండి నిష్క్రమించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="224"/>
-        <source>Search</source>
-        <translation>సెర్చ్ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="225"/>
-        <source>Enter search phrase here</source>
-        <translation>శోధన పదబంధాన్ని ఇక్కడ నమోదు చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="227"/>
-        <source>Go to the next search result</source>
-        <translation>తదుపరి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="231"/>
-        <source>Go to the previous search result</source>
-        <translation>మునుపటి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="238"/>
-        <source>Replace with</source>
-        <translation>భర్తీ చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="239"/>
-        <source>Enter phrase to replace</source>
-        <translation>భర్తీ చేయాల్సిన పదాన్ని ఎంటర్  చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="240"/>
-        <source>Replace</source>
-        <translation>భర్తీ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="241"/>
-        <source>All</source>
-        <translation>మొత్తం </translation>
     </message>
 </context>
 <context>
@@ -18488,32 +18492,32 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>బుక్ మార్క్స్ లిస్ట్ చూపించండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="891"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="892"/>
         <source>Writing text</source>
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1204"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1205"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1205"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1206"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1206"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1207"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1207"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1208"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1210"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1211"/>
         <source>Start prompt from something like &quot;Write a story about ...&quot;, or &quot;Write about ...&quot;, or simply ask AI about anything</source>
         <translation>&quot;గురించి ఒక కథనాన్ని వ్రాయండి ...&quot;, లేదా &quot;గురించి వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి లేదా ఏదైనా గురించి AIని అడగండి.</translation>
     </message>
@@ -18706,27 +18710,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1317"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1324"/>
         <source>Bookmark</source>
         <translation>బుక్ మార్క్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1321"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1328"/>
         <source>Add</source>
         <translation>యాడ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1327"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1334"/>
         <source>Edit</source>
         <translation>ఎడిట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1332"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1339"/>
         <source>Remove</source>
         <translation>రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1339"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1346"/>
         <source>Show/hide list</source>
         <translation>షో/హైడ్ లిస్ట్ </translation>
     </message>
@@ -18800,87 +18804,6 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     </message>
 </context>
 <context>
-    <name>Ui::StageplayTextSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="311"/>
-        <source>Search without case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్ లేకుండా శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="312"/>
-        <source>Search with case sensitive</source>
-        <translation>కేస్ సెన్సిటివ్‌తో శోధించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="165"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="295"/>
-        <source>In the whole text</source>
-        <translation>మొత్తం  టెక్స్ట్ లో</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="288"/>
-        <source>Exit from search</source>
-        <translation>శోధన నుండి నిష్క్రమించండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="291"/>
-        <source>Search</source>
-        <translation>సెర్చ్ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="292"/>
-        <source>Enter search phrase here</source>
-        <translation>శోధన పదబంధాన్ని ఇక్కడ నమోదు చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="296"/>
-        <source>In scene heading</source>
-        <translation>సీన్ హెడ్డింగ్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="297"/>
-        <source>In character</source>
-        <translation>క్యారెక్టర్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="298"/>
-        <source>In dialogue</source>
-        <translation>డైలాగ్ లో </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="303"/>
-        <source>Go to the next search result</source>
-        <translation>తదుపరి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="307"/>
-        <source>Go to the previous search result</source>
-        <translation>మునుపటి శోధన ఫలితానికి వెళ్లండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="314"/>
-        <source>Replace with</source>
-        <translation>భర్తీ చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="315"/>
-        <source>Enter phrase to replace</source>
-        <translation>భర్తీ చేయాల్సిన పదాన్ని ఎంటర్  చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="316"/>
-        <source>Replace</source>
-        <translation>భర్తీ </translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="317"/>
-        <source>All</source>
-        <translation>మొత్తం </translation>
-    </message>
-</context>
-<context>
     <name>Ui::StageplayTextStructureView</name>
     <message>
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="141"/>
@@ -18901,34 +18824,54 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>బుక్ మార్క్స్ లిస్ట్ చూపించండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="909"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="910"/>
         <source>Writing text</source>
         <translation>రైటింగ్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1260"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1261"/>
         <source>Formatting</source>
         <translation>ఫార్మేట్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1261"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1262"/>
         <source>Comments</source>
         <translation>కామెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1262"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1263"/>
         <source>AI assistant</source>
         <translation>AI సహాయకుడు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1263"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1264"/>
         <source>Bookmarks</source>
         <translation>బుక్ మార్క్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1266"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1267"/>
         <source>Start prompt from something like &quot;Write a stage play about ...&quot;</source>
         <translation>&quot;దీని గురించి రంగస్థల నాటకం వ్రాయండి ...&quot; వంటి వాటి నుండి ప్రాంప్ట్ ప్రారంభించండి</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1283"/>
+        <source>In the whole text</source>
+        <translation>మొత్తం  టెక్స్ట్ లో</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1284"/>
+        <source>In scene heading</source>
+        <translation>సీన్ హెడ్డింగ్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1285"/>
+        <source>In character</source>
+        <translation>క్యారెక్టర్ లో </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1286"/>
+        <source>In dialogue</source>
+        <translation>డైలాగ్ లో </translation>
     </message>
 </context>
 <context>
@@ -19311,12 +19254,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="203"/>
         <source>Magic</source>
-        <translation>మేజిక్</translation>
+        <translation>మ్యాజిక్ </translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/world_information_structure/world_information_structure_view.cpp" line="211"/>
         <source>Magic types</source>
-        <translation>మేజిక్ రకాలు</translation>
+        <translation>మ్యాజిక్ రకాలు </translation>
     </message>
 </context>
 <context>
@@ -19661,7 +19604,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message>
         <location filename="../management_layer/plugins/world_information/world_items_view.cpp" line="119"/>
         <source>Remove</source>
-        <translation>రిమూవ్ </translation>
+        <translation>తొలగించు </translation>
     </message>
 </context>
 <context>
@@ -19807,47 +19750,47 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::WorldsMapView</name>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="182"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="188"/>
         <source>Choose the file to save image</source>
         <translation>ఇమేజ్  సేవ్ చేయడానికి ఫైల్‌ను ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="382"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="388"/>
         <source>Unlock ability to edit worlds map</source>
         <translation>ప్రపంచ మ్యాప్‌ని సవరించగల సామర్థ్యాన్ని అన్‌లాక్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="383"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="389"/>
         <source>Add world</source>
         <translation>ప్రపంచం యాడ్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="384"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="390"/>
         <source>Add group</source>
         <translation>గ్రూప్ యాడ్ చెయ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="385"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="393"/>
         <source>Remove selected item</source>
         <translation>సెలక్ట్ చేసిన ఐటం రిమూవ్ చెయ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="388"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="404"/>
         <source>Show routes titles only for the selected worlds</source>
         <translation>ఎంచుకున్న ప్రపంచాల కోసం మాత్రమే మార్గాల శీర్షికలను చూపు</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="389"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="405"/>
         <source>Save worlds map to image</source>
         <translation>వరల్డ్స్ మ్యాప్‌ను ఇమేజ్‌కి సేవ్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="391"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="407"/>
         <source>Here will be a worlds map.</source>
         <translation>ఇక్కడ ప్రపంచ పటం ఉంటుంది.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="392"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="408"/>
         <source>It&apos;s time to create the first world!</source>
         <translation>ఇది మొదటి ప్రపంచాన్ని సృష్టించే సమయం!</translation>
     </message>

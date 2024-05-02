@@ -1149,13 +1149,23 @@
     <name>BusinessLayer::ComicBookTemplate</name>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="23"/>
-        <source>International template (page: A4; font: Courier Prime)</source>
-        <translation>Mednarodna predloga (velikost strani A4, črkovna vrsta Courier Prime)</translation>
+        <source>Classic international template (page: A4; font: Courier Prime)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="27"/>
-        <source>US template (page: Letter; font: Courier Prime)</source>
-        <translation>Ameriška predloga (velikost strani Letter, črkovna vrsta Courier Prime)</translation>
+        <source>Classic US template (page: Letter; font: Courier Prime)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="31"/>
+        <source>International template with screenplay like dialogues (page: A4; font: Courier Prime)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/templates/comic_book_template.cpp" line="35"/>
+        <source>US template with screenplay like dialogues (page: Letter; font: Courier Prime)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1170,41 +1180,49 @@
     <name>BusinessLayer::FountainExporter</name>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="25"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="25"/>
         <source>INT</source>
         <translation>INT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="26"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="26"/>
         <source>EXT</source>
         <translation>EKST</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="27"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="27"/>
         <source>EST</source>
         <translation>VZP</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="28"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="28"/>
         <source>INT./EXT</source>
         <translation>INT./EKST.</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="29"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="29"/>
         <source>INT/EXT</source>
         <translation>INT/EKST</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="30"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="30"/>
         <source>EXT./INT</source>
         <translation>EXT/INT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="31"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="31"/>
         <source>EXT/INT</source>
         <translation>EXT/INT</translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/screenplay/screenplay_fountain_exporter.cpp" line="32"/>
+        <location filename="../../corelib/business_layer/export/stageplay/stageplay_fountain_exporter.cpp" line="32"/>
         <source>I/E</source>
         <translation>I/E</translation>
     </message>
@@ -2536,6 +2554,104 @@
     </message>
 </context>
 <context>
+    <name>DatePicker</name>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="107"/>
+        <source>January</source>
+        <translation>Januar</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="110"/>
+        <source>February</source>
+        <translation>Februar</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="113"/>
+        <source>March</source>
+        <translation>Marec</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="116"/>
+        <source>April</source>
+        <translation>April</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="119"/>
+        <source>May</source>
+        <translation>Maj</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="122"/>
+        <source>June</source>
+        <translation>Junij</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="125"/>
+        <source>July</source>
+        <translation>Julij</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="128"/>
+        <source>August</source>
+        <translation>Avgust</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="131"/>
+        <source>September</source>
+        <translation>September</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="134"/>
+        <source>October</source>
+        <translation>Oktober</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="137"/>
+        <source>November</source>
+        <translation>November</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="140"/>
+        <source>December</source>
+        <translation>December</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="302"/>
+        <source>Mon</source>
+        <translation>Pon</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="303"/>
+        <source>Tue</source>
+        <translation>Tor</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="304"/>
+        <source>Wed</source>
+        <translation>Sre</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="305"/>
+        <source>Thu</source>
+        <translation>Čet</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="306"/>
+        <source>Fri</source>
+        <translation>Pet</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="307"/>
+        <source>Sat</source>
+        <translation>Sob</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/date_picker/date_picker.cpp" line="308"/>
+        <source>Sun</source>
+        <translation>Ned</translation>
+    </message>
+</context>
+<context>
     <name>DialogHelper</name>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="33"/>
@@ -2609,7 +2725,12 @@
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="116"/>
-        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="133"/>
+        <source>Markdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="122"/>
+        <location filename="../../corelib/utils/helpers/dialog_helper.cpp" line="141"/>
         <source>All supported files</source>
         <translation>Vse podprte datoteke</translation>
     </message>
@@ -2738,14 +2859,14 @@
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
         <location filename="../../corelib/business_layer/export/abstract_exporter.cpp" line="282"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1055"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="990"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="970"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1168"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1048"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="989"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="962"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1160"/>
         <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1047"/>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="922"/>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1111"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1177"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="915"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1104"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1169"/>
         <source>End of</source>
         <translation>Konec</translation>
     </message>
@@ -2880,7 +3001,7 @@
     <message>
         <location filename="../management_layer/application_manager.cpp" line="1276"/>
         <location filename="../management_layer/application_manager.cpp" line="1295"/>
-        <location filename="../management_layer/application_manager.cpp" line="1487"/>
+        <location filename="../management_layer/application_manager.cpp" line="1493"/>
         <source>Saving error</source>
         <translation>Napaka pri shranjevanju</translation>
     </message>
@@ -2915,94 +3036,94 @@
         <translation>Shrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1447"/>
+        <location filename="../management_layer/application_manager.cpp" line="1453"/>
         <source>Choose file to save story</source>
         <translation>Izberite datoteko za shranjevanje zgodbe</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1488"/>
+        <location filename="../management_layer/application_manager.cpp" line="1494"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Zgodbe ni možno shraniti v datoteko %1. Preverite dovoljenja in poskusite znova.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1538"/>
+        <location filename="../management_layer/application_manager.cpp" line="1544"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Projekt ste poskusili ustvariti v neobstoječi mapi %1. Izberite drugo mesto za novi projekt.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1543"/>
+        <location filename="../management_layer/application_manager.cpp" line="1549"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Datoteke ni mogoče zapisati. Kaže, da je odprta v drugem programu. Zaprite jo in poskusite ustvariti nov projekt.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1547"/>
+        <location filename="../management_layer/application_manager.cpp" line="1553"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Datoteke ni mogoče zapisati. Preverite in dodelite ustrezne pravice programu za pisanje v izbrano mapo ali pa izberite drugo mapo za shranjevanje novega projekta.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1551"/>
+        <location filename="../management_layer/application_manager.cpp" line="1557"/>
         <source>Create project error</source>
         <translation>Napaka pri ustvarjanju projekta</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1737"/>
-        <location filename="../management_layer/application_manager.cpp" line="1760"/>
+        <location filename="../management_layer/application_manager.cpp" line="1743"/>
+        <location filename="../management_layer/application_manager.cpp" line="1766"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>Te datoteke trenutno ni mogoče odpreti, ker je že odprta v drugi instanci tega programa.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1763"/>
+        <location filename="../management_layer/application_manager.cpp" line="1769"/>
         <source>Ignore and open</source>
         <translation>Prezri in odpri</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1859"/>
+        <location filename="../management_layer/application_manager.cpp" line="1865"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation>Datoteka, ki jo skušate odpreti, nima pravic za pisanje. Preverite lastnosti datoteke in dovolite njeno urejanje. Ker je trenutno ni mogoče urejati, bo odprta v načinu samo za branje.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1876"/>
+        <location filename="../management_layer/application_manager.cpp" line="1882"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation>Ali želite še naprej uporabljati zapis datotek .%1?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1877"/>
+        <location filename="../management_layer/application_manager.cpp" line="1883"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation>Nekaterih podatkov projekta ni mogoče shraniti v zapisu .%1. Priporočamo, da uporabite zapis Story Architect .%2, da bodo vsi podatki projekta ustrezno shranjeni.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1880"/>
+        <location filename="../management_layer/application_manager.cpp" line="1886"/>
         <source>Never ask again</source>
         <translation>Ne sprašuj več</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1881"/>
+        <location filename="../management_layer/application_manager.cpp" line="1887"/>
         <source>Keep .%1</source>
         <translation>Ohrani .%1</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1882"/>
+        <location filename="../management_layer/application_manager.cpp" line="1888"/>
         <source>Switch to .STARC</source>
         <translation>Preklopi na .STARC</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3143"/>
+        <location filename="../management_layer/application_manager.cpp" line="3160"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>Naročnina lastnikov projekta na oblačno storitev je potekla. Z delom na projektu lahko nadaljujete, takoj ko obnovijo naročnino.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3376"/>
+        <location filename="../management_layer/application_manager.cpp" line="3393"/>
         <source>Novel</source>
-        <translation type="unfinished">Roman</translation>
+        <translation>Roman</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3389"/>
+        <location filename="../management_layer/application_manager.cpp" line="3406"/>
         <source>Screenplay</source>
         <translation>Scenarij</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3124"/>
-        <location filename="../management_layer/application_manager.cpp" line="3145"/>
+        <location filename="../management_layer/application_manager.cpp" line="3141"/>
+        <location filename="../management_layer/application_manager.cpp" line="3162"/>
         <source>Continue offline</source>
         <translation>Nadaljuj nepovezano</translation>
     </message>
@@ -3018,12 +3139,12 @@
         <translation>Nalaganje manjkajočih črkovnih vrst</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3122"/>
+        <location filename="../management_layer/application_manager.cpp" line="3139"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>Vaša naročnina na oblačno storitev je potekla. Aktivirajte naročnino, da nadaljujete z delom na projektu.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3125"/>
+        <location filename="../management_layer/application_manager.cpp" line="3142"/>
         <source>Renew subscription</source>
         <translation>Obnovi naročnino</translation>
     </message>
@@ -3248,7 +3369,7 @@
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="774"/>
         <source>CUT TO:</source>
-        <translation type="unfinished">REZ NA:</translation>
+        <translation>REZ NA:</translation>
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="790"/>
@@ -3303,13 +3424,13 @@
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="2115"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2232"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2235"/>
         <source>Generating novel (scene %1 from %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Izdelovanje romana (prizor %1 od %2)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2286"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2405"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2289"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2408"/>
         <source>Generating script (chapter %1 from %2)</source>
         <translation>Tvorjenje scenarija (prizor %1 od %2)</translation>
     </message>
@@ -3324,13 +3445,13 @@
         <translation>EKST.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2453"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2609"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2456"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2612"/>
         <source>Processing text</source>
         <translation>Obdelovanje besedila</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2562"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2565"/>
         <source>Generating image</source>
         <translation>Tvorjenje slike</translation>
     </message>
@@ -3347,68 +3468,68 @@
 <context>
     <name>ManagementLayer::ExportManager</name>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="194"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="374"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="528"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="688"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="846"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="986"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1125"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1257"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1390"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1522"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="195"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="375"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="529"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="689"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="847"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="992"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1135"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1267"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1400"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1532"/>
         <source>Choose the file to export</source>
         <translation>Izberite datoteko za izvoz</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="253"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="401"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="555"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="715"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="873"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1013"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1152"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1284"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1417"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1549"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="254"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="402"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="556"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="716"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="874"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1019"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1162"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1294"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1427"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1559"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation>V datoteko ni mogoče pisati. Kaže, da je odprta v drugem programu. Zaprite jo in ponovno poskusite izvoziti.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="256"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="404"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="558"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="718"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="876"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1016"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1155"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1287"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1420"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1552"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="257"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="405"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="559"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="719"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="877"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1022"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1165"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1297"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1430"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1562"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation>V datoteko ni možno pisati. Preverite pravice pisanja v izbrani mapi ali izberite drugo mapo.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="259"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="407"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="561"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="721"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="879"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1019"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1158"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1290"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1423"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1555"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="260"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="408"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="562"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="722"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="880"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1025"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1168"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1300"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1433"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1565"/>
         <source>Export error</source>
         <translation>Napaka pri izvozu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1245"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1255"/>
         <source>Characters</source>
         <translation>Liki</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1510"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1520"/>
         <source>Locations</source>
         <translation>Prizorišča</translation>
     </message>
@@ -3482,28 +3603,28 @@
         <translation>Nadgradi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="225"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="228"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Ime mesta je spremenjeno iz »%1« v »%2«. Ali želite uveljaviti spremembe?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="227"/>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="269"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="230"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="274"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="228"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="231"/>
         <source>Yes</source>
         <translation>Da</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="268"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="273"/>
         <source>Do you want to delete the location&apos;s photo?</source>
         <translation>Ali želite izbrisati fotografijo prizorišča?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="270"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="275"/>
         <source>Yes, delete</source>
         <translation>Da, izbriši</translation>
     </message>
@@ -3534,17 +3655,17 @@
         <translation>Posodobite program na različico PRO, če želite urejati zemljevid lokacij.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="511"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="514"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Ime mesta je spremenjeno iz »%1« v »%2«. Ali želite uveljaviti spremembe?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="513"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="516"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="514"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="517"/>
         <source>Yes</source>
         <translation>Da</translation>
     </message>
@@ -3629,7 +3750,7 @@ If you want to continue editing novel text, switch to the corresponding module v
         <translation>Odstrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="603"/>
+        <location filename="../management_layer/plugins/novel_cards/novel_cards_manager.cpp" line="609"/>
         <source>Go to text</source>
         <translation>Pojdi na besedilo</translation>
     </message>
@@ -3703,244 +3824,259 @@ If you want to continue editing novel text, switch to the corresponding module v
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="462"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="502"/>
         <source>Find all characters</source>
         <translation>Poišči vse like</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="468"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="508"/>
         <source>Add character</source>
         <translation>Dodaj lik</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="473"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="513"/>
         <source>Find all locations</source>
         <translation>Poišči vse lokacije</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="479"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="519"/>
         <source>Add location</source>
         <translation>Dodaj lokacijo</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="485"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="525"/>
         <source>Empty recycle bin</source>
         <translation>Izprazni koš</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="503"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="543"/>
         <source>Add document</source>
         <translation>Dodaj dokument</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="538"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="565"/>
         <source>Remove document</source>
         <translation>Odstrani dokument</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="553"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2108"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="581"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2184"/>
         <source>Create new draft</source>
         <translation>Ustvari nov osnutek</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="567"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="595"/>
         <source>Open in new window</source>
         <translation>Odpri v novem oknu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="741"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="787"/>
         <source>Character with this name already exists</source>
         <translation>Lik s tem imenom že obstaja</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="751"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="797"/>
         <source>Location with this name already exists</source>
         <translation>Prizorišče s tem imenom že obstaja</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="906"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="952"/>
         <source>Current draft</source>
         <translation>Trenutni osnutek</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="975"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1021"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation>Ali resnično želite odstraniti različico dokumenta »%1«?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1080"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1156"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Ali želite trajno odstraniti dokument?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="976"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1081"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1540"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1022"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1157"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1616"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="417"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="457"/>
         <source>Remove split</source>
         <translation>Odstrani delitev okna</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="418"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="458"/>
         <source>Split window</source>
         <translation>Razdeli okno</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="496"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="536"/>
         <source>Add folder</source>
         <translation>Dodaj mapo</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="624"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="564"/>
+        <source>Remove documents</source>
+        <translation>Odstrani dokumente</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="652"/>
         <source>Share access</source>
         <translation>Deli dostop</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="761"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="672"/>
+        <source>Expand all</source>
+        <translation>Razširi vse</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="678"/>
+        <source>Collapse all</source>
+        <translation>Strni vse</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="807"/>
         <source>World with this name already exists</source>
         <translation>Svet s tem imenom že obstaja</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="977"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1082"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1541"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1023"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1158"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1617"/>
         <source>Yes, remove</source>
         <translation>Da, odstrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1299"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1375"/>
         <source>Characters from the text</source>
         <translation>Liki iz besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1309"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1385"/>
         <source>Characters that are not found in the text</source>
         <translation>Liki, ki niso navedeni v besedilu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1322"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1398"/>
         <source>Save only characters from the text</source>
         <translation>Shrani le like iz besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1323"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1399"/>
         <source>Save all characters</source>
         <translation>Shrani vse like</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1324"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1456"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1400"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1532"/>
         <source>Change nothing</source>
         <translation>Ne spremeni ničesar</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1431"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1507"/>
         <source>Locations from the text</source>
         <translation>Lokacije iz besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1441"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1517"/>
         <source>Locations that are not found in the text</source>
         <translation>Lokacije, ki niso navedene v besedilu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1454"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1530"/>
         <source>Save only locations from the text</source>
         <translation>Shrani le lokacije iz besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1455"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1531"/>
         <source>Save all locations</source>
         <translation>Shrani vse lokacije</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1539"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1615"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Ali želite trajno odstraniti vse dokumente iz koša?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2122"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2198"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2132"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2208"/>
         <source>Remove</source>
         <translation>Odstrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2292"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2313"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2334"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2355"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2467"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2368"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2389"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2410"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2431"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2543"/>
         <source>draft</source>
         <translation>osnutek</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2311"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2332"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2353"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2387"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2408"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2429"/>
         <source>Script</source>
         <translation>Scenarij</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3095"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3133"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3171"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3209"/>
         <source>Title page</source>
         <translation>Naslovnica</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3097"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3134"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3173"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3210"/>
         <source>Synopsis</source>
         <translation>Sinopsis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3109"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3185"/>
         <source>Treatment</source>
         <translation>Scenosled</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3136"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3212"/>
         <source>Novel</source>
-        <translation type="unfinished">Roman</translation>
+        <translation>Roman</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3145"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3221"/>
         <source>Outline</source>
-        <translation type="unfinished">Povzetek</translation>
+        <translation>Povzetek</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3409"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3485"/>
         <source>Conflicted version</source>
         <translation>Različica v sporu</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2290"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2465"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3100"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2366"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2541"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3176"/>
         <source>Screenplay</source>
         <translation>Scenarij</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="419"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="459"/>
         <source>Hide document drafts</source>
         <translation>Skrij osnutke dokumenta</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="420"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="460"/>
         <source>Show document drafts</source>
         <translation>Pokaži osnutke dokumenta</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3103"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3139"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3179"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3215"/>
         <source>Statistics</source>
         <translation>Statistika</translation>
     </message>
@@ -4487,7 +4623,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Odstrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="605"/>
+        <location filename="../management_layer/plugins/screenplay_cards/screenplay_cards_manager.cpp" line="611"/>
         <source>Go to text</source>
         <translation>Pojdi na besedilo</translation>
     </message>
@@ -4576,6 +4712,48 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../management_layer/plugins/screenplay_text_structure/screenplay_text_structure_manager.cpp" line="374"/>
         <source>Screenplay</source>
         <translation>Scenarij</translation>
+    </message>
+</context>
+<context>
+    <name>ManagementLayer::ScreenplayTimelineManager</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="119"/>
+        <source>Upgrade the app to the PRO version to edit screenplay timeline.
+
+If you want to continue editing screenplay text, switch to the corresponding module via icons on the top left toolbar.</source>
+        <translation>Posodobite program na različico PRO, če želite urejati časovnico scenarija.
+
+Če želite nadaljevati z urejanjem besedila scenarija, preklopite na ustrezen modul s pomočjo ikon v levi vrhnji orodni vrstici.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="122"/>
+        <source>Maybe later</source>
+        <translation>Morda kasneje</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="123"/>
+        <source>Upgrade</source>
+        <translation>Nadgradi</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="210"/>
+        <source>Add scene</source>
+        <translation>Dodaj prizor</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="217"/>
+        <source>Color</source>
+        <translation>Barva</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="252"/>
+        <source>Remove</source>
+        <translation>Odstrani</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/screenplay_timeline_manager.cpp" line="266"/>
+        <source>Go to text</source>
+        <translation>Pojdi na besedilo</translation>
     </message>
 </context>
 <context>
@@ -4894,33 +5072,24 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="471"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="474"/>
         <source>Information about project</source>
         <translation>Podatki o projektu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="473"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="476"/>
         <source>Project collaborators</source>
         <translation>Sodelavci pri projektu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="477"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="480"/>
         <source>Information about screenplay</source>
         <translation>Podatki o scenariju</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="479"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="482"/>
         <source>Screenplay parameters</source>
         <translation>Parametri scenarija</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="482"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="513"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="533"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="553"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="573"/>
-        <source>Title page text</source>
-        <translation>Besedilo naslovnice</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="485"/>
@@ -4928,183 +5097,192 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../management_layer/plugins_builder.cpp" line="536"/>
         <location filename="../management_layer/plugins_builder.cpp" line="556"/>
         <location filename="../management_layer/plugins_builder.cpp" line="576"/>
+        <source>Title page text</source>
+        <translation>Besedilo naslovnice</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins_builder.cpp" line="488"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="519"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="539"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="559"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="579"/>
         <source>Synopsis text</source>
         <translation>Besedilo sinopsisa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="490"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="581"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="493"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="584"/>
         <source>Beats</source>
         <translation>Koščki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="499"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="590"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="502"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="593"/>
         <source>Timeline</source>
         <translation>Časovnica</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="501"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="504"/>
         <source>Breakdown</source>
         <translation>Razdelava</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="508"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="511"/>
         <source>Information about comic book</source>
         <translation>Podatki o stripu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="510"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="513"/>
         <source>Comic book parameters</source>
         <translation>Parametri stripa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="519"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="522"/>
         <source>Comic book text</source>
         <translation>Besedilo stripa</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="528"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="531"/>
         <source>Information about audioplay</source>
         <translation>Podatki o radijski igri</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="530"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="533"/>
         <source>Audioplay parameters</source>
         <translation>Parametri radijske igre</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="539"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="542"/>
         <source>Audioplay text</source>
         <translation>Besedilo radijske igre</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="548"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="551"/>
         <source>Information about stageplay</source>
         <translation>Podatki o dramskem besedilu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="550"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="553"/>
         <source>Stageplay parameters</source>
         <translation>Parametri dramskega besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="559"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="562"/>
         <source>Stageplay text</source>
         <translation>Besedilo drame</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="568"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="571"/>
         <source>Information about novel</source>
         <translation>Podatki o romanu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="570"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="573"/>
         <source>Novel parameters</source>
         <translation>Parametri romana</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="579"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="582"/>
         <source>Outline text</source>
         <translation>Besedilo povzetka</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="586"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="589"/>
         <source>Novel text</source>
         <translation>Besedilo romana</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="597"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="600"/>
         <source>Characters relations</source>
         <translation>Odnosi med liki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="600"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="603"/>
         <source>Character information</source>
         <translation>Podatki o liku</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="602"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="605"/>
         <source>Character dialogues</source>
         <translation>Dialogi lika</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="606"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="609"/>
         <source>Locations map</source>
         <translation>Zemljevid prizorišč</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="609"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="612"/>
         <source>Location information</source>
         <translation>Podatki o lokaciji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="611"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="614"/>
         <source>Location scenes</source>
         <translation>Prizori prizorišč</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="615"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="618"/>
         <source>Worlds map</source>
         <translation>Zemljevid svetov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="618"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="621"/>
         <source>World information</source>
         <translation>Podatki o svetu</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="622"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="625"/>
         <source>Folder text</source>
         <translation>Besedilo mape</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="625"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="628"/>
         <source>Document text</source>
         <translation>Besedilo dokumenta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="629"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="632"/>
         <source>Recycle bin summary info</source>
         <translation>Povzetek koša</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="632"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="635"/>
         <source>Mind map</source>
         <translation>Miselni vzorec</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="635"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="638"/>
         <source>Images gallery</source>
         <translation>Galerija slik</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="488"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="491"/>
         <source>Treatment text</source>
         <translation>Besedilo scenosleda</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="495"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="498"/>
         <source>Screenplay text</source>
         <translation>Besedilo scenarija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="492"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="497"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="521"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="541"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="561"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="583"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="588"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="495"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="500"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="524"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="544"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="564"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="586"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="591"/>
         <source>Cards</source>
         <translation>Kartončki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="504"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="524"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="544"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="564"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="593"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="507"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="527"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="547"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="567"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="596"/>
         <source>Statistics</source>
         <translation>Statistika</translation>
     </message>
@@ -7353,7 +7531,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1103"/>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1318"/>
         <source>Generate novel</source>
-        <translation type="unfinished"></translation>
+        <translation>Izdelaj roman</translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1104"/>
@@ -8157,10 +8335,6 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Sinopsis</translation>
     </message>
     <message>
-        <source>Script</source>
-        <translation type="vanished">Scenarij</translation>
-    </message>
-    <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1323"/>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1330"/>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1339"/>
@@ -8226,7 +8400,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ApplicationView</name>
     <message>
-        <location filename="../ui/application_view.cpp" line="273"/>
+        <location filename="../ui/application_view.cpp" line="275"/>
         <source>Turn off full screen</source>
         <translation>Izklopi celozaslonski način</translation>
     </message>
@@ -8829,87 +9003,6 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
 </context>
 <context>
-    <name>Ui::AudioplayTextSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="316"/>
-        <source>Search without case sensitive</source>
-        <translation>Pri iskanju ne razlikuj malih/velikih črk</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="317"/>
-        <source>Search with case sensitive</source>
-        <translation>Pri iskanju razlikuj male/velike črke</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="165"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="300"/>
-        <source>In the whole text</source>
-        <translation>V celotnem besedilu</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="293"/>
-        <source>Exit from search</source>
-        <translation>Izhod iz iskanja</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="296"/>
-        <source>Search</source>
-        <translation>Najdi</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="297"/>
-        <source>Enter search phrase here</source>
-        <translation>Tukaj vnesite iskani niz</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="301"/>
-        <source>In scene heading</source>
-        <translation>V naslovu prizora</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="302"/>
-        <source>In character</source>
-        <translation>V imenih likov</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="303"/>
-        <source>In dialogue</source>
-        <translation>V dialogih</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="308"/>
-        <source>Go to the next search result</source>
-        <translation>Pojdi na naslednji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="312"/>
-        <source>Go to the previous search result</source>
-        <translation>Pojdi na prejšnji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="319"/>
-        <source>Replace with</source>
-        <translation>Zamenjaj z</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="320"/>
-        <source>Enter phrase to replace</source>
-        <translation>Tukaj vnesite niz za zamenjavo</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="321"/>
-        <source>Replace</source>
-        <translation>Zamenjaj</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_search_toolbar.cpp" line="322"/>
-        <source>All</source>
-        <translation>Vse</translation>
-    </message>
-</context>
-<context>
     <name>Ui::AudioplayTextStructureView</name>
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="141"/>
@@ -8925,34 +9018,54 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Skrij seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="933"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="934"/>
         <source>Writing text</source>
         <translation>Pisanje besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1302"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1303"/>
         <source>Formatting</source>
         <translation>Oblikovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1303"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1304"/>
         <source>Comments</source>
         <translation>Komentarji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1304"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1305"/>
         <source>AI assistant</source>
         <translation>Asistent umetne inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1305"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1306"/>
         <source>Bookmarks</source>
         <translation>Zaznamki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1308"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1309"/>
         <source>Start prompt from something like &quot;Write an audio drama about ...&quot;, or &quot;Write a radio drama about ...&quot;</source>
         <translation>Začni z iztočnico kot npr. »Napiši radijsko igro o ...« ali »Napiši zvočno igro o ...«.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1326"/>
+        <source>In the whole text</source>
+        <translation>V celotnem besedilu</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1327"/>
+        <source>In scene heading</source>
+        <translation>V naslovu prizora</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1328"/>
+        <source>In character</source>
+        <translation>V imenih likov</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1329"/>
+        <source>In dialogue</source>
+        <translation>V dialogih</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="306"/>
@@ -9019,89 +9132,94 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CardItemParametersView</name>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="201"/>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="663"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="211"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="760"/>
         <source>Description</source>
         <translation>Opis</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="205"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="215"/>
         <source>Each line is a separate beat</source>
         <translation>Vsaka vrstica je ločen košček</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="643"/>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="661"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="740"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="758"/>
         <source>Heading</source>
         <translation>Naslov</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="645"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="742"/>
         <source>Select item color</source>
         <translation>Izberite barvo elementa</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="650"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="747"/>
         <source>Title</source>
         <translation>Naslov</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="651"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="748"/>
         <source>Human-readable name (hidden in text)</source>
         <translation>Berljivo ime (skrito v besedilu)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="652"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="749"/>
         <source>Select scene color</source>
         <translation>Izberite barvo prizora</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="662"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="759"/>
         <source>Header text (visible in text)</source>
         <translation>Besedilo glave (vidno v besedilu)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="665"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="762"/>
         <source>Story day</source>
         <translation>Dan v zgodbi</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="666"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="763"/>
+        <source>Start date</source>
+        <translation>Začetni datum</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="765"/>
         <source>Stamp</source>
         <translation>Žigosaj</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="667"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="766"/>
         <source>Auto scene numbering</source>
         <translation>Samodejno oštevilčevanje prizorov</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="668"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="767"/>
         <source>Scene number</source>
         <translation>Številka prizora</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="669"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="768"/>
         <source>Skip the number of this scene</source>
         <translation>Preskoči številko tega prizora</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="671"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="770"/>
         <source>Skip logical number of this scene for determining the next scene number</source>
         <translation>Preskoči logično številko tega prizora za določitev številke naslednjega prizora</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="672"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="771"/>
         <source>Tags</source>
         <translation>Značke</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="673"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="772"/>
         <source>Add tag to the selected card</source>
         <translation>Dodaj značko izbranemu kartončku</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="674"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="773"/>
         <source>Tag name</source>
         <translation>Ime značke</translation>
     </message>
@@ -9993,47 +10111,47 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharactersRelationsView</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="185"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="191"/>
         <source>Choose the file to save image</source>
         <translation>Izberite datoteko, da shranite sliko</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="391"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="397"/>
         <source>Unlock ability to edit characters relations</source>
         <translation>Odklenite možnost urejanja odnosov med liki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="392"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="398"/>
         <source>Add character</source>
         <translation>Dodaj lik</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="393"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="399"/>
         <source>Add group</source>
         <translation>Dodaj skupino</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="402"/>
         <source>Remove selected item</source>
         <translation>Odstrani izbrani element</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="397"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="413"/>
         <source>Show relations titles only for the selected characters</source>
         <translation>Pokaži naslove odnosov le za izbrane like</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="400"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="416"/>
         <source>Save relations scheme to image</source>
         <translation>Shrani shemo odnosov v sliko</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="402"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="418"/>
         <source>Here will be a characters relations scheme.</source>
         <translation>Tukaj bo shema odnosov med liki.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="403"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="419"/>
         <source>It&apos;s time to create the first character!</source>
         <translation>Čas je, da ustvarite prvi lik!</translation>
     </message>
@@ -10228,7 +10346,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1069"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1068"/>
         <source>%n panels</source>
         <translation>
             <numerusform>%n okvir</numerusform>
@@ -10238,27 +10356,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1248"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1254"/>
         <source>Bookmark</source>
         <translation>Zaznamek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1252"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1258"/>
         <source>Add</source>
         <translation>Dodaj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1258"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1264"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1263"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1269"/>
         <source>Remove</source>
         <translation>Odstrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1270"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1276"/>
         <source>Show/hide list</source>
         <translation>Pokaži/skrij seznam</translation>
     </message>
@@ -10332,92 +10450,6 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
 </context>
 <context>
-    <name>Ui::ComicBookTextSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="312"/>
-        <source>Search without case sensitive</source>
-        <translation>Pri iskanju ne razlikuj malih/velikih črk</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="313"/>
-        <source>Search with case sensitive</source>
-        <translation>Pri iskanju razlikuj male/velike črke</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="165"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="299"/>
-        <source>In the whole text</source>
-        <translation>V celotnem besedilu</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="293"/>
-        <source>Exit from search</source>
-        <translation>Izhod iz iskanja</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="296"/>
-        <source>Search</source>
-        <translation>Najdi</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="297"/>
-        <source>Enter search phrase here</source>
-        <translation>Tukaj vnesite iskani niz</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="299"/>
-        <source>In scene heading</source>
-        <translation>V naslovu prizora</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="299"/>
-        <source>In action</source>
-        <translation>V dejanju</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="300"/>
-        <source>In character</source>
-        <translation>V imenih likov</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="300"/>
-        <source>In dialogue</source>
-        <translation>V dialogih</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="304"/>
-        <source>Go to the next search result</source>
-        <translation>Pojdi na naslednji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="308"/>
-        <source>Go to the previous search result</source>
-        <translation>Pojdi na prejšnji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="315"/>
-        <source>Replace with</source>
-        <translation>Zamenjaj z</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="316"/>
-        <source>Enter phrase to replace</source>
-        <translation>Tukaj vnesite niz za zamenjavo</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="317"/>
-        <source>Replace</source>
-        <translation>Zamenjaj</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_search_toolbar.cpp" line="318"/>
-        <source>All</source>
-        <translation>Vse</translation>
-    </message>
-</context>
-<context>
     <name>Ui::ComicBookTextStructureDelegate</name>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="352"/>
@@ -10446,34 +10478,59 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Skrij seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="922"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="923"/>
         <source>Writing text</source>
         <translation>Pisanje besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1299"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1300"/>
         <source>Formatting</source>
         <translation>Oblikovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1300"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1301"/>
         <source>Comments</source>
         <translation>Komentarji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1301"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1302"/>
         <source>AI assistant</source>
         <translation>Asistent umetne inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1302"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1303"/>
         <source>Bookmarks</source>
         <translation>Zaznamki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1305"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1306"/>
         <source>Start prompt from something like &quot;Write a comic book script about ...&quot;</source>
         <translation>Začnite z iztočnico, kot je »Napiši scenarij za strip o ...«.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1322"/>
+        <source>In the whole text</source>
+        <translation>V celotnem besedilu</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1323"/>
+        <source>In scene heading</source>
+        <translation>V naslovu prizora</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1324"/>
+        <source>In action</source>
+        <translation>V dejanju</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1325"/>
+        <source>In character</source>
+        <translation>V imenih likov</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1326"/>
+        <source>In dialogue</source>
+        <translation>V dialogih</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="296"/>
@@ -11098,62 +11155,62 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateDocumentDialogOption</name>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="178"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="179"/>
         <source>Folder</source>
         <translation>Mapa</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="183"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="184"/>
         <source>Text</source>
         <translation>Besedilo</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="188"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="189"/>
         <source>Character</source>
         <translation>Lik</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="193"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="194"/>
         <source>Location</source>
         <translation>Prizorišče</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="198"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="199"/>
         <source>World</source>
         <translation>Svet</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="203"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="204"/>
         <source>Screenplay</source>
         <translation>Scenarij</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="208"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="209"/>
         <source>Comic book</source>
         <translation>Strip</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="213"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="214"/>
         <source>Audioplay</source>
         <translation>Radijska igra</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="218"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="219"/>
         <source>Stageplay</source>
         <translation>Dramsko besedilo</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="223"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="224"/>
         <source>Novel</source>
         <translation>Roman</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="228"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="229"/>
         <source>Mind map</source>
         <translation>Miselni vzorec</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="233"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="234"/>
         <source>Image gallery</source>
         <translation>Galerija slik</translation>
     </message>
@@ -11657,142 +11714,152 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="316"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="321"/>
         <source>Apply new location name</source>
         <translation>Uveljavi novo ime prizorišča</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="714"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="733"/>
         <source>Name</source>
         <translation>Ime</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="715"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="735"/>
         <source>Story role</source>
         <translation>Vloga v zgodbi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="276"/>
         <source>Primary</source>
         <translation>primarne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="276"/>
         <source>Secondary</source>
         <translation>sekundarne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="276"/>
         <source>Tertiary</source>
         <translation>terciarne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="276"/>
         <source>Undefined</source>
         <translation>Nedoločeno</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="712"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="327"/>
+        <source>Select character color</source>
+        <translation>Izberite barvo lika</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="731"/>
         <source>Unlock access to extended location profile</source>
         <translation>Odkleni dostop do razširjenega profila lokacije</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="719"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="734"/>
+        <source>Select location color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="739"/>
         <source>One sentence description</source>
         <translation>Opis v eni povedi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="720"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="740"/>
         <source>Long description</source>
         <translation>Daljši opis</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="721"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="741"/>
         <source>Add photo +</source>
         <translation>Dodaj fotografijo +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="721"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="741"/>
         <source>Change photo...</source>
         <translation>Spremeni fotografijo ...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="722"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="742"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
         <translation>Ali želite izbrisati glavno fotografijo lokacije?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="723"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="743"/>
         <source>Select an area for the location main photo</source>
         <translation>Izberite področje za glavno fotografijo lokacije</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="725"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="745"/>
         <source>Photos</source>
         <translation>Fotografije</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="727"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="747"/>
         <source>Sense info</source>
         <translation>Podatki o zaznavi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="728"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="748"/>
         <source>Sight</source>
         <translation>Vid</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="729"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="749"/>
         <source>Smell</source>
         <translation>Vonj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="730"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="750"/>
         <source>Sound</source>
         <translation>Zvok</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="731"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="751"/>
         <source>Taste</source>
         <translation>Okus</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="732"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="752"/>
         <source>Touch</source>
         <translation>Dotik</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="734"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="754"/>
         <source>Geography info</source>
         <translation>Zemljepisni podatki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="735"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="755"/>
         <source>Location</source>
         <translation>Prizorišče</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="736"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="756"/>
         <source>Climate</source>
         <translation>Klima</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="737"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="757"/>
         <source>Landmark</source>
         <translation>Znamenitost</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="738"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="758"/>
         <source>Nearby places</source>
         <translation>Bližnji kraji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="740"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="760"/>
         <source>Background info</source>
         <translation>Podatki o ozadju</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="741"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="761"/>
         <source>History</source>
         <translation>Zgodovina</translation>
     </message>
@@ -11871,164 +11938,174 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationsMapSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="339"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="340"/>
         <source>Apply new location name</source>
         <translation>Uveljavi novo ime prizorišča</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="587"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="725"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="346"/>
+        <source>Select character color</source>
+        <translation>Izberite barvo lika</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="601"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="739"/>
         <source>To create a new route, hold the Option button and move one location to another.</source>
         <translation>Za izdelavo nove poti držite pritisnjeno izmenjalko (Option) in premaknite eno prizorišče k drugemu.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="590"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="728"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="604"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="742"/>
         <source>To create a new route, hold the Alt button and move one location to another.</source>
         <translation>Za izdelavo nove poti držite pritisnjeno izmenjalko (Alt) in premaknite eno prizorišče k drugemu.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="594"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="608"/>
         <source>%1 has no routes with other locations</source>
         <translation>%1 nima nobenih poti do drugih prizorišč</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="596"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="610"/>
         <source>What routes %1 has</source>
         <translation>Katere poti ima %1</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="602"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="755"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="616"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="770"/>
         <source>Open route details</source>
         <translation>Odpri podrobnosti poti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="662"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="663"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="667"/>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="668"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="676"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="677"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="681"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="682"/>
         <source>Show all %1&apos;s routes</source>
         <translation>Pokaži vse poti prizorišča %1</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="721"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="735"/>
         <source>To see location info and all their routes, select concrete location.</source>
         <translation>Če želite videti podatke o prizorišču in vse njegove poti, izberite želeno prizorišče.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="722"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="736"/>
         <source>To see route details, select concrete route.</source>
         <translation>Če želite videti podrobnosti poti, izberite posamezno pot.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="730"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="744"/>
         <source>Solid line</source>
         <translation>Zvezna črta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="730"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="744"/>
         <source>Dash line</source>
         <translation>Črtkana črta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="730"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="744"/>
         <source>Dot line</source>
         <translation>Pikasta črta</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="735"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="749"/>
         <source>Border line type</source>
         <translation>Vrsta črte obrobe</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="736"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="750"/>
         <source>Group name</source>
         <translation>Ime skupine</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="737"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="751"/>
         <source>Group description</source>
         <translation>Opis skupine</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="739"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="753"/>
         <source>Profile</source>
         <translation>Profil</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="740"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="754"/>
         <source>Routes</source>
         <translation>Poti</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="742"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="756"/>
         <source>Add photo +</source>
         <translation>Dodaj fotografijo +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="742"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="756"/>
         <source>Change photo...</source>
         <translation>Spremeni fotografijo ...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="743"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="757"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
         <translation>Ali želite izbrisati glavno fotografijo prizorišča?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="744"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="758"/>
         <source>Select an area for the location main photo</source>
         <translation>Izberite področje za glavno fotografijo lokacije</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="745"/>
         <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="759"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="774"/>
         <source>Name</source>
         <translation>Ime</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="746"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="760"/>
+        <source>Select location color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="761"/>
         <source>Story role</source>
         <translation>Vloga v zgodbi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="749"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="764"/>
         <source>Primary</source>
         <translation>primarne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="749"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="764"/>
         <source>Secondary</source>
         <translation>sekundarne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="749"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="764"/>
         <source>Tertiary</source>
         <translation>terciarne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="749"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="764"/>
         <source>Undefined</source>
         <translation>Nedoločeno</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="751"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="766"/>
         <source>One sentence description</source>
         <translation>Opis v eni povedi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="752"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="767"/>
         <source>Long description</source>
         <translation>Daljši opis</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="758"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="773"/>
         <source>Line type</source>
         <translation>Vrsta črte</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="760"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_sidebar.cpp" line="775"/>
         <source>Details</source>
         <translation>Podrobnosti</translation>
     </message>
@@ -12036,47 +12113,47 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationsMapView</name>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="184"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="190"/>
         <source>Choose the file to save image</source>
         <translation>Izberite datoteko, da shranite sliko</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="388"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="394"/>
         <source>Unlock ability to edit locations map</source>
         <translation>Odklenite možnost urejanja zemljevida prizorišč</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="389"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="395"/>
         <source>Add location</source>
         <translation>Dodaj lokacijo</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="390"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="396"/>
         <source>Add group</source>
         <translation>Dodaj skupino</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="391"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="399"/>
         <source>Remove selected item</source>
         <translation>Odstrani izbrani element</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="410"/>
         <source>Show routes titles only for the selected locations</source>
         <translation>Pokaži naslove poti le za izbrana prizorišča</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="397"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="413"/>
         <source>Save locations map to image</source>
         <translation>Shrani zemljevid lokacij v sliko</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="399"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="415"/>
         <source>Here will be a locations map.</source>
         <translation>Tukaj bo prikazan zemljevid prizorišč.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="400"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="416"/>
         <source>It&apos;s time to create the first location!</source>
         <translation>Čas je, da ustvarite svoje prvo prizorišče!</translation>
     </message>
@@ -12446,113 +12523,149 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::MenuView</name>
     <message>
-        <location filename="../ui/menu_view.cpp" line="322"/>
-        <location filename="../ui/menu_view.cpp" line="555"/>
+        <location filename="../ui/menu_view.cpp" line="331"/>
+        <location filename="../ui/menu_view.cpp" line="569"/>
         <source>Hide developers version</source>
         <translation>Skrij razvijalske različice</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="323"/>
-        <location filename="../ui/menu_view.cpp" line="556"/>
+        <location filename="../ui/menu_view.cpp" line="332"/>
+        <location filename="../ui/menu_view.cpp" line="570"/>
         <source>Show developers version</source>
         <translation>Pokaži razvijalske različice</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="398"/>
-        <location filename="../ui/menu_view.cpp" line="532"/>
+        <location filename="../ui/menu_view.cpp" line="412"/>
+        <location filename="../ui/menu_view.cpp" line="546"/>
         <source>All changes saved</source>
         <translation>Vse spremembe so shranjene</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="398"/>
-        <location filename="../ui/menu_view.cpp" line="531"/>
+        <location filename="../ui/menu_view.cpp" line="412"/>
+        <location filename="../ui/menu_view.cpp" line="545"/>
         <source>Save changes</source>
         <translation>Shrani spremembe</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="527"/>
+        <location filename="../ui/menu_view.cpp" line="541"/>
         <source>Sign in</source>
         <translation>Prijavi</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="528"/>
+        <location filename="../ui/menu_view.cpp" line="542"/>
         <source>Stories</source>
         <translation>Zgodbe</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="529"/>
+        <location filename="../ui/menu_view.cpp" line="543"/>
         <source>Create story</source>
         <translation>Ustvari zgodbo</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="530"/>
+        <location filename="../ui/menu_view.cpp" line="544"/>
         <source>Open story</source>
         <translation>Odpri zgodbo</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="535"/>
+        <location filename="../ui/menu_view.cpp" line="549"/>
         <source>Save current story as...</source>
         <translation>Shrani trenutno zgodbo kot ...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="536"/>
+        <location filename="../ui/menu_view.cpp" line="550"/>
         <source>Import...</source>
         <translation>Uvozi ...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="537"/>
+        <location filename="../ui/menu_view.cpp" line="551"/>
         <source>Export current document...</source>
         <translation>Izvozi trenutni dokument ...</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="538"/>
+        <location filename="../ui/menu_view.cpp" line="552"/>
         <source>Toggle full screen</source>
         <translation>Preklopi celozaslonsko</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="541"/>
+        <location filename="../ui/menu_view.cpp" line="555"/>
         <source>Application settings</source>
         <translation>Nastavitve programa</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="543"/>
+        <location filename="../ui/menu_view.cpp" line="557"/>
         <source>Show writing statistics</source>
         <translation>Pokaži statistiko pisanja</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="544"/>
+        <location filename="../ui/menu_view.cpp" line="558"/>
         <source>Show writing sprint timer</source>
         <translation>Pokaži časovnik šprinta pisanja</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="545"/>
+        <location filename="../ui/menu_view.cpp" line="559"/>
         <source>Show notifications</source>
         <translation>Pokaži obvestila</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="548"/>
+        <location filename="../ui/menu_view.cpp" line="562"/>
         <source>Version</source>
         <translation>Različica</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="549"/>
+        <location filename="../ui/menu_view.cpp" line="563"/>
         <source>About</source>
         <translation>O programu</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="551"/>
+        <location filename="../ui/menu_view.cpp" line="565"/>
         <source>Back to main menu</source>
         <translation>Nazaj na glavni meni</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="552"/>
+        <location filename="../ui/menu_view.cpp" line="566"/>
+        <location filename="../ui/menu_view.cpp" line="573"/>
         <source>Notifications</source>
         <translation>Obvestila</translation>
     </message>
     <message>
-        <location filename="../ui/menu_view.cpp" line="553"/>
+        <location filename="../ui/menu_view.cpp" line="567"/>
         <source>Notifications preferences</source>
         <translation>Nastavitve obveščanja</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="572"/>
+        <source>Account</source>
+        <translation>Račun</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="574"/>
+        <source>Writing statistics</source>
+        <translation>Statistika pisanja</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="575"/>
+        <source>Writing sprint</source>
+        <translation>Pisanje na čas</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="630"/>
+        <source>About Story Architect</source>
+        <translation>O programu Story Architect</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="635"/>
+        <source>Preferences</source>
+        <translation>Nastavitve</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="660"/>
+        <source>File</source>
+        <translation>Datoteka</translation>
+    </message>
+    <message>
+        <location filename="../ui/menu_view.cpp" line="674"/>
+        <source>View</source>
+        <translation>Pogled</translation>
     </message>
 </context>
 <context>
@@ -12658,73 +12771,73 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <name>Ui::MindMapView</name>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="151"/>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="258"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="264"/>
         <source>New node</source>
         <translation>Novo vozlišče</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="265"/>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="758"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="764"/>
         <source>Add child node</source>
         <translation>Dodaj podrejeno vozlišče</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="271"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="277"/>
         <source>Add sibling node</source>
         <translation>Dodaj enakovredno vozlišče</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="292"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="298"/>
         <source>New group</source>
         <translation>Nova skupina</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="316"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="322"/>
         <source>Choose the file to save image</source>
         <translation>Izberite datoteko, da shranite sliko</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="593"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="599"/>
         <source>Writing ideas</source>
         <translation>Ideje za pisanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="612"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="618"/>
         <source>Ideas</source>
         <translation>Ideje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="752"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="758"/>
         <source>Unlock ability to edit mind map</source>
         <translation>Odklenite možnost urejanja miselnih vzorcev</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="755"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="761"/>
         <source>Add node</source>
         <translation>Dodaj vozlišče</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="759"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="765"/>
         <source>Add group</source>
         <translation>Dodaj skupino</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="762"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="768"/>
         <source>Remove selected item</source>
         <translation>Odstrani izbrani element</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="765"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="777"/>
         <source>AI assistant</source>
         <translation>Asistent umetne inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="768"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="780"/>
         <source>Show connections titles only for the selected nodes</source>
         <translation>Pokaži naslove povezav samo za izbrana vozlišča</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="769"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="781"/>
         <source>Save mind map to image</source>
         <translation>Shrani miselni vzorec kot sliko</translation>
     </message>
@@ -12830,57 +12943,57 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelCardsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="197"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="198"/>
         <source>Please enter positive number</source>
         <translation>Vnesite pozitivno število</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="396"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="397"/>
         <source>View</source>
         <translation>Pogled</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="397"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="398"/>
         <source>Lock cards positions</source>
         <translation>Zakleni položaje kartončkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="398"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="399"/>
         <source>Arrange cards in rows</source>
         <translation>Razporedi kartončke v vrste</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="399"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="400"/>
         <source>Arrange cards in columns</source>
         <translation>Razporedi kartončke v stolpce</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="400"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="401"/>
         <source>Card size</source>
         <translation>Velikost kartončkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="401"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="402"/>
         <source>Card ratio</source>
         <translation>Razmerje stranic kartončkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="402"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="403"/>
         <source>Space between cards</source>
         <translation>Razmik med kartončki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="403"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="404"/>
         <source>Arrange cards by</source>
         <translation>Razporedi kartončke po</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="404"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="405"/>
         <source>in row</source>
         <translation>v vrstici</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="405"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_sidebar.cpp" line="406"/>
         <source>Keep empty to fit cards on screen</source>
         <translation>Ohrani prazno za kartončke na zaslonu</translation>
     </message>
@@ -12923,17 +13036,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Odstrani izbrani element</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="187"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="195"/>
         <source>Search cards</source>
         <translation>Išči med kartončki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="191"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="199"/>
         <source>Print cards</source>
         <translation>Natisni kartončke</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="194"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_toolbar.cpp" line="202"/>
         <source>Save cards to image</source>
         <translation>Shrani kartice v sliko</translation>
     </message>
@@ -12941,7 +13054,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelCardsView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="273"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_view.cpp" line="279"/>
         <source>Choose the file to save image</source>
         <translation>Izberite datoteko, da shranite sliko</translation>
     </message>
@@ -13194,137 +13307,76 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
 </context>
 <context>
-    <name>Ui::NovelOutlineSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="154"/>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="306"/>
-        <source>Search without case sensitive</source>
-        <translation>Pri iskanju ne razlikuj malih/velikih črk</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="155"/>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="307"/>
-        <source>Search with case sensitive</source>
-        <translation>Pri iskanju razlikuj male/velike črke</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="294"/>
-        <source>In the whole text</source>
-        <translation>V celotnem besedilu</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="288"/>
-        <source>Exit from search</source>
-        <translation>Izhod iz iskanja</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="291"/>
-        <source>Search</source>
-        <translation>Najdi</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="292"/>
-        <source>Enter search phrase here</source>
-        <translation>Tukaj vnesite iskani niz</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="294"/>
-        <source>In scene heading</source>
-        <translation>V naslovu prizora</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="294"/>
-        <source>In beats</source>
-        <translation>V koščkih</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="298"/>
-        <source>Go to the next search result</source>
-        <translation>Pojdi na naslednji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="302"/>
-        <source>Go to the previous search result</source>
-        <translation>Pojdi na prejšnji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="309"/>
-        <source>Replace with</source>
-        <translation>Zamenjaj z</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="310"/>
-        <source>Enter phrase to replace</source>
-        <translation>Tukaj vnesite niz za zamenjavo</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="311"/>
-        <source>Replace</source>
-        <translation>Zamenjaj</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_search_toolbar.cpp" line="312"/>
-        <source>All</source>
-        <translation>Vse</translation>
-    </message>
-</context>
-<context>
     <name>Ui::NovelOutlineView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="320"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="321"/>
         <source>Hide scene parameters</source>
         <translation>Skrij parametre prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="321"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="322"/>
         <source>Show scene parameters</source>
         <translation>Pokaži parametre prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="322"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="323"/>
         <source>Hide bookmarks list</source>
         <translation>Skrij seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="323"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="324"/>
         <source>Show bookmarks list</source>
         <translation>Pokaži seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1318"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1320"/>
         <source>Writing text</source>
         <translation>Pisanje besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1635"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1637"/>
         <source>Formatting</source>
         <translation>Oblikovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1636"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1638"/>
         <source>Scene parameters</source>
         <translation>Parametri prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1637"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1639"/>
         <source>Comments</source>
         <translation>Komentarji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1638"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1640"/>
         <source>AI assistant</source>
         <translation>Asistent umetne inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1639"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1641"/>
         <source>Bookmarks</source>
         <translation>Zaznamki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1642"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1644"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>Začnite z iztočnico npr. »Napiši roman o ...« ali »Napiši poglavje o ...«.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1661"/>
+        <source>In the whole text</source>
+        <translation>V celotnem besedilu</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1662"/>
+        <source>In scene heading</source>
+        <translation>V naslovu prizora</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1663"/>
+        <source>In beats</source>
+        <translation>V koščkih</translation>
     </message>
 </context>
 <context>
@@ -13490,82 +13542,6 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
 </context>
 <context>
-    <name>Ui::NovelTextSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="311"/>
-        <source>Search without case sensitive</source>
-        <translation>Pri iskanju ne razlikuj malih/velikih črk</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="312"/>
-        <source>Search with case sensitive</source>
-        <translation>Pri iskanju razlikuj male/velike črke</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="165"/>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="299"/>
-        <source>In the whole text</source>
-        <translation>V celotnem besedilu</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="293"/>
-        <source>Exit from search</source>
-        <translation>Izhod iz iskanja</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="296"/>
-        <source>Search</source>
-        <translation>Najdi</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="297"/>
-        <source>Enter search phrase here</source>
-        <translation>Tukaj vnesite iskani niz</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="299"/>
-        <source>In scene heading</source>
-        <translation>V naslovu prizora</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="299"/>
-        <source>In text</source>
-        <translation>V besedilu</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="303"/>
-        <source>Go to the next search result</source>
-        <translation>Pojdi na naslednji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="307"/>
-        <source>Go to the previous search result</source>
-        <translation>Pojdi na prejšnji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="314"/>
-        <source>Replace with</source>
-        <translation>Zamenjaj z</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="315"/>
-        <source>Enter phrase to replace</source>
-        <translation>Tukaj vnesite niz za zamenjavo</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="316"/>
-        <source>Replace</source>
-        <translation>Zamenjaj</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_search_toolbar.cpp" line="317"/>
-        <source>All</source>
-        <translation>Vse</translation>
-    </message>
-</context>
-<context>
     <name>Ui::NovelTextStructureView</name>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="120"/>
@@ -13627,78 +13603,84 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelTextView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="338"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="339"/>
         <source>Hide scene parameters</source>
         <translation>Skrij parametre prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="339"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="340"/>
         <source>Show scene parameters</source>
         <translation>Pokaži parametre prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="340"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="341"/>
         <source>Hide bookmarks list</source>
         <translation>Skrij seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="341"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="342"/>
         <source>Show bookmarks list</source>
         <translation>Pokaži seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1341"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1343"/>
         <source>Writing text</source>
         <translation>Pisanje besedila</translation>
     </message>
     <message numerus="yes">
-        <source>Script generation will takes %n word(s)</source>
-        <translation type="vanished">
-            <numerusform>Tvorjenje scenarija zahteva %n besedo</numerusform>
-            <numerusform>Tvorjenje scenarija zahteva %n besedi</numerusform>
-            <numerusform>Tvorjenje scenarija zahteva %n besede</numerusform>
-            <numerusform>Tvorjenje scenarija zahteva %n besed</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1566"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1568"/>
         <source>Script generation will take %n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Izdelava scenarija zahteva %n besedo</numerusform>
+            <numerusform>Izdelava scenarija zahteva %n besedi</numerusform>
+            <numerusform>Izdelava scenarija zahteva %n besede</numerusform>
+            <numerusform>Izdelava scenarija zahteva %n besed</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1680"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1682"/>
         <source>Formatting</source>
         <translation>Oblikovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1681"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1683"/>
         <source>Scene parameters</source>
         <translation>Parametri prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1682"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1684"/>
         <source>Comments</source>
         <translation>Komentarji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1683"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1685"/>
         <source>AI assistant</source>
         <translation>Asistent umetne inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1684"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1686"/>
         <source>Bookmarks</source>
         <translation>Zaznamki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1687"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1689"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>Začnite z iztočnico npr. »Napiši roman o ...« ali »Napiši poglavje o ...«.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1706"/>
+        <source>In the whole text</source>
+        <translation>V celotnem besedilu</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1707"/>
+        <source>In scene heading</source>
+        <translation>V naslovu prizora</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1708"/>
+        <source>In text</source>
+        <translation>V besedilu</translation>
     </message>
 </context>
 <context>
@@ -14246,17 +14228,17 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
 <context>
     <name>Ui::ProjectNavigator</name>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="264"/>
+        <location filename="../ui/project/project_navigator.cpp" line="279"/>
         <source>Show document structure</source>
         <translation>Pokaži strukturo dokumenta</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="272"/>
+        <location filename="../ui/project/project_navigator.cpp" line="287"/>
         <source>Add document</source>
         <translation>Dodaj dokument</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="273"/>
+        <location filename="../ui/project/project_navigator.cpp" line="288"/>
         <source>Empty recycle bin</source>
         <translation>Izprazni koš</translation>
     </message>
@@ -14989,77 +14971,107 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
 <context>
     <name>Ui::ScreenplayBreakdownView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="393"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="394"/>
         <source>Hide scene parameters</source>
         <translation>Skrij parametre prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="395"/>
         <source>Show scene parameters</source>
         <translation>Pokaži parametre prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="395"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="396"/>
         <source>Hide bookmarks list</source>
         <translation>Skrij seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="396"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="397"/>
         <source>Show bookmarks list</source>
         <translation>Pokaži seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="398"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="399"/>
         <source>Hide screenplay dictionaries</source>
         <translation>Skrij slovarje scenarija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="399"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="400"/>
         <source>Show screenplay dictionaries</source>
         <translation>Pokaži slovarje scenarija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1150"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1151"/>
         <source>Do you really want to remove element &quot;%1&quot; from current scene?</source>
         <translation>Ali res želite odstraniti postavko »%1« iz trenutnega prizora?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2013"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2014"/>
         <source>Elements</source>
         <translation>Postavke</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1152"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2035"/>
+        <source>In the whole text</source>
+        <translation>V celotnem besedilu</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2036"/>
+        <source>In scene heading</source>
+        <translation>V naslovu prizora</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2037"/>
+        <source>In cast list</source>
+        <translation>Na seznamu zasedbe</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2038"/>
+        <source>In action</source>
+        <translation>V dejanju</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2039"/>
+        <source>In character</source>
+        <translation>V imenih likov</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2040"/>
+        <source>In dialogue</source>
+        <translation>V dialogih</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1153"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1153"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1154"/>
         <source>Yes, remove</source>
         <translation>Da, odstrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2014"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2015"/>
         <source>Formatting</source>
         <translation>Oblikovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2015"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2016"/>
         <source>Scene parameters</source>
         <translation>Parametri prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2016"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2017"/>
         <source>Comments</source>
         <translation>Komentarji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2017"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2018"/>
         <source>Bookmarks</source>
         <translation>Zaznamki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2018"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2019"/>
         <source>Dictionaries</source>
         <translation>Slovarji</translation>
     </message>
@@ -15165,57 +15177,57 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
 <context>
     <name>Ui::ScreenplayCardsSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="197"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="199"/>
         <source>Please enter positive number</source>
         <translation>Vnesite pozitivno število</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="396"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="398"/>
         <source>View</source>
         <translation>Pogled</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="397"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="399"/>
         <source>Lock cards positions</source>
         <translation>Zakleni položaje kartončkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="398"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="400"/>
         <source>Arrange cards in rows</source>
         <translation>Razporedi kartončke v vrste</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="399"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="401"/>
         <source>Arrange cards in columns</source>
         <translation>Razporedi kartončke v stolpce</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="400"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="402"/>
         <source>Card size</source>
         <translation>Velikost kartončkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="401"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="403"/>
         <source>Card ratio</source>
         <translation>Razmerje stranic kartončkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="402"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="404"/>
         <source>Space between cards</source>
         <translation>Razmik med kartončki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="403"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="405"/>
         <source>Arrange cards by</source>
         <translation>Razporedi kartončke po</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="404"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="406"/>
         <source>in row</source>
         <translation>v vrstici</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="405"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_sidebar.cpp" line="407"/>
         <source>Keep empty to fit cards on screen</source>
         <translation>Ohrani prazno za kartončke na zaslonu</translation>
     </message>
@@ -15258,17 +15270,17 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
         <translation>Odstrani izbrani element</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="189"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="197"/>
         <source>Search cards</source>
         <translation>Išči med kartončki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="193"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="201"/>
         <source>Print cards</source>
         <translation>Natisni kartončke</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="196"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_toolbar.cpp" line="204"/>
         <source>Save cards to image</source>
         <translation>Shrani kartice v sliko</translation>
     </message>
@@ -15276,7 +15288,7 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
 <context>
     <name>Ui::ScreenplayCardsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="278"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_view.cpp" line="284"/>
         <source>Choose the file to save image</source>
         <translation>Izberite datoteko, da shranite sliko</translation>
     </message>
@@ -16199,44 +16211,44 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1588"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1609"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1587"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1608"/>
         <source>Merge paragraph</source>
         <translation>Spoji odstavke</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1590"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1611"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1589"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1610"/>
         <source>Split paragraph</source>
         <translation>Razdeli odstavek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1555"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1638"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1554"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1637"/>
         <source>Bookmark</source>
         <translation>Zaznamek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1559"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1642"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1558"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1641"/>
         <source>Add</source>
         <translation>Dodaj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1565"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1648"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1564"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1647"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1571"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1654"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1570"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1653"/>
         <source>Remove</source>
         <translation>Odstrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1578"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1661"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1577"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1660"/>
         <source>Show/hide list</source>
         <translation>Pokaži/skrij seznam</translation>
     </message>
@@ -16341,117 +16353,6 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     </message>
 </context>
 <context>
-    <name>Ui::ScreenplayTextSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="312"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="312"/>
-        <source>Search without case sensitive</source>
-        <translation>Pri iskanju ne razlikuj malih/velikih črk</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="313"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="313"/>
-        <source>Search with case sensitive</source>
-        <translation>Pri iskanju razlikuj male/velike črke</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="165"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="299"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="165"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="299"/>
-        <source>In the whole text</source>
-        <translation>V celotnem besedilu</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="293"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="293"/>
-        <source>Exit from search</source>
-        <translation>Izhod iz iskanja</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="296"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="296"/>
-        <source>Search</source>
-        <translation>Najdi</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="297"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="297"/>
-        <source>Enter search phrase here</source>
-        <translation>Tukaj vnesite iskani niz</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="299"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="299"/>
-        <source>In scene heading</source>
-        <translation>V naslovu prizora</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="299"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="299"/>
-        <source>In cast list</source>
-        <translation>Na seznamu zasedbe</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="300"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="300"/>
-        <source>In action</source>
-        <translation>V dejanju</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="300"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="300"/>
-        <source>In character</source>
-        <translation>V imenih likov</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="300"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="300"/>
-        <source>In dialogue</source>
-        <translation>V dialogih</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="304"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="304"/>
-        <source>Go to the next search result</source>
-        <translation>Pojdi na naslednji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="308"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="308"/>
-        <source>Go to the previous search result</source>
-        <translation>Pojdi na prejšnji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="315"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="315"/>
-        <source>Replace with</source>
-        <translation>Zamenjaj z</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="316"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="316"/>
-        <source>Enter phrase to replace</source>
-        <translation>Tukaj vnesite niz za zamenjavo</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="317"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="317"/>
-        <source>Replace</source>
-        <translation>Zamenjaj</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_search_toolbar.cpp" line="318"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_search_toolbar.cpp" line="318"/>
-        <source>All</source>
-        <translation>Vse</translation>
-    </message>
-</context>
-<context>
     <name>Ui::ScreenplayTextStructureView</name>
     <message>
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="121"/>
@@ -16512,129 +16413,284 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
 <context>
     <name>Ui::ScreenplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="388"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="389"/>
         <source>Hide scene parameters</source>
         <translation>Skrij parametre prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="389"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="390"/>
         <source>Show scene parameters</source>
         <translation>Pokaži parametre prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="390"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="391"/>
         <source>Hide bookmarks list</source>
         <translation>Skrij seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="393"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="394"/>
         <source>Hide screenplay dictionaries</source>
         <translation>Skrij slovarje scenarija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="395"/>
         <source>Show screenplay dictionaries</source>
         <translation>Pokaži slovarje scenarija</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1440"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1442"/>
         <source>Writing text</source>
         <translation>Pisanje besedila</translation>
     </message>
     <message numerus="yes">
-        <source>Synopsis generation will takes %n word(s)</source>
-        <translation type="vanished">
-            <numerusform>Tvorjenje sinopsisa zahteva %n besedo</numerusform>
-            <numerusform>Tvorjenje sinopsisa zahteva %n besedi</numerusform>
-            <numerusform>Tvorjenje sinopsisa zahteva %n besede</numerusform>
-            <numerusform>Tvorjenje sinopsisa zahteva %n besed</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1754"/>
-        <source>Synopsis generation will take %n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1756"/>
+        <source>Synopsis generation will take %n word(s)</source>
+        <translation>
+            <numerusform>Izdelava sinopsisa zahteva %n besedo</numerusform>
+            <numerusform>Izdelava sinopsisa zahteva %n besedi</numerusform>
+            <numerusform>Izdelava sinopsisa zahteva %n besede</numerusform>
+            <numerusform>Izdelava sinopsisa zahteva %n besed</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1758"/>
         <source>Novel generation will take %n word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Izdelava romana zahteva %n besedo</numerusform>
+            <numerusform>Izdelava romana zahteva %n besedi</numerusform>
+            <numerusform>Izdelava romana zahteva %n besede</numerusform>
+            <numerusform>Izdelava romana zahteva %n besed</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1875"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1877"/>
         <source>Formatting</source>
         <translation>Oblikovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1876"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1878"/>
         <source>Scene parameters</source>
         <translation>Parametri prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1877"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1879"/>
         <source>Comments</source>
         <translation>Komentarji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1878"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1880"/>
         <source>AI assistant</source>
         <translation>Asistent umetne inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1879"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1881"/>
         <source>Bookmarks</source>
         <translation>Zaznamki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1880"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1882"/>
         <source>Dictionaries</source>
         <translation>Slovarji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1883"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1885"/>
         <source>Start prompt from something like &quot;Write a screenplay about ...&quot;, or &quot;Write a short movie screenplay about ...&quot;</source>
         <translation>Začnite iztočnico oz. vzpodbudo z besedami, kot so: »Napiši scenarij o ...« ali »Napiši scenarij za kratek film o  ...«</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="391"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1902"/>
+        <source>In the whole text</source>
+        <translation>V celotnem besedilu</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1903"/>
+        <source>In scene heading</source>
+        <translation>V naslovu prizora</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1904"/>
+        <source>In cast list</source>
+        <translation>Na seznamu zasedbe</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1905"/>
+        <source>In action</source>
+        <translation>V dejanju</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1906"/>
+        <source>In character</source>
+        <translation>V imenih likov</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1907"/>
+        <source>In dialogue</source>
+        <translation>V dialogih</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="392"/>
         <source>Show bookmarks list</source>
         <translation>Pokaži seznam zaznamkov</translation>
     </message>
 </context>
 <context>
+    <name>Ui::ScreenplayTimelineSearchToolbar</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="122"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="242"/>
+        <source>Search without case sensitive</source>
+        <translation>Pri iskanju ne razlikuj malih/velikih črk</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="123"/>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="243"/>
+        <source>Search with case sensitive</source>
+        <translation>Pri iskanju razlikuj male/velike črke</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="128"/>
+        <source>In the whole text</source>
+        <translation>V celotnem besedilu</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="231"/>
+        <source>Exit from search</source>
+        <translation>Izhod iz iskanja</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="234"/>
+        <source>Search</source>
+        <translation>Najdi</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="235"/>
+        <source>Enter search phrase here</source>
+        <translation>Tukaj vnesite iskani niz</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="237"/>
+        <source>In the whole card content</source>
+        <translation>V celotni vsebini kartončka</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="237"/>
+        <source>In titles &amp; headings</source>
+        <translation>V naslovih</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="238"/>
+        <source>In text</source>
+        <translation>V besedilu</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_search_toolbar.cpp" line="238"/>
+        <source>In tags</source>
+        <translation>V značkah</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScreenplayTimelineSidebar</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="328"/>
+        <source>View</source>
+        <translation>Pogled</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="329"/>
+        <source>Arrange timeline horizontal</source>
+        <translation>Razporedi časovnico vodoravno</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="330"/>
+        <source>Arrange timeline vertical</source>
+        <translation>Razporedi časovnico navpično</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="331"/>
+        <source>Card size</source>
+        <translation>Velikost kartončkov</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="332"/>
+        <source>Card ratio</source>
+        <translation>Razmerje stranic kartončkov</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_sidebar.cpp" line="333"/>
+        <source>Space between cards</source>
+        <translation>Razmik med kartončki</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScreenplayTimelineToolbar</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="150"/>
+        <source>Unlock ability to edit screenplay cards</source>
+        <translation>Odkleni možnost urejanja kartončkov scenarija</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="152"/>
+        <source>Undo last action</source>
+        <translation>Razveljavi zadnje dejanje</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="156"/>
+        <source>Redo last action</source>
+        <translation>Ponovi zadnje dejanje</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="159"/>
+        <source>Add scene</source>
+        <translation>Dodaj prizor</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="160"/>
+        <source>Remove selected item</source>
+        <translation>Odstrani izbrani element</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="170"/>
+        <source>Search cards</source>
+        <translation>Išči med kartončki</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_toolbar.cpp" line="173"/>
+        <source>Save cards to image</source>
+        <translation>Shrani kartice v sliko</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScreenplayTimelineView</name>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_timeline/ui/screenplay_timeline_view.cpp" line="308"/>
+        <source>Choose the file to save image</source>
+        <translation>Izberite datoteko, da shranite sliko</translation>
+    </message>
+</context>
+<context>
     <name>Ui::ScreenplayTreatmentEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1219"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1218"/>
         <source>Bookmark</source>
         <translation>Zaznamek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1223"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1222"/>
         <source>Add</source>
         <translation>Dodaj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1229"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1228"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1235"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1234"/>
         <source>Remove</source>
         <translation>Odstrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1242"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1241"/>
         <source>Show/hide list</source>
         <translation>Pokaži/skrij seznam</translation>
     </message>
@@ -16708,137 +16764,136 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     </message>
 </context>
 <context>
-    <name>Ui::ScreenplayTreatmentSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="155"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="309"/>
-        <source>Search without case sensitive</source>
-        <translation>Pri iskanju ne razlikuj malih/velikih črk</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="156"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="310"/>
-        <source>Search with case sensitive</source>
-        <translation>Pri iskanju razlikuj male/velike črke</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="161"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="297"/>
-        <source>In the whole text</source>
-        <translation>V celotnem besedilu</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="291"/>
-        <source>Exit from search</source>
-        <translation>Izhod iz iskanja</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="294"/>
-        <source>Search</source>
-        <translation>Najdi</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="295"/>
-        <source>Enter search phrase here</source>
-        <translation>Tukaj vnesite iskani niz</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="297"/>
-        <source>In scene heading</source>
-        <translation>V naslovu prizora</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="297"/>
-        <source>In beats</source>
-        <translation>V koščkih</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="301"/>
-        <source>Go to the next search result</source>
-        <translation>Pojdi na naslednji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="305"/>
-        <source>Go to the previous search result</source>
-        <translation>Pojdi na prejšnji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="312"/>
-        <source>Replace with</source>
-        <translation>Zamenjaj z</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="313"/>
-        <source>Enter phrase to replace</source>
-        <translation>Tukaj vnesite niz za zamenjavo</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="314"/>
-        <source>Replace</source>
-        <translation>Zamenjaj</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_search_toolbar.cpp" line="315"/>
-        <source>All</source>
-        <translation>Vse</translation>
-    </message>
-</context>
-<context>
     <name>Ui::ScreenplayTreatmentView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="350"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="351"/>
         <source>Hide scene parameters</source>
         <translation>Skrij parametre prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="351"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="352"/>
         <source>Show scene parameters</source>
         <translation>Pokaži parametre prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="352"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="353"/>
         <source>Hide bookmarks list</source>
         <translation>Skrij seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="353"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="354"/>
         <source>Show bookmarks list</source>
         <translation>Pokaži seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1344"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1345"/>
         <source>Writing text</source>
         <translation>Pisanje besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1712"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1713"/>
         <source>Formatting</source>
         <translation>Oblikovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1713"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1714"/>
         <source>Scene parameters</source>
         <translation>Parametri prizora</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1714"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1715"/>
         <source>Comments</source>
         <translation>Komentarji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1715"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1716"/>
         <source>AI assistant</source>
         <translation>Asistent umetne inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1716"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1717"/>
         <source>Bookmarks</source>
         <translation>Zaznamki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1719"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1720"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>Začnite z iztočnico npr. »Napiši roman o ...« ali »Napiši poglavje o ...«.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1737"/>
+        <source>In the whole text</source>
+        <translation>V celotnem besedilu</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1738"/>
+        <source>In scene heading</source>
+        <translation>V naslovu prizora</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1739"/>
+        <source>In beats</source>
+        <translation>V koščkih</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::SearchToolbar</name>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="193"/>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="329"/>
+        <source>Search without case sensitive</source>
+        <translation>Pri iskanju ne razlikuj malih/velikih črk</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="194"/>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="330"/>
+        <source>Search with case sensitive</source>
+        <translation>Pri iskanju razlikuj male/velike črke</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="311"/>
+        <source>Exit from search</source>
+        <translation>Izhod iz iskanja</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="314"/>
+        <source>Search</source>
+        <translation>Najdi</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="315"/>
+        <source>Enter search phrase here</source>
+        <translation>Tukaj vnesite iskani niz</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="321"/>
+        <source>Go to the next search result</source>
+        <translation>Pojdi na naslednji zadetek</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="325"/>
+        <source>Go to the previous search result</source>
+        <translation>Pojdi na prejšnji zadetek</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="332"/>
+        <source>Replace with</source>
+        <translation>Zamenjaj z</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="333"/>
+        <source>Enter phrase to replace</source>
+        <translation>Tukaj vnesite niz za zamenjavo</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="334"/>
+        <source>Replace</source>
+        <translation>Zamenjaj</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="335"/>
+        <source>All</source>
+        <translation>Vse</translation>
     </message>
 </context>
 <context>
@@ -18349,27 +18404,27 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
 <context>
     <name>Ui::SimpleTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="767"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="770"/>
         <source>Bookmark</source>
         <translation>Zaznamek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="771"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="774"/>
         <source>Add</source>
         <translation>Dodaj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="776"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="779"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="781"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="784"/>
         <source>Remove</source>
         <translation>Odstrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="788"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="791"/>
         <source>Show/hide list</source>
         <translation>Pokaži/skrij seznam</translation>
     </message>
@@ -18445,104 +18500,44 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
 <context>
     <name>Ui::SimpleTextExportDialog</name>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="194"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="222"/>
         <source>Export text document</source>
         <translation>Izvozi besedilni dokument</translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="196"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="224"/>
         <source>Format</source>
         <translation>Oblika</translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="197"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="225"/>
         <source>Include inline notes</source>
         <translation>Vključi vmesne opombe</translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="198"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="226"/>
         <source>Include review marks</source>
         <translation>Vključi oznake pregleda</translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="199"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="227"/>
         <source>Watermark</source>
         <translation>Vodni žig</translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="201"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="229"/>
         <source>Open document after export</source>
         <translation>Po izvozu odpri dokument</translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="202"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="230"/>
         <source>Export</source>
         <translation>Izvozi</translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="203"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="231"/>
         <source>Cancel</source>
         <translation>Prekliči</translation>
-    </message>
-</context>
-<context>
-    <name>Ui::SimpleTextSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="121"/>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="235"/>
-        <source>Search without case sensitive</source>
-        <translation>Pri iskanju ne razlikuj malih/velikih črk</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="122"/>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="236"/>
-        <source>Search with case sensitive</source>
-        <translation>Pri iskanju razlikuj male/velike črke</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="221"/>
-        <source>Exit from search</source>
-        <translation>Izhod iz iskanja</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="224"/>
-        <source>Search</source>
-        <translation>Najdi</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="225"/>
-        <source>Enter search phrase here</source>
-        <translation>Tukaj vnesite iskani niz</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="227"/>
-        <source>Go to the next search result</source>
-        <translation>Pojdi na naslednji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="231"/>
-        <source>Go to the previous search result</source>
-        <translation>Pojdi na prejšnji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="238"/>
-        <source>Replace with</source>
-        <translation>Zamenjaj z</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="239"/>
-        <source>Enter phrase to replace</source>
-        <translation>Tukaj vnesite niz za zamenjavo</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="240"/>
-        <source>Replace</source>
-        <translation>Zamenjaj</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_search_toolbar.cpp" line="241"/>
-        <source>All</source>
-        <translation>Vse</translation>
     </message>
 </context>
 <context>
@@ -18567,32 +18562,32 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
         <translation>Pokaži seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="891"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="892"/>
         <source>Writing text</source>
         <translation>Pisanje besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1204"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1205"/>
         <source>Formatting</source>
         <translation>Oblikovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1205"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1206"/>
         <source>Comments</source>
         <translation>Komentarji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1206"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1207"/>
         <source>AI assistant</source>
         <translation>Asistent umetne inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1207"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1208"/>
         <source>Bookmarks</source>
         <translation>Zaznamki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1210"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1211"/>
         <source>Start prompt from something like &quot;Write a story about ...&quot;, or &quot;Write about ...&quot;, or simply ask AI about anything</source>
         <translation>Iztočnico začnite z npr. »Napiši zgodbo o ...« ali »Napiši o ...« ali preprosto vprašajte um. inteligenco o čemer koli.</translation>
     </message>
@@ -18787,27 +18782,27 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
 <context>
     <name>Ui::StageplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1317"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1324"/>
         <source>Bookmark</source>
         <translation>Zaznamek</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1321"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1328"/>
         <source>Add</source>
         <translation>Dodaj</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1327"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1334"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1332"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1339"/>
         <source>Remove</source>
         <translation>Odstrani</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1339"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1346"/>
         <source>Show/hide list</source>
         <translation>Pokaži/skrij seznam</translation>
     </message>
@@ -18881,87 +18876,6 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
     </message>
 </context>
 <context>
-    <name>Ui::StageplayTextSearchToolbar</name>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="159"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="311"/>
-        <source>Search without case sensitive</source>
-        <translation>Pri iskanju ne razlikuj malih/velikih črk</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="160"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="312"/>
-        <source>Search with case sensitive</source>
-        <translation>Pri iskanju razlikuj male/velike črke</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="165"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="295"/>
-        <source>In the whole text</source>
-        <translation>V celotnem besedilu</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="288"/>
-        <source>Exit from search</source>
-        <translation>Izhod iz iskanja</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="291"/>
-        <source>Search</source>
-        <translation>Najdi</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="292"/>
-        <source>Enter search phrase here</source>
-        <translation>Tukaj vnesite iskani niz</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="296"/>
-        <source>In scene heading</source>
-        <translation>V naslovu prizora</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="297"/>
-        <source>In character</source>
-        <translation>V imenih likov</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="298"/>
-        <source>In dialogue</source>
-        <translation>V dialogih</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="303"/>
-        <source>Go to the next search result</source>
-        <translation>Pojdi na naslednji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="307"/>
-        <source>Go to the previous search result</source>
-        <translation>Pojdi na prejšnji zadetek</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="314"/>
-        <source>Replace with</source>
-        <translation>Zamenjaj z</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="315"/>
-        <source>Enter phrase to replace</source>
-        <translation>Tukaj vnesite niz za zamenjavo</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="316"/>
-        <source>Replace</source>
-        <translation>Zamenjaj</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_search_toolbar.cpp" line="317"/>
-        <source>All</source>
-        <translation>Vse</translation>
-    </message>
-</context>
-<context>
     <name>Ui::StageplayTextStructureView</name>
     <message>
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="141"/>
@@ -18982,34 +18896,54 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
         <translation>Pokaži seznam zaznamkov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="909"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="910"/>
         <source>Writing text</source>
         <translation>Pisanje besedila</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1260"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1261"/>
         <source>Formatting</source>
         <translation>Oblikovanje</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1261"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1262"/>
         <source>Comments</source>
         <translation>Komentarji</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1262"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1263"/>
         <source>AI assistant</source>
         <translation>Asistent umetne inteligence</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1263"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1264"/>
         <source>Bookmarks</source>
         <translation>Zaznamki</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1266"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1267"/>
         <source>Start prompt from something like &quot;Write a stage play about ...&quot;</source>
         <translation>Iztočnico začnite z npr. »Napiši dramsko besedilo o ...«</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1283"/>
+        <source>In the whole text</source>
+        <translation>V celotnem besedilu</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1284"/>
+        <source>In scene heading</source>
+        <translation>V naslovu prizora</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1285"/>
+        <source>In character</source>
+        <translation>V imenih likov</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1286"/>
+        <source>In dialogue</source>
+        <translation>V dialogih</translation>
     </message>
 </context>
 <context>
@@ -19892,47 +19826,47 @@ Projekt shrani vsake tri sekunde, ko ne uporabljate miške ali tipkovnice.
 <context>
     <name>Ui::WorldsMapView</name>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="182"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="188"/>
         <source>Choose the file to save image</source>
         <translation>Izberite datoteko, da shranite sliko</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="382"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="388"/>
         <source>Unlock ability to edit worlds map</source>
         <translation>Odklenite možnost urejanja zemljevida svetov</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="383"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="389"/>
         <source>Add world</source>
         <translation>Dodaj svet</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="384"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="390"/>
         <source>Add group</source>
         <translation>Dodaj skupino</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="385"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="393"/>
         <source>Remove selected item</source>
         <translation>Odstrani izbrani element</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="388"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="404"/>
         <source>Show routes titles only for the selected worlds</source>
         <translation>Pokaži naslove poti le za izbrane svetove</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="389"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="405"/>
         <source>Save worlds map to image</source>
         <translation>Shrani zemljevid svetov kot sliko</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="391"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="407"/>
         <source>Here will be a worlds map.</source>
         <translation>Tukaj bo prikazan zemljevid svetov.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="392"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="408"/>
         <source>It&apos;s time to create the first world!</source>
         <translation>Čas je, da ustvarite svojo prvi svet!</translation>
     </message>
