@@ -613,8 +613,8 @@ TemplatesFacade::TemplatesFacade()
                                          });
     d->loadTemplates<ComicBookTemplate>(kComicBookTemplatesDirectory,
                                         {
-                                            QLatin1String("classic_world"),
-                                            QLatin1String("classic_us"),
+                                            QLatin1String("world"),
+                                            QLatin1String("us"),
                                             QLatin1String("script_world"),
                                             QLatin1String("script_us"),
                                         });
