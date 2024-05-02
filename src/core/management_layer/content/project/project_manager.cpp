@@ -604,6 +604,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     // Для документов, имеющих разрешение на экспорт, можно вызвать экспорт
     if (_index.isValid() && q->isCurrentDocumentExportAviable) {
         auto exportCurrentFileAction = new QAction(tr("Export current file..."));
+        exportCurrentFileAction->setSeparator(true);
         exportCurrentFileAction->setIconText(u8"\U000f0207");
         connect(exportCurrentFileAction, &QAction::triggered, q,
                 [this] { q->exportCurrentDocumentPressed(); });
