@@ -984,6 +984,11 @@ void CardsGraphicsView::Implementation::reorderCardInHorizontalLines(const QMode
     const auto position = positionsInterval.first + movedCardX * pxDistance;
     movedCard->setPositionOnLine(position);
     emit model->dataChanged(_index, _index);
+
+    //
+    // Перерисуем сцену, чтобы не оставалось артифактов от перетаскивания карточек
+    //
+    q->updateScene({ scene->sceneRect() });
 }
 
 void CardsGraphicsView::Implementation::reorderCardInVerticalLines(const QModelIndex& _index)
@@ -1013,6 +1018,11 @@ void CardsGraphicsView::Implementation::reorderCardInVerticalLines(const QModelI
     const auto position = positionsInterval.first + movedCardY * pxDistance;
     movedCard->setPositionOnLine(position);
     emit model->dataChanged(_index, _index);
+
+    //
+    // Перерисуем сцену, чтобы не оставалось артифактов от перетаскивания карточек
+    //
+    q->updateScene({ scene->sceneRect() });
 }
 
 void CardsGraphicsView::Implementation::reorderCards()
