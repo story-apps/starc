@@ -66,11 +66,6 @@ public:
     QString openFormatString(const QVector<QTextLayout::FormatRange>& formats,
                              int _formatIndex) const;
 
-    /**
-     * @brief Очистить начало параграфа от пробельных символов
-     */
-    void removeWhitespaceAtBegin(QString& _paragraph) const;
-
 
     AbstractMarkdownExporter* q = nullptr;
 
@@ -319,15 +314,6 @@ QString AbstractMarkdownExporter::Implementation::openFormatString(
     return formatString;
 }
 
-void AbstractMarkdownExporter::Implementation::removeWhitespaceAtBegin(QString& _paragraph) const
-{
-    int spaceIndex = 0;
-    while (_paragraph[spaceIndex].isSpace()) {
-        ++spaceIndex;
-    }
-    _paragraph.remove(0, spaceIndex);
-}
-
 
 // ****
 
@@ -412,11 +398,6 @@ void AbstractMarkdownExporter::exportTo(AbstractModel* _model, int _fromPosition
         // Обрабатывать форматирование надо с конца, чтобы не сбилась их позиция вставки
         //
         for (int formatIndex = formats.size() - 1; formatIndex >= 0; --formatIndex) {
-
-            //
-            // Далее работаем с форматированием
-            //
-
             //
             // Пишем закрывающий формат
             //
@@ -539,26 +520,31 @@ void AbstractMarkdownExporter::exportTo(AbstractModel* _model, int _fromPosition
         paragraphText = paragraphText.replace(QChar::LineSeparator, QChar::LineFeed);
 
         //
-        // Очистим пробельные символы в начале абзаца, чтобы не сбивалось форматирование
-        //
-        d->removeWhitespaceAtBegin(paragraphText);
-
-        //
         // Обрабатываем блок
         //
-        const bool isProcessed = processBlock(paragraphText, TextBlockStyle::forBlock(block));
+        const bool isProcessed = processBlock(paragraphText, block, _exportOptions);
 
         //
         // Записываем только обработанные блоки
         //
         if (isProcessed) {
-            indentationAtBegin(paragraphText, previousBlockType, TextBlockStyle::forBlock(block));
+            addIndentationAtBegin(paragraphText, previousBlockType,
+                                  TextBlockStyle::forBlock(block));
             markdownFile.write(paragraphText.toUtf8());
             previousBlockType = TextBlockStyle::forBlock(block);
         }
     }
     markdownFile.write("\n");
     markdownFile.close();
+}
+
+void AbstractMarkdownExporter::removeWhitespaceAtBegin(QString& _paragraph) const
+{
+    int spaceIndex = 0;
+    while (spaceIndex < _paragraph.size() && _paragraph[spaceIndex].isSpace()) {
+        ++spaceIndex;
+    }
+    _paragraph.remove(0, spaceIndex);
 }
 
 } // namespace BusinessLayer

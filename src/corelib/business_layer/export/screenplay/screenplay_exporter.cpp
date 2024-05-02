@@ -42,11 +42,11 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
     const auto& exportOptions = static_cast<const ScreenplayExportOptions&>(_exportOptions);
 
     //
-    // Скорем блок, если в нём нет необходимости
+    // Скроем блок, если в нём нет необходимости
     //
 
     //
-    // Если не нужно печатать, эту сцену, то удаляем её
+    // Если не нужно печатать эту сцену, то удаляем её
     //
     if (!exportOptions.exportScenes.isEmpty()) {
         const auto blockData = static_cast<TextBlockData*>(_cursor.block().userData());
@@ -144,6 +144,17 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
                       return format;
                   };
             TextHelper::updateSelectionFormatting(_cursor, updateFormatting);
+        }
+    }
+
+    //
+    // Удаляем невидимые блоки, если экспортируем поэпизодник
+    //
+    if (!_cursor.block().isVisible() && exportOptions.includeTreatment) {
+        _cursor.select(QTextCursor::BlockUnderCursor);
+        if (_cursor.hasSelection()) {
+            _cursor.deleteChar();
+            return true;
         }
     }
 
