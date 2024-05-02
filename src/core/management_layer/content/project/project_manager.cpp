@@ -601,6 +601,15 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         isDocumentActionAdded = true;
     }
 
+    // Для документов, имеющих разрешение на экспорт, можно вызвать экспорт
+    if (_index.isValid() && q->isCurrentDocumentExportAviable) {
+        auto exportCurrentFileAction = new QAction(tr("Export current file..."));
+        exportCurrentFileAction->setIconText(u8"\U000f0207");
+        connect(exportCurrentFileAction, &QAction::triggered, q,
+                [this] { q->exportCurrentDocumentPressed(); });
+        menuActions.append(exportCurrentFileAction);
+    }
+
     //
     // Документы облачного проекта можно расшарить
     //
@@ -3185,6 +3194,11 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
         createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), synopsisItem,
         _treatment.toUtf8());
 }
+
+void ProjectManager::setCurrentDocumentExportAviable(bool _available)
+{
+    isCurrentDocumentExportAviable = _available;
+};
 
 void ProjectManager::addNovel(const QString& _name, const QString& _text)
 {
