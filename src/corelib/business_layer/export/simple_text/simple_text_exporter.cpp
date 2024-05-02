@@ -10,6 +10,8 @@
 
 namespace BusinessLayer {
 
+SimpleTextExporter::~SimpleTextExporter() = default;
+
 TextDocument* SimpleTextExporter::createDocument(const ExportOptions& _exportOptions) const
 {
     Q_UNUSED(_exportOptions)
@@ -25,4 +27,5 @@ const TextTemplate& SimpleTextExporter::documentTemplate(const ExportOptions& _e
 {
     return TemplatesFacade::simpleTextTemplate(_exportOptions.templateId);
 }
+
 } // namespace BusinessLayer

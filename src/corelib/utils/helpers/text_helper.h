@@ -108,4 +108,9 @@ public:
      */
     static void applyTextFormattingForBlock(QTextCursor& _cursor,
                                             const QTextCharFormat& _newFormat);
+
+    /**
+     * @brief Находится ли текст в верхнем регистре
+     */
+    static bool isUppercase(const QString& _text);
 };

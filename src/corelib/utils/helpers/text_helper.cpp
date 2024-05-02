@@ -589,3 +589,8 @@ void TextHelper::applyTextFormattingForBlock(QTextCursor& _cursor,
 
     _cursor.clearSelection();
 }
+
+bool TextHelper::isUppercase(const QString& _text)
+{
+    return _text == TextHelper::smartToUpper(_text);
+}

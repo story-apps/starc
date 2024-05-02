@@ -17,7 +17,6 @@
 namespace BusinessLayer {
 
 namespace {
-
 /**
  * @brief Список мест, в которые умеет фонтан
  */
@@ -31,760 +30,338 @@ const QStringList sceneHeadingStart = {
     QCoreApplication::translate("BusinessLayer::FountainExporter", "EXT/INT"),
     QCoreApplication::translate("BusinessLayer::FountainExporter", "I/E"),
 };
-
-/**
- * @brief Форматы, которые подерживает fountain
- */
-enum TextSelectionTypes {
-    Bold,
-    Italic,
-    Underline,
-};
-
-/**
- * @brief Символы форматирования
- */
-static const QVector<QPair<TextSelectionTypes, QString>> kFormatSymbols{
-    { Bold, "**" },
-    { Italic, "*" },
-    { Underline, "_" },
-};
-
-//
-// Формируем закрывающую форматную строку
-//
-static QString closeFormatString(const QVector<QTextLayout::FormatRange>& formats, int _formatIndex)
-{
-    //
-    // Собираем текущие форматы
-    //
-    QSet<TextSelectionTypes> currentFormats;
-    if (formats[_formatIndex].format.font().bold()) {
-        currentFormats.insert(TextSelectionTypes::Bold);
-    }
-    if (formats[_formatIndex].format.font().italic()) {
-        currentFormats.insert(TextSelectionTypes::Italic);
-    }
-    if (formats[_formatIndex].format.font().underline()) {
-        currentFormats.insert(TextSelectionTypes::Underline);
-    }
-
-    QString formatString;
-
-    //
-    // Смотрим в какой последовательности начинаются текущие форматы
-    // и в соответствии с этим формируем форматную строку
-    //
-    for (int index = _formatIndex - 1; index >= 0 && !currentFormats.isEmpty(); --index) {
-        if (!formats[index].format.font().bold()
-            && currentFormats.contains(TextSelectionTypes::Bold)) {
-            formatString.append(kFormatSymbols[TextSelectionTypes::Bold].second);
-            currentFormats.remove(TextSelectionTypes::Bold);
-        }
-        if (!formats[index].format.font().italic()
-            && currentFormats.contains(TextSelectionTypes::Italic)) {
-            formatString.append(kFormatSymbols[TextSelectionTypes::Italic].second);
-            currentFormats.remove(TextSelectionTypes::Italic);
-        }
-        if (!formats[index].format.font().underline()
-            && currentFormats.contains(TextSelectionTypes::Underline)) {
-            formatString.append(kFormatSymbols[TextSelectionTypes::Underline].second);
-            currentFormats.remove(TextSelectionTypes::Underline);
-        }
-    }
-
-    //
-    // ... если первый формат такой же, как и текущий, то в цикле он обработан не был
-    //
-    if (!currentFormats.isEmpty()) {
-        if (currentFormats.contains(TextSelectionTypes::Bold)) {
-            formatString.append(kFormatSymbols[TextSelectionTypes::Bold].second);
-        }
-        if (currentFormats.contains(TextSelectionTypes::Italic)) {
-            formatString.append(kFormatSymbols[TextSelectionTypes::Italic].second);
-        }
-        if (currentFormats.contains(TextSelectionTypes::Underline)) {
-            formatString.append(kFormatSymbols[TextSelectionTypes::Underline].second);
-        }
-    }
-
-    return formatString;
-}
-
-//
-// Формируем открывающую форматную строку
-//
-static QString openFormatString(const QVector<QTextLayout::FormatRange>& formats, int _formatIndex)
-{
-    //
-    // Собираем текущие форматы
-    //
-    QSet<TextSelectionTypes> currentFormats;
-    if (formats[_formatIndex].format.font().bold()) {
-        currentFormats.insert(TextSelectionTypes::Bold);
-    }
-    if (formats[_formatIndex].format.font().italic()) {
-        currentFormats.insert(TextSelectionTypes::Italic);
-    }
-    if (formats[_formatIndex].format.font().underline()) {
-        currentFormats.insert(TextSelectionTypes::Underline);
-    }
-
-    QString formatString;
-
-    //
-    // Смотрим в какой последовательности заканчиваются текущие форматы
-    // и в соответствии с этим формируем форматную строку
-    //
-    for (int index = _formatIndex + 1; index < formats.size() && !currentFormats.isEmpty();
-         ++index) {
-        if (!formats[index].format.font().bold()
-            && currentFormats.contains(TextSelectionTypes::Bold)) {
-            formatString.prepend(kFormatSymbols[TextSelectionTypes::Bold].second);
-            currentFormats.remove(TextSelectionTypes::Bold);
-        }
-        if (!formats[index].format.font().italic()
-            && currentFormats.contains(TextSelectionTypes::Italic)) {
-            formatString.prepend(kFormatSymbols[TextSelectionTypes::Italic].second);
-            currentFormats.remove(TextSelectionTypes::Italic);
-        }
-        if (!formats[index].format.font().underline()
-            && currentFormats.contains(TextSelectionTypes::Underline)) {
-            formatString.prepend(kFormatSymbols[TextSelectionTypes::Underline].second);
-            currentFormats.remove(TextSelectionTypes::Underline);
-        }
-    }
-
-    //
-    // ... если последний формат такой же, как и текущий, то в цикле он обработан не был
-    //
-    if (!currentFormats.isEmpty()) {
-        if (currentFormats.contains(TextSelectionTypes::Bold)) {
-            formatString.prepend(kFormatSymbols[TextSelectionTypes::Bold].second);
-        }
-        if (currentFormats.contains(TextSelectionTypes::Italic)) {
-            formatString.prepend(kFormatSymbols[TextSelectionTypes::Italic].second);
-        }
-        if (currentFormats.contains(TextSelectionTypes::Underline)) {
-            formatString.prepend(kFormatSymbols[TextSelectionTypes::Underline].second);
-        }
-    }
-
-    return formatString;
-}
-
-/**
- * @brief Преобразовать разницу в двух форматах в строку, открывающую формат
- */
-static QString formatsOpenDiffToString(const QTextCharFormat& _current,
-                                       const QTextCharFormat& _next)
-{
-    QTextCharFormat diff;
-    diff.setFontWeight(!_current.font().bold() && _next.font().bold() ? QFont::Bold
-                                                                      : QFont::Normal);
-    diff.setFontItalic(!_current.font().italic() && _next.font().italic());
-    diff.setFontUnderline(!_current.font().underline() && _next.font().underline());
-
-    QString formatString;
-    if (diff.font().bold()) {
-        formatString.prepend(kFormatSymbols[TextSelectionTypes::Bold].second);
-    }
-    if (diff.font().italic()) {
-        formatString.prepend(kFormatSymbols[TextSelectionTypes::Italic].second);
-    }
-    if (diff.font().underline()) {
-        formatString.prepend(kFormatSymbols[TextSelectionTypes::Underline].second);
-    }
-    return formatString;
-}
-
-/**
- * @brief Преобразовать разницу в двух форматах в строку, закрывающую формат
- */
-static QString formatsCloseDiffToString(const QTextCharFormat& _current,
-                                        const QTextCharFormat& _next)
-{
-    QTextCharFormat diff;
-    diff.setFontWeight(_current.font().bold() && !_next.font().bold() ? QFont::Bold
-                                                                      : QFont::Normal);
-    diff.setFontItalic(_current.font().italic() && !_next.font().italic());
-    diff.setFontUnderline(_current.font().underline() && !_next.font().underline());
-
-    QString formatString;
-    if (diff.font().bold()) {
-        formatString.append(kFormatSymbols[TextSelectionTypes::Bold].second);
-    }
-    if (diff.font().italic()) {
-        formatString.append(kFormatSymbols[TextSelectionTypes::Italic].second);
-    }
-    if (diff.font().underline()) {
-        formatString.append(kFormatSymbols[TextSelectionTypes::Underline].second);
-    }
-
-    return formatString;
-}
-
-/**
- * @brief Заэкранировать специальные символы в заданном диапазоне
- * @return Количество заэкранированных символов
- */
-static int escapeCharacters(QString& _paragraph, int _begin, int _end)
-{
-    int count = 0;
-    const QSet<QChar> escapedCharacters = { '*', '_' };
-    for (int index = _end; index >= _begin; --index) {
-        if (escapedCharacters.contains(_paragraph[index])) {
-            _paragraph.insert(index, '\\');
-            ++count;
-        }
-    }
-    return count;
-}
-
-/**
- * @brief Получить индекс для вставки открывающего формата
- */
-static int openFormatIndex(const QString& _paragraph,
-                           const QTextLayout::FormatRange _nextFormatRange)
-{
-    int index = _nextFormatRange.start;
-    //
-    // Вставлять открывающую форматную строку будем непосредственно перед непробельными
-    // символами следующего формата, иначе Markdown неправильно нас поймет
-    //
-    while (_paragraph[index].isSpace()) {
-        ++index;
-    }
-    return index;
-}
-
-/**
- * @brief Получить индекс для вставки закрывающего формата
- */
-static int closeFormatIndex(const QString& _paragraph,
-                            const QTextLayout::FormatRange _currentFormatRange)
-{
-    int index = _currentFormatRange.start + _currentFormatRange.length;
-    //
-    // Вставлять закрывающую форматную строку будем сразу после непробельных символов текущего
-    // формата
-    //
-    while (_paragraph[index - 1].isSpace()) {
-        --index;
-    }
-    return index;
-}
-
 } // namespace
 
-void ScreenplayFountainExporter::exportTo(AbstractModel* _model,
-                                          ExportOptions& _exportOptions) const
+
+class ScreenplayFountainExporter::Implementation
 {
-    constexpr int invalidPosition = -1;
-    exportTo(_model, invalidPosition, invalidPosition, _exportOptions);
+public:
+    explicit Implementation();
+
+    /**
+     * @brief Глубина вложенности дирректории
+     */
+    mutable unsigned m_dirNesting = 0;
+};
+
+ScreenplayFountainExporter::Implementation::Implementation() = default;
+
+
+// ****
+
+
+ScreenplayFountainExporter::ScreenplayFountainExporter()
+    : ScreenplayExporter()
+    , AbstractMarkdownExporter({ '*', '_' })
+    , d(new Implementation())
+{
 }
 
-void ScreenplayFountainExporter::exportTo(AbstractModel* _model, int _fromPosition, int _toPosition,
-                                          ExportOptions& _exportOptions) const
+ScreenplayFountainExporter::~ScreenplayFountainExporter() = default;
+
+bool ScreenplayFountainExporter::processBlock(QString& _paragraph, const QTextBlock& _block,
+                                              const ExportOptions& _exportOptions) const
 {
-    //
-    // Открываем документ на запись
-    //
-    QFile fountainFile(_exportOptions.filePath);
-    if (!fountainFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return;
-    }
-
-    QScopedPointer<TextDocument> document(prepareDocument(_model, _exportOptions));
-
-    //
-    // Если задан интервал для экспорта, корректируем документ в соответствии с ним
-    //
-    if (_fromPosition != -1 && _toPosition != -1 && _fromPosition < _toPosition) {
-        TextCursor cursor(document.data());
-        cursor.beginEditBlock();
-        cursor.setPosition(_toPosition);
-        cursor.movePosition(TextCursor::End, TextCursor::KeepAnchor);
-        cursor.removeSelectedText();
-        cursor.setPosition(0);
-        cursor.setPosition(_fromPosition, TextCursor::KeepAnchor);
-        cursor.removeSelectedText();
-        cursor.endEditBlock();
-    }
-
     const auto& exportOptions = static_cast<const ScreenplayExportOptions&>(_exportOptions);
 
     //
-    // TODO: Реализовать экспорт титульной страницы
+    // Если нужны редакторские заметки, то вставляем их
     //
-    //    //
-    //    // При необходимости пишем титульную страницу
-    //    //
-    //    if (_exportParameters.printTilte) {
-    //        auto writeLine = [&fountainFile](const QString& _key, const QString& _value) {
-    //            if (!_key.isEmpty() && !_value.isEmpty()) {
-    //                fountainFile.write(QString("%1: %2\n").arg(_key).arg(_value).toUtf8());
-    //            }
-    //        };
-    //        auto writeLines = [&fountainFile](const QString& _key, const QString& _value) {
-    //            if (!_key.isEmpty() && !_value.isEmpty()) {
-    //                fountainFile.write(QString("%1:\n").arg(_key).toUtf8());
-    //                for (const QString& line : _value.split("\n")) {
-    //                    fountainFile.write(QString("   %1\n").arg(line).toUtf8());
-    //                }
-    //            }
-    //        };
-    //        writeLine("Title", _exportParameters.scriptName);
-    //        writeLine("Credit", _exportParameters.scriptGenre);
-    //        writeLine("Author", _exportParameters.scriptAuthor);
-    //        writeLine("Source", _exportParameters.scriptAdditionalInfo);
-    //        writeLine("Draft date", _exportParameters.scriptYear);
-    //        writeLines("Contact", _exportParameters.scriptContacts);
-    //        //
-    //        // Пустая строка в конце
-    //        //
-    //        fountainFile.write("\n");
-    //    }
+    if (exportOptions.includeReviewMarks) {
+        QVector<QTextLayout::FormatRange> reviewMarks;
+        for (const QTextLayout::FormatRange& format : _block.textFormats()) {
+            if (format.format.boolProperty(TextBlockStyle::PropertyIsReviewMark)) {
+                reviewMarks.push_back(format);
+            }
+        }
+        for (int markIndex = reviewMarks.size() - 1; markIndex >= 0; --markIndex) {
+            //
+            // Извлечем список редакторских заметок для данной области блока
+            //
+            const QStringList comments = reviewMarks[markIndex]
+                                             .format.property(TextBlockStyle::PropertyComments)
+                                             .toStringList();
+            //
+            // Вставлять редакторские заметки нужно с конца, чтобы не сбилась их
+            // позиция вставки
+            //
+            for (int commentIndex = comments.size() - 1; commentIndex >= 0; --commentIndex) {
+                if (!comments[commentIndex].simplified().isEmpty()) {
+                    _paragraph.insert(reviewMarks[markIndex].start + reviewMarks[markIndex].length,
+                                      "[[" + comments[commentIndex] + "]]");
+                }
+            }
+        }
+    }
 
     //
-    // Является ли текущий блок первым
+    // Добавить форматные символы перед заголовком
     //
-    bool isFirst = true;
+    auto formatToHeading = [&_paragraph](int _level) {
+        const QString prefix = "#";
+        _paragraph.prepend(prefix.repeated(_level) + " ");
+    };
 
-    //
-    // Текущая глубина вложенности директорий
-    //
-    unsigned dirNesting = 0;
-
-    //
-    // Тип предыдущего блока
-    //
-    auto block = document->begin();
-    while (block.isValid()) {
-        QString paragraphText;
-        if (!block.text().isEmpty()) {
-            paragraphText = block.text();
-            QVector<QTextLayout::FormatRange> formats;
-
-            //
-            // Извлечем список форматов и редакторских заметок
-            //
-
-            //
-            // Не знаю, какая это магия, но если вместо этого цикла использовать remove_copy_if
-            // или copy_if, то получаем сегфолт
-            //
-            for (const QTextLayout::FormatRange& format : block.textFormats()) {
-                if (format.format != block.charFormat()) {
-                    formats.push_back(format);
-                }
-            }
-
-            //
-            // Если всего один формат или редакторская заметка на весь текст, то расположим
-            // ее после блока на отдельной строке (делается не здесь, а в конце цикла),
-            // а иначе просто вставим в блок заметки
-            //
-            bool fullBlockComment = true;
-            if (formats.size() != 1 || formats.front().length != paragraphText.size()) {
-                fullBlockComment = false;
-
-                //
-                // При вставке форматных строк будем экранировать специальные символы (начиная с
-                // конца), чтобы они не сбивали форматирование. Для этого заведем переменную,
-                // отслеживающую положение обработанной части
-                //
-                int escapedRange = paragraphText.size() - 1;
-
-                //
-                // Обрабатывать форматирование надо с конца, чтобы не сбилась их позиция вставки
-                //
-                for (int formatIndex = formats.size() - 1; formatIndex >= 0; --formatIndex) {
-                    //
-                    // Если это редактораская заметка, обработаем комментарии
-                    //
-                    if (formats[formatIndex].format.boolProperty(
-                            TextBlockStyle::PropertyIsReviewMark)) {
-                        //
-                        // Извлечем список редакторских заметок для данной области блока
-                        //
-                        const QStringList comments
-                            = formats[formatIndex]
-                                  .format.property(TextBlockStyle::PropertyComments)
-                                  .toStringList();
-                        //
-                        // Вставлять редакторские заметки нужно с конца, чтобы не сбилась их
-                        // позиция вставки
-                        //
-                        for (int commentIndex = comments.size() - 1; commentIndex >= 0;
-                             --commentIndex) {
-                            if (!comments[commentIndex].simplified().isEmpty()) {
-                                paragraphText.insert(formats[formatIndex].start
-                                                         + formats[formatIndex].length,
-                                                     "[[" + comments[commentIndex] + "]]");
-                            }
-                        }
-                    }
-
-                    //
-                    // Далее работаем с форматированием
-                    //
-
-                    //
-                    // Пишем закрывающий формат
-                    //
-                    // Смотрим на следующий формат
-                    //
-                    const int nextFormatIndex = formatIndex + 1;
-                    //
-                    // ... если он есть, то сравниваем форматы и пишем только необходимое (то,
-                    // которое не дублируется с последующим)
-                    //
-                    if (nextFormatIndex < formats.size()
-                        && (formats[formatIndex].start + formats[formatIndex].length
-                            == formats[nextFormatIndex].start)) {
-
-                        //
-                        // Получаем индекс для вставки открывающей форматной строки следующего
-                        // формата
-                        //
-                        const int nextFormatStartIndex
-                            = openFormatIndex(paragraphText, formats[nextFormatIndex]);
-
-                        //
-                        // Экранируем специальные символы до индекса (со стороны конца)
-                        //
-                        escapeCharacters(paragraphText, nextFormatStartIndex, escapedRange);
-                        escapedRange = nextFormatStartIndex - 1;
-
-                        //
-                        // Вставляем открывающую форматную строку следующего формата
-                        //
-                        paragraphText.insert(
-                            nextFormatStartIndex,
-                            formatsOpenDiffToString(formats[formatIndex].format,
-                                                    formats[nextFormatIndex].format));
-
-                        //
-                        // Получаем индекс для вставки закрывающей форматной строки текущего формата
-                        //
-                        const int formatEndIndex
-                            = closeFormatIndex(paragraphText, formats[formatIndex]);
-
-                        //
-                        // Экранируем специальные символы до индекса (со стороны конца)
-                        //
-                        escapeCharacters(paragraphText, formatEndIndex, escapedRange);
-                        escapedRange = formatEndIndex - 1;
-
-                        //
-                        // Вставляем закрывающую форматную строку текущего формата
-                        //
-                        paragraphText.insert(
-                            formatEndIndex,
-                            formatsCloseDiffToString(formats[formatIndex].format,
-                                                     formats[nextFormatIndex].format));
-                    }
-                    //
-                    // ... а если это последний формат блока, то формируем полностью
-                    //
-                    else {
-                        //
-                        // Получаем индекс для вставки закрывающей форматной строки текущего формата
-                        //
-                        const int formatEndIndex
-                            = closeFormatIndex(paragraphText, formats[formatIndex]);
-
-                        //
-                        // Экранируем специальные символы до индекса (со стороны конца)
-                        //
-                        escapeCharacters(paragraphText, formatEndIndex, escapedRange);
-                        escapedRange = formatEndIndex - 1;
-
-                        //
-                        // Вставляем закрывающую форматную строку текущего формата
-                        //
-                        paragraphText.insert(formatEndIndex,
-                                             closeFormatString(formats, formatIndex));
-                    }
-
-                    //
-                    // Пишем закрывающий формат, если это самый первый из форматов
-                    //
-                    // Смотрим на предыдущее форматирование
-                    //
-                    const int prevFormatIndex = formatIndex - 1;
-                    //
-                    // ... если есть, то ничего не пишем
-                    //
-                    if (prevFormatIndex >= 0
-                        && (formats[prevFormatIndex].start + formats[prevFormatIndex].length
-                            == formats[formatIndex].start)) {
-                        //
-                        // Формат будет записан, при записи закрывающей части
-                        // предыдущего форматирования в следующем проходе
-                        //
-                    }
-                    //
-                    // ... если нет, то пишем открывающий формат
-                    //
-                    else {
-                        //
-                        // Получаем индекс для вставки открывающей форматной строки текущего формата
-                        //
-                        const int currentFormatStartIndex
-                            = openFormatIndex(paragraphText, formats[formatIndex]);
-
-                        //
-                        // Экранируем специальные символы до индекса (со стороны конца)
-                        //
-                        escapeCharacters(paragraphText, currentFormatStartIndex, escapedRange);
-                        escapedRange = currentFormatStartIndex - 1;
-
-                        //
-                        // Вставляем открывающую форматную строку текущего формата
-                        //
-                        paragraphText.insert(currentFormatStartIndex,
-                                             openFormatString(formats, formatIndex));
-                    }
-                }
-
-                //
-                // Экранируем специальные символы до конца, если остались непроверенные
-                //
-                escapeCharacters(paragraphText, 0, escapedRange);
-            }
-
-            //
-            // Разрывы строк преобразуем в переносы строк
-            //
-            paragraphText = paragraphText.replace(QChar::LineSeparator, QChar::LineFeed);
-
-            //
-            // Пропустить запись текущего блока
-            //
-            bool skipBlock = false;
-
-            switch (TextBlockStyle::forBlock(block)) {
-            case TextParagraphType::SceneHeading: {
-                //
-                // Если заголовок сцены начинается с одного из ключевых слов, то все хорошо
-                //
-                bool startsWithHeading = false;
-                for (const QString& heading : sceneHeadingStart) {
-                    if (paragraphText.startsWith(heading)) {
-                        startsWithHeading = true;
-                        break;
-                    }
-                }
-
-                //
-                // Иначе, нужно сказать, что это заголовок сцены добавлением точки в начало
-                //
-                if (!startsWithHeading) {
-                    paragraphText.prepend('.');
-                }
-
-                //
-                // А если печатаем номера сцен, то добавим в конец этот номер, окруженный #
-                //
-                if (exportOptions.showScenesNumbers) {
-                    const auto blockData = static_cast<TextBlockData*>(block.userData());
-                    if (blockData != nullptr && blockData->item()->parent() != nullptr
-                        && blockData->item()->parent()->type() == TextModelItemType::Group
-                        && static_cast<TextGroupType>(blockData->item()->parent()->subtype())
-                            == TextGroupType::Scene) {
-                        const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(
-                            blockData->item()->parent());
-                        paragraphText += QString(" #%1#").arg(sceneItem->number()->text);
-                    }
-                }
-
-                if (!isFirst) {
-                    paragraphText.prepend('\n');
-                }
-                break;
-            }
-
-            case TextParagraphType::Character: {
-                if (paragraphText != TextHelper::smartToUpper(paragraphText)) {
-                    //
-                    // Если название персонажа не состоит из заглавных букв,
-                    // то необходимо добавить @ в начало
-                    //
-                    paragraphText.prepend('@');
-                }
-                paragraphText.prepend('\n');
-                break;
-            }
-
-            case TextParagraphType::Transition: {
-                //
-                // Если переход задан заглавными буквами и в конце есть TO:
-                //
-                if (TextHelper::smartToUpper(paragraphText) == paragraphText
-                    && paragraphText.endsWith("TO:")) {
-                    //
-                    // Ничего делать не надо, всё распознается нормально
-                    //
-                }
-                //
-                // А если переход задан как то иначе
-                //
-                else {
-                    //
-                    // То надо добавить в начало >
-                    //
-                    paragraphText.prepend("> ");
-                }
-                paragraphText.prepend('\n');
-                break;
-            }
-
-            case TextParagraphType::InlineNote: {
-                //
-                // Обернем в /* и */
-                //
-                paragraphText = "\n/* " + paragraphText + " */";
-                break;
-            }
-
-            case TextParagraphType::Action: {
-                //
-                // Если не первое действие, то отделим его пустой строкой от предыдущего
-                //
-                if (!isFirst) {
-                    paragraphText.prepend('\n');
-                }
-                break;
-            }
-
-            case TextParagraphType::BeatHeading: {
-                //
-                // Блоки описания сцены предворяются = и расставляются обособлено
-                //
-                paragraphText.prepend("\n= ");
-                break;
-            }
-
-            case TextParagraphType::Lyrics: {
-                //
-                // Добавим ~ вначало блока лирики
-                //
-                paragraphText.prepend("~ ");
-                break;
-            }
-
-            case TextParagraphType::ActHeading:
-            case TextParagraphType::SequenceHeading: {
-                //
-                // Напечатаем в начале столько #, насколько глубоко мы в директории
-                //
-                ++dirNesting;
-                paragraphText = " " + paragraphText;
-                for (unsigned i = 0; i != dirNesting; ++i) {
-                    paragraphText = '#' + paragraphText;
-                }
-                paragraphText.prepend('\n');
-                break;
-            }
-
-            case TextParagraphType::ActFooter:
-            case TextParagraphType::SequenceFooter: {
-                --dirNesting;
-                skipBlock = true;
-                break;
-            }
-
-            case TextParagraphType::Parenthetical: {
-                paragraphText = "(" + paragraphText + ")";
-                break;
-            }
-
-            case TextParagraphType::Dialogue: {
-                break;
-            }
-
-            default: {
-                //
-                // Игнорируем неизвестные блоки
-                //
-                skipBlock = true;
-            }
-            }
-
-            paragraphText += '\n';
-
-            //
-            // А это как раз случай одной большой редакторской заметки или формата
-            //
-            if (fullBlockComment) {
-                //
-                // Формат
-                //
-
-                //
-                // ... определяем начало
-                //
-                int formatStartIndex = 0;
-                const QStringList prefixes = { "\n",     ".",     "@",    "= ",  "~ ", "/*",
-                                               "##### ", "#### ", "### ", "## ", "# ", "\n" };
-                for (const QString& prefix : prefixes) {
-                    if (paragraphText.mid(formatStartIndex, prefix.length()) == prefix) {
-                        formatStartIndex += prefix.length();
-                    }
-                }
-
-                //
-                // ... определяем конец
-                //
-                int formatEndIndex = paragraphText.length();
-                const QStringList postfixes = { "\n", "*/", "\n" };
-                for (const QString& postfix : postfixes) {
-                    if (paragraphText.mid(formatEndIndex - postfix.length(), postfix.length())
-                        == postfix) {
-                        formatEndIndex -= postfix.length();
-                    }
-                }
-
-                //
-                // ... экранируем специальные символы
-                //
-                const int escapedCount
-                    = escapeCharacters(paragraphText, formatStartIndex, formatEndIndex);
-
-                //
-                // ... вставляем форматные строки
-                //
-                paragraphText.insert(formatEndIndex + escapedCount, closeFormatString(formats, 0));
-                paragraphText.insert(formatStartIndex, openFormatString(formats, 0));
-
-                //
-                // Заметки
-                //
-                const QTextCharFormat paragraphFormat = formats.first().format;
-                const QStringList comments
-                    = paragraphFormat.property(TextBlockStyle::PropertyComments).toStringList();
-                for (const QString& comment : comments) {
-                    if (!comment.isEmpty()) {
-                        paragraphText += "\n[[" + comment + "]]\n";
-                    }
-                }
-            }
-
-            //
-            // Запишем получившуюся строку
-            //
-            if (!skipBlock) {
-                isFirst = false;
-                fountainFile.write(paragraphText.toUtf8());
+    switch (TextBlockStyle::forBlock(_block)) {
+    case TextParagraphType::SceneHeading: {
+        //
+        // Если заголовок сцены начинается с одного из ключевых слов, то все хорошо
+        //
+        bool startsWithHeading = false;
+        for (const QString& heading : sceneHeadingStart) {
+            if (_paragraph.startsWith(heading)) {
+                startsWithHeading = true;
+                return true;
             }
         }
 
-        block = block.next();
+        //
+        // Иначе, нужно сказать, что это заголовок сцены добавлением точки в начало
+        //
+        if (!startsWithHeading) {
+            _paragraph.prepend('.');
+        }
+
+        //
+        // А если печатаем номера сцен, то добавим в конец этот номер, окруженный #
+        //
+        if (exportOptions.showScenesNumbers) {
+            const auto blockData = static_cast<TextBlockData*>(_block.userData());
+            if (blockData != nullptr && blockData->item()->parent() != nullptr
+                && blockData->item()->parent()->type() == TextModelItemType::Group
+                && static_cast<TextGroupType>(blockData->item()->parent()->subtype())
+                    == TextGroupType::Scene) {
+                const auto sceneItem
+                    = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
+                _paragraph += QString(" #%1#").arg(sceneItem->number()->text);
+            }
+        }
+        return true;
     }
 
-    fountainFile.close();
+    case TextParagraphType::Character: {
+        if (!TextHelper::isUppercase(_paragraph)) {
+            //
+            // Если название персонажа не состоит из заглавных букв,
+            // то необходимо добавить @ в начало
+            //
+            _paragraph.prepend('@');
+        }
+        return true;
+    }
+
+    case TextParagraphType::Transition: {
+        //
+        // Если переход задан заглавными буквами и в конце есть TO:
+        //
+        if (TextHelper::isUppercase(_paragraph) && _paragraph.endsWith("TO:")) {
+            //
+            // Ничего делать не надо, всё распознается нормально
+            //
+        }
+        //
+        // А если переход задан как то иначе
+        //
+        else {
+            //
+            // То надо добавить в начало >
+            //
+            _paragraph.prepend("> ");
+        }
+        return true;
+    }
+
+    case TextParagraphType::InlineNote: {
+        //
+        // Обернем в /* и */
+        //
+        _paragraph = "/* " + _paragraph + " */";
+        return true;
+    }
+
+    case TextParagraphType::Action: {
+        //
+        // Корректируем регистр, чтобы не было верхнего регистра
+        //
+        const auto capitalizeEveryWord = false;
+        const auto capitalizeEverySentense = true;
+        _paragraph
+            = TextHelper::toSentenceCase(_paragraph, capitalizeEveryWord, capitalizeEverySentense);
+        return true;
+    }
+
+    case TextParagraphType::BeatHeading: {
+        //
+        // Блоки описания сцены предворяются = и расставляются обособлено
+        //
+        _paragraph.prepend("= ");
+        return true;
+    }
+
+    case TextParagraphType::Lyrics: {
+        //
+        // Добавим ~ вначало блока лирики
+        //
+        _paragraph.prepend("~ ");
+        return true;
+    }
+
+    case TextParagraphType::ActHeading:
+    case TextParagraphType::SequenceHeading: {
+        //
+        // Напечатаем в начале столько #, насколько глубоко мы в директории
+        //
+        ++d->m_dirNesting;
+        formatToHeading(d->m_dirNesting);
+        return true;
+    }
+
+    case TextParagraphType::ActFooter:
+    case TextParagraphType::SequenceFooter: {
+        --d->m_dirNesting;
+        return false;
+    }
+
+    case TextParagraphType::Parenthetical: {
+        _paragraph = "(" + _paragraph + ")";
+        return true;
+    }
+
+    case TextParagraphType::Dialogue: {
+        return true;
+    }
+
+    //
+    // Блоки синопсиса
+    //
+    case TextParagraphType::ChapterHeading1: {
+        formatToHeading(1);
+        return true;
+    }
+    case TextParagraphType::ChapterHeading2: {
+        formatToHeading(2);
+        return true;
+    }
+    case TextParagraphType::ChapterHeading3: {
+        formatToHeading(3);
+        return true;
+    }
+    case TextParagraphType::ChapterHeading4: {
+        formatToHeading(4);
+        return true;
+    }
+    case TextParagraphType::ChapterHeading5: {
+        formatToHeading(5);
+        return true;
+    }
+    case TextParagraphType::ChapterHeading6: {
+        formatToHeading(6);
+        return true;
+    }
+    case TextParagraphType::Text: {
+        return true;
+    }
+
+    default: {
+        //
+        // Игнорируем неизвестные блоки
+        //
+        return false;
+    }
+    }
+}
+
+QString ScreenplayFountainExporter::formatSymbols(TextSelectionTypes _type) const
+{
+    switch (_type) {
+    case TextSelectionTypes::Bold: {
+        return "**";
+    }
+    case TextSelectionTypes::Italic: {
+        return "*";
+    }
+    case TextSelectionTypes::Underline: {
+        return "_";
+    }
+    default: {
+        return "";
+    }
+    }
+}
+
+void ScreenplayFountainExporter::addIndentationAtBegin(QString& _paragraph,
+                                                       TextParagraphType _previosBlockType,
+                                                       TextParagraphType _currentBlockType) const
+{
+    //
+    // Таблица количества переносов строк между различными типами блоков
+    // столбцы - предыдущий тип, строки - текущий
+    //
+    const QVector<QVector<int>> countIndentation = {
+        // Undefined, SceneCharacters, Character, Parenthetical, Dialogue/Lyrics, Footers,
+        // ActHeading/SequenceHeading/SceneHeading, other
+        { 0, 0, 0, 0, 0, 0, 0, 0 }, // Undefined
+        { 0, 1, 2, 2, 2, 3, 2, 2 }, // SceneCharacters
+        { 0, 2, 2, 2, 2, 3, 2, 2 }, // Character
+        { 0, 2, 1, 1, 1, 3, 2, 2 }, // Parenthetical
+        { 0, 2, 1, 1, 1, 3, 2, 2 }, // Dialogue/Lyrics
+        { 0, 2, 2, 2, 2, 2, 2, 2 }, // Footers
+        { 0, 3, 3, 3, 3, 3, 2, 3 }, // ActHeading/SequenceHeading/SceneHeading
+        { 0, 2, 2, 2, 2, 3, 2, 2 }, // other
+        // other:
+        // Action/Shot/Transition/BeatHeading/UnformattedText/InlineNote/Synopses
+    };
+
+    auto positionInTable = [](TextParagraphType _type) {
+        switch (_type) {
+        case TextParagraphType::SceneCharacters: {
+            return 1;
+        }
+        case TextParagraphType::Character: {
+            return 2;
+        }
+        case TextParagraphType::Parenthetical: {
+            return 3;
+        }
+        case TextParagraphType::Dialogue:
+        case TextParagraphType::Lyrics: {
+            return 4;
+        }
+        case TextParagraphType::ActFooter:
+        case TextParagraphType::SequenceFooter: {
+            return 5;
+        }
+        case TextParagraphType::ActHeading:
+        case TextParagraphType::SequenceHeading:
+        case TextParagraphType::SceneHeading: {
+            return 6;
+        }
+        case TextParagraphType::Action:
+        case TextParagraphType::Shot:
+        case TextParagraphType::Transition:
+        case TextParagraphType::BeatHeading:
+        case TextParagraphType::UnformattedText:
+        case TextParagraphType::InlineNote:
+        //
+        // Блоки синопсиса
+        //
+        case TextParagraphType::ChapterHeading1:
+        case TextParagraphType::ChapterHeading2:
+        case TextParagraphType::ChapterHeading3:
+        case TextParagraphType::ChapterHeading4:
+        case TextParagraphType::ChapterHeading5:
+        case TextParagraphType::ChapterHeading6:
+        case TextParagraphType::Text: {
+            return 7;
+        }
+        default: {
+            return 0;
+        }
+        }
+    };
+    int column = positionInTable(_previosBlockType);
+    int row = positionInTable(_currentBlockType);
+    _paragraph.prepend(QString("\n").repeated(countIndentation[row][column]));
 }
 
 } // namespace BusinessLayer

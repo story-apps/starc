@@ -14,8 +14,16 @@ NovelMarkdownExporter::NovelMarkdownExporter()
 
 NovelMarkdownExporter::~NovelMarkdownExporter() = default;
 
-bool NovelMarkdownExporter::processBlock(QString& _paragraph, TextParagraphType _blockType) const
+bool NovelMarkdownExporter::processBlock(QString& _paragraph, const QTextBlock& _block,
+                                         const ExportOptions& _exportOptions) const
 {
+    Q_UNUSED(_exportOptions)
+
+    //
+    // Очистим пробельные символы в начале абзаца, чтобы не сбивалось форматирование
+    //
+    removeWhitespaceAtBegin(_paragraph);
+
     //
     // Добавить форматные символы перед заголовком
     //
@@ -24,7 +32,7 @@ bool NovelMarkdownExporter::processBlock(QString& _paragraph, TextParagraphType 
         _paragraph.prepend(prefix.repeated(_level) + " ");
     };
 
-    switch (_blockType) {
+    switch (TextBlockStyle::forBlock(_block)) {
     case TextParagraphType::PartHeading:
     case TextParagraphType::PartFooter: {
         formatToHeading(1);
@@ -92,9 +100,9 @@ QString NovelMarkdownExporter::formatSymbols(TextSelectionTypes _type) const
     }
 }
 
-void NovelMarkdownExporter::indentationAtBegin(QString& _paragraph,
-                                               TextParagraphType _previosBlockType,
-                                               TextParagraphType _currentBlockType) const
+void NovelMarkdownExporter::addIndentationAtBegin(QString& _paragraph,
+                                                  TextParagraphType _previosBlockType,
+                                                  TextParagraphType _currentBlockType) const
 {
     //
     // Таблица количества переносов строк между различными типами блоков
