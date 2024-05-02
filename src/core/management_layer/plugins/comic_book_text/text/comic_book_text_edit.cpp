@@ -1135,8 +1135,8 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                             };
 
                             const auto pageNumberText = d->document.pageNumber(block);
-                            const auto leftPageIcon = u8"\U000F10AA";
-                            const auto rightPageIcon = u8"\U000F10AB";
+                            const auto leftPageIcon = u8"\U000F0BB3";
+                            const auto rightPageIcon = u8"\U000F0BB1";
 
                             //
                             // Два номера
