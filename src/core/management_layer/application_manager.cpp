@@ -2701,11 +2701,11 @@ void ApplicationManager::initConnections()
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectCover);
     connect(d->projectManager.data(), &ProjectManager::currentModelChanged, this,
             [this](BusinessLayer::AbstractModel* _model) {
-                bool _aviable = d->exportManager->canExportDocument(_model);
+                const bool _aviable = d->exportManager->canExportDocument(_model);
                 d->menuView->setCurrentDocumentExportAvailable(_aviable);
                 d->projectManager->setCurrentDocumentExportAviable(_aviable);
             });
-    connect(d->projectManager.data(), &ProjectManager::exportCurrentDocumentPressed, this,
+    connect(d->projectManager.data(), &ProjectManager::exportCurrentDocumentRequested, this,
             [this] { d->exportCurrentDocument(); });
 
     //

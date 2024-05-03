@@ -205,8 +205,6 @@ public:
     void setGeneratedText(const QString& _text);
     void setGeneratedImage(const QPixmap& _image);
 
-    bool isCurrentDocumentExportAviable;
-
 signals:
     /**
      * @brief Запрос на отображение меню
@@ -227,7 +225,7 @@ signals:
     /**
      * @brief Запрос на экспорт документа
      */
-    void exportCurrentDocumentPressed();
+    void exportCurrentDocumentRequested();
 
     /**
      * @brief Изменились данные

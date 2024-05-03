@@ -406,6 +406,11 @@ public:
      * @brief Количество последовательно обновлённых документов
      */
     int mergedDocuments = 0;
+
+    /**
+     * @brief Возможность экспортирования для текущего документа
+     */
+    bool isCurrentDocumentExportAviable = false;
 };
 
 ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _parent,
@@ -602,14 +607,14 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     }
 
     // Для документов, имеющих разрешение на экспорт, можно вызвать экспорт
-    if (_index.isValid() && q->isCurrentDocumentExportAviable) {
-        auto exportCurrentFileAction = new QAction(tr("Export current file..."));
+    if (_index.isValid() && isCurrentDocumentExportAviable) {
+        auto exportCurrentFileAction = new QAction(tr("Export..."));
         exportCurrentFileAction->setSeparator(true);
         exportCurrentFileAction->setIconText(u8"\U000f0207");
         connect(exportCurrentFileAction, &QAction::triggered, q,
-                [this] { q->exportCurrentDocumentPressed(); });
+                &ProjectManager::exportCurrentDocumentRequested);
         menuActions.append(exportCurrentFileAction);
-    }
+    };
 
     //
     // Документы облачного проекта можно расшарить
@@ -3198,7 +3203,7 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
 
 void ProjectManager::setCurrentDocumentExportAviable(bool _available)
 {
-    isCurrentDocumentExportAviable = _available;
+    d->isCurrentDocumentExportAviable = _available;
 };
 
 void ProjectManager::addNovel(const QString& _name, const QString& _text)
