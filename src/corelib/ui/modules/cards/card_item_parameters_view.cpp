@@ -59,6 +59,11 @@ public:
     CardItemType currentItemType = CardItemType::Undefined;
 
     /**
+     * @brief Биты текущего элемента для отображения
+     */
+    QVector<QString> currentItemBeats;
+
+    /**
      * @brief Попап выбора цвета
      */
     ColorPickerPopup* colorPickerPopup = nullptr;
@@ -501,6 +506,8 @@ void CardItemParametersView::setDescription(const QString& _description)
 
 void CardItemParametersView::setBeats(const QVector<QString>& _beats)
 {
+    d->currentItemBeats = _beats;
+
     //
     // Настраиваем поля для отображения битов
     //
@@ -514,8 +521,13 @@ void CardItemParametersView::setBeats(const QVector<QString>& _beats)
         while (d->beats.size() < beatsSize) {
             auto beat = new TextField(d->content->widget());
             beat->installEventFilter(this);
-            connect(beat, &TextField::textChanged, this,
-                    [this, beat] { emit beatChanged(d->beats.indexOf(beat), beat->text()); });
+            connect(beat, &TextField::textChanged, this, [this, beat] {
+                const auto beatIndex = d->beats.indexOf(beat);
+                if (d->currentItemBeats.isEmpty()
+                    || d->currentItemBeats.at(beatIndex) != beat->text()) {
+                    emit beatChanged(beatIndex, beat->text());
+                }
+            });
             //
             // ... вставляем новые поля перед штампом и тэгами (заголовок + список)
             //
