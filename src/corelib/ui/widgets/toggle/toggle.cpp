@@ -158,11 +158,24 @@ void Toggle::paintEvent(QPaintEvent* _event)
 
     painter.fillRect(_event->rect(), backgroundColor());
 
-    const auto tumblerColor = d->isChecked
-        ? Ui::DesignSystem::color().accent()
-        : (ColorHelper::isColorLight(backgroundColor()) ? backgroundColor() : textColor());
-    const auto trackColor
-        = d->isChecked ? tumblerColor.lighter(140) : ColorHelper::nearby(tumblerColor, 160);
+    QColor tumblerColor;
+    QColor trackColor;
+
+    if (isEnabled()) {
+        tumblerColor = d->isChecked
+            ? Ui::DesignSystem::color().accent()
+            : (ColorHelper::isColorLight(backgroundColor()) ? backgroundColor() : textColor());
+        trackColor
+            = d->isChecked ? tumblerColor.lighter(140) : ColorHelper::nearby(tumblerColor, 160);
+    } else {
+        tumblerColor = d->isChecked
+            ? Ui::DesignSystem::color().accent().darker(70)
+            : (ColorHelper::isColorLight(backgroundColor()) ? backgroundColor()
+                                                            : textColor().darker(130));
+        trackColor
+            = d->isChecked ? tumblerColor.lighter(110) : ColorHelper::nearby(tumblerColor, 110);
+    }
+
     //
     // Трэк
     //
@@ -178,9 +191,11 @@ void Toggle::paintEvent(QPaintEvent* _event)
     //
     // Переключатель
     //
-    painter.setBrush(tumblerColor);
+    painter.setBrush(isEnabled() ? tumblerColor : tumblerColor.lighter(150));
     const QRectF toggleRect = d->tumblerAnimation.currentValue().toRectF();
     const qreal borderRadius = toggleRect.height() / 2.0;
+    const qreal disabledOpacity = isEnabled() ? 1.0 : 0.3;
+    painter.setOpacity(disabledOpacity);
     //
     // ... подготовим тень
     //
@@ -190,7 +205,10 @@ void Toggle::paintEvent(QPaintEvent* _event)
         backgroundImage.fill(Qt::transparent);
         QPainter backgroundImagePainter(&backgroundImage);
         backgroundImagePainter.setPen(Qt::NoPen);
-        backgroundImagePainter.setBrush(Ui::DesignSystem::color().textEditor());
+        backgroundImagePainter.setBrush(isEnabled()
+                                            ? Ui::DesignSystem::color().textEditor()
+                                            : Ui::DesignSystem::color().textEditor().lighter(150));
+        backgroundImagePainter.setOpacity(disabledOpacity);
         backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()),
                                                borderRadius, borderRadius);
     }
@@ -199,9 +217,12 @@ void Toggle::paintEvent(QPaintEvent* _event)
     //
     const qreal shadowHeight = Ui::DesignSystem::card().minimumShadowBlurRadius();
     const bool useCache = true;
-    const QPixmap shadow
-        = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
-                                  shadowHeight, Ui::DesignSystem::color().shadow(), useCache);
+    const QPixmap shadow = ImageHelper::dropShadow(
+        backgroundImage, Ui::DesignSystem::card().shadowMargins(), shadowHeight,
+        isEnabled() ? Ui::DesignSystem::color().shadow()
+                    : Ui::DesignSystem::color().shadow().lighter(150),
+        useCache);
+    painter.setOpacity(1.0);
     painter.drawPixmap(toggleRect.topLeft()
                            - QPointF{ Ui::DesignSystem::card().shadowMargins().left(),
                                       Ui::DesignSystem::card().shadowMargins().top() },
@@ -209,7 +230,7 @@ void Toggle::paintEvent(QPaintEvent* _event)
     //
     // ... рисуем декорацию
     //
-    if (underMouse() || hasFocus()) {
+    if (isEnabled() && (underMouse() || hasFocus())) {
         painter.setPen(Qt::NoPen);
         painter.setBrush(isChecked() ? Ui::DesignSystem::color().accent() : textColor());
         painter.setOpacity(hasFocus() ? Ui::DesignSystem::focusBackgroundOpacity()
@@ -218,7 +239,7 @@ void Toggle::paintEvent(QPaintEvent* _event)
         painter.drawEllipse(toggleRect.center(), radius, radius);
         painter.setOpacity(1.0);
     }
-    if (d->decorationAnimation.state() == ClickAnimation::Running) {
+    if (isEnabled() && d->decorationAnimation.state() == ClickAnimation::Running) {
         painter.setPen(Qt::NoPen);
         painter.setBrush(isChecked() ? Ui::DesignSystem::color().accent() : textColor());
         painter.setOpacity(d->decorationAnimation.opacity());
