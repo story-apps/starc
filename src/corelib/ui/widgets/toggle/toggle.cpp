@@ -158,24 +158,16 @@ void Toggle::paintEvent(QPaintEvent* _event)
 
     painter.fillRect(_event->rect(), backgroundColor());
 
+    qreal opacity = isEnabled() ? 1.0 : 0.3;
+    painter.setOpacity(opacity);
+
     QColor tumblerColor;
     QColor trackColor;
 
-    if (isEnabled()) {
-        tumblerColor = d->isChecked
-            ? Ui::DesignSystem::color().accent()
-            : (ColorHelper::isColorLight(backgroundColor()) ? backgroundColor() : textColor());
-        trackColor
-            = d->isChecked ? tumblerColor.lighter(140) : ColorHelper::nearby(tumblerColor, 160);
-    } else {
-        tumblerColor = d->isChecked
-            ? Ui::DesignSystem::color().accent().darker(70)
-            : (ColorHelper::isColorLight(backgroundColor()) ? backgroundColor()
-                                                            : textColor().darker(130));
-        trackColor
-            = d->isChecked ? tumblerColor.lighter(110) : ColorHelper::nearby(tumblerColor, 110);
-    }
-
+    tumblerColor = d->isChecked
+        ? Ui::DesignSystem::color().accent()
+        : (ColorHelper::isColorLight(backgroundColor()) ? backgroundColor() : textColor());
+    trackColor = d->isChecked ? tumblerColor.lighter(140) : ColorHelper::nearby(tumblerColor, 160);
     //
     // Трэк
     //
@@ -187,7 +179,6 @@ void Toggle::paintEvent(QPaintEvent* _event)
                            Ui::DesignSystem::toggle().trackSize());
 
     painter.drawRoundedRect(trackRect, trackRect.height() / 2.0, trackRect.height() / 2.0);
-
     //
     // Переключатель
     //
