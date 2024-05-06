@@ -614,7 +614,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         connect(exportCurrentFileAction, &QAction::triggered, q,
                 &ProjectManager::exportCurrentDocumentRequested);
         menuActions.append(exportCurrentFileAction);
-    };
+    }
 
     //
     // Документы облачного проекта можно расшарить
