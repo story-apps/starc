@@ -406,6 +406,11 @@ public:
      * @brief Количество последовательно обновлённых документов
      */
     int mergedDocuments = 0;
+
+    /**
+     * @brief Возможность экспортирования для текущего документа
+     */
+    bool isCurrentDocumentExportAvailable = false;
 };
 
 ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _parent,
@@ -599,6 +604,16 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
                 [this] { this->openCurrentDocumentInNewWindow(); });
         menuActions.append(openInNewWindow);
         isDocumentActionAdded = true;
+    }
+
+    // Для документов, имеющих разрешение на экспорт, можно вызвать экспорт
+    if (_index.isValid() && isCurrentDocumentExportAvailable) {
+        auto exportCurrentFileAction = new QAction(tr("Export..."));
+        exportCurrentFileAction->setSeparator(true);
+        exportCurrentFileAction->setIconText(u8"\U000f0207");
+        connect(exportCurrentFileAction, &QAction::triggered, q,
+                &ProjectManager::exportCurrentDocumentRequested);
+        menuActions.append(exportCurrentFileAction);
     }
 
     //
@@ -3185,6 +3200,11 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
         createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), synopsisItem,
         _treatment.toUtf8());
 }
+
+void ProjectManager::setCurrentDocumentExportAvailable(bool _available)
+{
+    d->isCurrentDocumentExportAvailable = _available;
+};
 
 void ProjectManager::addNovel(const QString& _name, const QString& _text)
 {

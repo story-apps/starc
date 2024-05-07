@@ -2701,9 +2701,12 @@ void ApplicationManager::initConnections()
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectCover);
     connect(d->projectManager.data(), &ProjectManager::currentModelChanged, this,
             [this](BusinessLayer::AbstractModel* _model) {
-                d->menuView->setCurrentDocumentExportAvailable(
-                    d->exportManager->canExportDocument(_model));
+                const bool _available = d->exportManager->canExportDocument(_model);
+                d->menuView->setCurrentDocumentExportAvailable(_available);
+                d->projectManager->setCurrentDocumentExportAvailable(_available);
             });
+    connect(d->projectManager.data(), &ProjectManager::exportCurrentDocumentRequested, this,
+            [this] { d->exportCurrentDocument(); });
 
     //
     // Менеджер импорта

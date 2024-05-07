@@ -133,6 +133,11 @@ public:
     Domain::DocumentObject* currentDocument() const;
 
     /**
+     * @brief Установить возможность экспортирования текущего документа
+     */
+    void setCurrentDocumentExportAvailable(bool _available);
+
+    /**
      * @brief Получить список документов, у которых есть несинхроинизированные изменения
      */
     QVector<Domain::DocumentObject*> unsyncedDocuments() const;
@@ -216,6 +221,11 @@ signals:
      * @brief Запрос на покупку кредитов из одного из плагинов
      */
     void buyCreditsRequested();
+
+    /**
+     * @brief Запрос на экспорт документа
+     */
+    void exportCurrentDocumentRequested();
 
     /**
      * @brief Изменились данные
