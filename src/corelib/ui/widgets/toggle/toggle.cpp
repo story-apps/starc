@@ -1,4 +1,5 @@
 #include "toggle.h"
+#include "QtGui/qpainterpath.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/animations/click_animation.h>
@@ -158,35 +159,41 @@ void Toggle::paintEvent(QPaintEvent* _event)
 
     painter.fillRect(_event->rect(), backgroundColor());
 
-    qreal opacity = isEnabled() ? 1.0 : 0.3;
+    qreal opacity = isEnabled() ? 1.0 : 0.5;
     painter.setOpacity(opacity);
 
-    QColor tumblerColor;
-    QColor trackColor;
-
-    tumblerColor = d->isChecked
+    const auto tumblerColor = d->isChecked
         ? Ui::DesignSystem::color().accent()
         : (ColorHelper::isColorLight(backgroundColor()) ? backgroundColor() : textColor());
-    trackColor = d->isChecked ? tumblerColor.lighter(140) : ColorHelper::nearby(tumblerColor, 160);
+    const auto trackColor
+        = d->isChecked ? tumblerColor.lighter(140) : ColorHelper::nearby(tumblerColor, 160);
     //
     // Трэк
     //
+    QPainterPath trackPath;
     painter.setBrush(trackColor);
-    const QRectF trackRect({ contentsMargins().left() + Ui::DesignSystem::layout().px12()
-                                 + Ui::DesignSystem::toggle().tumblerOverflow(),
-                             contentsMargins().top() + Ui::DesignSystem::layout().px12()
-                                 + Ui::DesignSystem::toggle().tumblerOverflow() },
-                           Ui::DesignSystem::toggle().trackSize());
 
-    painter.drawRoundedRect(trackRect, trackRect.height() / 2.0, trackRect.height() / 2.0);
+    QRectF trackRect({ contentsMargins().left() + Ui::DesignSystem::layout().px12()
+                           + Ui::DesignSystem::toggle().tumblerOverflow(),
+                       contentsMargins().top() + Ui::DesignSystem::layout().px12()
+                           + Ui::DesignSystem::toggle().tumblerOverflow() },
+                     Ui::DesignSystem::toggle().trackSize());
+    trackPath.addRoundedRect(trackRect, trackRect.height() / 2.0, trackRect.height() / 2.0);
+
+    const QRectF tumblerRect = d->tumblerAnimation.currentValue().toRectF();
+
+    QPainterPath tumblerPath;
+    tumblerPath.addRoundedRect(tumblerRect, tumblerRect.height() / 2.0, tumblerRect.height() / 2.0);
+    trackPath = trackPath.subtracted(tumblerPath);
+
+    painter.fillPath(trackPath, trackColor);
+
     //
     // Переключатель
     //
-    painter.setBrush(isEnabled() ? tumblerColor : tumblerColor.lighter(150));
+    painter.setBrush(tumblerColor);
     const QRectF toggleRect = d->tumblerAnimation.currentValue().toRectF();
     const qreal borderRadius = toggleRect.height() / 2.0;
-    const qreal disabledOpacity = isEnabled() ? 1.0 : 0.3;
-    painter.setOpacity(disabledOpacity);
     //
     // ... подготовим тень
     //
@@ -196,10 +203,7 @@ void Toggle::paintEvent(QPaintEvent* _event)
         backgroundImage.fill(Qt::transparent);
         QPainter backgroundImagePainter(&backgroundImage);
         backgroundImagePainter.setPen(Qt::NoPen);
-        backgroundImagePainter.setBrush(isEnabled()
-                                            ? Ui::DesignSystem::color().textEditor()
-                                            : Ui::DesignSystem::color().textEditor().lighter(150));
-        backgroundImagePainter.setOpacity(disabledOpacity);
+        backgroundImagePainter.setBrush(Ui::DesignSystem::color().textEditor());
         backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()),
                                                borderRadius, borderRadius);
     }
@@ -208,12 +212,14 @@ void Toggle::paintEvent(QPaintEvent* _event)
     //
     const qreal shadowHeight = Ui::DesignSystem::card().minimumShadowBlurRadius();
     const bool useCache = true;
-    const QPixmap shadow = ImageHelper::dropShadow(
-        backgroundImage, Ui::DesignSystem::card().shadowMargins(), shadowHeight,
-        isEnabled() ? Ui::DesignSystem::color().shadow()
-                    : Ui::DesignSystem::color().shadow().lighter(150),
-        useCache);
-    painter.setOpacity(1.0);
+    QPixmap shadow
+        = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
+                                  shadowHeight, Ui::DesignSystem::color().shadow(), useCache);
+    QPainter shadowPainter(&shadow);
+    shadowPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+    shadowPainter.fillRect(shadow.rect(), QColor(0, 0, 0, 255 * opacity));
+    shadowPainter.end();
+
     painter.drawPixmap(toggleRect.topLeft()
                            - QPointF{ Ui::DesignSystem::card().shadowMargins().left(),
                                       Ui::DesignSystem::card().shadowMargins().top() },
