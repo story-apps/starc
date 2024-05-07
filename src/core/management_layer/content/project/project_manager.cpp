@@ -410,7 +410,7 @@ public:
     /**
      * @brief Возможность экспортирования для текущего документа
      */
-    bool isCurrentDocumentExportAviable = false;
+    bool isCurrentDocumentExportAvailable = false;
 };
 
 ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _parent,
@@ -607,7 +607,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     }
 
     // Для документов, имеющих разрешение на экспорт, можно вызвать экспорт
-    if (_index.isValid() && isCurrentDocumentExportAviable) {
+    if (_index.isValid() && isCurrentDocumentExportAvailable) {
         auto exportCurrentFileAction = new QAction(tr("Export..."));
         exportCurrentFileAction->setSeparator(true);
         exportCurrentFileAction->setIconText(u8"\U000f0207");
@@ -3201,9 +3201,9 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
         _treatment.toUtf8());
 }
 
-void ProjectManager::setCurrentDocumentExportAviable(bool _available)
+void ProjectManager::setCurrentDocumentExportAvailable(bool _available)
 {
-    d->isCurrentDocumentExportAviable = _available;
+    d->isCurrentDocumentExportAvailable = _available;
 };
 
 void ProjectManager::addNovel(const QString& _name, const QString& _text)

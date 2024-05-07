@@ -135,7 +135,7 @@ public:
     /**
      * @brief Установить возможность экспортирования текущего документа
      */
-    void setCurrentDocumentExportAviable(bool _available);
+    void setCurrentDocumentExportAvailable(bool _available);
 
     /**
      * @brief Получить список документов, у которых есть несинхроинизированные изменения
