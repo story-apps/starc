@@ -2,6 +2,7 @@
 
 #include <business_layer/export/audioplay/audioplay_docx_exporter.h>
 #include <business_layer/export/audioplay/audioplay_export_options.h>
+#include <business_layer/export/audioplay/audioplay_fountain_exporter.h>
 #include <business_layer/export/audioplay/audioplay_pdf_exporter.h>
 #include <business_layer/export/characters/character_docx_exporter.h>
 #include <business_layer/export/characters/character_export_options.h>
@@ -11,6 +12,7 @@
 #include <business_layer/export/characters/characters_pdf_exporter.h>
 #include <business_layer/export/comic_book/comic_book_docx_exporter.h>
 #include <business_layer/export/comic_book/comic_book_export_options.h>
+#include <business_layer/export/comic_book/comic_book_fountain_exporter.h>
 #include <business_layer/export/comic_book/comic_book_pdf_exporter.h>
 #include <business_layer/export/export_options.h>
 #include <business_layer/export/locations/location_docx_exporter.h>
@@ -33,6 +35,7 @@
 #include <business_layer/export/simple_text/simple_text_pdf_exporter.h>
 #include <business_layer/export/stageplay/stageplay_docx_exporter.h>
 #include <business_layer/export/stageplay/stageplay_export_options.h>
+#include <business_layer/export/stageplay/stageplay_fountain_exporter.h>
 #include <business_layer/export/stageplay/stageplay_pdf_exporter.h>
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
@@ -353,6 +356,11 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                     exportExtension = ExtensionHelper::msOfficeOpenXml();
                     break;
                 }
+                case ExportFileFormat::Fountain: {
+                    exportFilter = DialogHelper::fountainFilter();
+                    exportExtension = ExtensionHelper::fountain();
+                    break;
+                }
                 }
                 const auto comicBookTextModel
                     = qobject_cast<BusinessLayer::ComicBookTextModel*>(_model);
@@ -450,6 +458,10 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                     exporter.reset(new BusinessLayer::ComicBookDocxExporter);
                     break;
                 }
+                case ExportFileFormat::Fountain: {
+                    exporter.reset(new BusinessLayer::ComicBookFountainExporter);
+                    break;
+                }
                 }
                 if (exporter.isNull()) {
                     return;
@@ -505,6 +517,11 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
                 case ExportFileFormat::Docx: {
                     exportFilter = DialogHelper::msWordFilter();
                     exportExtension = ExtensionHelper::msOfficeOpenXml();
+                    break;
+                }
+                case ExportFileFormat::Fountain: {
+                    exportFilter = DialogHelper::fountainFilter();
+                    exportExtension = ExtensionHelper::fountain();
                     break;
                 }
                 }
@@ -610,6 +627,10 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
                     exporter.reset(new BusinessLayer::AudioplayDocxExporter);
                     break;
                 }
+                case ExportFileFormat::Fountain: {
+                    exporter.reset(new BusinessLayer::AudioplayFountainExporter);
+                    break;
+                }
                 }
                 if (exporter.isNull()) {
                     return;
@@ -665,6 +686,11 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
                 case ExportFileFormat::Docx: {
                     exportFilter = DialogHelper::msWordFilter();
                     exportExtension = ExtensionHelper::msOfficeOpenXml();
+                    break;
+                }
+                case ExportFileFormat::Fountain: {
+                    exportFilter = DialogHelper::fountainFilter();
+                    exportExtension = ExtensionHelper::fountain();
                     break;
                 }
                 }
@@ -767,6 +793,10 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
                 }
                 case ExportFileFormat::Docx: {
                     exporter.reset(new BusinessLayer::StageplayDocxExporter);
+                    break;
+                }
+                case ExportFileFormat::Fountain: {
+                    exporter.reset(new BusinessLayer::StageplayFountainExporter);
                     break;
                 }
                 }

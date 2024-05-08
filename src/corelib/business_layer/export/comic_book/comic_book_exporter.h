@@ -10,6 +10,9 @@ namespace BusinessLayer {
  */
 class CORE_LIBRARY_EXPORT ComicBookExporter : virtual public AbstractExporter
 {
+public:
+    ~ComicBookExporter() override;
+
 protected:
     /**
      * @brief Создать документ для экспорта

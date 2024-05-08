@@ -39,6 +39,11 @@ class AudioplayExportDialog::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Получить формат файла в соответствии со строкой комбобокса
+     */
+    BusinessLayer::ExportFileFormat currentFileFormat();
+
 
     CheckBox* includeTitlePage = nullptr;
     CheckBox* includeSynopsis = nullptr;
@@ -75,7 +80,7 @@ AudioplayExportDialog::Implementation::Implementation(QWidget* _parent)
     , exportButton(new Button(_parent))
 {
     fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    auto formatsModel = new QStringListModel({ "PDF", "DOCX" });
+    auto formatsModel = new QStringListModel({ "PDF", "DOCX", "Fountain" });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
     highlightCharactersWithDialogue->setEnabled(false);
@@ -89,6 +94,22 @@ AudioplayExportDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton, 0, Qt::AlignVCenter);
     buttonsLayout->addWidget(exportButton, 0, Qt::AlignVCenter);
+}
+
+BusinessLayer::ExportFileFormat AudioplayExportDialog::Implementation::currentFileFormat()
+{
+    switch (fileFormat->currentIndex().row()) {
+    default:
+    case 0: {
+        return BusinessLayer::ExportFileFormat::Pdf;
+    }
+    case 1: {
+        return BusinessLayer::ExportFileFormat::Docx;
+    }
+    case 2: {
+        return BusinessLayer::ExportFileFormat::Fountain;
+    }
+    }
 }
 
 
@@ -136,23 +157,22 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
         auto isPrintReviewMarksVisible = true;
         auto isHighlightCharactersVisible = true;
         auto isWatermarkVisible = true;
-        switch (d->fileFormat->currentIndex().row()) {
-        //
-        // PDF
-        //
+        auto isPrintSynopsisVisible = true;
+        switch (d->currentFileFormat()) {
         default:
-        case 0: {
+        case BusinessLayer::ExportFileFormat::Pdf: {
             //
             // ... всё видимое
             //
             break;
         }
-
-        //
-        // DOCX
-        //
-        case 1: {
+        case BusinessLayer::ExportFileFormat::Docx: {
             isWatermarkVisible = false;
+            break;
+        }
+        case BusinessLayer::ExportFileFormat::Fountain: {
+            isWatermarkVisible = false;
+            isPrintSynopsisVisible = false;
             break;
         }
         }
@@ -166,6 +186,7 @@ AudioplayExportDialog::AudioplayExportDialog(QWidget* _parent)
         d->highlightCharacters->setVisible(isHighlightCharactersVisible);
         d->highlightCharactersWithDialogue->setVisible(isHighlightCharactersVisible);
         d->watermark->setVisible(isWatermarkVisible);
+        d->includeSynopsis->setVisible(isPrintSynopsisVisible);
     };
     connect(d->includeScript, &CheckBox::checkedChanged, this, updateParametersVisibility);
     connect(d->fileFormat, &ComboBox::currentIndexChanged, this, updateParametersVisibility);
@@ -234,10 +255,10 @@ AudioplayExportDialog::~AudioplayExportDialog()
 BusinessLayer::AudioplayExportOptions AudioplayExportDialog::exportOptions() const
 {
     BusinessLayer::AudioplayExportOptions options;
-    options.fileFormat
-        = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
+    options.fileFormat = d->currentFileFormat();
     options.includeTiltePage = d->includeTitlePage->isChecked();
-    options.includeSynopsis = d->includeSynopsis->isChecked();
+    options.includeSynopsis
+        = d->includeSynopsis->isVisibleTo(this) ? d->includeSynopsis->isChecked() : false;
     options.includeText = d->includeScript->isChecked();
     options.includeInlineNotes = d->includeInlineNotes->isChecked();
     options.includeReviewMarks = d->includeReviewMarks->isChecked();

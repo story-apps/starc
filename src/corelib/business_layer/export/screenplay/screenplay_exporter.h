@@ -7,6 +7,9 @@ namespace BusinessLayer {
 
 class CORE_LIBRARY_EXPORT ScreenplayExporter : virtual public AbstractExporter
 {
+public:
+    ~ScreenplayExporter() override;
+
 protected:
     /**
      * @brief Создать документ для экспорта

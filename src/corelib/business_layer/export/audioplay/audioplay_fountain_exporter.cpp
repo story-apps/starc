@@ -1,35 +1,65 @@
-#include "stageplay_fountain_exporter.h"
+#include "audioplay_fountain_exporter.h"
 
-#include "stageplay_export_options.h"
+#include "audioplay_export_options.h"
 
 #include <business_layer/document/text/text_block_data.h>
-#include <business_layer/model/stageplay/text/stageplay_text_model_scene_item.h>
-#include <business_layer/templates/stageplay_template.h>
+#include <business_layer/model/audioplay/text/audioplay_text_model_scene_item.h>
+#include <business_layer/templates/text_template.h>
 #include <utils/helpers/text_helper.h>
 
 
 namespace BusinessLayer {
 
-StageplayFountainExporter::StageplayFountainExporter()
-    : StageplayExporter()
+
+AudioplayFountainExporter::AudioplayFountainExporter()
+    : AudioplayExporter()
     , AbstractMarkdownExporter({ '*', '_' })
 {
 }
 
-StageplayFountainExporter::~StageplayFountainExporter() = default;
+AudioplayFountainExporter::~AudioplayFountainExporter() = default;
 
-
-bool StageplayFountainExporter::processBlock(QString& _paragraph, const QTextBlock& _block,
+bool AudioplayFountainExporter::processBlock(QString& _paragraph, const QTextBlock& _block,
                                              const ExportOptions& _exportOptions) const
 {
-    const auto& exportOptions = static_cast<const StageplayExportOptions&>(_exportOptions);
+    const auto& exportOptions = static_cast<const AudioplayExportOptions&>(_exportOptions);
+
+    //
+    // Если нужны редакторские заметки, то вставляем их
+    //
+    if (exportOptions.includeReviewMarks) {
+        QVector<QTextLayout::FormatRange> reviewMarks;
+        for (const QTextLayout::FormatRange& format : _block.textFormats()) {
+            if (format.format.boolProperty(TextBlockStyle::PropertyIsReviewMark)) {
+                reviewMarks.push_back(format);
+            }
+        }
+        for (int markIndex = reviewMarks.size() - 1; markIndex >= 0; --markIndex) {
+            //
+            // Извлечем список редакторских заметок для данной области блока
+            //
+            const QStringList comments = reviewMarks[markIndex]
+                                             .format.property(TextBlockStyle::PropertyComments)
+                                             .toStringList();
+            //
+            // Вставлять редакторские заметки нужно с конца, чтобы не сбилась их
+            // позиция вставки
+            //
+            for (int commentIndex = comments.size() - 1; commentIndex >= 0; --commentIndex) {
+                if (!comments[commentIndex].simplified().isEmpty()) {
+                    _paragraph.insert(reviewMarks[markIndex].start + reviewMarks[markIndex].length,
+                                      "[[" + comments[commentIndex] + "]]");
+                }
+            }
+        }
+    }
 
     switch (TextBlockStyle::forBlock(_block)) {
     case TextParagraphType::SceneHeading: {
         _paragraph.prepend('.');
 
         //
-        // Если печатаем номера сцен, то добавим в конец этот номер, окруженный #
+        // Если печатаем номера блоков, то добавим в конец этот номер, окруженный #
         //
         if (exportOptions.showBlockNumbers) {
             const auto blockData = static_cast<TextBlockData*>(_block.userData());
@@ -38,7 +68,7 @@ bool StageplayFountainExporter::processBlock(QString& _paragraph, const QTextBlo
                 && static_cast<TextGroupType>(blockData->item()->parent()->subtype())
                     == TextGroupType::Scene) {
                 const auto sceneItem
-                    = static_cast<StageplayTextModelSceneItem*>(blockData->item()->parent());
+                    = static_cast<AudioplayTextModelSceneItem*>(blockData->item()->parent());
                 _paragraph += QString(" #%1#").arg(sceneItem->number()->text);
             }
         }
@@ -53,27 +83,29 @@ bool StageplayFountainExporter::processBlock(QString& _paragraph, const QTextBlo
         if (!TextHelper::isUppercase(_paragraph)) {
             _paragraph.prepend('@');
         }
+
         //
         // Если в конце имени персонажа стоит двоеточие, удалим его
         //
         if (_paragraph.endsWith(':')) {
             _paragraph.chop(1);
         }
+
         return true;
     }
 
-    case TextParagraphType::Dialogue: {
+    case TextParagraphType::Dialogue:
+    case TextParagraphType::Cue: {
         return true;
     }
 
-    case TextParagraphType::Action: {
-        //
-        // Корректируем регистр, чтобы не было верхнего регистра
-        //
-        const auto capitalizeEveryWord = false;
-        const auto capitalizeEverySentense = true;
-        _paragraph
-            = TextHelper::toSentenceCase(_paragraph, capitalizeEveryWord, capitalizeEverySentense);
+    case TextParagraphType::Sound: {
+        _paragraph.prepend("Sound: ");
+        return true;
+    }
+
+    case TextParagraphType::Music: {
+        _paragraph.prepend("Music: ");
         return true;
     }
 
@@ -98,7 +130,7 @@ bool StageplayFountainExporter::processBlock(QString& _paragraph, const QTextBlo
     }
 }
 
-QString StageplayFountainExporter::formatSymbols(TextSelectionTypes _type) const
+QString AudioplayFountainExporter::formatSymbols(TextSelectionTypes _type) const
 {
     switch (_type) {
     case TextSelectionTypes::Bold: {
@@ -116,7 +148,7 @@ QString StageplayFountainExporter::formatSymbols(TextSelectionTypes _type) const
     }
 }
 
-void StageplayFountainExporter::addIndentationAtBegin(QString& _paragraph,
+void AudioplayFountainExporter::addIndentationAtBegin(QString& _paragraph,
                                                       TextParagraphType _previosBlockType,
                                                       TextParagraphType _currentBlockType) const
 {
@@ -125,12 +157,12 @@ void StageplayFountainExporter::addIndentationAtBegin(QString& _paragraph,
     // столбцы - предыдущий тип, строки - текущий
     //
     const QVector<QVector<int>> countIndentation = {
-        // Undefined, SceneHeading, Character, Dialogue, Action/InlineNote/UnformattedText
+        // Undefined, SceneHeading, Character, Dialogue, Sound/Music/Cue/InlineNote/UnformattedText
         { 0, 0, 0, 0, 0 }, // Undefined
         { 0, 2, 3, 3, 3 }, // SceneHeading
         { 0, 2, 2, 2, 2 }, // Character
         { 0, 2, 1, 2, 2 }, // Dialogue
-        { 0, 2, 2, 2, 2 }, // Action/InlineNote/UnformattedText
+        { 0, 2, 2, 2, 2 }, // Sound/Music/Cue/InlineNote/UnformattedText
     };
 
     auto positionInTable = [](TextParagraphType _type) {
@@ -144,7 +176,9 @@ void StageplayFountainExporter::addIndentationAtBegin(QString& _paragraph,
         case TextParagraphType::Dialogue: {
             return 3;
         }
-        case TextParagraphType::Action:
+        case TextParagraphType::Sound:
+        case TextParagraphType::Music:
+        case TextParagraphType::Cue:
         case TextParagraphType::InlineNote:
         case TextParagraphType::UnformattedText: {
             return 4;

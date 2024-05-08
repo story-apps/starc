@@ -18,6 +18,8 @@
 
 namespace BusinessLayer {
 
+ScreenplayExporter::~ScreenplayExporter() = default;
+
 TextDocument* ScreenplayExporter::createDocument(const ExportOptions& _exportOptions) const
 {
     const auto& exportOptions = static_cast<const ScreenplayExportOptions&>(_exportOptions);

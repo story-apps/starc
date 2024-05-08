@@ -37,6 +37,11 @@ class ComicBookExportDialog::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Получить формат файла в соответствии со строкой комбобокса
+     */
+    BusinessLayer::ExportFileFormat currentFileFormat();
+
 
     CheckBox* includeTitlePage = nullptr;
     CheckBox* includeSynopsis = nullptr;
@@ -71,7 +76,7 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     using namespace BusinessLayer;
 
     fileFormat->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    auto formatsModel = new QStringListModel({ "PDF", "DOCX" });
+    auto formatsModel = new QStringListModel({ "PDF", "DOCX", "Fountain" });
     fileFormat->setModel(formatsModel);
     fileFormat->setCurrentIndex(formatsModel->index(0, 0));
     watermark->setSpellCheckPolicy(SpellCheckPolicy::Manual);
@@ -84,6 +89,22 @@ ComicBookExportDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton, 0, Qt::AlignVCenter);
     buttonsLayout->addWidget(exportButton, 0, Qt::AlignVCenter);
+}
+
+BusinessLayer::ExportFileFormat ComicBookExportDialog::Implementation::currentFileFormat()
+{
+    switch (fileFormat->currentIndex().row()) {
+    default:
+    case 0: {
+        return BusinessLayer::ExportFileFormat::Pdf;
+    }
+    case 1: {
+        return BusinessLayer::ExportFileFormat::Docx;
+    }
+    case 2: {
+        return BusinessLayer::ExportFileFormat::Fountain;
+    }
+    }
 }
 
 
@@ -121,23 +142,22 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
         auto isPrintInlineNotesVisible = true;
         auto isPrintReviewMarksVisible = true;
         auto isWatermarkVisible = true;
-        switch (d->fileFormat->currentIndex().row()) {
-        //
-        // PDF
-        //
+        auto isPrintSynopsisVisible = true;
+        switch (d->currentFileFormat()) {
         default:
-        case 0: {
+        case BusinessLayer::ExportFileFormat::Pdf: {
             //
             // ... всё видимое
             //
             break;
         }
-
-        //
-        // DOCX
-        //
-        case 1: {
+        case BusinessLayer::ExportFileFormat::Docx: {
             isWatermarkVisible = false;
+            break;
+        }
+        case BusinessLayer::ExportFileFormat::Fountain: {
+            isWatermarkVisible = false;
+            isPrintSynopsisVisible = false;
             break;
         }
         }
@@ -148,6 +168,7 @@ ComicBookExportDialog::ComicBookExportDialog(QWidget* _parent)
         d->includeInlineNotes->setVisible(isPrintInlineNotesVisible);
         d->includeReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->watermark->setVisible(isWatermarkVisible);
+        d->includeSynopsis->setVisible(isPrintSynopsisVisible);
     };
     connect(d->includeScript, &CheckBox::checkedChanged, this, updateParametersVisibility);
     connect(d->fileFormat, &ComboBox::currentIndexChanged, this, updateParametersVisibility);
@@ -208,10 +229,10 @@ ComicBookExportDialog::~ComicBookExportDialog()
 BusinessLayer::ComicBookExportOptions ComicBookExportDialog::exportOptions() const
 {
     BusinessLayer::ComicBookExportOptions options;
-    options.fileFormat
-        = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
+    options.fileFormat = d->currentFileFormat();
     options.includeTiltePage = d->includeTitlePage->isChecked();
-    options.includeSynopsis = d->includeSynopsis->isChecked();
+    options.includeSynopsis
+        = d->includeSynopsis->isVisibleTo(this) ? d->includeSynopsis->isChecked() : false;
     options.includeText = d->includeScript->isChecked();
     options.includeInlineNotes = d->includeInlineNotes->isChecked();
     options.includeReviewMarks = d->includeReviewMarks->isChecked();
