@@ -1,18 +1,18 @@
 #pragma once
 
-#include "stageplay_exporter.h"
+#include "audioplay_exporter.h"
 
 #include <business_layer/export/abstract_markdown_exporter.h>
 
 
 namespace BusinessLayer {
 
-class CORE_LIBRARY_EXPORT StageplayFountainExporter : public StageplayExporter,
+class CORE_LIBRARY_EXPORT AudioplayFountainExporter : public AudioplayExporter,
                                                       public AbstractMarkdownExporter
 {
 public:
-    StageplayFountainExporter();
-    ~StageplayFountainExporter() override;
+    AudioplayFountainExporter();
+    ~AudioplayFountainExporter() override;
 
 protected:
     /**

@@ -15,6 +15,8 @@
 
 namespace BusinessLayer {
 
+ComicBookExporter::~ComicBookExporter() = default;
+
 TextDocument* ComicBookExporter::createDocument(const ExportOptions& _exportOptions) const
 {
     Q_UNUSED(_exportOptions)

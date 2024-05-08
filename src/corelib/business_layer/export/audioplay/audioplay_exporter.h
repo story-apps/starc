@@ -7,6 +7,9 @@ namespace BusinessLayer {
 
 class CORE_LIBRARY_EXPORT AudioplayExporter : virtual public AbstractExporter
 {
+public:
+    ~AudioplayExporter() override;
+
 protected:
     /**
      * @brief Создать документ для экспорта

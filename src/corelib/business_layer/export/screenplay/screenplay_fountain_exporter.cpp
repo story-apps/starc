@@ -2,16 +2,13 @@
 
 #include "screenplay_export_options.h"
 
-#include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/document/text/text_block_data.h>
-#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QCoreApplication>
-#include <QFile>
 
 
 namespace BusinessLayer {
@@ -278,7 +275,7 @@ void ScreenplayFountainExporter::addIndentationAtBegin(QString& _paragraph,
         { 0, 3, 3, 3, 3, 3, 2, 3 }, // ActHeading/SequenceHeading/SceneHeading
         { 0, 2, 2, 2, 2, 3, 2, 2 }, // other
         // other:
-        // Action/Shot/Transition/BeatHeading/UnformattedText/InlineNote/Synopses
+        // Action/Shot/Transition/BeatHeading/UnformattedText/InlineNote
     };
 
     auto positionInTable = [](TextParagraphType _type) {

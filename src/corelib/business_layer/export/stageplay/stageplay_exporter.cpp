@@ -13,6 +13,8 @@
 
 namespace BusinessLayer {
 
+StageplayExporter::~StageplayExporter() = default;
+
 TextDocument* StageplayExporter::createDocument(const ExportOptions& _exportOptions) const
 {
     Q_UNUSED(_exportOptions)

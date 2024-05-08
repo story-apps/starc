@@ -14,6 +14,8 @@
 
 namespace BusinessLayer {
 
+AudioplayExporter::~AudioplayExporter() = default;
+
 TextDocument* AudioplayExporter::createDocument(const ExportOptions& _exportOptions) const
 {
     Q_UNUSED(_exportOptions)
