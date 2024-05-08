@@ -188,6 +188,7 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
     });
     //
     auto updateParametersVisibility = [this] {
+        auto isPrintSynopsisVisible = true;
         auto isPrintFoldersVisible = true;
         auto isPrintInlineNotesVisible = true;
         auto isPrintReviewMarksVisible = true;
@@ -218,6 +219,7 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
             // FDX
             //
         case 2: {
+            isPrintSynopsisVisible = false;
             isPrintReviewMarksVisible = false;
             isWatermarkVisible = false;
             break;
@@ -227,11 +229,13 @@ ScreenplayExportDialog::ScreenplayExportDialog(QWidget* _parent)
             // Fountain
             //
         case 3: {
+            isPrintSynopsisVisible = false;
             isWatermarkVisible = false;
             break;
         }
         }
 
+        d->includeSynopsis->setVisible(isPrintSynopsisVisible);
         if (!d->includeTreatment->isChecked() && !d->includeScreenplay->isChecked()) {
             isPrintFoldersVisible = false;
             isPrintInlineNotesVisible = false;
@@ -326,7 +330,8 @@ BusinessLayer::ScreenplayExportOptions ScreenplayExportDialog::exportOptions() c
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
     options.includeTiltePage = d->includeTitlePage->isChecked();
-    options.includeSynopsis = d->includeSynopsis->isChecked();
+    options.includeSynopsis
+        = d->includeSynopsis->isVisibleTo(this) ? d->includeSynopsis->isChecked() : false;
     options.includeText = d->includeTreatment->isChecked() || d->includeScreenplay->isChecked();
     options.includeTreatment = d->includeTreatment->isChecked();
     options.includeFolders = d->includeSequences->isChecked();
