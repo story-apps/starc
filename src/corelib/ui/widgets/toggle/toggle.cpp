@@ -1,5 +1,4 @@
 #include "toggle.h"
-#include "QtGui/qpainterpath.h"
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/animations/click_animation.h>
@@ -8,6 +7,7 @@
 
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QVariantAnimation>
 
 
@@ -159,7 +159,7 @@ void Toggle::paintEvent(QPaintEvent* _event)
 
     painter.fillRect(_event->rect(), backgroundColor());
 
-    qreal opacity = isEnabled() ? 1.0 : 0.5;
+    const qreal opacity = isEnabled() ? 1.0 : Ui::DesignSystem::disabledTextOpacity();
     painter.setOpacity(opacity);
 
     const auto tumblerColor = d->isChecked
@@ -170,30 +170,28 @@ void Toggle::paintEvent(QPaintEvent* _event)
     //
     // Трэк
     //
-    QPainterPath trackPath;
     painter.setBrush(trackColor);
-
-    QRectF trackRect({ contentsMargins().left() + Ui::DesignSystem::layout().px12()
-                           + Ui::DesignSystem::toggle().tumblerOverflow(),
-                       contentsMargins().top() + Ui::DesignSystem::layout().px12()
-                           + Ui::DesignSystem::toggle().tumblerOverflow() },
-                     Ui::DesignSystem::toggle().trackSize());
-    trackPath.addRoundedRect(trackRect, trackRect.height() / 2.0, trackRect.height() / 2.0);
-
+    const QRectF trackRect({ contentsMargins().left() + Ui::DesignSystem::layout().px12()
+                                 + Ui::DesignSystem::toggle().tumblerOverflow(),
+                             contentsMargins().top() + Ui::DesignSystem::layout().px12()
+                                 + Ui::DesignSystem::toggle().tumblerOverflow() },
+                           Ui::DesignSystem::toggle().trackSize());
     const QRectF tumblerRect = d->tumblerAnimation.currentValue().toRectF();
-
-    QPainterPath tumblerPath;
-    tumblerPath.addRoundedRect(tumblerRect, tumblerRect.height() / 2.0, tumblerRect.height() / 2.0);
-    trackPath = trackPath.subtracted(tumblerPath);
-
-    painter.fillPath(trackPath, trackColor);
-
     //
     // Переключатель
     //
     painter.setBrush(tumblerColor);
     const QRectF toggleRect = d->tumblerAnimation.currentValue().toRectF();
     const qreal borderRadius = toggleRect.height() / 2.0;
+    //
+    // Определение фигур для отрисовки
+    //
+    QPainterPath tumblerPath;
+    tumblerPath.addRoundedRect(tumblerRect, tumblerRect.height() / 2.0, tumblerRect.height() / 2.0);
+    QPainterPath trackPath;
+    trackPath.addRoundedRect(trackRect, trackRect.height() / 2.0, trackRect.height() / 2.0);
+    trackPath = trackPath.subtracted(tumblerPath);
+    painter.fillPath(trackPath, trackColor);
     //
     // ... подготовим тень
     //
@@ -227,22 +225,24 @@ void Toggle::paintEvent(QPaintEvent* _event)
     //
     // ... рисуем декорацию
     //
-    if (isEnabled() && (underMouse() || hasFocus())) {
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(isChecked() ? Ui::DesignSystem::color().accent() : textColor());
-        painter.setOpacity(hasFocus() ? Ui::DesignSystem::focusBackgroundOpacity()
-                                      : Ui::DesignSystem::hoverBackgroundOpacity());
-        const auto radius = d->decorationAnimation.maximumRadius();
-        painter.drawEllipse(toggleRect.center(), radius, radius);
-        painter.setOpacity(1.0);
-    }
-    if (isEnabled() && d->decorationAnimation.state() == ClickAnimation::Running) {
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(isChecked() ? Ui::DesignSystem::color().accent() : textColor());
-        painter.setOpacity(d->decorationAnimation.opacity());
-        const auto radius = d->decorationAnimation.radius();
-        painter.drawEllipse(toggleRect.center(), radius, radius);
-        painter.setOpacity(1.0);
+    if (isEnabled()) {
+        if (underMouse() || hasFocus()) {
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(isChecked() ? Ui::DesignSystem::color().accent() : textColor());
+            painter.setOpacity(hasFocus() ? Ui::DesignSystem::focusBackgroundOpacity()
+                                          : Ui::DesignSystem::hoverBackgroundOpacity());
+            const auto radius = d->decorationAnimation.maximumRadius();
+            painter.drawEllipse(toggleRect.center(), radius, radius);
+            painter.setOpacity(1.0);
+        }
+        if (d->decorationAnimation.state() == ClickAnimation::Running) {
+            painter.setPen(Qt::NoPen);
+            painter.setBrush(isChecked() ? Ui::DesignSystem::color().accent() : textColor());
+            painter.setOpacity(d->decorationAnimation.opacity());
+            const auto radius = d->decorationAnimation.radius();
+            painter.drawEllipse(toggleRect.center(), radius, radius);
+            painter.setOpacity(1.0);
+        }
     }
     painter.setBrush(tumblerColor);
     //
