@@ -294,12 +294,6 @@ QTextDocument* ScreenplayTextCorrector::Implementation::document() const
 void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from, int _charsChanged)
 {
     //
-    // Сформируем список типов блоков для отображения
-    //
-    auto screenplayDocument = qobject_cast<ScreenplayTextDocument*>(document());
-    const auto visibleBlocksTypes = screenplayDocument->visibleBlocksTypes();
-
-    //
     // Пробегаем документ и настраиваем видимые и невидимые блоки в соответствии с шаблоном
     //
     const auto& currentTemplate = TemplatesFacade::screenplayTemplate(q->templateId());
@@ -327,12 +321,12 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from, 
         //
         // При необходимости корректируем видимость блока
         //
-        const auto isBlockShouldBeVisible = [this, block, blockType, visibleBlocksTypes] {
+        const auto isBlockShouldBeVisible = [this, block, blockType] {
             //
             // Если не задан верхнеуровневый видимый элемент, то смотрим только по типам
             //
             if (q->visibleTopLevelItem() == nullptr) {
-                return visibleBlocksTypes.contains(blockType);
+                return q->isBlockVisible(blockType);
             }
 
             //
@@ -348,7 +342,7 @@ void ScreenplayTextCorrector::Implementation::updateBlocksVisibility(int _from, 
             //
             // А если является дитём, то смотрим опять же по типам
             //
-            return visibleBlocksTypes.contains(blockType);
+            return q->isBlockVisible(blockType);
         }();
 
         cursor.setPosition(block.position());

@@ -243,12 +243,6 @@ QTextDocument* NovelTextCorrector::Implementation::document() const
 void NovelTextCorrector::Implementation::updateBlocksVisibility(int _from, int _charsChanged)
 {
     //
-    // Сформируем список типов блоков для отображения
-    //
-    auto screenplayDocument = qobject_cast<NovelTextDocument*>(document());
-    const auto visibleBlocksTypes = screenplayDocument->visibleBlocksTypes();
-
-    //
     // Пробегаем документ и настраиваем видимые и невидимые блоки в соответствии с шаблоном
     //
     const auto& currentTemplate = TemplatesFacade::novelTemplate(q->templateId());
@@ -276,12 +270,12 @@ void NovelTextCorrector::Implementation::updateBlocksVisibility(int _from, int _
         //
         // При необходимости корректируем видимость блока
         //
-        const auto isBlockShouldBeVisible = [this, block, blockType, visibleBlocksTypes] {
+        const auto isBlockShouldBeVisible = [this, block, blockType] {
             //
             // Если не задан верхнеуровневый видимый элемент, то смотрим только по типам
             //
             if (q->visibleTopLevelItem() == nullptr) {
-                return visibleBlocksTypes.contains(blockType);
+                return q->isBlockVisible(blockType);
             }
 
             //
@@ -297,7 +291,7 @@ void NovelTextCorrector::Implementation::updateBlocksVisibility(int _from, int _
             //
             // А если является дитём, то смотрим опять же по типам
             //
-            return visibleBlocksTypes.contains(blockType);
+            return q->isBlockVisible(blockType);
         }();
 
         cursor.setPosition(block.position());
@@ -1159,6 +1153,22 @@ void NovelTextCorrector::setCorrectionOptions(const QStringList& _options)
 
     clear();
     makeCorrections();
+}
+
+bool NovelTextCorrector::isBlockVisible(TextParagraphType _type) const
+{
+    const QSet<TextParagraphType> standardBlockTypes = {
+        TextParagraphType::ChapterHeading1,
+        TextParagraphType::ChapterHeading2,
+        TextParagraphType::ChapterHeading3,
+        TextParagraphType::ChapterHeading4,
+        TextParagraphType::ChapterHeading5,
+        TextParagraphType::ChapterHeading6,
+        TextParagraphType::Text,
+    };
+    const auto novelDocument = qobject_cast<NovelTextDocument*>(document());
+    return standardBlockTypes.contains(_type)
+        || novelDocument->visibleBlocksTypes().contains(_type);
 }
 
 void NovelTextCorrector::clearImpl()
