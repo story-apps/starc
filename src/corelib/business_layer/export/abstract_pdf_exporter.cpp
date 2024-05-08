@@ -120,48 +120,35 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
         _painter->setClipRect(fullWidthPageRect);
 
         //
-        // Наличие невидимых блоков в маке и винде может давать неверный результат по
-        // layout::hitTest, поэтому для него делаем дополнительную проверку
+        // Наличие невидимых блоков может давать неверный результат по
+        // layout::hitTest, поэтому используем грубую силу и ищем вручную
         //
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-        QTextBlock block;
-        if (pageYPos > 0) {
-            int blockPos = 0;
-            auto topY = pageYPos
-                + MeasurementHelper::mmToPx(
-                            q->documentTemplate(_exportOptions).pageMargins().top());
-            auto y = topY;
-            constexpr int repeats = 20;
-            for (int repeat = 0; repeat < repeats; ++repeat) {
-                blockPos = layout->hitTest(QPoint(0, y), Qt::FuzzyHit);
-                block = _document->findBlock(std::max(0, blockPos));
-                const auto blockLineHeight = TextHelper::fineLineSpacing(block.charFormat().font());
-                if (abs(layout->blockBoundingRect(block).top() - topY) < blockLineHeight) {
-                    break;
-                }
-
-                constexpr int movementDelta = 20;
-                y += movementDelta;
-            }
-        }
-#else
-        const int blockPos = pageYPos == 0
-            ? 0
-            : layout->hitTest(
-                QPointF(0,
-                        pageYPos
-                            + MeasurementHelper::mmToPx(
-                                q->documentTemplate(_exportOptions).pageMargins().top())),
-                Qt::FuzzyHit);
-        QTextBlock block = _document->findBlock(std::max(0, blockPos));
-#endif
+        auto block = _document->begin();
         while (block.isValid()) {
-            const auto paragraphType = TextBlockStyle::forBlock(block);
-            QRectF blockRect = layout->blockBoundingRect(block);
-            if (q->documentTemplate(_exportOptions).paragraphStyle(paragraphType).lineSpacingType()
-                != TextBlockStyle::LineSpacingType::SingleLineSpacing) {
-                blockRect.setTop((int)blockRect.top() + block.blockFormat().lineHeight()
-                                 - TextHelper::fineLineSpacing(block.charFormat().font()));
+            if (!block.isVisible()) {
+                block = block.next();
+                continue;
+            }
+
+            if (pageYPos
+                    - MeasurementHelper::mmToPx(
+                        q->documentTemplate(_exportOptions).pageMargins().bottom())
+                    - layout->blockBoundingRect(block).top()
+                >= block.layout()->lineAt(0).height()) {
+                block = block.next();
+                continue;
+            }
+
+            break;
+        }
+
+        //
+        // Собственно переходим к отрисовке
+        //
+        while (block.isValid()) {
+            if (!block.isVisible()) {
+                block = block.next();
+                continue;
             }
 
             //
@@ -169,18 +156,8 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
             // строка блока, либо если блок должен был начаться на предыдущей странице,
             // но туда не влезла даже одна строка
             //
-            const auto blockLineHeight = TextHelper::fineLineSpacing(block.charFormat().font()) -
-            //
-            // FIXME: почему-то высота строки у рендера в PDF как будто чуть меньше высоты строки
-            //        при ручном проссчёте, поэтому уменьшаем тут чутка, чтобы корректно рассчитать
-            //        кейсы, когда первая строка таки влезает
-            //
-#ifdef Q_OS_WINDOWS
-                3
-#else
-                2
-#endif
-                ;
+            const auto blockLineHeight = block.layout()->lineAt(0).height();
+            const auto blockRect = layout->blockBoundingRect(block);
             const bool isFirstLineCanBePlacedAtCurrentPage = (blockRect.top() > pageYPos)
                 && (pageYPos + _body.height()
                         - MeasurementHelper::mmToPx(
@@ -196,6 +173,7 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
                     >= blockLineHeight);
             if (isFirstLineCanBePlacedAtCurrentPage
                 || (isBlockStartedOnPreviousPage && !isFirstLinePlacedAtPreviousPage)) {
+                const auto paragraphType = TextBlockStyle::forBlock(block);
                 q->printBlockDecorations(_painter, pageYPos, _body, paragraphType, blockRect, block,
                                          _exportOptions);
             }
