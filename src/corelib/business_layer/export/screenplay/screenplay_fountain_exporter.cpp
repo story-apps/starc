@@ -231,37 +231,6 @@ bool ScreenplayFountainExporter::processBlock(QString& _paragraph, const QTextBl
         return true;
     }
 
-    //
-    // Блоки синопсиса
-    //
-    case TextParagraphType::ChapterHeading1: {
-        formatToHeading(1);
-        return true;
-    }
-    case TextParagraphType::ChapterHeading2: {
-        formatToHeading(2);
-        return true;
-    }
-    case TextParagraphType::ChapterHeading3: {
-        formatToHeading(3);
-        return true;
-    }
-    case TextParagraphType::ChapterHeading4: {
-        formatToHeading(4);
-        return true;
-    }
-    case TextParagraphType::ChapterHeading5: {
-        formatToHeading(5);
-        return true;
-    }
-    case TextParagraphType::ChapterHeading6: {
-        formatToHeading(6);
-        return true;
-    }
-    case TextParagraphType::Text: {
-        return true;
-    }
-
     default: {
         //
         // Игнорируем неизвестные блоки
@@ -341,17 +310,7 @@ void ScreenplayFountainExporter::addIndentationAtBegin(QString& _paragraph,
         case TextParagraphType::Transition:
         case TextParagraphType::BeatHeading:
         case TextParagraphType::UnformattedText:
-        case TextParagraphType::InlineNote:
-        //
-        // Блоки синопсиса
-        //
-        case TextParagraphType::ChapterHeading1:
-        case TextParagraphType::ChapterHeading2:
-        case TextParagraphType::ChapterHeading3:
-        case TextParagraphType::ChapterHeading4:
-        case TextParagraphType::ChapterHeading5:
-        case TextParagraphType::ChapterHeading6:
-        case TextParagraphType::Text: {
+        case TextParagraphType::InlineNote: {
             return 7;
         }
         default: {
