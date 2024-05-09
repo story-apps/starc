@@ -192,7 +192,7 @@ TextDocument* AbstractExporter::prepareDocument(AbstractModel* _model,
     //
     // ... вставляем титульную страницу
     //
-    if (_exportOptions.includeTiltePage) {
+    if (_exportOptions.includeTitlePage) {
         //
         // Переносим основной текст и данные на следующую страницу
         //

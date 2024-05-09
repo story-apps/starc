@@ -41,7 +41,7 @@ struct CORE_LIBRARY_EXPORT ExportOptions {
     /**
      * @brief Печатать титульную страницу
      */
-    bool includeTiltePage = true;
+    bool includeTitlePage = true;
 
     /**
      * @brief Печатать синопсис

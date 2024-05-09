@@ -1070,7 +1070,7 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
                 // ... донастроим параметры экспорта
                 //
                 exportOptions.templateId = TemplatesFacade::simpleTextTemplate().id();
-                exportOptions.includeTiltePage = false;
+                exportOptions.includeTitlePage = false;
                 exportOptions.includeSynopsis = false;
                 exportOptions.includeText = true;
                 //
@@ -1799,7 +1799,7 @@ void ExportManager::exportDocument(BusinessLayer::AbstractModel* _model, const Q
         options.includeFolders = true;
         options.includeInlineNotes = true;
         options.includeReviewMarks = true;
-        options.includeTiltePage = true;
+        options.includeTitlePage = true;
         options.includeText = true;
         d->exportScreenplay(_model, options);
         break;

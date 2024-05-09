@@ -1561,7 +1561,7 @@ QMimeData* NovelTextEdit::createMimeDataFromSelection() const
         //
         BusinessLayer::ExportOptions options;
         options.filePath = QDir::temp().absoluteFilePath("clipboard.md");
-        options.includeTiltePage = false;
+        options.includeTitlePage = false;
         options.includeReviewMarks = false;
         options.includeInlineNotes = false;
         //

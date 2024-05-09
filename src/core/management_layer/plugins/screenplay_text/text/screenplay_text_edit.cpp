@@ -1690,7 +1690,7 @@ QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
         //
         BusinessLayer::ScreenplayExportOptions options;
         options.filePath = QDir::temp().absoluteFilePath("clipboard.fountain");
-        options.includeTiltePage = false;
+        options.includeTitlePage = false;
         options.includeSynopsis = false;
         options.showScenesNumbers = d->model->informationModel()->showSceneNumbers();
         //

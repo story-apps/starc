@@ -230,7 +230,7 @@ BusinessLayer::ComicBookExportOptions ComicBookExportDialog::exportOptions() con
 {
     BusinessLayer::ComicBookExportOptions options;
     options.fileFormat = d->currentFileFormat();
-    options.includeTiltePage = d->includeTitlePage->isChecked();
+    options.includeTitlePage = d->includeTitlePage->isChecked();
     options.includeSynopsis
         = d->includeSynopsis->isVisibleTo(this) ? d->includeSynopsis->isChecked() : false;
     options.includeText = d->includeScript->isChecked();

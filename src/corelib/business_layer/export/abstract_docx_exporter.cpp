@@ -1133,13 +1133,13 @@ void AbstractDocxExporter::Implementation::writeDocument(QtZipWriter* _zip,
     //
     // ... нужна ли титульная страница
     //
-    if (_exportOptions.includeTiltePage) {
+    if (_exportOptions.includeTitlePage) {
         documentXml.append("<w:titlePg/>");
     }
     //
     // ... нумерация страниц
     //
-    int pageNumbersStartFrom = _exportOptions.includeTiltePage ? 0 : 1;
+    int pageNumbersStartFrom = _exportOptions.includeTitlePage ? 0 : 1;
     documentXml.append(
         QString("<w:pgNumType w:fmt=\"decimal\" w:start=\"%1\"/>").arg(pageNumbersStartFrom));
     //

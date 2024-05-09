@@ -44,6 +44,22 @@ void ScreenplayPdfExporter::printBlockDecorations(
 
     const auto& exportTemplate = documentTemplate(_exportOptions);
     const auto& exportOptions = static_cast<const ScreenplayExportOptions&>(_exportOptions);
+    const auto firstBlockYDelta =
+#ifdef Q_OS_WINDOWS
+        6
+#else
+        9
+#endif
+        ;
+    QRectF blockRect = _blockRect;
+    //    if (exportTemplate.paragraphStyle(_paragraphType).lineSpacingType()
+    //        != TextBlockStyle::LineSpacingType::SingleLineSpacing) {
+    auto l1 = _block.blockFormat().lineHeight();
+    auto l2 = _block.layout()->lineAt(0).height();
+    auto delta = l1 - l2;
+    blockRect.moveTop(blockRect.top() + _block.blockFormat().lineHeight()
+                      - _block.layout()->lineAt(0).height());
+    //    }
 
     //
     // Покажем номер сцены, если необходимо
@@ -65,12 +81,13 @@ void ScreenplayPdfExporter::printBlockDecorations(
             if (exportOptions.showScenesNumbersOnLeft) {
                 const QRectF leftSceneNumberRect(
                     0,
-                    _blockRect.top() <= _pageYPos ? (
-                        _pageYPos + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
-                                                  : _blockRect.top(),
+                    blockRect.top() <= _pageYPos
+                        ? (_pageYPos + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
+                           + delta)
+                        : blockRect.top(),
                     MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
                         - distanceBetweenSceneNumberAndText,
-                    _blockRect.height());
+                    blockRect.height());
                 _painter->drawText(leftSceneNumberRect, Qt::AlignRight | Qt::AlignTop,
                                    sceneItem->number()->text);
             }
@@ -79,12 +96,12 @@ void ScreenplayPdfExporter::printBlockDecorations(
                 const QRectF rightSceneNumberRect(
                     _body.width() - MeasurementHelper::mmToPx(exportTemplate.pageMargins().right())
                         + distanceBetweenSceneNumberAndText,
-                    _blockRect.top() <= _pageYPos ? (
+                    blockRect.top() <= _pageYPos ? (
                         _pageYPos + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
-                                                  : _blockRect.top(),
+                                                 : blockRect.top(),
                     MeasurementHelper::mmToPx(exportTemplate.pageMargins().right())
                         - distanceBetweenSceneNumberAndText,
-                    _blockRect.height());
+                    blockRect.height());
                 _painter->drawText(rightSceneNumberRect, Qt::AlignLeft | Qt::AlignTop,
                                    sceneItem->number()->text);
             }

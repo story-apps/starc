@@ -197,7 +197,7 @@ void writeContent(QXmlStreamWriter& _writer, TextDocument* _screenplayText,
     auto block = _screenplayText->begin();
     bool titlePageSkipped = false;
     while (block.isValid()) {
-        if (_exportOptions.includeTiltePage && !titlePageSkipped) {
+        if (_exportOptions.includeTitlePage && !titlePageSkipped) {
             if (TextBlockStyle::forBlock(block) == TextParagraphType::Undefined) {
                 block = block.next();
                 continue;
@@ -267,7 +267,7 @@ void writeSettings(QXmlStreamWriter& _writer, const ScreenplayExportOptions& _ex
 void writeTitlePage(QXmlStreamWriter& _writer, TextDocument* _screenplayText,
                     const ScreenplayExportOptions& _exportOptions)
 {
-    if (!_exportOptions.includeTiltePage) {
+    if (!_exportOptions.includeTitlePage) {
         return;
     }
 

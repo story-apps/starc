@@ -849,7 +849,7 @@ QMimeData* SimpleTextEdit::createMimeDataFromSelection() const
         //
         BusinessLayer::ExportOptions options;
         options.filePath = QDir::temp().absoluteFilePath("clipboard.md");
-        options.includeTiltePage = false;
+        options.includeTitlePage = false;
         options.includeReviewMarks = false;
         //
         // ... сохраняем в формате markdown

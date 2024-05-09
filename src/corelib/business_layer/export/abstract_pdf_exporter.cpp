@@ -200,7 +200,7 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
         //
         // На титульной и на первой странице сценария
         //
-        if ((_exportOptions.includeTiltePage && _pageNumber < 3) || _pageNumber == 1) {
+        if ((_exportOptions.includeTitlePage && _pageNumber < 3) || _pageNumber == 1) {
             //
             // ... не печатаем номер
             //
@@ -255,7 +255,7 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
             // Рисуем нумерацию в положеном месте (отнимаем единицу, т.к. нумерация
             // должна следовать с единицы для первой страницы текста сценария)
             //
-            int titleDelta = _exportOptions.includeTiltePage ? -1 : 0;
+            int titleDelta = _exportOptions.includeTitlePage ? -1 : 0;
             _painter->setClipRect(numberingRect);
             _painter->drawText(numberingRect, numberingAlignment,
                                QString(QLocale().textDirection() == Qt::LeftToRight ? "%1." : ".%1")
@@ -268,9 +268,9 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
     // Печатаем колонтитулы, если необходимо
     //
     if (!_exportOptions.header.isEmpty() || !_exportOptions.footer.isEmpty()) {
-        const bool printHeader = _pageNumber > 1 || !_exportOptions.includeTiltePage
+        const bool printHeader = _pageNumber > 1 || !_exportOptions.includeTitlePage
             || _exportOptions.printHeaderOnTitlePage;
-        const bool printFooter = _pageNumber > 1 || !_exportOptions.includeTiltePage
+        const bool printFooter = _pageNumber > 1 || !_exportOptions.includeTitlePage
             || _exportOptions.printFooterOnTitlePage;
 
         _painter->save();

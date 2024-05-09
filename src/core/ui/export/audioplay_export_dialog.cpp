@@ -256,7 +256,7 @@ BusinessLayer::AudioplayExportOptions AudioplayExportDialog::exportOptions() con
 {
     BusinessLayer::AudioplayExportOptions options;
     options.fileFormat = d->currentFileFormat();
-    options.includeTiltePage = d->includeTitlePage->isChecked();
+    options.includeTitlePage = d->includeTitlePage->isChecked();
     options.includeSynopsis
         = d->includeSynopsis->isVisibleTo(this) ? d->includeSynopsis->isChecked() : false;
     options.includeText = d->includeScript->isChecked();

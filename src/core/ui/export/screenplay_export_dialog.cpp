@@ -329,7 +329,7 @@ BusinessLayer::ScreenplayExportOptions ScreenplayExportDialog::exportOptions() c
     BusinessLayer::ScreenplayExportOptions options;
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
-    options.includeTiltePage = d->includeTitlePage->isChecked();
+    options.includeTitlePage = d->includeTitlePage->isChecked();
     options.includeSynopsis
         = d->includeSynopsis->isVisibleTo(this) ? d->includeSynopsis->isChecked() : false;
     options.includeText = d->includeTreatment->isChecked() || d->includeScreenplay->isChecked();
