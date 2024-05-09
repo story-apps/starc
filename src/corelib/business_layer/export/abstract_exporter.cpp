@@ -45,181 +45,20 @@ TextDocument* AbstractExporter::prepareDocument(AbstractModel* _model,
     // ... отсоединяем документ от модели, что изменения в документе не привели к изменениям модели
     //
     textDocument->disconnect(_model);
+
     //
-    // ... корректируем текст сценария
+    // Начинаем работу с документом
     //
     TextCursor cursor(textDocument);
     cursor.beginEditBlock();
     //
-    // ... вставляем титульную страницу
-    //
-    if (_exportOptions.includeTiltePage) {
-        //
-        // Переносим основной текст и данные на следующую страницу
-        //
-        TextBlockData* firstBlockUserData = nullptr;
-        if (cursor.block().userData() != nullptr) {
-            firstBlockUserData
-                = new TextBlockData(static_cast<TextBlockData*>(cursor.block().userData()));
-            cursor.block().setUserData(nullptr);
-        }
-        cursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
-        auto blockFormat = cursor.blockFormat();
-        blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
-        blockFormat.setTopMargin(0);
-        cursor.setBlockFormat(blockFormat);
-        cursor.block().setUserData(firstBlockUserData);
-
-        //
-        // Собственно добавляем текст титульной страницы
-        //
-        auto titlePageText = new SimpleTextDocument;
-        titlePageText->setModel(textModel->titlePageModel(), false);
-        //
-        cursor.movePosition(TextCursor::PreviousBlock);
-        auto block = titlePageText->begin();
-        while (block.isValid()) {
-            //
-            // Донастроим стиль блока
-            //
-            auto blockFormat = block.blockFormat();
-            //
-            // ... сбросим тип
-            //
-            blockFormat.setProperty(TextBlockStyle::PropertyType,
-                                    static_cast<int>(TextParagraphType::Undefined));
-            //
-            // ... и уравняем отступы
-            //
-            if (exportTemplate.pageMargins().left() < exportTemplate.pageMargins().right()) {
-                blockFormat.setLeftMargin(MeasurementHelper::mmToPx(
-                    exportTemplate.pageMargins().right() - exportTemplate.pageMargins().left()));
-            } else if (exportTemplate.pageMargins().right() < exportTemplate.pageMargins().left()) {
-                blockFormat.setRightMargin(MeasurementHelper::mmToPx(
-                    exportTemplate.pageMargins().left() - exportTemplate.pageMargins().right()));
-            }
-            //
-            // ... вставляем блок
-            //
-            if (cursor.atStart()) {
-                cursor.setBlockFormat(blockFormat);
-                cursor.setBlockCharFormat(block.charFormat());
-            } else {
-                cursor.insertBlock(blockFormat, block.charFormat());
-            }
-            //
-            // ... вставляем текст
-            //
-            const auto formats = block.textFormats();
-            for (const auto& format : formats) {
-                cursor.insertText(block.text().mid(format.start, format.length), format.format);
-            }
-            //
-            // ... если первый блок пуст, добавим пробел, чтобы избежать косяка с сохранением в PDF
-            //
-            if (cursor.atStart()) {
-                cursor.insertText(" ");
-            }
-
-            block = block.next();
-        }
-
-        //
-        // Убираем нижний отступ у последнего блока титульной страницы
-        //
-        blockFormat = cursor.blockFormat();
-        blockFormat.setBottomMargin(0);
-        cursor.setBlockFormat(blockFormat);
-
-        //
-        // Переходим к тексту сценария
-        //
-        cursor.movePosition(TextCursor::NextBlock);
-        cursor.movePosition(TextCursor::StartOfBlock);
-    }
-    //
-    // ... вставляем синопсис
-    //
-    if (_exportOptions.includeSynopsis) {
-        //
-        // Переносим основной текст и данные на следующую страницу
-        //
-        TextBlockData* firstBlockUserData = nullptr;
-        if (cursor.block().userData() != nullptr) {
-            firstBlockUserData
-                = new TextBlockData(static_cast<TextBlockData*>(cursor.block().userData()));
-            cursor.block().setUserData(nullptr);
-        }
-        cursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
-        auto blockFormat = cursor.blockFormat();
-        blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
-        blockFormat.setTopMargin(0);
-        cursor.setBlockFormat(blockFormat);
-        cursor.block().setUserData(firstBlockUserData);
-
-        //
-        // Собственно добавляем текст синопсиса
-        //
-        auto synopsisText = new TextDocument;
-        synopsisText->setModel(textModel->synopsisModel(), false);
-        //
-        cursor.movePosition(TextCursor::PreviousBlock);
-        auto block = synopsisText->begin();
-        while (block.isValid()) {
-            //
-            // Донастроим стиль блока
-            //
-            auto blockFormat = block.blockFormat();
-            //
-            // ... вставляем блок
-            //
-            if (cursor.atStart()) {
-                cursor.setBlockFormat(blockFormat);
-                cursor.setBlockCharFormat(block.charFormat());
-            } else {
-                cursor.insertBlock(blockFormat, block.charFormat());
-            }
-            //
-            // ... вставляем текст
-            //
-            const auto formats = block.textFormats();
-            for (const auto& format : formats) {
-                cursor.insertText(block.text().mid(format.start, format.length), format.format);
-            }
-            //
-            // ... если первый блок пуст, добавим пробел, чтобы избежать косяка с сохранением в PDF
-            //
-            if (cursor.atStart()) {
-                cursor.insertText(" ");
-            }
-
-            block = block.next();
-        }
-
-        //
-        // Убираем нижний отступ у поледнего блока синопсиса
-        //
-        blockFormat = cursor.blockFormat();
-        blockFormat.setBottomMargin(0);
-        cursor.setBlockFormat(blockFormat);
-
-        //
-        // Переходим к тексту сценария
-        //
-        cursor.movePosition(TextCursor::NextBlock);
-        cursor.movePosition(TextCursor::StartOfBlock);
-    }
-    //
-    // ... корректируем сценарий, если он нужен
+    // ... корректируем текст документа (удаляем ненужные блоки и т.п.), если он нужен
     //
     if (_exportOptions.includeText) {
         //
-        // ... для первого блока убираем принудительный перенос страницы,
-        //     если он есть и если не печатается титульная страница
+        // ... для первого блока убираем принудительный перенос страницы, если он есть
         //
-        if (cursor.atStart()
-            && cursor.block().blockFormat().pageBreakPolicy()
-                == QTextFormat::PageBreak_AlwaysBefore) {
+        if (cursor.block().blockFormat().pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore) {
             auto blockFormat = cursor.blockFormat();
             blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
             cursor.setBlockFormat(blockFormat);
@@ -338,6 +177,220 @@ TextDocument* AbstractExporter::prepareDocument(AbstractModel* _model,
     else {
         cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
         cursor.deleteChar();
+    }
+    //
+    // ... завершаем корректировку текста, чтобы отработали автоматические корректировки блоков
+    //
+    cursor.endEditBlock();
+
+    //
+    // Пишем в документ титульную страницу и синопсис в виде неопределённых типов, чтобы
+    // корректировки уже больше не осуществлялись и форматирование блоков не менялись
+    //
+    cursor.movePosition(TextCursor::Start);
+    cursor.beginEditBlock();
+    //
+    // ... вставляем титульную страницу
+    //
+    if (_exportOptions.includeTiltePage) {
+        //
+        // Переносим основной текст и данные на следующую страницу
+        //
+        const auto isFirstBlockVisible = cursor.block().isVisible();
+        cursor.block().setVisible(true);
+        TextBlockData* firstBlockUserData = nullptr;
+        if (cursor.block().userData() != nullptr) {
+            firstBlockUserData
+                = new TextBlockData(static_cast<TextBlockData*>(cursor.block().userData()));
+            cursor.block().setUserData(nullptr);
+        }
+        cursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
+        cursor.block().setVisible(isFirstBlockVisible);
+        cursor.block().setUserData(firstBlockUserData);
+
+        //
+        // Собственно добавляем текст титульной страницы
+        //
+        auto titlePageText = new SimpleTextDocument;
+        titlePageText->setModel(textModel->titlePageModel(), false);
+        //
+        cursor.movePosition(TextCursor::PreviousBlock);
+        auto block = titlePageText->begin();
+        while (block.isValid()) {
+            //
+            // Донастроим стиль блока
+            //
+            auto blockFormat = block.blockFormat();
+            //
+            // ... сбросим тип
+            //
+            blockFormat.setProperty(TextBlockStyle::PropertyType,
+                                    static_cast<int>(TextParagraphType::Undefined));
+            //
+            // ... уравняем отступы
+            //
+            if (exportTemplate.pageMargins().left() < exportTemplate.pageMargins().right()) {
+                blockFormat.setLeftMargin(MeasurementHelper::mmToPx(
+                    exportTemplate.pageMargins().right() - exportTemplate.pageMargins().left()));
+            } else if (exportTemplate.pageMargins().right() < exportTemplate.pageMargins().left()) {
+                blockFormat.setRightMargin(MeasurementHelper::mmToPx(
+                    exportTemplate.pageMargins().left() - exportTemplate.pageMargins().right()));
+            }
+            //
+            // ... вставляем блок
+            //
+            if (block == titlePageText->begin()) {
+                cursor.setBlockFormat(blockFormat);
+                cursor.setBlockCharFormat(block.charFormat());
+            } else {
+                cursor.insertBlock(blockFormat, block.charFormat());
+            }
+            //
+            // ... вставляем текст
+            //
+            const auto formats = block.textFormats();
+            for (const auto& format : formats) {
+                cursor.insertText(block.text().mid(format.start, format.length), format.format);
+            }
+            //
+            // ... если первый блок пуст, добавим пробел, чтобы избежать косяка с сохранением в PDF
+            //
+            if (cursor.atStart()) {
+                cursor.insertText(" ");
+            }
+
+            block = block.next();
+        }
+
+        //
+        // Убираем нижний отступ у последнего блока титульной страницы
+        //
+        auto blockFormat = cursor.blockFormat();
+        blockFormat.setBottomMargin(0);
+        cursor.setBlockFormat(blockFormat);
+
+        //
+        // Переходим к тексту сценария
+        //
+        cursor.movePosition(TextCursor::NextBlock);
+        cursor.movePosition(TextCursor::StartOfBlock);
+
+        //
+        // Идём до первого видимого блока текста, и назначаем ему разрыв страницы
+        //
+        if (_exportOptions.includeText) {
+            auto block = cursor.block();
+            while (block.isValid() && !block.isVisible()) {
+                block = block.next();
+            }
+            const auto lastCursorPosition = cursor.position();
+            cursor.setPosition(block.position());
+            auto blockFormat = cursor.blockFormat();
+            blockFormat.setTopMargin(0);
+            blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+            cursor.setBlockFormat(blockFormat);
+            cursor.setPosition(lastCursorPosition);
+        }
+    }
+    //
+    // ... вставляем синопсис
+    //
+    if (_exportOptions.includeSynopsis) {
+        //
+        // Переносим основной текст и данные на следующую страницу
+        //
+        const auto isFirstBlockVisible = cursor.block().isVisible();
+        cursor.block().setVisible(true);
+        TextBlockData* firstBlockUserData = nullptr;
+        if (cursor.block().userData() != nullptr) {
+            firstBlockUserData
+                = new TextBlockData(static_cast<TextBlockData*>(cursor.block().userData()));
+            cursor.block().setUserData(nullptr);
+        }
+        cursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
+        cursor.block().setVisible(isFirstBlockVisible);
+        cursor.block().setUserData(firstBlockUserData);
+
+        //
+        // Собственно добавляем текст синопсиса
+        //
+        auto synopsisText = new TextDocument;
+        synopsisText->setModel(textModel->synopsisModel(), false);
+        cursor.movePosition(TextCursor::PreviousBlock);
+        cursor.movePosition(TextCursor::StartOfBlock);
+        auto block = synopsisText->begin();
+        while (block.isValid()) {
+            //
+            // Донастроим стиль блока
+            //
+            auto blockFormat = block.blockFormat();
+            //
+            // ... сбросим тип
+            //
+            blockFormat.setProperty(TextBlockStyle::PropertyType,
+                                    static_cast<int>(TextParagraphType::Undefined));
+            //
+            // Если перед синопсисом есть текст титульной страницы, то добавляем разрыв страницы
+            //
+            if (block == synopsisText->begin() && !cursor.atStart()) {
+                blockFormat.setTopMargin(0);
+                blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+            }
+            //
+            // ... вставляем блок
+            //
+            if (block == synopsisText->begin()) {
+                cursor.setBlockFormat(blockFormat);
+                cursor.setBlockCharFormat(block.charFormat());
+            } else {
+                cursor.insertBlock(blockFormat, block.charFormat());
+            }
+            //
+            // ... вставляем текст
+            //
+            const auto formats = block.textFormats();
+            for (const auto& format : formats) {
+                cursor.insertText(block.text().mid(format.start, format.length), format.format);
+            }
+            //
+            // ... если первый блок пуст, добавим пробел, чтобы избежать косяка с сохранением в PDF
+            //
+            if (cursor.atStart()) {
+                cursor.insertText(" ");
+            }
+
+            block = block.next();
+        }
+
+        //
+        // Убираем нижний отступ у поледнего блока синопсиса
+        //
+        auto blockFormat = cursor.blockFormat();
+        blockFormat.setBottomMargin(0);
+        cursor.setBlockFormat(blockFormat);
+
+        //
+        // Переходим к тексту сценария
+        //
+        cursor.movePosition(TextCursor::NextBlock);
+        cursor.movePosition(TextCursor::StartOfBlock);
+
+        //
+        // Идём до первого видимого блока текста, и назначаем ему разрыв страницы
+        //
+        if (_exportOptions.includeText) {
+            auto block = cursor.block();
+            while (block.isValid() && !block.isVisible()) {
+                block = block.next();
+            }
+            const auto lastCursorPosition = cursor.position();
+            cursor.setPosition(block.position());
+            auto blockFormat = cursor.blockFormat();
+            blockFormat.setTopMargin(0);
+            blockFormat.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+            cursor.setBlockFormat(blockFormat);
+            cursor.setPosition(lastCursorPosition);
+        }
     }
 
     cursor.endEditBlock();
