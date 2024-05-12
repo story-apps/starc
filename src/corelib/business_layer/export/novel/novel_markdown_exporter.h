@@ -32,6 +32,10 @@ protected:
      */
     void addIndentationAtBegin(QString& _paragraph, TextParagraphType _previosBlockType,
                                TextParagraphType _currentBlockType) const override;
+
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 } // namespace BusinessLayer

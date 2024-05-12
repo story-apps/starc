@@ -5,10 +5,58 @@
 
 namespace BusinessLayer {
 
+class NovelMarkdownExporter::Implementation
+{
+public:
+    explicit Implementation();
+
+    /**
+     * @brief  Увеличить показатель вложенности глав
+     */
+    void increaseNesting();
+
+    /**
+     * @brief  Уменььшить показатель вложенности глав
+     */
+    void decreaseNesting();
+
+
+    /**
+     * @brief Глубина вложенности глав
+     */
+    mutable unsigned m_chapterNesting = 1;
+};
+
+NovelMarkdownExporter::Implementation::Implementation() = default;
+
+void NovelMarkdownExporter::Implementation::increaseNesting()
+{
+    if (m_chapterNesting > 5) {
+        m_chapterNesting = 5;
+        return;
+    } else {
+        ++m_chapterNesting;
+    }
+}
+
+void NovelMarkdownExporter::Implementation::decreaseNesting()
+{
+    if (m_chapterNesting < 2) {
+        m_chapterNesting = 2;
+        return;
+    } else {
+        --m_chapterNesting;
+    }
+}
+
+
+// ****
+
+
 NovelMarkdownExporter::NovelMarkdownExporter()
     : NovelExporter()
-    , AbstractMarkdownExporter(
-          { '\\', '`', '*', '_', '{', '}', '[', ']', '(', ')', '#', '+', '-', '.', '!', '|', '~' })
+    , AbstractMarkdownExporter({ '\\', '`', '*', '_', '#', '~', '-', '(', ')' })
+    , d(new Implementation())
 {
 }
 
@@ -38,36 +86,17 @@ bool NovelMarkdownExporter::processBlock(QString& _paragraph, const QTextBlock& 
         formatToHeading(1);
         return true;
     }
-    case TextParagraphType::ChapterHeading:
+    case TextParagraphType::ChapterHeading: {
+        d->increaseNesting();
+        formatToHeading(d->m_chapterNesting);
+        return true;
+    }
     case TextParagraphType::ChapterFooter: {
-        formatToHeading(3);
+        formatToHeading(d->m_chapterNesting);
+        d->decreaseNesting();
         return true;
     }
     case TextParagraphType::SceneHeading: {
-        formatToHeading(5);
-        return true;
-    }
-    case TextParagraphType::ChapterHeading1: {
-        formatToHeading(1);
-        return true;
-    }
-    case TextParagraphType::ChapterHeading2: {
-        formatToHeading(2);
-        return true;
-    }
-    case TextParagraphType::ChapterHeading3: {
-        formatToHeading(3);
-        return true;
-    }
-    case TextParagraphType::ChapterHeading4: {
-        formatToHeading(4);
-        return true;
-    }
-    case TextParagraphType::ChapterHeading5: {
-        formatToHeading(5);
-        return true;
-    }
-    case TextParagraphType::ChapterHeading6: {
         formatToHeading(6);
         return true;
     }
@@ -120,13 +149,7 @@ void NovelMarkdownExporter::addIndentationAtBegin(QString& _paragraph,
     auto positionInTable = [](TextParagraphType _type) {
         switch (_type) {
         case TextParagraphType::PartHeading:
-        case TextParagraphType::ChapterHeading:
-        case TextParagraphType::ChapterHeading1:
-        case TextParagraphType::ChapterHeading2:
-        case TextParagraphType::ChapterHeading3:
-        case TextParagraphType::ChapterHeading4:
-        case TextParagraphType::ChapterHeading5:
-        case TextParagraphType::ChapterHeading6: {
+        case TextParagraphType::ChapterHeading: {
             return 1;
         }
         case TextParagraphType::SceneHeading: {

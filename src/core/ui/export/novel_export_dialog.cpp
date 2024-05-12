@@ -192,14 +192,12 @@ NovelExportDialog::NovelExportDialog(QWidget* _parent)
     });
     //
     auto updateParametersVisibility = [this] {
+        auto isPrintSynopsisVisible = true;
         auto isPrintInlineNotesVisible = true;
         auto isPrintReviewMarksVisible = true;
         auto exportConcreteScenesVisible = true;
         auto isWatermarkVisible = true;
         switch (d->currentFileFormat()) {
-        //
-        // PDF
-        //
         default:
         case BusinessLayer::ExportFileFormat::Pdf: {
             //
@@ -207,17 +205,12 @@ NovelExportDialog::NovelExportDialog(QWidget* _parent)
             //
             break;
         }
-        //
-        // DOCX
-        //
         case BusinessLayer::ExportFileFormat::Docx: {
             isWatermarkVisible = false;
             break;
         }
-        //
-        // Markdown
-        //
         case BusinessLayer::ExportFileFormat::Markdown: {
+            isPrintSynopsisVisible = false;
             isPrintInlineNotesVisible = false;
             isPrintReviewMarksVisible = false;
             isWatermarkVisible = false;
@@ -231,6 +224,7 @@ NovelExportDialog::NovelExportDialog(QWidget* _parent)
             exportConcreteScenesVisible = false;
         }
 
+        d->includeSynopsis->setVisible(isPrintSynopsisVisible);
         d->includeInlineNotes->setVisible(isPrintInlineNotesVisible);
         d->includeReviewMarks->setVisible(isPrintReviewMarksVisible);
         d->ornamentalBreak->setVisible(exportConcreteScenesVisible);
@@ -305,7 +299,8 @@ BusinessLayer::NovelExportOptions NovelExportDialog::exportOptions() const
     BusinessLayer::NovelExportOptions options;
     options.fileFormat = d->currentFileFormat();
     options.includeTiltePage = d->includeTitlePage->isChecked();
-    options.includeSynopsis = d->includeSynopsis->isChecked();
+    options.includeSynopsis
+        = d->includeSynopsis->isVisibleTo(this) ? d->includeSynopsis->isChecked() : false;
     options.includeText = d->includeOutline->isChecked() || d->includeNovel->isChecked();
     options.includeOutline = d->includeOutline->isChecked();
     options.includeFolders = true;
