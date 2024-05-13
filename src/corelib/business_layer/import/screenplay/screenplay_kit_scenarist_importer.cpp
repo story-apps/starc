@@ -128,23 +128,6 @@ QString readLocation(const QString& _locationName, const QString& _kitLocationXm
 }
 
 /**
- * @brief Извлечение XML парсером атрибутов bookmark и bookmark_color, создание закладки в испортированном проекте
- */
-// void ScreenplayKitScenaristImporter::processBookmarkAction(const QString& bookmarkXml) {
-//     QXmlStreamReader xmlReader(bookmarkXml);
-//     while (!xmlReader.atEnd()) {
-//         if (xmlReader.readNextStartElement()) {
-//             if (xmlReader.name() == "action" && xmlReader.attributes().hasAttribute("bookmark")) {
-//                 const QString bookmarkName = xmlReader.attributes().value("bookmark").toString();
-//                 const QString bookmarkColor = xmlReader.attributes().value("bookmark_color").toString();
-
-//                 // Место для твоей реализации
-//             }
-//         }
-//     }
-// }
-
-/**
  * @brief Сформировать простой текстовый документ из текстового документа КИТа
  */
 QString readPlainTextDocument(const QString& _sourceDocument)
