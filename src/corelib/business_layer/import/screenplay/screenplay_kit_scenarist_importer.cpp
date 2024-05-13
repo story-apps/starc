@@ -226,10 +226,6 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
                         bookmarkName = actionNode.attribute("bookmark");
                         bookmarkColor = actionNode.attribute("bookmark_color");
                         isNeedWriteBookmark = true;
-
-
-                        qDebug() << "Текущее имя закладки:" << bookmarkName;
-                        qDebug() << "Текущий цвет закладки:" << bookmarkColor;
                     }
                 }
                 //
@@ -425,46 +421,20 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
             break;
         }
         }
-
         //
-        // Пишем закладки
+        // Пишем текст блока и закладку
         //
+        writer.writeStartElement(toString(blockType));
         if (isNeedWriteBookmark) {
-            // Отладочное сообщение для проверки значений перед записью
-            qDebug() << "Отладка: Попытка записи закладки с именем" << bookmarkName << "и цветом" << bookmarkColor;
-
-            // Проверка на пустые значения
-            if (bookmarkName.isEmpty() || bookmarkColor.isEmpty()) {
-                qDebug() << "Ошибка: Имя закладки или цвет не могут быть пустыми.";
-            } else {
-
-                // Попытка записи закладки
-                writer.writeStartElement(toString(blockType));
-
-                // Записываем закладку
-                writer.writeStartElement(xml::kBookmarkTag);
-                writer.writeAttribute("color", bookmarkColor);
-                writer.writeCDATA(bookmarkName);
-                writer.writeEndElement(); // bm
-
-                // Записываем текст, обёрнутый в закладку
-                writer.writeStartElement(xml::kValueTag);
-                writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
-                writer.writeEndElement(); // value
-
-                writer.writeEndElement(); // text
-
-                // Сброс флага после записи
-                isNeedWriteBookmark = false;
-            }
-        } else {
-            qDebug() << "Отладка: Запись закладки не требуется.";
-            writer.writeStartElement(toString(blockType));
-            writer.writeStartElement(xml::kValueTag);
-            writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
-            writer.writeEndElement(); // value
+            writer.writeStartElement(xml::kBookmarkTag);
+            writer.writeAttribute("color", bookmarkColor);
+            writer.writeCDATA(bookmarkName);
+            writer.writeEndElement(); // bm
+            isNeedWriteBookmark = false;
         }
-
+        writer.writeStartElement(xml::kValueTag);
+        writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
+        writer.writeEndElement(); // value
         //
         // Пишем редакторские заметки
         //
