@@ -529,7 +529,6 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
             });
     connect(d->toolbar, &AudioplayTextEditToolbar::fastFormatPanelVisibleChanged, this,
             [this](bool _visible) {
-                d->updateToolbarPositon();
                 d->sidebarTabs->setTabVisible(kFastFormatTabIndex, _visible);
                 d->fastFormatWidget->setVisible(_visible);
                 if (_visible) {
@@ -537,6 +536,7 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
                     d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
                 }
                 d->updateSideBarVisibility(this);
+                d->updateToolbarPositon();
             });
     connect(d->toolbar, &AudioplayTextEditToolbar::commentsModeEnabledChanged, this,
             [this](bool _enabled) {

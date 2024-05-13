@@ -526,6 +526,7 @@ ComicBookTextView::ComicBookTextView(QWidget* _parent)
                     d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
                 }
                 d->updateSideBarVisibility(this);
+                d->updateToolbarPositon();
             });
     connect(d->toolbar, &ComicBookTextEditToolbar::commentsModeEnabledChanged, this,
             [this](bool _enabled) {
