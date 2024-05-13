@@ -425,10 +425,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
             break;
         }
         }
-        writer.writeStartElement(toString(blockType));
-        writer.writeStartElement(xml::kValueTag);
-        writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
-        writer.writeEndElement(); // value
+
         //
         // Пишем закладки
         //
@@ -440,19 +437,20 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
             if (bookmarkName.isEmpty() || bookmarkColor.isEmpty()) {
                 qDebug() << "Ошибка: Имя закладки или цвет не могут быть пустыми.";
             } else {
+
                 // Попытка записи закладки
-                writer.writeStartElement("text");
+                writer.writeStartElement(toString(blockType));
 
                 // Записываем закладку
-                writer.writeStartElement("bm");
+                writer.writeStartElement(xml::kBookmarkTag);
                 writer.writeAttribute("color", bookmarkColor);
                 writer.writeCDATA(bookmarkName);
                 writer.writeEndElement(); // bm
 
                 // Записываем текст, обёрнутый в закладку
-                writer.writeStartElement("v");
+                writer.writeStartElement(xml::kValueTag);
                 writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
-                writer.writeEndElement(); // v
+                writer.writeEndElement(); // value
 
                 writer.writeEndElement(); // text
 
@@ -461,6 +459,10 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
             }
         } else {
             qDebug() << "Отладка: Запись закладки не требуется.";
+            writer.writeStartElement(toString(blockType));
+            writer.writeStartElement(xml::kValueTag);
+            writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
+            writer.writeEndElement(); // value
         }
 
         //
