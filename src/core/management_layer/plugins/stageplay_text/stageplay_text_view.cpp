@@ -512,6 +512,7 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
                     d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
                 }
                 d->updateSideBarVisibility(this);
+                d->updateToolbarPositon();
             });
     connect(d->toolbar, &StageplayTextEditToolbar::commentsModeEnabledChanged, this,
             [this](bool _enabled) {

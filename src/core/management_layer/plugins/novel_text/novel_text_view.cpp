@@ -632,6 +632,7 @@ NovelTextView::NovelTextView(QWidget* _parent)
                     d->sidebarContent->setCurrentWidget(d->fastFormatWidget);
                 }
                 d->updateSideBarVisibility(this);
+                d->updateToolbarPositon();
             });
     connect(d->toolbar, &NovelTextEditToolbar::beatsVisibleChanged, this, [this](bool _visible) {
         d->textEdit->setBeatsVisible(_visible);
