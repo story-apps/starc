@@ -150,6 +150,7 @@ void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader
 
     if (currentTag == xml::kValueTag) {
         text = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());
+        text.replace(QChar::LineFeed, QChar::LineSeparator);
         xml::readNextElement(_contentReader); // end
         currentTag = xml::readNextElement(_contentReader); // next
     }
