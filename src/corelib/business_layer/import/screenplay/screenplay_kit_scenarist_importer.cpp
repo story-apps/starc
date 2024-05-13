@@ -1,5 +1,6 @@
 #include "screenplay_kit_scenarist_importer.h"
 
+#include "QtCore/qdebug.h"
 #include "screenplay_import_options.h"
 
 #include <business_layer/import/text/simple_text_markdown_importer.h>
@@ -127,6 +128,23 @@ QString readLocation(const QString& _locationName, const QString& _kitLocationXm
 }
 
 /**
+ * @brief Извлечение XML парсером атрибутов bookmark и bookmark_color, создание закладки в испортированном проекте
+ */
+// void ScreenplayKitScenaristImporter::processBookmarkAction(const QString& bookmarkXml) {
+//     QXmlStreamReader xmlReader(bookmarkXml);
+//     while (!xmlReader.atEnd()) {
+//         if (xmlReader.readNextStartElement()) {
+//             if (xmlReader.name() == "action" && xmlReader.attributes().hasAttribute("bookmark")) {
+//                 const QString bookmarkName = xmlReader.attributes().value("bookmark").toString();
+//                 const QString bookmarkColor = xmlReader.attributes().value("bookmark_color").toString();
+
+//                 // Место для твоей реализации
+//             }
+//         }
+//     }
+// }
+
+/**
  * @brief Сформировать простой текстовый документ из текстового документа КИТа
  */
 QString readPlainTextDocument(const QString& _sourceDocument)
@@ -166,6 +184,9 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
     bool alreadyInScene = false;
     bool alreadyInBeat = false;
     bool alreadyInText = false;
+    bool isNeedWriteBookmark = false;
+    QString bookmarkName = "";
+    QString bookmarkColor = "";
     while (!paragraph.isNull()) {
         //
         // Определим тип блока
@@ -213,6 +234,21 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
                 // ... читаем текст
                 //
                 paragraphText = textNode.text();
+                //
+                // ... читаем закладки
+                //
+                if (blockType == TextParagraphType::Action) {
+                    QDomElement actionNode = paragraph.toElement();
+                    if (!actionNode.isNull() && actionNode.hasAttribute("bookmark")) {
+                        bookmarkName = actionNode.attribute("bookmark");
+                        bookmarkColor = actionNode.attribute("bookmark_color");
+                        isNeedWriteBookmark = true;
+
+
+                        qDebug() << "Текущее имя закладки:" << bookmarkName;
+                        qDebug() << "Текущий цвет закладки:" << bookmarkColor;
+                    }
+                }
                 //
                 // ... читаем редакторские заметки
                 //
@@ -410,6 +446,40 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
         writer.writeStartElement(xml::kValueTag);
         writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
         writer.writeEndElement(); // value
+        //
+        // Пишем закладки
+        //
+        if (isNeedWriteBookmark) {
+            // Отладочное сообщение для проверки значений перед записью
+            qDebug() << "Отладка: Попытка записи закладки с именем" << bookmarkName << "и цветом" << bookmarkColor;
+
+            // Проверка на пустые значения
+            if (bookmarkName.isEmpty() || bookmarkColor.isEmpty()) {
+                qDebug() << "Ошибка: Имя закладки или цвет не могут быть пустыми.";
+            } else {
+                // Попытка записи закладки
+                writer.writeStartElement("text");
+
+                // Записываем закладку
+                writer.writeStartElement("bm");
+                writer.writeAttribute("color", bookmarkColor);
+                writer.writeCDATA(bookmarkName);
+                writer.writeEndElement(); // bm
+
+                // Записываем текст, обёрнутый в закладку
+                writer.writeStartElement("v");
+                writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
+                writer.writeEndElement(); // v
+
+                writer.writeEndElement(); // text
+
+                // Сброс флага после записи
+                isNeedWriteBookmark = false;
+            }
+        } else {
+            qDebug() << "Отладка: Запись закладки не требуется.";
+        }
+
         //
         // Пишем редакторские заметки
         //
