@@ -195,29 +195,37 @@ void Toggle::paintEvent(QPaintEvent* _event)
     //
     // ... подготовим тень
     //
-    if (isEnabled()) {
-        static QPixmap backgroundImage;
-        if (backgroundImage.size() != toggleRect.size().toSize()) {
-            backgroundImage = QPixmap(toggleRect.size().toSize());
-            backgroundImage.fill(Qt::transparent);
-            QPainter backgroundImagePainter(&backgroundImage);
-            backgroundImagePainter.setPen(Qt::NoPen);
-            backgroundImagePainter.setBrush(Ui::DesignSystem::color().textEditor());
-            backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()),
-                                                   borderRadius, borderRadius);
-        }
-
-        // ... рисуем тень
-        const qreal shadowHeight = Ui::DesignSystem::card().minimumShadowBlurRadius();
-        const bool useCache = true;
-        QPixmap shadow = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
-                                                 shadowHeight, Ui::DesignSystem::color().shadow(), useCache);
-
-        painter.drawPixmap(toggleRect.topLeft()
-                               - QPointF{ Ui::DesignSystem::card().shadowMargins().left(),
-                                          Ui::DesignSystem::card().shadowMargins().top() },
-                           shadow);
+    static QPixmap backgroundImage;
+    if (backgroundImage.size() != toggleRect.size().toSize()) {
+        backgroundImage = QPixmap(toggleRect.size().toSize());
+        backgroundImage.fill(Qt::transparent);
+        QPainter backgroundImagePainter(&backgroundImage);
+        backgroundImagePainter.setPen(Qt::NoPen);
+        backgroundImagePainter.setBrush(Ui::DesignSystem::color().textEditor());
+        backgroundImagePainter.drawRoundedRect(QRect({ 0, 0 }, backgroundImage.size()),
+                                               borderRadius, borderRadius);
     }
+
+    if (!isEnabled()) {
+        QRegion region(rect());
+        QRegion tumblerRegion(tumblerPath.toFillPolygon().toPolygon());
+        region = region.subtracted(tumblerRegion);
+        painter.setClipRegion(region);
+    }
+    // ... рисуем тень
+    const qreal shadowHeight = Ui::DesignSystem::card().minimumShadowBlurRadius();
+    const bool useCache = true;
+    QPixmap shadow = ImageHelper::dropShadow(backgroundImage, Ui::DesignSystem::card().shadowMargins(),
+                                             shadowHeight, Ui::DesignSystem::color().shadow(), useCache);
+
+    painter.drawPixmap(toggleRect.topLeft()
+                           - QPointF{ Ui::DesignSystem::card().shadowMargins().left(),
+                                      Ui::DesignSystem::card().shadowMargins().top() },
+                       shadow);
+    if (!isEnabled()) {
+        painter.setClipRegion(QRegion());
+    }
+
     //
     // ... рисуем декорацию
     //
