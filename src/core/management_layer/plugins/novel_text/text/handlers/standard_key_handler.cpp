@@ -331,36 +331,37 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     BusinessLayer::TextCursor cursor = editor()->textCursor();
 
     //
-    // TODO: При удалении заголовка сцены бекспейсом, нужно удалить все его биты и текст
-    // присоединить к тексту предыдущей сцены
+    // TODO: не удалять невидимые блоки внутри выделения
     //
 
     //
-    // Если пользователь нажимает Backspace в начале первого блока бита и он при этом скрыт,
-    // то удаляем полностью блок с заголовком предшествующего бита
+    // Если нет выделения, то обработаем крайние случаи с удалением по краям блоков
     //
-    if (!cursor.atStart() && !cursor.hasSelection() && cursor.positionInBlock() == 0 && _backward
-        && !cursor.block().previous().isVisible()
-        && TextBlockStyle::forBlock(cursor.block().previous()) == TextParagraphType::BeatHeading) {
-        cursor.movePosition(QTextCursor::PreviousBlock);
-        cursor.movePosition(QTextCursor::StartOfBlock);
-        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-        editor()->setTextCursorForced(cursor);
-    }
-    //
-    // Если пользователь нажал Delete в конце непустого абзаца и при этом после текущего абзаца идёт
-    // блок с заголовком бита, то удаляем блок заголовка бита
-    //
-    else if (!cursor.atEnd() && !cursor.hasSelection() && !cursor.block().text().isEmpty()
-             && cursor.positionInBlock() == cursor.block().text().length() && !_backward
-             && !cursor.block().next().isVisible()
-             && TextBlockStyle::forBlock(cursor.block().next()) == TextParagraphType::BeatHeading) {
-        cursor.movePosition(QTextCursor::NextBlock);
-        cursor.movePosition(QTextCursor::EndOfBlock);
-        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
-        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-        editor()->setTextCursorForced(cursor);
+    if (!cursor.hasSelection()) {
+        //
+        // ... если пользователь нажимает Backspace в начале блока, перед котором идёт невидимый,
+        //     то идём назад до конца первого видимого блока
+        //
+        if (!cursor.atStart() && cursor.positionInBlock() == 0 && _backward
+            && !cursor.block().previous().isVisible()) {
+            do {
+                cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            } while (!cursor.block().isVisible() && !cursor.atStart());
+            editor()->setTextCursorForced(cursor);
+        }
+        //
+        // ... если пользователь нажал Delete в конце абзаца и при этом после текущего абзаца
+        //     идёт невидимый блок, то идём вперёд до начала первого видимого блока
+        //
+        else if (!cursor.atEnd() && cursor.positionInBlock() == cursor.block().text().length()
+                 && !_backward && !cursor.block().next().isVisible()) {
+            do {
+                cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            } while (!cursor.block().isVisible() && !cursor.atEnd());
+            editor()->setTextCursorForced(cursor);
+        }
     }
 
     cursor.removeCharacters(_backward, editor());

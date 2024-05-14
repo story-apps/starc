@@ -2,18 +2,15 @@
 
 #include "../novel_outline_edit.h"
 
-#include <business_layer/model/characters/characters_model.h>
-#include <business_layer/model/novel/novel_dictionaries_model.h>
 #include <business_layer/templates/novel_template.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QKeyEvent>
-#include <QString>
 #include <QTextBlock>
-#include <QVector>
 
 using BusinessLayer::TextParagraphType;
 using Ui::NovelOutlineEdit;
+
 
 namespace KeyProcessingLayer {
 
@@ -53,8 +50,9 @@ void BeatHeadingHandler::handleEnter(QKeyEvent*)
             //! Есть выделение
 
             //
-            // Ничего не делаем
+            // Удаляем всё, но оставляем стилем блока текущий
             //
+            editor()->addParagraph(TextParagraphType::BeatHeading);
         } else {
             //! Нет выделения
 
@@ -76,7 +74,7 @@ void BeatHeadingHandler::handleEnter(QKeyEvent*)
                 } else {
                     //! Внутри блока
 
-                    editor()->addParagraph(jumpForEnter(TextParagraphType::BeatHeading));
+                    editor()->addParagraph(TextParagraphType::BeatHeading);
                 }
             }
         }
@@ -122,9 +120,6 @@ void BeatHeadingHandler::handleTab(QKeyEvent*)
             if (cursorBackwardText.isEmpty() && cursorForwardText.isEmpty()) {
                 //! Текст пуст
 
-                //
-                // Если строка пуста, то сменить стиль на имя героя
-                //
                 editor()->setCurrentParagraphType(changeForTab(TextParagraphType::BeatHeading));
             } else {
                 //! Текст не пуст
