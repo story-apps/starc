@@ -337,83 +337,40 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     BusinessLayer::TextCursor cursor = editor()->textCursor();
 
     //
-    // Бит нельзя удалить, если не стёрт весь текст его заголовка
+    // TODO: не удалять невидимые блоки внутри выделения
     //
-    if (!cursor.hasSelection()
-        && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::BeatHeading
-        && !cursor.block().text().isEmpty()
-        && ((cursor.positionInBlock() == 0 && _backward)
-            || (cursor.positionInBlock() == cursor.block().text().length() && !_backward))) {
-        return;
-    }
 
     //
-    // Если пользователь хочет удалить бит (удаляя заголовок бита), то нужно также удалить и всё
-    // содержимое удаляемого бита, соответственно нужно выделить всё содержимое бита
+    // Если нет выделения, то обработаем крайние случаи с удалением по краям блоков
     //
-    const QSet<TextParagraphType> beatBorders = {
-        TextParagraphType::ActHeading,      TextParagraphType::ActFooter,
-        TextParagraphType::SequenceHeading, TextParagraphType::SequenceFooter,
-        TextParagraphType::SceneHeading,    TextParagraphType::BeatHeading,
-    };
-    if (!cursor.atStart() && !cursor.hasSelection()
-        && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::BeatHeading
-        && cursor.block().text().isEmpty() && cursor.positionInBlock() == 0 && _backward) {
+    if (!cursor.hasSelection()) {
         //
-        // Отводим курсор на символ назад, куда будет происходить удаление и потом выделяем весь
-        // текст бита, следающий за удаляемым заголовком
+        // ... если пользователь нажимает Backspace в начале блока, перед котором идёт невидимый,
+        //     то идём назад до конца первого видимого блока
         //
-        cursor.movePosition(QTextCursor::PreviousCharacter);
-        cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
-        do {
-            cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        } while (!cursor.atEnd()
-                 && !beatBorders.contains(TextBlockStyle::forBlock(cursor.block())));
-        if (beatBorders.contains(TextBlockStyle::forBlock(cursor.block()))) {
-            cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        }
-        editor()->setTextCursorForced(cursor);
-    } else if (!cursor.atEnd() && !cursor.hasSelection()
-               && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::BeatHeading
-               && cursor.block().text().isEmpty()
-               && cursor.positionInBlock() == cursor.block().text().length() && !_backward) {
-        //
-        // Отводим курсор на символ назад (если не в самом начале документа), куда будет происходить
-        // удаление и потом выделяем весь текст бита, следающий за удаляемым заголовком. Если
-        // удаляется бит, стоящий в самом начале документа, то по возможности выделение будет
-        // расширено до первого символа в блоке идущем после бита
-        //
-        const bool beatStartsFromBeginningOfDocument = cursor.atStart();
-        if (!beatStartsFromBeginningOfDocument) {
-            cursor.movePosition(QTextCursor::PreviousCharacter);
-            cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
-        }
-        do {
-            cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        } while (!cursor.atEnd()
-                 && !beatBorders.contains(TextBlockStyle::forBlock(cursor.block())));
-        if (beatBorders.contains(TextBlockStyle::forBlock(cursor.block()))) {
-            if (beatStartsFromBeginningOfDocument) {
-                cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
-            } else {
+        if (!cursor.atStart() && cursor.positionInBlock() == 0 && _backward
+            && !cursor.block().previous().isVisible()) {
+            do {
                 cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            }
+            } while (!cursor.block().isVisible() && !cursor.atStart());
+            editor()->setTextCursorForced(cursor);
         }
-        editor()->setTextCursorForced(cursor);
+        //
+        // ... если пользователь нажал Delete в конце абзаца и при этом после текущего абзаца
+        //     идёт невидимый блок, то идём вперёд до начала первого видимого блока
+        //
+        else if (!cursor.atEnd() && cursor.positionInBlock() == cursor.block().text().length()
+                 && !_backward && !cursor.block().next().isVisible()) {
+            do {
+                cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            } while (!cursor.block().isVisible() && !cursor.atEnd());
+            editor()->setTextCursorForced(cursor);
+        }
     }
 
     cursor.removeCharacters(_backward, editor());
-
-    //
-    // Если прям всё удалилось, то применим оставшемуся параграфу стиль заголовка сцены
-    //
-    if (cursor.document()->isEmpty()) {
-        editor()->setCurrentParagraphType(TextParagraphType::SceneHeading);
-    }
 }
 
 } // namespace KeyProcessingLayer

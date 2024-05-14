@@ -358,104 +358,33 @@ void ScreenplayTreatmentEdit::redo()
 void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
 {
     //
-    // При позиционировании курсора в невидимый блок, Qt откидывает прокрутку в самый верх, поэтому
-    // перед редактированием документа запомним прокрутку, а после завершения редактирования
-    // восстановим значения полос прокрутки
-    //
-    const auto verticalScrollValue = verticalScrollBar()->value();
-    const auto horizontalScrollValue = horizontalScrollBar()->value();
-
-    BusinessLayer::TextCursor cursor = textCursor();
-    QString blockEndMime;
-    //
-    // Если добавление происходит в момент нахождения курсора в блоке бита
-    //
-    if (TextBlockStyle::forBlock(cursor) == TextParagraphType::BeatHeading) {
-        //
-        // Если курсор в начале блока, то просто переносим всё содержимое блока вперёд
-        //
-        if (cursor.positionInBlock() == 0) {
-            //
-            // ... ничего не делаем
-            //
-        }
-        //
-        // В противном случае
-        //
-        else {
-            //
-            // Если в середине блока, то вырежем контент идущий до конца блока
-            //
-            if (cursor.positionInBlock() < cursor.block().text().length() - 1) {
-                //
-                // Выделяем до конца, плюс захватываем начало следующего блока
-                //
-                cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
-                const auto selection = cursor.selectionInterval();
-                blockEndMime = d->document.mimeFromSelection(selection.from, selection.to);
-                //
-                // Возвращаемся в конец предыдущего блока, чтобы удалять только контент заголовка
-                // бита
-                //
-                cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-                cursor.removeSelectedText();
-            }
-            //
-            // ... и передвигаем курсор для добавления нового блока
-            //
-            while (cursor.block().next().isValid() && !cursor.block().next().isVisible()) {
-                moveCursor(QTextCursor::NextBlock);
-                moveCursor(QTextCursor::EndOfBlock);
-                cursor = textCursor();
-            }
-        }
-    }
-
-    //
-    // Если добавляется бит
+    // Если добавляется бит, то позиционируем его в конце сцены, либо между другими битами
     //
     if (_type == TextParagraphType::BeatHeading) {
         //
-        // ... и если это разрыв текущего бита, то вставим сохранённый в буфере контент
+        // Если это не вставка бита после бита
         //
-        if (!blockEndMime.isEmpty()) {
-            constexpr int invalidPosition = -1;
-            auto removeCharacterAtPosition = invalidPosition;
-            if (cursor.block().text().isEmpty()) {
-                removeCharacterAtPosition = cursor.position();
-                cursor.insertText(" ");
-            }
-
-            d->document.insertFromMime(cursor.position(), blockEndMime);
-
-            if (removeCharacterAtPosition != invalidPosition) {
-                cursor.setPosition(removeCharacterAtPosition);
-                cursor.deleteChar();
-            }
-        }
-        //
-        // ... если вставка нового бита, позиционируем его в конце сцены, либо между другими битами
-        //
-        else {
+        if (currentParagraphType() != TextParagraphType::BeatHeading) {
+            BusinessLayer::TextCursor cursor = textCursor();
             //
             // ... передвигаем курсор
             //
-            while (cursor.block().next().isValid() && !cursor.block().next().isVisible()) {
+            while (cursor.block().next().isValid() && !cursor.block().next().isVisible()
+                   && !cursor.atEnd()) {
                 moveCursor(QTextCursor::NextBlock);
                 moveCursor(QTextCursor::EndOfBlock);
                 cursor = textCursor();
             }
-            //
-            // ... и добавляем блок бита
-            //
-            d->document.addParagraph(_type, textCursor());
         }
+        //
+        // ... и добавляем блок бита
+        //
+        d->document.addParagraph(_type, textCursor());
     }
     //
     // Все остальные блоки просто добавляются в текст
     //
     else {
-
         //
         // Если изменяется заголовок изолированного элемента, то снимаем изоляцию на время
         // операции, а после изолируем предшествующий текущему элемент, либо его родителя
@@ -485,12 +414,6 @@ void ScreenplayTreatmentEdit::addParagraph(TextParagraphType _type)
     }
 
     emit paragraphTypeChanged();
-
-    //
-    // Восстанавливаем значения полос прокрутки
-    //
-    verticalScrollBar()->setValue(verticalScrollValue);
-    horizontalScrollBar()->setValue(horizontalScrollValue);
 }
 
 void ScreenplayTreatmentEdit::setCurrentParagraphType(TextParagraphType _type)

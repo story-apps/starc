@@ -67,9 +67,7 @@ void BeatHeadingHandler::handleEnter(QKeyEvent*)
                 if (cursorBackwardText.isEmpty()) {
                     //! В начале блока
 
-                    //
-                    // Ни чего не делаем
-                    //
+                    editor()->addParagraph(TextParagraphType::BeatHeading);
                 } else if (cursorForwardText.isEmpty()) {
                     //! В конце блока
 
