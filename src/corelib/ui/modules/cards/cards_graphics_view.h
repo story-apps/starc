@@ -62,6 +62,11 @@ public:
     void setCardsSpacing(int _spacing);
 
     /**
+     * @brief Масштабирование вида линий
+     */
+    void setLinesScale(int _scale);
+
+    /**
      * @brief Необходимое количество карточек для отображения в ряду
      * @note -1 - для отображения по границам экрана
      */

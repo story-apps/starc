@@ -301,6 +301,8 @@ const QString kComponentsScreenplayTimelineCardsRatioKey
     = kComponentsScreenplayTimelineKey + QStringLiteral("/cards-ratio");
 const QString kComponentsScreenplayTimelineCardsSpacingKey
     = kComponentsScreenplayTimelineKey + QStringLiteral("/cards-spacing");
+const QString kComponentsScreenplayTimelineScaleKey
+    = kComponentsScreenplayTimelineKey + QStringLiteral("/timeline-scale");
 // ... статистика
 const QString kComponentsScreenplayStatisticsKey
     = kComponentsScreenplayKey + QStringLiteral("/statistics");

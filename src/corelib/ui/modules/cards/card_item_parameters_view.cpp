@@ -280,15 +280,24 @@ CardItemParametersView::CardItemParametersView(QWidget* _parent)
     connect(d->storyDay, &TextField::textChanged, this,
             [this] { emit storyDayChanged(d->storyDay->text()); });
     connect(d->startDateTime, &TextField::textChanged, this, [this] {
-        emit startDateTimeChanged(QDateTime::fromString(d->startDateTime->text(), "dd.MM.yyyy"));
+        auto datetime = QDateTime::fromString(d->startDateTime->text(), "dd.MM.yyyy hh:mm");
+        if (!datetime.isValid()) {
+            d->startDateTime->setError(tr("Value should be in format DD.MM.YYYY HH:MM"));
+            return;
+        }
+
+        d->startDateTime->clearError();
+        emit startDateTimeChanged(datetime);
     });
     auto initDatePicker = [this](TextField* _editor) {
         d->datePickerPopup->disconnect();
 
         connect(d->datePickerPopup, &DatePickerPopup::selectedDateChanged, _editor,
-                [_editor](const QDate& _date) { _editor->setText(_date.toString("dd.MM.yyyy")); });
+                [_editor](const QDate& _date) {
+                    _editor->setText(_date.startOfDay().toString("dd.MM.yyyy hh:mm"));
+                });
 
-        if (auto date = QDate::fromString(_editor->text(), "dd.MM.yyyy"); date.isValid()) {
+        if (auto date = QDate::fromString(_editor->text(), "dd.MM.yyyy hh:mm"); date.isValid()) {
             d->datePickerPopup->setCurrentDate(date);
             d->datePickerPopup->setSelectedDate(date);
         } else {
@@ -303,30 +312,38 @@ CardItemParametersView::CardItemParametersView(QWidget* _parent)
         connect(dateTextField, &TextField::trailingIconPressed, this,
                 [dateTextField, initDatePicker] { initDatePicker(dateTextField); });
         connect(dateTextField, &TextField::textChanged, dateTextField, [dateTextField] {
-            dateTextField->clearError();
-
             const auto sourceText = dateTextField->text();
             auto text = sourceText;
             //
             // Убираем не числа
             //
             for (int i = text.length() - 1; i >= 0; --i) {
-                if (!text[i].isDigit()) {
+                if (!text[i].isDigit() && !text[i].isSpace() && !text[i].isPunct()) {
                     text.remove(i, 1);
                 }
             }
             //
             // Убираем лишние символы
             //
-            if (text.length() > 8) {
-                text = text.left(8);
+            if (text.length() > 16) {
+                text = text.left(16);
             }
             //
             // Добавляем точки
             //
             for (int i = 0; i < text.length(); ++i) {
                 if (i == 2 || i == 5) {
-                    text.insert(i, '.');
+                    if (text[i] != '.') {
+                        text.insert(i, '.');
+                    }
+                } else if (i == 10) {
+                    if (text[i] != ' ') {
+                        text.insert(i, ' ');
+                    }
+                } else if (i == 13) {
+                    if (text[i] != ':') {
+                        text.insert(i, ':');
+                    }
                 }
             }
 
@@ -582,11 +599,11 @@ void CardItemParametersView::setStartDateTimeVisible(bool _visible)
 
 void CardItemParametersView::setStartDateTime(const QDateTime& _startDateTime)
 {
-    if (d->startDateTime->text() == _startDateTime.toString("dd.MM.yyyy")) {
+    if (d->startDateTime->text() == _startDateTime.toString("dd.MM.yyyy hh:mm")) {
         return;
     }
 
-    d->startDateTime->setText(_startDateTime.toString("dd.MM.yyyy"));
+    d->startDateTime->setText(_startDateTime.toString("dd.MM.yyyy hh:mm"));
 }
 
 void CardItemParametersView::setStampVisible(bool _visible)
@@ -772,8 +789,8 @@ void CardItemParametersView::updateTranslations()
     d->description->setLabel(tr("Description"));
     d->initCardBeats();
     d->storyDay->setLabel(tr("Story day"));
-    d->startDateTime->setLabel(tr("Start date"));
-    d->startDateTime->setPlaceholderText("DD.MM.YYYY");
+    d->startDateTime->setLabel(tr("Start date and time"));
+    d->startDateTime->setPlaceholderText(tr("DD.MM.YYYY HH:MM"));
     d->stamp->setLabel(tr("Stamp"));
     d->numberingTitle->setText(tr("Auto scene numbering"));
     d->customNumber->setLabel(tr("Scene number"));

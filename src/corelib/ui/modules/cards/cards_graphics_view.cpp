@@ -96,9 +96,11 @@ public:
         int ratio = 0;
         int spacingScale = 0;
         int cardsInRow = -1;
+        int linesScale = 0;
         //
         QSizeF size;
         qreal spacing = 0.0;
+        qreal linesScaleFactor = 0.0;
     } cardsOptions;
 
     QTimer reorderCardsDebounceTimer;
@@ -175,6 +177,11 @@ void CardsGraphicsView::Implementation::updateCardsOptions()
     //
     cardsOptions.spacing = Ui::DesignSystem::layout().px(cardsOptions.spacingScale)
         - Ui::DesignSystem::layout().px24();
+
+    //
+    // Настроим масштабировнаие коэффициента отображения линий
+    //
+    cardsOptions.linesScaleFactor = 60 * 60 * 24 / ((cardsOptions.linesScale + 300) / 1000.0);
 }
 
 int CardsGraphicsView::Implementation::flatCardIndex(const QModelIndex& _index) const
@@ -1738,7 +1745,7 @@ void CardsGraphicsView::Implementation::reorderCardsInHorizontalLines()
     for (auto card : std::as_const(sortedCardsItems)) {
         qreal x = qFuzzyCompare(card->positionOnLine(), 0.0)
             ? 0
-            : ((card->positionOnLine() - xDelta) / static_cast<qreal>(60 * 60 * 24));
+            : ((card->positionOnLine() - xDelta) / cardsOptions.linesScaleFactor);
         qreal y = Ui::DesignSystem::projectCard().margins().bottom() + cardsOptions.size.height();
         //
         // Пропускаем невидимые карточки
@@ -1891,7 +1898,7 @@ void CardsGraphicsView::Implementation::reorderCardsInVerticalLines()
         qreal x = Ui::DesignSystem::projectCard().margins().left() + cardsOptions.size.width();
         qreal y = qFuzzyCompare(card->positionOnLine(), 0.0)
             ? 0
-            : ((card->positionOnLine() - yDelta) / static_cast<qreal>(60 * 60 * 24));
+            : ((card->positionOnLine() - yDelta) / cardsOptions.linesScaleFactor);
         //
         // Пропускаем невидимые карточки
         //
@@ -2145,6 +2152,19 @@ void CardsGraphicsView::setCardsSpacing(int _spacing)
     d->reorderCardsImpl();
 }
 
+void CardsGraphicsView::setLinesScale(int _scale)
+{
+    if (d->cardsOptions.linesScale == _scale) {
+        return;
+    }
+
+    d->cardsOptions.linesScale = _scale;
+    d->updateCardsOptions();
+
+    QScopedValueRollback<bool> cardsAnimationsBlocker(d->cardsAnimationsAvailable, false);
+    d->reorderCardsImpl();
+}
+
 void CardsGraphicsView::setCardsInRow(int _cardsInRow)
 {
     if (d->cardsOptions.cardsInRow == _cardsInRow) {
@@ -2185,11 +2205,11 @@ QPair<qreal, qreal> CardsGraphicsView::cardsPositionsInterval() const
         // В противном случае, рассчитываем интервал и кешируем
         //
         const auto minimumPosition = cardWithPosition->positionOnLine();
-        const auto maximumPosition = minimumPosition + 30 * 60 * 60 * 24;
+        const auto maximumPosition = minimumPosition + 30 * d->cardsOptions.linesScaleFactor;
         if (d->cardsOptions.type == CardsGraphicsViewType::HorizontalLines) {
             const auto minimumX = mapFromScene(cardWithPosition->scenePos()).x();
             const auto maximumPosTranslated = transform().map(
-                QPointF((maximumPosition - minimumPosition) / static_cast<qreal>(60 * 60 * 24), 0));
+                QPointF((maximumPosition - minimumPosition) / d->cardsOptions.linesScaleFactor, 0));
             const auto maximumX = minimumX + maximumPosTranslated.x();
             const auto pxDistance = (maximumPosition - minimumPosition) / (maximumX - minimumX);
             d->cardsPositionsInterval.minimum = minimumPosition - minimumX * pxDistance;
@@ -2198,7 +2218,7 @@ QPair<qreal, qreal> CardsGraphicsView::cardsPositionsInterval() const
         } else {
             const auto minimumY = mapFromScene(cardWithPosition->scenePos()).y();
             const auto maximumPosTranslated = transform().map(
-                QPointF(0, (maximumPosition - minimumPosition) / static_cast<qreal>(60 * 60 * 24)));
+                QPointF(0, (maximumPosition - minimumPosition) / d->cardsOptions.linesScaleFactor));
             const auto maximumY = minimumY + maximumPosTranslated.y();
             const auto pxDistance = (maximumPosition - minimumPosition) / (maximumY - minimumY);
             d->cardsPositionsInterval.minimum = minimumPosition - minimumY * pxDistance;
