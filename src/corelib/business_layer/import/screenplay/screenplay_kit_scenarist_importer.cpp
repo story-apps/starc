@@ -166,6 +166,8 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
     bool alreadyInScene = false;
     bool alreadyInBeat = false;
     bool alreadyInText = false;
+    QString bookmarkName = "";
+    QString bookmarkColor = "";
     while (!paragraph.isNull()) {
         //
         // Определим тип блока
@@ -213,6 +215,17 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
                 // ... читаем текст
                 //
                 paragraphText = textNode.text();
+                //
+                // ... читаем закладки
+                //
+                if (const auto paragraphNode = paragraph.toElement();
+                    !paragraphNode.isNull() && paragraphNode.hasAttribute("bookmark")) {
+                    bookmarkName = paragraphNode.attribute("bookmark");
+                    bookmarkColor = paragraphNode.attribute("bookmark_color");
+                } else {
+                    bookmarkName.clear();
+                    bookmarkColor.clear();
+                }
                 //
                 // ... читаем редакторские заметки
                 //
@@ -406,7 +419,22 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
             break;
         }
         }
+        //
+        // Начинаем писать блок
+        //
         writer.writeStartElement(toString(blockType));
+        //
+        // Пишем закладку
+        //
+        if (!bookmarkColor.isEmpty() || !bookmarkName.isEmpty()) {
+            writer.writeStartElement(xml::kBookmarkTag);
+            writer.writeAttribute("color", bookmarkColor);
+            writer.writeCDATA(bookmarkName);
+            writer.writeEndElement(); // bookmark
+        }
+        //
+        // Пишем текст блока
+        //
         writer.writeStartElement(xml::kValueTag);
         writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
         writer.writeEndElement(); // value
