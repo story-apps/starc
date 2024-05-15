@@ -1176,7 +1176,7 @@ ContextMenu* ScreenplayTreatmentEdit::createContextMenu(const QPoint& _position,
 
 bool ScreenplayTreatmentEdit::canInsertFromMimeData(const QMimeData* _source) const
 {
-    return _source->formats().contains(d->model->mimeTypes().first()) || _source->hasText();
+    return _source->formats().contains(d->model->mimeTypes().constFirst()) || _source->hasText();
 }
 
 QMimeData* ScreenplayTreatmentEdit::createMimeDataFromSelection() const
@@ -1250,7 +1250,7 @@ QMimeData* ScreenplayTreatmentEdit::createMimeDataFromSelection() const
         // т.к. пользователь может захотеть перенести блоки вырезав и вставив их в другое место
         //
         const auto mime = d->document.mimeFromSelection(selection.from, selection.to);
-        mimeData->setData(d->model->mimeTypes().first(), mime.toUtf8());
+        mimeData->setData(d->model->mimeTypes().constFirst(), mime.toUtf8());
     }
 
     return mimeData;

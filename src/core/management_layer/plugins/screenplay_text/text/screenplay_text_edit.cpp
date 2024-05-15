@@ -1635,7 +1635,7 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
 
 bool ScreenplayTextEdit::canInsertFromMimeData(const QMimeData* _source) const
 {
-    return _source->formats().contains(d->model->mimeTypes().first()) || _source->hasText();
+    return _source->formats().contains(d->model->mimeTypes().constFirst()) || _source->hasText();
 }
 
 QMimeData* ScreenplayTextEdit::createMimeDataFromSelection() const
