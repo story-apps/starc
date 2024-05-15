@@ -218,7 +218,8 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
                 //
                 // ... читаем закладки
                 //
-                if (const auto paragraphNode = paragraph.toElement(); !paragraphNode.isNull() && paragraphNode.hasAttribute("bookmark")) {
+                if (const auto paragraphNode = paragraph.toElement();
+                    !paragraphNode.isNull() && paragraphNode.hasAttribute("bookmark")) {
                     bookmarkName = paragraphNode.attribute("bookmark");
                     bookmarkColor = paragraphNode.attribute("bookmark_color");
                 } else {
