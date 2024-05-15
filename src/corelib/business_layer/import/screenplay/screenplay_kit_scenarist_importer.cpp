@@ -166,7 +166,6 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
     bool alreadyInScene = false;
     bool alreadyInBeat = false;
     bool alreadyInText = false;
-    bool isNeedWriteBookmark = false;
     QString bookmarkName = "";
     QString bookmarkColor = "";
     while (!paragraph.isNull()) {
@@ -219,13 +218,12 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
                 //
                 // ... читаем закладки
                 //
-                if (blockType == TextParagraphType::Action) {
-                    QDomElement actionNode = paragraph.toElement();
-                    if (!actionNode.isNull() && actionNode.hasAttribute("bookmark")) {
-                        bookmarkName = actionNode.attribute("bookmark");
-                        bookmarkColor = actionNode.attribute("bookmark_color");
-                        isNeedWriteBookmark = true;
-                    }
+                if (const auto paragraphNode = paragraph.toElement(); !paragraphNode.isNull() && paragraphNode.hasAttribute("bookmark")) {
+                    bookmarkName = paragraphNode.attribute("bookmark");
+                    bookmarkColor = paragraphNode.attribute("bookmark_color");
+                } else {
+                    bookmarkName.clear();
+                    bookmarkColor.clear();
                 }
                 //
                 // ... читаем редакторские заметки
@@ -421,16 +419,21 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
         }
         }
         //
-        // Пишем текст блока и закладку
+        // Начинаем писать блок
         //
         writer.writeStartElement(toString(blockType));
-        if (isNeedWriteBookmark) {
+        //
+        // Пишем закладку
+        //
+        if (!bookmarkColor.isEmpty() || !bookmarkName.isEmpty()) {
             writer.writeStartElement(xml::kBookmarkTag);
             writer.writeAttribute("color", bookmarkColor);
             writer.writeCDATA(bookmarkName);
-            writer.writeEndElement(); // bm
-            isNeedWriteBookmark = false;
+            writer.writeEndElement(); // bookmark
         }
+        //
+        // Пишем текст блока
+        //
         writer.writeStartElement(xml::kValueTag);
         writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
         writer.writeEndElement(); // value
