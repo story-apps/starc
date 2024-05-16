@@ -497,6 +497,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
 
     const auto currentItemIndex = projectStructureProxyModel->mapToSource(_index);
     const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
+    const auto selectedIndexes = navigator->selectedIndexes();
 
     const auto enabled = editingMode == DocumentEditingMode::Edit;
 
@@ -556,7 +557,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
             // Если хотя бы один выделенный элемент можно удалить, добавим действие
             //
             bool addRemoveAction = false;
-            for (const auto index : navigator->selectedIndexes()) {
+            for (const auto index : selectedIndexes) {
                 const auto currentItemIndex = projectStructureProxyModel->mapToSource(index);
                 const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
                 if (canDocumentBeRemoved(currentItem)) {
@@ -565,9 +566,8 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
                 }
             }
             if (addRemoveAction) {
-                auto removeDocument
-                    = new QAction(navigator->selectedIndexes().size() > 1 ? tr("Remove documents")
-                                                                          : tr("Remove document"));
+                auto removeDocument = new QAction(
+                    selectedIndexes.size() > 1 ? tr("Remove documents") : tr("Remove document"));
                 removeDocument->setSeparator(true);
                 removeDocument->setIconText(u8"\U000f01b4");
                 removeDocument->setEnabled(enabled);
@@ -582,7 +582,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     //
     // Для текстовых документов можно создать версию
     //
-    if (_index.isValid() && isTextItem(currentItem)) {
+    if (_index.isValid() && selectedIndexes.size() == 1 && isTextItem(currentItem)) {
         auto createNewVersion = new QAction(tr("Create new draft"));
         createNewVersion->setSeparator(true);
         createNewVersion->setIconText(u8"\U000F00FB");
@@ -596,7 +596,8 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     //
     // Каждый из элементов можно открыть в своём окне, кроме корзины
     //
-    if (_index.isValid() && currentItem->type() != Domain::DocumentObjectType::RecycleBin) {
+    if (_index.isValid() && selectedIndexes.size() == 1
+        && currentItem->type() != Domain::DocumentObjectType::RecycleBin) {
         auto openInNewWindow = new QAction(tr("Open in new window"));
         openInNewWindow->setSeparator(!isDocumentActionAdded && !menuActions.isEmpty());
         openInNewWindow->setIconText(u8"\U000F03CC");
@@ -606,8 +607,10 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         isDocumentActionAdded = true;
     }
 
+    //
     // Для документов, имеющих разрешение на экспорт, можно вызвать экспорт
-    if (_index.isValid() && isCurrentDocumentExportAvailable) {
+    //
+    if (_index.isValid() && selectedIndexes.size() == 1 && isCurrentDocumentExportAvailable) {
         auto exportCurrentFileAction = new QAction(tr("Export..."));
         exportCurrentFileAction->setSeparator(true);
         exportCurrentFileAction->setIconText(u8"\U000f0207");
@@ -620,6 +623,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     // Документы облачного проекта можно расшарить
     //
     if (isProjectRemote && allowGrantAccessToProject && _index.isValid()
+        && selectedIndexes.size() == 1
         && currentItem->type() != Domain::DocumentObjectType::RecycleBin) {
         QModelIndex documentIndexToShare;
         const auto documentUuidToShare = [currentItem, _index, &documentIndexToShare] {
