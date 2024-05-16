@@ -34,6 +34,8 @@
         <keyword>ai assistant</keyword>
         <keyword>chatgpt</keyword>
         <keyword>mind map</keyword>
+        <keyword>corkboard</keyword>
+        <keyword>timeline</keyword>
     </keywords>
     <url type="homepage">https://starc.app</url>
     <url type="bugtracker">https://github.com/story-apps/starc/issues</url>
@@ -62,6 +64,7 @@
             <li>AI Assistant</li>
             <li>Timer for organizing writing sprints</li>
             <li>Corkboard</li>
+            <li>Timeline</li>
             <li>Statistical and visual reports</li>
             <li>Mind maps</li>
             <li>and much more</li>
@@ -109,6 +112,7 @@
         </screenshot>
     </screenshots>
     <releases>
+        <release version="0.7.2" date="2024-05-16"/>
         <release version="0.7.1" date="2024-05-02"/>
         <release version="0.7.0" date="2024-03-05"/>
         <release version="0.6.4" date="2023-11-04"/>
