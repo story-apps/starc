@@ -280,7 +280,12 @@ CardItemParametersView::CardItemParametersView(QWidget* _parent)
     connect(d->storyDay, &TextField::textChanged, this,
             [this] { emit storyDayChanged(d->storyDay->text()); });
     connect(d->startDateTime, &TextField::textChanged, this, [this] {
-        auto datetime = QDateTime::fromString(d->startDateTime->text(), "dd.MM.yyyy hh:mm");
+        const auto datetimeText = d->startDateTime->text();
+        if (datetimeText.isEmpty()) {
+            return;
+        }
+
+        const auto datetime = QDateTime::fromString(datetimeText, "dd.MM.yyyy hh:mm");
         if (!datetime.isValid()) {
             d->startDateTime->setError(tr("Value should be in format DD.MM.YYYY HH:MM"));
             return;

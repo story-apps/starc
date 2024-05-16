@@ -1157,18 +1157,8 @@ void NovelTextCorrector::setCorrectionOptions(const QStringList& _options)
 
 bool NovelTextCorrector::isBlockVisible(TextParagraphType _type) const
 {
-    const QSet<TextParagraphType> standardBlockTypes = {
-        TextParagraphType::ChapterHeading1,
-        TextParagraphType::ChapterHeading2,
-        TextParagraphType::ChapterHeading3,
-        TextParagraphType::ChapterHeading4,
-        TextParagraphType::ChapterHeading5,
-        TextParagraphType::ChapterHeading6,
-        TextParagraphType::Text,
-    };
     const auto novelDocument = qobject_cast<NovelTextDocument*>(document());
-    return standardBlockTypes.contains(_type)
-        || novelDocument->visibleBlocksTypes().contains(_type);
+    return novelDocument->visibleBlocksTypes().contains(_type);
 }
 
 void NovelTextCorrector::clearImpl()

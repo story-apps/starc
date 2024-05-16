@@ -98,6 +98,9 @@ exists (stageplay_statistics/stageplay_statistics.pro) {
 exists (novel_cards/novel_cards.pro) {
     SUBDIRS += novel_cards
 }
+exists (novel_timeline/novel_timeline.pro) {
+    SUBDIRS += novel_timeline
+}
 exists (novel_statistics/novel_statistics.pro) {
     SUBDIRS += novel_statistics
 }

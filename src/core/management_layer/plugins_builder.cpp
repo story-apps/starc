@@ -90,6 +90,7 @@ const QString kNovelOutlineCardsMime = QStringLiteral("application/x-starc/edito
 const QString kNovelTextEditorMime = QStringLiteral("application/x-starc/editor/novel/text/text");
 const QString kNovelTextNavigatorMime = QStringLiteral("application/x-starc/navigator/novel/text");
 const QString kNovelTextCardsMime = QStringLiteral("application/x-starc/editor/novel/text/cards");
+const QString kNovelTextTimelineMime = QStringLiteral("application/x-starc/editor/novel/text/timeline");
 const QString kNovelStatisticsViewMime = QStringLiteral("application/x-starc/view/novel/statistics");
 const QString kNovelStatisticsNavigatorMime = QStringLiteral("application/x-starc/navigator/novel/statistics");
 //
@@ -119,6 +120,7 @@ const QHash<QString, QString> kEditorToNavigator
         { kNovelOutlineCardsMime, kNovelTextNavigatorMime },
         { kNovelTextEditorMime, kNovelTextNavigatorMime },
         { kNovelTextCardsMime, kNovelTextNavigatorMime },
+        { kNovelTextTimelineMime, kNovelTextNavigatorMime },
 //        { kNovelStatisticsViewMime, kNovelStatisticsNavigatorMime },
       };
 
@@ -172,7 +174,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
                                                                   /*{ "application/x-starc/editor/novel/beatboard", u8"\U000F13D2" }*/ } },
         { "application/x-starc/document/novel/text",       { { kNovelTextEditorMime, u8"\U000f09ed" },
                                                              { kNovelTextCardsMime, u8"\U000f0554" },
-                                                                  /*{ "application/x-starc/editor/novel/timeline", u8"\U000F066C" }*/ } },
+                                                             { kNovelTextTimelineMime, u8"\U000F066C" } } },
         { "application/x-starc/document/novel/statistics", { { kNovelStatisticsViewMime, u8"\U000f0127" } } },
         //
         { "application/x-starc/document/characters",  { { kCharactersRelationsMime, u8"\U000F0D3D" } } },
@@ -253,6 +255,7 @@ const QHash<QString, QString> kMimeToPlugin
         { kNovelTextEditorMime, "*noveltextplugin*" },
         { kNovelTextNavigatorMime, "*noveltextstructureplugin*" },
         { kNovelTextCardsMime, "*novelcardsplugin*" },
+        { kNovelTextTimelineMime, "*noveltimelineplugin*" },
         { kNovelStatisticsViewMime, "*novelstatisticsplugin*" },
         { kNovelStatisticsNavigatorMime, "*novelstatisticsstructureplugin*" },
         //
@@ -589,7 +592,7 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                   QApplication::translate("ProjectPluginsBuilder", "Novel text") },
                 { kNovelTextCardsMime,
                   QApplication::translate("ProjectPluginsBuilder", "Cards") },
-                { "application/x-starc/editor/novel/timeline",
+                { kNovelTextTimelineMime,
                   QApplication::translate("ProjectPluginsBuilder", "Timeline") } } },
             { "application/x-starc/document/novel/statistics",
               { { kNovelStatisticsViewMime,
@@ -939,6 +942,7 @@ void PluginsBuilder::reconfigureNovelEditor(const QStringList& _changedSettingsK
     reconfigurePlugin(kNovelOutlineEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kNovelTextEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kNovelTextCardsMime, _changedSettingsKeys);
+    reconfigurePlugin(kNovelTextTimelineMime, _changedSettingsKeys);
 }
 
 void PluginsBuilder::reconfigureNovelNavigator() const
