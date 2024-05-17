@@ -135,7 +135,7 @@ ScreenplayAbstractImporter::Documents ScreenplayCeltxImporter::importDocuments(
 QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayCeltxImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
-    if (_options.importScreenplay == false) {
+    if (_options.importText == false) {
         return {};
     }
 

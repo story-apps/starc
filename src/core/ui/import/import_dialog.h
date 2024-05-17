@@ -3,8 +3,9 @@
 #include <ui/widgets/dialog/abstract_dialog.h>
 
 namespace BusinessLayer {
+struct ImportOptions;
 struct ScreenplayImportOptions;
-}
+} // namespace BusinessLayer
 
 
 namespace Ui {
@@ -23,7 +24,12 @@ public:
     /**
      * @brief Получить заданные опции импортирования
      */
-    BusinessLayer::ScreenplayImportOptions importOptions() const;
+    BusinessLayer::ImportOptions importOptions() const;
+
+    /**
+     * @brief Получить заданные опции импортирования сценария
+     */
+    BusinessLayer::ScreenplayImportOptions screenplayImportOptions() const;
 
 signals:
     /**

@@ -1,6 +1,5 @@
 #include "import_manager.h"
 
-#include <business_layer/import/novel/novel_import_options.h>
 #include <business_layer/import/novel/novel_markdown_importer.h>
 #include <business_layer/import/screenplay/screenplay_celtx_importer.h>
 #include <business_layer/import/screenplay/screenplay_document_importer.h>
@@ -39,7 +38,7 @@ public:
     /**
      * @brief Импортировать данные романа из заданного файла
      */
-    void importNovel(const BusinessLayer::NovelImportOptions& _options);
+    void importNovel(const BusinessLayer::ImportOptions& _options);
 
     //
     // Данные
@@ -74,8 +73,33 @@ void ImportManager::Implementation::showImportDialogFor(const QString& _path)
     if (importDialog == nullptr) {
         importDialog = new Ui::ImportDialog(_path, topLevelWidget);
         connect(importDialog, &Ui::ImportDialog::importRequested, importDialog, [this] {
-            importDialog->hideDialog();
-            importScreenplay(importDialog->importOptions());
+            const auto importOptions = importDialog->importOptions();
+            switch (importOptions.documentType) {
+            default:
+            case Domain::DocumentObjectType::Undefined: {
+                break;
+            }
+            case Domain::DocumentObjectType::Audioplay: {
+                break;
+            }
+            case Domain::DocumentObjectType::ComicBook: {
+                break;
+            }
+            case Domain::DocumentObjectType::Novel: {
+                importDialog->hideDialog();
+                importNovel(importOptions);
+                break;
+            }
+            case Domain::DocumentObjectType::Screenplay: {
+                const auto screenplayImportOptions = importDialog->screenplayImportOptions();
+                importDialog->hideDialog();
+                importScreenplay(screenplayImportOptions);
+                break;
+            }
+            case Domain::DocumentObjectType::Stageplay: {
+                break;
+            }
+            }
         });
         connect(importDialog, &Ui::ImportDialog::canceled, importDialog,
                 &Ui::ImportDialog::hideDialog);
@@ -89,14 +113,14 @@ void ImportManager::Implementation::showImportDialogFor(const QString& _path)
 }
 
 void ImportManager::Implementation::importScreenplay(
-    const BusinessLayer::ScreenplayImportOptions& _options)
+    const BusinessLayer::ScreenplayImportOptions& _importOptions)
 {
     //
     // Определим нужный импортер
     //
     QScopedPointer<BusinessLayer::ScreenplayAbstractImporter> importer;
     {
-        const auto importFilePath = _options.filePath.toLower();
+        const auto importFilePath = _importOptions.filePath.toLower();
         if (importFilePath.endsWith(ExtensionHelper::kitScenarist())) {
             importer.reset(new BusinessLayer::ScreenplayKitScenaristImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::finalDraft())
@@ -118,7 +142,7 @@ void ImportManager::Implementation::importScreenplay(
     //
     // Импортируем документы
     //
-    const auto documents = importer->importDocuments(_options);
+    const auto documents = importer->importDocuments(_importOptions);
     for (const auto& character : documents.characters) {
         emit q->characterImported(character.name, character.content);
     }
@@ -129,17 +153,17 @@ void ImportManager::Implementation::importScreenplay(
     //
     // Импортируем текст сценариев
     //
-    const auto screenplays = importer->importScreenplays(_options);
+    const auto screenplays = importer->importScreenplays(_importOptions);
     for (const auto& screenplay : screenplays) {
         const auto screenplayName = !screenplay.name.isEmpty()
             ? screenplay.name
-            : QFileInfo(_options.filePath).completeBaseName();
+            : QFileInfo(_importOptions.filePath).completeBaseName();
         emit q->screenplayImported(screenplayName, screenplay.titlePage, screenplay.synopsis,
                                    screenplay.treatment, screenplay.text);
     }
 }
 
-void ImportManager::Implementation::importNovel(const BusinessLayer::NovelImportOptions& _options)
+void ImportManager::Implementation::importNovel(const BusinessLayer::ImportOptions& _options)
 {
     //
     // Определим нужный импортер
@@ -207,6 +231,7 @@ void ImportManager::importScreenplay(const QString& _filePath, bool _importDocum
 {
     BusinessLayer::ScreenplayImportOptions options;
     options.filePath = _filePath;
+    options.documentType = Domain::DocumentObjectType::Screenplay;
     options.importCharacters = _importDocuments;
     options.importLocations = _importDocuments;
     options.importResearch = _importDocuments;
@@ -215,8 +240,9 @@ void ImportManager::importScreenplay(const QString& _filePath, bool _importDocum
 
 void ImportManager::importNovel(const QString& _filePath)
 {
-    BusinessLayer::NovelImportOptions options;
+    BusinessLayer::ImportOptions options;
     options.filePath = _filePath;
+    options.documentType = Domain::DocumentObjectType::Novel;
     d->importNovel(options);
 }
 

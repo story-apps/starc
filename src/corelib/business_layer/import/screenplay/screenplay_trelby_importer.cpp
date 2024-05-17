@@ -121,7 +121,7 @@ ScreenplayAbstractImporter::Documents ScreenplayTrelbyImporter::importDocuments(
 QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayTrelbyImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
-    if (_options.importScreenplay == false) {
+    if (_options.importText == false) {
         return {};
     }
 

@@ -150,6 +150,7 @@ QString DialogHelper::filtersForImport()
                                      ExtensionHelper::fountain(),
                                      ExtensionHelper::celtx(),
                                      ExtensionHelper::plainText(),
+                                     ExtensionHelper::markdown(),
                                  });
     for (const auto& filter : {
              kitScenaristFilter(),

@@ -41,7 +41,7 @@ QStringList sceneHeadingsDictionary()
 }
 
 /**
- * @brief Ключит титульной страницы
+ * @brief Ключи титульной страницы
  */
 QHash<QString, QString> titleKeysDictionary()
 {
@@ -1091,7 +1091,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
 QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayFountainImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
-    if (_options.importScreenplay == false) {
+    if (_options.importText == false) {
         return {};
     }
 
