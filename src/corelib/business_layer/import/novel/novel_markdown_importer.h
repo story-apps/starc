@@ -16,7 +16,7 @@ public:
     /**
      * @brief Импорт докуметов (всех, кроме сценариев)
      */
-    Document importNovels(const NovelImportOptions& _options) const override;
+    Document importNovels(const ImportOptions& _options) const override;
     Document importNovel(const QString& _text) const;
 };
 

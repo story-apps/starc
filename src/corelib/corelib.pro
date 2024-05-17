@@ -504,8 +504,8 @@ HEADERS += \
     business_layer/import/comic_book/comic_book_abstract_importer.h \
     business_layer/import/comic_book/comic_book_import_options.h \
     business_layer/import/comic_book/comic_book_plain_text_importer.h \
+    business_layer/import/import_options.h \
     business_layer/import/novel/novel_abstract_importer.h \
-    business_layer/import/novel/novel_import_options.h \
     business_layer/import/novel/novel_markdown_importer.h \
     business_layer/import/screenplay/screenplay_abstract_importer.h \
     business_layer/import/screenplay/screenplay_celtx_importer.h \

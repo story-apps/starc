@@ -7,7 +7,7 @@
 
 namespace BusinessLayer {
 
-struct NovelImportOptions;
+struct ImportOptions;
 
 /**
  * @brief Базовый класс для реализации импортера документов
@@ -28,7 +28,7 @@ public:
     /**
      * @brief Импорт сценариев из заданного документа
      */
-    virtual Document importNovels(const NovelImportOptions& _options) const = 0;
+    virtual Document importNovels(const ImportOptions& _options) const = 0;
 };
 
 } // namespace BusinessLayer

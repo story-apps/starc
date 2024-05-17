@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QString>
+#include <business_layer/import/import_options.h>
 
 #include <corelib_global.h>
 
@@ -10,31 +10,11 @@ namespace BusinessLayer {
 /**
  * @brief Опции импорта
  */
-struct CORE_LIBRARY_EXPORT ScreenplayImportOptions {
-    /**
-     * @brief Путь файла для импорта
-     */
-    QString filePath;
-
-    /**
-     * @brief Нужно ли импортировать персонажей
-     */
-    bool importCharacters = true;
-
-    /**
-     * @brief Нужно ли импортировать локации
-     */
-    bool importLocations = true;
-
+struct CORE_LIBRARY_EXPORT ScreenplayImportOptions : public ImportOptions {
     /**
      * @brief Нужно ли импортировать документы
      */
     bool importResearch = true;
-
-    /**
-     * @brief Нужно ли импортировать сценарий
-     */
-    bool importScreenplay = true;
 
     /**
      * @brief Сохранять номера сцен импортируемого сценария
