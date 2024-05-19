@@ -7,6 +7,7 @@
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/export/export_options.h>
+#include <business_layer/export/novel/novel_export_options.h>
 #include <business_layer/export/novel/novel_markdown_exporter.h>
 #include <business_layer/import/novel/novel_markdown_importer.h>
 #include <business_layer/model/characters/character_model.h>
@@ -1559,7 +1560,7 @@ QMimeData* NovelTextEdit::createMimeDataFromSelection() const
         //
         // Подготавливаем опции для экспорта в markdown
         //
-        BusinessLayer::ExportOptions options;
+        BusinessLayer::NovelExportOptions options;
         options.filePath = QDir::temp().absoluteFilePath("clipboard.md");
         options.includeTitlePage = false;
         options.includeReviewMarks = false;
