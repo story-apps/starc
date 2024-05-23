@@ -784,7 +784,11 @@ AbstractScreenplayImporter::Screenplay ScreenplayFountainImporter::importScreenp
     QVector<QString> paragraphs;
     bool isTitle = false;
     bool isFirstLine = true;
+<<<<<<< HEAD
     for (const auto& str : QString(_screenplayText).remove('\r').split("\n")) {
+=======
+    for (QString str : QString(_screenplayText).remove('\r').split("\n")) {
+>>>>>>> eb375d5b (Abstract markdown importer for novels and screenplays)
         //
         // Если первая строка содержит ':', то в начале идет титульная страница,
         // которую мы обрабатываем не здесь
@@ -1009,6 +1013,10 @@ AbstractScreenplayImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 // и заканчивается "TO:", то это переход
                 //
                 blockType = TextParagraphType::Transition;
+<<<<<<< HEAD
+=======
+                paragraphText.chop(3);
+>>>>>>> eb375d5b (Abstract markdown importer for novels and screenplays)
             } else if (paragraphText.startsWith("(") && paragraphText.endsWith(")")
                        && (prevBlockType == TextParagraphType::Character
                            || prevBlockType == TextParagraphType::Dialogue)) {
