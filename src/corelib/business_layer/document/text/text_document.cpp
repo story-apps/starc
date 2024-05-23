@@ -1780,8 +1780,40 @@ void TextDocument::splitParagraph(const TextCursor& _cursor)
     insertFromMime(cursor.position(), mime);
 }
 
-void TextDocument::mergeParagraph(const TextCursor& _cursor)
+int TextDocument::mergeParagraph(const TextCursor& _cursor)
 {
+    //
+    // Если курсор в пустом абзаце в конце таблицы, то по-видимому пользователь хочет
+    // перенести этот абзац после таблицы, чтобы продолжить писать ниже
+    //
+    if (_cursor.block().text().isEmpty() && _cursor.inTable() && !_cursor.inFirstColumn()) {
+        TextCursor cursor = _cursor;
+        //
+        // ... проверяем предыдущий блок, он не должен быть пустым и должен быть в этой же колонке
+        //
+        cursor.movePosition(TextCursor::PreviousBlock);
+        if (!cursor.block().text().isEmpty() && cursor.inTable() && !cursor.inFirstColumn()) {
+            //
+            // ... проверяем следующий блок, он должен быть границей таблицы
+            //
+            cursor = _cursor;
+            cursor.movePosition(TextCursor::NextBlock);
+            if (!cursor.inTable()) {
+                //
+                // Если всё сходится, то переносим блок
+                //
+                cursor.beginEditBlock();
+                addParagraph(TextBlockStyle::forBlock(_cursor), cursor);
+                cursor.setPosition(_cursor.position());
+                cursor.deletePreviousChar();
+                cursor.endEditBlock();
+                cursor.movePosition(TextCursor::NextBlock);
+                cursor.movePosition(TextCursor::NextBlock);
+                return cursor.position();
+            }
+        }
+    }
+
     //
     // Получим курсор для блока, из которого пользователь хочет убрать разделение
     //
@@ -1885,6 +1917,7 @@ void TextDocument::mergeParagraph(const TextCursor& _cursor)
     //
     cursor.setPosition(insertPosition);
     cursor.deleteChar();
+    return cursor.position();
 }
 
 void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,

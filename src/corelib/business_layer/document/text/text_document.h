@@ -118,8 +118,9 @@ public:
 
     /**
      * @brief Соединить разделённый параграф
+     * @return Положение курсора, куда его нужно установить, после объединения
      */
-    void mergeParagraph(const TextCursor& _cursor);
+    int mergeParagraph(const TextCursor& _cursor);
 
     /**
      * @brief Добавить редакторсую заметку в текущее выделение

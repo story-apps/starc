@@ -772,7 +772,9 @@ bool ScreenplayTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         BusinessLayer::TextCursor cursor = textCursor();
         if (d->canSplitParagraph(cursor)) {
             if (cursor.inTable()) {
-                d->document.mergeParagraph(cursor);
+                const auto cursorPosition = d->document.mergeParagraph(cursor);
+                cursor.setPosition(cursorPosition);
+                setTextCursor(cursor);
             } else {
                 d->document.splitParagraph(cursor);
 
@@ -1596,7 +1598,9 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     connect(splitAction, &QAction::triggered, this, [this] {
         BusinessLayer::TextCursor cursor = textCursor();
         if (cursor.inTable()) {
-            d->document.mergeParagraph(cursor);
+            const auto cursorPosition = d->document.mergeParagraph(cursor);
+            cursor.setPosition(cursorPosition);
+            setTextCursor(cursor);
         } else {
             d->document.splitParagraph(cursor);
 
