@@ -402,11 +402,10 @@ void ScreenplayTextEdit::addParagraph(TextParagraphType _type)
     //
     // При попытке вставки папки или сцены в таблицу, подменяем тип на описание действия
     //
-    if (_type == TextParagraphType::ActHeading || _type == TextParagraphType::SequenceHeading
-        || _type == TextParagraphType::SceneHeading) {
-        if (cursor.inTable()) {
-            _type = TextParagraphType::Action;
-        }
+    if ((_type == TextParagraphType::ActHeading || _type == TextParagraphType::SequenceHeading
+         || _type == TextParagraphType::SceneHeading)
+        && cursor.inTable()) {
+        _type = TextParagraphType::Action;
     }
 
     //
@@ -461,6 +460,15 @@ void ScreenplayTextEdit::setCurrentParagraphType(TextParagraphType _type)
 
     BusinessLayer::TextCursor cursor = textCursor();
     QString blockEndMime;
+
+    //
+    // При попытке установки папки или сцены в таблицу, подменяем тип на описание действия
+    //
+    if ((_type == TextParagraphType::ActHeading || _type == TextParagraphType::SequenceHeading
+         || _type == TextParagraphType::SceneHeading)
+        && cursor.inTable()) {
+        _type = TextParagraphType::Action;
+    }
 
     //
     // Если изменяется заголовок изолированного элемента, то снимаем изоляцию на время
