@@ -13,15 +13,34 @@
 #include <QDateTime>
 #include <QFile>
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <QStack>
 #include <QXmlStreamWriter>
 
 #include <set>
 
-
 namespace BusinessLayer {
 
 namespace {
+
+/**
+ * @brief Регулярное выражение для поиска любого типа выделения текста
+ */
+static const QRegularExpression kSelectionTypeChecker("(^|[^\\\\])(?<format>(\\*\\*)|(\\*)|(_))");
+
+/**
+ * @brief Имя группы захвата форматных символов
+ */
+static const QString kCapturedGroup("format");
+
+/**
+ * @brief Возможные типы выделения текста в fountain
+ */
+static const QMap<QString, QLatin1String> kFountainSelectionTypes({
+    { "**", xml::kBoldAttribute },
+    { "*", xml::kItalicAttribute },
+    { "_", xml::kUnderlineAttribute },
+});
 
 /**
  * @brief С чего может начинаться название сцены
@@ -40,6 +59,9 @@ QStringList sceneHeadingsDictionary()
     };
 }
 
+//
+// TODO: Пока нигде не используется, но возможно пригодится потом
+//
 /**
  * @brief Ключи титульной страницы
  */
@@ -55,7 +77,6 @@ QHash<QString, QString> titleKeysDictionary()
              std::make_pair(QString("Source"), QString("additional_info")) };
 }
 
-const QString kTripleWhitespace = QLatin1String("   ");
 const QString kDoubleWhitespace = QLatin1String("  ");
 
 } // namespace
@@ -63,6 +84,8 @@ const QString kDoubleWhitespace = QLatin1String("  ");
 class ScreenplayFountainImporter::Implementation
 {
 public:
+    explicit Implementation(ScreenplayFountainImporter* _q);
+
     /**
      * @brief Обработка конкретного блока перед его добавлением
      */
@@ -80,29 +103,8 @@ public:
      */
     void appendComments(QXmlStreamWriter& _writer);
 
-    /**
-     * @brief Убрать форматирование
-     */
-    QString simplify(const QString& _value);
 
-    /**
-     * @brief Добавить форматирование
-     * @param _atCurrentCharacter - начинается/заканчивается ли форматирование
-     *        в текущей позиции (true), или захватывает последний символ (false)
-     */
-    bool processFormat(bool _italics, bool _bold, bool _underline, bool _forCurrentCharacter,
-                       bool _isCanStartEmphasis, bool _isCanEndEmphasis);
-
-    /**
-     * @brief Может ли предыдущий символ быть началом форматирования
-     */
-    bool canStartEmphasis() const;
-
-    /**
-     * @brief Может ли предыдущий символ быть концом форматирования
-     */
-    bool canEndEmphasis(const QString& _paragraphText, int _pos) const;
-
+    ScreenplayFountainImporter* q = nullptr;
 
     /**
      * @brief Начало позиции в блоке для потенциальной будущей редакторской заметки
@@ -159,17 +161,12 @@ public:
      * 		  tuple содержит комментарий, позиция и длина области редакторской заметки
      */
     QVector<std::tuple<QString, unsigned, unsigned>> notes;
-
-    /**
-     * @brief Список форматов обрабатываемых блоков
-     */
-    QVector<ScreenplayTextModelTextItem::TextFormat> formats;
-
-    /**
-     * @brief Последний обрабатываемый формат
-     */
-    ScreenplayTextModelTextItem::TextFormat lastFormat;
 };
+
+ScreenplayFountainImporter::Implementation::Implementation(ScreenplayFountainImporter* _q)
+    : q(_q)
+{
+}
 
 void ScreenplayFountainImporter::Implementation::processBlock(const QString& _paragraphText,
                                                               TextParagraphType _type,
@@ -200,12 +197,10 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
         }
     }
 
-    if (!isCommenting) {
-        formats.clear();
-    }
-
+    //
+    // Комментарии и заметки
+    //
     char prevSymbol = '\0';
-    int asteriskLen = 0;
     for (int i = 0; i != _paragraphText.size(); ++i) {
         //
         // Если предыдущий символ - \, то просто добавим текущий
@@ -227,6 +222,7 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
         char curSymbol = _paragraphText[i].toLatin1();
         switch (curSymbol) {
         case '\\': {
+            q->movePreviousTypes(i, 1);
             break;
         }
 
@@ -235,7 +231,6 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
                 //
                 // Заканчивается комментирование
                 //
-                --asteriskLen;
                 isCommenting = false;
                 noteStartPos += noteLen;
                 noteLen = blockText.size();
@@ -282,8 +277,6 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
             } else {
                 if (isNotation) {
                     note.append('*');
-                } else {
-                    ++asteriskLen;
                 }
             }
             break;
@@ -328,13 +321,6 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
             break;
         }
 
-        case '_': {
-            //
-            // Подчеркивания обрабатываются в другом месте, поэтому тут игнорируем его обработку
-            //
-            break;
-        }
-
         default: {
             //
             // Самый обычный символ
@@ -348,107 +334,8 @@ void ScreenplayFountainImporter::Implementation::processBlock(const QString& _pa
         }
         }
 
-        const bool isCanStartEmphasis = canStartEmphasis();
-        const bool isCanEndEmphasis = canEndEmphasis(_paragraphText, i);
-        //
-        // Underline
-        //
-        if (prevSymbol == '_') {
-            if (!processFormat(false, false, true, curSymbol == '*', isCanStartEmphasis,
-                               isCanEndEmphasis)) {
-                blockText.insert(std::max(0, static_cast<int>(blockText.size()) - 1), prevSymbol);
-            }
-        }
-
-        if (curSymbol != '*') {
-            bool success = false;
-            switch (asteriskLen) {
-            //
-            // Italics
-            //
-            case 1: {
-                success = processFormat(true, false, false, curSymbol == '_', isCanStartEmphasis,
-                                        isCanEndEmphasis);
-                break;
-            }
-
-            //
-            // Bold
-            //
-            case 2: {
-                success = processFormat(false, true, false, curSymbol == '_', isCanStartEmphasis,
-                                        isCanEndEmphasis);
-                break;
-            }
-
-            //
-            // Bold & Italics
-            //
-            case 3: {
-                success = processFormat(true, true, false, curSymbol == '_', isCanStartEmphasis,
-                                        isCanEndEmphasis);
-                break;
-            }
-
-            default:
-                break;
-            }
-            if (!success) {
-                for (int i = 0; i != asteriskLen; ++i) {
-                    blockText.insert(std::max(0, static_cast<int>(blockText.size()) - 1), '*');
-                }
-            }
-            asteriskLen = 0;
-        }
-
         prevSymbol = curSymbol;
     }
-
-    //
-    // Underline
-    //
-    if (prevSymbol == '_') {
-        if (!processFormat(false, false, true, true, false, true)) {
-            blockText.append(prevSymbol);
-        }
-    }
-
-    bool success = false;
-    switch (asteriskLen) {
-    //
-    // Italics
-    //
-    case 1: {
-        success = processFormat(true, false, false, true, false, true);
-        break;
-    }
-
-    //
-    // Bold
-    //
-    case 2: {
-        success = processFormat(false, true, false, true, false, true);
-        break;
-    }
-
-    //
-    // Bold & Italics
-    //
-    case 3: {
-        success = processFormat(true, true, false, true, false, true);
-        break;
-    }
-
-    default:
-        break;
-    }
-
-    if (!success) {
-        for (int i = 0; i != asteriskLen; ++i) {
-            blockText.append('*');
-        }
-    }
-
 
     if (!isNotation && !isCommenting) {
         //
@@ -482,122 +369,6 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
     while (!paragraphText.isEmpty() && paragraphText.startsWith(" ")) {
         ++leadSpaceCount;
         paragraphText = paragraphText.mid(1);
-    }
-
-    //
-    // У нас осталось незакрытое форматирование, а значит его нужно не закрыть, а убрать
-    //
-    if (lastFormat.isValid()) {
-        QVector<ScreenplayTextModelTextItem::TextFormat> removedFormats;
-        if (!formats.empty()) {
-            for (int i = formats.size() - 1; i >= 0; --i) {
-                ScreenplayTextModelTextItem::TextFormat& format = formats[i];
-                ScreenplayTextModelTextItem::TextFormat removed;
-
-                //
-                // У нас остался незакрытый жирный формат
-                //
-                if (lastFormat.isBold) {
-                    if (!format.isBold) {
-                        //
-                        // Формат, начиная отсюда не является жирным. Значит, предыдущий был
-                        // открывающим Значит, на место предыдущего надо вернуть звездочки, а жирный
-                        // незакрытый мы больше не ищем
-                        //
-                        lastFormat.isBold = false;
-                        removed.isBold = true;
-                    } else {
-                        //
-                        // Формат здесь все еще является жирным, значит просто перестаем его таковым
-                        // считать
-                        //
-                        format.isBold = false;
-                    }
-                }
-
-                //
-                // Аналогично для остальных форматов
-                //
-                if (lastFormat.isItalic) {
-                    if (!format.isItalic) {
-                        lastFormat.isItalic = false;
-                        removed.isItalic = true;
-                    } else {
-                        format.isItalic = false;
-                    }
-                }
-
-                if (lastFormat.isUnderline) {
-                    if (!format.isUnderline) {
-                        lastFormat.isUnderline = false;
-                        removed.isUnderline = true;
-                    } else {
-                        format.isUnderline = false;
-                    }
-                }
-
-                //
-                // У нас есть формат, который мы удалили (нам важна его позиция, чтобы вернуть
-                // символы)
-                //
-                if (removed.isValid()) {
-                    removed.from = lastFormat.from;
-                    removedFormats.push_back(removed);
-                }
-                lastFormat.from = format.from;
-
-                //
-                // Может быть текущий формат стал бесполезным
-                //
-                if (!format.isValid()) {
-                    formats.removeAt(i);
-                }
-
-                //
-                // Все закрыли, мы молодцы
-                //
-                if (!lastFormat.isValid()) {
-                    break;
-                }
-            }
-        }
-
-        //
-        // Что то еще осталось (это нормально), поэтому просто тоже вернем эти символы форматировани
-        //
-        if (lastFormat.isValid()) {
-            removedFormats.push_back(lastFormat);
-            lastFormat = {};
-        }
-
-        //
-        // Возвращаем символы форматирования
-        //
-        for (const auto& format : removedFormats) {
-            QString addedStr;
-            if (format.isBold) {
-                addedStr += "**";
-            }
-            if (format.isItalic) {
-                addedStr += "*";
-            }
-            if (format.isUnderline) {
-                addedStr += "_";
-            }
-
-            //
-            // Сдвигаем/увеличиваем форматы на длину добавленных символов
-            //
-            for (auto& innerFormat : formats) {
-                if (innerFormat.from < format.from
-                    && innerFormat.from + innerFormat.length >= format.from) {
-                    innerFormat.length += addedStr.size();
-                } else if (innerFormat.from >= format.from) {
-                    innerFormat.from += addedStr.size();
-                }
-            }
-            paragraphText.insert(format.from, addedStr);
-        }
     }
 
     //
@@ -686,31 +457,7 @@ void ScreenplayFountainImporter::Implementation::appendBlock(const QString& _par
     //
     // Пишем форматирование, если оно есть
     //
-    if (!formats.isEmpty()) {
-        _writer.writeStartElement(xml::kFormatsTag);
-        for (const auto& format : std::as_const(formats)) {
-            _writer.writeStartElement(xml::kFormatTag);
-            //
-            // Данные пользовательского форматирования
-            //
-            _writer.writeAttribute(xml::kFromAttribute,
-                                   QString::number(format.from - leadSpaceCount));
-            _writer.writeAttribute(xml::kLengthAttribute, QString::number(format.length));
-            if (format.isBold) {
-                _writer.writeAttribute(xml::kBoldAttribute, "true");
-            }
-            if (format.isItalic) {
-                _writer.writeAttribute(xml::kItalicAttribute, "true");
-            }
-            if (format.isUnderline) {
-                _writer.writeAttribute(xml::kUnderlineAttribute, "true");
-            }
-            //
-            _writer.writeEndElement(); // format
-        }
-        _writer.writeEndElement(); // formats
-        formats.clear();
-    }
+    q->writeSelectionTypes(_writer);
 
     lastBlockText = blockText;
 
@@ -762,120 +509,20 @@ void ScreenplayFountainImporter::Implementation::appendComments(QXmlStreamWriter
     notes.clear();
 }
 
-QString ScreenplayFountainImporter::Implementation::simplify(const QString& _value)
-{
-    QString res;
-    for (int i = 0; i != _value.size(); ++i) {
-        if (_value[i] == '*' || _value[i] == '_' || _value[i] == '\\') {
-            if (i == 0 || (i > 0 && _value[i - 1] != '\\')) {
-                continue;
-            } else {
-                res += _value[i];
-            }
-        } else {
-            res += _value[i];
-        }
-    }
-    return res;
-}
-
-bool ScreenplayFountainImporter::Implementation::processFormat(bool _italics, bool _bold,
-                                                               bool _underline,
-                                                               bool _forCurrentCharacter,
-                                                               bool _isCanStartEmphasis,
-                                                               bool _isCanEndEmphasis)
-{
-    //
-    // Новый формат, который еще не начат
-    //
-    if (!lastFormat.isValid()) {
-        if (!_isCanStartEmphasis) {
-            return false;
-        }
-
-        lastFormat.isBold = _bold;
-        lastFormat.isItalic = _italics;
-        lastFormat.isUnderline = _underline;
-        lastFormat.from = blockText.size();
-        if (!_forCurrentCharacter) {
-            --lastFormat.from;
-        }
-        return true;
-    }
-    //
-    // Формат уже начат
-    //
-    else {
-        if ((lastFormat.isBold & _bold) == _bold && (lastFormat.isItalic & _italics) == _italics
-            && (lastFormat.isUnderline & _underline) == _underline) {
-            //
-            // Если тут появилось что то новенькое, то может ли это быть началом
-            //
-            if (!_isCanEndEmphasis) {
-                return false;
-            }
-        } else {
-            //
-            // Иначе, может ли быть концом
-            //
-            if (!_isCanStartEmphasis) {
-                return false;
-            }
-        }
-        //
-        // Добавим его в список форматов
-        //
-        lastFormat.length = blockText.size() - lastFormat.from;
-        if (!_forCurrentCharacter) {
-            --lastFormat.length;
-        }
-        if (lastFormat.length != 0) {
-            formats.push_back(lastFormat);
-        }
-
-        //
-        // Если необходимо, созданим новый, частично унаследованный от текущего
-        //
-        if (lastFormat.isBold != _bold || lastFormat.isItalic != _italics
-            || lastFormat.isUnderline != _underline) {
-            lastFormat.isItalic = lastFormat.isItalic ^ _italics;
-            lastFormat.isBold = lastFormat.isBold ^ _bold;
-            lastFormat.isUnderline = lastFormat.isUnderline ^ _underline;
-            lastFormat.from = lastFormat.from + lastFormat.length;
-        }
-        //
-        // Либо просто закроем
-        //
-        else {
-            lastFormat = {};
-        }
-        return true;
-    }
-}
-
-bool ScreenplayFountainImporter::Implementation::canStartEmphasis() const
-{
-    return blockText.size() <= 1 || !blockText[blockText.size() - 2].isLetterOrNumber();
-}
-
-bool ScreenplayFountainImporter::Implementation::canEndEmphasis(const QString& _paragraphText,
-                                                                int _pos) const
-{
-    return _pos >= _paragraphText.size() || !_paragraphText[_pos].isLetterOrNumber();
-}
-
 
 // ****
 
 
 ScreenplayFountainImporter::ScreenplayFountainImporter()
-    : d(new Implementation)
+    : AbstractScreenplayImporter()
+    , AbstractMarkdownImporter(kFountainSelectionTypes, kSelectionTypeChecker, kCapturedGroup)
+    , d(new Implementation(this))
 {
 }
 
 ScreenplayFountainImporter::~ScreenplayFountainImporter() = default;
 
-ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocuments(
+AbstractScreenplayImporter::Documents ScreenplayFountainImporter::importDocuments(
     const ScreenplayImportOptions& _options) const
 {
     //
@@ -889,7 +536,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
     //
     // Читаем plain text
     //
-    const QString& scriptText = fountainFile.readAll();
+    QString scriptText = fountainFile.readAll();
 
     //
     // Сформируем список строк, содержащий текст сценария
@@ -897,7 +544,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
     QVector<QString> paragraphs;
     bool isTitle = false;
     bool isFirstLine = true;
-    for (QString str : scriptText.split("\n")) {
+    for (const auto& str : scriptText.remove('\r').split("\n")) {
         //
         // Если первая строка содержит ':', то в начале идет титульная страница,
         // которую мы обрабатываем не здесь
@@ -917,10 +564,6 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
                 isTitle = false;
             }
         } else {
-            if (str.endsWith("\r")) {
-                str.chop(1);
-            }
-
             if (str == kDoubleWhitespace) {
                 //
                 // Если строка состоит из 2 пробелов, то это нужно сохранить
@@ -1088,7 +731,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFountainImporter::importDocument
     return documents;
 }
 
-QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayFountainImporter::importScreenplays(
+QVector<AbstractScreenplayImporter::Screenplay> ScreenplayFountainImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
     if (_options.importText == false) {
@@ -1114,7 +757,7 @@ QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayFountainImporter::impo
     return { screenplay };
 }
 
-ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenplay(
+AbstractScreenplayImporter::Screenplay ScreenplayFountainImporter::importScreenplay(
     const QString& _screenplayText) const
 {
     if (_screenplayText.simplified().isEmpty()) {
@@ -1141,7 +784,7 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
     QVector<QString> paragraphs;
     bool isTitle = false;
     bool isFirstLine = true;
-    for (QString str : _screenplayText.split("\n")) {
+    for (const auto& str : QString(_screenplayText).remove('\r').split("\n")) {
         //
         // Если первая строка содержит ':', то в начале идет титульная страница,
         // которую мы обрабатываем не здесь
@@ -1151,10 +794,6 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
             if (str.contains(':')) {
                 isTitle = true;
             }
-        }
-
-        if (str.endsWith("\r")) {
-            str.chop(1);
         }
 
         if (isTitle) {
@@ -1177,78 +816,86 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
         }
     }
 
-    //
-    // Очищаем форматы перед импортом
-    //
-    d->formats.clear();
-    d->lastFormat = {};
-
     const int paragraphsCount = paragraphs.size();
-    auto prevBlockType = TextParagraphType::Undefined;
     QStack<QString> dirs;
-    TextParagraphType blockType;
+    auto prevBlockType = TextParagraphType::Undefined;
+    TextParagraphType blockType = TextParagraphType::Undefined;
+
     for (int i = 0; i != paragraphsCount; ++i) {
+        QString paragraphText = paragraphs[i];
+
         if (d->isNotation || d->isCommenting) {
             //
             // Если мы комментируем или делаем заметку, то продолжим это
             //
-            d->processBlock(paragraphs[i], prevBlockType, writer);
+            d->processBlock(paragraphText, prevBlockType, writer);
             continue;
         }
 
-        if (paragraphs[i].isEmpty()) {
+        if (paragraphText.isEmpty()) {
             continue;
         }
 
         blockType = TextParagraphType::Action;
-        QString paragraphText;
 
-        switch (paragraphs[i][0].toLatin1()) {
+        //
+        // Собираем типы выделения текста и очищаем текст от форматных символов
+        //
+        collectSelectionTypes(paragraphText);
+
+        switch (paragraphText[0].toLatin1()) {
         case '.': {
             blockType = TextParagraphType::SceneHeading;
             //
             // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
             //
-            int sharpPos = paragraphs[i].size();
-            if (paragraphs[i].endsWith("#")) {
-                sharpPos = paragraphs[i].lastIndexOf('#', paragraphs[i].size() - 2);
+            int sharpPos = paragraphText.size();
+            if (paragraphText.endsWith("#")) {
+                sharpPos = paragraphText.lastIndexOf('#', paragraphText.size() - 2);
             }
             if (sharpPos == -1) {
-                sharpPos = paragraphs[i].size();
+                sharpPos = paragraphText.size();
             }
-            paragraphText = paragraphs[i].mid(1, sharpPos - 1);
+            paragraphText.truncate(sharpPos);
+            paragraphText.remove(0, 1);
+            movePreviousTypes(0, 1);
             break;
         }
 
         case '!': {
             blockType = TextParagraphType::Action;
-            paragraphText = paragraphs[i].mid(1);
+            paragraphText.remove(0, 1);
+            movePreviousTypes(0, 1);
             break;
         }
 
         case '@': {
             blockType = TextParagraphType::Character;
-            paragraphText = paragraphs[i].mid(1);
+            paragraphText.remove(0, 1);
+            movePreviousTypes(0, 1);
             break;
         }
 
         case '>': {
-            if (paragraphs[i].endsWith("<")) {
+            if (paragraphText.endsWith("<")) {
                 blockType = TextParagraphType::Action;
-                paragraphText = paragraphs[i].mid(1, paragraphs[i].size() - 2);
+                paragraphText.chop(1);
+                paragraphText.remove(0, 1);
+                movePreviousTypes(0, 1);
             } else {
                 blockType = TextParagraphType::Transition;
-                paragraphText = paragraphs[i].mid(1);
+                paragraphText.remove(0, 1);
+                movePreviousTypes(0, 1);
             }
             break;
         }
 
         case '=': {
             bool isPageBreak = false;
-            if (paragraphs[i].startsWith("===")) {
+            if (paragraphText.startsWith("===")) {
                 isPageBreak = true;
-                for (int j = 3; j != paragraphs[i].size(); ++j) {
-                    if (paragraphs[i][j] != '=') {
+                for (int j = 3; j != paragraphText.size(); ++j) {
+                    if (paragraphText[j] != '=') {
                         isPageBreak = false;
                         break;
                     }
@@ -1262,7 +909,8 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
             }
             if (!isPageBreak) {
                 blockType = TextParagraphType::BeatHeading;
-                paragraphText = paragraphs[i].mid(1);
+                paragraphText.remove(0, 1);
+                movePreviousTypes(0, 1);
             }
             break;
         }
@@ -1272,7 +920,8 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
             // Лирика
             //
             blockType = TextParagraphType::Lyrics;
-            paragraphText = paragraphs[i].mid(1);
+            paragraphText.remove(0, 1);
+            movePreviousTypes(0, 1);
             break;
         }
 
@@ -1281,7 +930,7 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
             // Директории
             //
             int sharpCount = 0;
-            while (paragraphs[i][sharpCount] == '#') {
+            while (paragraphText[sharpCount] == '#') {
                 ++sharpCount;
             }
 
@@ -1298,7 +947,7 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
             //
             // И откроем новую
             //
-            QString text = paragraphs[i].mid(sharpCount);
+            QString text = paragraphText.mid(sharpCount);
             d->processBlock(text, TextParagraphType::SequenceHeading, writer);
             dirs.push(text);
             prevBlockType = TextParagraphType::SequenceHeading;
@@ -1313,7 +962,7 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
         default: {
             bool startsWithHeading = false;
             for (const QString& sceneHeading : sceneHeadingsDictionary()) {
-                if (paragraphs[i].startsWith(sceneHeading)) {
+                if (paragraphText.startsWith(sceneHeading)) {
                     startsWithHeading = true;
                     break;
                 }
@@ -1329,45 +978,48 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 //
                 // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
                 //
-                int sharpPos = paragraphs[i].size();
-                if (paragraphs[i].endsWith("#")) {
-                    sharpPos = paragraphs[i].lastIndexOf('#', paragraphs[i].size() - 2);
+                int sharpPos = paragraphText.size();
+                if (paragraphText.endsWith("#")) {
+                    sharpPos = paragraphText.lastIndexOf('#', paragraphText.size() - 2);
                 }
                 if (sharpPos == -1) {
-                    sharpPos = paragraphs[i].size();
+                    sharpPos = paragraphText.size();
                 }
-                paragraphText = paragraphs[i].left(sharpPos);
-            } else if (paragraphs[i].startsWith("[[") && paragraphs[i].endsWith("]]")) {
+                paragraphText = paragraphText.left(sharpPos);
+            } else if (paragraphText.startsWith("[[") && paragraphText.endsWith("]]")) {
                 //
                 // Редакторская заметка
                 //
-                d->notes.append(std::make_tuple(paragraphs[i].mid(2, paragraphs[i].size() - 4),
-                                                d->noteStartPos, d->noteLen));
+                paragraphText.chop(2);
+                paragraphText.remove(0, 2);
+                movePreviousTypes(0, 2);
+                d->notes.append(std::make_tuple(paragraphText, d->noteStartPos, d->noteLen));
                 d->noteStartPos += d->noteLen;
                 d->noteLen = 0;
                 continue;
-            } else if (paragraphs[i].startsWith("/*")) {
+            } else if (paragraphText.startsWith("/*")) {
                 //
                 // Начинается комментарий
-                paragraphText = paragraphs[i];
-            } else if (paragraphs[i] == TextHelper::smartToUpper(paragraphs[i]) && i != 0
+                //
+            } else if (paragraphText == TextHelper::smartToUpper(paragraphText) && i != 0
                        && paragraphs[i - 1].isEmpty() && i + 1 < paragraphsCount
-                       && paragraphs[i + 1].isEmpty() && paragraphs[i].endsWith("TO:")) {
+                       && paragraphs[i + 1].isEmpty() && paragraphText.endsWith("TO:")) {
                 //
                 // Если состоит только из заглавных букв, предыдущая и следующая строки пустые
                 // и заканчивается "TO:", то это переход
                 //
                 blockType = TextParagraphType::Transition;
-                paragraphText = paragraphs[i].left(paragraphs[i].size() - 4);
-            } else if (paragraphs[i].startsWith("(") && paragraphs[i].endsWith(")")
+            } else if (paragraphText.startsWith("(") && paragraphText.endsWith(")")
                        && (prevBlockType == TextParagraphType::Character
                            || prevBlockType == TextParagraphType::Dialogue)) {
                 //
                 // Если текущий блок обернут в (), то это ремарка
                 //
                 blockType = TextParagraphType::Parenthetical;
-                paragraphText = paragraphs[i].mid(1, paragraphs[i].length() - 2);
-            } else if (paragraphs[i] == TextHelper::smartToUpper(paragraphs[i]) && i != 0
+                paragraphText.chop(1);
+                paragraphText.remove(0, 1);
+                movePreviousTypes(0, 1);
+            } else if (paragraphText == TextHelper::smartToUpper(paragraphText) && i != 0
                        && paragraphs[i - 1].isEmpty() && i + 1 < paragraphsCount
                        && !paragraphs[i + 1].isEmpty()) {
                 //
@@ -1375,13 +1027,11 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 // пустая Значит это имя персонажа (для реплики)
                 //
                 blockType = TextParagraphType::Character;
-                if (paragraphs[i].endsWith("^")) {
+                if (paragraphText.endsWith("^")) {
                     //
                     // Двойной диалог, который мы пока что не умеем обрабатывать
                     //
-                    paragraphText = paragraphs[i].left(paragraphs[i].size() - 1);
-                } else {
-                    paragraphText = paragraphs[i];
+                    paragraphText.chop(1);
                 }
             } else if (prevBlockType == TextParagraphType::Character
                        || prevBlockType == TextParagraphType::Parenthetical
@@ -1392,13 +1042,11 @@ ScreenplayAbstractImporter::Screenplay ScreenplayFountainImporter::importScreenp
                 // Или предыдущая строка является диалогом
                 //
                 blockType = TextParagraphType::Dialogue;
-                paragraphText = paragraphs[i];
             } else {
                 //
                 // Во всех остальных случаях - Action
                 //
                 blockType = TextParagraphType::Action;
-                paragraphText = paragraphs[i];
             }
         }
         }

@@ -16,7 +16,7 @@
 
 namespace BusinessLayer {
 
-ScreenplayAbstractImporter::Documents ScreenplayTrelbyImporter::importDocuments(
+AbstractScreenplayImporter::Documents ScreenplayTrelbyImporter::importDocuments(
     const ScreenplayImportOptions& _options) const
 {
     //
@@ -118,7 +118,7 @@ ScreenplayAbstractImporter::Documents ScreenplayTrelbyImporter::importDocuments(
     return documents;
 }
 
-QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayTrelbyImporter::importScreenplays(
+QVector<AbstractScreenplayImporter::Screenplay> ScreenplayTrelbyImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
     if (_options.importText == false) {

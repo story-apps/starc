@@ -252,7 +252,7 @@ static QString clearBlockText(TextParagraphType _blockType, const QString& _bloc
 
 } // namespace
 
-ScreenplayAbstractImporter::Documents ScreenplayDocumentImporter::importDocuments(
+AbstractScreenplayImporter::Documents ScreenplayDocumentImporter::importDocuments(
     const ScreenplayImportOptions& _options) const
 {
     //
@@ -392,7 +392,7 @@ ScreenplayAbstractImporter::Documents ScreenplayDocumentImporter::importDocument
     return documents;
 }
 
-QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayDocumentImporter::importScreenplays(
+QVector<AbstractScreenplayImporter::Screenplay> ScreenplayDocumentImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
     if (_options.importText == false) {

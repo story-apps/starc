@@ -1,6 +1,6 @@
 #pragma once
 
-#include "screenplay_abstract_importer.h"
+#include "abstract_screenplay_importer.h"
 
 
 namespace BusinessLayer {
@@ -8,7 +8,7 @@ namespace BusinessLayer {
 /**
  * @brief Импортер сценария из файлов Final Draft
  */
-class CORE_LIBRARY_EXPORT ScreenplayFdxImporter : public ScreenplayAbstractImporter
+class CORE_LIBRARY_EXPORT ScreenplayFdxImporter : public AbstractScreenplayImporter
 {
 public:
     ScreenplayFdxImporter() = default;

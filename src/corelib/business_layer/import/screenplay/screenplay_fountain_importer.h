@@ -1,6 +1,8 @@
 #pragma once
 
-#include "screenplay_abstract_importer.h"
+#include "abstract_screenplay_importer.h"
+
+#include <corelib/business_layer/import/abstract_markdown_importer.h>
 
 #include <QScopedPointer>
 
@@ -10,7 +12,8 @@ namespace BusinessLayer {
 /**
  * @brief Импортер сценария из файлов fountain
  */
-class CORE_LIBRARY_EXPORT ScreenplayFountainImporter : public ScreenplayAbstractImporter
+class CORE_LIBRARY_EXPORT ScreenplayFountainImporter : public AbstractScreenplayImporter,
+                                                       public AbstractMarkdownImporter
 {
     /*
                   . .
