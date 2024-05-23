@@ -19,7 +19,7 @@
 
 namespace BusinessLayer {
 
-ScreenplayAbstractImporter::Documents ScreenplayFdxImporter::importDocuments(
+AbstractScreenplayImporter::Documents ScreenplayFdxImporter::importDocuments(
     const ScreenplayImportOptions& _options) const
 {
     //
@@ -130,7 +130,7 @@ ScreenplayAbstractImporter::Documents ScreenplayFdxImporter::importDocuments(
     return documents;
 }
 
-QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayFdxImporter::importScreenplays(
+QVector<AbstractScreenplayImporter::Screenplay> ScreenplayFdxImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
     Screenplay result;

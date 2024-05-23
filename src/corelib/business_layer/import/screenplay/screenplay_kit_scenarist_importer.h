@@ -1,6 +1,6 @@
 #pragma once
 
-#include "screenplay_abstract_importer.h"
+#include "abstract_screenplay_importer.h"
 
 
 namespace BusinessLayer {
@@ -8,7 +8,7 @@ namespace BusinessLayer {
 /**
  * @brief Импортер сценария из файлов КИТа
  */
-class CORE_LIBRARY_EXPORT ScreenplayKitScenaristImporter : public ScreenplayAbstractImporter
+class CORE_LIBRARY_EXPORT ScreenplayKitScenaristImporter : public AbstractScreenplayImporter
 {
 public:
     ScreenplayKitScenaristImporter() = default;
