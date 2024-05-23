@@ -95,6 +95,8 @@ ScreenplayTextEditToolbar::ScreenplayTextEditToolbar(QWidget* _parent)
     d->beatsAction->setCheckable(true);
     addAction(d->beatsAction);
     connect(d->beatsAction, &QAction::toggled, this,
+            &ScreenplayTextEditToolbar::updateTranslations);
+    connect(d->beatsAction, &QAction::toggled, this,
             &ScreenplayTextEditToolbar::beatsVisibleChanged);
 
     d->paragraphTypeAction->setText(tr("Scene heading"));

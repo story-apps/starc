@@ -94,6 +94,7 @@ NovelTextEditToolbar::NovelTextEditToolbar(QWidget* _parent)
     d->beatsAction->setIconText(u8"\U000F06C7");
     d->beatsAction->setCheckable(true);
     addAction(d->beatsAction);
+    connect(d->beatsAction, &QAction::toggled, this, &NovelTextEditToolbar::updateTranslations);
     connect(d->beatsAction, &QAction::toggled, this, &NovelTextEditToolbar::beatsVisibleChanged);
 
     d->paragraphTypeAction->setText(tr("Scene heading"));
