@@ -759,7 +759,7 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
         // Уведомим навигатор клиентов, о смене текущего элемента
         //
         const auto screenplayModelIndex = d->textEdit->currentModelIndex();
-        if (hasFocus()) {
+        if (hasFocus() || d->searchManager->toolbar()->hasFocus()) {
             emit currentModelIndexChanged(screenplayModelIndex);
         }
 
