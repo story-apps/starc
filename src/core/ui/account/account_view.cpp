@@ -202,8 +202,6 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     accountContentLayout->addWidget(subscriptionInfo, row++, 0, 1, 2);
     accountContentLayout->addWidget(promocodeInfo, row++, 0, 1, 2);
     accountContentLayout->addWidget(sessionsTitle, row++, 0, 1, 2);
-    ++row; // оставляем строку для сессий
-    accountContentLayout->setRowStretch(row, 1);
     accountContentLayout->setColumnStretch(0, 1);
     accountContentLayout->setColumnStretch(1, 1);
     accountContentWidget->setLayout(accountContentLayout);
@@ -575,7 +573,7 @@ void AccountView::setSessions(const QVector<Domain::SessionInfo>& _sessions)
     }
 
     auto layout = qobject_cast<QGridLayout*>(d->accountContent->widget()->layout());
-    int row = layout->rowCount() - 2;
+    int row = layout->rowCount() - 1;
     int column = 0;
     for (const auto& sessionInfo : _sessions) {
         auto sessionWidget = new SessionWidget(d->accountContent->widget());
@@ -598,6 +596,7 @@ void AccountView::setSessions(const QVector<Domain::SessionInfo>& _sessions)
                 [this, sessionInfo] { emit terminateSessionRequested(sessionInfo.sessionKey); });
 
         layout->addWidget(sessionWidget, row, column++);
+        layout->setRowStretch(row, 0);
         if (column > 1) {
             ++row;
             column = 0;
@@ -605,6 +604,14 @@ void AccountView::setSessions(const QVector<Domain::SessionInfo>& _sessions)
 
         d->sessions.append(sessionWidget);
     }
+
+    //
+    // Растягиваем строку под сессиями, чтобы нижний из виджетов сессий не растягивался
+    //
+    if (column != 0) {
+        ++row;
+    }
+    layout->setRowStretch(row, 1);
 }
 
 void AccountView::setAccountTeams(const QVector<Domain::TeamInfo>& _teams)
