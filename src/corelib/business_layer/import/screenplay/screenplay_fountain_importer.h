@@ -4,6 +4,8 @@
 
 #include <corelib/business_layer/import/abstract_markdown_importer.h>
 
+#include <corelib/business_layer/import/abstract_markdown_importer.h>
+
 #include <QScopedPointer>
 
 
