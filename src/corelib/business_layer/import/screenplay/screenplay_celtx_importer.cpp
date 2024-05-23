@@ -54,7 +54,7 @@ QString readScript(const QString& _filePath)
 
 } // namespace
 
-ScreenplayAbstractImporter::Documents ScreenplayCeltxImporter::importDocuments(
+AbstractScreenplayImporter::Documents ScreenplayCeltxImporter::importDocuments(
     const ScreenplayImportOptions& _options) const
 {
     //
@@ -132,7 +132,7 @@ ScreenplayAbstractImporter::Documents ScreenplayCeltxImporter::importDocuments(
     return documents;
 }
 
-QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayCeltxImporter::importScreenplays(
+QVector<AbstractScreenplayImporter::Screenplay> ScreenplayCeltxImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
     if (_options.importText == false) {

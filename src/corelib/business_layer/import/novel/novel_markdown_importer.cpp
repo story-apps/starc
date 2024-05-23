@@ -18,43 +18,31 @@ namespace BusinessLayer {
 namespace {
 
 /**
- * @brief Регулярные выражения для поиска типов выделения текста
+ * @brief Регулярное выражение для поиска любого типа выделения текста
  */
-static const QRegularExpression kBoldChecker("(^|[^\\\\])(\\*\\*)");
-static const QRegularExpression kBoldChecker2("(^|[^\\\\])(__)");
-static const QRegularExpression kItalicChecker("(^|[^\\\\])(\\*)");
-static const QRegularExpression kItalicChecker2("(^|[^\\\\])(_)");
-static const QRegularExpression kStrikeoutChecker("(^|[^\\\\])(~~)");
+static const QRegularExpression kSelectionTypeChecker(
+    "(^|[^\\\\])(?<format>(\\*\\*)|(__)|(\\*)|(_)|(~~))");
+
+/**
+ * @brief Имя группы захвата форматных символов
+ */
+static const QString kCapturedGroup("format");
+
+/**
+ * @brief Возможные типы выделения текста в markdown
+ */
+static const QMap<QString, QLatin1String> kMarkdownSelectionTypes({
+    { "**", xml::kBoldAttribute },
+    { "__", xml::kBoldAttribute },
+    { "*", xml::kItalicAttribute },
+    { "_", xml::kItalicAttribute },
+    { "~~", xml::kStrikethroughAttribute },
+});
 
 /**
  * @brief Регулярное выражение для поиска символа экранирования
  */
 static const QRegularExpression kEscapeingSymbolChecker("(^|[^\\\\])(\\\\)([^\\\\])");
-
-/**
- * @brief Регулярное выражение заголовка
- */
-static const QRegularExpression kHeadingChecker("^#{1,6}(\\s{1,}|$)");
-
-/**
- * @brief Возможные типы выделения текста в markdown
- */
-static const QVector<QPair<QRegularExpression, QLatin1String>> kMarkdownSelectionTypes({
-    { kBoldChecker, xml::kBoldAttribute },
-    { kBoldChecker2, xml::kBoldAttribute },
-    { kItalicChecker, xml::kItalicAttribute },
-    { kItalicChecker2, xml::kItalicAttribute },
-    { kStrikeoutChecker, xml::kStrikethroughAttribute },
-});
-
-/**
- * @brief Информация о типах выделения в тексте
- */
-struct SelectionTypeInText {
-    QLatin1String attribute;
-    int from = -1;
-    int length = 0;
-};
 
 
 /**
@@ -69,29 +57,15 @@ static void removeEscapeingSymbol(QString& _paragraphText)
     }
 }
 
-/**
- * @brief Найти выделения текста
- */
-static int findTypeSelection(const QString& _paragraphText,
-                             const QPair<QRegularExpression, QLatin1String>& _selectionType,
-                             int& _typeStart, int& _typeEnd)
-{
-    _typeStart = -1;
-    _typeEnd = -1;
-    QRegularExpressionMatch match = _selectionType.first.match(_paragraphText);
-    if (match.hasMatch()) {
-        _typeStart = match.capturedStart(2);
-        match = _selectionType.first.match(_paragraphText, _typeStart + 1);
-        if (match.hasMatch()) {
-            _typeEnd = match.capturedStart(2);
-            return match.capturedLength(2);
-        }
-    }
-    return 0;
-};
-
 } // namespace
 
+NovelMarkdownImporter::NovelMarkdownImporter()
+    : NovelAbstractImporter()
+    , AbstractMarkdownImporter(kMarkdownSelectionTypes, kSelectionTypeChecker, kCapturedGroup)
+{
+}
+
+NovelMarkdownImporter::~NovelMarkdownImporter() = default;
 
 NovelAbstractImporter::Document NovelMarkdownImporter::importNovels(
     const ImportOptions& _options) const
@@ -144,48 +118,14 @@ NovelAbstractImporter::Document NovelMarkdownImporter::importNovel(const QString
         auto paragraphText = paragraph;
 
         //
-        // Типы выделения текста
-        //
-        QVector<SelectionTypeInText> selectionTypesInText;
-
-        //
-        // Сдвинуть расположение типов выделения текста, которые уже собраны
-        //
-        auto movePreviousTypes = [&selectionTypesInText](int _position, int _offset) {
-            for (auto& type : selectionTypesInText) {
-                if (_position < type.from) {
-                    type.from -= _offset;
-                }
-            }
-        };
-
-        //
         // Собираем типы выделения текста
         //
-        for (const auto& selectionType : kMarkdownSelectionTypes) {
-            int typeStart = -1;
-            int typeEnd = -1;
+        collectSelectionTypes(paragraphText);
 
-            int offset = findTypeSelection(paragraphText, selectionType, typeStart, typeEnd);
-            while (typeEnd != -1) {
-                SelectionTypeInText type;
 
-                paragraphText.remove(typeStart, offset);
-                movePreviousTypes(typeStart, offset);
-
-                typeEnd -= offset;
-                paragraphText.remove(typeEnd, offset);
-                movePreviousTypes(typeEnd, offset);
-
-                type.attribute = selectionType.second;
-                type.from = typeStart;
-                type.length = typeEnd - typeStart;
-                selectionTypesInText.append(type);
-
-                offset = findTypeSelection(paragraphText, selectionType, typeStart, typeEnd);
-            }
-        }
-
+        //
+        // Обрабатываем блоки
+        //
         if (paragraph.startsWith("#")) {
             const QString stringBegin = paragraph.split(' ')[0];
             //
@@ -198,6 +138,8 @@ NovelAbstractImporter::Document NovelMarkdownImporter::importNovel(const QString
                 const int headingLevel = stringBegin.count('#');
                 switch (headingLevel) {
                 case 1: {
+                    paragraphText.remove(0, headingLevel + 1);
+                    movePreviousTypes(0, headingLevel + 1);
                     writer.writeStartElement(toString(TextParagraphType::PartHeading));
                     break;
                 }
@@ -205,10 +147,14 @@ NovelAbstractImporter::Document NovelMarkdownImporter::importNovel(const QString
                 case 3:
                 case 4:
                 case 5: {
+                    paragraphText.remove(0, headingLevel + 1);
+                    movePreviousTypes(0, headingLevel + 1);
                     writer.writeStartElement(toString(TextParagraphType::ChapterHeading));
                     break;
                 }
                 case 6: {
+                    paragraphText.remove(0, headingLevel + 1);
+                    movePreviousTypes(0, headingLevel + 1);
                     writer.writeStartElement(toString(TextParagraphType::SceneHeading));
                     break;
                 }
@@ -220,7 +166,7 @@ NovelAbstractImporter::Document NovelMarkdownImporter::importNovel(const QString
             } else {
                 writer.writeStartElement(toString(TextParagraphType::Text));
             }
-            paragraphText.remove(kHeadingChecker);
+
             writer.writeStartElement(xml::kValueTag);
             removeEscapeingSymbol(paragraphText);
             writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
@@ -236,17 +182,7 @@ NovelAbstractImporter::Document NovelMarkdownImporter::importNovel(const QString
         //
         // Пишем данные о типах выделения текста
         //
-        if (!selectionTypesInText.isEmpty()) {
-            writer.writeStartElement(xml::kFormatsTag);
-            for (const auto& type : selectionTypesInText) {
-                writer.writeStartElement(xml::kFormatTag);
-                writer.writeAttribute(xml::kFromAttribute, QString::number(type.from));
-                writer.writeAttribute(xml::kLengthAttribute, QString::number(type.length));
-                writer.writeAttribute(type.attribute, "true");
-                writer.writeEndElement(); // format
-            }
-            writer.writeEndElement(); // formats
-        }
+        writeSelectionTypes(writer);
 
         writer.writeEndElement(); // block type
     }

@@ -2,16 +2,20 @@
 
 #include "novel_abstract_importer.h"
 
+#include <corelib/business_layer/import/abstract_markdown_importer.h>
+
 
 namespace BusinessLayer {
 
 /**
  * @brief Импортер текста из markdown файла
  */
-class CORE_LIBRARY_EXPORT NovelMarkdownImporter : public NovelAbstractImporter
+class CORE_LIBRARY_EXPORT NovelMarkdownImporter : public NovelAbstractImporter,
+                                                  public AbstractMarkdownImporter
 {
 public:
-    NovelMarkdownImporter() = default;
+    NovelMarkdownImporter();
+    ~NovelMarkdownImporter() override;
 
     /**
      * @brief Импорт докуметов (всех, кроме сценариев)

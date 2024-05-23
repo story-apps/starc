@@ -118,7 +118,7 @@ void ImportManager::Implementation::importScreenplay(
     //
     // Определим нужный импортер
     //
-    QScopedPointer<BusinessLayer::ScreenplayAbstractImporter> importer;
+    QScopedPointer<BusinessLayer::AbstractScreenplayImporter> importer;
     {
         const auto importFilePath = _importOptions.filePath.toLower();
         if (importFilePath.endsWith(ExtensionHelper::kitScenarist())) {

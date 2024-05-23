@@ -139,9 +139,9 @@ QString readPlainTextDocument(const QString& _sourceDocument)
 /**
  * @brief Сформировать документ сценария из xml сценария КИТа
  */
-ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenplayXml)
+AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenplayXml)
 {
-    ScreenplayAbstractImporter::Screenplay screenplay;
+    AbstractScreenplayImporter::Screenplay screenplay;
 
     //
     // Читаем XML
@@ -508,7 +508,7 @@ ScreenplayAbstractImporter::Screenplay readScreenplay(const QString& _kitScreenp
 
 } // namespace
 
-ScreenplayAbstractImporter::Documents ScreenplayKitScenaristImporter::importDocuments(
+AbstractScreenplayImporter::Documents ScreenplayKitScenaristImporter::importDocuments(
     const ScreenplayImportOptions& _options) const
 {
     Documents result;
@@ -603,7 +603,7 @@ ScreenplayAbstractImporter::Documents ScreenplayKitScenaristImporter::importDocu
     return result;
 }
 
-QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayKitScenaristImporter::importScreenplays(
+QVector<AbstractScreenplayImporter::Screenplay> ScreenplayKitScenaristImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
     if (_options.importText == false) {
