@@ -3245,6 +3245,38 @@ void ProjectManager::addNovel(const QString& _name, const QString& _text)
         createItem(DocumentObjectType::NovelOutline, tr("Outline")), synopsisItem, {});
 }
 
+void ProjectManager::addAudioplay(const QString& _name, const QString& _titlePage,
+                                  const QString& _synopsis, const QString& _text)
+{
+    //
+    // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
+    //
+
+    using namespace Domain;
+
+    auto createItem = [](DocumentObjectType _type, const QString& _name) {
+        auto uuid = QUuid::createUuid();
+        const auto visible = true;
+        const auto readOnly = false;
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly);
+    };
+
+    auto rootItem = d->projectStructureModel->itemForIndex({});
+    auto audioplayItem = createItem(DocumentObjectType::Audioplay, _name);
+    d->projectStructureModel->appendItem(audioplayItem, rootItem);
+
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::AudioplayTitlePage, tr("Title page")), audioplayItem,
+        _titlePage.toUtf8());
+    auto synopsisItem = createItem(DocumentObjectType::AudioplaySynopsis, tr("Synopsis"));
+    d->projectStructureModel->appendItem(synopsisItem, audioplayItem, _synopsis.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::AudioplayText, tr("Audioplay")), audioplayItem,
+        _text.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::AudioplayStatistics, tr("Statistics")), audioplayItem, {});
+}
+
 BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
 {
     auto scriptTextModel

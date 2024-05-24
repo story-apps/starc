@@ -2,9 +2,7 @@
 
 #include "abstract_screenplay_importer.h"
 
-#include <corelib/business_layer/import/abstract_markdown_importer.h>
-
-#include <corelib/business_layer/import/abstract_markdown_importer.h>
+#include <corelib/business_layer/import/abstract_fountain_importer.h>
 
 #include <QScopedPointer>
 
@@ -15,7 +13,7 @@ namespace BusinessLayer {
  * @brief Импортер сценария из файлов fountain
  */
 class CORE_LIBRARY_EXPORT ScreenplayFountainImporter : public AbstractScreenplayImporter,
-                                                       public AbstractMarkdownImporter
+                                                       public AbstractFountainImporter
 {
     /*
                   . .
@@ -54,6 +52,11 @@ public:
      * @brief Импортировать сценарий из заданного текста
      */
     Screenplay importScreenplay(const QString& _screenplayText) const;
+
+    /**
+     * @brief Предобработка конкретного блока (определяется его тип)
+     */
+    virtual void preprocessBlock(QVector<QString>& paragraphs, QXmlStreamWriter& _writer) const override;
 
 private:
     class Implementation;

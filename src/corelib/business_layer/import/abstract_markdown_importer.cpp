@@ -2,13 +2,8 @@
 
 #include <business_layer/model/text/text_model_xml.h>
 
-<<<<<<< HEAD
-#include <QPair>
 #include <QRegularExpression>
 #include <QSet>
-=======
-#include <QRegularExpression>
->>>>>>> eb375d5b (Abstract markdown importer for novels and screenplays)
 #include <QVector>
 #include <QXmlStreamWriter>
 

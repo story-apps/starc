@@ -1,6 +1,6 @@
 #pragma once
 
-#include "comic_book_abstract_importer.h"
+#include "abstract_comic_book_importer.h"
 
 
 namespace BusinessLayer {
@@ -8,7 +8,7 @@ namespace BusinessLayer {
 /**
  * @brief Импортер комикса из текстового файла
  */
-class CORE_LIBRARY_EXPORT ComicBookPlainTextImporter : public ComicBookAbstractImporter
+class CORE_LIBRARY_EXPORT ComicBookPlainTextImporter : public AbstractComicBookImporter
 {
 public:
     ComicBookPlainTextImporter() = default;

@@ -1,6 +1,8 @@
 #pragma once
 
-#include "audioplay_abstract_importer.h"
+#include "abstract_audioplay_importer.h"
+
+#include <corelib/business_layer/import/abstract_fountain_importer.h>
 
 #include <QScopedPointer>
 
@@ -10,7 +12,8 @@ namespace BusinessLayer {
 /**
  * @brief Импортер сценария из файлов fountain
  */
-class CORE_LIBRARY_EXPORT AudioplayFountainImporter : public AudioplayAbstractImporter
+class CORE_LIBRARY_EXPORT AudioplayFountainImporter : public AbstractAudioplayImporter,
+                                                      public AbstractFountainImporter
 {
     /*
                   . .
@@ -50,9 +53,10 @@ public:
      */
     Audioplay importAudioplay(const QString& _audioplayText) const;
 
-private:
-    class Implementation;
-    QScopedPointer<Implementation> d;
+    /**
+     * @brief Предобработка конкретного блока (определяется его тип)
+     */
+    virtual void preprocessBlock(QVector<QString>& paragraphs, QXmlStreamWriter& _writer) const override;
 };
 
 } // namespace BusinessLayer

@@ -812,7 +812,7 @@ StageplayFountainImporter::StageplayFountainImporter()
 
 StageplayFountainImporter::~StageplayFountainImporter() = default;
 
-StageplayAbstractImporter::Documents StageplayFountainImporter::importDocuments(
+AbstractStageplayImporter::Documents StageplayFountainImporter::importDocuments(
     const StageplayImportOptions& _options) const
 {
     //
@@ -1006,7 +1006,7 @@ StageplayAbstractImporter::Documents StageplayFountainImporter::importDocuments(
     return documents;
 }
 
-QVector<StageplayAbstractImporter::Stageplay> StageplayFountainImporter::importStageplays(
+QVector<AbstractStageplayImporter::Stageplay> StageplayFountainImporter::importStageplays(
     const StageplayImportOptions& _options) const
 {
     if (_options.importStageplay == false) {
@@ -1032,7 +1032,7 @@ QVector<StageplayAbstractImporter::Stageplay> StageplayFountainImporter::importS
     return { stageplay };
 }
 
-StageplayAbstractImporter::Stageplay StageplayFountainImporter::importStageplay(
+AbstractStageplayImporter::Stageplay StageplayFountainImporter::importStageplay(
     const QString& _stageplayText) const
 {
     if (_stageplayText.simplified().isEmpty()) {

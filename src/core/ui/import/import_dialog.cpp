@@ -1,5 +1,6 @@
 #include "import_dialog.h"
 
+#include <business_layer/import/audioplay/audioplay_import_options.h>
 #include <business_layer/import/screenplay/screenplay_import_options.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
@@ -139,16 +140,20 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
         auto isImportLocationsVisible = true;
         auto isKeepSceneNumbersVisible = true;
         switch (d->importInType()) {
-        case Domain::DocumentObjectType::Screenplay: {
-            //
-            // ... всё видимое
-            //
+        case Domain::DocumentObjectType::Audioplay: {
+            isImportLocationsVisible = false;
             break;
         }
         case Domain::DocumentObjectType::Novel: {
             isImportCharactersVisible = false;
             isImportLocationsVisible = false;
             isKeepSceneNumbersVisible = false;
+            break;
+        }
+        case Domain::DocumentObjectType::Screenplay: {
+            //
+            // ... всё видимое
+            //
             break;
         }
         default: {
@@ -179,6 +184,22 @@ BusinessLayer::ImportOptions ImportDialog::importOptions() const
         = d->importCharacters->isVisibleTo(this) && d->importCharacters->isChecked();
     options.importLocations
         = d->importLocations->isVisibleTo(this) && d->importLocations->isChecked();
+    return options;
+}
+
+BusinessLayer::AudioplayImportOptions ImportDialog::audioplayImportOptions() const
+{
+    BusinessLayer::AudioplayImportOptions options;
+    options.filePath = d->importFilePath;
+    options.documentType = d->importInType();
+    options.importText = d->importText->isChecked();
+
+    options.importCharacters
+        = d->importCharacters->isVisibleTo(this) && d->importCharacters->isChecked();
+    options.importLocations
+        = d->importLocations->isVisibleTo(this) && d->importLocations->isChecked();
+    options.keepSceneNumbers
+        = d->keepSceneNumbers->isVisibleTo(this) && d->keepSceneNumbers->isChecked();
     return options;
 }
 

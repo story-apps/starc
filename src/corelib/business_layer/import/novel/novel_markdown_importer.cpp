@@ -60,14 +60,14 @@ static void removeEscapeingSymbol(QString& _paragraphText)
 } // namespace
 
 NovelMarkdownImporter::NovelMarkdownImporter()
-    : NovelAbstractImporter()
+    : AbstractNovelImporter()
     , AbstractMarkdownImporter(kMarkdownSelectionTypes, kSelectionTypeChecker, kCapturedGroup)
 {
 }
 
 NovelMarkdownImporter::~NovelMarkdownImporter() = default;
 
-NovelAbstractImporter::Document NovelMarkdownImporter::importNovels(
+AbstractNovelImporter::Document NovelMarkdownImporter::importNovels(
     const ImportOptions& _options) const
 {
     //
@@ -89,7 +89,7 @@ NovelAbstractImporter::Document NovelMarkdownImporter::importNovels(
     return textDocument;
 }
 
-NovelAbstractImporter::Document NovelMarkdownImporter::importNovel(const QString& _text) const
+AbstractNovelImporter::Document NovelMarkdownImporter::importNovel(const QString& _text) const
 {
     if (_text.simplified().isEmpty()) {
         return {};

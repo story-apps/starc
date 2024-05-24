@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stageplay_abstract_importer.h"
+#include "abstract_stageplay_importer.h"
 
 #include <QScopedPointer>
 
@@ -10,7 +10,7 @@ namespace BusinessLayer {
 /**
  * @brief Импортер сценария из файлов fountain
  */
-class CORE_LIBRARY_EXPORT StageplayFountainImporter : public StageplayAbstractImporter
+class CORE_LIBRARY_EXPORT StageplayFountainImporter : public AbstractStageplayImporter
 {
     /*
                   . .
