@@ -130,6 +130,16 @@ QModelIndexList ComicBookTextStructureView::selectedIndexes() const
     return d->content->selectedIndexes();
 }
 
+void ComicBookTextStructureView::expandAll()
+{
+    d->content->expandAll();
+}
+
+void ComicBookTextStructureView::collapseAll()
+{
+    d->content->collapseAll();
+}
+
 void ComicBookTextStructureView::updateTranslations()
 {
     d->backText->setText(tr("Back to navigator"));

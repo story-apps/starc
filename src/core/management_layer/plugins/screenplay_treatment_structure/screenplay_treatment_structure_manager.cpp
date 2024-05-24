@@ -207,6 +207,21 @@ void ScreenplayTreatmentStructureManager::Implementation::updateContextMenu(
                 });
     }
 
+    //
+    // ... для любого количества
+    //
+    auto expandAll = new QAction(tr("Expand all"));
+    expandAll->setSeparator(!actions.isEmpty());
+    expandAll->setIconText(u8"\U000F004C");
+    connect(expandAll, &QAction::triggered, view, &Ui::ScreenplayTreatmentStructureView::expandAll);
+    actions.append(expandAll);
+
+    auto collapseAll = new QAction(tr("Collapse all"));
+    collapseAll->setIconText(u8"\U000F0044");
+    connect(collapseAll, &QAction::triggered, view,
+            &Ui::ScreenplayTreatmentStructureView::collapseAll);
+    actions.append(collapseAll);
+
     contextMenu->setActions(actions);
 }
 

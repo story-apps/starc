@@ -236,6 +236,16 @@ QModelIndexList ScreenplayTextStructureView::selectedIndexes() const
     return d->content->selectedIndexes();
 }
 
+void ScreenplayTextStructureView::expandAll()
+{
+    d->content->expandAll();
+}
+
+void ScreenplayTextStructureView::collapseAll()
+{
+    d->content->collapseAll();
+}
+
 void ScreenplayTextStructureView::updateTranslations()
 {
     d->updateCounters();

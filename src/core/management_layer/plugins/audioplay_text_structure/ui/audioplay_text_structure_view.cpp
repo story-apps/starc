@@ -136,6 +136,16 @@ QModelIndexList AudioplayTextStructureView::selectedIndexes() const
     return d->content->selectedIndexes();
 }
 
+void AudioplayTextStructureView::expandAll()
+{
+    d->content->expandAll();
+}
+
+void AudioplayTextStructureView::collapseAll()
+{
+    d->content->collapseAll();
+}
+
 void AudioplayTextStructureView::updateTranslations()
 {
     d->backText->setText(tr("Back to navigator"));

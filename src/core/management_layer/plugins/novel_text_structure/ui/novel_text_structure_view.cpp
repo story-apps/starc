@@ -229,6 +229,16 @@ QModelIndexList NovelTextStructureView::selectedIndexes() const
     return d->content->selectedIndexes();
 }
 
+void NovelTextStructureView::expandAll()
+{
+    d->content->expandAll();
+}
+
+void NovelTextStructureView::collapseAll()
+{
+    d->content->collapseAll();
+}
+
 void NovelTextStructureView::updateTranslations()
 {
     d->backIcon->setToolTip(tr("Back to navigator"));
