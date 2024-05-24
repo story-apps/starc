@@ -2763,6 +2763,8 @@ void ApplicationManager::initConnections()
             &ProjectManager::addScreenplay);
     connect(d->importManager.data(), &ImportManager::novelImported, d->projectManager.data(),
             &ProjectManager::addNovel);
+    connect(d->importManager.data(), &ImportManager::audioplayImported, d->projectManager.data(),
+            &ProjectManager::addAudioplay);
 
     //
     // Менеджер настроек

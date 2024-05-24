@@ -2,13 +2,8 @@
 
 #include <business_layer/model/text/text_model_xml.h>
 
-<<<<<<< HEAD
-#include <QPair>
 #include <QRegularExpression>
 #include <QSet>
-=======
-#include <QRegularExpression>
->>>>>>> eb375d5b (Abstract markdown importer for novels and screenplays)
 #include <QVector>
 #include <QXmlStreamWriter>
 
@@ -109,11 +104,7 @@ void AbstractMarkdownImporter::collectSelectionTypes(QString& _paragraphText) co
     QVector<SelectionTypeInText> selectionTypes;
     QRegularExpressionMatch match = d->selectionTypeChecker.match(_paragraphText);
     while (match.hasMatch()) {
-<<<<<<< HEAD
         const SelectionTypeInText type
-=======
-        SelectionTypeInText type
->>>>>>> 9202b8bb (Abstract markdown importer for novels and screenplays)
             = { match.capturedStart(d->capturedGroup), match.captured(d->capturedGroup) };
         selectionTypes.append(type);
         int position = match.capturedEnd(d->capturedGroup);
@@ -128,15 +119,8 @@ void AbstractMarkdownImporter::collectSelectionTypes(QString& _paragraphText) co
     //
     QVector<SelectionTypeInText> pairedTypes;
     while (!selectionTypes.isEmpty()) {
-<<<<<<< HEAD
         const auto first = selectionTypes.takeFirst();
-        bool isPaired = false;
         for (int i = 0; i != selectionTypes.size(); ++i) {
-=======
-        const auto first = selectionTypes.first();
-        bool isPaired = false;
-        for (int i = 1; i != selectionTypes.size(); ++i) {
->>>>>>> 9202b8bb (Abstract markdown importer for novels and screenplays)
             if (first.formatSymbols == selectionTypes[i].formatSymbols) {
                 //
                 // ... дополнительно проверим, что между форматными символами есть расстояние,
@@ -157,16 +141,8 @@ void AbstractMarkdownImporter::collectSelectionTypes(QString& _paragraphText) co
                 }
 
                 selectionTypes.remove(i);
-<<<<<<< HEAD
-=======
-                selectionTypes.removeFirst();
->>>>>>> 9202b8bb (Abstract markdown importer for novels and screenplays)
-                isPaired = true;
                 break;
             }
-        }
-        if (!isPaired) {
-            selectionTypes.removeFirst();
         }
     }
 
@@ -186,13 +162,8 @@ void AbstractMarkdownImporter::collectSelectionTypes(QString& _paragraphText) co
     // Сортируем по позиции в тексте
     //
     std::sort(pairedTypes.begin(), pairedTypes.end(),
-<<<<<<< HEAD
               [](const SelectionTypeInText& _lhs, const SelectionTypeInText& _rhs) {
                   return _lhs.position < _rhs.position;
-=======
-              [](const SelectionTypeInText& type1, const SelectionTypeInText& type2) {
-                  return type1.position < type2.position;
->>>>>>> 9202b8bb (Abstract markdown importer for novels and screenplays)
               });
 
     //

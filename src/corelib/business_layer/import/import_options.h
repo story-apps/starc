@@ -33,7 +33,7 @@ struct CORE_LIBRARY_EXPORT ImportOptions {
     bool importLocations = true;
 
     /**
-     * @brief Нужно ли импортировать текст
+     * @brief Нужно ли импортировать основной текст документа
      */
     bool importText = true;
 };

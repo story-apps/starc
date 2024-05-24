@@ -12,10 +12,10 @@ struct AudioplayImportOptions;
 /**
  * @brief Базовый класс для реализации импортера документов
  */
-class CORE_LIBRARY_EXPORT AudioplayAbstractImporter
+class CORE_LIBRARY_EXPORT AbstractAudioplayImporter
 {
 public:
-    virtual ~AudioplayAbstractImporter() = default;
+    virtual ~AbstractAudioplayImporter() = default;
 
     /**
      * @brief Вспомогательные структуры для хранения данных импортируемых документов

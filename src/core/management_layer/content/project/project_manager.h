@@ -115,6 +115,12 @@ public:
     void addNovel(const QString& _name, const QString& _text);
 
     /**
+     * @brief Добавить данные по аудиопьесе
+     */
+    void addAudioplay(const QString& _name, const QString& _titlePage, const QString& _synopsis,
+                      const QString& _text);
+
+    /**
      * @brief Модель документа для экспорта
      * @note Маппим модели для случаев, когда у пользователя выбрана титульная страница, чтобы
      *       экспортировался сам скрипт

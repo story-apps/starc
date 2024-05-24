@@ -12,10 +12,10 @@ struct SimpleTextImportOptions;
 /**
  * @brief Базовый класс для реализации импортера документов
  */
-class CORE_LIBRARY_EXPORT SimpleTextAbstractImporter
+class CORE_LIBRARY_EXPORT AbstractSimpleTextImporter
 {
 public:
-    virtual ~SimpleTextAbstractImporter() = default;
+    virtual ~AbstractSimpleTextImporter() = default;
 
     /**
      * @brief Вспомогательные структуры для хранения данных импортируемых документов

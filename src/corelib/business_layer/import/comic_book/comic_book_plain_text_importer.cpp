@@ -12,7 +12,7 @@
 
 namespace BusinessLayer {
 
-ComicBookAbstractImporter::Document ComicBookPlainTextImporter::importComicBook(
+AbstractComicBookImporter::Document ComicBookPlainTextImporter::importComicBook(
     const ComicBookImportOptions& _options) const
 {
     //
@@ -34,7 +34,7 @@ ComicBookAbstractImporter::Document ComicBookPlainTextImporter::importComicBook(
     return textDocument;
 }
 
-ComicBookAbstractImporter::Document ComicBookPlainTextImporter::importComicBook(
+AbstractComicBookImporter::Document ComicBookPlainTextImporter::importComicBook(
     const QString& _text) const
 {
     if (_text.simplified().isEmpty()) {

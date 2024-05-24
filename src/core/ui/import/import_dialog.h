@@ -5,6 +5,7 @@
 namespace BusinessLayer {
 struct ImportOptions;
 struct ScreenplayImportOptions;
+struct AudioplayImportOptions;
 } // namespace BusinessLayer
 
 
@@ -25,10 +26,7 @@ public:
      * @brief Получить заданные опции импортирования
      */
     BusinessLayer::ImportOptions importOptions() const;
-
-    /**
-     * @brief Получить заданные опции импортирования сценария
-     */
+    BusinessLayer::AudioplayImportOptions audioplayImportOptions() const;
     BusinessLayer::ScreenplayImportOptions screenplayImportOptions() const;
 
 signals:

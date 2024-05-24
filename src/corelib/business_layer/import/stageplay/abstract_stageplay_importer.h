@@ -12,10 +12,10 @@ struct StageplayImportOptions;
 /**
  * @brief Базовый класс для реализации импортера документов
  */
-class CORE_LIBRARY_EXPORT StageplayAbstractImporter
+class CORE_LIBRARY_EXPORT AbstractStageplayImporter
 {
 public:
-    virtual ~StageplayAbstractImporter() = default;
+    virtual ~AbstractStageplayImporter() = default;
 
     /**
      * @brief Вспомогательные структуры для хранения данных импортируемых документов
