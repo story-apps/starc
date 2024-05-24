@@ -128,6 +128,16 @@ QModelIndexList SimpleTextStructureView::selectedIndexes() const
     return d->content->selectedIndexes();
 }
 
+void SimpleTextStructureView::expandAll()
+{
+    d->content->expandAll();
+}
+
+void SimpleTextStructureView::collapseAll()
+{
+    d->content->collapseAll();
+}
+
 void SimpleTextStructureView::updateTranslations()
 {
     d->backIcon->setToolTip(tr("Back to navigator"));

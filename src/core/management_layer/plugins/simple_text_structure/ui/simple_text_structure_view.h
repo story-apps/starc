@@ -49,6 +49,16 @@ public:
      */
     QModelIndexList selectedIndexes() const;
 
+    /**
+     * @brief Развернуть все элементы
+     */
+    void expandAll();
+
+    /**
+     * @brief Свернуть все элементы
+     */
+    void collapseAll();
+
 signals:
     /**
      * @brief Пользователь выбрал элемент в навигаторе с заданным индексом

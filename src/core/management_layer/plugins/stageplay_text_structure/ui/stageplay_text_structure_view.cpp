@@ -136,6 +136,16 @@ QModelIndexList StageplayTextStructureView::selectedIndexes() const
     return d->content->selectedIndexes();
 }
 
+void StageplayTextStructureView::expandAll()
+{
+    d->content->expandAll();
+}
+
+void StageplayTextStructureView::collapseAll()
+{
+    d->content->collapseAll();
+}
+
 void StageplayTextStructureView::updateTranslations()
 {
     d->backText->setText(tr("Back to navigator"));

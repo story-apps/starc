@@ -138,6 +138,16 @@ QModelIndexList ScreenplayTreatmentStructureView::selectedIndexes() const
     return d->content->selectedIndexes();
 }
 
+void ScreenplayTreatmentStructureView::expandAll()
+{
+    d->content->expandAll();
+}
+
+void ScreenplayTreatmentStructureView::collapseAll()
+{
+    d->content->collapseAll();
+}
+
 void ScreenplayTreatmentStructureView::updateTranslations()
 {
 }

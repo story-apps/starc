@@ -135,6 +135,16 @@ QModelIndexList NovelOutlineStructureView::selectedIndexes() const
     return d->content->selectedIndexes();
 }
 
+void NovelOutlineStructureView::expandAll()
+{
+    d->content->expandAll();
+}
+
+void NovelOutlineStructureView::collapseAll()
+{
+    d->content->collapseAll();
+}
+
 void NovelOutlineStructureView::updateTranslations()
 {
 }
