@@ -12,7 +12,7 @@ class QXmlStreamWriter;
 namespace BusinessLayer {
 
 /**
- * @brief Абстрактный импортер из markdown и fountain
+ * @brief Абстрактный импортер из формата markdown
  */
 class CORE_LIBRARY_EXPORT AbstractMarkdownImporter
 {

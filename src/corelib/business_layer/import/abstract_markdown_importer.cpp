@@ -2,7 +2,6 @@
 
 #include <business_layer/model/text/text_model_xml.h>
 
-#include <QPair>
 #include <QRegularExpression>
 #include <QSet>
 #include <QVector>
@@ -121,7 +120,6 @@ void AbstractMarkdownImporter::collectSelectionTypes(QString& _paragraphText) co
     QVector<SelectionTypeInText> pairedTypes;
     while (!selectionTypes.isEmpty()) {
         const auto first = selectionTypes.takeFirst();
-        bool isPaired = false;
         for (int i = 0; i != selectionTypes.size(); ++i) {
             if (first.formatSymbols == selectionTypes[i].formatSymbols) {
                 //
@@ -143,12 +141,8 @@ void AbstractMarkdownImporter::collectSelectionTypes(QString& _paragraphText) co
                 }
 
                 selectionTypes.remove(i);
-                isPaired = true;
                 break;
             }
-        }
-        if (!isPaired) {
-            selectionTypes.removeFirst();
         }
     }
 

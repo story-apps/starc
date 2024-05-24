@@ -39,16 +39,22 @@ signals:
     void locationImported(const QString& _name, const QString& _content);
 
     /**
-     * @brief Сценарий загружен
+     * @brief Аудиопьеса загружена
      */
-    void screenplayImported(const QString& _name, const QString& _titlePage,
-                            const QString& _synopsis, const QString& _treatment,
-                            const QString& _screenplay);
+    void audioplayImported(const QString& _name, const QString& _titlePage,
+                           const QString& _synopsis, const QString& _text);
 
     /**
      * @brief Роман загружен
      */
-    void novelImported(const QString& _name, const QString& _screenplay);
+    void novelImported(const QString& _name, const QString& _text);
+
+    /**
+     * @brief Сценарий загружен
+     */
+    void screenplayImported(const QString& _name, const QString& _titlePage,
+                            const QString& _synopsis, const QString& _treatment,
+                            const QString& _text);
 
 private:
     class Implementation;
