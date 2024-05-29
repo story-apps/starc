@@ -59,6 +59,8 @@ void AudioplayTextModelFolderItem::handleChange()
 {
     setHeading({});
     d->duration = std::chrono::seconds{ 0 };
+    setWordsCount(0);
+    setCharactersCount({});
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -66,12 +68,18 @@ void AudioplayTextModelFolderItem::handleChange()
         case TextModelItemType::Folder: {
             auto childItem = static_cast<AudioplayTextModelFolderItem*>(child);
             d->duration += childItem->duration();
+            setWordsCount(wordsCount() + childItem->wordsCount());
+            setCharactersCount({ charactersCount().first + childItem->charactersCount().first,
+                                 charactersCount().second + childItem->charactersCount().second });
             break;
         }
 
         case TextModelItemType::Group: {
             auto childItem = static_cast<AudioplayTextModelSceneItem*>(child);
             d->duration += childItem->duration();
+            setWordsCount(wordsCount() + childItem->wordsCount());
+            setCharactersCount({ charactersCount().first + childItem->charactersCount().first,
+                                 charactersCount().second + childItem->charactersCount().second });
             break;
         }
 
@@ -82,6 +90,9 @@ void AudioplayTextModelFolderItem::handleChange()
                 setHeading(childItem->text());
             }
             d->duration += childItem->duration();
+            setWordsCount(wordsCount() + childItem->wordsCount());
+            setCharactersCount({ charactersCount().first + childItem->charactersCount().first,
+                                 charactersCount().second + childItem->charactersCount().second });
             break;
         }
 

@@ -30,16 +30,6 @@ public:
     ~NovelTextModelSceneItem() override;
 
     /**
-     * @brief Количество слов
-     */
-    int wordsCount() const;
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount() const;
-
-    /**
      * @brief Список битов
      */
     QVector<QString> beats() const;

@@ -10,46 +10,13 @@
 
 namespace BusinessLayer {
 
-class NovelTextModelBeatItem::Implementation
-{
-public:
-    //
-    // Ридонли свойства, которые формируются по ходу работы со сценарием
-    //
-
-    /**
-     * @brief Количество слов
-     */
-    int wordsCount = 0;
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount;
-};
-
-
-// ****
-
-
 NovelTextModelBeatItem::NovelTextModelBeatItem(const NovelTextModel* _model)
     : TextModelGroupItem(_model)
-    , d(new Implementation)
 {
     setGroupType(TextGroupType::Beat);
 }
 
 NovelTextModelBeatItem::~NovelTextModelBeatItem() = default;
-
-int NovelTextModelBeatItem::wordsCount() const
-{
-    return d->wordsCount;
-}
-
-QPair<int, int> NovelTextModelBeatItem::charactersCount() const
-{
-    return d->charactersCount;
-}
 
 QVariant NovelTextModelBeatItem::data(int _role) const
 {
@@ -70,8 +37,8 @@ void NovelTextModelBeatItem::handleChange()
     QString text;
     int inlineNotesSize = 0;
     QVector<TextModelTextItem::ReviewMark> reviewMarks;
-    d->wordsCount = 0;
-    d->charactersCount = {};
+    setWordsCount(0);
+    setCharactersCount({});
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -117,9 +84,9 @@ void NovelTextModelBeatItem::handleChange()
         //
         // Собираем счётчики
         //
-        d->wordsCount += childTextItem->wordsCount();
-        d->charactersCount.first += childTextItem->charactersCount().first;
-        d->charactersCount.second += childTextItem->charactersCount().second;
+        setWordsCount(wordsCount() + childTextItem->wordsCount());
+        setCharactersCount({ charactersCount().first + childTextItem->charactersCount().first,
+                             charactersCount().second + childTextItem->charactersCount().second });
     }
 
     setHeading(heading);

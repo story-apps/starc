@@ -18,20 +18,6 @@ public:
      * @brief Параметры отображения папки на доске с карточками
      */
     CardInfo cardInfo;
-
-    //
-    // Ридонли свойства, которые формируются по ходу работы с текстом
-    //
-
-    /**
-     * @brief Количество слов
-     */
-    int wordsCount = 0;
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount;
 };
 
 
@@ -60,16 +46,6 @@ void NovelTextModelFolderItem::setCardInfo(const CardInfo& _info)
 
     d->cardInfo = _info;
     setChanged(true);
-}
-
-int NovelTextModelFolderItem::wordsCount() const
-{
-    return d->wordsCount;
-}
-
-QPair<int, int> NovelTextModelFolderItem::charactersCount() const
-{
-    return d->charactersCount;
 }
 
 QString NovelTextModelFolderItem::text() const
@@ -116,15 +92,15 @@ QVariant NovelTextModelFolderItem::data(int _role) const
 {
     switch (_role) {
     case FolderWordCountRole: {
-        return d->wordsCount;
+        return wordsCount();
     }
 
     case FolderCharacterCountRole: {
-        return d->charactersCount.first;
+        return charactersCount().first;
     }
 
     case FolderCharacterCountWithSpacesRole: {
-        return d->charactersCount.second;
+        return charactersCount().second;
     }
 
     default: {
@@ -158,17 +134,17 @@ bool NovelTextModelFolderItem::isFilterAccepted(const QString& _text, bool _isCa
 void NovelTextModelFolderItem::handleChange()
 {
     setHeading({});
-    d->wordsCount = 0;
-    d->charactersCount = {};
+    setWordsCount(0);
+    setCharactersCount({});
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
         switch (child->type()) {
         case TextModelItemType::Folder: {
             auto folderItem = static_cast<NovelTextModelFolderItem*>(child);
-            d->wordsCount += folderItem->wordsCount();
-            d->charactersCount.first += folderItem->charactersCount().first;
-            d->charactersCount.second += folderItem->charactersCount().second;
+            setWordsCount(wordsCount() + folderItem->wordsCount());
+            setCharactersCount({ charactersCount().first + folderItem->charactersCount().first,
+                                 charactersCount().second + folderItem->charactersCount().second });
             break;
         }
 
@@ -176,14 +152,16 @@ void NovelTextModelFolderItem::handleChange()
             auto childItem = static_cast<TextModelGroupItem*>(child);
             if (childItem->groupType() == TextGroupType::Scene) {
                 const auto sceneItem = static_cast<NovelTextModelSceneItem*>(childItem);
-                d->wordsCount += sceneItem->wordsCount();
-                d->charactersCount.first += sceneItem->charactersCount().first;
-                d->charactersCount.second += sceneItem->charactersCount().second;
+                setWordsCount(wordsCount() + sceneItem->wordsCount());
+                setCharactersCount(
+                    { charactersCount().first + sceneItem->charactersCount().first,
+                      charactersCount().second + sceneItem->charactersCount().second });
             } else {
                 const auto beatItem = static_cast<NovelTextModelBeatItem*>(childItem);
-                d->wordsCount += beatItem->wordsCount();
-                d->charactersCount.first += beatItem->charactersCount().first;
-                d->charactersCount.second += beatItem->charactersCount().second;
+                setWordsCount(wordsCount() + beatItem->wordsCount());
+                setCharactersCount(
+                    { charactersCount().first + beatItem->charactersCount().first,
+                      charactersCount().second + beatItem->charactersCount().second });
             }
             break;
         }
@@ -194,9 +172,9 @@ void NovelTextModelFolderItem::handleChange()
                 || childItem->paragraphType() == TextParagraphType::ChapterHeading) {
                 setHeading(childItem->text());
             }
-            d->wordsCount += childItem->wordsCount();
-            d->charactersCount.first += childItem->charactersCount().first;
-            d->charactersCount.second += childItem->charactersCount().second;
+            setWordsCount(wordsCount() + childItem->wordsCount());
+            setCharactersCount({ charactersCount().first + childItem->charactersCount().first,
+                                 charactersCount().second + childItem->charactersCount().second });
             break;
         }
 

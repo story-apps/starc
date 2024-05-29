@@ -2867,7 +2867,7 @@ void ProjectManager::reconfigureScreenplayDuration()
             continue;
         }
 
-        screenplayModel->recalculateDuration();
+        screenplayModel->recalculateCounters();
     }
 }
 
@@ -2899,7 +2899,7 @@ void ProjectManager::reconfigureAudioplayDuration()
             continue;
         }
 
-        audioplayModel->recalculateDuration();
+        audioplayModel->recalculateCounters();
     }
 }
 

@@ -313,7 +313,7 @@ void ScreenplayTextEdit::reinit()
     // Пересчитаем всё, что считается во время выполнения
     //
     if (d->model != nullptr) {
-        d->model->recalculateDuration();
+        d->model->recalculateCounters();
         d->model->updateRuntimeDictionaries();
     }
 }

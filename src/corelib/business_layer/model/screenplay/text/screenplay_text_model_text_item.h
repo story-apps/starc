@@ -17,16 +17,6 @@ public:
     ~ScreenplayTextModelTextItem() override;
 
     /**
-     * @brief Количество слов
-     */
-    int wordsCount() const;
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount() const;
-
-    /**
      * @brief Длительность сцены
      */
     std::chrono::milliseconds duration() const;
@@ -34,18 +24,12 @@ public:
     /**
      * @brief Обновить счётчики
      */
-    void updateCounters(bool _force = false);
+    void updateCounters(bool _force = false) override;
 
     /**
      * @brief Определяем интерфейс получения данных сцены
      */
     QVariant data(int _role) const override;
-
-protected:
-    /**
-     * @brief Обновляем хронометраж, при изменении текста
-     */
-    void handleChange() override;
 
 private:
     class Implementation;

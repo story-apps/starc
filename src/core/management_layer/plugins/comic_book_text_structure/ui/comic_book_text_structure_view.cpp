@@ -2,15 +2,23 @@
 
 #include "comic_book_text_structure_delegate.h"
 
+#include <business_layer/document/comic_book/text/comic_book_text_document.h>
+#include <business_layer/model/comic_book/comic_book_information_model.h>
+#include <business_layer/model/comic_book/text/comic_book_text_model.h>
+#include <business_layer/templates/comic_book_template.h>
+#include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/counters_info/counters_info_widget.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
+#include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <ui/widgets/tree/tree.h>
 
+#include <QSortFilterProxyModel>
 #include <QStringListModel>
 #include <QVBoxLayout>
 
@@ -22,11 +30,25 @@ class ComicBookTextStructureView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Обновить счётчики
+     */
+    void updateCounters();
+
+
+    QSortFilterProxyModel* model = nullptr;
 
     IconsMidLabel* backIcon = nullptr;
     Subtitle2Label* backText = nullptr;
     Tree* content = nullptr;
     ComicBookTextStructureDelegate* contentDelegate = nullptr;
+    CountersInfoWidget* countersWidget = nullptr;
+
+    /**
+     * @brief Редактор текста, который будет использоваться для подсчёта кол-ва страниц, если в
+     *        приложении ещё не был открыт редактор текста модели, структуру которого отображаем
+     */
+    QScopedPointer<PageTextEdit> textEdit;
 };
 
 ComicBookTextStructureView::Implementation::Implementation(QWidget* _parent)
@@ -34,6 +56,7 @@ ComicBookTextStructureView::Implementation::Implementation(QWidget* _parent)
     , backText(new Subtitle2Label(_parent))
     , content(new Tree(_parent))
     , contentDelegate(new ComicBookTextStructureDelegate(content))
+    , countersWidget(new CountersInfoWidget(_parent))
 {
     backIcon->setIcon(u8"\U000F0141");
 
@@ -42,7 +65,62 @@ ComicBookTextStructureView::Implementation::Implementation(QWidget* _parent)
     content->setSelectionMode(QAbstractItemView::ExtendedSelection);
     content->setItemDelegate(contentDelegate);
 
+    countersWidget->setSettingsCounterModuleKey(QLatin1String("comic_book"));
+
     new Shadow(Qt::TopEdge, content);
+    new Shadow(Qt::BottomEdge, content);
+}
+
+void ComicBookTextStructureView::Implementation::updateCounters()
+{
+    if (model == nullptr || model->sourceModel() == nullptr) {
+        return;
+    }
+
+    auto comicBookModel = qobject_cast<BusinessLayer::ComicBookTextModel*>(model->sourceModel());
+    if (comicBookModel == nullptr) {
+        return;
+    }
+
+    const auto pageCount = [this, comicBookModel] {
+        //
+        // Если в модели уже задано количество страниц, то используем его
+        //
+        if (comicBookModel->textPageCount() > 0) {
+            textEdit.reset();
+            return comicBookModel->textPageCount();
+        }
+
+        //
+        // А если не задано, то придётся считать вручную
+        // NOTE: это возможно, когда не был активирован редактор текста сценария
+        //
+        if (textEdit.isNull()) {
+            const auto& comicBookTemplate = BusinessLayer::TemplatesFacade::comicBookTemplate(
+                comicBookModel->informationModel()->templateId());
+
+            textEdit.reset(new PageTextEdit);
+            textEdit->setUsePageMode(true);
+            textEdit->setPageSpacing(0);
+            textEdit->setPageFormat(comicBookTemplate.pageSizeId());
+            textEdit->setPageMarginsMm(comicBookTemplate.pageMargins());
+            auto comicBookDocument = new BusinessLayer::ComicBookTextDocument(textEdit.data());
+            textEdit->setDocument(comicBookDocument);
+
+            const bool canChangeModel = false;
+            comicBookDocument->setModel(comicBookModel, canChangeModel);
+        }
+
+        return textEdit->document()->pageCount();
+    }();
+
+    countersWidget->setCounters({
+        tr("%n page(s)", "", pageCount),
+        tr("%n panel(s)", "", comicBookModel->panelsCount()),
+        tr("%n word(s)", "", comicBookModel->wordsCount()),
+        tr("%n character(s)", "", comicBookModel->charactersCount().first),
+        tr("%n character(s) with spaces", "", comicBookModel->charactersCount().second),
+    });
 }
 
 
@@ -64,6 +142,7 @@ ComicBookTextStructureView::ComicBookTextStructureView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addLayout(topLayout);
     layout->addWidget(d->content);
+    layout->addWidget(d->countersWidget);
     setLayout(layout);
 
     connect(d->backIcon, &AbstractLabel::clicked, this, &ComicBookTextStructureView::backPressed);
@@ -122,7 +201,25 @@ void ComicBookTextStructureView::setTitle(const QString& _title)
 
 void ComicBookTextStructureView::setModel(QAbstractItemModel* _model)
 {
+    if (d->model != nullptr) {
+        d->model->disconnect(this);
+        d->textEdit.reset();
+    }
+
     d->content->setModel(_model);
+
+    d->model = qobject_cast<QSortFilterProxyModel*>(_model);
+    if (d->model != nullptr) {
+        connect(d->model, &QSortFilterProxyModel::modelReset, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::dataChanged, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::rowsInserted, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::rowsMoved, this, [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::rowsRemoved, this,
+                [this] { d->updateCounters(); });
+    }
 }
 
 QModelIndexList ComicBookTextStructureView::selectedIndexes() const
@@ -133,6 +230,7 @@ QModelIndexList ComicBookTextStructureView::selectedIndexes() const
 void ComicBookTextStructureView::updateTranslations()
 {
     d->backText->setText(tr("Back to navigator"));
+    d->updateCounters();
 }
 
 void ComicBookTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

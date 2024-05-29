@@ -3,6 +3,7 @@
 #include "text_model_item.h"
 
 #include <Qt>
+#include <QtContainerFwd>
 
 class QColor;
 class QXmlStreamReader;
@@ -94,6 +95,18 @@ public:
      * @brief Проверить равен ли текущий элемент заданному
      */
     bool isEqual(TextModelItem* _item) const override;
+
+    /**
+     * @brief Количество слов
+     */
+    int wordsCount() const;
+    void setWordsCount(int _count);
+
+    /**
+     * @brief Количество символов
+     */
+    QPair<int, int> charactersCount() const;
+    void setCharactersCount(QPair<int, int> _count);
 
 protected:
     /**

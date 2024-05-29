@@ -1,6 +1,7 @@
 #include "comic_book_text_model.h"
 
 #include "comic_book_text_block_parser.h"
+#include "comic_book_text_model_folder_item.h"
 #include "comic_book_text_model_page_item.h"
 #include "comic_book_text_model_panel_item.h"
 #include "comic_book_text_model_text_item.h"
@@ -44,6 +45,11 @@ public:
      */
     void updateNumbering();
 
+    /**
+     * @brief Пересчитать счетчики элемента и всех детей
+     */
+    void updateChildrenCounters(const TextModelItem* _item);
+
 
     /**
      * @brief Родительский элемент
@@ -64,6 +70,16 @@ public:
      * @brief Запланировано ли обновление нумерации
      */
     bool isUpdateNumberingPlanned = false;
+
+    /**
+     * @brief Количество панелей
+     */
+    int panelsCount = 0;
+
+    /**
+     * @brief Количество страниц
+     */
+    int textPageCount = 0;
 };
 
 ComicBookTextModel::Implementation::Implementation(ComicBookTextModel* _q)
@@ -82,6 +98,7 @@ void ComicBookTextModel::Implementation::updateNumbering()
         return;
     }
 
+    panelsCount = 0;
     int pageNumber = 1;
     int panelNumber = 1;
     int dialogueNumber = 0;
@@ -107,7 +124,8 @@ void ComicBookTextModel::Implementation::updateNumbering()
                     pageItem->setPageNumber(pageNumber, dictionariesModel->singlePageIntros(),
                                             dictionariesModel->multiplePageIntros());
                     pageItem->updateCounters();
-                } else {
+                } else if (groupItem->groupType() == TextGroupType::Panel) {
+                    ++panelsCount;
                     updateChildNumbering(childItem);
                     auto panelItem = static_cast<ComicBookTextModelPanelItem*>(childItem);
                     panelItem->setPanelNumber(panelNumber, dictionariesModel->singlePanelIntros(),
@@ -148,6 +166,29 @@ void ComicBookTextModel::Implementation::updateNumbering()
     updateChildNumbering(rootItem());
 }
 
+void ComicBookTextModel::Implementation::updateChildrenCounters(const TextModelItem* _item)
+{
+    for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+        auto childItem = _item->childAt(childIndex);
+        switch (childItem->type()) {
+        case TextModelItemType::Folder:
+        case TextModelItemType::Group: {
+            updateChildrenCounters(childItem);
+            break;
+        }
+
+        case TextModelItemType::Text: {
+            auto textItem = static_cast<ComicBookTextModelTextItem*>(childItem);
+            textItem->updateCounters();
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+}
+
 
 // ****
 
@@ -156,15 +197,18 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
     : ScriptTextModel(_parent, ComicBookTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
-    auto updateNumbering = [this] { d->updateNumbering(); };
+    auto updateCounters = [this](const QModelIndex& _index) {
+        d->updateNumbering();
+        d->updateChildrenCounters(itemForIndex(_index));
+    };
 
     //
     // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
     // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
     // приводить к падению внутри них
     //
-    connect(this, &ComicBookTextModel::afterRowsInserted, this, updateNumbering);
-    connect(this, &ComicBookTextModel::afterRowsRemoved, this, updateNumbering);
+    connect(this, &ComicBookTextModel::afterRowsInserted, this, updateCounters);
+    connect(this, &ComicBookTextModel::afterRowsRemoved, this, updateCounters);
     //
     // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
     //
@@ -185,7 +229,7 @@ ComicBookTextModel::~ComicBookTextModel() = default;
 
 TextModelFolderItem* ComicBookTextModel::createFolderItem(TextFolderType _type) const
 {
-    return new TextModelFolderItem(this, _type);
+    return new ComicBookTextModelFolderItem(this, _type);
 }
 
 TextModelGroupItem* ComicBookTextModel::createGroupItem(TextGroupType _type) const
@@ -503,6 +547,40 @@ void ComicBookTextModel::updateRuntimeDictionaries()
 QStringList ComicBookTextModel::mimeTypes() const
 {
     return { kMimeType };
+}
+
+int ComicBookTextModel::panelsCount() const
+{
+    return d->panelsCount;
+}
+
+int ComicBookTextModel::wordsCount() const
+{
+    return static_cast<ComicBookTextModelFolderItem*>(d->rootItem())->wordsCount();
+}
+
+QPair<int, int> ComicBookTextModel::charactersCount() const
+{
+    return static_cast<ComicBookTextModelFolderItem*>(d->rootItem())->charactersCount();
+}
+
+int ComicBookTextModel::textPageCount() const
+{
+    return d->textPageCount;
+}
+
+void ComicBookTextModel::setTextPageCount(int _count)
+{
+    if (d->textPageCount == _count) {
+        return;
+    }
+
+    d->textPageCount = _count;
+
+    //
+    // Создаём фейковое уведомление, чтобы оповестить клиентов
+    //
+    emit dataChanged(index(0, 0), index(0, 0));
 }
 
 void ComicBookTextModel::initEmptyDocument()

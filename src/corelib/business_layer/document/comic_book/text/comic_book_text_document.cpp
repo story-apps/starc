@@ -3,6 +3,7 @@
 #include "comic_book_text_corrector.h"
 
 #include <business_layer/document/text/text_block_data.h>
+#include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_page_item.h>
 #include <business_layer/model/comic_book/text/comic_book_text_model_panel_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
@@ -14,6 +15,19 @@ ComicBookTextDocument::ComicBookTextDocument(QObject* _parent)
     : TextDocument(_parent)
 {
     setCorrector(new ComicBookTextCorrector(this));
+
+    connect(this, &ComicBookTextDocument::contentsChanged, this, [this] {
+        if (!canChangeModel()) {
+            return;
+        }
+
+        auto comicBookModel = qobject_cast<ComicBookTextModel*>(model());
+        if (comicBookModel == nullptr) {
+            return;
+        }
+
+        comicBookModel->setTextPageCount(pageCount());
+    });
 }
 
 void ComicBookTextDocument::setCorrectionOptions(bool _needToCorrectCharactersNames,

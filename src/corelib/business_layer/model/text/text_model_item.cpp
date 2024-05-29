@@ -14,6 +14,20 @@ public:
     const TextModelItemType type;
     QString icon;
     const TextModel* model = nullptr;
+
+    //
+    // Ридонли свойства, которые формируются по ходу работы
+    //
+
+    /**
+     * @brief Количество слов
+     */
+    int wordsCount = 0;
+
+    /**
+     * @brief Количество символов
+     */
+    QPair<int, int> charactersCount;
 };
 
 TextModelItem::Implementation::Implementation(TextModelItemType _type, const TextModel* _model)
@@ -76,6 +90,26 @@ QVariant TextModelItem::data(int _role) const
     }
 
     return {};
+}
+
+int TextModelItem::wordsCount() const
+{
+    return d->wordsCount;
+}
+
+void TextModelItem::setWordsCount(int _count)
+{
+    d->wordsCount = _count;
+}
+
+QPair<int, int> TextModelItem::charactersCount() const
+{
+    return d->charactersCount;
+}
+
+void TextModelItem::setCharactersCount(QPair<int, int> _count)
+{
+    d->charactersCount = _count;
 }
 
 QStringRef TextModelItem::readCustomContent(QXmlStreamReader& _contentReader)

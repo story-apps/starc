@@ -77,9 +77,9 @@ public:
     std::map<std::chrono::milliseconds, QColor> itemsBookmarks() const;
 
     /**
-     * @brief Пересчитать хронометраж
+     * @brief Пересчитать счетчики
      */
-    void recalculateDuration();
+    void recalculateCounters();
 
     /**
      * @brief Настроить справочники сценария, которые собираются во время работы приложения
@@ -90,6 +90,27 @@ public:
      * @brief Определим список майм типов для модели
      */
     QStringList mimeTypes() const override;
+
+    /**
+     * @brief Количество сцен
+     */
+    int scenesCount() const;
+
+    /**
+     * @brief Количество слов
+     */
+    int wordsCount() const;
+
+    /**
+     * @brief Количество символов
+     */
+    QPair<int, int> charactersCount() const;
+
+    /**
+     * @brief Количество страниц текста сценария
+     */
+    int textPageCount() const;
+    void setTextPageCount(int _count);
 
 protected:
     /**

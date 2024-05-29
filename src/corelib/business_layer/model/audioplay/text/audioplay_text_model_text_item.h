@@ -21,18 +21,16 @@ public:
      * @brief Длительность блока
      */
     std::chrono::milliseconds duration() const;
-    void updateDuration();
+
+    /**
+     * @brief Обновить счётчики
+     */
+    void updateCounters(bool _force = false) override;
 
     /**
      * @brief Определяем интерфейс получения данных блока
      */
     QVariant data(int _role) const override;
-
-protected:
-    /**
-     * @brief Обновляем хронометраж, при изменении текста
-     */
-    void handleChange() override;
 
 private:
     class Implementation;

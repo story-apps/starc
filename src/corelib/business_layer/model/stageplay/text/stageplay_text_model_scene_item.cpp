@@ -24,6 +24,8 @@ void StageplayTextModelSceneItem::handleChange()
     QString text;
     int inlineNotesSize = 0;
     QVector<TextModelTextItem::ReviewMark> reviewMarks;
+    setWordsCount(0);
+    setCharactersCount({});
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         const auto child = childAt(childIndex);
@@ -63,6 +65,14 @@ void StageplayTextModelSceneItem::handleChange()
                 reviewMarks.removeLast();
             }
             reviewMarks.append(childTextItem->reviewMarks());
+
+            //
+            // Собираем счётчики
+            //
+            setWordsCount(wordsCount() + childTextItem->wordsCount());
+            setCharactersCount(
+                { charactersCount().first + childTextItem->charactersCount().first,
+                  charactersCount().second + childTextItem->charactersCount().second });
             break;
         }
 

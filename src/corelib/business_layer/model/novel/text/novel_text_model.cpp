@@ -38,9 +38,17 @@ public:
     TextModelItem* rootItem() const;
 
     /**
-     * @brief Пересчитать хронометраж элемента и всех детей
+     * @brief Пересчитать счетчики элемента и всех детей
      */
     void updateChildrenCounters(const TextModelItem* _item);
+
+    /**
+     * @brief Пересчитать количество сцен
+     */
+    //
+    // TODO: Возможно стоит добавить обновление номеров сцен, как в аналогичных моделях
+    //
+    void updateNumbering();
 
 
     /**
@@ -85,7 +93,6 @@ void NovelTextModel::Implementation::updateChildrenCounters(const TextModelItem*
     if (_item == nullptr) {
         return;
     }
-
     for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
         auto childItem = _item->childAt(childIndex);
         switch (childItem->type()) {
@@ -107,6 +114,35 @@ void NovelTextModel::Implementation::updateChildrenCounters(const TextModelItem*
     }
 }
 
+void NovelTextModel::Implementation::updateNumbering()
+{
+    scenesCount = 0;
+    std::function<void(const TextModelItem*)> updateChildNumbering;
+    updateChildNumbering = [this, &updateChildNumbering](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case TextModelItemType::Folder: {
+                updateChildNumbering(childItem);
+                break;
+            }
+
+            case TextModelItemType::Group: {
+                auto groupItem = static_cast<TextModelGroupItem*>(childItem);
+                if (groupItem->groupType() == TextGroupType::Scene) {
+                    ++scenesCount;
+                }
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
+    updateChildNumbering(rootItem());
+}
+
 
 // ****
 
@@ -115,8 +151,10 @@ NovelTextModel::NovelTextModel(QObject* _parent)
     : ScriptTextModel(_parent, NovelTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
-    auto updateCounters
-        = [this](const QModelIndex& _index) { d->updateChildrenCounters(itemForIndex(_index)); };
+    auto updateCounters = [this](const QModelIndex& _index) {
+        d->updateNumbering();
+        d->updateChildrenCounters(itemForIndex(_index));
+    };
     //
     // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
     // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
@@ -296,6 +334,7 @@ void NovelTextModel::initEmptyDocument()
 
 void NovelTextModel::finalizeInitialization()
 {
+    d->updateNumbering();
 }
 
 } // namespace BusinessLayer

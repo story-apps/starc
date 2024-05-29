@@ -2,18 +2,25 @@
 
 #include "stageplay_text_structure_delegate.h"
 
+#include <business_layer/document/stageplay/text/stageplay_text_document.h>
+#include <business_layer/model/stageplay/stageplay_information_model.h>
+#include <business_layer/model/stageplay/text/stageplay_text_model.h>
 #include <business_layer/model/text/text_model_group_item.h>
 #include <business_layer/templates/stageplay_template.h>
+#include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/counters_info/counters_info_widget.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
+#include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <ui/widgets/tree/tree.h>
 
 #include <QAction>
+#include <QSortFilterProxyModel>
 #include <QStringListModel>
 #include <QVBoxLayout>
 
@@ -25,11 +32,25 @@ class StageplayTextStructureView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Обновить счётчики
+     */
+    void updateCounters();
+
+
+    QSortFilterProxyModel* model = nullptr;
 
     IconsMidLabel* backIcon = nullptr;
     Subtitle2Label* backText = nullptr;
     Tree* content = nullptr;
     StageplayTextStructureDelegate* contentDelegate = nullptr;
+    CountersInfoWidget* countersWidget = nullptr;
+
+    /**
+     * @brief Редактор текста, который будет использоваться для подсчёта кол-ва страниц, если в
+     *        приложении ещё не был открыт редактор текста модели, структуру которого отображаем
+     */
+    QScopedPointer<PageTextEdit> textEdit;
 };
 
 StageplayTextStructureView::Implementation::Implementation(QWidget* _parent)
@@ -37,6 +58,7 @@ StageplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     , backText(new Subtitle2Label(_parent))
     , content(new Tree(_parent))
     , contentDelegate(new StageplayTextStructureDelegate(content))
+    , countersWidget(new CountersInfoWidget(_parent))
 {
     backIcon->setIcon(u8"\U000F0141");
 
@@ -45,7 +67,62 @@ StageplayTextStructureView::Implementation::Implementation(QWidget* _parent)
     content->setSelectionMode(QAbstractItemView::ExtendedSelection);
     content->setItemDelegate(contentDelegate);
 
+    countersWidget->setSettingsCounterModuleKey(QLatin1String("stageplay"));
+
     new Shadow(Qt::TopEdge, content);
+    new Shadow(Qt::BottomEdge, content);
+}
+
+void StageplayTextStructureView::Implementation::updateCounters()
+{
+    if (model == nullptr || model->sourceModel() == nullptr) {
+        return;
+    }
+
+    auto stageplayModel = qobject_cast<BusinessLayer::StageplayTextModel*>(model->sourceModel());
+    if (stageplayModel == nullptr) {
+        return;
+    }
+
+    const auto pageCount = [this, stageplayModel] {
+        //
+        // Если в модели уже задано количество страниц, то используем его
+        //
+        if (stageplayModel->textPageCount() > 0) {
+            textEdit.reset();
+            return stageplayModel->textPageCount();
+        }
+
+        //
+        // А если не задано, то придётся считать вручную
+        // NOTE: это возможно, когда не был активирован редактор текста сценария
+        //
+        if (textEdit.isNull()) {
+            const auto& stageplayTemplate = BusinessLayer::TemplatesFacade::stageplayTemplate(
+                stageplayModel->informationModel()->templateId());
+
+            textEdit.reset(new PageTextEdit);
+            textEdit->setUsePageMode(true);
+            textEdit->setPageSpacing(0);
+            textEdit->setPageFormat(stageplayTemplate.pageSizeId());
+            textEdit->setPageMarginsMm(stageplayTemplate.pageMargins());
+            auto stageplayDocument = new BusinessLayer::StageplayTextDocument(textEdit.data());
+            textEdit->setDocument(stageplayDocument);
+
+            const bool canChangeModel = false;
+            stageplayDocument->setModel(stageplayModel, canChangeModel);
+        }
+
+        return textEdit->document()->pageCount();
+    }();
+
+    countersWidget->setCounters({
+        tr("%n page(s)", "", pageCount),
+        tr("%n scene(s)", "", stageplayModel->scenesCount()),
+        tr("%n word(s)", "", stageplayModel->wordsCount()),
+        tr("%n character(s)", "", stageplayModel->charactersCount().first),
+        tr("%n character(s) with spaces", "", stageplayModel->charactersCount().second),
+    });
 }
 
 
@@ -67,6 +144,7 @@ StageplayTextStructureView::StageplayTextStructureView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addLayout(topLayout);
     layout->addWidget(d->content);
+    layout->addWidget(d->countersWidget);
     setLayout(layout);
 
 
@@ -128,7 +206,25 @@ void StageplayTextStructureView::setTitle(const QString& _title)
 
 void StageplayTextStructureView::setModel(QAbstractItemModel* _model)
 {
+    if (d->model != nullptr) {
+        d->model->disconnect(this);
+        d->textEdit.reset();
+    }
+
     d->content->setModel(_model);
+
+    d->model = qobject_cast<QSortFilterProxyModel*>(_model);
+    if (d->model != nullptr) {
+        connect(d->model, &QSortFilterProxyModel::modelReset, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::dataChanged, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::rowsInserted, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::rowsMoved, this, [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::rowsRemoved, this,
+                [this] { d->updateCounters(); });
+    }
 }
 
 QModelIndexList StageplayTextStructureView::selectedIndexes() const
@@ -139,6 +235,7 @@ QModelIndexList StageplayTextStructureView::selectedIndexes() const
 void StageplayTextStructureView::updateTranslations()
 {
     d->backText->setText(tr("Back to navigator"));
+    d->updateCounters();
 }
 
 void StageplayTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

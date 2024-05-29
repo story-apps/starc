@@ -126,9 +126,9 @@ public:
     void setScenesNumbersLocked(bool _locked);
 
     /**
-     * @brief Пересчитать хронометраж
+     * @brief Пересчитать счетчики
      */
-    void recalculateDuration();
+    void recalculateCounters();
 
     /**
      * @brief Настроить справочники сценария, которые собираются во время работы приложения
