@@ -4,6 +4,7 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/stageplay/text/stageplay_text_model.h>
 #include <business_layer/templates/stageplay_template.h>
 
 
@@ -13,6 +14,19 @@ StageplayTextDocument::StageplayTextDocument(QObject* _parent)
     : TextDocument(_parent)
 {
     setCorrector(new StageplayTextCorrector(this));
+
+    connect(this, &StageplayTextDocument::contentsChanged, this, [this] {
+        if (!canChangeModel()) {
+            return;
+        }
+
+        auto stageplayModel = qobject_cast<StageplayTextModel*>(model());
+        if (stageplayModel == nullptr) {
+            return;
+        }
+
+        stageplayModel->setTextPageCount(pageCount());
+    });
 }
 
 StageplayTextDocument::~StageplayTextDocument() = default;

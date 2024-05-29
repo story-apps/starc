@@ -37,16 +37,6 @@ public:
     void removeResource(const QUuid& _uuid);
 
     /**
-     * @brief Количество слов
-     */
-    int wordsCount() const;
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount() const;
-
-    /**
      * @brief Длительность сцены
      */
     std::chrono::milliseconds duration() const;

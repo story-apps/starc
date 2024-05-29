@@ -15,13 +15,14 @@ class CORE_LIBRARY_EXPORT ComicBookTextModelTextItem : public TextModelTextItem
 
 public:
     explicit ComicBookTextModelTextItem(const ComicBookTextModel* _model);
+    ~ComicBookTextModelTextItem() override;
 
 protected:
     /**
      * @brief Текст элемента, который будет сохранён
      * @note Убираем номер для имени персонажа
      */
-    virtual QString textToSave() const;
+    QString textToSave() const override;
 };
 
 

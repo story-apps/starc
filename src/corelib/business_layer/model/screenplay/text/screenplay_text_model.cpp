@@ -39,9 +39,9 @@ public:
     TextModelItem* rootItem() const;
 
     /**
-     * @brief Пересчитать хронометраж элемента и всех детей
+     * @brief Пересчитать счетчики элемента и всех детей
      */
-    void updateChildrenDuration(const TextModelItem* _item, bool _force = false);
+    void updateChildrenCounters(const TextModelItem* _item, bool _force = false);
 
 
     /**
@@ -86,7 +86,7 @@ TextModelItem* ScreenplayTextModel::Implementation::rootItem() const
     return q->itemForIndex({});
 }
 
-void ScreenplayTextModel::Implementation::updateChildrenDuration(const TextModelItem* _item,
+void ScreenplayTextModel::Implementation::updateChildrenCounters(const TextModelItem* _item,
                                                                  bool _force)
 {
     if (_item == nullptr) {
@@ -98,7 +98,7 @@ void ScreenplayTextModel::Implementation::updateChildrenDuration(const TextModel
         switch (childItem->type()) {
         case TextModelItemType::Folder:
         case TextModelItemType::Group: {
-            updateChildrenDuration(childItem, _force);
+            updateChildrenCounters(childItem, _force);
             break;
         }
 
@@ -124,7 +124,7 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
 {
     auto updateCounters = [this](const QModelIndex& _index) {
         updateNumbering();
-        d->updateChildrenDuration(itemForIndex(_index));
+        d->updateChildrenCounters(itemForIndex(_index));
     };
     //
     // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
@@ -801,11 +801,11 @@ void ScreenplayTextModel::setScenesNumbersLocked(bool _locked)
     }
 }
 
-void ScreenplayTextModel::recalculateDuration()
+void ScreenplayTextModel::recalculateCounters()
 {
     beginChangeRows();
     const auto forceUpdate = true;
-    d->updateChildrenDuration(d->rootItem(), forceUpdate);
+    d->updateChildrenCounters(d->rootItem(), forceUpdate);
     endChangeRows();
 }
 

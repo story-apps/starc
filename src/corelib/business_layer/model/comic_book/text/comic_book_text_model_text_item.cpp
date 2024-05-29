@@ -1,6 +1,5 @@
 #include "comic_book_text_model_text_item.h"
 
-#include "comic_book_text_block_parser.h"
 #include "comic_book_text_model.h"
 
 #include <business_layer/templates/text_template.h>
@@ -14,6 +13,8 @@ ComicBookTextModelTextItem::ComicBookTextModelTextItem(const ComicBookTextModel*
 {
 }
 
+ComicBookTextModelTextItem::~ComicBookTextModelTextItem() = default;
+
 QString ComicBookTextModelTextItem::textToSave() const
 {
     if (paragraphType() != TextParagraphType::Character) {
@@ -25,6 +26,5 @@ QString ComicBookTextModelTextItem::textToSave() const
     textCorrected = textCorrected.remove(rxNumberRemover);
     return textCorrected;
 }
-
 
 } // namespace BusinessLayer

@@ -4,6 +4,7 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/audioplay/text/audioplay_text_model.h>
 #include <business_layer/templates/audioplay_template.h>
 
 
@@ -13,6 +14,19 @@ AudioplayTextDocument::AudioplayTextDocument(QObject* _parent)
     : TextDocument(_parent)
 {
     setCorrector(new AudioplayTextCorrector(this));
+
+    connect(this, &AudioplayTextDocument::contentsChanged, this, [this] {
+        if (!canChangeModel()) {
+            return;
+        }
+
+        auto audioplayModel = qobject_cast<AudioplayTextModel*>(model());
+        if (audioplayModel == nullptr) {
+            return;
+        }
+
+        audioplayModel->setTextPageCount(pageCount());
+    });
 }
 
 AudioplayTextDocument::~AudioplayTextDocument() = default;

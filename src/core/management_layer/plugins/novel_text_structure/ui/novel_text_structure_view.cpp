@@ -67,7 +67,7 @@ NovelTextStructureView::Implementation::Implementation(QWidget* _parent)
     content->setSelectionMode(QAbstractItemView::ExtendedSelection);
     content->setItemDelegate(contentDelegate);
 
-    countersWidget->setSettingsCounterModuleKey("novel");
+    countersWidget->setSettingsCounterModuleKey(QLatin1String("novel"));
 
     new Shadow(Qt::TopEdge, content);
     new Shadow(Qt::BottomEdge, content);
@@ -109,8 +109,8 @@ void NovelTextStructureView::Implementation::updateCounters()
             auto novelDocument = new BusinessLayer::NovelTextDocument(textEdit.data());
             textEdit->setDocument(novelDocument);
 
-            const bool kCanChangeModel = false;
-            novelDocument->setModel(novelModel, kCanChangeModel);
+            const bool canChangeModel = false;
+            novelDocument->setModel(novelModel, canChangeModel);
         }
 
         return textEdit->document()->pageCount();
@@ -211,15 +211,14 @@ void NovelTextStructureView::setModel(QAbstractItemModel* _model)
 
     d->model = qobject_cast<QSortFilterProxyModel*>(_model);
     if (d->model != nullptr) {
-        connect(d->model, &BusinessLayer::NovelTextModel::modelReset, this,
+        connect(d->model, &QSortFilterProxyModel::modelReset, this,
                 [this] { d->updateCounters(); });
-        connect(d->model, &BusinessLayer::NovelTextModel::dataChanged, this,
+        connect(d->model, &QSortFilterProxyModel::dataChanged, this,
                 [this] { d->updateCounters(); });
-        connect(d->model, &BusinessLayer::NovelTextModel::rowsInserted, this,
+        connect(d->model, &QSortFilterProxyModel::rowsInserted, this,
                 [this] { d->updateCounters(); });
-        connect(d->model, &BusinessLayer::NovelTextModel::rowsMoved, this,
-                [this] { d->updateCounters(); });
-        connect(d->model, &BusinessLayer::NovelTextModel::rowsRemoved, this,
+        connect(d->model, &QSortFilterProxyModel::rowsMoved, this, [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::rowsRemoved, this,
                 [this] { d->updateCounters(); });
     }
 }

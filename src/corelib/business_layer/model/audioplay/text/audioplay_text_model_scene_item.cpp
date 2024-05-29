@@ -14,7 +14,7 @@ class AudioplayTextModelSceneItem::Implementation
 {
 public:
     //
-    // Ридонли свойства, которые формируются по ходу работы со сценарием
+    // Ридонли свойства, которые формируются по ходу работы
     //
 
     /**
@@ -62,6 +62,8 @@ void AudioplayTextModelSceneItem::handleChange()
     int inlineNotesSize = 0;
     QVector<TextModelTextItem::ReviewMark> reviewMarks;
     d->duration = std::chrono::seconds{ 0 };
+    setWordsCount(0);
+    setCharactersCount({});
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         const auto child = childAt(childIndex);
@@ -103,9 +105,13 @@ void AudioplayTextModelSceneItem::handleChange()
             reviewMarks.append(childTextItem->reviewMarks());
 
             //
-            // Собираем хронометраж
+            // Собираем счётчики
             //
             d->duration += childTextItem->duration();
+            setWordsCount(wordsCount() + childTextItem->wordsCount());
+            setCharactersCount(
+                { charactersCount().first + childTextItem->charactersCount().first,
+                  charactersCount().second + childTextItem->charactersCount().second });
             break;
         }
 

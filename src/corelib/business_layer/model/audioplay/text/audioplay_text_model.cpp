@@ -41,9 +41,9 @@ public:
     void updateNumbering();
 
     /**
-     * @brief Пересчитать хронометраж элемента и всех детей
+     * @brief Пересчитать счетчики элемента и всех детей
      */
-    void updateChildrenDuration(const TextModelItem* _item);
+    void updateChildrenCounters(const TextModelItem* _item, bool _force = false);
 
 
     /**
@@ -60,6 +60,16 @@ public:
      * @brief Запланировано ли обновление нумерации
      */
     bool isUpdateNumberingPlanned = false;
+
+    /**
+     * @brief Количество сцен
+     */
+    int scenesCount = 0;
+
+    /**
+     * @brief Количество страниц
+     */
+    int textPageCount = 0;
 };
 
 AudioplayTextModel::Implementation::Implementation(AudioplayTextModel* _q)
@@ -78,6 +88,7 @@ void AudioplayTextModel::Implementation::updateNumbering()
         return;
     }
 
+    scenesCount = 0;
     int sceneNumber = 1;
     int dialogueNumber = 0;
     std::function<void(const TextModelItem*)> updateChildNumbering;
@@ -98,6 +109,7 @@ void AudioplayTextModel::Implementation::updateNumbering()
                     q->updateItemForRoles(groupItem, { TextModelGroupItem::GroupNumberRole });
                 }
                 ++sceneNumber;
+                ++scenesCount;
                 groupItem->prepareNumberText("#");
                 break;
             }
@@ -138,20 +150,21 @@ void AudioplayTextModel::Implementation::updateNumbering()
     updateChildNumbering(rootItem());
 }
 
-void AudioplayTextModel::Implementation::updateChildrenDuration(const TextModelItem* _item)
+void AudioplayTextModel::Implementation::updateChildrenCounters(const TextModelItem* _item,
+                                                                bool _force)
 {
     for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
         auto childItem = _item->childAt(childIndex);
         switch (childItem->type()) {
         case TextModelItemType::Folder:
         case TextModelItemType::Group: {
-            updateChildrenDuration(childItem);
+            updateChildrenCounters(childItem, _force);
             break;
         }
 
         case TextModelItemType::Text: {
             auto textItem = static_cast<AudioplayTextModelTextItem*>(childItem);
-            textItem->updateDuration();
+            textItem->updateCounters(_force);
             break;
         }
 
@@ -171,7 +184,7 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
 {
     auto updateCounters = [this](const QModelIndex& _index) {
         d->updateNumbering();
-        d->updateChildrenDuration(itemForIndex(_index));
+        d->updateChildrenCounters(itemForIndex(_index));
     };
     //
     // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
@@ -227,6 +240,40 @@ TextModelTextItem* AudioplayTextModel::createTextItem() const
 QStringList AudioplayTextModel::mimeTypes() const
 {
     return { kMimeType };
+}
+
+int AudioplayTextModel::wordsCount() const
+{
+    return static_cast<AudioplayTextModelFolderItem*>(d->rootItem())->wordsCount();
+}
+
+int AudioplayTextModel::scenesCount() const
+{
+    return d->scenesCount;
+}
+
+QPair<int, int> AudioplayTextModel::charactersCount() const
+{
+    return static_cast<AudioplayTextModelFolderItem*>(d->rootItem())->charactersCount();
+}
+
+int AudioplayTextModel::textPageCount() const
+{
+    return d->textPageCount;
+}
+
+void AudioplayTextModel::setTextPageCount(int _count)
+{
+    if (d->textPageCount == _count) {
+        return;
+    }
+
+    d->textPageCount = _count;
+
+    //
+    // Создаём фейковое уведомление, чтобы оповестить клиентов
+    //
+    emit dataChanged(index(0, 0), index(0, 0));
 }
 
 void AudioplayTextModel::setInformationModel(AudioplayInformationModel* _model)
@@ -486,10 +533,11 @@ std::map<std::chrono::milliseconds, QColor> AudioplayTextModel::itemsBookmarks()
     return colors;
 }
 
-void AudioplayTextModel::recalculateDuration()
+void AudioplayTextModel::recalculateCounters()
 {
     beginChangeRows();
-    d->updateChildrenDuration(d->rootItem());
+    const auto forceUpdate = true;
+    d->updateChildrenCounters(d->rootItem(), forceUpdate);
     endChangeRows();
 }
 

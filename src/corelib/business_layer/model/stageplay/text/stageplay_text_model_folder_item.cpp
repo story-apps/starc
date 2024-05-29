@@ -21,16 +21,37 @@ StageplayTextModelFolderItem::~StageplayTextModelFolderItem() = default;
 void StageplayTextModelFolderItem::handleChange()
 {
     setHeading({});
+    setWordsCount(0);
+    setCharactersCount({});
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
         switch (child->type()) {
+        case TextModelItemType::Folder: {
+            auto childItem = static_cast<StageplayTextModelFolderItem*>(child);
+            setWordsCount(wordsCount() + childItem->wordsCount());
+            setCharactersCount({ charactersCount().first + childItem->charactersCount().first,
+                                 charactersCount().second + childItem->charactersCount().second });
+            break;
+        }
+
+        case TextModelItemType::Group: {
+            auto childItem = static_cast<StageplayTextModelSceneItem*>(child);
+            setWordsCount(wordsCount() + childItem->wordsCount());
+            setCharactersCount({ charactersCount().first + childItem->charactersCount().first,
+                                 charactersCount().second + childItem->charactersCount().second });
+            break;
+        }
+
         case TextModelItemType::Text: {
             auto childItem = static_cast<TextModelTextItem*>(child);
             if (childItem->paragraphType() == TextParagraphType::ActHeading
                 || childItem->paragraphType() == TextParagraphType::SequenceHeading) {
                 setHeading(childItem->text());
             }
+            setWordsCount(wordsCount() + childItem->wordsCount());
+            setCharactersCount({ charactersCount().first + childItem->charactersCount().first,
+                                 charactersCount().second + childItem->charactersCount().second });
             break;
         }
 

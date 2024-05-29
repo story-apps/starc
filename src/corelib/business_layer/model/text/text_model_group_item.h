@@ -3,7 +3,6 @@
 #include "text_model_item.h"
 
 #include <QString>
-#include <QtContainerFwd>
 
 #include <chrono>
 #include <optional>

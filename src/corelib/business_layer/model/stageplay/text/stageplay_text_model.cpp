@@ -40,6 +40,11 @@ public:
      */
     void updateNumbering();
 
+    /**
+     * @brief Пересчитать счетчики элемента и всех детей
+     */
+    void updateChildrenCounters(const TextModelItem* _item);
+
 
     /**
      * @brief Родительский элемент
@@ -55,6 +60,16 @@ public:
      * @brief Запланировано ли обновление нумерации
      */
     bool isUpdateNumberingPlanned = false;
+
+    /**
+     * @brief Количество сцен
+     */
+    int scenesCount = 0;
+
+    /**
+     * @brief Количество страниц
+     */
+    int textPageCount = 0;
 };
 
 StageplayTextModel::Implementation::Implementation(StageplayTextModel* _q)
@@ -73,6 +88,7 @@ void StageplayTextModel::Implementation::updateNumbering()
         return;
     }
 
+    scenesCount = 0;
     int sceneNumber = 1;
     int dialogueNumber = 0;
     std::function<void(const TextModelItem*)> updateChildNumbering;
@@ -93,6 +109,7 @@ void StageplayTextModel::Implementation::updateNumbering()
                     ++sceneNumber;
                 }
                 groupItem->prepareNumberText("#");
+                ++scenesCount;
                 break;
             }
 
@@ -128,6 +145,29 @@ void StageplayTextModel::Implementation::updateNumbering()
     updateChildNumbering(rootItem());
 }
 
+void StageplayTextModel::Implementation::updateChildrenCounters(const TextModelItem* _item)
+{
+    for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+        auto childItem = _item->childAt(childIndex);
+        switch (childItem->type()) {
+        case TextModelItemType::Folder:
+        case TextModelItemType::Group: {
+            updateChildrenCounters(childItem);
+            break;
+        }
+
+        case TextModelItemType::Text: {
+            auto textItem = static_cast<TextModelTextItem*>(childItem);
+            textItem->updateCounters();
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+}
+
 
 // ****
 
@@ -136,14 +176,17 @@ StageplayTextModel::StageplayTextModel(QObject* _parent)
     : ScriptTextModel(_parent, createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
-    auto updateNumbering = [this] { d->updateNumbering(); };
+    auto updateCounters = [this](const QModelIndex& _index) {
+        d->updateNumbering();
+        d->updateChildrenCounters(itemForIndex(_index));
+    };
     //
     // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
     // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
     // приводить к падению внутри них
     //
-    connect(this, &StageplayTextModel::afterRowsInserted, this, updateNumbering);
-    connect(this, &StageplayTextModel::afterRowsRemoved, this, updateNumbering);
+    connect(this, &StageplayTextModel::afterRowsInserted, this, updateCounters);
+    connect(this, &StageplayTextModel::afterRowsRemoved, this, updateCounters);
     //
     // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
     //
@@ -164,7 +207,7 @@ StageplayTextModel::~StageplayTextModel() = default;
 
 TextModelFolderItem* StageplayTextModel::createFolderItem(TextFolderType _type) const
 {
-    return new TextModelFolderItem(this, _type);
+    return new StageplayTextModelFolderItem(this, _type);
 }
 
 TextModelGroupItem* StageplayTextModel::createGroupItem(TextGroupType _type) const
@@ -191,6 +234,40 @@ TextModelTextItem* StageplayTextModel::createTextItem() const
 QStringList StageplayTextModel::mimeTypes() const
 {
     return { kMimeType };
+}
+
+int StageplayTextModel::scenesCount() const
+{
+    return d->scenesCount;
+}
+
+int StageplayTextModel::wordsCount() const
+{
+    return static_cast<StageplayTextModelFolderItem*>(d->rootItem())->wordsCount();
+}
+
+QPair<int, int> StageplayTextModel::charactersCount() const
+{
+    return static_cast<StageplayTextModelFolderItem*>(d->rootItem())->charactersCount();
+}
+
+int StageplayTextModel::textPageCount() const
+{
+    return d->textPageCount;
+}
+
+void StageplayTextModel::setTextPageCount(int _count)
+{
+    if (d->textPageCount == _count) {
+        return;
+    }
+
+    d->textPageCount = _count;
+
+    //
+    // Создаём фейковое уведомление, чтобы оповестить клиентов
+    //
+    emit dataChanged(index(0, 0), index(0, 0));
 }
 
 void StageplayTextModel::setInformationModel(StageplayInformationModel* _model)

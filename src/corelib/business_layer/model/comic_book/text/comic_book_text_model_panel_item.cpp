@@ -2,8 +2,8 @@
 
 #include "comic_book_text_block_parser.h"
 #include "comic_book_text_model.h"
+#include "comic_book_text_model_text_item.h"
 
-#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/comic_book_template.h>
 #include <utils/helpers/text_helper.h>
 
@@ -131,6 +131,8 @@ void ComicBookTextModelPanelItem::handleChange()
     int inlineNotesSize = 0;
     QVector<TextModelTextItem::ReviewMark> reviewMarks;
     d->dialoguesWordsCount = 0;
+    setWordsCount(0);
+    setCharactersCount({});
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -138,7 +140,7 @@ void ComicBookTextModelPanelItem::handleChange()
             continue;
         }
 
-        auto childTextItem = static_cast<TextModelTextItem*>(child);
+        auto childTextItem = static_cast<ComicBookTextModelTextItem*>(child);
 
         //
         // Собираем текст
@@ -181,6 +183,13 @@ void ComicBookTextModelPanelItem::handleChange()
             reviewMarks.removeLast();
         }
         reviewMarks.append(childTextItem->reviewMarks());
+
+        //
+        // Собираем счётчики
+        //
+        setWordsCount(wordsCount() + childTextItem->wordsCount());
+        setCharactersCount({ charactersCount().first + childTextItem->charactersCount().first,
+                             charactersCount().second + childTextItem->charactersCount().second });
     }
 
     setHeading(heading);

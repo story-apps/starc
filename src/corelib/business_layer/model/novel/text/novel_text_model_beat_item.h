@@ -27,16 +27,6 @@ public:
     ~NovelTextModelBeatItem() override;
 
     /**
-     * @brief Количество слов
-     */
-    int wordsCount() const;
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount() const;
-
-    /**
      * @brief Определяем интерфейс получения данных бита
      */
     QVariant data(int _role) const override;
@@ -46,10 +36,6 @@ protected:
      * @brief Обновляем текст бита при изменении кого-то из детей
      */
     void handleChange() override;
-
-private:
-    class Implementation;
-    QScopedPointer<Implementation> d;
 };
 
 } // namespace BusinessLayer

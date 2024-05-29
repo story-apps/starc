@@ -17,34 +17,14 @@ public:
     ~NovelTextModelTextItem() override;
 
     /**
-     * @brief Количество слов
-     */
-    int wordsCount() const;
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount() const;
-
-    /**
      * @brief Обновить счётчики
      */
-    void updateCounters();
+    void updateCounters(bool _force = false) override;
 
     /**
      * @brief Определяем интерфейс получения данных сцены
      */
     QVariant data(int _role) const override;
-
-protected:
-    /**
-     * @brief Обновляем хронометраж, при изменении текста
-     */
-    void handleChange() override;
-
-private:
-    class Implementation;
-    QScopedPointer<Implementation> d;
 };
 
 

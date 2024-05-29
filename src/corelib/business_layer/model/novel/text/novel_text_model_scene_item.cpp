@@ -18,20 +18,6 @@ public:
      * @brief Запланированная длительность сцены
      */
     std::optional<int> plannedDuration;
-
-    //
-    // Ридонли свойства, которые формируются по ходу работы со сценарием
-    //
-
-    /**
-     * @brief Количество слов
-     */
-    int wordsCount = 0;
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount;
 };
 
 
@@ -46,16 +32,6 @@ NovelTextModelSceneItem::NovelTextModelSceneItem(const NovelTextModel* _model)
 }
 
 NovelTextModelSceneItem::~NovelTextModelSceneItem() = default;
-
-int NovelTextModelSceneItem::wordsCount() const
-{
-    return d->wordsCount;
-}
-
-QPair<int, int> NovelTextModelSceneItem::charactersCount() const
-{
-    return d->charactersCount;
-}
 
 QVector<QString> NovelTextModelSceneItem::beats() const
 {
@@ -102,15 +78,15 @@ QVariant NovelTextModelSceneItem::data(int _role) const
 {
     switch (_role) {
     case SceneWordCountRole: {
-        return d->wordsCount;
+        return wordsCount();
     }
 
     case SceneCharacterCountRole: {
-        return d->charactersCount.first;
+        return charactersCount().first;
     }
 
     case SceneCharacterCountWithSpacesRole: {
-        return d->charactersCount.second;
+        return charactersCount().second;
     }
 
     case SceneDescriptionRole: {
@@ -212,8 +188,8 @@ void NovelTextModelSceneItem::handleChange()
     int inlineNotesSize = 0;
     int childGroupsReviewMarksSize = 0;
     QVector<TextModelTextItem::ReviewMark> reviewMarks;
-    d->wordsCount = 0;
-    d->charactersCount = {};
+    setWordsCount(0);
+    setCharactersCount({});
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         const auto child = childAt(childIndex);
@@ -223,9 +199,10 @@ void NovelTextModelSceneItem::handleChange()
             text += childGroupItem->text() + " ";
             inlineNotesSize += childGroupItem->inlineNotesSize();
             childGroupsReviewMarksSize += childGroupItem->reviewMarksSize();
-            d->wordsCount += childGroupItem->wordsCount();
-            d->charactersCount.first += childGroupItem->charactersCount().first;
-            d->charactersCount.second += childGroupItem->charactersCount().second;
+            setWordsCount(wordsCount() + childGroupItem->wordsCount());
+            setCharactersCount(
+                { charactersCount().first + childGroupItem->charactersCount().first,
+                  charactersCount().second + childGroupItem->charactersCount().second });
             break;
         }
 
@@ -270,9 +247,10 @@ void NovelTextModelSceneItem::handleChange()
             //
             // Собираем счётчики
             //
-            d->wordsCount += childTextItem->wordsCount();
-            d->charactersCount.first += childTextItem->charactersCount().first;
-            d->charactersCount.second += childTextItem->charactersCount().second;
+            setWordsCount(wordsCount() + childTextItem->wordsCount());
+            setCharactersCount(
+                { charactersCount().first + childTextItem->charactersCount().first,
+                  charactersCount().second + childTextItem->charactersCount().second });
             break;
         }
 

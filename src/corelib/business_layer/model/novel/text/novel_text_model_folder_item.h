@@ -2,7 +2,6 @@
 
 #include <business_layer/model/text/text_model_folder_item.h>
 
-#include <QPair>
 #include <QRectF>
 
 #include <chrono>
@@ -40,16 +39,6 @@ public:
     };
     const CardInfo& cardInfo() const;
     void setCardInfo(const CardInfo& _info);
-
-    /**
-     * @brief Количество слов
-     */
-    int wordsCount() const;
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount() const;
 
     /**
      * @brief Текст папки

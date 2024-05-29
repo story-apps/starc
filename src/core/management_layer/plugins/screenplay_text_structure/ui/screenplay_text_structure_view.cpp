@@ -110,8 +110,8 @@ void ScreenplayTextStructureView::Implementation::updateCounters()
             auto novelDocument = new BusinessLayer::ScreenplayTextDocument(textEdit.data());
             textEdit->setDocument(novelDocument);
 
-            const bool kCanChangeModel = false;
-            novelDocument->setModel(screenplayModel, kCanChangeModel);
+            const bool canChangeModel = false;
+            novelDocument->setModel(screenplayModel, canChangeModel);
         }
 
         return textEdit->document()->pageCount();
@@ -218,15 +218,14 @@ void ScreenplayTextStructureView::setModel(QAbstractItemModel* _model)
 
     d->model = qobject_cast<QSortFilterProxyModel*>(_model);
     if (d->model != nullptr) {
-        connect(d->model, &BusinessLayer::ScreenplayTextModel::modelReset, this,
+        connect(d->model, &QSortFilterProxyModel::modelReset, this,
                 [this] { d->updateCounters(); });
-        connect(d->model, &BusinessLayer::ScreenplayTextModel::dataChanged, this,
+        connect(d->model, &QSortFilterProxyModel::dataChanged, this,
                 [this] { d->updateCounters(); });
-        connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsInserted, this,
+        connect(d->model, &QSortFilterProxyModel::rowsInserted, this,
                 [this] { d->updateCounters(); });
-        connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsMoved, this,
-                [this] { d->updateCounters(); });
-        connect(d->model, &BusinessLayer::ScreenplayTextModel::rowsRemoved, this,
+        connect(d->model, &QSortFilterProxyModel::rowsMoved, this, [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::rowsRemoved, this,
                 [this] { d->updateCounters(); });
     }
 }

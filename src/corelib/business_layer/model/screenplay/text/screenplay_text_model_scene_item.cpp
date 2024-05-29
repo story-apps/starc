@@ -29,16 +29,6 @@ public:
     //
 
     /**
-     * @brief Количество слов
-     */
-    int wordsCount = 0;
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount;
-
-    /**
      * @brief Длительность сцены
      */
     std::chrono::milliseconds duration = std::chrono::milliseconds{ 0 };
@@ -120,16 +110,6 @@ void ScreenplayTextModelSceneItem::removeResource(const QUuid& _uuid)
         setChanged(true);
         return;
     }
-}
-
-int ScreenplayTextModelSceneItem::wordsCount() const
-{
-    return d->wordsCount;
-}
-
-QPair<int, int> ScreenplayTextModelSceneItem::charactersCount() const
-{
-    return d->charactersCount;
 }
 
 std::chrono::milliseconds ScreenplayTextModelSceneItem::duration() const
@@ -314,8 +294,8 @@ void ScreenplayTextModelSceneItem::handleChange()
     int inlineNotesSize = 0;
     int childGroupsReviewMarksSize = 0;
     QVector<TextModelTextItem::ReviewMark> reviewMarks;
-    d->wordsCount = 0;
-    d->charactersCount = {};
+    setWordsCount(0);
+    setCharactersCount({});
     d->duration = std::chrono::seconds{ 0 };
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
@@ -326,9 +306,10 @@ void ScreenplayTextModelSceneItem::handleChange()
             text += childGroupItem->text() + " ";
             inlineNotesSize += childGroupItem->inlineNotesSize();
             childGroupsReviewMarksSize += childGroupItem->reviewMarksSize();
-            d->wordsCount += childGroupItem->wordsCount();
-            d->charactersCount.first += childGroupItem->charactersCount().first;
-            d->charactersCount.second += childGroupItem->charactersCount().second;
+            setWordsCount(wordsCount() + childGroupItem->wordsCount());
+            setCharactersCount(
+                { charactersCount().first + childGroupItem->charactersCount().first,
+                  charactersCount().second + childGroupItem->charactersCount().second });
             d->duration += childGroupItem->duration();
             break;
         }
@@ -378,10 +359,11 @@ void ScreenplayTextModelSceneItem::handleChange()
             //
             // Собираем счётчики
             //
-            d->wordsCount += childTextItem->wordsCount();
-            d->charactersCount.first += childTextItem->charactersCount().first;
-            d->charactersCount.second += childTextItem->charactersCount().second;
             d->duration += childTextItem->duration();
+            setWordsCount(wordsCount() + childTextItem->wordsCount());
+            setCharactersCount(
+                { charactersCount().first + childTextItem->charactersCount().first,
+                  charactersCount().second + childTextItem->charactersCount().second });
             break;
         }
 

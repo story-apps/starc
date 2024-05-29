@@ -234,6 +234,11 @@ public:
      */
     bool isEqual(TextModelItem* _item) const override;
 
+    /**
+     * @brief Обновить счётчики
+     */
+    virtual void updateCounters(bool _force = false);
+
 protected:
     /**
      * @brief Пометить блок изменённым
@@ -246,6 +251,11 @@ protected:
      *       например текст диалогов комиксов сохраняется без номеров
      */
     virtual QString textToSave() const;
+
+    /**
+     * @brief Обновляем счетчики, при изменении текста
+     */
+    void handleChange() override;
 
 private:
     class Implementation;

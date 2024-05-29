@@ -6,14 +6,9 @@
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
-#include <utils/helpers/string_helper.h>
+#include <domain/document_object.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/tools/run_once.h>
-
-#include <QColor>
-#include <QLocale>
-#include <QVariant>
-#include <QXmlStreamReader>
 
 
 namespace BusinessLayer {
@@ -22,18 +17,8 @@ class ScreenplayTextModelTextItem::Implementation
 {
 public:
     //
-    // Ридонли свойства, которые формируются по ходу работы со сценарием
+    // Ридонли свойства, которые формируются по ходу работы
     //
-
-    /**
-     * @brief Количество слов
-     */
-    int wordsCount = 0;
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount;
 
     /**
      * @brief Длительность сцены
@@ -49,16 +34,6 @@ ScreenplayTextModelTextItem::ScreenplayTextModelTextItem(const ScreenplayTextMod
 
 ScreenplayTextModelTextItem::~ScreenplayTextModelTextItem() = default;
 
-int ScreenplayTextModelTextItem::wordsCount() const
-{
-    return d->wordsCount;
-}
-
-QPair<int, int> ScreenplayTextModelTextItem::charactersCount() const
-{
-    return d->charactersCount;
-}
-
 std::chrono::milliseconds ScreenplayTextModelTextItem::duration() const
 {
     return d->duration;
@@ -72,7 +47,7 @@ void ScreenplayTextModelTextItem::updateCounters(bool _force)
     }
 
     //
-    // Не учитываем некоторые блоки
+    // Не учитываем биты
     //
     if (paragraphType() == TextParagraphType::BeatHeading) {
         return;
@@ -83,7 +58,7 @@ void ScreenplayTextModelTextItem::updateCounters(bool _force)
     // счётчиков, не делаем лишнюю работу
     //
     if (!_force
-        && (d->wordsCount != 0 || d->charactersCount != QPair<int, int>()
+        && (wordsCount() != 0 || charactersCount() != QPair<int, int>()
             || d->duration != std::chrono::milliseconds{ 0 })
         && !isChanged()) {
         return;
@@ -92,7 +67,7 @@ void ScreenplayTextModelTextItem::updateCounters(bool _force)
     //
     // Считаем
     //
-    const auto wordsCount = TextHelper::wordsCount(text());
+    const auto currentWordsCount = TextHelper::wordsCount(text());
     //
     const auto charactersCountFirst = text().length() - text().count(' ');
     const auto charactersCountSecond
@@ -106,19 +81,18 @@ void ScreenplayTextModelTextItem::updateCounters(bool _force)
     //
     // Если не было изменений, то и ладно, выходим тогда
     //
-    if (d->wordsCount == wordsCount
-        && d->charactersCount == QPair<int, int>(charactersCountFirst, charactersCountSecond)
+    if (wordsCount() == currentWordsCount
+        && charactersCount() == QPair<int, int>(charactersCountFirst, charactersCountSecond)
         && d->duration == duration) {
         return;
     }
 
-    d->wordsCount = wordsCount;
-    d->charactersCount.first = charactersCountFirst;
-    d->charactersCount.second = charactersCountSecond;
     d->duration = duration;
+    setWordsCount(currentWordsCount);
+    setCharactersCount(QPair<int, int>(charactersCountFirst, charactersCountSecond));
 
     //
-    // Помещаем изменённым для пересчёта хронометража в родительском элементе
+    // Помечаем изменённым для пересчёта счетчиков в родительском элементе
     //
     markChanged();
 }
@@ -134,11 +108,6 @@ QVariant ScreenplayTextModelTextItem::data(int _role) const
         return TextModelTextItem::data(_role);
     }
     }
-}
-
-void ScreenplayTextModelTextItem::handleChange()
-{
-    updateCounters();
 }
 
 } // namespace BusinessLayer
