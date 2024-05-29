@@ -430,6 +430,7 @@ ApplicationManager::Implementation::~Implementation()
 void ApplicationManager::Implementation::initDockMenu()
 {
 #ifdef Q_OS_MAC
+    Log::info("Init dock menu");
     //
     // Добавляем в маке возможность открытия ещё одного окна приложения
     //
@@ -2200,7 +2201,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     // Загрузим шрифты в базу шрифтов программы, если их там ещё нет
     //
-    Log::info("Loading fonts");
+    Log::info("Loading fonts [embedded]");
     //
     // ... встроенные в бинарник
     //
@@ -2243,6 +2244,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     // ... скаченные
     //
+    Log::info("Loading fonts [downloaded]");
     const auto fontsFolderPath
         = QString("%1/fonts")
               .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
@@ -2254,11 +2256,13 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     // Инициилизируем данные после подгрузки шрифтов, чтобы они сразу подхватились системой
     //
+    Log::info("Init application managers");
     d.reset(new Implementation(this));
 
     //
     // Настроим соединения с менеджерами и представлением приложения
     //
+    Log::info("Init business logic between managers");
     initConnections();
 }
 

@@ -100,11 +100,14 @@ void Application::setApplicationManager(QObject* _manager)
 
 void Application::startUp()
 {
+    qInfo() << "Set up window title";
     setWindowIcon(QIcon(":/images/logo"));
 
+    qInfo() << "Set up application manager";
     auto manager = qobject_cast<ManagementLayer::IApplicationManager*>(d->applicationManager);
     if (manager == nullptr) {
-        qCritical() << "Can't start application without application manager";
+        qCritical() << "Application manager is not initialized. "
+                       "Can't start application without application manager";
         exit(1);
     }
 
@@ -123,6 +126,7 @@ void Application::startUp()
         d->fileToOpen = arguments.constFirst();
     }
 
+    qInfo() << "Starting application";
     manager->exec(d->fileToOpen);
 }
 
