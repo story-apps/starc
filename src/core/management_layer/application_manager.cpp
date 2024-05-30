@@ -62,6 +62,7 @@
 #include <QLockFile>
 #include <QMenu>
 #include <QProcess>
+#include <QRawFont>
 #include <QScopedPointer>
 #include <QShortcut>
 #include <QSoundEffect>
@@ -593,6 +594,13 @@ void ApplicationManager::Implementation::sendCrashInfo()
 
 void ApplicationManager::Implementation::loadMissedFonts()
 {
+    //
+    // Загружаем недостающие шрифты только если онбординг уже прошёл
+    //
+    if (settingsValue(DataStorageLayer::kApplicationConfiguredKey).toBool() == false) {
+        return;
+    }
+
     //
     // Сформировать список ссылок для загрузки
     //
@@ -2250,6 +2258,13 @@ ApplicationManager::ApplicationManager(QObject* _parent)
               .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     const auto fonts = QDir(fontsFolderPath).entryInfoList(QDir::Files);
     for (const auto& font : fonts) {
+        const auto rawFont = QRawFont(font.absoluteFilePath(), 12);
+        if (!rawFont.isValid()) {
+            Log::warning("Font %1 is invalid and will be removed", font.fileName());
+            QFile::remove(font.absoluteFilePath());
+            continue;
+        }
+
         fontDatabase.addApplicationFont(font.absoluteFilePath());
     }
 
