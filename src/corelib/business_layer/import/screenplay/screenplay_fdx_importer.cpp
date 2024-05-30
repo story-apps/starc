@@ -133,6 +133,10 @@ ScreenplayAbstractImporter::Documents ScreenplayFdxImporter::importDocuments(
 QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayFdxImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
+    if (_options.importText == false) {
+        return {};
+    }
+
     Screenplay result;
     result.name = QFileInfo(_options.filePath).completeBaseName();
 

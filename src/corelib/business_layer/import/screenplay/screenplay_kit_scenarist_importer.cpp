@@ -606,6 +606,10 @@ ScreenplayAbstractImporter::Documents ScreenplayKitScenaristImporter::importDocu
 QVector<ScreenplayAbstractImporter::Screenplay> ScreenplayKitScenaristImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
 {
+    if (_options.importText == false) {
+        return {};
+    }
+
     QVector<Screenplay> result;
 
     {
