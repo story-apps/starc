@@ -265,7 +265,7 @@ void ComicBookTextView::Implementation::reconfigureTemplate(bool _withModelReini
 
         auto typeItem = new QStandardItem(toDisplayString(type));
         typeItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        typeItem->setData(shortcutsManager.shortcut(type), Qt::WhatsThisRole);
+        typeItem->setData(shortcutsManager.shortcut(type), Qt::ToolTipRole);
         typeItem->setData(static_cast<int>(type), kTypeDataRole);
         paragraphTypesModel->appendRow(typeItem);
     }
