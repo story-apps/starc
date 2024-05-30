@@ -10,6 +10,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScreen>
+#include <QToolTip>
 #include <QVariantAnimation>
 #include <QWidgetAction>
 
@@ -530,6 +531,24 @@ void ContextMenu::processTextColorChange()
 {
     for (auto submenu : std::as_const(d->actionToSubmenu)) {
         submenu->setTextColor(textColor());
+    }
+}
+
+bool ContextMenu::event(QEvent* _event)
+{
+    switch (static_cast<int>(_event->type())) {
+    case QEvent::ToolTip: {
+        const auto event = static_cast<QHelpEvent*>(_event);
+        const auto action = d->actionForPosition(event->pos());
+        if (action != nullptr) {
+            QToolTip::showText(event->globalPos(), action->toolTip());
+        }
+        return true;
+    }
+
+    default: {
+        return Card::event(_event);
+    }
     }
 }
 

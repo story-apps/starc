@@ -40,6 +40,11 @@ protected:
     void processTextColorChange() override;
 
     /**
+     * @brief Переопределяем для отображения всплывающей подсказки
+     */
+    bool event(QEvent* _event) override;
+
+    /**
      * @brief Реализуем ручную отрисовку пунктов меню
      */
     void paintEvent(QPaintEvent* _event) override;
