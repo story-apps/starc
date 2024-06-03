@@ -694,7 +694,23 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
             }
         }
         setTextCursor(cursor);
-    } else if (_event == QKeySequence::SelectAll) {
+    }
+    //
+    // ... перевод к концу документа
+    //
+    else if (_event == QKeySequence::MoveToEndOfDocument) {
+        auto cursor = textCursor();
+        cursor.movePosition(QTextCursor::End);
+        while (!cursor.atStart() && !cursor.block().isVisible()) {
+            cursor.movePosition(QTextCursor::PreviousBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock);
+        }
+        setTextCursor(cursor);
+    }
+    //
+    // ... выделить все
+    //
+    else if (_event == QKeySequence::SelectAll) {
         auto cursor = textCursor();
         cursor.select(QTextCursor::Document);
         setTextCursor(cursor);
