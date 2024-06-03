@@ -3245,8 +3245,19 @@ void ApplicationManager::initConnections()
                 //
                 qDeleteAll(temporaryDocuments);
             });
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentReceived,
-            d->projectManager.data(), &ProjectManager::mergeDocumentInfo);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentReceived, this,
+            [this](const Domain::DocumentInfo& _documentInfo) {
+                //
+                // Мержим изменения только в том случае, если пользователь работает с облачным
+                // проектом, если сохранить проект локально, то гуиды документов будут совпадать и
+                // поэтому изменения будут пытаться смержиться с локальным проектом
+                //
+                if (d->projectsManager->currentProject()->isLocal()) {
+                    return;
+                }
+
+                d->projectManager->mergeDocumentInfo(_documentInfo);
+            });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::documentChanged,
             d->projectManager.data(), &ProjectManager::applyDocumentChanges);
     connect(d->projectManager.data(), &ProjectManager::contentsChanged, this,
