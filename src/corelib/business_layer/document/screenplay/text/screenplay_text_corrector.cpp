@@ -974,13 +974,29 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
         if (blockFormat.boolProperty(TextBlockStyle::PropertyIsCorrection)) {
             blockItems[currentBlockInfo.number] = {};
             cursor.setPosition(block.position());
-            if (cursor.block().next() != cursor.document()->end()) {
-                cursor.movePosition(TextCursor::EndOfBlock, TextCursor::KeepAnchor);
-                cursor.movePosition(TextCursor::NextCharacter, TextCursor::KeepAnchor);
-            } else {
+            QTextBlockFormat targetBlockFormat;
+            auto targetBlockType = blockType;
+            TextBlockData* targetBlockData = nullptr;
+            auto fillTargetBlockInfo = [&cursor, &targetBlockFormat, &targetBlockType,
+                                        &targetBlockData] {
+                targetBlockFormat = cursor.blockFormat();
+                targetBlockType = TextBlockStyle::forBlock(cursor);
+                if (cursor.block().userData() != nullptr) {
+                    targetBlockData
+                        = new TextBlockData(static_cast<TextBlockData*>(cursor.block().userData()));
+                    cursor.block().setUserData(nullptr);
+                }
+            };
+            if (cursor.block() != cursor.document()->begin()) {
                 cursor.movePosition(TextCursor::PreviousCharacter);
+                fillTargetBlockInfo();
                 cursor.movePosition(TextCursor::NextBlock, TextCursor::KeepAnchor);
                 cursor.movePosition(TextCursor::EndOfBlock, TextCursor::KeepAnchor);
+            } else if (cursor.block() != cursor.document()->end()) {
+                cursor.movePosition(TextCursor::NextCharacter);
+                fillTargetBlockInfo();
+                cursor.movePosition(TextCursor::PreviousCharacter, TextCursor::KeepAnchor);
+                cursor.movePosition(TextCursor::StartOfBlock, TextCursor::KeepAnchor);
             }
             if (cursor.hasSelection()) {
                 cursor.deleteChar();
@@ -988,14 +1004,15 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                 // ... восстанавливаем формат результирующего блока, т.к. в блоке будет сохранятся
                 //     форматирование блока удалённой декорации
                 //
-                const auto blockType = TextBlockStyle::forBlock(cursor);
                 const auto& blockStyle = TemplatesFacade::screenplayTemplate(q->templateId())
-                                             .paragraphStyle(blockType);
+                                             .paragraphStyle(targetBlockType);
                 cursor.setBlockCharFormat(blockStyle.charFormat());
+                cursor.setBlockFormat(targetBlockFormat);
+                cursor.block().setUserData(targetBlockData);
             } else {
-                QTextBlockFormat breakStartFormat = cursor.blockFormat();
-                breakStartFormat.clearProperty(TextBlockStyle::PropertyIsCorrection);
-                cursor.setBlockFormat(breakStartFormat);
+                auto blockFormat = cursor.blockFormat();
+                blockFormat.clearProperty(TextBlockStyle::PropertyIsCorrection);
+                cursor.setBlockFormat(blockFormat);
             }
             //
             // ... и продолжим с предыдущего блока, т.к. тут мог быть разрыв в реплике например
