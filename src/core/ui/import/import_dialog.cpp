@@ -31,6 +31,11 @@ public:
      */
     Domain::DocumentObjectType importInType() const;
 
+    /**
+     * @brief Обновить лейбл галочки импортирования текста в зависимости от текущего типа документа
+     */
+    void updateImportTextLabel();
+
 
     const QString importFilePath;
 
@@ -97,6 +102,27 @@ Domain::DocumentObjectType ImportDialog::Implementation::importInType() const
                                Domain::DocumentObjectType::Undefined);
 }
 
+void ImportDialog::Implementation::updateImportTextLabel()
+{
+    switch (importInType()) {
+    case Domain::DocumentObjectType::Audioplay:
+    case Domain::DocumentObjectType::ComicBook:
+    case Domain::DocumentObjectType::Screenplay:
+    case Domain::DocumentObjectType::Stageplay: {
+        importText->setText(tr("Import script text"));
+        break;
+    }
+    case Domain::DocumentObjectType::Novel: {
+        importText->setText(tr("Import novel text"));
+        break;
+    }
+    default: {
+        importText->setText(tr("Import text"));
+        break;
+    }
+    }
+}
+
 
 // ****
 
@@ -134,7 +160,7 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     connect(d->importButton, &Button::clicked, this, &ImportDialog::importRequested);
     connect(d->cancelButton, &Button::clicked, this, &ImportDialog::canceled);
 
-    auto updateParametersVisibility = [this] {
+    auto updateParameters = [this] {
         auto isImportCharactersVisible = true;
         auto isImportLocationsVisible = true;
         auto isKeepSceneNumbersVisible = true;
@@ -161,9 +187,11 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
         d->importLocations->setVisible(isImportLocationsVisible);
         d->keepSceneNumbers->setVisible(isKeepSceneNumbersVisible);
         d->documentsTitle->setVisible(isImportCharactersVisible || isImportLocationsVisible);
+
+        d->updateImportTextLabel();
     };
 
-    connect(d->documentType, &ComboBox::currentIndexChanged, this, updateParametersVisibility);
+    connect(d->documentType, &ComboBox::currentIndexChanged, this, updateParameters);
 }
 
 ImportDialog::~ImportDialog() = default;
@@ -217,7 +245,7 @@ void ImportDialog::updateTranslations()
     d->importCharacters->setText(tr("Import characters"));
     d->importLocations->setText(tr("Import locations"));
     d->textTitle->setText(tr("Text"));
-    d->importText->setText(tr("Import text"));
+    d->updateImportTextLabel();
     d->keepSceneNumbers->setText(tr("Keep scene numbers"));
 
     d->importButton->setText(tr("Import"));
