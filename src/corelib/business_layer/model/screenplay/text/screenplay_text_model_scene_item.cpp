@@ -185,6 +185,7 @@ void ScreenplayTextModelSceneItem::copyFrom(TextModelItem* _item)
 
     auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(_item);
     d->plannedDuration = sceneItem->d->plannedDuration;
+    d->resources = sceneItem->d->resources;
 
     TextModelGroupItem::copyFrom(_item);
 }
@@ -196,8 +197,8 @@ bool ScreenplayTextModelSceneItem::isEqual(TextModelItem* _item) const
     }
 
     const auto sceneItem = static_cast<ScreenplayTextModelSceneItem*>(_item);
-    return TextModelGroupItem::isEqual(_item)
-        && d->plannedDuration == sceneItem->d->plannedDuration;
+    return TextModelGroupItem::isEqual(_item) && d->plannedDuration == sceneItem->d->plannedDuration
+        && d->resources == sceneItem->d->resources;
 }
 
 bool ScreenplayTextModelSceneItem::isFilterAccepted(const QString& _text, bool _isCaseSensitive,
