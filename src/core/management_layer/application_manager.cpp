@@ -17,6 +17,15 @@
 #include <cloud/cloud_service_manager.h>
 #endif
 
+#undef PRINT_DOCUMENT_HISTORY
+#ifdef PRINT_DOCUMENT_HISTORY
+#include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <data_layer/mapper/document_change_mapper.h>
+#include <data_layer/mapper/mapper_facade.h>
+#include <domain/objects_builder.h>
+#endif
+
 #include <business_layer/model/abstract_model.h>
 #include <data_layer/database.h>
 #include <data_layer/storage/settings_storage.h>
@@ -1967,6 +1976,22 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     // Запускаем писательскую сессию
     //
     writingSessionManager->startSession(currentProject->uuid(), currentProject->name());
+
+#ifdef PRINT_DOCUMENT_HISTORY
+    const QUuid uuid("{c6b12deb-81c1-4f83-a70b-7963dd0e33d3}");
+    BusinessLayer::ScreenplayTextModel model;
+    BusinessLayer::ScreenplayInformationModel informationModel;
+    model.setInformationModel(&informationModel);
+    auto document = Domain::ObjectsBuilder::createDocument(
+        {}, {}, Domain::DocumentObjectType::ScreenplayText, {}, {});
+    model.setDocument(document);
+    const auto changes = DataMappingLayer::MapperFacade::documentChangeMapper()->findAll(uuid);
+    for (int index = 0; index < changes.size(); ++index) {
+        const auto change = changes[index];
+        model.applyDocumentChanges({ change->redoPatch() });
+    }
+    qDebug() << qUtf8Printable(model.document()->content());
+#endif
 }
 
 void ApplicationManager::Implementation::closeCurrentProject()
