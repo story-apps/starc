@@ -1598,8 +1598,9 @@ void TextDocument::cleanParagraphType(const TextCursor& _cursor)
     // Удалить завершающий блок папки
     //
     cursor.movePosition(QTextCursor::NextBlock);
-
+    //
     // ... открытые группы на пути поиска необходимого для обновления блока
+    //
     int openedGroups = 0;
     bool isFooterUpdated = false;
     do {
@@ -1609,11 +1610,32 @@ void TextDocument::cleanParagraphType(const TextCursor& _cursor)
             || currentType == TextParagraphType::PartFooter
             || currentType == TextParagraphType::ChapterFooter) {
             if (openedGroups == 0) {
+                //
+                // ... переходим к предыдущему блоку, который должен остаться на месте
+                //
                 cursor.movePosition(QTextCursor::PreviousBlock);
                 cursor.movePosition(QTextCursor::EndOfBlock);
+                //
+                // ... сохраняем данные футера, чтобы восстановить их после удаления, делать это
+                // нужно для кейса с пустыми блоками, Qt в таком случае оставляет в результирующем
+                // блоке данные из второго блока, нам же нужно удалить именно второй блок, оставив
+                // данные первого
+                //
+                TextBlockData* blockData = nullptr;
+                if (cursor.block().userData() != nullptr) {
+                    blockData
+                        = new TextBlockData(static_cast<TextBlockData*>(cursor.block().userData()));
+                }
+                //
+                // ... выделяем блок футера, который нужно удалить и удаляем его
+                //
                 cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 cursor.deleteChar();
+                //
+                // ... восстанавливаем данные блока, который шёл перед футером
+                //
+                cursor.block().setUserData(blockData);
 
                 isFooterUpdated = true;
             } else {
@@ -2228,13 +2250,13 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 const auto textItem = static_cast<TextModelTextItem*>(item);
                 //
                 // ... т.к. при удалении папки удаляются и заголовок и конец, но удаляются они
-                //     последовательно сверху вниз, то удалять непосредственно папку будем,
-                //     когда дойдём до обработки именно конца папки
+                //     снизу вверх (см. rbegin в цикле), то удалять непосредственно группу будем,
+                //     когда дойдём до обработки её заголовка
                 //
-                needToDeleteParent = textItem->paragraphType() == TextParagraphType::ActFooter
-                    || textItem->paragraphType() == TextParagraphType::SequenceFooter
-                    || textItem->paragraphType() == TextParagraphType::PartFooter
-                    || textItem->paragraphType() == TextParagraphType::ChapterFooter
+                needToDeleteParent = textItem->paragraphType() == TextParagraphType::ActHeading
+                    || textItem->paragraphType() == TextParagraphType::SequenceHeading
+                    || textItem->paragraphType() == TextParagraphType::PartHeading
+                    || textItem->paragraphType() == TextParagraphType::ChapterHeading
                     || textItem->paragraphType() == TextParagraphType::SceneHeading
                     || textItem->paragraphType() == TextParagraphType::BeatHeading
                     || textItem->paragraphType() == TextParagraphType::PageHeading
