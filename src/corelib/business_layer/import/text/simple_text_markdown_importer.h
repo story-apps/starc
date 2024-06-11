@@ -1,6 +1,6 @@
 #pragma once
 
-#include "simple_text_abstract_importer.h"
+#include "abstract_simple_text_importer.h"
 
 
 namespace BusinessLayer {
@@ -8,7 +8,7 @@ namespace BusinessLayer {
 /**
  * @brief Импортер текста из markdown файла
  */
-class CORE_LIBRARY_EXPORT SimpleTextMarkdownImporter : public SimpleTextAbstractImporter
+class CORE_LIBRARY_EXPORT SimpleTextMarkdownImporter : public AbstractSimpleTextImporter
 {
 public:
     SimpleTextMarkdownImporter() = default;

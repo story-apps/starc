@@ -2,7 +2,7 @@
 
 #include "abstract_screenplay_importer.h"
 
-#include <corelib/business_layer/import/abstract_markdown_importer.h>
+#include <business_layer/import/abstract_fountain_importer.h>
 
 #include <QScopedPointer>
 
@@ -13,7 +13,7 @@ namespace BusinessLayer {
  * @brief Импортер сценария из файлов fountain
  */
 class CORE_LIBRARY_EXPORT ScreenplayFountainImporter : public AbstractScreenplayImporter,
-                                                       public AbstractMarkdownImporter
+                                                       public AbstractFountainImporter
 {
     /*
                   . .
@@ -39,23 +39,25 @@ public:
     ~ScreenplayFountainImporter() override;
 
     /**
-     * @brief Импорт докуметов (всех, кроме сценариев)
-     */
-    Documents importDocuments(const ScreenplayImportOptions& _options) const override;
-
-    /**
      * @brief Импортировать сценарии
      */
     QVector<Screenplay> importScreenplays(const ScreenplayImportOptions& _options) const override;
 
     /**
-     * @brief Импортировать сценарий из заданного текста
+     * @brief Получить основной текст сценария в формате xml из заданного текста
      */
-    Screenplay importScreenplay(const QString& _screenplayText) const;
+    Screenplay screenplayText(const QString& _screenplayText) const;
 
-private:
-    class Implementation;
-    QScopedPointer<Implementation> d;
+protected:
+    /**
+     * @brief Получить имя персонажа
+     */
+    QString characterName(const QString& _text) const override;
+
+    /**
+     * @brief Получить название локации
+     */
+    QString locationName(const QString& _text) const override;
 };
 
 } // namespace BusinessLayer

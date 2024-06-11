@@ -12,7 +12,7 @@
 
 namespace BusinessLayer {
 
-SimpleTextAbstractImporter::Document SimpleTextMarkdownImporter::importDocument(
+AbstractSimpleTextImporter::Document SimpleTextMarkdownImporter::importDocument(
     const SimpleTextImportOptions& _options) const
 {
     //
@@ -34,7 +34,7 @@ SimpleTextAbstractImporter::Document SimpleTextMarkdownImporter::importDocument(
     return textDocument;
 }
 
-SimpleTextAbstractImporter::Document SimpleTextMarkdownImporter::importDocument(
+AbstractSimpleTextImporter::Document SimpleTextMarkdownImporter::importDocument(
     const QString& _text) const
 {
     if (_text.simplified().isEmpty()) {

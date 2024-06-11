@@ -253,7 +253,7 @@ static QString clearBlockText(TextParagraphType _blockType, const QString& _bloc
 } // namespace
 
 AbstractScreenplayImporter::Documents ScreenplayDocumentImporter::importDocuments(
-    const ScreenplayImportOptions& _options) const
+    const ImportOptions& _options) const
 {
     //
     // Открываем файл

@@ -11,10 +11,20 @@
 #include <QEvent>
 #include <QFileInfo>
 #include <QGridLayout>
+#include <QSettings>
 #include <QStringListModel>
 
 
 namespace Ui {
+
+namespace {
+const QString kGroupKey = "widgets/import-dialog/";
+const QString kDocumentType = kGroupKey + "document-type";
+const QString kImportCharacters = kGroupKey + "import-characters";
+const QString kImportLocations = kGroupKey + "import-locations";
+const QString kImportText = kGroupKey + "import-text";
+const QString kKeepSceneNumbers = kGroupKey + "keep-scene-numbers";
+} // namespace
 
 class ImportDialog::Implementation
 {
@@ -93,7 +103,13 @@ void ImportDialog::Implementation::setImportDocumentTypes(
     }
     auto documentTypesModel = new QStringListModel(list);
     documentType->setModel(documentTypesModel);
-    documentType->setCurrentIndex(documentTypesModel->index(0, 0));
+
+    QSettings settings;
+    if (const int index = list.indexOf(settings.value(kDocumentType, "").toString()); index >= 0) {
+        documentType->setCurrentIndex(documentType->model()->index(index, 0));
+    } else {
+        documentType->setCurrentIndex(documentType->model()->index(0, 0));
+    }
 }
 
 Domain::DocumentObjectType ImportDialog::Implementation::importInType() const
@@ -165,16 +181,23 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
         auto isImportLocationsVisible = true;
         auto isKeepSceneNumbersVisible = true;
         switch (d->importInType()) {
-        case Domain::DocumentObjectType::Screenplay: {
-            //
-            // ... всё видимое
-            //
+        case Domain::DocumentObjectType::Audioplay:
+        case Domain::DocumentObjectType::ComicBook:
+        case Domain::DocumentObjectType::Stageplay: {
+            isImportLocationsVisible = false;
+            isKeepSceneNumbersVisible = false;
             break;
         }
         case Domain::DocumentObjectType::Novel: {
             isImportCharactersVisible = false;
             isImportLocationsVisible = false;
             isKeepSceneNumbersVisible = false;
+            break;
+        }
+        case Domain::DocumentObjectType::Screenplay: {
+            //
+            // ... всё видимое
+            //
             break;
         }
         default: {
@@ -192,9 +215,23 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     };
 
     connect(d->documentType, &ComboBox::currentIndexChanged, this, updateParameters);
+
+    QSettings settings;
+    d->importCharacters->setChecked(settings.value(kImportCharacters, true).toBool());
+    d->importLocations->setChecked(settings.value(kImportLocations, true).toBool());
+    d->importText->setChecked(settings.value(kImportText, true).toBool());
+    d->keepSceneNumbers->setChecked(settings.value(kKeepSceneNumbers, false).toBool());
 }
 
-ImportDialog::~ImportDialog() = default;
+ImportDialog::~ImportDialog()
+{
+    QSettings settings;
+    settings.setValue(kDocumentType, d->documentType->currentText());
+    settings.setValue(kImportCharacters, d->importCharacters->isChecked());
+    settings.setValue(kImportLocations, d->importLocations->isChecked());
+    settings.setValue(kImportText, d->importText->isChecked());
+    settings.setValue(kKeepSceneNumbers, d->keepSceneNumbers->isChecked());
+}
 
 BusinessLayer::ImportOptions ImportDialog::importOptions() const
 {

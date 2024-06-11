@@ -1260,7 +1260,7 @@ void NovelOutlineEdit::insertFromMimeData(const QMimeData* _source)
         //       не воспринимался как титульная страница
         //
         BusinessLayer::NovelMarkdownImporter markdownImporter;
-        textToInsert = markdownImporter.importNovel("\n" + _source->text()).text;
+        textToInsert = markdownImporter.novelText("\n" + _source->text()).text;
 
         //
         // Преобразовываем все текстовые блоки в биты

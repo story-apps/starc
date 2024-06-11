@@ -12,10 +12,10 @@ struct ImportOptions;
 /**
  * @brief Базовый класс для реализации импортера документов
  */
-class CORE_LIBRARY_EXPORT NovelAbstractImporter
+class CORE_LIBRARY_EXPORT AbstractNovelImporter
 {
 public:
-    virtual ~NovelAbstractImporter() = default;
+    virtual ~AbstractNovelImporter() = default;
 
     /**
      * @brief Вспомогательные структуры для хранения данных импортируемых документов
@@ -28,7 +28,7 @@ public:
     /**
      * @brief Импорт сценариев из заданного документа
      */
-    virtual Document importNovels(const ImportOptions& _options) const = 0;
+    virtual Document importNovel(const ImportOptions& _options) const = 0;
 };
 
 } // namespace BusinessLayer

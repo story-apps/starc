@@ -55,7 +55,7 @@ QString readScript(const QString& _filePath)
 } // namespace
 
 AbstractScreenplayImporter::Documents ScreenplayCeltxImporter::importDocuments(
-    const ScreenplayImportOptions& _options) const
+    const ImportOptions& _options) const
 {
     //
     // Открываем файл

@@ -3165,6 +3165,105 @@ void ProjectManager::addLocation(const QString& _name, const QString& _content)
     locationsModel->createLocation(_name, _content.toUtf8());
 }
 
+void ProjectManager::addAudioplay(const QString& _name, const QString& _titlePage,
+                                  const QString& _text)
+{
+    //
+    // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
+    //
+
+    using namespace Domain;
+
+    auto createItem = [](DocumentObjectType _type, const QString& _name) {
+        auto uuid = QUuid::createUuid();
+        const auto visible = true;
+        const auto readOnly = false;
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly);
+    };
+
+    auto rootItem = d->projectStructureModel->itemForIndex({});
+    auto audioplayItem = createItem(DocumentObjectType::Audioplay, _name);
+    d->projectStructureModel->appendItem(audioplayItem, rootItem);
+
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::AudioplayTitlePage, tr("Title page")), audioplayItem,
+        _titlePage.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::AudioplaySynopsis, tr("Synopsis")), audioplayItem, {});
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::AudioplayText, tr("Audioplay")), audioplayItem,
+        _text.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::AudioplayStatistics, tr("Statistics")), audioplayItem, {});
+}
+
+void ProjectManager::addComicBook(const QString& _name, const QString& _titlePage,
+                                  const QString& _text)
+{
+    //
+    // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
+    //
+
+    using namespace Domain;
+
+    auto createItem = [](DocumentObjectType _type, const QString& _name) {
+        auto uuid = QUuid::createUuid();
+        const auto visible = true;
+        const auto readOnly = false;
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly);
+    };
+
+    auto rootItem = d->projectStructureModel->itemForIndex({});
+    auto comicbookItem = createItem(DocumentObjectType::ComicBook, _name);
+    d->projectStructureModel->appendItem(comicbookItem, rootItem);
+
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::ComicBookTitlePage, tr("Title page")), comicbookItem,
+        _titlePage.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::ComicBookSynopsis, tr("Synopsis")), comicbookItem, {});
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::ComicBookText, tr("Comic book")), comicbookItem,
+        _text.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::ComicBookStatistics, tr("Statistics")), comicbookItem, {});
+}
+
+void ProjectManager::addNovel(const QString& _name, const QString& _text)
+{
+    //
+    // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
+    //
+
+    using namespace Domain;
+
+    auto createItem = [](DocumentObjectType _type, const QString& _name) {
+        auto uuid = QUuid::createUuid();
+        const auto visible = true;
+        const auto readOnly = false;
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly);
+    };
+
+    auto rootItem = d->projectStructureModel->itemForIndex({});
+    auto novelItem = createItem(DocumentObjectType::Novel, _name);
+    d->projectStructureModel->appendItem(novelItem, rootItem);
+
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::NovelTitlePage, tr("Title page")), novelItem, {});
+    auto synopsisItem = createItem(DocumentObjectType::NovelSynopsis, tr("Synopsis"));
+    d->projectStructureModel->appendItem(synopsisItem, novelItem, {});
+    d->projectStructureModel->appendItem(createItem(DocumentObjectType::NovelText, tr("Novel")),
+                                         novelItem, _text.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::NovelStatistics, tr("Statistics")), novelItem, {});
+    //
+    // Вставляем план после всех документов, т.к. он является алиасом к документу романа
+    // и чтобы его сконструировать, нужны другие документы
+    //
+    d->projectStructureModel->insertItem(
+        createItem(DocumentObjectType::NovelOutline, tr("Outline")), synopsisItem, {});
+}
+
 void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePage,
                                    const QString& _synopsis, const QString& _treatment,
                                    const QString& _text)
@@ -3205,12 +3304,8 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
         _treatment.toUtf8());
 }
 
-void ProjectManager::setCurrentDocumentExportAvailable(bool _available)
-{
-    d->isCurrentDocumentExportAvailable = _available;
-};
-
-void ProjectManager::addNovel(const QString& _name, const QString& _text)
+void ProjectManager::addStageplay(const QString& _name, const QString& _titlePage,
+                                  const QString& _text)
 {
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
@@ -3226,23 +3321,19 @@ void ProjectManager::addNovel(const QString& _name, const QString& _text)
     };
 
     auto rootItem = d->projectStructureModel->itemForIndex({});
-    auto novelItem = createItem(DocumentObjectType::Novel, _name);
-    d->projectStructureModel->appendItem(novelItem, rootItem);
+    auto stageplayItem = createItem(DocumentObjectType::Stageplay, _name);
+    d->projectStructureModel->appendItem(stageplayItem, rootItem);
 
     d->projectStructureModel->appendItem(
-        createItem(DocumentObjectType::NovelTitlePage, tr("Title page")), novelItem, {});
-    auto synopsisItem = createItem(DocumentObjectType::NovelSynopsis, tr("Synopsis"));
-    d->projectStructureModel->appendItem(synopsisItem, novelItem, {});
-    d->projectStructureModel->appendItem(createItem(DocumentObjectType::NovelText, tr("Novel")),
-                                         novelItem, _text.toUtf8());
+        createItem(DocumentObjectType::StageplayTitlePage, tr("Title page")), stageplayItem,
+        _titlePage.toUtf8());
     d->projectStructureModel->appendItem(
-        createItem(DocumentObjectType::NovelStatistics, tr("Statistics")), novelItem, {});
-    //
-    // Вставляем план после всех документов, т.к. он является алиасом к документу романа
-    // и чтобы его сконструировать, нужны другие документы
-    //
-    d->projectStructureModel->insertItem(
-        createItem(DocumentObjectType::NovelOutline, tr("Outline")), synopsisItem, {});
+        createItem(DocumentObjectType::StageplaySynopsis, tr("Synopsis")), stageplayItem, {});
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::StageplayText, tr("Stageplay")), stageplayItem,
+        _text.toUtf8());
+    d->projectStructureModel->appendItem(
+        createItem(DocumentObjectType::StageplayStatistics, tr("Statistics")), stageplayItem, {});
 }
 
 BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
@@ -3361,6 +3452,11 @@ Domain::DocumentObject* ProjectManager::currentDocument() const
 
     return d->view.activeModel->document();
 }
+
+void ProjectManager::setCurrentDocumentExportAvailable(bool _available)
+{
+    d->isCurrentDocumentExportAvailable = _available;
+};
 
 QVector<Domain::DocumentObject*> ProjectManager::unsyncedDocuments() const
 {
@@ -3684,6 +3780,26 @@ void ProjectManager::applyDocumentChanges(const Domain::DocumentInfo& _documentI
         changes.append(change.redoPatch);
     }
     documentModel->applyDocumentChanges(changes);
+}
+
+QVector<Domain::DocumentChangeObject*> ProjectManager::unsyncedChanges(
+    const QUuid& _documentUuid) const
+{
+    const auto unsyncedChanges
+        = DataStorageLayer::StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(
+            _documentUuid);
+    d->changesForSync[_documentUuid] = unsyncedChanges;
+    return unsyncedChanges;
+}
+
+void ProjectManager::markChangesSynced(const QUuid& _documentUuid)
+{
+    const auto changes = d->changesForSync[_documentUuid];
+    for (auto change : changes) {
+        change->setSynced(true);
+        DataStorageLayer::StorageFacade::documentChangeStorage()->updateDocumentChange(change);
+    }
+    d->changesForSync.remove(_documentUuid);
 }
 
 void ProjectManager::planDocumentSyncing(const QUuid& _documentUuid)
@@ -4050,26 +4166,6 @@ void ProjectManager::setGeneratedImage(const QPixmap& _image)
     if (view != nullptr) {
         view->setGeneratedImage(_image);
     }
-}
-
-QVector<Domain::DocumentChangeObject*> ProjectManager::unsyncedChanges(
-    const QUuid& _documentUuid) const
-{
-    const auto unsyncedChanges
-        = DataStorageLayer::StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(
-            _documentUuid);
-    d->changesForSync[_documentUuid] = unsyncedChanges;
-    return unsyncedChanges;
-}
-
-void ProjectManager::markChangesSynced(const QUuid& _documentUuid)
-{
-    const auto changes = d->changesForSync[_documentUuid];
-    for (auto change : changes) {
-        change->setSynced(true);
-        DataStorageLayer::StorageFacade::documentChangeStorage()->updateDocumentChange(change);
-    }
-    d->changesForSync.remove(_documentUuid);
 }
 
 bool ProjectManager::event(QEvent* _event)

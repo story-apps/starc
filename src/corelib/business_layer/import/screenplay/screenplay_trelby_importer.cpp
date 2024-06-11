@@ -17,7 +17,7 @@
 namespace BusinessLayer {
 
 AbstractScreenplayImporter::Documents ScreenplayTrelbyImporter::importDocuments(
-    const ScreenplayImportOptions& _options) const
+    const ImportOptions& _options) const
 {
     //
     // Открываем файл
