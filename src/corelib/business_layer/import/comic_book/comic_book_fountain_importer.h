@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstract_audioplay_importer.h"
+#include "abstract_comic_book_importer.h"
 
 #include <business_layer/import/abstract_fountain_importer.h>
 
@@ -10,43 +10,24 @@
 namespace BusinessLayer {
 
 /**
- * @brief Импортер аудиопьес из файлов fountain
+ * @brief Импортер комиксов из файлов fountain
  */
-class CORE_LIBRARY_EXPORT AudioplayFountainImporter : public AbstractAudioplayImporter,
+class CORE_LIBRARY_EXPORT ComicBookFountainImporter : public AbstractComicBookImporter,
                                                       public AbstractFountainImporter
 {
-    /*
-                  . .
-                 ` ' `
-             .'''. ' .'''.
-               .. ' ' ..
-              '  '.'.'  '
-              .'''.'.'''
-             ' .''.'.''. '
-               . . : . .
-          {} _'___':'___'_ {}
-          ||(_____________)||
-          """"""(     )""""""
-                _)   (_             .^-^.  ~""~
-               (_______)~~"""~~     '._.'
-           ~""~                     .' '.
-                                    '.,.'
-                                       `'`'
-     */
-
 public:
-    AudioplayFountainImporter();
-    ~AudioplayFountainImporter() override;
+    ComicBookFountainImporter();
+    ~ComicBookFountainImporter() override;
 
     /**
-     * @brief Импортировать аудиопьесу
+     * @brief Импортировать комикс
      */
-    Audioplay importAudioplay(const ImportOptions& _options) const override;
+    ComicBook importComicBook(const ImportOptions& _options) const override;
 
     /**
-     * @brief Получить основной текст аудиопьесы в формате xml из заданного текста
+     * @brief Получить основной текст комикса в формате xml из заданного текста
      */
-    Audioplay audioplayText(const QString& _audioplayText) const;
+    ComicBook comicbookText(const QString& _comicbookText) const;
 
 protected:
     /**

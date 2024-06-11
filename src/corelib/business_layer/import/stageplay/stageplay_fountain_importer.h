@@ -1,6 +1,8 @@
 #pragma once
 
-#include "stageplay_abstract_importer.h"
+#include "abstract_stageplay_importer.h"
+
+#include <business_layer/import/abstract_fountain_importer.h>
 
 #include <QScopedPointer>
 
@@ -8,9 +10,10 @@
 namespace BusinessLayer {
 
 /**
- * @brief Импортер сценария из файлов fountain
+ * @brief Импортер пьес из файлов fountain
  */
-class CORE_LIBRARY_EXPORT StageplayFountainImporter : public StageplayAbstractImporter
+class CORE_LIBRARY_EXPORT StageplayFountainImporter : public AbstractStageplayImporter,
+                                                      public AbstractFountainImporter
 {
     /*
                   . .
@@ -36,19 +39,36 @@ public:
     ~StageplayFountainImporter() override;
 
     /**
-     * @brief Импорт докуметов (всех, кроме сценариев)
+     * @brief Импортировать пьесу
      */
-    Documents importDocuments(const StageplayImportOptions& _options) const override;
+    Stageplay importStageplay(const ImportOptions& _options) const override;
 
     /**
-     * @brief Импортировать сценарии
+     * @brief Получить основной текст пьесы в формате xml из заданного текста
      */
-    QVector<Stageplay> importStageplays(const StageplayImportOptions& _options) const override;
+    Stageplay stageplayText(const QString& _stageplayText) const;
+
+protected:
+    /**
+     * @brief Получить имя персонажа
+     */
+    QString characterName(const QString& _text) const override;
 
     /**
-     * @brief Импортировать сценарий из заданного текста
+     * @brief Получить название локации
      */
-    Stageplay importStageplay(const QString& _stageplayText) const;
+    QString locationName(const QString& _text) const override;
+
+    /**
+     * @brief Записать данные блока
+     */
+    void writeBlock(const QString& _paragraphText, TextParagraphType _type,
+                    QXmlStreamWriter& _writer) const override;
+
+    /**
+     * @brief Постобработка предыдущего блока после его закрытия
+     */
+    void postProcessBlock(TextParagraphType _type, QXmlStreamWriter& _writer) const override;
 
 private:
     class Implementation;

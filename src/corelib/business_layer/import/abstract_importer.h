@@ -1,28 +1,30 @@
 #pragma once
 
-#include <QVector>
+#include <domain/document_object.h>
 
 #include <corelib_global.h>
 
 
 namespace BusinessLayer {
 
-struct StageplayImportOptions;
+struct ImportOptions;
 
 /**
  * @brief Базовый класс для реализации импортера документов
  */
-class CORE_LIBRARY_EXPORT StageplayAbstractImporter
+class CORE_LIBRARY_EXPORT AbstractImporter
 {
 public:
-    virtual ~StageplayAbstractImporter() = default;
+    virtual ~AbstractImporter() = default;
 
     /**
      * @brief Вспомогательные структуры для хранения данных импортируемых документов
      */
     struct Document {
+        Domain::DocumentObjectType type = Domain::DocumentObjectType::Undefined;
         QString name;
         QString content;
+        QVector<Document> children;
     };
     struct Documents {
         //
@@ -30,27 +32,13 @@ public:
         //
         QVector<Document> characters;
         QVector<Document> locations;
+        QVector<Document> research;
     };
 
     /**
      * @brief Импорт докуметов (всех, кроме сценариев)
      */
-    virtual Documents importDocuments(const StageplayImportOptions& _options) const = 0;
-
-    /**
-     * @brief Вспомогательная структура для хранения данных импортированного сценария
-     */
-    struct Stageplay {
-        QString name;
-        QString titlePage;
-        QString synopsis;
-        QString text;
-    };
-
-    /**
-     * @brief Импорт сценариев из заданного документа
-     */
-    virtual QVector<Stageplay> importStageplays(const StageplayImportOptions& _options) const = 0;
+    virtual Documents importDocuments(const ImportOptions& _options) const = 0;
 };
 
 } // namespace BusinessLayer

@@ -6,7 +6,7 @@
 #include <business_layer/document/comic_book/text/comic_book_text_document.h>
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
-#include <business_layer/import/comic_book/comic_book_plain_text_importer.h>
+#include <business_layer/import/comic_book/comic_book_fountain_importer.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
 #include <business_layer/model/comic_book/text/comic_book_text_block_parser.h>
@@ -1384,8 +1384,8 @@ void ComicBookTextEdit::insertFromMimeData(const QMimeData* _source)
         // NOTE: Перед текстом нужно обязательно добавить перенос строки, чтобы он
         //       не воспринимался как титульная страница
         //
-        ComicBookPlainTextImporter plainTextImporter;
-        textToInsert = plainTextImporter.importComicBook(text).text;
+        ComicBookFountainImporter fountainImporter;
+        textToInsert = fountainImporter.comicbookText("\n" + text).text;
     }
 
     //

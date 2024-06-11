@@ -1,6 +1,6 @@
 #pragma once
 
-#include "novel_abstract_importer.h"
+#include "abstract_novel_importer.h"
 
 #include <corelib/business_layer/import/abstract_markdown_importer.h>
 
@@ -10,7 +10,7 @@ namespace BusinessLayer {
 /**
  * @brief Импортер текста из markdown файла
  */
-class CORE_LIBRARY_EXPORT NovelMarkdownImporter : public NovelAbstractImporter,
+class CORE_LIBRARY_EXPORT NovelMarkdownImporter : public AbstractNovelImporter,
                                                   public AbstractMarkdownImporter
 {
 public:
@@ -18,10 +18,14 @@ public:
     ~NovelMarkdownImporter() override;
 
     /**
-     * @brief Импорт докуметов (всех, кроме сценариев)
+     * @brief Импортировать роман
      */
-    Document importNovels(const ImportOptions& _options) const override;
-    Document importNovel(const QString& _text) const;
+    Document importNovel(const ImportOptions& _options) const override;
+
+    /**
+     * @brief Получить основной текст романа в формате xml из заданного текста
+     */
+    Document novelText(const QString& _text) const;
 };
 
 } // namespace BusinessLayer

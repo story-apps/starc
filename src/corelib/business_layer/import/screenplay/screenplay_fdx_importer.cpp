@@ -20,7 +20,7 @@
 namespace BusinessLayer {
 
 AbstractScreenplayImporter::Documents ScreenplayFdxImporter::importDocuments(
-    const ScreenplayImportOptions& _options) const
+    const ImportOptions& _options) const
 {
     //
     // Открываем файл

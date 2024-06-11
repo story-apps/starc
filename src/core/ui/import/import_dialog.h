@@ -25,10 +25,6 @@ public:
      * @brief Получить заданные опции импортирования
      */
     BusinessLayer::ImportOptions importOptions() const;
-
-    /**
-     * @brief Получить заданные опции импортирования сценария
-     */
     BusinessLayer::ScreenplayImportOptions screenplayImportOptions() const;
 
 signals:

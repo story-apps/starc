@@ -7,15 +7,15 @@
 
 namespace BusinessLayer {
 
-struct ComicBookImportOptions;
+struct SimpleTextImportOptions;
 
 /**
  * @brief Базовый класс для реализации импортера документов
  */
-class CORE_LIBRARY_EXPORT ComicBookAbstractImporter
+class CORE_LIBRARY_EXPORT AbstractSimpleTextImporter
 {
 public:
-    virtual ~ComicBookAbstractImporter() = default;
+    virtual ~AbstractSimpleTextImporter() = default;
 
     /**
      * @brief Вспомогательные структуры для хранения данных импортируемых документов
@@ -28,7 +28,7 @@ public:
     /**
      * @brief Импорт сценариев из заданного документа
      */
-    virtual Document importComicBook(const ComicBookImportOptions& _options) const = 0;
+    virtual Document importDocument(const SimpleTextImportOptions& _options) const = 0;
 };
 
 } // namespace BusinessLayer

@@ -1409,7 +1409,7 @@ void AudioplayTextEdit::insertFromMimeData(const QMimeData* _source)
         //       не воспринимался как титульная страница
         //
         AudioplayFountainImporter fountainImporter;
-        textToInsert = fountainImporter.importAudioplay("\n" + text).text;
+        textToInsert = fountainImporter.audioplayText("\n" + text).text;
     }
 
     //

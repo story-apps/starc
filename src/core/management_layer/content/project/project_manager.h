@@ -104,15 +104,14 @@ public:
     void addLocation(const QString& _name, const QString& _content);
 
     /**
-     * @brief Добавить данные по сценарию
+     * @brief Добавить данные по документу
      */
+    void addAudioplay(const QString& _name, const QString& _titlePage, const QString& _text);
+    void addComicBook(const QString& _name, const QString& _titlePage, const QString& _text);
+    void addNovel(const QString& _name, const QString& _text);
     void addScreenplay(const QString& _name, const QString& _titlePage, const QString& _synopsis,
                        const QString& _treatment, const QString& _text);
-
-    /**
-     * @brief Добавить данные по роману
-     */
-    void addNovel(const QString& _name, const QString& _text);
+    void addStageplay(const QString& _name, const QString& _titlePage, const QString& _text);
 
     /**
      * @brief Модель документа для экспорта

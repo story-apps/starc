@@ -2759,10 +2759,16 @@ void ApplicationManager::initConnections()
             &ProjectManager::addCharacter);
     connect(d->importManager.data(), &ImportManager::locationImported, d->projectManager.data(),
             &ProjectManager::addLocation);
-    connect(d->importManager.data(), &ImportManager::screenplayImported, d->projectManager.data(),
-            &ProjectManager::addScreenplay);
+    connect(d->importManager.data(), &ImportManager::audioplayImported, d->projectManager.data(),
+            &ProjectManager::addAudioplay);
+    connect(d->importManager.data(), &ImportManager::comicbookImported, d->projectManager.data(),
+            &ProjectManager::addComicBook);
     connect(d->importManager.data(), &ImportManager::novelImported, d->projectManager.data(),
             &ProjectManager::addNovel);
+    connect(d->importManager.data(), &ImportManager::screenplayImported, d->projectManager.data(),
+            &ProjectManager::addScreenplay);
+    connect(d->importManager.data(), &ImportManager::stageplayImported, d->projectManager.data(),
+            &ProjectManager::addStageplay);
 
     //
     // Менеджер настроек

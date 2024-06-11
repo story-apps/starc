@@ -2,7 +2,7 @@
 
 #include <business_layer/import/import_options.h>
 #include <business_layer/model/text/text_model_xml.h>
-#include <business_layer/templates/simple_text_template.h>
+#include <business_layer/templates/text_template.h>
 #include <domain/document_object.h>
 #include <utils/helpers/text_helper.h>
 
@@ -60,14 +60,14 @@ static void removeEscapeingSymbol(QString& _paragraphText)
 } // namespace
 
 NovelMarkdownImporter::NovelMarkdownImporter()
-    : NovelAbstractImporter()
+    : AbstractNovelImporter()
     , AbstractMarkdownImporter(kMarkdownSelectionTypes, kSelectionTypeChecker, kCapturedGroup)
 {
 }
 
 NovelMarkdownImporter::~NovelMarkdownImporter() = default;
 
-NovelAbstractImporter::Document NovelMarkdownImporter::importNovels(
+AbstractNovelImporter::Document NovelMarkdownImporter::importNovel(
     const ImportOptions& _options) const
 {
     //
@@ -81,7 +81,7 @@ NovelAbstractImporter::Document NovelMarkdownImporter::importNovels(
     //
     // Импортируем
     //
-    Document textDocument = importNovel(textFile.readAll());
+    Document textDocument = novelText(textFile.readAll());
     if (textDocument.name.isEmpty()) {
         textDocument.name = QFileInfo(_options.filePath).completeBaseName();
     }
@@ -89,7 +89,7 @@ NovelAbstractImporter::Document NovelMarkdownImporter::importNovels(
     return textDocument;
 }
 
-NovelAbstractImporter::Document NovelMarkdownImporter::importNovel(const QString& _text) const
+AbstractNovelImporter::Document NovelMarkdownImporter::novelText(const QString& _text) const
 {
     if (_text.simplified().isEmpty()) {
         return {};

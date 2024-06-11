@@ -16,7 +16,7 @@ public:
     /**
      * @brief Импорт докуметов (всех, кроме сценариев)
      */
-    Documents importDocuments(const ScreenplayImportOptions& _options) const override;
+    Documents importDocuments(const ImportOptions& _options) const override;
 
     /**
      * @brief Сформировать xml-сценария во внутреннем формате
