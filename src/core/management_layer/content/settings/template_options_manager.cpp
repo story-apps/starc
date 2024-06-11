@@ -511,6 +511,7 @@ TemplateOptionsManager::TemplateOptionsManager(QObject* _parent, QWidget* _paren
                     return;
                 }
 
+                d->savePageParameters();
                 d->useMm = _mm;
                 d->pageView->setUseMm(d->useMm);
                 d->paragraphsView->setUseMm(d->useMm);
