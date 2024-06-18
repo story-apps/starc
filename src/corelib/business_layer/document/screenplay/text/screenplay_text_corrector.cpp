@@ -987,16 +987,18 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
                     cursor.block().setUserData(nullptr);
                 }
             };
-            if (cursor.block() != cursor.document()->begin()) {
-                cursor.movePosition(TextCursor::PreviousCharacter);
+            if (cursor.block() != cursor.document()->end()) {
+                cursor.movePosition(TextCursor::NextBlock);
+                cursor.movePosition(TextCursor::StartOfBlock);
+                fillTargetBlockInfo();
+                cursor.movePosition(TextCursor::PreviousBlock, TextCursor::KeepAnchor);
+                cursor.movePosition(TextCursor::StartOfBlock, TextCursor::KeepAnchor);
+            } else if (cursor.block() != cursor.document()->begin()) {
+                cursor.movePosition(TextCursor::PreviousBlock);
+                cursor.movePosition(TextCursor::EndOfBlock);
                 fillTargetBlockInfo();
                 cursor.movePosition(TextCursor::NextBlock, TextCursor::KeepAnchor);
                 cursor.movePosition(TextCursor::EndOfBlock, TextCursor::KeepAnchor);
-            } else if (cursor.block() != cursor.document()->end()) {
-                cursor.movePosition(TextCursor::NextCharacter);
-                fillTargetBlockInfo();
-                cursor.movePosition(TextCursor::PreviousCharacter, TextCursor::KeepAnchor);
-                cursor.movePosition(TextCursor::StartOfBlock, TextCursor::KeepAnchor);
             }
             if (cursor.hasSelection()) {
                 cursor.deleteChar();
