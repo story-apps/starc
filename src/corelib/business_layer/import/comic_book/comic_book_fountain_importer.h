@@ -52,9 +52,9 @@ protected:
                     QXmlStreamWriter& _writer) const override;
 
     /**
-     * @brief Постобработка предыдущего блока после его закрытия
+     * @brief Помещать диалоги в таблицу
      */
-    void postProcessBlock(TextParagraphType _type, QXmlStreamWriter& _writer) const override;
+    bool placeDialoguesInTable() const override;
 
 private:
     class Implementation;

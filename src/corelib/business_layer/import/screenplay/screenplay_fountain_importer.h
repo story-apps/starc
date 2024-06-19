@@ -58,6 +58,11 @@ protected:
      * @brief Получить название локации
      */
     QString locationName(const QString& _text) const override;
+
+    /**
+     * @brief Помещать диалоги в таблицу
+     */
+    bool placeDialoguesInTable() const override;
 };
 
 } // namespace BusinessLayer

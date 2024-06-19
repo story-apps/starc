@@ -43,11 +43,6 @@ protected:
                             QXmlStreamWriter& _writer) const;
 
     /**
-     * @brief Постобработка блока после его закрытия
-     */
-    virtual void postProcessBlock(TextParagraphType _type, QXmlStreamWriter& _writer) const;
-
-    /**
      * @brief Получить имя персонажа
      */
     virtual QString characterName(const QString& _text) const = 0;
@@ -56,6 +51,11 @@ protected:
      * @brief Получить название локации
      */
     virtual QString locationName(const QString& _text) const = 0;
+
+    /**
+     * @brief Помещать диалоги в таблицу
+     */
+    virtual bool placeDialoguesInTable() const = 0;
 
 private:
     class Implementation;

@@ -65,19 +65,9 @@ protected:
     TextParagraphType blockType(QString& _paragraphText) const override;
 
     /**
-     * @brief Записать данные блока
+     * @brief Помещать диалоги в таблицу
      */
-    void writeBlock(const QString& _paragraphText, TextParagraphType _type,
-                    QXmlStreamWriter& _writer) const override;
-
-    /**
-     * @brief Постобработка предыдущего блока после его закрытия
-     */
-    void postProcessBlock(TextParagraphType _type, QXmlStreamWriter& _writer) const override;
-
-private:
-    class Implementation;
-    QScopedPointer<Implementation> d;
+    bool placeDialoguesInTable() const override;
 };
 
 } // namespace BusinessLayer

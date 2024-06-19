@@ -36,11 +36,6 @@ class ComicBookFountainImporter::Implementation
 {
 public:
     /**
-     * @brief Закрыт ли разделитель
-     */
-    bool splitterIsOpen = false;
-
-    /**
      * @brief Зашли ли мы уже в панель
      */
     bool alreadyInPanel = false;
@@ -182,49 +177,6 @@ void ComicBookFountainImporter::writeBlock(const QString& _paragraphText, TextPa
         break;
     }
 
-    case TextParagraphType::Character: {
-        //
-        // Если диалоги располагаются в таблице и разделитель ещё не открыт, то откроем
-        //
-        if (TemplatesFacade::comicBookTemplate().placeDialoguesInTable() && !d->splitterIsOpen) {
-            _writer.writeEmptyElement(xml::kSplitterTag);
-            _writer.writeAttribute(xml::kTypeAttribute, "start");
-            d->splitterIsOpen = true;
-        }
-
-        _writer.writeStartElement(toString(_type));
-        _writer.writeEmptyElement(xml::kParametersTag);
-        _writer.writeAttribute(xml::kInFirstColumnAttribute, "true");
-        writeValue(_paragraphText);
-        break;
-    }
-
-    case TextParagraphType::Dialogue: {
-        //
-        // Если диалоги располагаются в таблице и разделитель ещё не открыт, то откроем
-        //
-        if (TemplatesFacade::comicBookTemplate().placeDialoguesInTable() && !d->splitterIsOpen) {
-            _writer.writeEmptyElement(xml::kSplitterTag);
-            _writer.writeAttribute(xml::kTypeAttribute, "start");
-            d->splitterIsOpen = true;
-
-            //
-            // ... и запишем пустое имя персонажа в первую колонку
-            //
-            _writer.writeStartElement(toString(TextParagraphType::Character));
-            _writer.writeEmptyElement(xml::kParametersTag);
-            _writer.writeAttribute(xml::kInFirstColumnAttribute, "true");
-            writeValue("");
-            _writer.writeEndElement(); // сharacter
-        }
-
-        _writer.writeStartElement(toString(_type));
-        _writer.writeEmptyElement(xml::kParametersTag);
-        _writer.writeAttribute(xml::kInFirstColumnAttribute, "false");
-        writeValue(_paragraphText);
-        break;
-    }
-
     default: {
         AbstractFountainImporter::writeBlock(_paragraphText, _type, _writer);
         break;
@@ -232,17 +184,9 @@ void ComicBookFountainImporter::writeBlock(const QString& _paragraphText, TextPa
     }
 }
 
-void ComicBookFountainImporter::postProcessBlock(TextParagraphType _type,
-                                                 QXmlStreamWriter& _writer) const
+bool ComicBookFountainImporter::placeDialoguesInTable() const
 {
-    //
-    // Нужно закрыть разделитель, если он октрыт и если текущий блок - не диалог
-    //
-    if (d->splitterIsOpen && _type != TextParagraphType::Dialogue) {
-        _writer.writeEmptyElement(xml::kSplitterTag);
-        _writer.writeAttribute(xml::kTypeAttribute, "end");
-        d->splitterIsOpen = false;
-    }
+    return TemplatesFacade::comicBookTemplate().placeDialoguesInTable();
 }
 
 } // namespace BusinessLayer
