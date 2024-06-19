@@ -9,8 +9,6 @@
 #include <QFileInfo>
 #include <QSet>
 
-#include <set>
-
 namespace BusinessLayer {
 
 namespace {
@@ -86,6 +84,11 @@ QString ScreenplayFountainImporter::characterName(const QString& _text) const
 QString ScreenplayFountainImporter::locationName(const QString& _text) const
 {
     return ScreenplaySceneHeadingParser::location(_text);
+}
+
+bool ScreenplayFountainImporter::placeDialoguesInTable() const
+{
+    return false;
 }
 
 } // namespace BusinessLayer

@@ -31,23 +31,10 @@ static const TextParagraphType kDefaultBlockType = TextParagraphType::Unformatte
 
 } // namespace
 
-class StageplayFountainImporter::Implementation
-{
-public:
-    /**
-     * @brief Закрыт ли разделитель
-     */
-    bool splitterIsOpen = false;
-};
-
-
-// ****
-
 
 StageplayFountainImporter::StageplayFountainImporter()
     : AbstractStageplayImporter()
     , AbstractFountainImporter(kPossibleBlockTypes, kDefaultBlockType)
-    , d(new Implementation)
 {
 }
 
@@ -99,78 +86,9 @@ QString StageplayFountainImporter::locationName(const QString& _text) const
     return "";
 }
 
-void StageplayFountainImporter::writeBlock(const QString& _paragraphText, TextParagraphType _type,
-                                           QXmlStreamWriter& _writer) const
+bool StageplayFountainImporter::placeDialoguesInTable() const
 {
-
-    auto writeValue = [&_writer](const QString& _text) {
-        _writer.writeStartElement(xml::kValueTag);
-        _writer.writeCDATA(TextHelper::toHtmlEscaped(_text));
-        _writer.writeEndElement(); // value
-    };
-
-    switch (_type) {
-    case TextParagraphType::Character: {
-        //
-        // Если диалоги располагаются в таблице и разделитель ещё не открыт, то откроем
-        //
-        if (TemplatesFacade::stageplayTemplate().placeDialoguesInTable() && !d->splitterIsOpen) {
-            _writer.writeEmptyElement(xml::kSplitterTag);
-            _writer.writeAttribute(xml::kTypeAttribute, "start");
-            d->splitterIsOpen = true;
-        }
-
-        _writer.writeStartElement(toString(_type));
-        _writer.writeEmptyElement(xml::kParametersTag);
-        _writer.writeAttribute(xml::kInFirstColumnAttribute, "true");
-        writeValue(_paragraphText);
-        break;
-    }
-
-    case TextParagraphType::Dialogue: {
-        //
-        // Если диалоги располагаются в таблице и разделитель ещё не открыт, то откроем
-        //
-        if (TemplatesFacade::stageplayTemplate().placeDialoguesInTable() && !d->splitterIsOpen) {
-            _writer.writeEmptyElement(xml::kSplitterTag);
-            _writer.writeAttribute(xml::kTypeAttribute, "start");
-            d->splitterIsOpen = true;
-
-            //
-            // ... и запишем пустое имя персонажа в первую колонку
-            //
-            _writer.writeStartElement(toString(TextParagraphType::Character));
-            _writer.writeEmptyElement(xml::kParametersTag);
-            _writer.writeAttribute(xml::kInFirstColumnAttribute, "true");
-            writeValue("");
-            _writer.writeEndElement(); // сharacter
-        }
-
-        _writer.writeStartElement(toString(_type));
-        _writer.writeEmptyElement(xml::kParametersTag);
-        _writer.writeAttribute(xml::kInFirstColumnAttribute, "false");
-        writeValue(_paragraphText);
-        break;
-    }
-
-    default: {
-        AbstractFountainImporter::writeBlock(_paragraphText, _type, _writer);
-        break;
-    }
-    }
-}
-
-void StageplayFountainImporter::postProcessBlock(TextParagraphType _type,
-                                                 QXmlStreamWriter& _writer) const
-{
-    //
-    // Нужно закрыть разделитель, если он октрыт и если текущий блок - не диалог
-    //
-    if (d->splitterIsOpen && _type != TextParagraphType::Dialogue) {
-        _writer.writeEmptyElement(xml::kSplitterTag);
-        _writer.writeAttribute(xml::kTypeAttribute, "end");
-        d->splitterIsOpen = false;
-    }
+    return TemplatesFacade::stageplayTemplate().placeDialoguesInTable();
 }
 
 } // namespace BusinessLayer

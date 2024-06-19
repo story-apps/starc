@@ -101,6 +101,11 @@ public:
      */
     void appendComments(QXmlStreamWriter& _writer);
 
+    /**
+     * @brief Постобработка блока после его закрытия
+     */
+    void postProcessPreviousBlock(TextParagraphType _currentBlockType, QXmlStreamWriter& _writer);
+
 
     AbstractFountainImporter* q = nullptr;
 
@@ -138,6 +143,21 @@ public:
      * @brief Зашли ли мы уже в бит
      */
     bool alreadyInBeat = false;
+
+    /**
+     * @brief Идет ли сейчас двойной диалог
+     */
+    bool isDoubleDialogue = false;
+
+    /**
+     * @brief Идет ли сейчас первый персонаж в двойном диалоге
+     */
+    bool isFirstCharacter = false;
+
+    /**
+     * @brief Открыт ли разделитель параграфа
+     */
+    bool splitterIsOpen = false;
 
     /**
      * @brief Текст блока
@@ -257,7 +277,7 @@ void AbstractFountainImporter::Implementation::processBlock(const QString& _para
                 //
                 if (!lastBlockText.isEmpty()) {
                     _writer.writeEndElement();
-                    q->postProcessBlock(_type, _writer);
+                    postProcessPreviousBlock(_type, _writer);
                 }
 
                 //
@@ -291,7 +311,7 @@ void AbstractFountainImporter::Implementation::processBlock(const QString& _para
                 //
                 if (blockText.size() != 1) {
                     _writer.writeEndElement();
-                    q->postProcessBlock(_type, _writer);
+                    postProcessPreviousBlock(_type, _writer);
                     appendBlock(blockText.left(blockText.size() - 1), _type, _writer);
                     appendComments(_writer);
                     notes.clear();
@@ -375,7 +395,7 @@ void AbstractFountainImporter::Implementation::processBlock(const QString& _para
             //
             if (!isFirstBlock) {
                 _writer.writeEndElement();
-                q->postProcessBlock(_type, _writer);
+                postProcessPreviousBlock(_type, _writer);
             }
 
             appendBlock(blockText, _type, _writer);
@@ -451,6 +471,29 @@ void AbstractFountainImporter::Implementation::appendComments(QXmlStreamWriter& 
     _writer.writeEndElement(); // review marks
 
     notes.clear();
+}
+
+void AbstractFountainImporter::Implementation::postProcessPreviousBlock(
+    TextParagraphType _currentBlockType, QXmlStreamWriter& _writer)
+{
+    if (splitterIsOpen) {
+        if (isDoubleDialogue) {
+            if (_currentBlockType != TextParagraphType::Dialogue
+                && _currentBlockType != TextParagraphType::Parenthetical
+                && isFirstCharacter == false) {
+                _writer.writeEmptyElement(xml::kSplitterTag);
+                _writer.writeAttribute(xml::kTypeAttribute, "end");
+                splitterIsOpen = false;
+            }
+        } else if (q->placeDialoguesInTable()) {
+            if (_currentBlockType != TextParagraphType::Dialogue
+                && _currentBlockType != TextParagraphType::Parenthetical) {
+                _writer.writeEmptyElement(xml::kSplitterTag);
+                _writer.writeAttribute(xml::kTypeAttribute, "end");
+                splitterIsOpen = false;
+            }
+        }
+    }
 }
 
 
@@ -814,9 +857,6 @@ QString AbstractFountainImporter::documentText(const QString& _text, bool _keepS
                 // Если текущий блок обернут в (), то это ремарка
                 //
                 currentBlockType = TextParagraphType::Parenthetical;
-                paragraphText.chop(1);
-                paragraphText.remove(0, 1);
-                movePreviousTypes(0, 1);
             } else if (paragraphText == TextHelper::smartToUpper(paragraphText) && i != 0
                        && paragraphs[i - 1].isEmpty() && i + 1 < paragraphsCount
                        && !paragraphs[i + 1].isEmpty()) {
@@ -825,19 +865,13 @@ QString AbstractFountainImporter::documentText(const QString& _text, bool _keepS
                 // пустая Значит это имя персонажа (для реплики)
                 //
                 currentBlockType = TextParagraphType::Character;
-                if (paragraphText.endsWith("^")) {
-                    //
-                    // Двойной диалог, который мы пока что не умеем обрабатывать
-                    //
-                    paragraphText.chop(1);
-                }
-            } else if (prevBlockType == TextParagraphType::Character
-                       || prevBlockType == TextParagraphType::Parenthetical
-                       || (prevBlockType == TextParagraphType::Dialogue && i > 0
-                           && !paragraphs[i - 1].isEmpty())) {
+            } else if ((prevBlockType == TextParagraphType::Character
+                        || prevBlockType == TextParagraphType::Parenthetical
+                        || prevBlockType == TextParagraphType::Dialogue)
+                       && i > 0 && !paragraphs[i - 1].isEmpty()) {
                 //
-                // Если предыдущий блок - имя персонажа или ремарка, то сейчас диалог
-                // Или предыдущая строка является диалогом
+                // Если предыдущий блок - имя персонажа, ремарка или диалог
+                // и предыдущая строка не пустая, то сейчас диалог
                 //
                 currentBlockType = TextParagraphType::Dialogue;
             } else if (paragraphText.startsWith("=")) {
@@ -870,15 +904,36 @@ QString AbstractFountainImporter::documentText(const QString& _text, bool _keepS
         // Если в документе не может быть такого типа блока, то установим его как дефолтный
         //
         if (!d->possibleBlockTypes.contains(currentBlockType)) {
-            currentBlockType = d->defaultBlockType;
+            //
+            // Но ремарки будем рассматривать как реплики, т.к. иначе они могут сбить форматирование
+            //
+            if (currentBlockType == TextParagraphType::Parenthetical) {
+                currentBlockType = TextParagraphType::Dialogue;
+            } else {
+                currentBlockType = d->defaultBlockType;
+            }
         }
 
         //
-        // Отправляем блок на обработку
+        // Если тип текущего блока - "Персонаж", проверим будет ли двойной диалог
+        //
+        if (currentBlockType == TextParagraphType::Character) {
+            for (int j = i + 1; j + 1 < paragraphsCount; ++j) {
+                if (paragraphs[j].isEmpty()) {
+                    if (paragraphs[j + 1].endsWith("^")) {
+                        d->isDoubleDialogue = true;
+                    }
+                    break;
+                }
+            }
+        }
+
+        //
+        // Перед отправкой блока на обработку сделаем предобработку определенных блоков
         //
         if (currentBlockType == TextParagraphType::SequenceHeading) {
             //
-            // ... если директория - сделаем предобработку
+            // ... если директория - закроем нужное число раз уже открытые
             //
             int sharpCount = 0;
             while (paragraphText[sharpCount] == '#') {
@@ -886,15 +941,13 @@ QString AbstractFountainImporter::documentText(const QString& _text, bool _keepS
             }
 
             if (sharpCount <= dirs.size()) {
-                //
-                // ... закроем нужное число раз уже открытые
-                //
                 unsigned toClose = dirs.size() - sharpCount + 1;
                 for (unsigned i = 0; i != toClose; ++i) {
                     d->processBlock({}, TextParagraphType::SequenceFooter, writer);
                     dirs.pop();
                 }
             }
+
             //
             // ... и откроем новую
             //
@@ -924,6 +977,32 @@ QString AbstractFountainImporter::documentText(const QString& _text, bool _keepS
             }
             paragraphText = paragraphText.left(sharpPos);
             d->processBlock(paragraphText, currentBlockType, writer);
+        } else if (currentBlockType == TextParagraphType::Character) {
+            //
+            // ... если персонаж, удалим обозначение двойного диалога, если оно есть
+            //
+            if (paragraphText.endsWith("^")) {
+                paragraphText.chop(1);
+                while (!paragraphText.isEmpty() && paragraphText.back().isSpace()) {
+                    paragraphText.chop(1);
+                }
+            }
+            //
+            // ... и добавим двоеточие, если диалоги располагаются в таблице
+            //
+            if (placeDialoguesInTable()) {
+                paragraphText.append(":");
+            }
+            d->processBlock(paragraphText, currentBlockType, writer);
+        } else if (currentBlockType == TextParagraphType::Parenthetical) {
+            //
+            // ... если ремарка обернута в скобки, то удалим их
+            //
+            if (paragraphText.startsWith("(") && paragraphText.endsWith(")")) {
+                paragraphText.chop(1);
+                paragraphText.remove(0, 1);
+                movePreviousTypes(0, 1);
+            }
         } else {
             //
             // ... если не директория и не сцена - сразу отправим на обработку
@@ -942,7 +1021,7 @@ QString AbstractFountainImporter::documentText(const QString& _text, bool _keepS
     // Закроем последний блок
     //
     writer.writeEndElement();
-    postProcessBlock(currentBlockType, writer);
+    d->postProcessPreviousBlock(currentBlockType, writer);
 
     //
     // Закроем директории нужное число раз
@@ -1034,16 +1113,15 @@ TextParagraphType AbstractFountainImporter::blockType(QString& _paragraphText) c
     return blockType;
 }
 
-void AbstractFountainImporter::postProcessBlock(TextParagraphType _type,
-                                                QXmlStreamWriter& _writer) const
-{
-    Q_UNUSED(_type)
-    Q_UNUSED(_writer)
-}
-
 void AbstractFountainImporter::writeBlock(const QString& _paragraphText, TextParagraphType _type,
                                           QXmlStreamWriter& _writer) const
 {
+    auto writeValue = [&_writer](const QString& _text) {
+        _writer.writeStartElement(xml::kValueTag);
+        _writer.writeCDATA(TextHelper::toHtmlEscaped(_text));
+        _writer.writeEndElement(); // value
+    };
+
     //
     // Формируем блок сценария
     //
@@ -1064,6 +1142,8 @@ void AbstractFountainImporter::writeBlock(const QString& _paragraphText, TextPar
         _writer.writeStartElement(toString(TextFolderType::Sequence));
         _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
         _writer.writeStartElement(xml::kContentTag);
+        _writer.writeStartElement(toString(_type));
+        writeValue(_paragraphText);
         break;
     }
 
@@ -1082,6 +1162,8 @@ void AbstractFountainImporter::writeBlock(const QString& _paragraphText, TextPar
 
         _writer.writeEndElement(); // контент текущей папки
         _writer.writeEndElement(); // текущая папка
+        _writer.writeStartElement(toString(_type));
+        writeValue(_paragraphText);
         break;
     }
 
@@ -1111,6 +1193,8 @@ void AbstractFountainImporter::writeBlock(const QString& _paragraphText, TextPar
         }
 
         _writer.writeStartElement(xml::kContentTag);
+        _writer.writeStartElement(toString(_type));
+        writeValue(_paragraphText);
         break;
     }
 
@@ -1125,17 +1209,119 @@ void AbstractFountainImporter::writeBlock(const QString& _paragraphText, TextPar
         _writer.writeStartElement(toString(TextGroupType::Beat));
         _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
         _writer.writeStartElement(xml::kContentTag);
+        _writer.writeStartElement(toString(_type));
+        writeValue(_paragraphText);
         break;
     }
 
-    default:
+    case TextParagraphType::Character: {
+        //
+        // Если диалоги располагаются в таблице
+        //
+        if (placeDialoguesInTable()) {
+            //
+            // ... и разделитель ещё не открыт, то откроем
+            //
+            if (!d->splitterIsOpen) {
+                _writer.writeEmptyElement(xml::kSplitterTag);
+                _writer.writeAttribute(xml::kTypeAttribute, "start");
+                d->splitterIsOpen = true;
+            }
+            _writer.writeStartElement(toString(_type));
+            _writer.writeEmptyElement(xml::kParametersTag);
+            _writer.writeAttribute(xml::kInFirstColumnAttribute, "true");
+            writeValue(_paragraphText);
+        }
+        //
+        // Если диалоги не располгаются в таблице, но пишем двойной диалог
+        //
+        else if (d->isDoubleDialogue) {
+            //
+            // Если разделитель не открыт, то это первый персонаж
+            //
+            if (!d->splitterIsOpen) {
+                _writer.writeEmptyElement(xml::kSplitterTag);
+                _writer.writeAttribute(xml::kTypeAttribute, "start");
+                d->splitterIsOpen = true;
+                _writer.writeStartElement(toString(_type));
+                _writer.writeEmptyElement(xml::kParametersTag);
+                _writer.writeAttribute(xml::kInFirstColumnAttribute, "true");
+                d->isFirstCharacter = true;
+            } else {
+                _writer.writeStartElement(toString(_type));
+                _writer.writeEmptyElement(xml::kParametersTag);
+                _writer.writeAttribute(xml::kInFirstColumnAttribute, "false");
+                d->isFirstCharacter = false;
+            }
+            writeValue(_paragraphText);
+        }
+        //
+        // Иначе пишем без разделителя
+        //
+        else {
+            _writer.writeStartElement(toString(_type));
+            writeValue(_paragraphText);
+        }
         break;
     }
 
-    _writer.writeStartElement(toString(_type));
-    _writer.writeStartElement(xml::kValueTag);
-    _writer.writeCDATA(TextHelper::toHtmlEscaped(_paragraphText));
-    _writer.writeEndElement(); // value
+    case TextParagraphType::Dialogue: {
+        //
+        // Если диалоги располагаются в таблице
+        //
+        if (placeDialoguesInTable()) {
+            //
+            // ... и разделитель ещё не открыт, то откроем и запишем пустое имя персонажа в первую
+            // колонку
+            //
+            if (!d->splitterIsOpen) {
+                _writer.writeEmptyElement(xml::kSplitterTag);
+                _writer.writeAttribute(xml::kTypeAttribute, "start");
+                d->splitterIsOpen = true;
+                _writer.writeStartElement(toString(TextParagraphType::Character));
+                _writer.writeEmptyElement(xml::kParametersTag);
+                _writer.writeAttribute(xml::kInFirstColumnAttribute, "true");
+                writeValue("");
+                _writer.writeEndElement(); // сharacter
+            }
+            _writer.writeStartElement(toString(_type));
+            _writer.writeEmptyElement(xml::kParametersTag);
+            _writer.writeAttribute(xml::kInFirstColumnAttribute, "false");
+            writeValue(_paragraphText);
+        }
+        //
+        // Если диалоги не располгаются в таблице, но пишем двойной диалог
+        //
+        else if (d->isDoubleDialogue) {
+            _writer.writeStartElement(toString(_type));
+            _writer.writeEmptyElement(xml::kParametersTag);
+            if (d->isFirstCharacter) {
+                _writer.writeAttribute(xml::kInFirstColumnAttribute, "true");
+            } else {
+                _writer.writeAttribute(xml::kInFirstColumnAttribute, "false");
+            }
+            writeValue(_paragraphText);
+        }
+        //
+        // Иначе пишем без разделителя
+        //
+        else {
+            _writer.writeStartElement(toString(_type));
+            writeValue(_paragraphText);
+        }
+        break;
+    }
+
+    default: {
+        _writer.writeStartElement(toString(_type));
+        writeValue(_paragraphText);
+        break;
+    }
+    }
+
+    if (d->isDoubleDialogue && !d->splitterIsOpen) {
+        d->isDoubleDialogue = false;
+    }
 }
 
 } // namespace BusinessLayer
