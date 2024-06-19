@@ -4,6 +4,7 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <utils/helpers/text_helper.h>
@@ -143,6 +144,17 @@ bool ScreenplayFountainExporter::processBlock(QString& _paragraph, const QTextBl
             // то необходимо добавить @ в начало
             //
             _paragraph.prepend('@');
+        }
+
+        //
+        // Если двойной диалог, то к имени второго персонажа допишем "^"
+        //
+        const auto blockData = static_cast<TextBlockData*>(_block.userData());
+        if (blockData != nullptr) {
+            const auto textItem = static_cast<TextModelTextItem*>(blockData->item());
+            if (textItem->isInFirstColumn().has_value() && textItem->isInFirstColumn() == false) {
+                _paragraph.append(" ^");
+            }
         }
         return true;
     }
