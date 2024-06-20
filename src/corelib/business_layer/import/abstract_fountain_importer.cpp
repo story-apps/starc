@@ -155,6 +155,11 @@ public:
     QString note;
 
     /**
+     * @brief Кастомный номер сцены
+     */
+    QString customSceneNumber;
+
+    /**
      * @brief Редакторская заметка к текущему блоку
      * 		  tuple содержит комментарий, позиция и длина области редакторской заметки
      */
@@ -536,7 +541,7 @@ AbstractScreenplayImporter::Documents AbstractFountainImporter::importDocuments(
         case '.': {
             blockType = TextParagraphType::SceneHeading;
             //
-            // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
+            // Номера сцен игнорируем
             //
             int sharpPos = paragraphs[i].size();
             if (paragraphs[i].endsWith("#")) {
@@ -580,7 +585,7 @@ AbstractScreenplayImporter::Documents AbstractFountainImporter::importDocuments(
                 blockType = TextParagraphType::SceneHeading;
 
                 //
-                // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
+                // Номера сцен игнорируем
                 //
                 int sharpPos = paragraphs[i].size();
                 if (paragraphs[i].endsWith("#")) {
@@ -670,7 +675,7 @@ AbstractScreenplayImporter::Documents AbstractFountainImporter::importDocuments(
     return documents;
 }
 
-QString AbstractFountainImporter::documentText(const QString& _text) const
+QString AbstractFountainImporter::documentText(const QString& _text, bool _keepSceneNumbers) const
 {
     if (_text.simplified().isEmpty()) {
         return {};
@@ -779,18 +784,6 @@ QString AbstractFountainImporter::documentText(const QString& _text) const
                 // Значит это заголовок сцены
                 //
                 currentBlockType = TextParagraphType::SceneHeading;
-
-                //
-                // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
-                //
-                int sharpPos = paragraphText.size();
-                if (paragraphText.endsWith("#")) {
-                    sharpPos = paragraphText.lastIndexOf('#', paragraphText.size() - 2);
-                }
-                if (sharpPos == -1) {
-                    sharpPos = paragraphText.size();
-                }
-                paragraphText = paragraphText.left(sharpPos);
             } else if (paragraphText.startsWith("[[") && paragraphText.endsWith("]]")) {
                 //
                 // Редакторская заметка
@@ -885,7 +878,7 @@ QString AbstractFountainImporter::documentText(const QString& _text) const
         //
         if (currentBlockType == TextParagraphType::SequenceHeading) {
             //
-            // ... если директория - обработаем её отдельно
+            // ... если директория - сделаем предобработку
             //
             int sharpCount = 0;
             while (paragraphText[sharpCount] == '#') {
@@ -908,9 +901,32 @@ QString AbstractFountainImporter::documentText(const QString& _text) const
             QString text = paragraphText.mid(sharpCount);
             d->processBlock(text, TextParagraphType::SequenceHeading, writer);
             dirs.push(text);
+        } else if (currentBlockType == TextParagraphType::SceneHeading) {
+            //
+            // ... если сцена - обработаем её номер
+            //
+            int sharpPos = paragraphText.size();
+            if (paragraphText.endsWith("#")) {
+                sharpPos = paragraphText.lastIndexOf('#', paragraphText.size() - 2);
+            }
+            d->customSceneNumber = "";
+            if (sharpPos == -1) {
+                sharpPos = paragraphText.size();
+            } else if (_keepSceneNumbers) {
+                d->customSceneNumber
+                    = paragraphText.mid(sharpPos + 1, paragraphText.size() - 2 - sharpPos);
+                //
+                // Удалим точку в конце, если она есть, т.к. она будет добавлена потом
+                //
+                if (d->customSceneNumber.endsWith(".")) {
+                    d->customSceneNumber.chop(1);
+                }
+            }
+            paragraphText = paragraphText.left(sharpPos);
+            d->processBlock(paragraphText, currentBlockType, writer);
         } else {
             //
-            // ... если не директория - отправим на стандартную обработку
+            // ... если не директория и не сцена - сразу отправим на обработку
             //
             d->processBlock(paragraphText, currentBlockType, writer);
         }
@@ -951,18 +967,6 @@ TextParagraphType AbstractFountainImporter::blockType(QString& _paragraphText) c
     switch (_paragraphText[0].toLatin1()) {
     case '.': {
         blockType = TextParagraphType::SceneHeading;
-
-        //
-        // TODO: номера сцен игнорируем, поскольку в фонтане они являются строками
-        //
-        int sharpPos = _paragraphText.size();
-        if (_paragraphText.endsWith("#")) {
-            sharpPos = _paragraphText.lastIndexOf('#', _paragraphText.size() - 2);
-        }
-        if (sharpPos == -1) {
-            sharpPos = _paragraphText.size();
-        }
-        _paragraphText.truncate(sharpPos);
         _paragraphText.remove(0, 1);
         movePreviousTypes(0, 1);
         break;
@@ -1097,6 +1101,15 @@ void AbstractFountainImporter::writeBlock(const QString& _paragraphText, TextPar
 
         _writer.writeStartElement(toString(TextGroupType::Scene));
         _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
+
+        if (!d->customSceneNumber.isEmpty()) {
+            _writer.writeStartElement(xml::kNumberTag);
+            _writer.writeAttribute(xml::kNumberValueAttribute, d->customSceneNumber);
+            _writer.writeAttribute(xml::kNumberIsCustomAttribute, "true");
+            _writer.writeEndElement();
+            d->customSceneNumber = "";
+        }
+
         _writer.writeStartElement(xml::kContentTag);
         break;
     }
