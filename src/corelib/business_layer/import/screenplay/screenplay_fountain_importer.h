@@ -46,7 +46,7 @@ public:
     /**
      * @brief Получить основной текст сценария в формате xml из заданного текста
      */
-    Screenplay screenplayText(const QString& _screenplayText) const;
+    Screenplay screenplayText(const QString& _screenplayText, bool _keepSceneNumbers = true) const;
 
 protected:
     /**

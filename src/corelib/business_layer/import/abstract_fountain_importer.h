@@ -29,7 +29,7 @@ protected:
     /**
      * @brief Получить основной текст документа в формате xml из заданного текста
      */
-    QString documentText(const QString& _text) const;
+    QString documentText(const QString& _text, bool _keepSceneNumbers = false) const;
 
     /**
      * @brief Определить тип блока

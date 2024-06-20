@@ -62,7 +62,7 @@ QVector<AbstractScreenplayImporter::Screenplay> ScreenplayFountainImporter::impo
     //
     // Импортируем
     //
-    auto screenplay = screenplayText(fountainFile.readAll());
+    auto screenplay = screenplayText(fountainFile.readAll(), _options.keepSceneNumbers);
     if (screenplay.name.isEmpty()) {
         screenplay.name = QFileInfo(_options.filePath).completeBaseName();
     }
@@ -71,10 +71,10 @@ QVector<AbstractScreenplayImporter::Screenplay> ScreenplayFountainImporter::impo
 }
 
 AbstractScreenplayImporter::Screenplay ScreenplayFountainImporter::screenplayText(
-    const QString& _screenplayText) const
+    const QString& _screenplayText, bool _keepSceneNumbers) const
 {
     Screenplay result;
-    result.text = documentText(_screenplayText);
+    result.text = documentText(_screenplayText, _keepSceneNumbers);
     return result;
 }
 
