@@ -2,6 +2,8 @@
 
 #include "abstract_screenplay_importer.h"
 
+#include <QScopedPointer>
+
 
 namespace BusinessLayer {
 
@@ -11,7 +13,8 @@ namespace BusinessLayer {
 class CORE_LIBRARY_EXPORT ScreenplayKitScenaristImporter : public AbstractScreenplayImporter
 {
 public:
-    ScreenplayKitScenaristImporter() = default;
+    ScreenplayKitScenaristImporter();
+    ~ScreenplayKitScenaristImporter() override;
 
     /**
      * @brief Импорт докуметов (всех, кроме сценариев)
@@ -22,6 +25,10 @@ public:
      * @brief Сформировать xml-сценария во внутреннем формате
      */
     QVector<Screenplay> importScreenplays(const ScreenplayImportOptions& _options) const override;
+
+private:
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 } // namespace BusinessLayer

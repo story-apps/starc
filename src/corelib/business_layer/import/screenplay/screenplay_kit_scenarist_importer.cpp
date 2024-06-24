@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QDomDocument>
 #include <QFileInfo>
+#include <QQueue>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlRecord>
@@ -136,10 +137,52 @@ QString readPlainTextDocument(const QString& _sourceDocument)
     return document.text;
 }
 
-/**
- * @brief Сформировать документ сценария из xml сценария КИТа
- */
-AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenplayXml)
+} // namespace
+
+
+class ScreenplayKitScenaristImporter::Implementation
+{
+public:
+    /**
+     * @brief Сформировать документ сценария из xml сценария КИТа
+     */
+    AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenplayXml);
+
+    /**
+     * @brief Записать блок
+     */
+    void writeBlock(const QDomNode& _paragraph, TextParagraphType _blockType,
+                    QXmlStreamWriter& _writer);
+
+    /**
+     * @brief Записать биты
+     */
+    void writeBeats(QXmlStreamWriter& _writer);
+
+
+    /**
+     * @brief Зашли ли мы уже в сцену
+     */
+    bool alreadyInScene = false;
+
+    /**
+     * @brief Имя закладки
+     */
+    QString bookmarkName;
+
+    /**
+     * @brief Цвет закладки
+     */
+    QString bookmarkColor;
+
+    /**
+     * @brief Буфер битов
+     */
+    QQueue<QDomNode> beatsBuffer;
+};
+
+AbstractScreenplayImporter::Screenplay ScreenplayKitScenaristImporter::Implementation::
+    readScreenplay(const QString& _kitScreenplayXml)
 {
     AbstractScreenplayImporter::Screenplay screenplay;
 
@@ -158,17 +201,9 @@ AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenp
                           Domain::mimeTypeFor(Domain::DocumentObjectType::ScreenplayText));
     writer.writeAttribute(xml::kVersionAttribute, "1.0");
 
-    //
-    // scenario - текст сценария
-    //
     QDomElement rootElement = kitDocument.documentElement();
-    QDomNode paragraph = rootElement.firstChild();
-    bool alreadyInScene = false;
-    bool alreadyInBeat = false;
-    bool alreadyInText = false;
-    QString bookmarkName = "";
-    QString bookmarkColor = "";
-    while (!paragraph.isNull()) {
+    for (QDomNode paragraph = rootElement.firstChild(); !paragraph.isNull();
+         paragraph = paragraph.nextSibling()) {
         //
         // Определим тип блока
         //
@@ -203,310 +238,299 @@ AbstractScreenplayImporter::Screenplay readScreenplay(const QString& _kitScreenp
         }
 
         //
-        // Получим текст блока
+        // Биты пишем не сразу, а сохраним в буфер и запишем в конце сцены
         //
-        QString paragraphText;
-        QVector<ScreenplayTextModelTextItem::ReviewMark> reviewMarks;
-        QVector<ScreenplayTextModelTextItem::TextFormat> formats;
-        {
-            QDomElement textNode = paragraph.firstChildElement("v");
-            if (!textNode.isNull()) {
-                //
-                // ... читаем текст
-                //
-                paragraphText = textNode.text();
-                //
-                // ... читаем закладки
-                //
-                if (const auto paragraphNode = paragraph.toElement();
-                    !paragraphNode.isNull() && paragraphNode.hasAttribute("bookmark")) {
-                    bookmarkName = paragraphNode.attribute("bookmark");
-                    bookmarkColor = paragraphNode.attribute("bookmark_color");
-                } else {
-                    bookmarkName.clear();
-                    bookmarkColor.clear();
-                }
-                //
-                // ... читаем редакторские заметки
-                //
-                auto reviewsNode = paragraph.firstChildElement("reviews");
-                if (!reviewsNode.isNull()) {
-                    auto reviewNode = reviewsNode.firstChildElement("review");
-                    while (!reviewNode.isNull()) {
-                        ScreenplayTextModelTextItem::ReviewMark reviewMark;
-                        reviewMark.from = reviewNode.attribute("from").toInt();
-                        reviewMark.length = reviewNode.attribute("length").toInt();
-                        if (reviewNode.attribute("color") != "#000000") {
-                            reviewMark.textColor = reviewNode.attribute("color");
-                        }
-                        if (reviewNode.attribute("bgcolor") != "#000000") {
-                            reviewMark.backgroundColor = reviewNode.attribute("bgcolor");
-                        }
-                        reviewMark.isDone = reviewNode.attribute("done") == "true";
-                        auto reviewCommentNode = reviewNode.firstChildElement("review_comment");
-                        while (!reviewCommentNode.isNull()) {
-                            reviewMark.comments.append(
-                                { reviewCommentNode.attribute("author"),
-                                  {},
-                                  reviewCommentNode.attribute("date"),
-                                  TextHelper::fromHtmlEscaped(
-                                      reviewCommentNode.attribute("comment")) });
-
-                            reviewCommentNode
-                                = reviewCommentNode.nextSiblingElement("review_comment");
-                        }
-                        if (reviewMark.comments.isEmpty()) {
-                            reviewMark.comments.append(
-                                ScreenplayTextModelTextItem::ReviewComment());
-                        }
-                        reviewMarks.append(reviewMark);
-
-                        reviewNode = reviewNode.nextSiblingElement("review");
-                    }
-                }
-                //
-                // ... читаем форматирование
-                //
-                auto formatsNode = paragraph.firstChildElement("formatting");
-                if (!formatsNode.isNull()) {
-                    auto formatNode = formatsNode.firstChildElement("format");
-                    while (!formatNode.isNull()) {
-                        ScreenplayTextModelTextItem::TextFormat format;
-                        format.from = formatNode.attribute("from").toInt();
-                        format.length = formatNode.attribute("length").toInt();
-                        format.isBold = formatNode.attribute("bold") == "true";
-                        format.isItalic = formatNode.attribute("italic") == "true";
-                        format.isUnderline = formatNode.attribute("underline") == "true";
-                        formats.append(format);
-
-                        formatNode = formatNode.nextSiblingElement("format");
-                    }
-                }
-            }
-
-            //
-            // Корректируем при необходимости
-            //
-            if (blockType == TextParagraphType::Parenthetical) {
-                if (!paragraphText.isEmpty() && paragraphText.front() == '(') {
-                    paragraphText.remove(0, 1);
-                }
-                if (!paragraphText.isEmpty() && paragraphText.back() == ')') {
-                    paragraphText.chop(1);
-                }
-            }
+        if (blockType == TextParagraphType::BeatHeading) {
+            beatsBuffer.enqueue(paragraph);
+        } else {
+            writeBlock(paragraph, blockType, writer);
         }
-
-        //
-        // Формируем блок сценария
-        //
-        switch (blockType) {
-        case TextParagraphType::SequenceHeading: {
-            if (alreadyInBeat) {
-                if (!alreadyInText) {
-                    writer.writeStartElement(toString(TextParagraphType::Action));
-                    writer.writeStartElement(xml::kValueTag);
-                    writer.writeCDATA({});
-                    writer.writeEndElement(); // value
-                    writer.writeEndElement(); // action
-                }
-                writer.writeEndElement(); // контент предыдущего бита
-                writer.writeEndElement(); // предыдущий бит
-            }
-            alreadyInBeat = false; // вышли из бита
-
-            if (alreadyInScene) {
-                writer.writeEndElement(); // контент предыдущей сцены
-                writer.writeEndElement(); // предыдущая сцена
-            }
-            alreadyInScene = false; // вышли из сцены
-
-            writer.writeStartElement(toString(TextFolderType::Sequence));
-            writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
-            writer.writeStartElement(xml::kContentTag);
-            break;
-        }
-
-        case TextParagraphType::SequenceFooter: {
-            if (alreadyInBeat) {
-                if (!alreadyInText) {
-                    writer.writeStartElement(toString(TextParagraphType::Action));
-                    writer.writeStartElement(xml::kValueTag);
-                    writer.writeCDATA({});
-                    writer.writeEndElement(); // value
-                    writer.writeEndElement(); // action
-                }
-                writer.writeEndElement(); // контент предыдущего бита
-                writer.writeEndElement(); // предыдущий бит
-            }
-            alreadyInBeat = false; // вышли из бита
-
-            if (alreadyInScene) {
-                writer.writeEndElement(); // контент предыдущей сцены
-                writer.writeEndElement(); // предыдущая сцена
-            }
-            alreadyInScene = false; // вышли из сцены
-
-            break;
-        }
-
-        case TextParagraphType::SceneHeading: {
-            if (alreadyInBeat) {
-                if (!alreadyInText) {
-                    writer.writeStartElement(toString(TextParagraphType::Action));
-                    writer.writeStartElement(xml::kValueTag);
-                    writer.writeCDATA({});
-                    writer.writeEndElement(); // value
-                    writer.writeEndElement(); // action
-                }
-                writer.writeEndElement(); // контент предыдущего бита
-                writer.writeEndElement(); // предыдущий бит
-            }
-            alreadyInBeat = false; // вышли из бита
-
-            if (alreadyInScene) {
-                writer.writeEndElement(); // контент предыдущей сцены
-                writer.writeEndElement(); // предыдущая сцена
-            }
-            alreadyInScene = true; // вошли в новую сцену
-            alreadyInText = false;
-
-            writer.writeStartElement(toString(TextGroupType::Scene));
-            writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
-            if (paragraph.attributes().contains("color")) {
-                writer.writeStartElement(xml::kColorAttribute);
-                writer.writeCDATA(paragraph.attributes().namedItem("color").nodeValue());
-                writer.writeEndElement();
-            }
-            if (paragraph.attributes().contains("title")) {
-                writer.writeStartElement(xml::kTitleTag);
-                writer.writeCDATA(paragraph.attributes().namedItem("title").nodeValue());
-                writer.writeEndElement();
-            }
-            if (paragraph.attributes().contains("stamp")) {
-                writer.writeStartElement(xml::kStampTag);
-                writer.writeCDATA(paragraph.attributes().namedItem("stamp").nodeValue());
-                writer.writeEndElement();
-            }
-            writer.writeStartElement(xml::kContentTag);
-            break;
-        }
-
-        case TextParagraphType::BeatHeading: {
-            if (alreadyInBeat) {
-                if (!alreadyInText) {
-                    writer.writeStartElement(toString(TextParagraphType::Action));
-                    writer.writeStartElement(xml::kValueTag);
-                    writer.writeCDATA({});
-                    writer.writeEndElement(); // value
-                    writer.writeEndElement(); // action
-                }
-                writer.writeEndElement(); // контент предыдущего бита
-                writer.writeEndElement(); // предыдущий бит
-            }
-
-            alreadyInBeat = true; // вошли в новый бит
-            alreadyInText = false;
-
-            writer.writeStartElement(toString(TextGroupType::Beat));
-            writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
-            writer.writeStartElement(xml::kContentTag);
-            break;
-        }
-
-        default: {
-            alreadyInText = true;
-            break;
-        }
-        }
-        //
-        // Начинаем писать блок
-        //
-        writer.writeStartElement(toString(blockType));
-        //
-        // Пишем закладку
-        //
-        if (!bookmarkColor.isEmpty() || !bookmarkName.isEmpty()) {
-            writer.writeStartElement(xml::kBookmarkTag);
-            writer.writeAttribute("color", bookmarkColor);
-            writer.writeCDATA(bookmarkName);
-            writer.writeEndElement(); // bookmark
-        }
-        //
-        // Пишем текст блока
-        //
-        writer.writeStartElement(xml::kValueTag);
-        writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
-        writer.writeEndElement(); // value
-        //
-        // Пишем редакторские заметки
-        //
-        if (!reviewMarks.isEmpty()) {
-            writer.writeStartElement(xml::kReviewMarksTag);
-            for (const auto& reviewMark : std::as_const(reviewMarks)) {
-                writer.writeStartElement(xml::kReviewMarkTag);
-                writer.writeAttribute(xml::kFromAttribute, QString::number(reviewMark.from));
-                writer.writeAttribute(xml::kLengthAttribute, QString::number(reviewMark.length));
-                writer.writeAttribute(xml::kBackgroundColorAttribute,
-                                      reviewMark.backgroundColor.name());
-                for (const auto& comment : std::as_const(reviewMark.comments)) {
-                    writer.writeStartElement(xml::kCommentTag);
-                    writer.writeAttribute(xml::kAuthorAttribute, comment.author);
-                    writer.writeAttribute(xml::kDateAttribute, comment.date);
-                    writer.writeCDATA(TextHelper::toHtmlEscaped(comment.text));
-                    writer.writeEndElement(); // comment
-                }
-                writer.writeEndElement();
-            }
-            writer.writeEndElement(); // review marks
-        }
-        //
-        // Пишем форматирование
-        //
-        if (!formats.isEmpty()) {
-            writer.writeStartElement(xml::kFormatsTag);
-            for (const auto& format : std::as_const(formats)) {
-                writer.writeStartElement(xml::kFormatTag);
-                //
-                // Данные пользовательского форматирования
-                //
-                writer.writeAttribute(xml::kFromAttribute, QString::number(format.from));
-                writer.writeAttribute(xml::kLengthAttribute, QString::number(format.length));
-                if (format.isBold) {
-                    writer.writeAttribute(xml::kBoldAttribute, "true");
-                }
-                if (format.isItalic) {
-                    writer.writeAttribute(xml::kItalicAttribute, "true");
-                }
-                if (format.isUnderline) {
-                    writer.writeAttribute(xml::kUnderlineAttribute, "true");
-                }
-                //
-                writer.writeEndElement(); // format
-            }
-            writer.writeEndElement(); // formats
-        }
-        writer.writeEndElement(); // block type
-
-        //
-        // Если пишем футер папки, то нужно закрыть и саму папку
-        //
-        if (blockType == TextParagraphType::SequenceFooter) {
-            writer.writeEndElement(); // контент текущей папки
-            writer.writeEndElement(); // текущая папка
-        }
-
-        //
-        // Переходим к следующему
-        //
-        paragraph = paragraph.nextSibling();
     }
+
+    //
+    // Запишем оставшиеся биты
+    //
+    writeBeats(writer);
+
     writer.writeEndDocument();
 
     return screenplay;
 }
 
-} // namespace
+void ScreenplayKitScenaristImporter::Implementation::writeBlock(const QDomNode& _paragraph,
+                                                                TextParagraphType _blockType,
+                                                                QXmlStreamWriter& _writer)
+{
+    //
+    // Получим текст блока
+    //
+    QString paragraphText;
+    QVector<ScreenplayTextModelTextItem::ReviewMark> reviewMarks;
+    QVector<ScreenplayTextModelTextItem::TextFormat> formats;
+    {
+        QDomElement textNode = _paragraph.firstChildElement("v");
+        if (!textNode.isNull()) {
+            //
+            // ... читаем текст
+            //
+            paragraphText = textNode.text();
+            //
+            // ... читаем закладки
+            //
+            if (const auto paragraphNode = _paragraph.toElement();
+                !paragraphNode.isNull() && paragraphNode.hasAttribute("bookmark")) {
+                bookmarkName = paragraphNode.attribute("bookmark");
+                bookmarkColor = paragraphNode.attribute("bookmark_color");
+            } else {
+                bookmarkName.clear();
+                bookmarkColor.clear();
+            }
+            //
+            // ... читаем редакторские заметки
+            //
+            auto reviewsNode = _paragraph.firstChildElement("reviews");
+            if (!reviewsNode.isNull()) {
+                auto reviewNode = reviewsNode.firstChildElement("review");
+                while (!reviewNode.isNull()) {
+                    ScreenplayTextModelTextItem::ReviewMark reviewMark;
+                    reviewMark.from = reviewNode.attribute("from").toInt();
+                    reviewMark.length = reviewNode.attribute("length").toInt();
+                    if (reviewNode.attribute("color") != "#000000") {
+                        reviewMark.textColor = reviewNode.attribute("color");
+                    }
+                    if (reviewNode.attribute("bgcolor") != "#000000") {
+                        reviewMark.backgroundColor = reviewNode.attribute("bgcolor");
+                    }
+                    reviewMark.isDone = reviewNode.attribute("done") == "true";
+                    auto reviewCommentNode = reviewNode.firstChildElement("review_comment");
+                    while (!reviewCommentNode.isNull()) {
+                        reviewMark.comments.append({ reviewCommentNode.attribute("author"),
+                                                     {},
+                                                     reviewCommentNode.attribute("date"),
+                                                     TextHelper::fromHtmlEscaped(
+                                                         reviewCommentNode.attribute("comment")) });
+
+                        reviewCommentNode = reviewCommentNode.nextSiblingElement("review_comment");
+                    }
+                    if (reviewMark.comments.isEmpty()) {
+                        reviewMark.comments.append(ScreenplayTextModelTextItem::ReviewComment());
+                    }
+                    reviewMarks.append(reviewMark);
+
+                    reviewNode = reviewNode.nextSiblingElement("review");
+                }
+            }
+            //
+            // ... читаем форматирование
+            //
+            auto formatsNode = _paragraph.firstChildElement("formatting");
+            if (!formatsNode.isNull()) {
+                auto formatNode = formatsNode.firstChildElement("format");
+                while (!formatNode.isNull()) {
+                    ScreenplayTextModelTextItem::TextFormat format;
+                    format.from = formatNode.attribute("from").toInt();
+                    format.length = formatNode.attribute("length").toInt();
+                    format.isBold = formatNode.attribute("bold") == "true";
+                    format.isItalic = formatNode.attribute("italic") == "true";
+                    format.isUnderline = formatNode.attribute("underline") == "true";
+                    formats.append(format);
+
+                    formatNode = formatNode.nextSiblingElement("format");
+                }
+            }
+        }
+
+        //
+        // Корректируем при необходимости
+        //
+        if (_blockType == TextParagraphType::Parenthetical) {
+            if (!paragraphText.isEmpty() && paragraphText.front() == '(') {
+                paragraphText.remove(0, 1);
+            }
+            if (!paragraphText.isEmpty() && paragraphText.back() == ')') {
+                paragraphText.chop(1);
+            }
+        }
+    }
+
+    //
+    // Формируем блок сценария
+    //
+    switch (_blockType) {
+    case TextParagraphType::SequenceHeading: {
+        if (alreadyInScene) {
+            //
+            // В конце сцены пишем биты
+            //
+            writeBeats(_writer);
+            _writer.writeEndElement(); // контент предыдущей сцены
+            _writer.writeEndElement(); // предыдущая сцена
+        }
+        alreadyInScene = false; // вышли из сцены
+
+        _writer.writeStartElement(toString(TextFolderType::Sequence));
+        _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
+        _writer.writeStartElement(xml::kContentTag);
+        break;
+    }
+
+    case TextParagraphType::SequenceFooter: {
+        if (alreadyInScene) {
+            //
+            // В конце сцены пишем биты
+            //
+            writeBeats(_writer);
+            _writer.writeEndElement(); // контент предыдущей сцены
+            _writer.writeEndElement(); // предыдущая сцена
+        }
+        alreadyInScene = false; // вышли из сцены
+
+        break;
+    }
+
+    case TextParagraphType::SceneHeading: {
+        if (alreadyInScene) {
+            //
+            // В конце сцены пишем биты
+            //
+            writeBeats(_writer);
+            _writer.writeEndElement(); // контент предыдущей сцены
+            _writer.writeEndElement(); // предыдущая сцена
+        }
+        alreadyInScene = true; // вошли в новую сцену
+
+        _writer.writeStartElement(toString(TextGroupType::Scene));
+        _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
+        if (_paragraph.attributes().contains("color")) {
+            _writer.writeStartElement(xml::kColorAttribute);
+            _writer.writeCDATA(_paragraph.attributes().namedItem("color").nodeValue());
+            _writer.writeEndElement();
+        }
+        if (_paragraph.attributes().contains("title")) {
+            _writer.writeStartElement(xml::kTitleTag);
+            _writer.writeCDATA(_paragraph.attributes().namedItem("title").nodeValue());
+            _writer.writeEndElement();
+        }
+        if (_paragraph.attributes().contains("stamp")) {
+            _writer.writeStartElement(xml::kStampTag);
+            _writer.writeCDATA(_paragraph.attributes().namedItem("stamp").nodeValue());
+            _writer.writeEndElement();
+        }
+        _writer.writeStartElement(xml::kContentTag);
+        break;
+    }
+
+    case TextParagraphType::BeatHeading: {
+        _writer.writeStartElement(toString(TextGroupType::Beat));
+        _writer.writeAttribute(xml::kUuidAttribute, QUuid::createUuid().toString());
+        _writer.writeStartElement(xml::kContentTag);
+        break;
+    }
+
+    default: {
+        break;
+    }
+    }
+
+    //
+    // Начинаем писать блок
+    //
+    _writer.writeStartElement(toString(_blockType));
+    //
+    // Пишем закладку
+    //
+    if (!bookmarkColor.isEmpty() || !bookmarkName.isEmpty()) {
+        _writer.writeStartElement(xml::kBookmarkTag);
+        _writer.writeAttribute("color", bookmarkColor);
+        _writer.writeCDATA(bookmarkName);
+        _writer.writeEndElement(); // bookmark
+    }
+    //
+    // Пишем текст блока
+    //
+    _writer.writeStartElement(xml::kValueTag);
+    _writer.writeCDATA(TextHelper::toHtmlEscaped(paragraphText));
+    _writer.writeEndElement(); // value
+    //
+    // Пишем редакторские заметки
+    //
+    if (!reviewMarks.isEmpty()) {
+        _writer.writeStartElement(xml::kReviewMarksTag);
+        for (const auto& reviewMark : std::as_const(reviewMarks)) {
+            _writer.writeStartElement(xml::kReviewMarkTag);
+            _writer.writeAttribute(xml::kFromAttribute, QString::number(reviewMark.from));
+            _writer.writeAttribute(xml::kLengthAttribute, QString::number(reviewMark.length));
+            _writer.writeAttribute(xml::kBackgroundColorAttribute,
+                                   reviewMark.backgroundColor.name());
+            for (const auto& comment : std::as_const(reviewMark.comments)) {
+                _writer.writeStartElement(xml::kCommentTag);
+                _writer.writeAttribute(xml::kAuthorAttribute, comment.author);
+                _writer.writeAttribute(xml::kDateAttribute, comment.date);
+                _writer.writeCDATA(TextHelper::toHtmlEscaped(comment.text));
+                _writer.writeEndElement(); // comment
+            }
+            _writer.writeEndElement();
+        }
+        _writer.writeEndElement(); // review marks
+    }
+    //
+    // Пишем форматирование
+    //
+    if (!formats.isEmpty()) {
+        _writer.writeStartElement(xml::kFormatsTag);
+        for (const auto& format : std::as_const(formats)) {
+            _writer.writeStartElement(xml::kFormatTag);
+            //
+            // Данные пользовательского форматирования
+            //
+            _writer.writeAttribute(xml::kFromAttribute, QString::number(format.from));
+            _writer.writeAttribute(xml::kLengthAttribute, QString::number(format.length));
+            if (format.isBold) {
+                _writer.writeAttribute(xml::kBoldAttribute, "true");
+            }
+            if (format.isItalic) {
+                _writer.writeAttribute(xml::kItalicAttribute, "true");
+            }
+            if (format.isUnderline) {
+                _writer.writeAttribute(xml::kUnderlineAttribute, "true");
+            }
+            //
+            _writer.writeEndElement(); // format
+        }
+        _writer.writeEndElement(); // formats
+    }
+    _writer.writeEndElement(); // block type
+
+    //
+    // Если пишем футер папки, то нужно закрыть и саму папку
+    //
+    if (_blockType == TextParagraphType::SequenceFooter) {
+        _writer.writeEndElement(); // контент текущей папки
+        _writer.writeEndElement(); // текущая папка
+    }
+}
+
+void ScreenplayKitScenaristImporter::Implementation::writeBeats(QXmlStreamWriter& _writer)
+{
+    while (!beatsBuffer.isEmpty()) {
+        const auto beatParagraph = beatsBuffer.dequeue();
+        writeBlock(beatParagraph, TextParagraphType::BeatHeading, _writer);
+        _writer.writeEndElement(); // контент предыдущего бита
+        _writer.writeEndElement(); // предыдущий бит
+    }
+}
+
+
+// ****
+
+
+ScreenplayKitScenaristImporter::ScreenplayKitScenaristImporter()
+    : AbstractScreenplayImporter()
+    , d(new Implementation)
+{
+}
+
+ScreenplayKitScenaristImporter::~ScreenplayKitScenaristImporter() = default;
 
 AbstractScreenplayImporter::Documents ScreenplayKitScenaristImporter::importDocuments(
     const ImportOptions& _options) const
@@ -620,14 +644,14 @@ QVector<AbstractScreenplayImporter::Screenplay> ScreenplayKitScenaristImporter::
             QSqlQuery query(database);
 
             //
-            // Читаем сценарий
+            // Читаем сценарий (scenario - текст сценария)
             //
             QString screenplayName = QFileInfo(_options.filePath).completeBaseName();
             {
                 query.exec("SELECT text FROM scenario WHERE is_draft = 0");
                 query.next();
                 const auto kitScreenplayXml = query.record().value("text").toString();
-                auto screenplay = readScreenplay(kitScreenplayXml);
+                auto screenplay = d->readScreenplay(kitScreenplayXml);
 
                 //
                 // Читаем данные
@@ -672,7 +696,7 @@ QVector<AbstractScreenplayImporter::Screenplay> ScreenplayKitScenaristImporter::
                       "</scene_heading>\n"
                       "</scenario>\n";
                 if (kitScreenplayXml != defaultKitScreenplay) {
-                    auto screenplay = readScreenplay(kitScreenplayXml);
+                    auto screenplay = d->readScreenplay(kitScreenplayXml);
                     screenplay.name = QString("%1 (%2)").arg(
                         screenplayName,
                         //: Draft screenplay imported from KIT Scenarist file
