@@ -162,7 +162,9 @@ CreateProjectDialog::CreateProjectDialog(QWidget* _parent)
     connect(d->localProject, &RadioButton::checkedChanged, this, [this](bool _checked) {
         d->projectFolder->setVisible(_checked && d->advancedSettingsButton->isChecked());
     });
-    connect(d->cloudProject, &RadioButton::checkedChanged, d->projectTeam, &ComboBox::setEnabled);
+    connect(d->cloudProject, &RadioButton::checkedChanged, this, [this](bool _checked) {
+        d->projectTeam->setVisible(_checked && d->projectTeamModel->rowCount() > 0);
+    });
     connect(d->advancedSettingsButton, &IconButton::checkedChanged, this, [this](bool _checked) {
         d->projectFolder->setVisible(_checked && d->localProject->isChecked());
         d->importFilePath->setVisible(_checked);
@@ -331,7 +333,7 @@ void CreateProjectDialog::configureCloudProjectCreationAbility(
                 d->projectTeamModel->appendRow(makeItem(teamAvatar, team.name, team.id));
             }
             d->projectTeam->setCurrentIndex(d->projectTeamModel->index(0, 0));
-            d->projectTeam->show();
+            d->projectTeam->setVisible(d->cloudProject->isChecked());
         } else {
             d->projectTeam->hide();
         }
@@ -481,6 +483,9 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
     d->projectName->setCustomMargins({ DesignSystem::layout().px24(),
                                        DesignSystem::compactLayout().px16(),
                                        DesignSystem::layout().px24(), 0 });
+    d->projectFolder->setCustomMargins({ DesignSystem::layout().px24(), 0.0,
+                                         DesignSystem::layout().px24(),
+                                         DesignSystem::compactLayout().px16() });
     for (auto combobox : {
              d->projectType,
              d->projectTeam,
