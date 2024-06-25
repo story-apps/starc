@@ -238,7 +238,7 @@ BusinessLayer::ImportOptions ImportDialog::importOptions() const
     BusinessLayer::ImportOptions options;
     options.filePath = d->importFilePath;
     options.documentType = d->importInType();
-    options.importText = d->importText->isChecked();
+    options.importText = d->importText->isVisibleTo(this) && d->importText->isChecked();
 
     options.importCharacters
         = d->importCharacters->isVisibleTo(this) && d->importCharacters->isChecked();
@@ -252,7 +252,7 @@ BusinessLayer::ScreenplayImportOptions ImportDialog::screenplayImportOptions() c
     BusinessLayer::ScreenplayImportOptions options;
     options.filePath = d->importFilePath;
     options.documentType = d->importInType();
-    options.importText = d->importText->isChecked();
+    options.importText = d->importText->isVisibleTo(this) && d->importText->isChecked();
 
     options.importCharacters
         = d->importCharacters->isVisibleTo(this) && d->importCharacters->isChecked();

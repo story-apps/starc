@@ -315,14 +315,20 @@ BusinessLayer::CharactersExportOptions CharactersExportDialog::exportOptions() c
     }
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
-    options.includeMainPhoto = d->includeMainPhoto->isVisible() && d->includeMainPhoto->isChecked();
-    options.includeStoryRole = d->includeStoryRole->isChecked();
-    options.includeAge = d->includeAge->isChecked();
-    options.includeGender = d->includeGender->isChecked();
-    options.includeOneLineDescription = d->includeOneLineDescription->isChecked();
-    options.includeLongDescription = d->includeLongDescription->isChecked();
-    options.watermark = d->watermark->text();
-    options.watermarkColor = ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3);
+    options.includeMainPhoto
+        = d->includeMainPhoto->isVisibleTo(this) && d->includeMainPhoto->isChecked();
+    options.includeStoryRole
+        = d->includeStoryRole->isVisibleTo(this) && d->includeStoryRole->isChecked();
+    options.includeAge = d->includeAge->isVisibleTo(this) && d->includeAge->isChecked();
+    options.includeGender = d->includeGender->isVisibleTo(this) && d->includeGender->isChecked();
+    options.includeOneLineDescription = d->includeOneLineDescription->isVisibleTo(this)
+        && d->includeOneLineDescription->isChecked();
+    options.includeLongDescription
+        = d->includeLongDescription->isVisibleTo(this) && d->includeLongDescription->isChecked();
+    options.watermark = d->watermark->isVisibleTo(this) ? d->watermark->text() : "";
+    options.watermarkColor = d->watermarkColorPopup->isVisibleTo(this)
+        ? ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3)
+        : QColor();
     return options;
 }
 

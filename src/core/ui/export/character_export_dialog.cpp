@@ -217,16 +217,26 @@ BusinessLayer::CharacterExportOptions CharacterExportDialog::exportOptions() con
     BusinessLayer::CharacterExportOptions options;
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
-    options.includeMainPhoto = d->includeMainPhoto->isChecked();
-    options.includeAdditionalPhotos = d->includeAdditionalPhotos->isChecked();
-    options.includeStoryInfo = d->includeStoryInfo->isChecked();
-    options.includePersonalInfo = d->includePersonalInfo->isChecked();
-    options.includePhysiqueInfo = d->includePhysiqueInfo->isChecked();
-    options.includeLifeInfo = d->includeLifeInfo->isChecked();
-    options.includeAttitudeInfo = d->includeAttitudeInfo->isChecked();
-    options.includeBiographyInfo = d->includeBiographyInfo->isChecked();
-    options.watermark = d->watermark->text();
-    options.watermarkColor = ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3);
+    options.includeMainPhoto
+        = d->includeMainPhoto->isVisibleTo(this) && d->includeMainPhoto->isChecked();
+    options.includeAdditionalPhotos
+        = d->includeAdditionalPhotos->isVisibleTo(this) && d->includeAdditionalPhotos->isChecked();
+    options.includeStoryInfo
+        = d->includeStoryInfo->isVisibleTo(this) && d->includeStoryInfo->isChecked();
+    options.includePersonalInfo
+        = d->includePersonalInfo->isVisibleTo(this) && d->includePersonalInfo->isChecked();
+    options.includePhysiqueInfo
+        = d->includePhysiqueInfo->isVisibleTo(this) && d->includePhysiqueInfo->isChecked();
+    options.includeLifeInfo
+        = d->includeLifeInfo->isVisibleTo(this) && d->includeLifeInfo->isChecked();
+    options.includeAttitudeInfo
+        = d->includeAttitudeInfo->isVisibleTo(this) && d->includeAttitudeInfo->isChecked();
+    options.includeBiographyInfo
+        = d->includeBiographyInfo->isVisibleTo(this) && d->includeBiographyInfo->isChecked();
+    options.watermark = d->watermark->isVisibleTo(this) ? d->watermark->text() : "";
+    options.watermarkColor = d->watermarkColorPopup->isVisibleTo(this)
+        ? ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3)
+        : QColor();
     return options;
 }
 

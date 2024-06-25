@@ -329,19 +329,30 @@ BusinessLayer::ScreenplayExportOptions ScreenplayExportDialog::exportOptions() c
     BusinessLayer::ScreenplayExportOptions options;
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
-    options.includeTitlePage = d->includeTitlePage->isChecked();
+    options.includeTitlePage
+        = d->includeSynopsis->isVisibleTo(this) && d->includeTitlePage->isChecked();
     options.includeSynopsis
-        = d->includeSynopsis->isVisibleTo(this) ? d->includeSynopsis->isChecked() : false;
-    options.includeText = d->includeTreatment->isChecked() || d->includeScreenplay->isChecked();
-    options.includeTreatment = d->includeTreatment->isChecked();
-    options.includeFolders = d->includeSequences->isChecked();
-    options.includeInlineNotes = d->includeInlineNotes->isChecked();
-    options.includeReviewMarks = d->includeReviewMarks->isChecked();
-    options.highlightCharacters = d->highlightCharacters->isChecked();
-    options.highlightCharactersWithDialogues = d->highlightCharactersWithDialogue->isChecked();
+        = d->includeSynopsis->isVisibleTo(this) && d->includeSynopsis->isChecked();
+    options.includeText
+        = (d->includeTreatment->isVisibleTo(this) && d->includeTreatment->isChecked())
+        || (d->includeScreenplay->isVisibleTo(this) && d->includeScreenplay->isChecked());
+    options.includeTreatment
+        = d->includeTreatment->isVisibleTo(this) && d->includeTreatment->isChecked();
+    options.includeFolders
+        = d->includeSequences->isVisibleTo(this) && d->includeSequences->isChecked();
+    options.includeInlineNotes
+        = d->includeInlineNotes->isVisibleTo(this) && d->includeInlineNotes->isChecked();
+    options.includeReviewMarks
+        = d->includeReviewMarks->isVisibleTo(this) && d->includeReviewMarks->isChecked();
+    options.highlightCharacters
+        = d->highlightCharacters->isVisibleTo(this) && d->highlightCharacters->isChecked();
+    options.highlightCharactersWithDialogues = d->highlightCharactersWithDialogue->isVisibleTo(this)
+        && d->highlightCharactersWithDialogue->isChecked();
     options.exportScenes = d->scenesToPrint();
-    options.watermark = d->watermark->text();
-    options.watermarkColor = ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3);
+    options.watermark = d->watermark->isVisibleTo(this) ? d->watermark->text() : "";
+    options.watermarkColor = d->watermarkColorPopup->isVisibleTo(this)
+        ? ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3)
+        : QColor();
     return options;
 }
 

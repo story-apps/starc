@@ -199,13 +199,20 @@ BusinessLayer::LocationExportOptions LocationExportDialog::exportOptions() const
     BusinessLayer::LocationExportOptions options;
     options.fileFormat
         = static_cast<BusinessLayer::ExportFileFormat>(d->fileFormat->currentIndex().row());
-    options.includeMainPhoto = d->includeMainPhoto->isChecked();
-    options.includeAdditionalPhotos = d->includeAdditionalPhotos->isChecked();
-    options.includeSenseInfo = d->includeSenseInfo->isChecked();
-    options.includeGeographyInfo = d->includeGeographyInfo->isChecked();
-    options.includeBackgroundInfo = d->includeBackgroundInfo->isChecked();
-    options.watermark = d->watermark->text();
-    options.watermarkColor = ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3);
+    options.includeMainPhoto
+        = d->includeMainPhoto->isVisibleTo(this) && d->includeMainPhoto->isChecked();
+    options.includeAdditionalPhotos
+        = d->includeAdditionalPhotos->isVisibleTo(this) && d->includeAdditionalPhotos->isChecked();
+    options.includeSenseInfo
+        = d->includeSenseInfo->isVisibleTo(this) && d->includeSenseInfo->isChecked();
+    options.includeGeographyInfo
+        = d->includeGeographyInfo->isVisibleTo(this) && d->includeGeographyInfo->isChecked();
+    options.includeBackgroundInfo
+        = d->includeBackgroundInfo->isVisibleTo(this) && d->includeBackgroundInfo->isChecked();
+    options.watermark = d->watermark->isVisibleTo(this) ? d->watermark->text() : "";
+    options.watermarkColor = d->watermarkColorPopup->isVisibleTo(this)
+        ? ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3)
+        : QColor();
     return options;
 }
 

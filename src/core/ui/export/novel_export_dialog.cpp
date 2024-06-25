@@ -298,18 +298,24 @@ BusinessLayer::NovelExportOptions NovelExportDialog::exportOptions() const
 {
     BusinessLayer::NovelExportOptions options;
     options.fileFormat = d->currentFileFormat();
-    options.includeTitlePage = d->includeTitlePage->isChecked();
+    options.includeTitlePage
+        = d->includeTitlePage->isVisibleTo(this) && d->includeTitlePage->isChecked();
     options.includeSynopsis
-        = d->includeSynopsis->isVisibleTo(this) ? d->includeSynopsis->isChecked() : false;
-    options.includeText = d->includeOutline->isChecked() || d->includeNovel->isChecked();
-    options.includeOutline = d->includeOutline->isChecked();
+        = d->includeSynopsis->isVisibleTo(this) && d->includeSynopsis->isChecked();
+    options.includeText = (d->includeOutline->isVisibleTo(this) && d->includeOutline->isChecked())
+        || (d->includeNovel->isVisibleTo(this) && d->includeNovel->isChecked());
+    options.includeOutline = d->includeOutline->isVisibleTo(this) && d->includeOutline->isChecked();
     options.includeFolders = true;
-    options.includeFooters = d->includeFooters->isChecked();
-    options.includeInlineNotes = d->includeInlineNotes->isChecked();
-    options.includeReviewMarks = d->includeReviewMarks->isChecked();
-    options.ornamentalBreak = d->ornamentalBreak->text();
-    options.watermark = d->watermark->text();
-    options.watermarkColor = ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3);
+    options.includeFooters = d->includeFooters->isVisibleTo(this) && d->includeFooters->isChecked();
+    options.includeInlineNotes
+        = d->includeInlineNotes->isVisibleTo(this) && d->includeInlineNotes->isChecked();
+    options.includeReviewMarks
+        = d->includeReviewMarks->isVisibleTo(this) && d->includeReviewMarks->isChecked();
+    options.ornamentalBreak = d->watermark->isVisibleTo(this) ? d->ornamentalBreak->text() : "";
+    options.watermark = d->watermark->isVisibleTo(this) ? d->watermark->text() : "";
+    options.watermarkColor = d->watermarkColorPopup->isVisibleTo(this)
+        ? ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3)
+        : QColor();
     return options;
 }
 
