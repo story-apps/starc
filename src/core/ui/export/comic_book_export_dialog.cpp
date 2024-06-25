@@ -230,14 +230,19 @@ BusinessLayer::ComicBookExportOptions ComicBookExportDialog::exportOptions() con
 {
     BusinessLayer::ComicBookExportOptions options;
     options.fileFormat = d->currentFileFormat();
-    options.includeTitlePage = d->includeTitlePage->isChecked();
+    options.includeTitlePage
+        = d->includeTitlePage->isVisibleTo(this) && d->includeTitlePage->isChecked();
     options.includeSynopsis
-        = d->includeSynopsis->isVisibleTo(this) ? d->includeSynopsis->isChecked() : false;
-    options.includeText = d->includeScript->isChecked();
-    options.includeInlineNotes = d->includeInlineNotes->isChecked();
-    options.includeReviewMarks = d->includeReviewMarks->isChecked();
-    options.watermark = d->watermark->text();
-    options.watermarkColor = ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3);
+        = d->includeSynopsis->isVisibleTo(this) && d->includeSynopsis->isChecked();
+    options.includeText = d->includeScript->isVisibleTo(this) && d->includeScript->isChecked();
+    options.includeInlineNotes
+        = d->includeInlineNotes->isVisibleTo(this) && d->includeInlineNotes->isChecked();
+    options.includeReviewMarks
+        = d->includeReviewMarks->isVisibleTo(this) && d->includeReviewMarks->isChecked();
+    options.watermark = d->watermark->isVisibleTo(this) ? d->watermark->text() : "";
+    options.watermarkColor = d->watermarkColorPopup->isVisibleTo(this)
+        ? ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3)
+        : QColor();
     return options;
 }
 

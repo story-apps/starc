@@ -195,10 +195,14 @@ BusinessLayer::ExportOptions SimpleTextExportDialog::exportOptions() const
 {
     BusinessLayer::ExportOptions options;
     options.fileFormat = d->currentFileFormat();
-    options.includeInlineNotes = d->includeInlineNotes->isChecked();
-    options.includeReviewMarks = d->includeReviewMarks->isChecked();
-    options.watermark = d->watermark->text();
-    options.watermarkColor = ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3);
+    options.includeInlineNotes
+        = d->includeInlineNotes->isVisibleTo(this) && d->includeInlineNotes->isChecked();
+    options.includeReviewMarks
+        = d->includeReviewMarks->isVisibleTo(this) && d->includeReviewMarks->isChecked();
+    options.watermark = d->watermark->isVisibleTo(this) ? d->watermark->text() : "";
+    options.watermarkColor = d->watermarkColorPopup->isVisibleTo(this)
+        ? ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3)
+        : QColor();
     return options;
 }
 
