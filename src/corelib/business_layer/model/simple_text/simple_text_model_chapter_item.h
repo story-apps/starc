@@ -22,11 +22,6 @@ public:
     ~SimpleTextModelChapterItem() override;
 
     /**
-     * @brief Количество слов главы
-     */
-    int wordsCount() const;
-
-    /**
      * @brief Определяем интерфейс получения данных главы
      */
     QVariant data(int _role) const override;
@@ -36,10 +31,6 @@ protected:
      * @brief Обновляем текст главы при изменении кого-то из детей
      */
     void handleChange() override;
-
-private:
-    class Implementation;
-    QScopedPointer<Implementation> d;
 };
 
 } // namespace BusinessLayer

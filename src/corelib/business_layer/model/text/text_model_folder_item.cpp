@@ -53,16 +53,6 @@ public:
      * @brief Название папки
      */
     QString heading;
-
-    /**
-     * @brief Количество слов
-     */
-    int wordsCount = 0;
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount;
 };
 
 
@@ -410,26 +400,6 @@ bool TextModelFolderItem::isEqual(TextModelItem* _item) const
     const auto folderItem = static_cast<TextModelFolderItem*>(_item);
     return d->uuid == folderItem->d->uuid && d->color == folderItem->d->color
         && d->description == folderItem->d->description && d->stamp == folderItem->d->stamp;
-}
-
-int TextModelFolderItem::wordsCount() const
-{
-    return d->wordsCount;
-}
-
-void TextModelFolderItem::setWordsCount(int _count)
-{
-    d->wordsCount = _count;
-}
-
-QPair<int, int> TextModelFolderItem::charactersCount() const
-{
-    return d->charactersCount;
-}
-
-void TextModelFolderItem::setCharactersCount(QPair<int, int> _count)
-{
-    d->charactersCount = _count;
 }
 
 void TextModelFolderItem::setHeading(const QString& _heading)

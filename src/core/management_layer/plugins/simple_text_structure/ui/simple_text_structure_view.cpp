@@ -2,15 +2,22 @@
 
 #include "simple_text_structure_delegate.h"
 
+#include <business_layer/document/simple_text/simple_text_document.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/templates/simple_text_template.h>
+#include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
+#include <ui/modules/counters_info/counters_info_widget.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
+#include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <ui/widgets/tree/tree.h>
 
+#include <QSortFilterProxyModel>
 #include <QVBoxLayout>
 
 
@@ -21,11 +28,25 @@ class SimpleTextStructureView::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    /**
+     * @brief Обновить счётчики
+     */
+    void updateCounters();
+
+
+    QSortFilterProxyModel* model = nullptr;
 
     IconsMidLabel* backIcon = nullptr;
     Subtitle2Label* backText = nullptr;
     Tree* content = nullptr;
     SimpleTextStructureDelegate* contentDelegate = nullptr;
+    CountersInfoWidget* countersWidget = nullptr;
+
+    /**
+     * @brief Редактор текста, который будет использоваться для подсчёта кол-ва страниц, если в
+     *        приложении ещё не был открыт редактор текста модели, структуру которого отображаем
+     */
+    QScopedPointer<PageTextEdit> textEdit;
 };
 
 SimpleTextStructureView::Implementation::Implementation(QWidget* _parent)
@@ -33,6 +54,7 @@ SimpleTextStructureView::Implementation::Implementation(QWidget* _parent)
     , backText(new Subtitle2Label(_parent))
     , content(new Tree(_parent))
     , contentDelegate(new SimpleTextStructureDelegate(content))
+    , countersWidget(new CountersInfoWidget(_parent))
 {
     backIcon->setIcon(u8"\U000F0141");
 
@@ -41,7 +63,60 @@ SimpleTextStructureView::Implementation::Implementation(QWidget* _parent)
     content->setSelectionMode(QAbstractItemView::ExtendedSelection);
     content->setItemDelegate(contentDelegate);
 
+    countersWidget->setSettingsCounterModuleKey(QLatin1String("simple_text"));
+
     new Shadow(Qt::TopEdge, content);
+    new Shadow(Qt::BottomEdge, content);
+}
+
+void SimpleTextStructureView::Implementation::updateCounters()
+{
+    if (model == nullptr || model->sourceModel() == nullptr) {
+        return;
+    }
+
+    auto simpleTextModel = qobject_cast<BusinessLayer::SimpleTextModel*>(model->sourceModel());
+    if (simpleTextModel == nullptr) {
+        return;
+    }
+
+    const auto pageCount = [this, simpleTextModel] {
+        //
+        // Если в модели уже задано количество страниц, то используем его
+        //
+        if (simpleTextModel->textPageCount() > 0) {
+            textEdit.reset();
+            return simpleTextModel->textPageCount();
+        }
+
+        //
+        // А если не задано, то придётся считать вручную
+        // NOTE: это возможно, когда не был активирован редактор текста сценария
+        //
+        if (textEdit.isNull()) {
+            const auto& simpleTextTemplate = BusinessLayer::TemplatesFacade::simpleTextTemplate();
+
+            textEdit.reset(new PageTextEdit);
+            textEdit->setUsePageMode(true);
+            textEdit->setPageSpacing(0);
+            textEdit->setPageFormat(simpleTextTemplate.pageSizeId());
+            textEdit->setPageMarginsMm(simpleTextTemplate.pageMargins());
+            auto simpleTextDocument = new BusinessLayer::SimpleTextDocument(textEdit.data());
+            textEdit->setDocument(simpleTextDocument);
+
+            const bool canChangeModel = false;
+            simpleTextDocument->setModel(simpleTextModel, canChangeModel);
+        }
+
+        return textEdit->document()->pageCount();
+    }();
+
+    countersWidget->setCounters({
+        tr("%n page(s)", "", pageCount),
+        tr("%n word(s)", "", simpleTextModel->wordsCount()),
+        tr("%n character(s)", "", simpleTextModel->charactersCount().first),
+        tr("%n character(s) with spaces", "", simpleTextModel->charactersCount().second),
+    });
 }
 
 
@@ -63,6 +138,7 @@ SimpleTextStructureView::SimpleTextStructureView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addLayout(topLayout);
     layout->addWidget(d->content);
+    layout->addWidget(d->countersWidget);
     setLayout(layout);
 
     connect(d->backIcon, &AbstractLabel::clicked, this, &SimpleTextStructureView::backPressed);
@@ -120,7 +196,25 @@ void SimpleTextStructureView::setTitle(const QString& _title)
 
 void SimpleTextStructureView::setModel(QAbstractItemModel* _model)
 {
+    if (d->model != nullptr) {
+        d->model->disconnect(this);
+        d->textEdit.reset();
+    }
+
     d->content->setModel(_model);
+
+    d->model = qobject_cast<QSortFilterProxyModel*>(_model);
+    if (d->model != nullptr) {
+        connect(d->model, &QSortFilterProxyModel::modelReset, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::dataChanged, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::rowsInserted, this,
+                [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::rowsMoved, this, [this] { d->updateCounters(); });
+        connect(d->model, &QSortFilterProxyModel::rowsRemoved, this,
+                [this] { d->updateCounters(); });
+    }
 }
 
 QModelIndexList SimpleTextStructureView::selectedIndexes() const
@@ -142,6 +236,7 @@ void SimpleTextStructureView::updateTranslations()
 {
     d->backIcon->setToolTip(tr("Back to navigator"));
     d->backText->setToolTip(tr("Back to navigator"));
+    d->updateCounters();
 }
 
 void SimpleTextStructureView::designSystemChangeEvent(DesignSystemChangeEvent* _event)

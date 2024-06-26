@@ -10,43 +10,20 @@
 
 namespace BusinessLayer {
 
-class SimpleTextModelChapterItem::Implementation
-{
-public:
-    //
-    // Ридонли свойства, которые формируются по ходу работы со сценарием
-    //
-
-    /**
-     * @brief Количество слов главы
-     */
-    int wordsCount = 0;
-};
-
-
-// ****
-
-
 SimpleTextModelChapterItem::SimpleTextModelChapterItem(const SimpleTextModel* _model,
                                                        TextGroupType _type)
     : TextModelGroupItem(_model)
-    , d(new Implementation)
 {
     setGroupType(_type);
 }
 
 SimpleTextModelChapterItem::~SimpleTextModelChapterItem() = default;
 
-int SimpleTextModelChapterItem::wordsCount() const
-{
-    return d->wordsCount;
-}
-
 QVariant SimpleTextModelChapterItem::data(int _role) const
 {
     switch (_role) {
     case ChapterWordsCountRole: {
-        return d->wordsCount;
+        return wordsCount();
     }
 
     default: {
@@ -62,7 +39,8 @@ void SimpleTextModelChapterItem::handleChange()
     int inlineNotesSize = 0;
     int childGroupsReviewMarksSize = 0;
     QVector<TextModelTextItem::ReviewMark> reviewMarks;
-    d->wordsCount = 0;
+    setWordsCount(0);
+    setCharactersCount({});
 
     for (int childIndex = 0; childIndex < childCount(); ++childIndex) {
         auto child = childAt(childIndex);
@@ -76,7 +54,10 @@ void SimpleTextModelChapterItem::handleChange()
                 text = text.left(maxTextLength);
             }
             childGroupsReviewMarksSize += childChapterItem->reviewMarksSize();
-            d->wordsCount += childChapterItem->wordsCount();
+            setWordsCount(wordsCount() + childChapterItem->wordsCount());
+            setCharactersCount(
+                { charactersCount().first + childChapterItem->charactersCount().first,
+                  charactersCount().second + childChapterItem->charactersCount().second });
             break;
         }
 
@@ -118,9 +99,12 @@ void SimpleTextModelChapterItem::handleChange()
             reviewMarks.append(childTextItem->reviewMarks());
 
             //
-            // Собираем количество слов
+            // Собираем счётчики
             //
-            d->wordsCount += TextHelper::wordsCount(childTextItem->text());
+            setWordsCount(wordsCount() + childTextItem->wordsCount());
+            setCharactersCount(
+                { charactersCount().first + childTextItem->charactersCount().first,
+                  charactersCount().second + childTextItem->charactersCount().second });
 
             break;
         }
