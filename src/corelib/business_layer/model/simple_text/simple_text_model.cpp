@@ -1,6 +1,7 @@
 #include "simple_text_model.h"
 
 #include "simple_text_model_chapter_item.h"
+#include "simple_text_model_folder_item.h"
 
 #include <business_layer/model/text/text_model_folder_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
@@ -53,6 +54,11 @@ public:
      */
     void updateNumbering();
 
+    /**
+     * @brief Пересчитать счетчики элемента и всех детей
+     */
+    void updateChildrenCounters(const TextModelItem* _item, bool _force = false);
+
 
     /**
      * @brief Родительский элемент
@@ -68,6 +74,11 @@ public:
      * @brief Запланировано ли обновление нумерации
      */
     bool isUpdateNumberingPlanned = false;
+
+    /**
+     * @brief Количество страниц
+     */
+    int textPageCount = 0;
 };
 
 SimpleTextModel::Implementation::Implementation(SimpleTextModel* _q)
@@ -126,6 +137,29 @@ void SimpleTextModel::Implementation::updateNumbering()
     updateChildNumbering(rootItem());
 }
 
+void SimpleTextModel::Implementation::updateChildrenCounters(const TextModelItem* _item,
+                                                             bool _force)
+{
+    for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+        auto childItem = _item->childAt(childIndex);
+        switch (childItem->type()) {
+        case TextModelItemType::Group: {
+            updateChildrenCounters(childItem, _force);
+            break;
+        }
+
+        case TextModelItemType::Text: {
+            auto textItem = static_cast<TextModelTextItem*>(childItem);
+            textItem->updateCounters(_force);
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+}
+
 
 // ****
 
@@ -137,15 +171,18 @@ SimpleTextModel::SimpleTextModel(QObject* _parent)
     connect(this, &SimpleTextModel::dataChanged, this,
             [this](const QModelIndex& _index) { d->updateDocumentName(_index); });
 
-    auto updateNumbering = [this] { d->updateNumbering(); };
+    auto updateCounters = [this](const QModelIndex& _index) {
+        d->updateNumbering();
+        d->updateChildrenCounters(itemForIndex(_index));
+    };
 
     //
     // Обновляем счётчики после того, как операции вставки и удаления будут обработаны клиентами
     // модели (главным образом внутри прокси-моделей), т.к. обновление элемента модели может
     // приводить к падению внутри них
     //
-    connect(this, &SimpleTextModel::afterRowsInserted, this, updateNumbering);
-    connect(this, &SimpleTextModel::afterRowsRemoved, this, updateNumbering);
+    connect(this, &SimpleTextModel::afterRowsInserted, this, updateCounters);
+    connect(this, &SimpleTextModel::afterRowsRemoved, this, updateCounters);
     //
     // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
     //
@@ -163,7 +200,7 @@ SimpleTextModel::~SimpleTextModel() = default;
 
 TextModelFolderItem* SimpleTextModel::createFolderItem(TextFolderType _type) const
 {
-    return new TextModelFolderItem(this, _type);
+    return new SimpleTextModelFolderItem(this, _type);
 }
 
 TextModelGroupItem* SimpleTextModel::createGroupItem(TextGroupType _type) const
@@ -218,6 +255,35 @@ void SimpleTextModel::setDocumentContent(const QByteArray& _content)
 QStringList SimpleTextModel::mimeTypes() const
 {
     return { kMimeType };
+}
+
+int SimpleTextModel::wordsCount() const
+{
+    return static_cast<SimpleTextModelFolderItem*>(d->rootItem())->wordsCount();
+}
+
+QPair<int, int> SimpleTextModel::charactersCount() const
+{
+    return static_cast<SimpleTextModelFolderItem*>(d->rootItem())->charactersCount();
+}
+
+int SimpleTextModel::textPageCount() const
+{
+    return d->textPageCount;
+}
+
+void SimpleTextModel::setTextPageCount(int _count)
+{
+    if (d->textPageCount == _count) {
+        return;
+    }
+
+    d->textPageCount = _count;
+
+    //
+    // Создаём фейковое уведомление, чтобы оповестить клиентов
+    //
+    emit dataChanged(index(0, 0), index(0, 0));
 }
 
 void SimpleTextModel::initEmptyDocument()

@@ -96,18 +96,6 @@ public:
      */
     bool isEqual(TextModelItem* _item) const override;
 
-    /**
-     * @brief Количество слов
-     */
-    int wordsCount() const;
-    void setWordsCount(int _count);
-
-    /**
-     * @brief Количество символов
-     */
-    QPair<int, int> charactersCount() const;
-    void setCharactersCount(QPair<int, int> _count);
-
 protected:
     /**
      * @brief Задать заголовок папки

@@ -3,6 +3,7 @@
 #include "simple_text_corrector.h"
 
 #include <business_layer/document/text/text_block_data.h>
+#include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/model/simple_text/simple_text_model_chapter_item.h>
 
 
@@ -12,6 +13,19 @@ SimpleTextDocument::SimpleTextDocument(QObject* _parent)
     : TextDocument(_parent)
 {
     setCorrector(new SimpleTextCorrector(this));
+
+    connect(this, &SimpleTextDocument::contentsChanged, this, [this] {
+        if (!canChangeModel()) {
+            return;
+        }
+
+        auto simpleTextModel = qobject_cast<SimpleTextModel*>(model());
+        if (simpleTextModel == nullptr) {
+            return;
+        }
+
+        simpleTextModel->setTextPageCount(pageCount());
+    });
 }
 
 void SimpleTextDocument::setCorrectionOptions(bool _needToCorrectPageBreaks)

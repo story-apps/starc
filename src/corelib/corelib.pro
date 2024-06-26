@@ -226,6 +226,7 @@ SOURCES += \
     business_layer/model/screenplay/screenplay_title_page_model.cpp \
     business_layer/model/simple_text/simple_text_model.cpp \
     business_layer/model/simple_text/simple_text_model_chapter_item.cpp \
+    business_layer/model/simple_text/simple_text_model_folder_item.cpp \
     business_layer/model/stageplay/stageplay_information_model.cpp \
     business_layer/model/stageplay/stageplay_statistics_model.cpp \
     business_layer/model/stageplay/stageplay_synopsis_model.cpp \
@@ -582,6 +583,7 @@ HEADERS += \
     business_layer/model/screenplay/screenplay_title_page_model.h \
     business_layer/model/simple_text/simple_text_model.h \
     business_layer/model/simple_text/simple_text_model_chapter_item.h \
+    business_layer/model/simple_text/simple_text_model_folder_item.h \
     business_layer/model/stageplay/stageplay_information_model.h \
     business_layer/model/stageplay/stageplay_statistics_model.h \
     business_layer/model/stageplay/stageplay_synopsis_model.h \
