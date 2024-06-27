@@ -103,13 +103,13 @@ void StageplayTextModel::Implementation::updateNumbering()
             }
 
             case TextModelItemType::Group: {
+                ++scenesCount;
                 updateChildNumbering(childItem);
                 auto groupItem = static_cast<TextModelGroupItem*>(childItem);
                 if (groupItem->setNumber(sceneNumber, {})) {
                     ++sceneNumber;
                 }
                 groupItem->prepareNumberText("#");
-                ++scenesCount;
                 break;
             }
 

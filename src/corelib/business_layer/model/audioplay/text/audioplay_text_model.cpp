@@ -103,13 +103,13 @@ void AudioplayTextModel::Implementation::updateNumbering()
             }
 
             case TextModelItemType::Group: {
+                ++scenesCount;
                 updateChildNumbering(childItem);
                 auto groupItem = static_cast<TextModelGroupItem*>(childItem);
                 if (groupItem->setNumber(sceneNumber, {})) {
                     q->updateItemForRoles(groupItem, { TextModelGroupItem::GroupNumberRole });
                 }
                 ++sceneNumber;
-                ++scenesCount;
                 groupItem->prepareNumberText("#");
                 break;
             }
