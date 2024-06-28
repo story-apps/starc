@@ -52,6 +52,10 @@ using BusinessLayer::TextParagraphType;
 
 namespace Ui {
 
+namespace {
+const QLatin1String kMarkdownMimeType("text/markdown");
+}
+
 class TitlePageEdit::Implementation
 {
 public:
@@ -690,7 +694,7 @@ QMimeData* TitlePageEdit::createMimeDataFromSelection() const
         }
 
         if (!text.isEmpty()) {
-            mimeData->setData("text/markdown", text);
+            mimeData->setData(kMarkdownMimeType, text);
         }
     }
 
@@ -741,13 +745,14 @@ void TitlePageEdit::insertFromMimeData(const QMimeData* _source)
         textToInsert = _source->data(d->model->mimeTypes().constFirst());
     }
     //
-    // Если простой текст, то вставляем его, импортировав с фонтана
-    // NOTE: Перед текстом нужно обязательно добавить перенос строки, чтобы он
-    //       не воспринимался как титульная страница
+    // Если простой текст, то вставляем его, импортировав из markdown
     //
-    else if (_source->hasText()) {
+    else if (_source->hasFormat(kMarkdownMimeType) || _source->hasText()) {
+        const auto text = _source->hasFormat(kMarkdownMimeType) ? _source->data(kMarkdownMimeType)
+                                                                : _source->text();
+
         BusinessLayer::SimpleTextMarkdownImporter markdownImporter;
-        textToInsert = markdownImporter.importDocument(_source->text()).text;
+        textToInsert = markdownImporter.importDocument(text).text;
     }
 
     //
