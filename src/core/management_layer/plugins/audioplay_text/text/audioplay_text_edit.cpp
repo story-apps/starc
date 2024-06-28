@@ -6,6 +6,8 @@
 #include <business_layer/document/audioplay/text/audioplay_text_document.h>
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/export/audioplay/audioplay_export_options.h>
+#include <business_layer/export/audioplay/audioplay_fountain_exporter.h>
 #include <business_layer/import/audioplay/audioplay_fountain_importer.h>
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_block_parser.h>
@@ -26,6 +28,7 @@
 
 #include <QAction>
 #include <QCoreApplication>
+#include <QDir>
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
@@ -1326,7 +1329,6 @@ QMimeData* AudioplayTextEdit::createMimeDataFromSelection() const
 
     //
     // Сформируем в текстовом виде, для вставки наружу
-    // TODO: экспорт в фонтан
     //
     {
         QByteArray text;
@@ -1347,6 +1349,38 @@ QMimeData* AudioplayTextEdit::createMimeDataFromSelection() const
                  && cursor.movePosition(QTextCursor::NextBlock));
 
         mimeData->setData("text/plain", text);
+    }
+
+    //
+    // Добавим фонтан
+    //
+    {
+        //
+        // Подготавливаем опции для экспорта в фонтан
+        //
+        BusinessLayer::AudioplayExportOptions options;
+        options.filePath = QDir::temp().absoluteFilePath("clipboard.fountain");
+        options.includeTitlePage = false;
+        options.includeSynopsis = false;
+        //        options.showScenesNumbers = d->model->informationModel()->showSceneNumbers();
+        //
+        // ... сохраняем в формате фонтана
+        //
+        BusinessLayer::AudioplayFountainExporter().exportTo(d->model, selection.from, selection.to,
+                                                            options);
+        //
+        // ... читаем сохранённый экспорт из файла
+        //
+        QFile file(options.filePath);
+        QByteArray text;
+        if (file.open(QIODevice::ReadOnly)) {
+            text = file.readAll();
+            file.close();
+        }
+
+        if (!text.isEmpty()) {
+            mimeData->setData("text/markdown", text);
+        }
     }
 
     //

@@ -5,6 +5,8 @@
 #include <business_layer/document/simple_text/simple_text_document.h>
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/export/export_options.h>
+#include <business_layer/export/simple_text/simple_text_markdown_exporter.h>
 #include <business_layer/import/text/simple_text_markdown_importer.h>
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/audioplay_title_page_model.h>
@@ -35,6 +37,7 @@
 
 #include <QAction>
 #include <QCoreApplication>
+#include <QDir>
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
@@ -638,7 +641,6 @@ QMimeData* TitlePageEdit::createMimeDataFromSelection() const
 
     //
     // Сформируем в текстовом виде, для вставки наружу
-    // TODO: экспорт в фонтан
     //
     {
         QByteArray text;
@@ -659,6 +661,37 @@ QMimeData* TitlePageEdit::createMimeDataFromSelection() const
                  && cursor.movePosition(QTextCursor::NextBlock));
 
         mimeData->setData("text/plain", text);
+    }
+
+    //
+    // Добавим markdown
+    //
+    {
+        //
+        // Подготавливаем опции для экспорта в markdown
+        //
+        BusinessLayer::ExportOptions options;
+        options.filePath = QDir::temp().absoluteFilePath("clipboard.md");
+        options.includeTitlePage = false;
+        options.includeReviewMarks = false;
+        //
+        // ... сохраняем в формате markdown
+        //
+        BusinessLayer::SimpleTextMarkdownExporter().exportTo(d->model, selection.from, selection.to,
+                                                             options);
+        //
+        // ... читаем сохранённый экспорт из файла
+        //
+        QFile file(options.filePath);
+        QByteArray text;
+        if (file.open(QIODevice::ReadOnly)) {
+            text = file.readAll();
+            file.close();
+        }
+
+        if (!text.isEmpty()) {
+            mimeData->setData("text/markdown", text);
+        }
     }
 
     //
