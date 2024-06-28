@@ -42,6 +42,10 @@ using BusinessLayer::TextParagraphType;
 
 namespace Ui {
 
+namespace {
+const QLatin1String kMarkdownMimeType("text/markdown");
+}
+
 class ComicBookTextEdit::Implementation
 {
 public:
@@ -1355,7 +1359,7 @@ QMimeData* ComicBookTextEdit::createMimeDataFromSelection() const
         }
 
         if (!text.isEmpty()) {
-            mimeData->setData("text/markdown", text);
+            mimeData->setData(kMarkdownMimeType, text);
         }
     }
 
@@ -1410,8 +1414,9 @@ void ComicBookTextEdit::insertFromMimeData(const QMimeData* _source)
     //
     // Если простой текст
     //
-    else if (_source->hasText()) {
-        const auto text = _source->text();
+    else if (_source->hasFormat(kMarkdownMimeType) || _source->hasText()) {
+        const auto text = _source->hasFormat(kMarkdownMimeType) ? _source->data(kMarkdownMimeType)
+                                                                : _source->text();
 
         //
         // ... если строк несколько, то вставляем его, импортировав с фонтана
