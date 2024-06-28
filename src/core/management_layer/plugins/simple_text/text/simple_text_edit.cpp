@@ -817,7 +817,6 @@ QMimeData* SimpleTextEdit::createMimeDataFromSelection() const
 
     //
     // Сформируем в текстовом виде, для вставки наружу
-    // TODO: экспорт в фонтан
     //
     {
         QString text;
@@ -840,6 +839,7 @@ QMimeData* SimpleTextEdit::createMimeDataFromSelection() const
 
         mimeData->setData("text/plain", text.toUtf8());
     }
+
     //
     // Добавим markdown
     //

@@ -6,6 +6,8 @@
 #include <business_layer/document/comic_book/text/comic_book_text_document.h>
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/export/comic_book/comic_book_export_options.h>
+#include <business_layer/export/comic_book/comic_book_fountain_exporter.h>
 #include <business_layer/import/comic_book/comic_book_fountain_importer.h>
 #include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/comic_book/comic_book_information_model.h>
@@ -26,6 +28,7 @@
 
 #include <QAction>
 #include <QCoreApplication>
+#include <QDir>
 #include <QLocale>
 #include <QMimeData>
 #include <QPainter>
@@ -1302,7 +1305,6 @@ QMimeData* ComicBookTextEdit::createMimeDataFromSelection() const
 
     //
     // Сформируем в текстовом виде, для вставки наружу
-    // TODO: экспорт в фонтан
     //
     {
         QByteArray text;
@@ -1323,6 +1325,38 @@ QMimeData* ComicBookTextEdit::createMimeDataFromSelection() const
                  && cursor.movePosition(QTextCursor::NextBlock));
 
         mimeData->setData("text/plain", text);
+    }
+
+    //
+    // Добавим фонтан
+    //
+    {
+        //
+        // Подготавливаем опции для экспорта в фонтан
+        //
+        BusinessLayer::ComicBookExportOptions options;
+        options.filePath = QDir::temp().absoluteFilePath("clipboard.fountain");
+        options.includeTitlePage = false;
+        options.includeSynopsis = false;
+        //        options.showScenesNumbers = d->model->informationModel()->showSceneNumbers();
+        //
+        // ... сохраняем в формате фонтана
+        //
+        BusinessLayer::ComicBookFountainExporter().exportTo(d->model, selection.from, selection.to,
+                                                            options);
+        //
+        // ... читаем сохранённый экспорт из файла
+        //
+        QFile file(options.filePath);
+        QByteArray text;
+        if (file.open(QIODevice::ReadOnly)) {
+            text = file.readAll();
+            file.close();
+        }
+
+        if (!text.isEmpty()) {
+            mimeData->setData("text/markdown", text);
+        }
     }
 
     //
