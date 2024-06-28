@@ -298,16 +298,28 @@ void ImportDialog::updateTranslations()
     const auto screenplay = qMakePair(tr("Screenplay"), Domain::DocumentObjectType::Screenplay);
     const auto stageplay = qMakePair(tr("Stageplay"), Domain::DocumentObjectType::Stageplay);
 
-    if (fileIs(ExtensionHelper::msOfficeOpenXml()) || fileIs(ExtensionHelper::openDocumentXml())
-        || fileIs(ExtensionHelper::plainText())) {
-        d->setImportDocumentTypes({ audioplay, comicBook, novel, screenplay, stageplay });
+    //
+    // Бинарные форматы
+    //
+    if (fileIs(ExtensionHelper::msOfficeOpenXml()) || fileIs(ExtensionHelper::openDocumentXml())) {
+        d->setImportDocumentTypes({ screenplay });
+    }
+    //
+    // Текстовые форматы
+    //
+    else if (fileIs(ExtensionHelper::fountain())) {
+        d->setImportDocumentTypes({ audioplay, comicBook, screenplay, stageplay });
     } else if (fileIs(ExtensionHelper::markdown())) {
         d->setImportDocumentTypes({ novel });
-    } else if (fileIs(ExtensionHelper::fountain())) {
-        d->setImportDocumentTypes({ audioplay, comicBook, screenplay, stageplay });
-    } else if (fileIs(ExtensionHelper::celtx()) || fileIs(ExtensionHelper::finalDraft())
-               || fileIs(ExtensionHelper::finalDraftTemplate())
-               || fileIs(ExtensionHelper::kitScenarist()) || fileIs(ExtensionHelper::trelby())) {
+    } else if (fileIs(ExtensionHelper::plainText())) {
+        d->setImportDocumentTypes({ audioplay, comicBook, screenplay, stageplay, novel });
+    }
+    //
+    // Специализированные форматы
+    //
+    else if (fileIs(ExtensionHelper::celtx()) || fileIs(ExtensionHelper::finalDraft())
+             || fileIs(ExtensionHelper::finalDraftTemplate())
+             || fileIs(ExtensionHelper::kitScenarist()) || fileIs(ExtensionHelper::trelby())) {
         d->setImportDocumentTypes({ screenplay });
     }
 
