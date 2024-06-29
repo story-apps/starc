@@ -108,7 +108,8 @@ void SearchManager::Implementation::findText(bool _backward)
         const auto searchType = searchInType();
         auto blockType = TextBlockStyle::forBlock(cursor.block());
         if (!cursor.isNull()) {
-            if (searchType == TextParagraphType::Undefined || searchType == blockType) {
+            if (cursor.block().isVisible()
+                && (searchType == TextParagraphType::Undefined || searchType == blockType)) {
                 textEdit->ensureCursorVisible(cursor);
             } else {
                 restartSearch = true;
@@ -124,7 +125,9 @@ void SearchManager::Implementation::findText(bool _backward)
                 cursor = textEdit->document()->find(searchText, cursor, findFlags);
                 blockType = TextBlockStyle::forBlock(cursor.block());
                 if (!cursor.isNull()) {
-                    if (searchType == TextParagraphType::Undefined || searchType == blockType) {
+                    if (cursor.block().isVisible()
+                        && (searchType == TextParagraphType::Undefined
+                            || searchType == blockType)) {
                         textEdit->ensureCursorVisible(cursor);
                     } else {
                         restartSearch = true;
@@ -166,9 +169,14 @@ SearchManager::SearchManager(QWidget* _parent, BaseTextEdit* _textEdit)
         d->findText(backward);
     });
     connect(d->toolbar, &Ui::SearchToolbar::replaceOnePressed, this, [this] {
-        const QString searchText = d->toolbar->searchText();
         auto cursor = d->textEdit->textCursor();
-        bool selectedTextEqual = d->toolbar->isCaseSensitive()
+        if (!cursor.hasSelection()) {
+            d->findText();
+            return;
+        }
+
+        const QString searchText = d->toolbar->searchText();
+        const bool selectedTextEqual = d->toolbar->isCaseSensitive()
             ? cursor.selectedText() == searchText
             : TextHelper::smartToLower(cursor.selectedText())
                 == TextHelper::smartToLower(searchText);
