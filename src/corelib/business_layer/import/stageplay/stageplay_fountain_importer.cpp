@@ -27,7 +27,7 @@ static const QSet<TextParagraphType> kPossibleBlockTypes = {
 /**
  * @brief Тип блока по умолчанию
  */
-static const TextParagraphType kDefaultBlockType = TextParagraphType::UnformattedText;
+static const TextParagraphType kDefaultBlockType = TextParagraphType::Action;
 
 } // namespace
 
