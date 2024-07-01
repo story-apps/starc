@@ -518,7 +518,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         //
         auto addCharacter = new QAction(tr("Add character"));
         addCharacter->setIconText(u8"\U000F0014");
-        connect(addCharacter, &QAction::triggered, q, [this] { this->addDocument(); });
+        connect(addCharacter, &QAction::triggered, q, [this] { addDocument(); });
         menuActions.append(addCharacter);
     } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
         auto findAllLocations = new QAction(tr("Find all locations"));
@@ -529,7 +529,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         //
         auto addLocation = new QAction(tr("Add location"));
         addLocation->setIconText(u8"\U000F0975");
-        connect(addLocation, &QAction::triggered, q, [this] { this->addDocument(); });
+        connect(addLocation, &QAction::triggered, q, [this] { addDocument(); });
         menuActions.append(addLocation);
     } else if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
         if (currentItem->hasChildren()) {
@@ -548,7 +548,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         addFolder->setIconText(u8"\U000F0257");
         addFolder->setEnabled(enabled);
         connect(addFolder, &QAction::triggered, q,
-                [this] { this->addDocument(Domain::DocumentObjectType::Folder); });
+                [this] { addDocument(Domain::DocumentObjectType::Folder); });
         menuActions.append(addFolder);
         //
         auto addDocument = new QAction(tr("Add document"));
@@ -577,7 +577,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
                 removeDocument->setIconText(u8"\U000f01b4");
                 removeDocument->setEnabled(enabled);
                 connect(removeDocument, &QAction::triggered, q,
-                        [this] { this->removeSelectedDocuments(); });
+                        [this] { removeSelectedDocuments(); });
                 menuActions.append(removeDocument);
             }
         }
@@ -619,7 +619,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
         openInNewWindow->setSeparator(!isDocumentActionAdded && !menuActions.isEmpty());
         openInNewWindow->setIconText(u8"\U000F03CC");
         connect(openInNewWindow, &QAction::triggered, q,
-                [this] { this->openCurrentDocumentInNewWindow(); });
+                [this] { openCurrentDocumentInNewWindow(); });
         menuActions.append(openInNewWindow);
         isDocumentActionAdded = true;
     }
@@ -739,7 +739,7 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
         //
         window->setWindowTitle(view.activeModel->documentName());
 
-        this->view.windows.append(window);
+        view.windows.append(window);
     }
 }
 
