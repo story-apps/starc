@@ -256,6 +256,11 @@ public:
      */
     void emptyRecycleBin();
 
+    /**
+     * @brief Отсортировать по алфавиту дочерние элеиенты
+     */
+    void sortChildrenAlphabetically();
+
     //
     // Данные
     //
@@ -576,6 +581,18 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
                 menuActions.append(removeDocument);
             }
         }
+    }
+
+    //
+    // Персонажей и локации можно отсортировать по алфавиту
+    //
+    if (currentItem->type() == Domain::DocumentObjectType::Characters
+        || currentItem->type() == Domain::DocumentObjectType::Locations) {
+        auto sortAlphabetically = new QAction(tr("Sort alphabetically"));
+        sortAlphabetically->setIconText(u8"\U000F05BD");
+        connect(sortAlphabetically, &QAction::triggered, q,
+                [this] { sortChildrenAlphabetically(); });
+        menuActions.append(sortAlphabetically);
     }
 
     bool isDocumentActionAdded = false;
@@ -1661,6 +1678,20 @@ void ProjectManager::Implementation::emptyRecycleBin()
             navigator->setButtonEnabled(false);
         });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+}
+
+void ProjectManager::Implementation::sortChildrenAlphabetically()
+{
+    const auto currentItemIndex
+        = projectStructureProxyModel->mapToSource(navigator->currentIndex());
+    const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
+    const std::function<bool(BusinessLayer::AbstractModelItem*, BusinessLayer::AbstractModelItem*)>
+        sorter = [](BusinessLayer::AbstractModelItem* _lhs,
+                    BusinessLayer::AbstractModelItem* _rhs) {
+            return _lhs->data(Qt::DisplayRole).toString() < _rhs->data(Qt::DisplayRole).toString();
+        };
+    currentItem->sortChildren(sorter);
+    projectStructureModel->saveChanges();
 }
 
 
