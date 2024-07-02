@@ -2190,7 +2190,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     const auto movedItemIndex
                         = d->projectStructureModel->index(row, 0, _sourceParent);
                     const auto movedItem = d->projectStructureModel->itemForIndex(movedItemIndex);
-                    const auto location = qobject_cast<BusinessLayer::CharacterModel*>(
+                    const auto location = qobject_cast<BusinessLayer::LocationModel*>(
                         d->modelsFacade.modelFor(movedItem->uuid()));
                     locations->moveLocation(location->name(), _destination + (row - _sourceStart));
                 }
