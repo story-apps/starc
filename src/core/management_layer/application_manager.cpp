@@ -19,10 +19,12 @@
 
 #undef PRINT_DOCUMENT_HISTORY
 #ifdef PRINT_DOCUMENT_HISTORY
+#include <business_layer/model/characters/character_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <data_layer/mapper/document_change_mapper.h>
 #include <data_layer/mapper/mapper_facade.h>
+#include <data_layer/storage/document_image_storage.h>
 #include <domain/objects_builder.h>
 #endif
 
@@ -1978,12 +1980,21 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     writingSessionManager->startSession(currentProject->uuid(), currentProject->name());
 
 #ifdef PRINT_DOCUMENT_HISTORY
-    const QUuid uuid("{c6b12deb-81c1-4f83-a70b-7963dd0e33d3}");
-    BusinessLayer::ScreenplayTextModel model;
-    BusinessLayer::ScreenplayInformationModel informationModel;
-    model.setInformationModel(&informationModel);
+    const QUuid uuid("{c7d1aa50-2d01-4135-935c-c182eac65779}");
+    //
+    // Character
+    //
+    BusinessLayer::CharacterModel model;
+    DataStorageLayer::DocumentImageStorage documentImageStorage;
+    model.setImageWrapper(&documentImageStorage);
+    //
+    // Screenplay
+    //
+    //    BusinessLayer::ScreenplayTextModel model;
+    //    BusinessLayer::ScreenplayInformationModel informationModel;
+    //    model.setInformationModel(&informationModel);
     auto document = Domain::ObjectsBuilder::createDocument(
-        {}, {}, Domain::DocumentObjectType::ScreenplayText, {}, {});
+        {}, {}, Domain::DocumentObjectType::Character, {}, {});
     model.setDocument(document);
     const auto changes = DataMappingLayer::MapperFacade::documentChangeMapper()->findAll(uuid);
     for (int index = 0; index < changes.size(); ++index) {
