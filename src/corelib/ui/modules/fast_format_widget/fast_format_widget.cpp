@@ -185,7 +185,7 @@ void FastFormatWidget::Implementation::updateButtons()
         button->setVisible(true);
         button->setText(itemModelIndex.data(Qt::DisplayRole).toString());
         button->setShortcut(
-            showShortcuts->isChecked() ? itemModelIndex.data(Qt::WhatsThisRole).toString() : "");
+            showShortcuts->isChecked() ? itemModelIndex.data(Qt::ToolTipRole).toString() : "");
         button->setProperty(kButtonTypeKey, itemModelIndex);
     }
     //
