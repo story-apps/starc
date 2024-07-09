@@ -183,6 +183,12 @@ public:
     void updateNavigatorContextMenu(const QModelIndex& _index);
 
     /**
+     * @brief Установить заданный элемент текущим
+     */
+    void setCurrentIndex(const QModelIndex& _sourceModelIndex);
+    void setCurrentItem(BusinessLayer::StructureModelItem* _item);
+
+    /**
      * @brief Открыть текущий документ в отдельном окне
      */
     void openCurrentDocumentInNewWindow();
@@ -719,6 +725,18 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     navigator->setContextMenuActions(menuActions);
 }
 
+void ProjectManager::Implementation::setCurrentIndex(const QModelIndex& _sourceModelIndex)
+{
+    const auto mappedIndex = projectStructureProxyModel->mapFromSource(_sourceModelIndex);
+    navigator->setCurrentIndex(mappedIndex);
+}
+
+void ProjectManager::Implementation::setCurrentItem(BusinessLayer::StructureModelItem* _item)
+{
+    const auto itemIndex = projectStructureModel->indexForItem(_item);
+    setCurrentIndex(itemIndex);
+}
+
 void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
 {
     if (view.activeModel == nullptr) {
@@ -890,9 +908,7 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                     itemForSelectIndex
                         = projectStructureModel->index(childIndex, 0, itemForSelectIndex);
                 }
-                const auto mappedAddedItemIndex
-                    = projectStructureProxyModel->mapFromSource(itemForSelectIndex);
-                navigator->setCurrentIndex(mappedAddedItemIndex);
+                setCurrentIndex(itemForSelectIndex);
 
                 //
                 // Если исходный тип документа задан не был, то сохраним выбранный, чтобы
@@ -2385,8 +2401,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                         const auto item = d->projectStructureModel->itemForUuid(
                             charactersModel->character(characterToSelectName)->document()->uuid());
                         const auto itemIndex = d->projectStructureModel->indexForItem(item);
-                        d->navigator->setCurrentIndex(
-                            d->projectStructureProxyModel->mapFromSource(itemIndex));
+                        d->setCurrentIndex(itemIndex);
                     }
                 }
             });
@@ -2538,8 +2553,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                         const auto item = d->projectStructureModel->itemForUuid(
                             locationsModel->location(locationToSelectName)->document()->uuid());
                         const auto itemIndex = d->projectStructureModel->indexForItem(item);
-                        d->navigator->setCurrentIndex(
-                            d->projectStructureProxyModel->mapFromSource(itemIndex));
+                        d->setCurrentIndex(itemIndex);
                     }
                 }
 
@@ -3226,6 +3240,11 @@ void ProjectManager::addAudioplay(const QString& _name, const QString& _titlePag
         _text.toUtf8());
     d->projectStructureModel->appendItem(
         createItem(DocumentObjectType::AudioplayStatistics, tr("Statistics")), audioplayItem, {});
+
+    //
+    // Фокусируем добавленный документ
+    //
+    d->setCurrentItem(audioplayItem);
 }
 
 void ProjectManager::addComicBook(const QString& _name, const QString& _titlePage,
@@ -3258,6 +3277,11 @@ void ProjectManager::addComicBook(const QString& _name, const QString& _titlePag
         _text.toUtf8());
     d->projectStructureModel->appendItem(
         createItem(DocumentObjectType::ComicBookStatistics, tr("Statistics")), comicbookItem, {});
+
+    //
+    // Фокусируем добавленный документ
+    //
+    d->setCurrentItem(comicbookItem);
 }
 
 void ProjectManager::addNovel(const QString& _name, const QString& _text)
@@ -3293,6 +3317,11 @@ void ProjectManager::addNovel(const QString& _name, const QString& _text)
     //
     d->projectStructureModel->insertItem(
         createItem(DocumentObjectType::NovelOutline, tr("Outline")), synopsisItem, {});
+
+    //
+    // Фокусируем добавленный документ
+    //
+    d->setCurrentItem(novelItem);
 }
 
 void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePage,
@@ -3333,6 +3362,11 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     d->projectStructureModel->insertItem(
         createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")), synopsisItem,
         _treatment.toUtf8());
+
+    //
+    // Фокусируем добавленный документ
+    //
+    d->setCurrentItem(screenplayItem);
 }
 
 void ProjectManager::addStageplay(const QString& _name, const QString& _titlePage,
@@ -3365,6 +3399,11 @@ void ProjectManager::addStageplay(const QString& _name, const QString& _titlePag
         _text.toUtf8());
     d->projectStructureModel->appendItem(
         createItem(DocumentObjectType::StageplayStatistics, tr("Statistics")), stageplayItem, {});
+
+    //
+    // Фокусируем добавленный документ
+    //
+    d->setCurrentItem(stageplayItem);
 }
 
 BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
