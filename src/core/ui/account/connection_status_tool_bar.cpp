@@ -1,6 +1,7 @@
 #include "connection_status_tool_bar.h"
 
 #include <ui/design_system/design_system.h>
+#include <utils/helpers/color_helper.h>
 
 #include <QAction>
 #include <QEvent>
@@ -27,6 +28,12 @@ public:
     void correctPosition(int _y = kUnsetPosition);
 
     /**
+     * @brief Скорректировать настройки интерфейса в зависимости от того, как долго пользователь
+     * ждёт соединения
+     */
+    void setWaitingTooLong(bool _isWaitingooLong);
+
+    /**
      * @brief Показать/скрыть панель
      */
     void show();
@@ -40,6 +47,10 @@ public:
 
     ConnectionStatusToolBar* q = nullptr;
 
+    bool isWaitingTooLong = false;
+
+    QAction* progressAction = nullptr;
+
     QParallelAnimationGroup statusAnimation;
     QVariantAnimation* startAngleAnimation = nullptr;
     QVariantAnimation* spanAngleAnimation = nullptr;
@@ -49,6 +60,7 @@ public:
 
 ConnectionStatusToolBar::Implementation::Implementation(ConnectionStatusToolBar* _q)
     : q(_q)
+    , progressAction(new QAction(q))
     , startAngleAnimation(new QVariantAnimation(q))
     , spanAngleAnimation(new QVariantAnimation(q))
 {
@@ -82,6 +94,10 @@ ConnectionStatusToolBar::Implementation::Implementation(ConnectionStatusToolBar*
 
     connect(&statusAnimation, &QVariantAnimation::finished, startAngleAnimation,
             [this, endSpanAngle, initFirstPhase, initSecondPhase] {
+                if (isWaitingTooLong) {
+                    return;
+                }
+
                 // first phase
                 if (spanAngleAnimation->startValue() == endSpanAngle) {
                     initFirstPhase();
@@ -106,11 +122,28 @@ ConnectionStatusToolBar::Implementation::Implementation(ConnectionStatusToolBar*
 void ConnectionStatusToolBar::Implementation::correctPosition(int _y)
 {
     q->move(q->isLeftToRight()
-                ? (q->parentWidget()->width() - q->width() - Ui::DesignSystem::layout().px24())
-                : Ui::DesignSystem::layout().px24(),
+                ? (q->parentWidget()->width() - q->width() - DesignSystem::layout().px24())
+                : DesignSystem::layout().px24(),
             _y == kUnsetPosition
-                ? (q->parentWidget()->height() - q->height() - Ui::DesignSystem::layout().px24())
+                ? (q->parentWidget()->height() - q->height() - DesignSystem::layout().px24())
                 : _y);
+}
+
+void ConnectionStatusToolBar::Implementation::setWaitingTooLong(bool _isWaitingooLong)
+{
+    if (isWaitingTooLong == _isWaitingooLong) {
+        return;
+    }
+
+    if (isWaitingTooLong) {
+        statusAnimation.stop();
+    } else {
+        statusAnimation.start();
+    }
+    isWaitingTooLong = _isWaitingooLong;
+    progressAction->setIconText(isWaitingTooLong ? u8"\U000F05AA" : "");
+    q->setFlat(isWaitingTooLong);
+    q->designSystemChangeEvent(nullptr);
 }
 
 void ConnectionStatusToolBar::Implementation::show()
@@ -121,7 +154,7 @@ void ConnectionStatusToolBar::Implementation::show()
 
     positionAnimation.setStartValue(q->parentWidget()->height());
     positionAnimation.setEndValue(q->parentWidget()->height() - q->height()
-                                  - static_cast<int>(Ui::DesignSystem::layout().px24()));
+                                  - static_cast<int>(DesignSystem::layout().px24()));
     positionAnimation.start();
     q->show();
 }
@@ -133,7 +166,7 @@ void ConnectionStatusToolBar::Implementation::hide()
     }
 
     positionAnimation.setStartValue(q->parentWidget()->height() - q->height()
-                                    - static_cast<int>(Ui::DesignSystem::layout().px24()));
+                                    - static_cast<int>(DesignSystem::layout().px24()));
     positionAnimation.setEndValue(q->parentWidget()->height());
     positionAnimation.start();
 }
@@ -156,9 +189,8 @@ ConnectionStatusToolBar::ConnectionStatusToolBar(QWidget* _parent)
 
     setFocusPolicy(Qt::NoFocus);
 
-    auto progressAction = new QAction(this);
-    addAction(progressAction);
-    connect(progressAction, &QAction::triggered, this,
+    addAction(d->progressAction);
+    connect(d->progressAction, &QAction::triggered, this,
             &ConnectionStatusToolBar::checkConnectionPressed);
 
     connect(d->startAngleAnimation, &QVariantAnimation::valueChanged, this,
@@ -186,12 +218,19 @@ ConnectionStatusToolBar::~ConnectionStatusToolBar() = default;
 void ConnectionStatusToolBar::setConnectionAvailable(bool _available)
 {
     if (_available) {
+        d->setWaitingTooLong(false);
         d->hide();
         return;
     }
 
     d->statusAnimation.start();
     d->show();
+
+    QTimer::singleShot(std::chrono::minutes{ 1 }, this, [this] {
+        if (isVisible()) {
+            d->setWaitingTooLong(true);
+        }
+    });
 }
 
 bool ConnectionStatusToolBar::eventFilter(QObject* _watched, QEvent* _event)
@@ -204,7 +243,7 @@ bool ConnectionStatusToolBar::eventFilter(QObject* _watched, QEvent* _event)
                     d->positionAnimation.setEndValue(parentWidget()->height());
                 } else {
                     d->positionAnimation.setEndValue(parentWidget()->height() - height()
-                                                     - Ui::DesignSystem::layout().px24());
+                                                     - DesignSystem::layout().px24());
                 }
                 d->positionAnimation.resume();
             } else {
@@ -222,7 +261,7 @@ void ConnectionStatusToolBar::paintEvent(QPaintEvent* _event)
 {
     FloatingToolBar::paintEvent(_event);
 
-    if (d->startAngleAnimation->state() != QVariantAnimation::Running
+    if (d->isWaitingTooLong || d->startAngleAnimation->state() != QVariantAnimation::Running
         || d->spanAngleAnimation->state() != QVariantAnimation::Running) {
         return;
     }
@@ -231,15 +270,15 @@ void ConnectionStatusToolBar::paintEvent(QPaintEvent* _event)
     paiter.setRenderHints(QPainter::Antialiasing);
 
     QPen pen;
-    pen.setWidthF(Ui::DesignSystem::layout().px4());
+    pen.setWidthF(DesignSystem::layout().px4());
     pen.setCapStyle(Qt::SquareCap);
     pen.setCosmetic(true);
-    pen.setColor(Ui::DesignSystem::color().error());
+    pen.setColor(DesignSystem::color().error());
     paiter.setPen(pen);
 
     const auto circleRect
-        = QRectF(rect()).marginsRemoved(Ui::DesignSystem::floatingToolBar().shadowMargins()
-                                        + Ui::DesignSystem::floatingToolBar().margins());
+        = QRectF(rect()).marginsRemoved(DesignSystem::floatingToolBar().shadowMargins()
+                                        + DesignSystem::floatingToolBar().margins());
     paiter.drawArc(circleRect, d->startAngleAnimation->currentValue().toInt() * 16,
                    d->spanAngleAnimation->currentValue().toInt() * 16);
 }
@@ -254,7 +293,9 @@ void ConnectionStatusToolBar::designSystemChangeEvent(DesignSystemChangeEvent* _
 {
     FloatingToolBar::designSystemChangeEvent(_event);
 
-    setBackgroundColor(Ui::DesignSystem::color().primary());
+    setTextColor(ColorHelper::transparent(DesignSystem::color().onPrimary(),
+                                          DesignSystem::inactiveTextOpacity()));
+    setBackgroundColor(d->isWaitingTooLong ? Qt::transparent : DesignSystem::color().primary());
 
     raise();
     resize(sizeHint());
