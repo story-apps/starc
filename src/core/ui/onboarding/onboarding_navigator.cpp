@@ -767,8 +767,12 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
             [] { QDesktopServices::openUrl(QUrl("https://twitter.com/starcapp_")); });
     connect(d->socialDiscordButton, &IconButton::clicked, this,
             [] { QDesktopServices::openUrl(QUrl("https://discord.gg/8Hjze3UYgQ")); });
-    connect(d->socialTelegramButton, &IconButton::clicked, this,
-            [] { QDesktopServices::openUrl(QUrl("https://t.me/starcapp")); });
+    connect(d->socialTelegramButton, &IconButton::clicked, this, [] {
+        QDesktopServices::openUrl(QUrl(QLocale().language() == QLocale::Russian
+                                               || QLocale().language() == QLocale::Belarusian
+                                           ? "https://t.me/starcapp_ru"
+                                           : "https://t.me/starcapp"));
+    });
     connect(d->socialVkButton, &IconButton::clicked, this,
             [] { QDesktopServices::openUrl(QUrl("https://vk.com/starc_app")); });
     connect(d->socialFacebookButton, &IconButton::clicked, this, [] {
