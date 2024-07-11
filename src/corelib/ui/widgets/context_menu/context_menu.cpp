@@ -540,7 +540,7 @@ bool ContextMenu::event(QEvent* _event)
     case QEvent::ToolTip: {
         const auto event = static_cast<QHelpEvent*>(_event);
         const auto action = d->actionForPosition(event->pos());
-        if (action != nullptr) {
+        if (action != nullptr && action->toolTip() != action->text()) {
             QToolTip::showText(event->globalPos(), action->toolTip());
         }
         return true;
