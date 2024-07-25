@@ -43,6 +43,11 @@ public:
      */
     static bool isTaskFinished(const QString& _taskId);
 
+    /**
+     * @brief Завершить все процессы
+     */
+    static void finishAllTasks();
+
 public:
     ~TaskBar() override;
 

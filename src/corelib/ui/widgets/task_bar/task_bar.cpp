@@ -189,6 +189,19 @@ bool TaskBar::isTaskFinished(const QString& _taskId)
     return taskIter == tasks.end();
 }
 
+void TaskBar::finishAllTasks()
+{
+    Q_ASSERT(Implementation::instance);
+
+    QVector<QString> taskIds;
+    for (const auto& task : std::as_const(Implementation::instance->d->tasks)) {
+        taskIds.append(task.id);
+    }
+    for (const auto& taskId : std::as_const(taskIds)) {
+        finishTask(taskId);
+    }
+}
+
 void TaskBar::setBarColor(const QColor& _color)
 {
     if (d->barColor == _color) {
