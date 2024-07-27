@@ -36,7 +36,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         shell: bash
         run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/
+          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
 
       - name: Add info about dev build to the env
         shell: bash
