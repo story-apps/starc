@@ -35,7 +35,11 @@ win32-msvc*:QMAKE_LFLAGS += /WHOLEARCHIVE:$$LIBSDIR/fileformats.lib
 INCLUDEPATH += $$PWD/../3rd_party/fileformats
 DEPENDPATH += $$PWD/../3rd_party/fileformats
 PRE_TARGETDEPS += $$PWD/../3rd_party/fileformats
+#
 
+#
+# Подключаем библиотеку Zlib
+#
 mac:LIBS += -lz
 #
 
@@ -95,6 +99,61 @@ win32-msvc*:LIBS += -lUser32
 LIBS += -L$$LIBSDIR/ -lavoid
 INCLUDEPATH += $$PWD/../3rd_party/libavoid/
 DEPENDPATH += $$PWD/../3rd_party/libavoid
+#
+
+#
+# Подключаем библиотеку TextExtraction
+#
+LIBS += -L$$LIBSDIR/ -lTextExtraction
+INCLUDEPATH += $$PWD/../3rd_party/pdftextextraction/TextExtraction
+DEPENDPATH += $$PWD/../3rd_party/pdftextextraction/TextExtraction
+#
+
+#
+# Подключаем библиотеку PDFWriter
+#
+LIBS += -L$$LIBSDIR/ -lPDFWriter
+INCLUDEPATH += $$PWD/../3rd_party/pdfhummus/PDFWriter
+DEPENDPATH += $$PWD/../3rd_party/pdfhummus/PDFWriter
+#
+
+#
+# Подключаем библиотеку FreeType
+#
+LIBS += -L$$LIBSDIR/ -lFreeType
+INCLUDEPATH += $$PWD/../3rd_party/pdfhummus/FreeType/include
+DEPENDPATH += $$PWD/../3rd_party/pdfhummus/FreeType/include
+
+#
+# Подключаем библиотеку LibAesgm
+#
+LIBS += -L$$LIBSDIR/ -lLibAesgm
+INCLUDEPATH += $$PWD/../3rd_party/pdfhummus/LibAesgm
+DEPENDPATH += $$PWD/../3rd_party/pdfhummus/LibAesgm
+#
+
+#
+# Подключаем библиотеку LibJpeg
+#
+LIBS += -L$$LIBSDIR/ -lLibJpeg
+INCLUDEPATH += $$PWD/../3rd_party/pdfhummus/LibJpeg
+DEPENDPATH += $$PWD/../3rd_party/pdfhummus/LibJpeg
+#
+
+#
+# Подключаем библиотеку LibPng
+#
+LIBS += -L$$LIBSDIR/ -lLibPng
+INCLUDEPATH += $$PWD/../3rd_party/pdfhummus/LibPng
+DEPENDPATH += $$PWD/../3rd_party/pdfhummus/LibPng
+#
+
+#
+# Подключаем библиотеку LibTiff
+#
+LIBS += -L$$LIBSDIR/ -lLibTiff
+INCLUDEPATH += $$PWD/../3rd_party/pdfhummus/LibTiff
+DEPENDPATH += $$PWD/../3rd_party/pdfhummus/LibTiff
 #
 
 SOURCES += \

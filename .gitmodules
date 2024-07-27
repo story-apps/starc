@@ -1,6 +1,14 @@
 [submodule "src/3rd_party/qbreakpad"]
 	path = src/3rd_party/qbreakpad
 	url = https://github.com/story-apps/qBreakpad.git
+[submodule "src/3rd_party/pdfhummus"]
+	path = src/3rd_party/pdfhummus
+	url = https://github.com/story-apps/PDF-Writer.git
+	branch = qmake-build
+[submodule "src/3rd_party/pdftextextraction"]
+	path = src/3rd_party/pdftextextraction
+	url = https://github.com/story-apps/pdf-text-extraction.git
+	branch = qmake-build
 [submodule "src/cloud"]
 	path = src/cloud
 	url = git@github.com:story-apps/starcloud
