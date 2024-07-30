@@ -1,6 +1,6 @@
 [submodule "src/3rd_party/qbreakpad"]
 	path = src/3rd_party/qbreakpad
-	url = https://github.com/dimkanovikov/qBreakpad.git
+	url = https://github.com/story-apps/qBreakpad.git
 [submodule "src/cloud"]
 	path = src/cloud
 	url = git@github.com:story-apps/starcloud
