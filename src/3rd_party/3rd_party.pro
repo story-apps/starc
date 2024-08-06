@@ -7,4 +7,6 @@ SUBDIRS = \
     qbreakpad/qBreakpad.pro \
     qgumboparser \
     webloader \
-    qtxlsxwriter
+    qtxlsxwriter \
+    pdfhummus \
+    pdftextextraction \
