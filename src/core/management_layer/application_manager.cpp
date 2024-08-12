@@ -577,6 +577,17 @@ void ApplicationManager::Implementation::sendCrashInfo()
             loader->addRequestAttribute("frequency", dialog->frequency());
             loader->addRequestAttribute("crashSource", dialog->crashSource());
             loader->addRequestAttribute("message", dialog->crashDetails());
+            loader->addRequestAttribute("operating_system",
+#ifdef Q_OS_WIN
+                                        "windows"
+#elif defined Q_OS_LINUX
+                                        "linux"
+#elif defined Q_OS_MAC
+                                        "mac"
+#else
+                                        QSysInfo::kernelType()
+#endif
+            );
             loader->addRequestAttributeFile("dump", dumpAndLog.first);
             loader->addRequestAttributeFile("log", dumpAndLog.second);
             loader->loadAsync("https://starc.app/api/app/feedback/");
