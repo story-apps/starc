@@ -303,6 +303,8 @@ void ImportDialog::updateTranslations()
     //
     if (fileIs(ExtensionHelper::msOfficeOpenXml()) || fileIs(ExtensionHelper::openDocumentXml())) {
         d->setImportDocumentTypes({ screenplay });
+    } else if (fileIs(ExtensionHelper::pdf())) {
+        d->setImportDocumentTypes({ screenplay });
     }
     //
     // Текстовые форматы
