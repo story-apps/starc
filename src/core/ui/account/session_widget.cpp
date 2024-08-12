@@ -21,13 +21,15 @@ class SessionWidget::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+    bool isOnline() const;
+
 
     Domain::SessionInfo sessionInfo;
 
     H6Label* deviceName = nullptr;
     Body1Label* location = nullptr;
     IconsSmallLabel* lastUsedIcon = nullptr;
-    Body1Label* lastUsed = nullptr;
+    Body2Label* lastUsed = nullptr;
     Button* terinateSession = nullptr;
     QVBoxLayout* layout = nullptr;
 };
@@ -36,11 +38,17 @@ SessionWidget::Implementation::Implementation(QWidget* _parent)
     : deviceName(new H6Label(_parent))
     , location(new Body1Label(_parent))
     , lastUsedIcon(new IconsSmallLabel(_parent))
-    , lastUsed(new Body1Label(_parent))
+    , lastUsed(new Body2Label(_parent))
     , terinateSession(new Button(_parent))
     , layout(new QVBoxLayout)
 {
     lastUsedIcon->setIcon(u8"\U000F05E0");
+}
+
+bool SessionWidget::Implementation::isOnline() const
+{
+    const auto lastUsed = sessionInfo.lastUsed;
+    return QDateTime::currentSecsSinceEpoch() - lastUsed.toSecsSinceEpoch() < 180;
 }
 
 
@@ -118,19 +126,24 @@ void SessionWidget::updateTranslations()
 {
     if (d->sessionInfo.isCurrentDevice) {
         d->lastUsed->setText(tr("Current device"));
-    }
-    //
-    // TODO: Сделать красиво - сегодня и вчера
-    //
-    else {
-        const auto lastUsed = d->sessionInfo.lastUsed;
-        if (QDateTime::currentSecsSinceEpoch() - lastUsed.toSecsSinceEpoch() < 180) {
+    } else {
+        if (d->isOnline()) {
             d->lastUsed->setText(tr("Online"));
         } else {
+            const auto lastUsed = d->sessionInfo.lastUsed;
+            QString lastUsedDate;
+            const auto today = QDate::currentDate();
+            if (lastUsed.date() == today) {
+                lastUsedDate = tr("today");
+            } else if (lastUsed.date().daysTo(today) == 1) {
+                lastUsedDate = tr("yesterday");
+            } else {
+                lastUsedDate = lastUsed.toString("dd.MM.yyyy");
+            }
+
             //: Last active date (%1) and time (%2) of the user's device
             d->lastUsed->setText(
-                tr("was active %1 at %2")
-                    .arg(lastUsed.toString("dd.MM.yyyy"), lastUsed.toString("hh:mm")));
+                tr("was active %1 at %2").arg(lastUsedDate, lastUsed.toString("hh:mm")));
         }
     }
     d->terinateSession->setText(d->sessionInfo.isCurrentDevice ? tr("Terminate others")
@@ -141,7 +154,7 @@ void SessionWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Card::designSystemChangeEvent(_event);
 
-    setBackgroundColor(Ui::DesignSystem::color().background());
+    setBackgroundColor(DesignSystem::color().background());
 
     const auto labelColor = ColorHelper::transparent(DesignSystem::color().onBackground(),
                                                      DesignSystem::inactiveTextOpacity());
@@ -150,32 +163,33 @@ void SessionWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->location,
              d->lastUsed,
          }) {
-        label->setBackgroundColor(Ui::DesignSystem::color().background());
+        label->setBackgroundColor(DesignSystem::color().background());
         label->setTextColor(labelColor);
     }
-    d->deviceName->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->deviceName->setTextColor(DesignSystem::color().onBackground());
 
-    auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
+    auto labelMargins = DesignSystem::label().margins().toMargins();
     labelMargins.setRight(0);
     labelMargins.setBottom(0);
     d->deviceName->setContentsMargins(labelMargins);
-    labelMargins.setTop(Ui::DesignSystem::layout().px8());
+    labelMargins.setTop(DesignSystem::layout().px8());
     d->location->setContentsMargins(labelMargins);
-    labelMargins.setBottom(Ui::DesignSystem::layout().px24());
+    labelMargins.setBottom(DesignSystem::layout().px24());
     if (d->sessionInfo.isCurrentDevice) {
-        d->lastUsedIcon->setBackgroundColor(Ui::DesignSystem::color().background());
+        d->lastUsedIcon->setBackgroundColor(DesignSystem::color().background());
         d->lastUsedIcon->setTextColor(ColorHelper::transparent(
-            Ui::DesignSystem::color().accent(), Ui::DesignSystem::inactiveTextOpacity()));
+            DesignSystem::color().accent(), DesignSystem::inactiveTextOpacity()));
         d->lastUsedIcon->setContentsMargins(labelMargins);
-        labelMargins.setLeft(Ui::DesignSystem::layout().px8());
+        labelMargins.setLeft(DesignSystem::layout().px8());
     }
     d->lastUsed->setContentsMargins(labelMargins);
+    d->lastUsed->setTextColor(d->isOnline() ? DesignSystem::color().accent() : labelColor);
 
-    d->terinateSession->setBackgroundColor(Ui::DesignSystem::color().accent());
-    d->terinateSession->setTextColor(Ui::DesignSystem::color().accent());
+    d->terinateSession->setBackgroundColor(DesignSystem::color().accent());
+    d->terinateSession->setTextColor(DesignSystem::color().accent());
 
-    d->layout->setContentsMargins(0, 0, Ui::DesignSystem::layout().px16(),
-                                  Ui::DesignSystem::layout().px16());
+    d->layout->setContentsMargins(0, 0, DesignSystem::layout().px16(),
+                                  DesignSystem::layout().px16());
 }
 
 } // namespace Ui
