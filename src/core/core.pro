@@ -77,8 +77,9 @@ SOURCES += \
     ui/account/connection_status_tool_bar.cpp \
     ui/account/login_dialog.cpp \
     ui/account/purchase_dialog.cpp \
-    ui/account/purchase_dialog_option.cpp \
+    ui/account/purchase_dialog_option_widget.cpp \
     ui/account/session_widget.cpp \
+    ui/account/subscription_widget.cpp \
     ui/account/team_dialog.cpp \
     ui/application_style.cpp \
     ui/application_view.cpp \
@@ -165,8 +166,9 @@ HEADERS += \
     ui/account/connection_status_tool_bar.h \
     ui/account/login_dialog.h \
     ui/account/purchase_dialog.h \
-    ui/account/purchase_dialog_option.h \
+    ui/account/purchase_dialog_option_widget.h \
     ui/account/session_widget.h \
+    ui/account/subscription_widget.h \
     ui/account/team_dialog.h \
     ui/application_style.h \
     ui/application_view.h \

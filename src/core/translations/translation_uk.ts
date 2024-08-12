@@ -2938,187 +2938,187 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="725"/>
+        <location filename="../management_layer/application_manager.cpp" line="738"/>
         <source>Please update to the latest version if you want to use the Cloud.</source>
         <translation>Будь ласка, оновіть застосунок до останньої версії, якщо хочете використовувати хмару.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="726"/>
+        <location filename="../management_layer/application_manager.cpp" line="739"/>
         <source>Nope, I’m fine without Cloud</source>
         <translation>Ні, мені чудово і без хмари</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="727"/>
+        <location filename="../management_layer/application_manager.cpp" line="740"/>
         <source>Update</source>
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="745"/>
+        <location filename="../management_layer/application_manager.cpp" line="758"/>
         <source>The last version is downloading</source>
         <translation>Завантажується остання версія</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1227"/>
+        <location filename="../management_layer/application_manager.cpp" line="1240"/>
         <source>in cloud</source>
         <translation>в хмарі</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1228"/>
+        <location filename="../management_layer/application_manager.cpp" line="1241"/>
         <source>Read only</source>
         <translation>Лише для читання</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1238"/>
+        <location filename="../management_layer/application_manager.cpp" line="1251"/>
         <source> - changed</source>
         <translation>- змінено</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1294"/>
-        <location filename="../management_layer/application_manager.cpp" line="1313"/>
-        <location filename="../management_layer/application_manager.cpp" line="1511"/>
+        <location filename="../management_layer/application_manager.cpp" line="1307"/>
+        <location filename="../management_layer/application_manager.cpp" line="1326"/>
+        <location filename="../management_layer/application_manager.cpp" line="1524"/>
         <source>Saving error</source>
         <translation>Помилка зберігання</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1295"/>
+        <location filename="../management_layer/application_manager.cpp" line="1308"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Неможливо зберегти зміни. Внутрішня помилка бази даних: &quot;%1&quot;. Будь ласка, перевірте, чи існує Ваш файл і чи є у Вас дозвіл на запис.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1314"/>
+        <location filename="../management_layer/application_manager.cpp" line="1327"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Неможливо зберегти зміни, оскільки твір не знаходиться у &quot;%1&quot;. Будь ласка, поверніть туди файл і повторіть збереження.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1387"/>
+        <location filename="../management_layer/application_manager.cpp" line="1400"/>
         <source>Project was modified. Save changes?</source>
         <translation>Проєкт було змінено. Зберегти зміни?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1388"/>
+        <location filename="../management_layer/application_manager.cpp" line="1401"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1389"/>
+        <location filename="../management_layer/application_manager.cpp" line="1402"/>
         <source>Don&apos;t save</source>
         <translation>Не зберігати</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1390"/>
+        <location filename="../management_layer/application_manager.cpp" line="1403"/>
         <source>Save</source>
         <translation>Зберегти</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1471"/>
+        <location filename="../management_layer/application_manager.cpp" line="1484"/>
         <source>Choose file to save story</source>
         <translation>Оберіть файл для збереження твору</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1512"/>
+        <location filename="../management_layer/application_manager.cpp" line="1525"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Не вдалося зберегти твір в файл %1. Перевірте дозвіл на запис і спробуйте знову.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1562"/>
+        <location filename="../management_layer/application_manager.cpp" line="1575"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Ви намагаєтеся створити проєкт у неіснуючій теці %1. Будь ласка, оберіть для нового проєкту інше місце.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1567"/>
+        <location filename="../management_layer/application_manager.cpp" line="1580"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Неможливо зберегти файл. Схоже, він відкритий іншою програмою. Будь ласка, закрийте його і повторіть спробу створити проєкт.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1571"/>
+        <location filename="../management_layer/application_manager.cpp" line="1584"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Неможливо зберегти файл. Будь ласка, перевірте та надайте дозвіл програмі на запис у вибрану теку або виберіть для збереження проєкту іншу теку.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1575"/>
+        <location filename="../management_layer/application_manager.cpp" line="1588"/>
         <source>Create project error</source>
         <translation>Помилка створення проєкту</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1761"/>
-        <location filename="../management_layer/application_manager.cpp" line="1784"/>
+        <location filename="../management_layer/application_manager.cpp" line="1774"/>
+        <location filename="../management_layer/application_manager.cpp" line="1797"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>Файл наразі не можна відкрити, оскільки він уже відкритий в іншій копії програми.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1787"/>
+        <location filename="../management_layer/application_manager.cpp" line="1800"/>
         <source>Ignore and open</source>
         <translation>Ігнорувати та відкрити</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1883"/>
+        <location filename="../management_layer/application_manager.cpp" line="1896"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation>Файл, який ви намагаєтеся відкрити, не має дозволу на редагування. Його буде відкрито в режимі лише для читання. Але ви можете надати дозвіл на редагування у властивостях файлу.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1900"/>
+        <location filename="../management_layer/application_manager.cpp" line="1913"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation>Бажаєте надалі працювати з форматом .%1?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1901"/>
+        <location filename="../management_layer/application_manager.cpp" line="1914"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation>Деякі дані проекту неможливо зберегти у форматі .%1. Рекомендуємо вам формат Story Architect .%2, щоб усі дані проєкту було збережено належним чином.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1904"/>
+        <location filename="../management_layer/application_manager.cpp" line="1917"/>
         <source>Never ask again</source>
         <translation>Більше не питати</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1905"/>
+        <location filename="../management_layer/application_manager.cpp" line="1918"/>
         <source>Keep .%1</source>
         <translation>Лишити .%1</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1906"/>
+        <location filename="../management_layer/application_manager.cpp" line="1919"/>
         <source>Switch to .STARC</source>
         <translation>Змінити на .STARC</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3213"/>
+        <location filename="../management_layer/application_manager.cpp" line="3235"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>Закінчилася підписка власника проєкту на хмарний сервіс. Ви зможете продовжити роботу з проєктом, щойно її буде поновлено.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3457"/>
+        <location filename="../management_layer/application_manager.cpp" line="3479"/>
         <source>Novel</source>
         <translation>Роман</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3470"/>
+        <location filename="../management_layer/application_manager.cpp" line="3492"/>
         <source>Screenplay</source>
         <translation>Сценарій</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3194"/>
-        <location filename="../management_layer/application_manager.cpp" line="3215"/>
+        <location filename="../management_layer/application_manager.cpp" line="3216"/>
+        <location filename="../management_layer/application_manager.cpp" line="3237"/>
         <source>Continue offline</source>
         <translation>Продовжити офлайн</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="453"/>
-        <location filename="../management_layer/application_manager.cpp" line="467"/>
+        <location filename="../management_layer/application_manager.cpp" line="455"/>
+        <location filename="../management_layer/application_manager.cpp" line="469"/>
         <source>Open new window</source>
         <translation>Відкрити нове вікно</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="675"/>
+        <location filename="../management_layer/application_manager.cpp" line="688"/>
         <source>Loading missed fonts</source>
         <translation>Завантаження необхідних шрифтів</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3192"/>
+        <location filename="../management_layer/application_manager.cpp" line="3214"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>Ваша підпискв на хмарний сервіс закінчилася. Активуйте підписку для продовження роботи з проєктом.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3195"/>
+        <location filename="../management_layer/application_manager.cpp" line="3217"/>
         <source>Renew subscription</source>
         <translation>Продовжити передплату</translation>
     </message>
@@ -3219,28 +3219,28 @@
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="540"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="558"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Ім&apos;я персонажу змінено з &quot;%1&quot; на &quot;%2&quot;. Застосувати зміни?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="542"/>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="588"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="560"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="606"/>
         <source>No</source>
         <translation>Ні, в жодному разі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="543"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="561"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="587"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="605"/>
         <source>Do you want to delete the character&apos;s photo?</source>
         <translation>Хочете видалити фото персонажа?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="589"/>
+        <location filename="../management_layer/plugins/character_information/character_information_manager.cpp" line="607"/>
         <source>Yes, delete</source>
         <translation>Так, видалити</translation>
     </message>
@@ -3405,13 +3405,13 @@
     </message>
     <message>
         <location filename="../../cloud/cloud_service_manager.cpp" line="2115"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2235"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2234"/>
         <source>Generating novel (scene %1 from %2)</source>
         <translation>Генерування роману (сцена %1 з %2)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2289"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2408"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2288"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2406"/>
         <source>Generating script (chapter %1 from %2)</source>
         <translation>Генерування сценарію (глава %1 з %2)</translation>
     </message>
@@ -3426,13 +3426,13 @@
         <translation>НАТ.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2456"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2612"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2454"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2610"/>
         <source>Processing text</source>
         <translation>Обробка тексту</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2565"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2563"/>
         <source>Generating image</source>
         <translation>Генерування зображення</translation>
     </message>
@@ -3594,28 +3594,28 @@
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="228"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="246"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Назву локації змінено з &quot;%1&quot; на &quot;%2&quot;. Застосувати зміни?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="230"/>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="274"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="248"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="292"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="231"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="249"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="273"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="291"/>
         <source>Do you want to delete the location&apos;s photo?</source>
         <translation>Хочете видалити фото локації?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="275"/>
+        <location filename="../management_layer/plugins/location_information/location_information_manager.cpp" line="293"/>
         <source>Yes, delete</source>
         <translation>Так, видалити</translation>
     </message>
@@ -3877,293 +3877,293 @@ If you want to continue editing novel text, switch to the corresponding module v
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="513"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="519"/>
         <source>Find all characters</source>
         <translation>Знайти всіх персонажів</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="519"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="525"/>
         <source>Add character</source>
         <translation>Додати персонаж</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="524"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="530"/>
         <source>Find all locations</source>
         <translation>Знайти усі локації</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="530"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="536"/>
         <source>Add location</source>
         <translation>Додати локацію</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="536"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="542"/>
         <source>Empty recycle bin</source>
         <translation>Винести непотріб</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="554"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="560"/>
         <source>Add document</source>
         <translation>Додати елемент</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="575"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="581"/>
         <source>Remove document</source>
         <translation>Видалити елемент</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="603"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2234"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="609"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2250"/>
         <source>Create new draft</source>
         <translation>Зберегти драфт як попередній, щоб продовжити працювати в поточному драфті як в новому</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="618"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="624"/>
         <source>Open in new window</source>
         <translation>Відкрити в новому вікні</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="823"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="841"/>
         <source>Character with this name already exists</source>
         <translation>Персонаж з таким ім’ям вже існує</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="833"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="851"/>
         <source>Location with this name already exists</source>
         <translation>Локація з такою назвою вже існує</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="988"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1004"/>
         <source>Current draft</source>
         <translation>Поточний драфт</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1057"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1073"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation>Ви дійсно бажаєте видалити драфт документа &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1192"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1208"/>
         <source>Do you really want to permanently remove document?</source>
         <translation>Дійсно видалити документ назавжди?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1058"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1193"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1652"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1074"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1209"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1668"/>
         <source>No</source>
         <translation>Ні, в жодному разі</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="467"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="473"/>
         <source>Remove split</source>
         <translation>Прибрати розділення</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="468"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="474"/>
         <source>Split window</source>
         <translation>Розділити вікно</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="547"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="553"/>
         <source>Add folder</source>
         <translation>Додати теку</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="575"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="581"/>
         <source>Remove documents</source>
         <translation>Видалити документи</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="591"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="597"/>
         <source>Sort alphabetically</source>
         <translation>Сортувати за абеткою</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="631"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="637"/>
         <source>Export...</source>
         <translation>Експорт...</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="688"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="694"/>
         <source>Share access</source>
         <translation>Поділіться доступом</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="708"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="714"/>
         <source>Expand all</source>
         <translation>Розгорнути все</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="714"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="720"/>
         <source>Collapse all</source>
         <translation>Згорнути все</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="843"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="861"/>
         <source>World with this name already exists</source>
         <translation>Світ з такою назвою вже існує</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1059"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1194"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1653"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1075"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1210"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1669"/>
         <source>Yes, remove</source>
         <translation>Так, видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1411"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1427"/>
         <source>Characters from the text</source>
         <translation>Персонажі виявлені у тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1421"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1437"/>
         <source>Characters that are not found in the text</source>
         <translation>Персонажі, яких у тексті немає</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1434"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1450"/>
         <source>Save only characters from the text</source>
         <translation>Зберегти лише персонажів з тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1435"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1451"/>
         <source>Save all characters</source>
         <translation>Зберегти всіх персонажів</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1436"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1568"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1452"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1584"/>
         <source>Change nothing</source>
         <translation>Залишити без змін</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1543"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1559"/>
         <source>Locations from the text</source>
         <translation>Локації виявлені у тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1553"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1569"/>
         <source>Locations that are not found in the text</source>
         <translation>Локації, яких у тексті немає</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1566"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1582"/>
         <source>Save only locations from the text</source>
         <translation>Зберегти лише локації з тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1567"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1583"/>
         <source>Save all locations</source>
         <translation>Зберегти всі локації</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1651"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1667"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Дійсно видалити усі непотрібні документи назавжди?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2248"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2264"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2258"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2274"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2418"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2439"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2460"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2481"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2593"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2433"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2454"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2475"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2496"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2607"/>
         <source>draft</source>
         <translation>чернетка</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2437"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2458"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2479"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2452"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2473"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2494"/>
         <source>Script</source>
         <translation>Сценарій</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3220"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3252"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3283"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3320"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3359"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3234"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3271"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3307"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3349"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3393"/>
         <source>Title page</source>
         <translation>Титульна сторінка</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3223"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3255"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3284"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3322"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3362"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3237"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3274"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3308"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3351"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3396"/>
         <source>Synopsis</source>
         <translation>Синопсис</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3225"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3239"/>
         <source>Audioplay</source>
         <translation>Аудіовистава</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3257"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3276"/>
         <source>Comic book</source>
         <translation>Мальопис</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3334"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3363"/>
         <source>Treatment</source>
         <translation>Поепізодник</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3286"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3310"/>
         <source>Novel</source>
         <translation>Роман</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3295"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3319"/>
         <source>Outline</source>
         <translation>План</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3364"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3398"/>
         <source>Stageplay</source>
         <translation>П&apos;єса</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3636"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3675"/>
         <source>Conflicted version</source>
         <translation>Веріся з конфліктом</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2416"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2591"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3325"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2431"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2605"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3354"/>
         <source>Screenplay</source>
         <translation>Сценарій</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="469"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="475"/>
         <source>Hide document drafts</source>
         <translation>Приховати драфти</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="470"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="476"/>
         <source>Show document drafts</source>
         <translation>Показати драфти</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3228"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3260"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3289"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3328"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3367"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3242"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3279"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3313"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3357"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3401"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -5036,28 +5036,28 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="328"/>
+        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="346"/>
         <source>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Назву світу змінено з &quot;%1&quot; на &quot;%2&quot;. Застосувати зміни?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="330"/>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="370"/>
+        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="348"/>
+        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="388"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="331"/>
+        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="349"/>
         <source>Yes</source>
         <translation>Так</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="369"/>
+        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="387"/>
         <source>Do you want to delete the world&apos;s photo?</source>
         <translation>Хочете видалити фото світу?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="371"/>
+        <location filename="../management_layer/plugins/world_information/world_information_manager.cpp" line="389"/>
         <source>Yes, delete</source>
         <translation>Так, видалити</translation>
     </message>
@@ -8973,17 +8973,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="338"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="337"/>
         <source>Unlock ability to edit audioplay cards</source>
         <translation>Розблокувати можливість редагування карток аудіовистави</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="339"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="338"/>
         <source>Update statistics</source>
         <translation>Оновити статистику</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="340"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="339"/>
         <source>Save statistics to the file</source>
         <translation>Зберегти статистику у файл</translation>
     </message>
@@ -9405,12 +9405,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharacterDialoguesView</name>
     <message>
-        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="354"/>
+        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="353"/>
         <source>Unlock ability to use characters dialogues</source>
         <translation>Розблокувати можливість використання реплік персонажів</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="355"/>
+        <location filename="../management_layer/plugins/character_dialogues/character_dialogues_view.cpp" line="354"/>
         <source>Update character dialogues list</source>
         <translation>Оновити список реплік персонажа</translation>
     </message>
@@ -10294,42 +10294,42 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Виберіть файл для збереження зображення</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="397"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="396"/>
         <source>Unlock ability to edit characters relations</source>
         <translation>Розблокувати можливість редагувати стосунки персонажів</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="398"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="397"/>
         <source>Add character</source>
         <translation>Додати персонаж</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="399"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="398"/>
         <source>Add group</source>
         <translation>Додати групу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="402"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="401"/>
         <source>Remove selected item</source>
         <translation>Видалити вибраний елемент</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="413"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="412"/>
         <source>Show relations titles only for the selected characters</source>
         <translation>Показувати назви стосунків лише для обраних персонажів</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="416"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="415"/>
         <source>Save relations scheme to image</source>
         <translation>Зберегти схему стосунків як зображення</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="418"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="417"/>
         <source>Here will be a characters relations scheme.</source>
         <translation>Тут буде схема стосунків між персонажами.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="419"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/characters_relations_view.cpp" line="418"/>
         <source>It&apos;s time to create the first character!</source>
         <translation>Найкращий час створити першого персонажа!</translation>
     </message>
@@ -10865,7 +10865,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ConnectionStatusToolBar</name>
     <message>
-        <location filename="../ui/account/connection_status_tool_bar.cpp" line="249"/>
+        <location filename="../ui/account/connection_status_tool_bar.cpp" line="288"/>
         <source>Connection with server lost. Automatic reconnection enabled. Press, to try to reconnect right now.</source>
         <translation>З&apos;єднання з сервером втрачено. Активовано автоматичне перепідключення. Натисніть, щоб перепідключитися.</translation>
     </message>
@@ -11977,12 +11977,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Застосувати нову назву локації</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="746"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="748"/>
         <source>Name</source>
         <translation>Назва</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="748"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="750"/>
         <source>Story role</source>
         <translation>Сюжетна роль</translation>
     </message>
@@ -12012,112 +12012,112 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Обрати колір персонажу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="744"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="746"/>
         <source>Unlock access to extended location profile</source>
         <translation>Розблокувати доступ до розширеного профілю локації</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="747"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="749"/>
         <source>Select location color</source>
         <translation>Обрати колір локації</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="752"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="754"/>
         <source>One sentence description</source>
         <translation>Опис одним реченням</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="753"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="755"/>
         <source>Long description</source>
         <translation>Повний опис </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="754"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="756"/>
         <source>Add photo +</source>
         <translation>Додати фото +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="754"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="756"/>
         <source>Change photo...</source>
         <translation>Змінити фото...</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="755"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="757"/>
         <source>Do you want to delete the location&apos;s main photo?</source>
         <translation>Видалити головне фото локації?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="756"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="758"/>
         <source>Select an area for the location main photo</source>
         <translation>Виберіть область для фотографії локації</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="758"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="760"/>
         <source>Photos</source>
         <translation>Світлини</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="760"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="762"/>
         <source>Sense info</source>
         <translation>Відчуття від локації</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="761"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="763"/>
         <source>Sight</source>
         <translation>Вигляд</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="762"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="764"/>
         <source>Smell</source>
         <translation>Запах</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="763"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="765"/>
         <source>Sound</source>
         <translation>Звучання</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="764"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="766"/>
         <source>Taste</source>
         <translation>Смак</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="765"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="767"/>
         <source>Touch</source>
         <translation>Дотик</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="767"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="769"/>
         <source>Geography info</source>
         <translation>Географічна інформація</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="768"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="770"/>
         <source>Location</source>
         <translation>Розташування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="769"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="771"/>
         <source>Climate</source>
         <translation>Клімат</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="770"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="772"/>
         <source>Landmark</source>
         <translation>Ландшафт</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="771"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="773"/>
         <source>Nearby places</source>
         <translation>Прилеглі визначні місця</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="773"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="775"/>
         <source>Background info</source>
         <translation>Передісторія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="774"/>
+        <location filename="../management_layer/plugins/location_information/location_information_view.cpp" line="776"/>
         <source>History</source>
         <translation>Історія</translation>
     </message>
@@ -12376,42 +12376,42 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Виберіть файл для збереження зображення</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="393"/>
         <source>Unlock ability to edit locations map</source>
         <translation>Разблокувати можливість редагувати карту локацій</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="395"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="394"/>
         <source>Add location</source>
         <translation>Додати локацію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="396"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="395"/>
         <source>Add group</source>
         <translation>Додати групу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="399"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="398"/>
         <source>Remove selected item</source>
         <translation>Видалити вибраний елемент</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="410"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="409"/>
         <source>Show routes titles only for the selected locations</source>
         <translation>Показувати назви шляхів лише для вибраної локації</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="413"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="412"/>
         <source>Save locations map to image</source>
         <translation>Зберегти карту локацій як зображення</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="415"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="414"/>
         <source>Here will be a locations map.</source>
         <translation>Тут буде карта локацій</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="416"/>
+        <location filename="../management_layer/plugins/locations_map/ui/locations_map_view.cpp" line="415"/>
         <source>It&apos;s time to create the first location!</source>
         <translation>Настав час створити першу локацію!</translation>
     </message>
@@ -13035,7 +13035,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
     <message>
         <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="271"/>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="764"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="763"/>
         <source>Add child node</source>
         <translation>Додати вкладений вузол</translation>
     </message>
@@ -13065,37 +13065,37 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Ідеї</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="758"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="757"/>
         <source>Unlock ability to edit mind map</source>
         <translation>Розблокувати редагування мапи думок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="761"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="760"/>
         <source>Add node</source>
         <translation>Додати вузол</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="765"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="764"/>
         <source>Add group</source>
         <translation>Додати групу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="768"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="767"/>
         <source>Remove selected item</source>
         <translation>Видалити вибраний елемент</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="777"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="776"/>
         <source>AI assistant</source>
         <translation>Асистент ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="780"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="779"/>
         <source>Show connections titles only for the selected nodes</source>
         <translation>Показувати назви з&apos;єднань лише для вибраних вузлів</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="781"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="780"/>
         <source>Save mind map to image</source>
         <translation>Зберегти мапу думок як зображення</translation>
     </message>
@@ -14140,7 +14140,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <name>Ui::OnboardingNavigator</name>
     <message>
         <location filename="../ui/onboarding/onboarding_navigator.cpp" line="598"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="845"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="849"/>
         <source>Translation is ready for %1%</source>
         <translation>Переклад готовий на %1%</translation>
     </message>
@@ -14180,187 +14180,187 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Будь ласка, впишіть свій нікнейм</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="839"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="843"/>
         <source>Welcome to the Story Architect</source>
         <translation>Ласкаво просимо до Story Architect</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="840"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="844"/>
         <source>Let&apos;s configure something before start</source>
         <translation>Давайте спочатку дещо налаштуємо</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="841"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="845"/>
         <source>Language</source>
         <translation>Мова</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="847"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="851"/>
         <source>Choose application theme</source>
         <translation>Оберіть тему інтерфейсу</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="848"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="852"/>
         <source>Setup size of the user interface elements</source>
         <translation>Розмір елементів інтерфейсу</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="849"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="853"/>
         <source>small</source>
         <translation>маленький</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="850"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="854"/>
         <source>big</source>
         <translation>великий</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="851"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="869"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="881"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="888"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="855"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="873"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="885"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="892"/>
         <source>Continue</source>
         <translation>Продовжити</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="854"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="858"/>
         <source>Sign in to get access to the extended
 FREE, PRO and CLOUD features</source>
         <translation>Увійдіть, щоб отримати доступ до розширених можливостей FREE, PRO та CLOUD версій</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="868"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="872"/>
         <source>I want to receive STARC news</source>
         <translation>Хочу отримувати новини про STARC&#xa0;</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="855"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="859"/>
         <source>Such as writing sprints, writing statistics, worldbuilding tools, story development tools, collaboration and more</source>
         <translation>Зокрема, письменницькі спринти, статистика продуктивності, інструменти для розробки світу і структури твору, співавторства та багато іншого</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="857"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="861"/>
         <source>Email</source>
         <translation>Електронна пошта</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="858"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="862"/>
         <source>Confirmation code</source>
         <translation>Код підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="859"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="863"/>
         <source>Sign up</source>
         <translation>Зареєструватись</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="860"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="864"/>
         <source>Send code again</source>
         <translation>Відправити код знову</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="861"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="865"/>
         <source>Continue without sign in</source>
         <translation>Продовжити без авторизації</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="863"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="867"/>
         <source>Set up your account</source>
         <translation>Налаштуйте обліківку</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="864"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="868"/>
         <source>Personalize your workspace</source>
         <translation>Зробіть свій робочій простір особливим</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="865"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="869"/>
         <source>Change avatar</source>
         <translation>Змінити аватар</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="866"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="870"/>
         <source>Your name</source>
         <translation>Ваше ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="867"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="871"/>
         <source>Your bio</source>
         <translation>Про себе</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="871"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="875"/>
         <source>Customize your workspace</source>
         <translation>Налаштуйте власний робочий простір</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="872"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="884"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="876"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="888"/>
         <source>Feel at home</source>
         <translation>Почувайтеся як вдома</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="874"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="878"/>
         <source>Story Architect provides tools for working with any form of writing. Choose which ones you plan to use:</source>
         <translation>Story Architect надає інструменти для будь-якої писемної діяльності. Виберіть, над чим ви плануєте працювати: </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="876"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="880"/>
         <source>Screenplay</source>
         <translation>Сценарій</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="877"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="881"/>
         <source>Comic book</source>
         <translation>Мальопис</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="878"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="882"/>
         <source>Audioplay</source>
         <translation>Аудіо-вистава</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="879"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="883"/>
         <source>Stageplay</source>
         <translation>П&apos;єса</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="880"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="884"/>
         <source>Novel</source>
         <translation>Роман</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="883"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="887"/>
         <source>Customize your work environment</source>
         <translation>Налаштуйте робоче середовище під себе</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="886"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="890"/>
         <source>We&apos;ll help you get used to STARC by leveraging your experience with other applications.</source>
         <translation>Ми допоможемо вам звикнути до STARC, використовуючи ваш досвід роботи з іншими програмами.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="889"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="893"/>
         <source>Application</source>
         <translation>Застосунок</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="890"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="894"/>
         <source>Adapt the interface and workflow</source>
         <translation>Адаптуйте інтерфейс і робочий процес</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="892"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="896"/>
         <source>Before you get started</source>
         <translation>Перш ніж почати</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="893"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="897"/>
         <source>Feel our care</source>
         <translation>Відчуйте нашу турботу</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="895"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="899"/>
         <source>You should know that Story Architect cares about the safety of your work, so the app:
 
 • automatically saves changes every three seconds when there is no activity
@@ -14381,22 +14381,22 @@ This will help to protect your creativity in any unforeseen situation.</source>
 Це захистить вашу творчість в будь-якій непередбачуваній ситуації.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="903"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="907"/>
         <source>Thanks I&apos;ll know</source>
         <translation>Дякую, буду знати</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="905"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="909"/>
         <source>Follow us on social media</source>
         <translation>Слідкуйте за нами в соцмережах</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="906"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="910"/>
         <source>Let&apos;s unite to make the best app for writers</source>
         <translation>Давайте разом створимо найкращий додаток для авторів</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="907"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="911"/>
         <source>Be the first to know our news, fresh updates and special offers.
 
 Get in touch with our technical support, share your feedback and suggest improvements.
@@ -14409,7 +14409,7 @@ Discuss everything with fellow community of writers, share your work in progress
 Спілкуйтеся з громадою авторів, обговорюйте робочі моменти і життя та надихайте інших.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="917"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="921"/>
         <source>Start writing</source>
         <translation>Розпочати роботу</translation>
     </message>
@@ -14818,38 +14818,69 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::PurchaseDialogOption</name>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="115"/>
         <source>Pay with:</source>
-        <translation>Оплатити за допомогою:</translation>
+        <translation type="vanished">Оплатити за допомогою:</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="134"/>
         <source>%1 lifetime</source>
-        <translation>%1 назавжди</translation>
+        <translation type="vanished">%1 назавжди</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="193"/>
         <source>%1 for %2</source>
-        <translation>%1 на %2</translation>
+        <translation type="vanished">%1 на %2</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="193"/>
         <source>%n month(s)</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>%n місяць(ів)</numerusform>
             <numerusform>%n місяць(я)</numerusform>
             <numerusform>%n місяць(і)</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="194"/>
         <source>%1 credits</source>
-        <translation>%1 кредитів</translation>
+        <translation type="vanished">%1 кредитів</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option.cpp" line="207"/>
         <source>$%1 per month</source>
-        <translation>%1$ на місяць</translation>
+        <translation type="vanished">%1$ на місяць</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::PurchaseDialogOptionWidget</name>
+    <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="116"/>
+        <source>Pay with:</source>
+        <translation type="unfinished">Оплатити за допомогою:</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="135"/>
+        <source>%1 lifetime</source>
+        <translation type="unfinished">%1 назавжди</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="211"/>
+        <source>%1 for %2</source>
+        <translation type="unfinished">%1 на %2</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="211"/>
+        <source>%n month(s)</source>
+        <translation type="unfinished">
+            <numerusform>%n місяць(ів)</numerusform>
+            <numerusform>%n місяць(я)</numerusform>
+            <numerusform>%n місяць(і)</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="212"/>
+        <source>%1 credits</source>
+        <translation type="unfinished">%1 кредитів</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="244"/>
+        <source>$%1 per month</source>
+        <translation type="unfinished">%1$ на місяць</translation>
     </message>
 </context>
 <context>
@@ -15457,37 +15488,37 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation>Дійсно хочете видалити ресурс &quot;%1&quot; з поточної сцени?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2015"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2014"/>
         <source>Elements</source>
         <translation>Ресурси</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2036"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2035"/>
         <source>In the whole text</source>
         <translation>По всьому тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2037"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2036"/>
         <source>In scene heading</source>
         <translation>У сетингах сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2038"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2037"/>
         <source>In cast list</source>
         <translation>В списку касту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2039"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2038"/>
         <source>In action</source>
         <translation>В описах дії</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2040"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2039"/>
         <source>In character</source>
         <translation>В дійових особах</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2041"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2040"/>
         <source>In dialogue</source>
         <translation>У репліках</translation>
     </message>
@@ -15502,27 +15533,27 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation>Так, видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2016"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2015"/>
         <source>Formatting</source>
         <translation>Форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2017"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2016"/>
         <source>Scene parameters</source>
         <translation>Параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2018"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2017"/>
         <source>Comments</source>
         <translation>Коментарі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2019"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2018"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2020"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2019"/>
         <source>Dictionaries</source>
         <translation>Словники</translation>
     </message>
@@ -16293,17 +16324,17 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="339"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="338"/>
         <source>Unlock ability to edit screenplay cards</source>
         <translation>Розблокувати можливість редагування карток</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="340"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="339"/>
         <source>Update statistics</source>
         <translation>Оновити статистику</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="341"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="340"/>
         <source>Save statistics to the file</source>
         <translation>Зберегти статистику у файл</translation>
     </message>
@@ -17543,28 +17574,38 @@ STARTED</source>
 <context>
     <name>Ui::SessionWidget</name>
     <message>
-        <location filename="../ui/account/session_widget.cpp" line="120"/>
+        <location filename="../ui/account/session_widget.cpp" line="128"/>
         <source>Current device</source>
         <translation>Поточний пристрій</translation>
     </message>
     <message>
-        <location filename="../ui/account/session_widget.cpp" line="128"/>
+        <location filename="../ui/account/session_widget.cpp" line="131"/>
         <source>Online</source>
         <translation>у мережі</translation>
     </message>
     <message>
-        <location filename="../ui/account/session_widget.cpp" line="132"/>
+        <location filename="../ui/account/session_widget.cpp" line="137"/>
+        <source>today</source>
+        <translation type="unfinished">сьогодні</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/session_widget.cpp" line="139"/>
+        <source>yesterday</source>
+        <translation type="unfinished">вчора</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/session_widget.cpp" line="146"/>
         <source>was active %1 at %2</source>
         <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
         <translation>відвідував %1 о %2</translation>
     </message>
     <message>
-        <location filename="../ui/account/session_widget.cpp" line="136"/>
+        <location filename="../ui/account/session_widget.cpp" line="149"/>
         <source>Terminate others</source>
         <translation>Відкликати решту</translation>
     </message>
     <message>
-        <location filename="../ui/account/session_widget.cpp" line="137"/>
+        <location filename="../ui/account/session_widget.cpp" line="150"/>
         <source>Terminate</source>
         <translation>Відкликати</translation>
     </message>
@@ -19932,308 +19973,308 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>Застосувати нову назву світу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1336"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1338"/>
         <source>Unlock access to extended world profile</source>
         <translation>Розблокувати доступ до розширеного профілю світу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1338"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1340"/>
         <source>Name</source>
         <translation>Назва</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1339"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1341"/>
         <source>One sentence description</source>
         <translation>Опис одним реченням</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1340"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1342"/>
         <source>Long description</source>
         <translation>Повний опис </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1341"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1343"/>
         <source>Add photo +</source>
         <translation>Додати фото +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1341"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1343"/>
         <source>Change photo...</source>
         <translation>Змінити фото</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1342"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1344"/>
         <source>Do you want to delete the world&apos;s main photo?</source>
         <translation>Хочете видалити головне фото світу?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1343"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1345"/>
         <source>Select an area for the world main photo</source>
         <translation>Виберіть область для головного фото світу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1345"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1347"/>
         <source>Photos</source>
         <translation>Світлини</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1347"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1349"/>
         <source>World description</source>
         <translation>Світоустрій</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1348"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1350"/>
         <source>Overview</source>
         <translation>Огляд</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1349"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1351"/>
         <source>Earth like?</source>
         <translation>Схожий на Землю?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1350"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1352"/>
         <source>World history</source>
         <translation>Історія світу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1351"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1353"/>
         <source>World mood</source>
         <translation>Настрій світу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1353"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1355"/>
         <source>Nature</source>
         <translation>Довкілля світу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1354"/>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1398"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1356"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1400"/>
         <source>Basic info</source>
         <translation>Основна інформація</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1355"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1357"/>
         <source>Biology</source>
         <translation>Біологія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1356"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1358"/>
         <source>Physics</source>
         <translation>Фізика</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1357"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1359"/>
         <source>Astronomy</source>
         <translation>Астрономія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1358"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1360"/>
         <source>Geography</source>
         <translation>Географія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1359"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1361"/>
         <source>Races</source>
         <translation>Раси</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1360"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1362"/>
         <source>Flora</source>
         <translation>Рослини</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1361"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1363"/>
         <source>Animals</source>
         <translation>Тварини</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1362"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1364"/>
         <source>Natural resources</source>
         <translation>Природні ресурси та екологія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1363"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1365"/>
         <source>Climate</source>
         <translation>Клімат</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1365"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1367"/>
         <source>Culture</source>
         <translation>Культура</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1366"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1368"/>
         <source>Religions and beliefs</source>
         <translation>Релігії та вірування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1367"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1369"/>
         <source>Ethics and values</source>
         <translation>Етичні норми та цінності</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1368"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1370"/>
         <source>Languages</source>
         <translation>Мови</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1369"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1371"/>
         <source>Class/caste system</source>
         <translation>Класова/кастова система</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1371"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1373"/>
         <source>System info</source>
         <translation>Про систему</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1372"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1374"/>
         <source>Technology</source>
         <translation>Технології</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1373"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1375"/>
         <source>Economy</source>
         <translation>Економіка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1374"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1376"/>
         <source>Trade</source>
         <translation>Торгівля</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1375"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1377"/>
         <source>Business</source>
         <translation>Ділова активність</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1376"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1378"/>
         <source>Industry</source>
         <translation>Промисловість</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1377"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1379"/>
         <source>Currency</source>
         <translation>Валюти</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1378"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1380"/>
         <source>Education</source>
         <translation>Освіта</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1379"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1381"/>
         <source>Communication method</source>
         <translation>Спосіб спілкування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1380"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1382"/>
         <source>Art</source>
         <translation>Мистецтво</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1381"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1383"/>
         <source>Entertainment</source>
         <translation>Розваги</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1382"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1384"/>
         <source>Travel</source>
         <translation>Подорожі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1383"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1385"/>
         <source>Science</source>
         <translation>Наука</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1385"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1387"/>
         <source>Politics info</source>
         <translation>Політична система</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1386"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1388"/>
         <source>Government format</source>
         <translation>Формат уряду</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1387"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1389"/>
         <source>Government history</source>
         <translation>Історія уряду</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1388"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1390"/>
         <source>Laws and justice system</source>
         <translation>Закони та судова система</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1389"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1391"/>
         <source>Foreign relations</source>
         <translation>Зовнішні зв&apos;язки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1390"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1392"/>
         <source>People perception of government</source>
         <translation>Ставлення населення до уряду</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1391"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1393"/>
         <source>Propaganda</source>
         <translation>Пропаганда</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1392"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1394"/>
         <source>Anti-government organisations</source>
         <translation>Антиурядові організації</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1393"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1395"/>
         <source>Past war</source>
         <translation>Війни минулого</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1394"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1396"/>
         <source>Current war</source>
         <translation>Поточні війни</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1395"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1397"/>
         <source>Potential war</source>
         <translation>Потенційні війни</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1397"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1399"/>
         <source>Magic</source>
         <translation>Магія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1399"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1401"/>
         <source>Magic rule</source>
         <translation>Правила магії</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1400"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1402"/>
         <source>Who can use</source>
         <translation>Хто може користуватися</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1401"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1403"/>
         <source>Effect to world</source>
         <translation>Вплив на світ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1402"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1404"/>
         <source>Effect to society</source>
         <translation>Вплив на суспільство</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1403"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1405"/>
         <source>Effect to technology</source>
         <translation>Вплив на технології</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1404"/>
+        <location filename="../management_layer/plugins/world_information/world_information_view.cpp" line="1406"/>
         <source>Magic types</source>
         <translation>Різновиди магії</translation>
     </message>
@@ -20417,42 +20458,42 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <translation>Виберіть файл для збереження зображення</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="388"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="387"/>
         <source>Unlock ability to edit worlds map</source>
         <translation>Розблокувати можливість редагування карту світів</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="389"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="388"/>
         <source>Add world</source>
         <translation>Додати світ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="390"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="389"/>
         <source>Add group</source>
         <translation>Додати групу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="393"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="392"/>
         <source>Remove selected item</source>
         <translation>Видалити вибраний елемент</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="404"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="403"/>
         <source>Show routes titles only for the selected worlds</source>
         <translation>Показувати назви шляхів тільки для вибраного світу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="405"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="404"/>
         <source>Save worlds map to image</source>
         <translation>Зберегти карту світу до зображення</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="407"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="406"/>
         <source>Here will be a worlds map.</source>
         <translation>Тут буде карта світу.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="408"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_view.cpp" line="407"/>
         <source>It&apos;s time to create the first world!</source>
         <translation>Настав час створити перший світ!</translation>
     </message>

@@ -1,6 +1,6 @@
 #include "purchase_dialog.h"
 
-#include "purchase_dialog_option.h"
+#include "purchase_dialog_option_widget.h"
 
 #include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
@@ -21,12 +21,12 @@ public:
     /**
      * @brief Обновить состояние опций оплат
      */
-    void updateOptionsState(PurchaseDialogOption* _checkedOption);
+    void updateOptionsState(PurchaseDialogOptionWidget* _checkedOption);
 
 
     Body1Label* descriptionLabel = nullptr;
     Widget* content = nullptr;
-    QVector<PurchaseDialogOption*> options;
+    QVector<PurchaseDialogOptionWidget*> options;
 
     QHBoxLayout* buttonsLayout = nullptr;
     Button* cancelButton = nullptr;
@@ -49,7 +49,7 @@ PurchaseDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addWidget(purchaseButton);
 }
 
-void PurchaseDialog::Implementation::updateOptionsState(PurchaseDialogOption* _checkedOption)
+void PurchaseDialog::Implementation::updateOptionsState(PurchaseDialogOptionWidget* _checkedOption)
 {
     for (auto option : std::as_const(options)) {
         if (option == _checkedOption) {
@@ -114,7 +114,7 @@ void PurchaseDialog::setPaymentOptions(const QVector<Domain::PaymentOption>& _pa
     int row = 0;
     int column = 0;
     for (const auto& option : _paymentOptions) {
-        auto optionWidget = new PurchaseDialogOption(option);
+        auto optionWidget = new PurchaseDialogOptionWidget(option);
         optionWidget->setBackgroundColor(Ui::DesignSystem::color().background());
         optionWidget->setTextColor(Ui::DesignSystem::color().onBackground());
         if (option.duration == Domain::PaymentDuration::Lifetime) {
@@ -136,7 +136,7 @@ void PurchaseDialog::setPaymentOptions(const QVector<Domain::PaymentOption>& _pa
             contentLayout->addWidget(optionWidget, row, column++);
         }
 
-        connect(optionWidget, &PurchaseDialogOption::checkedChanged, this,
+        connect(optionWidget, &PurchaseDialogOptionWidget::checkedChanged, this,
                 [this, optionWidget] { d->updateOptionsState(optionWidget); });
 
         d->options.append(optionWidget);

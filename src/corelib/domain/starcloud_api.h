@@ -107,7 +107,7 @@ struct PaymentOption {
     /**
      * @brief Скидка в процентах
      */
-    int discount = -1;
+    qreal discount = -1;
 
     /**
      * @brief Стоимость со скидкой, в центах
