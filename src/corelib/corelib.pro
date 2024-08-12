@@ -225,6 +225,7 @@ SOURCES += \
     business_layer/import/screenplay/screenplay_fdx_importer.cpp \
     business_layer/import/screenplay/screenplay_fountain_importer.cpp \
     business_layer/import/screenplay/screenplay_kit_scenarist_importer.cpp \
+    business_layer/import/screenplay/screenplay_pdf_importer.cpp \
     business_layer/import/screenplay/screenplay_trelby_importer.cpp \
     business_layer/import/stageplay/stageplay_fountain_importer.cpp \
     business_layer/import/text/simple_text_markdown_importer.cpp \
@@ -578,6 +579,7 @@ HEADERS += \
     business_layer/import/screenplay/screenplay_fountain_importer.h \
     business_layer/import/screenplay/screenplay_import_options.h \
     business_layer/import/screenplay/screenplay_kit_scenarist_importer.h \
+    business_layer/import/screenplay/screenplay_pdf_importer.h \
     business_layer/import/screenplay/screenplay_trelby_importer.h \
     business_layer/import/stageplay/abstract_stageplay_importer.h \
     business_layer/import/stageplay/stageplay_fountain_importer.h \
