@@ -9,6 +9,7 @@
 #include <business_layer/import/screenplay/screenplay_fountain_importer.h>
 #include <business_layer/import/screenplay/screenplay_import_options.h>
 #include <business_layer/import/screenplay/screenplay_kit_scenarist_importer.h>
+#include <business_layer/import/screenplay/screenplay_pdf_importer.h>
 #include <business_layer/import/screenplay/screenplay_trelby_importer.h>
 #include <business_layer/import/stageplay/stageplay_fountain_importer.h>
 #include <data_layer/storage/settings_storage.h>
@@ -231,6 +232,8 @@ void ImportManager::Implementation::importScreenplay(
         } else if (importFilePath.endsWith(ExtensionHelper::fountain())
                    || importFilePath.endsWith(ExtensionHelper::plainText())) {
             importer.reset(new BusinessLayer::ScreenplayFountainImporter);
+        } else if (importFilePath.endsWith(ExtensionHelper::pdf())) {
+            importer.reset(new BusinessLayer::ScreenplayPdfImporter);
         }
     }
 

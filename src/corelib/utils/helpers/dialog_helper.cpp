@@ -151,6 +151,7 @@ QString DialogHelper::filtersForImport()
                                      ExtensionHelper::celtx(),
                                      ExtensionHelper::plainText(),
                                      ExtensionHelper::markdown(),
+                                     ExtensionHelper::pdf(),
                                  });
     for (const auto& filter : {
              kitScenaristFilter(),
@@ -162,6 +163,7 @@ QString DialogHelper::filtersForImport()
              fountainFilter(),
              celtxFilter(),
              plainTextFilter(),
+             pdfFilter(),
          }) {
         filters.append(";;");
         filters.append(filter);
