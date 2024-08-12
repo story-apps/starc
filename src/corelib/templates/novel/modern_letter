@@ -10,10 +10,10 @@
             <text><params align="hcenter"/><v><![CDATA[]]></v></text>
             <text><params align="hcenter"/><v><![CDATA[]]></v></text>
             <text><params align="hcenter"/><v><![CDATA[]]></v></text>
-            <text><params align="hcenter"/><v><![CDATA[Book Title]]></v><fms><fm from="0" length="10"  fontf="Arial" fonts="105"/></fms></text>
+            <text><params align="hcenter"/><v><![CDATA[Book Title]]></v><fms><fm from="0" length="10"  fontf="Arial" fonts="48"/></fms></text>
             <text><params align="hcenter"/><v><![CDATA[]]></v></text>
             <text><params align="hcenter"/><v><![CDATA[]]></v></text>
-            <text><params align="hcenter"/><v><![CDATA[Author Name]]></v><fms><fm from="0" length="11"  fontf="Arial" fonts="52"/></fms></text>
+            <text><params align="hcenter"/><v><![CDATA[Author Name]]></v><fms><fm from="0" length="11"  fontf="Arial" fonts="24"/></fms></text>
         </document>
     </titlepage>
     <blocks>

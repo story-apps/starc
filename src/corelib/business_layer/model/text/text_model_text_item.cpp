@@ -6,6 +6,7 @@
 #include <business_layer/templates/templates_facade.h>
 #include <business_layer/templates/text_template.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/measurement_helper.h>
 #include <utils/helpers/string_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/tools/run_once.h>
@@ -571,7 +572,7 @@ QTextCharFormat TextModelTextItem::TextFormat::charFormat() const
     if (!font.family.isEmpty() && font.size > 0) {
         auto formatFont = format.font();
         formatFont.setFamily(font.family);
-        formatFont.setPixelSize(font.size);
+        formatFont.setPixelSize(MeasurementHelper::ptToPx(font.size));
         format.setFont(formatFont);
     }
     return format;
@@ -970,7 +971,7 @@ void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _for
         if (format.format.font().family() != defaultBlockFormat.font().family()
             || format.format.font().pixelSize() != defaultBlockFormat.font().pixelSize()) {
             newFormat.font.family = format.format.font().family();
-            newFormat.font.size = format.format.font().pixelSize();
+            newFormat.font.size = MeasurementHelper::pxToPt(format.format.font().pixelSize());
         }
 
         newFormats.append(newFormat);
