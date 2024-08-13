@@ -20,6 +20,9 @@ class AboutApplicationDialog::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
+
+    bool isRussianSpeaking = false;
+
     Body2LinkLabel* versionLabel = nullptr;
     Body1Label* authorsLabel1 = nullptr;
     Body1LinkLabel* authorsLink = nullptr;
@@ -57,8 +60,6 @@ AboutApplicationDialog::Implementation::Implementation(QWidget* _parent)
     , closeButton(new Button(_parent))
     , buttonsLayout(new QHBoxLayout)
 {
-    versionLabel->setLink(QUrl("https://starc.app/blog/"));
-    authorsLink->setLink(QUrl("https://storyapps.dev/"));
     partnerLink->setLink(
         QUrl("https://scriptwriting.courses/?utm_source=starc-desktop-app&utm_medium=referral"));
 
@@ -123,8 +124,10 @@ AboutApplicationDialog::AboutApplicationDialog(QWidget* _parent)
             [] { QDesktopServices::openUrl(QUrl("https://discord.gg/8Hjze3UYgQ")); });
     connect(d->vkButton, &IconButton::clicked, this,
             [] { QDesktopServices::openUrl(QUrl("https://vk.com/starc_app")); });
-    connect(d->telegramButton, &IconButton::clicked, this,
-            [] { QDesktopServices::openUrl(QUrl("https://t.me/starcapp")); });
+    connect(d->telegramButton, &IconButton::clicked, this, [this] {
+        QDesktopServices::openUrl(
+            QUrl(d->isRussianSpeaking ? "https://t.me/starcapp_ru" : "https://t.me/starcapp"));
+    });
     connect(d->mailButton, &IconButton::clicked, this,
             [] { QDesktopServices::openUrl(QUrl("https://starc.app/contacts")); });
     connect(d->closeButton, &Button::clicked, this, &AboutApplicationDialog::hideDialog);
@@ -144,17 +147,21 @@ QWidget* AboutApplicationDialog::lastFocusableWidget() const
 
 void AboutApplicationDialog::updateTranslations()
 {
-    const auto isRussianSpeaking = QLocale().language() == QLocale::Russian
+    d->isRussianSpeaking = QLocale().language() == QLocale::Russian
         || QLocale().language() == QLocale::Belarusian
         || QLocale().language() == QLocale::Ukrainian;
-    d->twitterButton->setVisible(!isRussianSpeaking);
-    d->discordButton->setVisible(!isRussianSpeaking);
-    d->vkButton->setVisible(isRussianSpeaking);
+    d->twitterButton->setVisible(!d->isRussianSpeaking);
+    d->discordButton->setVisible(!d->isRussianSpeaking);
+    d->vkButton->setVisible(d->isRussianSpeaking);
 
     d->versionLabel->setText(
         QString("%1 %2").arg(tr("version"), QCoreApplication::applicationVersion()));
+    d->versionLabel->setLink(
+        QUrl(d->isRussianSpeaking ? "https://starc.app/ru/blog/" : "https://starc.app/blog/"));
     d->authorsLabel1->setText(
         QString("%1 ").arg(tr("Designed, coded and crafted with love at the")));
+    d->authorsLink->setLink(
+        QUrl(d->isRussianSpeaking ? "https://storyapps.dev/ru.html" : "https://storyapps.dev/"));
     d->authorsLink->setText("Story Apps");
     d->authorsLabel2->setText(QString(" %1.").arg(tr("company")));
     d->partnerLabel1->setText(QString("%1 ").arg(tr("The Logline Generator is powered by")));
