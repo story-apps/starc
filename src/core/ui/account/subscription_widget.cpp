@@ -149,7 +149,6 @@ void SubscriptionWidget::setPaymentOptions(const QVector<Domain::PaymentOption>&
     d->trialInfo->setVisible(hasTrial);
     d->tryButton->setVisible(hasTrial);
     d->buyButton->setVisible(!hasTrial && !d->isLifetime);
-    d->buyButton->setText(d->isActive ? tr("Renew") : tr("Buy"));
     d->buyLifetimeButton->setVisible(!hasTrial && hasLifetime);
 }
 
@@ -157,6 +156,7 @@ void SubscriptionWidget::updateTranslations()
 {
     d->trialInfo->setText(tr("30 days for free"));
     d->tryButton->setText(tr("Try for free"));
+    d->buyButton->setText(tr("Renew"));
     d->buyLifetimeButton->setText(tr("Buy lifetime"));
 }
 

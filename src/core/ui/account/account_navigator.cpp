@@ -79,7 +79,6 @@ public:
     ButtonLabel* proTitle = nullptr;
     Subtitle2Label* proSubtitle = nullptr;
     Button* tryProButton = nullptr;
-    Button* upgradeToProLifetimeButton = nullptr;
     Button* renewProSubscriptionButton = nullptr;
 
     IconsMidLabel* cloudTitleIcon = nullptr;
@@ -137,7 +136,6 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     , proTitle(new ButtonLabel(accountPage))
     , proSubtitle(new Subtitle2Label(accountPage))
     , tryProButton(new Button(accountPage))
-    , upgradeToProLifetimeButton(new Button(accountPage))
     , renewProSubscriptionButton(new Button(accountPage))
     //
     , cloudTitleIcon(new IconsMidLabel(accountPage))
@@ -219,7 +217,6 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     }
     accountLayout->addWidget(proSubtitle, row++, 2);
     accountLayout->addWidget(tryProButton, row++, 2);
-    accountLayout->addWidget(upgradeToProLifetimeButton, row++, 2);
     accountLayout->addWidget(renewProSubscriptionButton, row++, 2);
     //
     {
@@ -419,8 +416,6 @@ AccountNavigator::AccountNavigator(QWidget* _parent)
         }
     });
     connect(d->tryProButton, &Button::clicked, this, &AccountNavigator::tryProForFreePressed);
-    connect(d->upgradeToProLifetimeButton, &Button::clicked, this,
-            &AccountNavigator::buyProLifetimePressed);
     connect(d->renewProSubscriptionButton, &Button::clicked, this,
             &AccountNavigator::renewProPressed);
     connect(d->tryCloudButton, &Button::clicked, this, &AccountNavigator::tryCloudForFreePressed);
@@ -489,7 +484,6 @@ void AccountNavigator::showTeamPage()
 void AccountNavigator::setConnected(bool _connected)
 {
     d->tryProButton->setEnabled(_connected);
-    d->upgradeToProLifetimeButton->setEnabled(_connected);
     d->renewProSubscriptionButton->setEnabled(_connected);
     d->tryCloudButton->setEnabled(_connected);
     d->renewCloudSubscriptionButton->setEnabled(_connected);
@@ -511,7 +505,6 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
     d->proTitle->show();
     d->proSubtitle->hide();
     d->tryProButton->hide();
-    d->upgradeToProLifetimeButton->hide();
     d->renewProSubscriptionButton->hide();
     //
     d->cloudTitleIcon->show();
@@ -532,6 +525,8 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
     //
     // А потом показываем, в зависимости от активных подписок и доступных опций
     //
+    bool hasProSubscription = false;
+    bool hasCloudSubscription = false;
     d->cloudStorageSize = _account.cloudStorageSize;
     d->cloudStorageSizeUsed = _account.cloudStorageSizeUsed;
     auto isAccountTeamsCanBeAdded = false;
@@ -542,6 +537,11 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
 
         case Domain::SubscriptionType::ProMonthly: {
+            hasProSubscription = true;
+
+            d->freeTitle->hide();
+            d->freeSubtitle->hide();
+            //
             d->proSubscriptionEnds = subscription.end;
             d->updateProSubtitleLabel();
             d->proSubtitle->show();
@@ -559,6 +559,11 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
 
         case Domain::SubscriptionType::CloudMonthly: {
+            hasCloudSubscription = true;
+
+            d->freeTitle->hide();
+            d->freeSubtitle->hide();
+            //
             d->cloudSubscriptionEnds = subscription.end;
             d->updateCloudSubtitleLabel();
             d->cloudSpaceStats->show();
@@ -609,15 +614,13 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
     }
     d->setAccountTeamsCanBeAdded(isAccountTeamsCanBeAdded);
+    bool isProTrialAvailable = false;
+    bool isCloudoTrialAvailable = false;
     for (const auto& paymentOption : _account.paymentOptions) {
         switch (paymentOption.subscriptionType) {
-        case Domain::SubscriptionType::ProLifetime: {
-            d->upgradeToProLifetimeButton->show();
-            break;
-        }
-
         case Domain::SubscriptionType::ProMonthly: {
             if (paymentOption.amount == 0) {
+                isProTrialAvailable = true;
                 d->tryProButton->show();
             } else {
                 d->renewProSubscriptionButton->show();
@@ -627,6 +630,7 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
 
         case Domain::SubscriptionType::CloudMonthly: {
             if (paymentOption.amount == 0) {
+                isCloudoTrialAvailable = true;
                 d->tryCloudButton->show();
             } else {
                 d->renewCloudSubscriptionButton->show();
@@ -638,6 +642,31 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
             break;
         }
         }
+    }
+
+    //
+    // Если доступны бесплатные опции, то уберём кнопки активации платных
+    //
+    if (isProTrialAvailable) {
+        d->renewProSubscriptionButton->hide();
+    }
+    if (isCloudoTrialAvailable) {
+        d->renewCloudSubscriptionButton->hide();
+    }
+
+    //
+    // Если активна только какая-то одна подписка, то оставим интерфейс только для неё
+    //
+    if (hasProSubscription && !hasCloudSubscription) {
+        d->cloudTitleIcon->hide();
+        d->cloudTitle->hide();
+        d->tryCloudButton->hide();
+        d->renewCloudSubscriptionButton->hide();
+    } else if (!hasProSubscription && hasCloudSubscription) {
+        d->proTitleIcon->hide();
+        d->proTitle->hide();
+        d->tryProButton->hide();
+        d->renewProSubscriptionButton->hide();
     }
 
     //
@@ -720,7 +749,6 @@ void AccountNavigator::updateTranslations()
     d->proTitle->setText(tr("PRO version"));
     d->updateProSubtitleLabel();
     d->tryProButton->setText(tr("Try for free"));
-    d->upgradeToProLifetimeButton->setText(tr("Buy lifetime"));
     d->renewProSubscriptionButton->setText(tr("Renew"));
     d->cloudTitle->setText(tr("CLOUD version"));
     d->updateCloudSubtitleLabel();
@@ -828,7 +856,6 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     for (auto button : {
              d->tryProButton,
-             d->upgradeToProLifetimeButton,
              d->renewProSubscriptionButton,
              d->tryCloudButton,
              d->renewCloudSubscriptionButton,
