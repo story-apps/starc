@@ -16,6 +16,8 @@ class AbstractLabel::Implementation
 public:
     QString text;
     QString skeleton;
+    qreal borderRadius = 0.0;
+    bool strikeOut = false;
     Qt::Alignment alignment = Qt::AlignTop | Qt::AlignLeft;
     bool clickable = false;
 };
@@ -51,6 +53,21 @@ void AbstractLabel::setText(const QString& _text)
     update();
 }
 
+qreal AbstractLabel::borderRadius() const
+{
+    return d->borderRadius;
+}
+
+void AbstractLabel::setBorderRadius(qreal _radius)
+{
+    if (qFuzzyCompare(d->borderRadius, _radius)) {
+        return;
+    }
+
+    d->borderRadius = _radius;
+    update();
+}
+
 void AbstractLabel::setSkeleton(const QString& _filler)
 {
     if (d->skeleton == _filler) {
@@ -59,6 +76,16 @@ void AbstractLabel::setSkeleton(const QString& _filler)
 
     d->skeleton = _filler;
     updateGeometry();
+    update();
+}
+
+void AbstractLabel::setStrikeOut(bool _strikeOut)
+{
+    if (d->strikeOut == _strikeOut) {
+        return;
+    }
+
+    d->strikeOut = _strikeOut;
     update();
 }
 
@@ -105,14 +132,28 @@ int AbstractLabel::heightForWidth(int _width) const
     return contentsMargins().top() + textHeight + contentsMargins().bottom();
 }
 
+QFont AbstractLabel::textFont() const
+{
+    auto font = textFontImpl();
+    font.setStrikeOut(d->strikeOut);
+    return font;
+}
+
 void AbstractLabel::paintEvent(QPaintEvent* _event)
 {
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     //
     // Рисуем фон
     //
-    painter.fillRect(_event->rect(), backgroundColor());
+    if (d->borderRadius > 0) {
+        painter.setPen(backgroundColor());
+        painter.setBrush(backgroundColor());
+        painter.drawRoundedRect(contentsRect(), d->borderRadius, d->borderRadius);
+    } else {
+        painter.fillRect(_event->rect(), backgroundColor());
+    }
 
     //
     // Если не заданы ни текст, ни скелетон, больше тут делать нечего
@@ -125,7 +166,6 @@ void AbstractLabel::paintEvent(QPaintEvent* _event)
     // Если текста нет, рисуем скелетон
     //
     if (d->text.isEmpty()) {
-        painter.setRenderHint(QPainter::Antialiasing);
         painter.setPen(Qt::NoPen);
         const int textWidth = contentsRect().width();
         const auto lines = (d->text.isEmpty() ? d->skeleton : d->text).split('\n');
@@ -194,6 +234,11 @@ void AbstractLabel::mouseReleaseEvent(QMouseEvent* _event)
     emit clicked();
 }
 
+void AbstractLabel::setFont(const QFont& _font)
+{
+    Q_UNUSED(_font)
+}
+
 
 // ****
 
@@ -203,7 +248,7 @@ H4Label::H4Label(QWidget* _parent)
 {
 }
 
-const QFont& H4Label::textFont() const
+const QFont& H4Label::textFontImpl() const
 {
     return Ui::DesignSystem::font().h4();
 }
@@ -217,7 +262,7 @@ H5Label::H5Label(QWidget* _parent)
 {
 }
 
-const QFont& H5Label::textFont() const
+const QFont& H5Label::textFontImpl() const
 {
     return Ui::DesignSystem::font().h5();
 }
@@ -231,7 +276,7 @@ H6Label::H6Label(QWidget* _parent)
 {
 }
 
-const QFont& H6Label::textFont() const
+const QFont& H6Label::textFontImpl() const
 {
     return Ui::DesignSystem::font().h6();
 }
@@ -245,7 +290,7 @@ Subtitle1Label::Subtitle1Label(QWidget* _parent)
 {
 }
 
-const QFont& Subtitle1Label::textFont() const
+const QFont& Subtitle1Label::textFontImpl() const
 {
     return Ui::DesignSystem::font().subtitle1();
 }
@@ -259,7 +304,7 @@ Subtitle2Label::Subtitle2Label(QWidget* _parent)
 {
 }
 
-const QFont& Subtitle2Label::textFont() const
+const QFont& Subtitle2Label::textFontImpl() const
 {
     return Ui::DesignSystem::font().subtitle2();
 }
@@ -273,7 +318,7 @@ Body1Label::Body1Label(QWidget* _parent)
 {
 }
 
-const QFont& Body1Label::textFont() const
+const QFont& Body1Label::textFontImpl() const
 {
     return Ui::DesignSystem::font().body1();
 }
@@ -287,7 +332,7 @@ Body2Label::Body2Label(QWidget* _parent)
 {
 }
 
-const QFont& Body2Label::textFont() const
+const QFont& Body2Label::textFontImpl() const
 {
     return Ui::DesignSystem::font().body2();
 }
@@ -301,7 +346,7 @@ ButtonLabel::ButtonLabel(QWidget* _parent)
 {
 }
 
-const QFont& ButtonLabel::textFont() const
+const QFont& ButtonLabel::textFontImpl() const
 {
     return Ui::DesignSystem::font().button();
 }
@@ -315,7 +360,7 @@ CaptionLabel::CaptionLabel(QWidget* _parent)
 {
 }
 
-const QFont& CaptionLabel::textFont() const
+const QFont& CaptionLabel::textFontImpl() const
 {
     return Ui::DesignSystem::font().caption();
 }
@@ -329,7 +374,7 @@ OverlineLabel::OverlineLabel(QWidget* _parent)
 {
 }
 
-const QFont& OverlineLabel::textFont() const
+const QFont& OverlineLabel::textFontImpl() const
 {
     return Ui::DesignSystem::font().overline();
 }
@@ -383,7 +428,7 @@ IconsSmallLabel::IconsSmallLabel(QWidget* _parent)
 {
 }
 
-const QFont& IconsSmallLabel::textFont() const
+const QFont& IconsSmallLabel::textFontImpl() const
 {
     return Ui::DesignSystem::font().iconsSmall();
 }
@@ -426,7 +471,7 @@ int IconsMidLabel::heightForWidth(int _width) const
     return AbstractIconsLabel::heightForWidth(_width);
 }
 
-const QFont& IconsMidLabel::textFont() const
+const QFont& IconsMidLabel::textFontImpl() const
 {
     return Ui::DesignSystem::font().iconsMid();
 }
@@ -501,7 +546,7 @@ int IconsBigLabel::heightForWidth(int _width) const
     return AbstractIconsLabel::heightForWidth(_width);
 }
 
-const QFont& IconsBigLabel::textFont() const
+const QFont& IconsBigLabel::textFontImpl() const
 {
     return Ui::DesignSystem::font().iconsBig();
 }

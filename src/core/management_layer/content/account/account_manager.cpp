@@ -429,6 +429,8 @@ void AccountManager::setAccountInfo(const Domain::AccountInfo& _accountInfo)
 
     d->navigator->setAccountInfo(d->accountInfo);
     d->view->setAccountInfo(d->accountInfo);
+    d->view->setSubscriptions(d->accountInfo.subscriptions);
+    d->view->setPaymentOptions(d->accountInfo.paymentOptions);
     d->view->setSessions(d->accountInfo.sessions);
 
     //

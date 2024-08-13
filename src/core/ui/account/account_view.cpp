@@ -2,6 +2,7 @@
 
 #include "account_view_teams.h"
 #include "session_widget.h"
+#include "subscription_widget.h"
 
 #include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
@@ -35,11 +36,6 @@ public:
      */
     void scrollToTitle(AbstractLabel* title);
 
-    /**
-     * @brief Обновить текст лейбла окончания подписки
-     */
-    void updateSubscriptionEndsLabel();
-
 
     //
     // Страница аккаунта
@@ -63,20 +59,10 @@ public:
     Debouncer changeDescriptionDebouncer{ 500 };
     ImageCard* avatar = nullptr;
 
-    Card* subscriptionInfo = nullptr;
-    QGridLayout* subscriptionInfoLayout = nullptr;
-    int subscriptionInfoLastRow = 0;
-    H6Label* subscriptionTitle = nullptr;
-    QDateTime subscriptionEnds;
-    Subtitle2Label* subscriptionEndsLabel = nullptr;
-    Body1LinkLabel* subscriptionDetails = nullptr;
-    Button* subscriptionTryProForFree = nullptr;
-    Button* subscriptionTryCloudForFree = nullptr;
-    Button* subscriptionBuyProLifetime = nullptr;
-    Button* subscriptionRenewPro = nullptr;
-    Button* subscriptionRenewCloud = nullptr;
-    Button* subscriptionUpgradeToPro = nullptr;
-    Button* subscriptionUpgradeToCloud = nullptr;
+    H5Label* subscriptionsTitle = nullptr;
+    Body1LinkLabel* compareSubscriptions = nullptr;
+    SubscriptionWidget* proSubscription = nullptr;
+    SubscriptionWidget* cloudSubscription = nullptr;
 
     Card* promocodeInfo = nullptr;
     QGridLayout* promocodeInfoLayout = nullptr;
@@ -105,18 +91,10 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     , newsletterSubscription(new CheckBox(accountInfo))
     , avatar(new ImageCard(accountInfo))
     //
-    , subscriptionInfo(new Card(accountPage))
-    , subscriptionInfoLayout(new QGridLayout)
-    , subscriptionTitle(new H6Label(subscriptionInfo))
-    , subscriptionEndsLabel(new Subtitle2Label(subscriptionInfo))
-    , subscriptionDetails(new Body1LinkLabel(subscriptionInfo))
-    , subscriptionTryProForFree(new Button(subscriptionInfo))
-    , subscriptionTryCloudForFree(new Button(subscriptionInfo))
-    , subscriptionBuyProLifetime(new Button(subscriptionInfo))
-    , subscriptionRenewPro(new Button(subscriptionInfo))
-    , subscriptionRenewCloud(new Button(subscriptionInfo))
-    , subscriptionUpgradeToPro(new Button(subscriptionInfo))
-    , subscriptionUpgradeToCloud(new Button(subscriptionInfo))
+    , subscriptionsTitle(new H5Label(accountPage))
+    , compareSubscriptions(new Body1LinkLabel(accountPage))
+    , proSubscription(new SubscriptionWidget(accountPage))
+    , cloudSubscription(new SubscriptionWidget(accountPage))
     //
     , promocodeInfo(new Card(accountPage))
     , promocodeInfoLayout(new QGridLayout)
@@ -156,33 +134,6 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     accountInfoLayout->setRowMinimumHeight(accountInfoLastRow,
                                            1); // добавляем пустую строку, вместо отступа снизу
     accountInfo->setContentLayout(accountInfoLayout);
-
-    subscriptionDetails->setLink(QUrl("https://starc.app/pricing"));
-    //
-    subscriptionInfoLayout->setContentsMargins({});
-    subscriptionInfoLayout->setSpacing(0);
-    row = 0;
-    subscriptionInfoLayout->addWidget(subscriptionTitle, row++, 0);
-    subscriptionInfoLayout->addWidget(subscriptionEndsLabel, row++, 0);
-    {
-        auto layout = new QHBoxLayout;
-        layout->setContentsMargins({});
-        layout->setSpacing(0);
-        layout->addWidget(subscriptionDetails);
-        layout->addStretch();
-        layout->addWidget(subscriptionTryProForFree);
-        layout->addWidget(subscriptionTryCloudForFree);
-        layout->addWidget(subscriptionBuyProLifetime);
-        layout->addWidget(subscriptionRenewPro);
-        layout->addWidget(subscriptionRenewCloud);
-        layout->addWidget(subscriptionUpgradeToPro);
-        layout->addWidget(subscriptionUpgradeToCloud);
-        subscriptionInfoLayout->addLayout(layout, row++, 0);
-    }
-    subscriptionInfoLastRow = row;
-    subscriptionInfoLayout->setRowMinimumHeight(subscriptionInfoLastRow,
-                                                1); // добавляем пустую строку, вместо отступа снизу
-    subscriptionInfo->setContentLayout(subscriptionInfoLayout);
     //
     promocodeName->setCapitalizeWords(false);
     promocodeInfoLayout->addWidget(promocodeName, 0, 0);
@@ -199,7 +150,11 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     row = 0;
     accountContentLayout->addWidget(accountInfo, row, 0, 1, 2);
     accountContentLayout->addWidget(avatar, row++, 2, 3, 1, Qt::AlignTop);
-    accountContentLayout->addWidget(subscriptionInfo, row++, 0, 1, 2);
+    accountContentLayout->addWidget(subscriptionsTitle, row, 0);
+    accountContentLayout->addWidget(compareSubscriptions, row++, 1,
+                                    Qt::AlignRight | Qt::AlignBottom);
+    accountContentLayout->addWidget(proSubscription, row, 0);
+    accountContentLayout->addWidget(cloudSubscription, row++, 1);
     accountContentLayout->addWidget(promocodeInfo, row++, 0, 1, 2);
     accountContentLayout->addWidget(sessionsTitle, row++, 0, 1, 2);
     accountContentLayout->setColumnStretch(0, 1);
@@ -236,14 +191,6 @@ void AccountView::Implementation::scrollToTitle(AbstractLabel* title)
     colorAnimation.setEndValue(colorableTitle->textColor());
     colorableTitle->setTextColor(colorAnimation.startValue().value<QColor>());
     colorAnimation.start();
-}
-
-void AccountView::Implementation::updateSubscriptionEndsLabel()
-{
-    subscriptionEndsLabel->setText(
-        subscriptionEnds.isNull()
-            ? tr("Lifetime access")
-            : tr("Active until %1").arg(subscriptionEnds.toString("dd.MM.yyyy")));
 }
 
 
@@ -296,16 +243,16 @@ AccountView::AccountView(QWidget* _parent)
     //
     // Подписка
     //
-    connect(d->subscriptionTryProForFree, &Button::clicked, this,
+    connect(d->proSubscription, &SubscriptionWidget::tryPressed, this,
             &AccountView::tryProForFreePressed);
-    connect(d->subscriptionTryCloudForFree, &Button::clicked, this,
-            &AccountView::tryCloudForFreePressed);
-    connect(d->subscriptionBuyProLifetime, &Button::clicked, this,
+    connect(d->proSubscription, &SubscriptionWidget::buyPressed, this,
+            &AccountView::renewProPressed);
+    connect(d->proSubscription, &SubscriptionWidget::buyLifetimePressed, this,
             &AccountView::buyProLifetimePressed);
-    connect(d->subscriptionRenewPro, &Button::clicked, this, &AccountView::renewProPressed);
-    connect(d->subscriptionRenewCloud, &Button::clicked, this, &AccountView::renewCloudPressed);
-    connect(d->subscriptionUpgradeToPro, &Button::clicked, this, &AccountView::renewProPressed);
-    connect(d->subscriptionUpgradeToCloud, &Button::clicked, this, &AccountView::renewCloudPressed);
+    connect(d->cloudSubscription, &SubscriptionWidget::tryPressed, this,
+            &AccountView::tryCloudForFreePressed);
+    connect(d->cloudSubscription, &SubscriptionWidget::buyPressed, this,
+            &AccountView::renewCloudPressed);
 
     connect(d->promocodeName, &TextField::textChanged, d->promocodeName,
             [this] { d->promocodeName->setError({}); });
@@ -348,7 +295,7 @@ void AccountView::showAccount()
 
 void AccountView::showSubscription()
 {
-    d->scrollToTitle(d->subscriptionTitle);
+    d->scrollToTitle(d->subscriptionsTitle);
 }
 
 void AccountView::showSessions()
@@ -362,13 +309,8 @@ void AccountView::setConnected(bool _connected)
     d->description->setEnabled(_connected);
     d->newsletterSubscription->setEnabled(_connected);
     d->avatar->setEnabled(_connected);
-    d->subscriptionTryProForFree->setEnabled(_connected);
-    d->subscriptionTryCloudForFree->setEnabled(_connected);
-    d->subscriptionBuyProLifetime->setEnabled(_connected);
-    d->subscriptionRenewPro->setEnabled(_connected);
-    d->subscriptionRenewCloud->setEnabled(_connected);
-    d->subscriptionUpgradeToPro->setEnabled(_connected);
-    d->subscriptionUpgradeToCloud->setEnabled(_connected);
+    d->proSubscription->setEnabled(_connected);
+    d->cloudSubscription->setEnabled(_connected);
     d->promocodeName->setEnabled(_connected);
     d->activatePromocode->setEnabled(_connected);
     //
@@ -418,141 +360,59 @@ void AccountView::setAvatar(const QPixmap& _avatar)
 
 void AccountView::setAccountInfo(const Domain::AccountInfo& _account)
 {
-    d->subscriptionTryProForFree->hide();
-    d->subscriptionTryCloudForFree->hide();
-    d->subscriptionBuyProLifetime->hide();
-    d->subscriptionRenewPro->hide();
-    d->subscriptionRenewCloud->hide();
-    d->subscriptionUpgradeToPro->hide();
-    d->subscriptionUpgradeToCloud->hide();
+    d->teamPage->setAccountInfo(_account);
+}
 
-    if (_account.subscriptions.isEmpty()) {
-        return;
-    }
+void AccountView::setSubscriptions(const QVector<Domain::SubscriptionInfo>& _subscriptions)
+{
+    bool isActive = true;
+    bool isLifetime = true;
+    d->proSubscription->setStatus(!isActive, !isLifetime, {});
+    d->cloudSubscription->setStatus(!isActive, !isLifetime, {});
 
-    const auto subscription = _account.subscriptions.constLast();
-    switch (subscription.type) {
-    case Domain::SubscriptionType::Free: {
-        d->subscriptionTitle->setText(tr("FREE version"));
-        d->subscriptionEndsLabel->setText(tr("Lifetime access"));
-        break;
-    }
-
-    case Domain::SubscriptionType::ProMonthly: {
-        d->subscriptionTitle->setText(tr("PRO version"));
-        d->subscriptionEnds = subscription.end;
-        d->updateSubscriptionEndsLabel();
-        break;
-    }
-    case Domain::SubscriptionType::ProLifetime: {
-        d->subscriptionTitle->setText(tr("PRO version"));
-        d->subscriptionEnds = {};
-        d->updateSubscriptionEndsLabel();
-        break;
-    }
-
-    case Domain::SubscriptionType::CloudMonthly: {
-        d->subscriptionTitle->setText(tr("CLOUD version"));
-        d->subscriptionEnds = subscription.end;
-        d->updateSubscriptionEndsLabel();
-        break;
-    }
-
-    case Domain::SubscriptionType::CloudLifetime: {
-        d->subscriptionTitle->setText(tr("CLOUD version"));
-        d->subscriptionEnds = {};
-        d->updateSubscriptionEndsLabel();
-        break;
-    }
-
-    case Domain::SubscriptionType::Studio: {
-        d->subscriptionTitle->setText(tr("STUDIO version"));
-        d->subscriptionEnds = subscription.end;
-        d->updateSubscriptionEndsLabel();
-        break;
-    }
-
-    default: {
-        break;
-    }
-    }
-
-    //
-    // Если есть бесплатные опции, покажем только их
-    //
-    if (std::find_if(_account.paymentOptions.begin(), _account.paymentOptions.end(),
-                     [](const Domain::PaymentOption& _option) { return _option.amount == 0; })
-        != _account.paymentOptions.end()) {
-        for (const auto& option : _account.paymentOptions) {
-            if (option.amount != 0) {
-                continue;
-            }
-
-            if (option.subscriptionType == Domain::SubscriptionType::ProMonthly) {
-                d->subscriptionTryProForFree->show();
-            } else if (option.subscriptionType == Domain::SubscriptionType::CloudMonthly) {
-                d->subscriptionTryCloudForFree->show();
-            }
-        }
-    }
-    //
-    // В противном случае показываем в зависимости от текущей подписки
-    //
-    else {
+    for (const auto& subscription : _subscriptions) {
         switch (subscription.type) {
-        case Domain::SubscriptionType::Free: {
-            for (const auto& option : _account.paymentOptions) {
-                if (option.subscriptionType == Domain::SubscriptionType::ProMonthly
-                    || option.subscriptionType == Domain::SubscriptionType::ProLifetime) {
-                    d->subscriptionUpgradeToPro->show();
-                } else if (option.subscriptionType == Domain::SubscriptionType::CloudMonthly
-                           || option.subscriptionType == Domain::SubscriptionType::CloudLifetime) {
-                    d->subscriptionUpgradeToCloud->show();
-                }
-            }
-            break;
-        }
-
         case Domain::SubscriptionType::ProMonthly: {
-            for (const auto& option : _account.paymentOptions) {
-                if (option.subscriptionType == Domain::SubscriptionType::ProMonthly) {
-                    d->subscriptionRenewPro->show();
-                } else if (option.subscriptionType == Domain::SubscriptionType::ProLifetime) {
-                    d->subscriptionBuyProLifetime->show();
-                } else if (option.subscriptionType == Domain::SubscriptionType::CloudMonthly
-                           || option.subscriptionType == Domain::SubscriptionType::CloudLifetime) {
-                    d->subscriptionUpgradeToCloud->show();
-                }
-            }
+            d->proSubscription->setStatus(isActive, !isLifetime, subscription.end);
             break;
         }
-
         case Domain::SubscriptionType::ProLifetime: {
-            for (const auto& option : _account.paymentOptions) {
-                if (option.subscriptionType == Domain::SubscriptionType::CloudMonthly
-                    || option.subscriptionType == Domain::SubscriptionType::CloudLifetime) {
-                    d->subscriptionUpgradeToCloud->show();
-                }
-            }
+            d->proSubscription->setStatus(isActive, isLifetime, {});
             break;
         }
-
         case Domain::SubscriptionType::CloudMonthly: {
-            for (const auto& option : _account.paymentOptions) {
-                if (option.subscriptionType == Domain::SubscriptionType::CloudMonthly) {
-                    d->subscriptionRenewCloud->show();
-                }
-            }
+            d->cloudSubscription->setStatus(isActive, !isLifetime, subscription.end);
             break;
         }
-
+        case Domain::SubscriptionType::CloudLifetime: {
+            d->cloudSubscription->setStatus(isActive, isLifetime, {});
+            //
+            // Когда активна клауд, считаем, что и про тоже активна навсегда
+            //
+            d->proSubscription->setStatus(isActive, isLifetime, {});
+            break;
+        }
         default: {
             break;
         }
         }
     }
+}
 
-    d->teamPage->setAccountInfo(_account);
+void AccountView::setPaymentOptions(const QVector<Domain::PaymentOption>& _paymentOptions)
+{
+    QVector<Domain::PaymentOption> pro, cloud;
+    for (const auto& option : _paymentOptions) {
+        if (option.subscriptionType == Domain::SubscriptionType::ProMonthly
+            || option.subscriptionType == Domain::SubscriptionType::ProLifetime) {
+            pro.append(option);
+        } else if (option.subscriptionType == Domain::SubscriptionType::CloudMonthly
+                   || option.subscriptionType == Domain::SubscriptionType::CloudLifetime) {
+            cloud.append(option);
+        }
+    }
+    d->proSubscription->setPaymentOptions(pro);
+    d->cloudSubscription->setPaymentOptions(cloud);
 }
 
 void AccountView::clearPromocode()
@@ -630,22 +490,33 @@ void AccountView::showTeam(int _teamId)
 
 void AccountView::updateTranslations()
 {
+    const auto isRussianSpeaking = QLocale().language() == QLocale::Russian
+        || QLocale().language() == QLocale::Belarusian
+        || QLocale().language() == QLocale::Ukrainian;
+
     d->name->setLabel(tr("Your name"));
     d->description->setLabel(tr("Your bio"));
     d->newsletterSubscription->setText(tr("I want to receive STARC news"));
     d->avatar->setSupportingText(tr("Add avatar +"), tr("Change avatar..."),
                                  tr("Do you want to delete your avatar?"));
     d->avatar->setImageCroppingText(tr("Select an area for the avatar"));
-    d->subscriptionTitle->setText(tr("Subscription type"));
-    d->updateSubscriptionEndsLabel();
-    d->subscriptionDetails->setText(tr("Compare versions"));
-    d->subscriptionTryProForFree->setText(tr("Try PRO for free"));
-    d->subscriptionTryCloudForFree->setText(tr("Try CLOUD for free"));
-    d->subscriptionBuyProLifetime->setText(tr("Buy lifetime"));
-    d->subscriptionRenewPro->setText(tr("Renew"));
-    d->subscriptionRenewCloud->setText(tr("Renew"));
-    d->subscriptionUpgradeToPro->setText(tr("Upgrade to PRO"));
-    d->subscriptionUpgradeToCloud->setText(tr("Upgrade to CLOUD"));
+    d->subscriptionsTitle->setText(tr("Subscriptions"));
+    d->compareSubscriptions->setText(tr("Compare subscriptions"));
+    d->compareSubscriptions->setLink(
+        QUrl(isRussianSpeaking ? "https://starc.app/ru/pricing/" : "https://starc.app/pricing/"));
+    d->proSubscription->setInfo("PRO",
+                                tr("Advanced tools for professionals\n"
+                                   "• Characters relations\n"
+                                   "• Corkboard\n"
+                                   "• Timeline\n"
+                                   "• Mind maps\n"
+                                   "• and more writer's tools..."));
+    d->cloudSubscription->setInfo("CLOUD",
+                                  tr("For those who are always on the move\n"
+                                     "• 5GB cloud storage\n"
+                                     "• Seamless synchronization across all your devices\n"
+                                     "• Realtime collaboration\n"
+                                     "• Production tools"));
     d->sessionsTitle->setText(tr("Active sessions"));
     d->promocodeName->setLabel(tr("Promotional or gift code"));
     d->activatePromocode->setText(tr("Activate"));
@@ -665,28 +536,23 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     d->accountContent->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(),
-                  Ui::DesignSystem::compactLayout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
+        QMarginsF(DesignSystem::layout().px24(), DesignSystem::compactLayout().topContentMargin(),
+                  DesignSystem::layout().px24(), DesignSystem::compactLayout().px24())
             .toMargins());
 
-    d->colorAnimation.setStartValue(Ui::DesignSystem::color().accent());
+    d->colorAnimation.setStartValue(DesignSystem::color().accent());
 
     for (auto card : {
              d->accountInfo,
-             d->subscriptionInfo,
              d->promocodeInfo,
          }) {
         card->setBackgroundColor(DesignSystem::color().background());
     }
 
-    auto titleColor = DesignSystem::color().onBackground();
-    titleColor.setAlphaF(DesignSystem::inactiveTextOpacity());
-    auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
+    auto titleMargins = DesignSystem::label().margins().toMargins();
     titleMargins.setBottom(0);
     for (auto title : {
              d->accountTitle,
-             d->subscriptionTitle,
          }) {
         title->setBackgroundColor(DesignSystem::color().background());
         title->setTextColor(DesignSystem::color().onBackground());
@@ -694,24 +560,24 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto title : {
+             d->subscriptionsTitle,
              d->sessionsTitle,
          }) {
         title->setBackgroundColor(DesignSystem::color().surface());
-        title->setTextColor(titleColor);
+        title->setTextColor(DesignSystem::color().onSurface());
         title->setContentsMargins(titleMargins);
     }
 
-    auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
+    auto labelMargins = DesignSystem::label().margins().toMargins();
     labelMargins.setTop(0);
     labelMargins.setBottom(0);
     for (auto subtitle : std::vector<Widget*>{
-             d->subscriptionEndsLabel,
-             d->subscriptionDetails,
+             d->compareSubscriptions,
          }) {
         subtitle->setContentsMargins(labelMargins);
-        subtitle->setBackgroundColor(Ui::DesignSystem::color().background());
-        subtitle->setTextColor(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
-                                                        Ui::DesignSystem::inactiveTextOpacity()));
+        subtitle->setBackgroundColor(DesignSystem::color().surface());
+        subtitle->setTextColor(ColorHelper::transparent(DesignSystem::color().onBackground(),
+                                                        DesignSystem::inactiveTextOpacity()));
     }
 
     for (auto textField : {
@@ -719,44 +585,33 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->description,
              d->promocodeName,
          }) {
-        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-        textField->setTextColor(Ui::DesignSystem::color().onBackground());
+        textField->setBackgroundColor(DesignSystem::color().onBackground());
+        textField->setTextColor(DesignSystem::color().onBackground());
     }
 
-    d->name->setCustomMargins(
-        { Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24(),
-          Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px16() });
+    d->name->setCustomMargins({ DesignSystem::layout().px24(), DesignSystem::compactLayout().px24(),
+                                DesignSystem::layout().px24(),
+                                DesignSystem::compactLayout().px16() });
 
-    d->newsletterSubscription->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->newsletterSubscription->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->newsletterSubscription->setBackgroundColor(DesignSystem::color().background());
+    d->newsletterSubscription->setTextColor(DesignSystem::color().onBackground());
 
     for (auto button : {
-             d->subscriptionTryProForFree,
-             d->subscriptionTryCloudForFree,
-             d->subscriptionBuyProLifetime,
-             d->subscriptionRenewPro,
-             d->subscriptionRenewCloud,
-             d->subscriptionUpgradeToPro,
-             d->subscriptionUpgradeToCloud,
              d->activatePromocode,
          }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
+        button->setBackgroundColor(DesignSystem::color().accent());
+        button->setTextColor(DesignSystem::color().accent());
     }
 
-    d->avatar->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->avatar->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->avatar->setFixedSize((QSizeF(288, 288) * Ui::DesignSystem::scaleFactor()).toSize());
+    d->avatar->setBackgroundColor(DesignSystem::color().background());
+    d->avatar->setTextColor(DesignSystem::color().onBackground());
+    d->avatar->setFixedSize((QSizeF(288, 288) * DesignSystem::scaleFactor()).toSize());
 
     d->accountInfoLayout->setRowMinimumHeight(d->accountInfoLastRow,
-                                              static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->subscriptionInfoLayout->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
-    d->subscriptionInfoLayout->setRowMinimumHeight(
-        d->subscriptionInfoLastRow, static_cast<int>(Ui::DesignSystem::layout().px16()));
-    d->subscriptionInfoLayout->setContentsMargins(0, 0, Ui::DesignSystem::layout().px16(), 0);
-    d->promocodeInfoLayout->setContentsMargins(0, Ui::DesignSystem::layout().px24(),
-                                               Ui::DesignSystem::layout().px24(),
-                                               Ui::DesignSystem::layout().px24());
+                                              static_cast<int>(DesignSystem::layout().px8()));
+    d->promocodeInfoLayout->setContentsMargins(0, DesignSystem::layout().px24(),
+                                               DesignSystem::layout().px24(),
+                                               DesignSystem::layout().px24());
 }
 
 } // namespace Ui

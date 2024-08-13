@@ -25,9 +25,20 @@ public:
     virtual void setText(const QString& _text);
 
     /**
+     * @brief Скругление углов
+     */
+    qreal borderRadius() const;
+    void setBorderRadius(qreal _radius);
+
+    /**
      * @brief Задать текст для отрисовки области заливки
      */
     void setSkeleton(const QString& _filler);
+
+    /**
+     * @brief Сделать шрифт зачёркнутым
+     */
+    void setStrikeOut(bool _strikeOut);
 
     /**
      * @brief Задать выравнивание текста
@@ -55,7 +66,8 @@ protected:
     /**
      * @brief Получить шрифт для отрисовки текста
      */
-    virtual const QFont& textFont() const = 0;
+    QFont textFont() const;
+    virtual const QFont& textFontImpl() const = 0;
 
     /**
      * @brief Переопределяем для собственной отрисовки
@@ -66,6 +78,12 @@ protected:
      * @brief Переопределяем для открытия ссылки при клике на виджет
      */
     void mouseReleaseEvent(QMouseEvent* _event) override;
+
+private:
+    /**
+     * @brief Перекрываем метод, чтобы клиенты его не использовали
+     */
+    void setFont(const QFont& _font);
 
 private:
     class Implementation;
@@ -82,7 +100,7 @@ public:
     explicit H4Label(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 
@@ -95,7 +113,7 @@ public:
     explicit H5Label(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 
@@ -108,7 +126,7 @@ public:
     explicit H6Label(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 
@@ -121,7 +139,7 @@ public:
     explicit Subtitle1Label(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 
@@ -134,7 +152,7 @@ public:
     explicit Subtitle2Label(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 
@@ -147,7 +165,7 @@ public:
     explicit Body1Label(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 
@@ -160,7 +178,7 @@ public:
     explicit Body2Label(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 
@@ -173,7 +191,7 @@ public:
     explicit ButtonLabel(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 
@@ -186,7 +204,7 @@ public:
     explicit CaptionLabel(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 
@@ -199,7 +217,7 @@ public:
     explicit OverlineLabel(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 class CORE_LIBRARY_EXPORT AbstractIconsLabel : public AbstractLabel
@@ -245,7 +263,7 @@ public:
     explicit IconsSmallLabel(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 
@@ -272,7 +290,7 @@ protected:
     /**
      * @brief Необходимый шрифт для отрисовки лейбла
      */
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 
     /**
      * @brief Сначала рисуем декорацию, а потом иконку
@@ -310,7 +328,7 @@ protected:
     /**
      * @brief Необходимый шрифт для отрисовки лейбла
      */
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 
     /**
      * @brief Сначала рисуем декорацию, а потом иконку

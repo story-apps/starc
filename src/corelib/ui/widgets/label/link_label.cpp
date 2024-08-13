@@ -47,7 +47,7 @@ Body1LinkLabel::Body1LinkLabel(QWidget* _parent)
 {
 }
 
-const QFont& Body1LinkLabel::textFont() const
+const QFont& Body1LinkLabel::textFontImpl() const
 {
     return Ui::DesignSystem::font().body1();
 }
@@ -61,7 +61,7 @@ Body2LinkLabel::Body2LinkLabel(QWidget* _parent)
 {
 }
 
-const QFont& Body2LinkLabel::textFont() const
+const QFont& Body2LinkLabel::textFontImpl() const
 {
     return Ui::DesignSystem::font().body2();
 }
@@ -75,7 +75,7 @@ Subtitle2LinkLabel::Subtitle2LinkLabel(QWidget* _parent)
 {
 }
 
-const QFont& Subtitle2LinkLabel::textFont() const
+const QFont& Subtitle2LinkLabel::textFontImpl() const
 {
     return Ui::DesignSystem::font().subtitle2();
 }

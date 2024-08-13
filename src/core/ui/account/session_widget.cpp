@@ -30,7 +30,7 @@ public:
     Body1Label* location = nullptr;
     IconsSmallLabel* lastUsedIcon = nullptr;
     Body2Label* lastUsed = nullptr;
-    Button* terinateSession = nullptr;
+    Button* terminateSession = nullptr;
     QVBoxLayout* layout = nullptr;
 };
 
@@ -39,10 +39,22 @@ SessionWidget::Implementation::Implementation(QWidget* _parent)
     , location(new Body1Label(_parent))
     , lastUsedIcon(new IconsSmallLabel(_parent))
     , lastUsed(new Body2Label(_parent))
-    , terinateSession(new Button(_parent))
+    , terminateSession(new Button(_parent))
     , layout(new QVBoxLayout)
 {
     lastUsedIcon->setIcon(u8"\U000F05E0");
+
+    layout->setContentsMargins({});
+    layout->setSpacing(0);
+    layout->addWidget(deviceName);
+    layout->addWidget(location);
+    const auto lastUsedLayout = new QHBoxLayout;
+    lastUsedLayout->setContentsMargins({});
+    lastUsedLayout->setSpacing(0);
+    lastUsedLayout->addWidget(lastUsedIcon, 0, Qt::AlignCenter);
+    lastUsedLayout->addWidget(lastUsed, 1);
+    layout->addLayout(lastUsedLayout);
+    layout->addWidget(terminateSession, 0, Qt::AlignRight);
 }
 
 bool SessionWidget::Implementation::isOnline() const
@@ -59,21 +71,9 @@ SessionWidget::SessionWidget(QWidget* _parent)
     : Card(_parent)
     , d(new Implementation(this))
 {
-    d->layout->setContentsMargins({});
-    d->layout->setSpacing(0);
-    d->layout->addWidget(d->deviceName);
-    d->layout->addWidget(d->location);
-    const auto lastUsedLayout = new QHBoxLayout;
-    lastUsedLayout->setContentsMargins({});
-    lastUsedLayout->setSpacing(0);
-    lastUsedLayout->addWidget(d->lastUsedIcon, 0, Qt::AlignCenter);
-    lastUsedLayout->addWidget(d->lastUsed, 1);
-    d->layout->addLayout(lastUsedLayout);
-    d->layout->addWidget(d->terinateSession, 0, Qt::AlignRight);
     setContentLayout(d->layout);
 
-
-    connect(d->terinateSession, &Button::clicked, this, [this] {
+    connect(d->terminateSession, &Button::clicked, this, [this] {
         if (d->sessionInfo.isCurrentDevice) {
             emit terminateOthersRequested();
         } else {
@@ -119,7 +119,7 @@ void SessionWidget::setSessionInfo(const Domain::SessionInfo& _sessionInfo)
 
 void SessionWidget::hideTerminateButton()
 {
-    d->terinateSession->hide();
+    d->terminateSession->hide();
 }
 
 void SessionWidget::updateTranslations()
@@ -146,7 +146,7 @@ void SessionWidget::updateTranslations()
                 tr("was active %1 at %2").arg(lastUsedDate, lastUsed.toString("hh:mm")));
         }
     }
-    d->terinateSession->setText(d->sessionInfo.isCurrentDevice ? tr("Terminate others")
+    d->terminateSession->setText(d->sessionInfo.isCurrentDevice ? tr("Terminate others")
                                                                : tr("Terminate"));
 }
 
@@ -185,8 +185,8 @@ void SessionWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->lastUsed->setContentsMargins(labelMargins);
     d->lastUsed->setTextColor(d->isOnline() ? DesignSystem::color().accent() : labelColor);
 
-    d->terinateSession->setBackgroundColor(DesignSystem::color().accent());
-    d->terinateSession->setTextColor(DesignSystem::color().accent());
+    d->terminateSession->setBackgroundColor(DesignSystem::color().accent());
+    d->terminateSession->setTextColor(DesignSystem::color().accent());
 
     d->layout->setContentsMargins(0, 0, DesignSystem::layout().px16(),
                                   DesignSystem::layout().px16());

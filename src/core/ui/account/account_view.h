@@ -3,8 +3,10 @@
 #include <ui/widgets/stack_widget/stack_widget.h>
 
 namespace Domain {
-struct SessionInfo;
 struct AccountInfo;
+struct PaymentOption;
+struct SessionInfo;
+struct SubscriptionInfo;
 struct TeamInfo;
 } // namespace Domain
 
@@ -73,6 +75,16 @@ public:
      * @brief Задать информацию о подписке
      */
     void setAccountInfo(const Domain::AccountInfo& _account);
+
+    /**
+     * @brief Задать текущие подписки пользователя
+     */
+    void setSubscriptions(const QVector<Domain::SubscriptionInfo>& _subscriptions);
+
+    /**
+     * @brief Задать опции покупки
+     */
+    void setPaymentOptions(const QVector<Domain::PaymentOption>& _paymentOptions);
 
     /**
      * @brief Очистить промокод

@@ -34,7 +34,7 @@ public:
     explicit Body1LinkLabel(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 
@@ -49,7 +49,7 @@ public:
     explicit Body2LinkLabel(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
 
 
@@ -64,5 +64,5 @@ public:
     explicit Subtitle2LinkLabel(QWidget* _parent = nullptr);
 
 protected:
-    const QFont& textFont() const override;
+    const QFont& textFontImpl() const override;
 };
