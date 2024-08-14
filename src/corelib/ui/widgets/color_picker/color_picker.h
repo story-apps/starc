@@ -31,6 +31,12 @@ public:
      */
     void setSelectedColor(const QColor& _color);
 
+    /**
+     * @brief Переопределяем идеальный размер, чтобы лейаут, в котором используется виджет,
+     *        всегда знал о корректном размере
+     */
+    QSize sizeHint() const override;
+
 signals:
     /**
      * @brief Пользователь выбрал цвет

@@ -194,7 +194,19 @@ QColor ColorPicker::selectedColor() const
 
 void ColorPicker::setSelectedColor(const QColor& _color)
 {
+    setCurrentWidget(d->colorPallete);
     d->colorPallete->setSelectedColor(_color);
+}
+
+QSize ColorPicker::sizeHint() const
+{
+    auto sizeHint = d->colorPallete->sizeHint();
+    if (const auto panelSizeHint = d->customColorPanel->sizeHint();
+        sizeHint.width() < panelSizeHint.width() || sizeHint.height() < panelSizeHint.height()) {
+        sizeHint.setWidth(std::max(sizeHint.width(), panelSizeHint.width()));
+        sizeHint.setHeight(std::max(sizeHint.height(), panelSizeHint.height()));
+    }
+    return sizeHint;
 }
 
 bool ColorPicker::eventFilter(QObject* _watched, QEvent* _event)
