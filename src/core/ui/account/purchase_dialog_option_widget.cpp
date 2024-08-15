@@ -115,7 +115,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         : "CLOUD";
     const auto paymentMethodsTitle = tr("Pay with:");
     const auto regularPrice = QString("$%1").arg(d->option.amount / 100.0, 0, 'f', 2);
-    const auto totalPrice = QString("$%1").arg(d->option.totalAmount / 100.0, 0, 'f', 2);
+    const auto totalPrice = QString("$%1").arg(d->option.baseAmount() / 100.0, 0, 'f', 2);
     auto paymentMethodsText
         = [](int _price) { return _price >= 2000 ? u8" \U000F019B" : u8" \U000F019B"; };
 
@@ -136,7 +136,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         //
         // ... размер скидки
         //
-        if (d->option.discount > 0) {
+        if (d->option.baseDiscount > 0) {
             const auto backgroundColor = ColorHelper::transparent(
                 DesignSystem::color().accent(), DesignSystem::inactiveTextOpacity());
             painter.setPen(backgroundColor);
@@ -152,14 +152,14 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
             painter.setBrush(Qt::NoBrush);
             painter.setFont(DesignSystem::font().caption());
             painter.drawText(discountRect, Qt::AlignCenter,
-                             QString("-%1%").arg(static_cast<int>(d->option.discount)));
+                             QString("-%1%").arg(static_cast<int>(d->option.baseDiscount)));
         }
         //
         // ... цена без скидки
         //
         painter.setPen(DesignSystem::color().accent());
         painter.setFont(DesignSystem::font().button());
-        if (d->option.amount != d->option.totalAmount) {
+        if (d->option.amount != d->option.baseAmount()) {
             painter.setPen(
                 ColorHelper::transparent(textColor(), DesignSystem::disabledTextOpacity()));
             auto font = painter.font();
@@ -170,7 +170,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         //
         // ... цена со скидкой
         //
-        if (d->option.amount != d->option.totalAmount) {
+        if (d->option.amount != d->option.baseAmount()) {
             painter.setPen(DesignSystem::color().accent());
             painter.setFont(DesignSystem::font().button());
             auto totalPriceRect = textRect.adjusted(
@@ -216,7 +216,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         //
         // ... размер скидки
         //
-        if (d->option.discount > 0) {
+        if (d->option.baseDiscount > 0) {
             const auto backgroundColor = ColorHelper::transparent(
                 DesignSystem::color().accent(), DesignSystem::inactiveTextOpacity());
             painter.setPen(backgroundColor);
@@ -232,7 +232,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
             painter.setBrush(Qt::NoBrush);
             painter.setFont(DesignSystem::font().caption());
             painter.drawText(discountRect, Qt::AlignCenter,
-                             QString("-%1%").arg(static_cast<int>(d->option.discount)));
+                             QString("-%1%").arg(static_cast<int>(d->option.baseDiscount)));
         }
         //
         // ... добавляем месячную стоимость
@@ -246,7 +246,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
             painter.drawText(
                 textRect, Qt::AlignLeft | Qt::AlignVCenter,
                 tr("$%1 per month")
-                    .arg(d->option.totalAmount / 100.0 / static_cast<qreal>(d->option.duration), 0,
+                    .arg(d->option.baseAmount() / 100.0 / static_cast<qreal>(d->option.duration), 0,
                          'f', 2));
         }
         //
@@ -256,7 +256,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         textRect.setHeight(DesignSystem::layout().px24());
         painter.setPen(DesignSystem::color().accent());
         painter.setFont(DesignSystem::font().button());
-        if (d->option.amount != d->option.totalAmount) {
+        if (d->option.amount != d->option.baseAmount()) {
             painter.setPen(
                 ColorHelper::transparent(textColor(), DesignSystem::disabledTextOpacity()));
             auto font = painter.font();
@@ -267,7 +267,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         //
         // ... стоимость со скидкой
         //
-        if (d->option.amount != d->option.totalAmount) {
+        if (d->option.amount != d->option.baseAmount()) {
             auto totalPriceRect = textRect;
             totalPriceRect.setLeft(textRect.left()
                                    + TextHelper::fineTextWidthF(regularPrice, painter.font())
@@ -298,7 +298,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         painter.setFont(DesignSystem::font().iconsMid());
         painter.drawText(textRect.adjusted(0, 0, 0, DesignSystem::layout().px2()),
                          Qt::AlignLeft | Qt::AlignBottom,
-                         paymentMethodsText(d->option.totalAmount));
+                         paymentMethodsText(d->option.baseAmount()));
     }
 
     if (d->decorationAnimation.state() == ClickAnimation::Running) {

@@ -147,7 +147,7 @@ void SessionWidget::updateTranslations()
         }
     }
     d->terminateSession->setText(d->sessionInfo.isCurrentDevice ? tr("Terminate others")
-                                                               : tr("Terminate"));
+                                                                : tr("Terminate"));
 }
 
 void SessionWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)

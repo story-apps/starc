@@ -100,6 +100,14 @@ struct PaymentOption {
     }
 
     /**
+     * @brief Стоимость с учтом базовой скидки
+     */
+    int baseAmount() const
+    {
+        return amount - static_cast<int>(amount / 100 * baseDiscount);
+    }
+
+    /**
      * @brief Стоимость, в центах
      */
     int amount = -1;
@@ -107,6 +115,7 @@ struct PaymentOption {
     /**
      * @brief Скидка в процентах
      */
+    qreal baseDiscount = -1;
     qreal discount = -1;
 
     /**
