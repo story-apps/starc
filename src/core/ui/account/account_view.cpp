@@ -249,10 +249,14 @@ AccountView::AccountView(QWidget* _parent)
             &AccountView::renewProPressed);
     connect(d->proSubscription, &SubscriptionWidget::buyLifetimePressed, this,
             &AccountView::buyProLifetimePressed);
+    connect(d->proSubscription, &SubscriptionWidget::giftPressed, this,
+            &AccountView::giftProPressed);
     connect(d->cloudSubscription, &SubscriptionWidget::tryPressed, this,
             &AccountView::tryCloudForFreePressed);
     connect(d->cloudSubscription, &SubscriptionWidget::buyPressed, this,
             &AccountView::renewCloudPressed);
+    connect(d->cloudSubscription, &SubscriptionWidget::giftPressed, this,
+            &AccountView::giftCloudPressed);
 
     connect(d->promocodeName, &TextField::textChanged, d->promocodeName,
             [this] { d->promocodeName->setError({}); });

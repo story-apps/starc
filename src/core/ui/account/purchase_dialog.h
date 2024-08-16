@@ -26,6 +26,11 @@ public:
     void setDescription(const QString& _description);
 
     /**
+     * @brief Задать возможность покупки подписки для себя
+     */
+    void setPurchaseAvailable(bool _available);
+
+    /**
      * @brief Задать доступные опции покупки
      */
     void setPaymentOptions(const QVector<Domain::PaymentOption>& _paymentOptions);

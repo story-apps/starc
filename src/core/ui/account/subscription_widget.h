@@ -51,6 +51,11 @@ signals:
      */
     void buyLifetimePressed();
 
+    /**
+     * @brief Нажата кнопка подарить
+     */
+    void giftPressed();
+
 protected:
     /**
      * @brief Обновляем переводы

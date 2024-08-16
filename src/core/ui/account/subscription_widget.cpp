@@ -30,6 +30,7 @@ public:
     Button* tryButton = nullptr;
     Button* buyButton = nullptr;
     Button* buyLifetimeButton = nullptr;
+    Button* giftButton = nullptr;
     QVBoxLayout* layout = nullptr;
 };
 
@@ -43,6 +44,7 @@ SubscriptionWidget::Implementation::Implementation(QWidget* _parent)
     , tryButton(new Button(_parent))
     , buyButton(new Button(_parent))
     , buyLifetimeButton(new Button(_parent))
+    , giftButton(new Button(_parent))
     , layout(new QVBoxLayout)
 {
     isActiveIcon->setIcon(u8"\U000F05E0");
@@ -77,6 +79,7 @@ SubscriptionWidget::Implementation::Implementation(QWidget* _parent)
         buttonsLayout->addWidget(tryButton, 0, Qt::AlignBottom);
         buttonsLayout->addWidget(buyButton, 0, Qt::AlignBottom);
         buttonsLayout->addWidget(buyLifetimeButton, 0, Qt::AlignBottom);
+        buttonsLayout->addWidget(giftButton, 0, Qt::AlignBottom);
         layout->addLayout(buttonsLayout);
     }
 }
@@ -94,6 +97,7 @@ SubscriptionWidget::SubscriptionWidget(QWidget* _parent)
     connect(d->tryButton, &Button::clicked, this, &SubscriptionWidget::tryPressed);
     connect(d->buyButton, &Button::clicked, this, &SubscriptionWidget::buyPressed);
     connect(d->buyLifetimeButton, &Button::clicked, this, &SubscriptionWidget::buyLifetimePressed);
+    connect(d->giftButton, &Button::clicked, this, &SubscriptionWidget::giftPressed);
 }
 
 SubscriptionWidget::~SubscriptionWidget() = default;
@@ -149,7 +153,8 @@ void SubscriptionWidget::setPaymentOptions(const QVector<Domain::PaymentOption>&
     d->trialInfo->setVisible(hasTrial);
     d->tryButton->setVisible(hasTrial);
     d->buyButton->setVisible(!hasTrial && !d->isLifetime);
-    d->buyLifetimeButton->setVisible(!hasTrial && hasLifetime);
+    d->buyLifetimeButton->setVisible(!hasTrial && hasLifetime && !d->isLifetime);
+    d->giftButton->setVisible(d->isLifetime);
 }
 
 void SubscriptionWidget::updateTranslations()
@@ -158,6 +163,7 @@ void SubscriptionWidget::updateTranslations()
     d->tryButton->setText(tr("Try for free"));
     d->buyButton->setText(tr("Renew"));
     d->buyLifetimeButton->setText(tr("Buy lifetime"));
+    d->giftButton->setText(tr("Buy as a gift"));
 }
 
 void SubscriptionWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -203,6 +209,7 @@ void SubscriptionWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event
              d->tryButton,
              d->buyButton,
              d->buyLifetimeButton,
+             d->giftButton,
          }) {
         button->setBackgroundColor(DesignSystem::color().accent());
         button->setTextColor(DesignSystem::color().accent());

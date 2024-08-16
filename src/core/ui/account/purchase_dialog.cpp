@@ -105,6 +105,11 @@ void PurchaseDialog::setDescription(const QString& _description)
     d->descriptionLabel->setVisible(!_description.isEmpty());
 }
 
+void PurchaseDialog::setPurchaseAvailable(bool _available)
+{
+    d->purchaseButton->setEnabled(_available);
+}
+
 void PurchaseDialog::setPaymentOptions(const QVector<Domain::PaymentOption>& _paymentOptions)
 {
     QGridLayout* contentLayout = nullptr;

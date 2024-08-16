@@ -140,8 +140,10 @@ signals:
     void tryProForFreePressed();
     void buyProLifetimePressed();
     void renewProPressed();
+    void giftProPressed();
     void tryCloudForFreePressed();
     void renewCloudPressed();
+    void giftCloudPressed();
 
     /**
      * @brief Пользователь нажал кнопку активировать промокод

@@ -297,7 +297,9 @@ void AccountManager::Implementation::initViewConnections()
     connect(view, &Ui::AccountView::tryCloudForFreePressed, q, &AccountManager::tryCloudForFree);
     connect(view, &Ui::AccountView::buyProLifetimePressed, q, &AccountManager::buyProLifetme);
     connect(view, &Ui::AccountView::renewProPressed, q, &AccountManager::renewPro);
+    connect(view, &Ui::AccountView::giftProPressed, q, &AccountManager::giftPro);
     connect(view, &Ui::AccountView::renewCloudPressed, q, &AccountManager::renewCloud);
+    connect(view, &Ui::AccountView::giftCloudPressed, q, &AccountManager::giftCloud);
     connect(view, &Ui::AccountView::activatePromocodePressed, q,
             &AccountManager::activatePromocodeRequested);
 
@@ -493,7 +495,7 @@ void AccountManager::setAccountInfo(const Domain::AccountInfo& _accountInfo)
         d->purchaseDialog->hideDialog();
     }
     if (d->purchaseGiftDialog != nullptr && d->purchaseGiftDialog->isVisible()) {
-        d->purchaseDialog->hideDialog();
+        d->purchaseGiftDialog->hideDialog();
     }
 }
 
@@ -589,8 +591,6 @@ bool AccountManager::tryProForFree()
 
 void AccountManager::buyProLifetme()
 {
-    d->initPurchaseDialog();
-
     auto proPaymentOptions = d->accountInfo.paymentOptions;
     for (int index = proPaymentOptions.size() - 1; index >= 0; --index) {
         const auto& option = proPaymentOptions.at(index);
@@ -601,6 +601,7 @@ void AccountManager::buyProLifetme()
         }
     }
 
+    d->initPurchaseDialog();
     d->purchaseDialog->setPaymentOptions(proPaymentOptions);
     d->purchaseDialog->selectOption(proPaymentOptions.constFirst());
     d->purchaseDialog->showDialog();
@@ -624,6 +625,25 @@ void AccountManager::renewPro()
     d->initPurchaseDialog();
     d->purchaseDialog->setPaymentOptions(proPaymentOptions);
     d->purchaseDialog->selectOption(proPaymentOptions.constLast());
+    d->purchaseDialog->showDialog();
+}
+
+void AccountManager::giftPro()
+{
+    auto proPaymentOptions = d->accountInfo.paymentOptions;
+    for (int index = proPaymentOptions.size() - 1; index >= 0; --index) {
+        const auto& option = proPaymentOptions.at(index);
+        if (option.amount == 0
+            || (option.subscriptionType != Domain::SubscriptionType::ProMonthly
+                && option.subscriptionType != Domain::SubscriptionType::ProLifetime)) {
+            proPaymentOptions.removeAt(index);
+        }
+    }
+
+    d->initPurchaseDialog();
+    d->purchaseDialog->setPaymentOptions(proPaymentOptions);
+    d->purchaseDialog->setPurchaseAvailable(false);
+    d->purchaseDialog->selectOption(proPaymentOptions.constFirst());
     d->purchaseDialog->showDialog();
 }
 
@@ -687,6 +707,28 @@ void AccountManager::renewCloud()
 
     d->initPurchaseDialog();
     d->purchaseDialog->setPaymentOptions(cloudPaymentOptions);
+    d->purchaseDialog->selectOption(cloudPaymentOptions.constLast());
+    d->purchaseDialog->showDialog();
+}
+
+void AccountManager::giftCloud()
+{
+    auto cloudPaymentOptions = d->accountInfo.paymentOptions;
+    for (int index = cloudPaymentOptions.size() - 1; index >= 0; --index) {
+        const auto& option = cloudPaymentOptions.at(index);
+        if (option.amount == 0 || option.type != Domain::PaymentType::Subscription
+            || (option.subscriptionType != Domain::SubscriptionType::CloudMonthly
+                && option.subscriptionType != Domain::SubscriptionType::CloudLifetime)) {
+            cloudPaymentOptions.removeAt(index);
+        }
+    }
+    if (cloudPaymentOptions.isEmpty()) {
+        return;
+    }
+
+    d->initPurchaseDialog();
+    d->purchaseDialog->setPaymentOptions(cloudPaymentOptions);
+    d->purchaseDialog->setPurchaseAvailable(false);
     d->purchaseDialog->selectOption(cloudPaymentOptions.constLast());
     d->purchaseDialog->showDialog();
 }

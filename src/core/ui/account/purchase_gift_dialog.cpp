@@ -10,7 +10,7 @@
 #include <utils/helpers/color_helper.h>
 #include <utils/validators/email_validator.h>
 
-#include <QHBoxLayout>
+#include <QBoxLayout>
 
 
 namespace Ui {
@@ -50,7 +50,7 @@ PurchaseGiftDialog::Implementation::Implementation(QWidget* _parent)
     paymentOption->setWide(true);
     paymentOption->setShowTotal(true);
     email->setCapitalizeWords(false);
-    informationIcon->setIcon(u8"\U000F02FC");
+    informationIcon->setIcon(u8"\U000F02FD");
 
     auto informationLayout = new QHBoxLayout;
     informationLayout->setContentsMargins({});
@@ -123,7 +123,7 @@ QWidget* PurchaseGiftDialog::lastFocusableWidget() const
 
 void PurchaseGiftDialog::updateTranslations()
 {
-    setTitle(tr("Subscription as a gift"));
+    setTitle(tr("Purchasing a gift"));
     d->email->setLabel(tr("Recepient email"));
     d->email->setHelper(tr("A promo code to activate the gift will be sent here"));
     d->greeting->setLabel(tr("Greeting text"));
@@ -170,7 +170,7 @@ void PurchaseGiftDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event
     }
     d->informationIcon->setContentsMargins(DesignSystem::layout().px12(),
                                            DesignSystem::layout().px16(),
-                                           DesignSystem::layout().px8(), 0);
+                                           DesignSystem::layout().px12(), 0);
     d->informationText->setContentsMargins(0, DesignSystem::layout().px16(),
                                            DesignSystem::layout().px12(),
                                            DesignSystem::layout().px16());

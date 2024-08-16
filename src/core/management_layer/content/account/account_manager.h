@@ -69,6 +69,7 @@ public:
      */
     void buyProLifetme();
     void renewPro();
+    void giftPro();
 
     /**
      * @brief Активировать бесплатный период для ПРО
@@ -79,6 +80,7 @@ public:
      * @brief Оплатить ПРО версию
      */
     void renewCloud();
+    void giftCloud();
 
     /**
      * @brief Докупить кредиты
