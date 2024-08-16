@@ -72,6 +72,7 @@ public:
 
     Tree* tree = nullptr;
 
+    IconsMidLabel* freeTitleIcon = nullptr;
     ButtonLabel* freeTitle = nullptr;
     Subtitle2Label* freeSubtitle = nullptr;
 
@@ -129,6 +130,7 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     : accountPage(new Widget(_parent))
     //
     , tree(new Tree(accountPage))
+    , freeTitleIcon(new IconsMidLabel(accountPage))
     , freeTitle(new ButtonLabel(accountPage))
     , freeSubtitle(new Subtitle2Label(accountPage))
     //
@@ -193,6 +195,7 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     tree->setCurrentIndex(model->index(0, 0));
     tree->setRootIsDecorated(false);
 
+    freeTitleIcon->setIcon(u8"\U000F0381");
     proTitleIcon->setIcon(u8"\U000F18BC");
     cloudTitleIcon->setIcon(u8"\U000F015F");
     studioTitleIcon->setIcon(u8"\U000F0381");
@@ -204,7 +207,14 @@ AccountNavigator::Implementation::Implementation(QWidget* _parent)
     accountLayout->setSpacing(0);
     int row = 0;
     accountLayout->addWidget(tree, row++, 0, 1, 4);
-    accountLayout->addWidget(freeTitle, row++, 2);
+    {
+        auto layout = new QHBoxLayout;
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addWidget(freeTitleIcon);
+        layout->addWidget(freeTitle, 1);
+        accountLayout->addLayout(layout, row++, 2);
+    }
     accountLayout->addWidget(freeSubtitle, row++, 2);
     //
     {
@@ -498,6 +508,7 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
     //
     // Преднастроим видимость разных элементов
     //
+    d->freeTitleIcon->show();
     d->freeTitle->show();
     d->freeSubtitle->show();
     //
@@ -539,6 +550,7 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         case Domain::SubscriptionType::ProMonthly: {
             hasProSubscription = true;
 
+            d->freeTitleIcon->hide();
             d->freeTitle->hide();
             d->freeSubtitle->hide();
             //
@@ -549,6 +561,7 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
 
         case Domain::SubscriptionType::ProLifetime: {
+            d->freeTitleIcon->hide();
             d->freeTitle->hide();
             d->freeSubtitle->hide();
             //
@@ -561,6 +574,7 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         case Domain::SubscriptionType::CloudMonthly: {
             hasCloudSubscription = true;
 
+            d->freeTitleIcon->hide();
             d->freeTitle->hide();
             d->freeSubtitle->hide();
             //
@@ -573,6 +587,7 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
 
         case Domain::SubscriptionType::CloudLifetime: {
+            d->freeTitleIcon->hide();
             d->freeTitle->hide();
             d->freeSubtitle->hide();
             d->proTitleIcon->hide();
@@ -587,6 +602,7 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
 
         case Domain::SubscriptionType::Studio: {
+            d->freeTitleIcon->hide();
             d->freeTitle->hide();
             d->freeSubtitle->hide();
             d->proTitle->hide();
@@ -792,6 +808,7 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         = QMarginsF(Ui::DesignSystem::layout().px(18), Ui::DesignSystem::compactLayout().px(20),
                     Ui::DesignSystem::layout().px12(), Ui::DesignSystem::compactLayout().px4());
     for (auto icon : {
+             d->freeTitleIcon,
              d->proTitleIcon,
              d->cloudTitleIcon,
              d->studioTitleIcon,
@@ -817,12 +834,9 @@ void AccountNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         title->setContentsMargins(titleMargins.toMargins());
     }
 
-    auto freeTitleMargins = titleMargins;
-    freeTitleMargins.setLeft(Ui::DesignSystem::layout().px(18));
-    freeTitleMargins.setBottom(Ui::DesignSystem::compactLayout().px12());
-    d->freeTitle->setContentsMargins(freeTitleMargins.toMargins());
-
-    auto subtitleMargins = freeTitleMargins;
+    auto subtitleMargins = titleMargins;
+    subtitleMargins.setLeft(Ui::DesignSystem::layout().px(18));
+    subtitleMargins.setBottom(Ui::DesignSystem::compactLayout().px12());
     subtitleMargins.setTop(Ui::DesignSystem::compactLayout().px2());
     for (auto subtitle : {
              d->freeSubtitle,
