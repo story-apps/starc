@@ -86,6 +86,11 @@ public:
     void buyCredits();
 
     /**
+     * @brief Показать сообщение отправки подарка
+     */
+    void showGiftSentMessage(const QString& _message);
+
+    /**
      * @brief Показать сообщение активации промокода
      */
     void showPromocodeActivationMessage(const QString& _message);
@@ -178,6 +183,12 @@ signals:
      * @brief Пользователь хочет применить заданную опцию оплаты
      */
     void activatePaymentOptionRequested(const Domain::PaymentOption& _paymentOption);
+
+    /**
+     * @brief Пользователь хочет купить заданную опцию оплаты в подарок
+     */
+    void activatePaymentOptionAsGiftRequested(const Domain::PaymentOption& _paymentOption,
+                                              const QString& _email, const QString& _greeting);
 
     /**
      * @brief Пользователь хочет активировать промокод

@@ -15,11 +15,18 @@ namespace Ui {
 class PurchaseDialogOptionWidget::Implementation
 {
 public:
-    explicit Implementation(const Domain::PaymentOption& _option);
+    explicit Implementation();
+
+    /**
+     * @brief Рисовать ли опцию на всю ширину
+     */
+    bool isFullWidth() const;
 
 
     bool isChecked = false;
     Domain::PaymentOption option;
+    bool isWide = false;
+    bool showTotal = false;
 
     /**
      * @brief  Декорации при клике
@@ -27,22 +34,24 @@ public:
     ClickAnimation decorationAnimation;
 };
 
-PurchaseDialogOptionWidget::Implementation::Implementation(const Domain::PaymentOption& _option)
-    : option(_option)
+PurchaseDialogOptionWidget::Implementation::Implementation()
 {
     decorationAnimation.setFast(false);
+}
+
+bool PurchaseDialogOptionWidget::Implementation::isFullWidth() const
+{
+    return option.duration == Domain::PaymentDuration::Lifetime || isWide;
 }
 
 
 // ****
 
 
-PurchaseDialogOptionWidget::PurchaseDialogOptionWidget(const Domain::PaymentOption& _option,
-                                                       QWidget* _parent)
+PurchaseDialogOptionWidget::PurchaseDialogOptionWidget(QWidget* _parent)
     : Widget(_parent)
-    , d(new Implementation(_option))
+    , d(new Implementation)
 {
-
     setAttribute(Qt::WA_Hover);
     setFocusPolicy(Qt::StrongFocus);
 
@@ -52,9 +61,37 @@ PurchaseDialogOptionWidget::PurchaseDialogOptionWidget(const Domain::PaymentOpti
 
 PurchaseDialogOptionWidget::~PurchaseDialogOptionWidget() = default;
 
+void PurchaseDialogOptionWidget::setPaymentOption(const Domain::PaymentOption& _paymentOption)
+{
+    d->option = _paymentOption;
+
+    updateGeometry();
+    update();
+}
+
 const Domain::PaymentOption& PurchaseDialogOptionWidget::paymentOption() const
 {
     return d->option;
+}
+
+void PurchaseDialogOptionWidget::setWide(bool _isWide)
+{
+    if (d->isWide == _isWide) {
+        return;
+    }
+
+    d->isWide = _isWide;
+    update();
+}
+
+void PurchaseDialogOptionWidget::setShowTotal(bool _showTotal)
+{
+    if (d->showTotal == _showTotal) {
+        return;
+    }
+
+    d->showTotal = _showTotal;
+    update();
 }
 
 bool PurchaseDialogOptionWidget::isChecked() const
@@ -74,12 +111,11 @@ void PurchaseDialogOptionWidget::setChecked(bool _checked)
 
 QSize PurchaseDialogOptionWidget::sizeHint() const
 {
-    return QSize(10,
-                 contentsMargins().top()
-                     + (d->option.duration == Domain::PaymentDuration::Lifetime
-                            ? DesignSystem::layout().px(82)
-                            : DesignSystem::layout().px(124))
-                     + contentsMargins().bottom());
+    return QSize(
+        10,
+        contentsMargins().top()
+            + (d->isFullWidth() ? DesignSystem::layout().px(82) : DesignSystem::layout().px(124))
+            + contentsMargins().bottom());
 }
 
 void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
@@ -95,16 +131,17 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
     //
     // Заливаем подложку и рисуем рамку
     //
+    const auto isInteractive = isEnabled() && underMouse();
     painter.setPen(d->isChecked
                        ? QPen(DesignSystem::color().accent(), DesignSystem::layout().px2())
-                       : (underMouse()
+                       : (isInteractive
                               ? QPen(DesignSystem::color().accent(), DesignSystem::layout().px())
                               : QPen(ColorHelper::transparent(textColor(),
                                                               DesignSystem::elevationEndOpacity()),
                                      DesignSystem::layout().px())));
     painter.setBrush(
-        underMouse() ? ColorHelper::transparent(textColor(), DesignSystem::elevationEndOpacity())
-                     : backgroundColor());
+        isInteractive ? ColorHelper::transparent(textColor(), DesignSystem::elevationEndOpacity())
+                      : backgroundColor());
     painter.drawRoundedRect(contentsRect(), DesignSystem::card().borderRadius(),
                             DesignSystem::card().borderRadius());
 
@@ -115,14 +152,19 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         : "CLOUD";
     const auto paymentMethodsTitle = tr("Pay with:");
     const auto regularPrice = QString("$%1").arg(d->option.amount / 100.0, 0, 'f', 2);
-    const auto totalPrice = QString("$%1").arg(d->option.baseAmount() / 100.0, 0, 'f', 2);
+    const auto basePrice = QString("$%1").arg(d->option.baseAmount() / 100.0, 0, 'f', 2);
+    const auto totalPrice = QString("$%1").arg(d->option.totalAmount / 100.0, 0, 'f', 2);
     auto paymentMethodsText
         = [](int _price) { return _price >= 2000 ? u8" \U000F019B" : u8" \U000F019B"; };
 
     //
-    // Лайфтайм версия рисуется на всю ширину
+    // Вариант, когда рисуем опцию на всю ширину
+    // NOTE: Это может быть только лайфтайм, или другая опция в диалоге покупки подписки в подарок,
+    //       поэтому тут так по-дурацки сделана работа с ценами (на лайфтайм базовой скидки быть не
+    //       может, а когда мы берём в подарок то для опции покупки сразу показывается финальная
+    //       цена)
     //
-    if (d->option.duration == Domain::PaymentDuration::Lifetime) {
+    if (d->isFullWidth()) {
         auto textRect = contentsRect().adjusted(
             DesignSystem::layout().px24(), DesignSystem::layout().px16(),
             -DesignSystem::layout().px24(), -DesignSystem::layout().px16());
@@ -131,53 +173,21 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         //
         painter.setPen(textColor());
         painter.setFont(DesignSystem::font().body1());
-        painter.drawText(textRect, Qt::AlignLeft | Qt::AlignTop,
-                         tr("%1 lifetime").arg(subscriptionTypeTitle));
+        const auto title = d->option.duration == Domain::PaymentDuration::Lifetime
+            ? tr("%1 lifetime").arg(subscriptionTypeTitle)
+            : (d->option.type == Domain::PaymentType::Subscription
+                   ? tr("%1 for %2")
+                         .arg(subscriptionTypeTitle,
+                              tr("%n month(s)", "", static_cast<int>(d->option.duration)))
+                   : tr("%1 credits").arg(d->option.credits));
+        painter.drawText(textRect, Qt::AlignLeft | Qt::AlignTop, title);
         //
-        // ... размер скидки
-        //
-        if (d->option.baseDiscount > 0) {
-            const auto backgroundColor = ColorHelper::transparent(
-                DesignSystem::color().accent(), DesignSystem::inactiveTextOpacity());
-            painter.setPen(backgroundColor);
-            painter.setBrush(backgroundColor);
-            const auto discountRect
-                = QRectF(contentsRect().right() - DesignSystem::layout().px(54),
-                         DesignSystem::layout().px(20), DesignSystem::layout().px(38),
-                         DesignSystem::layout().px(20));
-            painter.drawRoundedRect(discountRect, DesignSystem::layout().px4(),
-                                    DesignSystem::layout().px4());
-
-            painter.setPen(DesignSystem::color().onAccent());
-            painter.setBrush(Qt::NoBrush);
-            painter.setFont(DesignSystem::font().caption());
-            painter.drawText(discountRect, Qt::AlignCenter,
-                             QString("-%1%").arg(static_cast<int>(d->option.baseDiscount)));
-        }
-        //
-        // ... цена без скидки
+        // ... цена
         //
         painter.setPen(DesignSystem::color().accent());
         painter.setFont(DesignSystem::font().button());
-        if (d->option.amount != d->option.baseAmount()) {
-            painter.setPen(
-                ColorHelper::transparent(textColor(), DesignSystem::disabledTextOpacity()));
-            auto font = painter.font();
-            font.setStrikeOut(true);
-            painter.setFont(font);
-        }
-        painter.drawText(textRect, Qt::AlignRight | Qt::AlignTop, regularPrice);
-        //
-        // ... цена со скидкой
-        //
-        if (d->option.amount != d->option.baseAmount()) {
-            painter.setPen(DesignSystem::color().accent());
-            painter.setFont(DesignSystem::font().button());
-            auto totalPriceRect = textRect.adjusted(
-                0, TextHelper::fineLineSpacing(painter.font()) + DesignSystem::layout().px8(), 0,
-                0);
-            painter.drawText(totalPriceRect, Qt::AlignRight | Qt::AlignTop, totalPrice);
-        }
+        painter.drawText(textRect, Qt::AlignRight | Qt::AlignTop,
+                         d->showTotal ? totalPrice : regularPrice);
         //
         // ... способы оплаты
         //
@@ -194,7 +204,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
                          paymentMethodsText(d->option.totalAmount));
     }
     //
-    // Остальные версии рисуются в несколько строк
+    // В противном случае опция рисуются в несколько строк
     // - название 24
     // - стоимость месяца 16
     // - полная стоимость 24
@@ -274,7 +284,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
                                    + DesignSystem::layout().px8());
             painter.setPen(DesignSystem::color().accent());
             painter.setFont(DesignSystem::font().button());
-            painter.drawText(totalPriceRect, Qt::AlignLeft | Qt::AlignVCenter, totalPrice);
+            painter.drawText(totalPriceRect, Qt::AlignLeft | Qt::AlignVCenter, basePrice);
         }
         //
         // ... если это была цена одного месяца, то нужно ещё немного сместить, т.к. строка месячной
@@ -317,7 +327,7 @@ void PurchaseDialogOptionWidget::mousePressEvent(QMouseEvent* _event)
 {
     Widget::mousePressEvent(_event);
 
-    if (!contentsRect().contains(_event->pos())) {
+    if (!isEnabled() || !contentsRect().contains(_event->pos())) {
         return;
     }
 
@@ -329,7 +339,7 @@ void PurchaseDialogOptionWidget::mousePressEvent(QMouseEvent* _event)
 
 void PurchaseDialogOptionWidget::mouseReleaseEvent(QMouseEvent* _event)
 {
-    if (!contentsRect().contains(_event->pos())) {
+    if (!isEnabled() || !contentsRect().contains(_event->pos())) {
         return;
     }
 

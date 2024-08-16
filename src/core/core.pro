@@ -78,6 +78,7 @@ SOURCES += \
     ui/account/login_dialog.cpp \
     ui/account/purchase_dialog.cpp \
     ui/account/purchase_dialog_option_widget.cpp \
+    ui/account/purchase_gift_dialog.cpp \
     ui/account/session_widget.cpp \
     ui/account/subscription_widget.cpp \
     ui/account/team_dialog.cpp \
@@ -167,6 +168,7 @@ HEADERS += \
     ui/account/login_dialog.h \
     ui/account/purchase_dialog.h \
     ui/account/purchase_dialog_option_widget.h \
+    ui/account/purchase_gift_dialog.h \
     ui/account/session_widget.h \
     ui/account/subscription_widget.h \
     ui/account/team_dialog.h \

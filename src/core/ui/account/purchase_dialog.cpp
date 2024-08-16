@@ -29,6 +29,7 @@ public:
     QVector<PurchaseDialogOptionWidget*> options;
 
     QHBoxLayout* buttonsLayout = nullptr;
+    Button* giftButton = nullptr;
     Button* cancelButton = nullptr;
     Button* purchaseButton = nullptr;
 };
@@ -37,6 +38,7 @@ PurchaseDialog::Implementation::Implementation(QWidget* _parent)
     : descriptionLabel(new Body1Label(_parent))
     , content(new Widget(_parent))
     , buttonsLayout(new QHBoxLayout)
+    , giftButton(new Button(_parent))
     , cancelButton(new Button(_parent))
     , purchaseButton(new Button(_parent))
 {
@@ -44,6 +46,7 @@ PurchaseDialog::Implementation::Implementation(QWidget* _parent)
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
+    buttonsLayout->addWidget(giftButton);
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton);
     buttonsLayout->addWidget(purchaseButton);
@@ -75,6 +78,14 @@ PurchaseDialog::PurchaseDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->content, 1, 0);
     contentsLayout()->addLayout(d->buttonsLayout, 2, 0);
 
+    connect(d->giftButton, &Button::clicked, this, [this] {
+        for (auto option : std::as_const(d->options)) {
+            if (option->isChecked()) {
+                emit giftPressed(option->paymentOption());
+                return;
+            }
+        }
+    });
     connect(d->cancelButton, &Button::clicked, this, &PurchaseDialog::canceled);
     connect(d->purchaseButton, &Button::clicked, this, [this] {
         for (auto option : std::as_const(d->options)) {
@@ -114,13 +125,14 @@ void PurchaseDialog::setPaymentOptions(const QVector<Domain::PaymentOption>& _pa
     int row = 0;
     int column = 0;
     for (const auto& option : _paymentOptions) {
-        auto optionWidget = new PurchaseDialogOptionWidget(option);
-        optionWidget->setBackgroundColor(Ui::DesignSystem::color().background());
-        optionWidget->setTextColor(Ui::DesignSystem::color().onBackground());
+        auto optionWidget = new PurchaseDialogOptionWidget(this);
+        optionWidget->setPaymentOption(option);
+        optionWidget->setBackgroundColor(DesignSystem::color().background());
+        optionWidget->setTextColor(DesignSystem::color().onBackground());
         if (option.duration == Domain::PaymentDuration::Lifetime) {
             optionWidget->setContentsMargins(
-                Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px4(),
-                Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12());
+                DesignSystem::layout().px12(), DesignSystem::layout().px4(),
+                DesignSystem::layout().px12(), DesignSystem::layout().px12());
             contentLayout->addWidget(optionWidget, row++, 0, 1, 2);
             column = 0;
         } else {
@@ -129,10 +141,10 @@ void PurchaseDialog::setPaymentOptions(const QVector<Domain::PaymentOption>& _pa
                 column = 0;
             }
             optionWidget->setContentsMargins(
-                column == 0 ? Ui::DesignSystem::layout().px12() : Ui::DesignSystem::layout().px4(),
-                Ui::DesignSystem::layout().px4(),
-                column == 0 ? Ui::DesignSystem::layout().px4() : Ui::DesignSystem::layout().px12(),
-                Ui::DesignSystem::layout().px4());
+                column == 0 ? DesignSystem::layout().px12() : DesignSystem::layout().px4(),
+                DesignSystem::layout().px4(),
+                column == 0 ? DesignSystem::layout().px4() : DesignSystem::layout().px12(),
+                DesignSystem::layout().px4());
             contentLayout->addWidget(optionWidget, row, column++);
         }
 
@@ -166,6 +178,7 @@ QWidget* PurchaseDialog::lastFocusableWidget() const
 void PurchaseDialog::updateTranslations()
 {
     setTitle(tr("Choose what suits you"));
+    d->giftButton->setText(tr("Buy as a gift"));
     d->cancelButton->setText(tr("Cancel"));
     d->purchaseButton->setText(tr("Purchase"));
 }
@@ -174,9 +187,9 @@ void PurchaseDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    setContentFixedWidth(Ui::DesignSystem::dialog().maximumWidth());
+    setContentFixedWidth(DesignSystem::dialog().maximumWidth());
 
-    d->content->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->content->setBackgroundColor(DesignSystem::color().background());
 
     d->descriptionLabel->setBackgroundColor(DesignSystem::color().background());
     d->descriptionLabel->setTextColor(DesignSystem::color().onBackground());
@@ -184,17 +197,18 @@ void PurchaseDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                             DesignSystem::layout().px24(), 0);
 
     for (auto button : {
+             d->giftButton,
              d->cancelButton,
              d->purchaseButton,
          }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
+        button->setBackgroundColor(DesignSystem::color().accent());
+        button->setTextColor(DesignSystem::color().accent());
     }
 
-    contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
+    contentsLayout()->setSpacing(static_cast<int>(DesignSystem::layout().px8()));
     d->buttonsLayout->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16())
+        QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+                  DesignSystem::layout().px16(), DesignSystem::layout().px16())
             .toMargins());
 }
 

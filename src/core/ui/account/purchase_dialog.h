@@ -42,6 +42,11 @@ signals:
     void purchasePressed(const Domain::PaymentOption& _option);
 
     /**
+     * @brief Пользователь нажал кнопку подарка
+     */
+    void giftPressed(const Domain::PaymentOption& _option);
+
+    /**
      * @brief Пользователь передумал вносить платёж
      */
     void canceled();

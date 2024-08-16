@@ -3029,6 +3029,8 @@ void ApplicationManager::initConnections()
                 d->projectManager->checkAvailabilityToEdit();
                 d->projectManager->setAvailableCredits(_accountInfo.credits);
             });
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::giftSent, d->accountManager.data(),
+            &AccountManager::showGiftSentMessage);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::promocodeActivated,
             d->accountManager.data(), &AccountManager::showPromocodeActivationMessage);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::promocodeErrorRecieved,
@@ -3043,6 +3045,8 @@ void ApplicationManager::initConnections()
             d->cloudServiceManager.data(), &CloudServiceManager::setAccountInfo);
     connect(d->accountManager.data(), &AccountManager::activatePaymentOptionRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::activatePaymentOption);
+    connect(d->accountManager.data(), &AccountManager::activatePaymentOptionAsGiftRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::activatePaymentOptionAsGift);
     connect(d->accountManager.data(), &AccountManager::activatePromocodeRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::activatePromocode);
 

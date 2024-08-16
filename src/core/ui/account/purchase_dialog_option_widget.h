@@ -16,11 +16,14 @@ class PurchaseDialogOptionWidget : public Widget
     Q_OBJECT
 
 public:
-    explicit PurchaseDialogOptionWidget(const Domain::PaymentOption& _option,
-                                        QWidget* _parent = nullptr);
+    explicit PurchaseDialogOptionWidget(QWidget* _parent = nullptr);
     ~PurchaseDialogOptionWidget() override;
 
+    void setPaymentOption(const Domain::PaymentOption& _paymentOption);
     const Domain::PaymentOption& paymentOption() const;
+
+    void setWide(bool _isWide);
+    void setShowTotal(bool _showTotal);
 
     bool isChecked() const;
     void setChecked(bool _checked);

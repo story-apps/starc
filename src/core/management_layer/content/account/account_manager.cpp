@@ -6,6 +6,7 @@
 #include <ui/account/account_view.h>
 #include <ui/account/login_dialog.h>
 #include <ui/account/purchase_dialog.h>
+#include <ui/account/purchase_gift_dialog.h>
 #include <ui/account/team_dialog.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/dialog/dialog.h>
@@ -51,6 +52,11 @@ public:
      */
     void initPurchaseDialog();
 
+    /**
+     * @brief Инициилизировать диалог поккупки услуг в подарок
+     */
+    void initPurchaseGiftDialog();
+
 
     AccountManager* q = nullptr;
 
@@ -60,6 +66,7 @@ public:
     int confirmationCodeLength = kInvalidConfirmationCodeLength;
 
     Ui::PurchaseDialog* purchaseDialog = nullptr;
+    Ui::PurchaseGiftDialog* purchaseGiftDialog = nullptr;
 
     Ui::AccountToolBar* toolBar = nullptr;
     Ui::AccountNavigator* navigator = nullptr;
@@ -345,6 +352,12 @@ void AccountManager::Implementation::initPurchaseDialog()
         purchaseDialog = new Ui::PurchaseDialog(view->topLevelWidget());
         connect(purchaseDialog, &Ui::PurchaseDialog::purchasePressed, q,
                 &AccountManager::activatePaymentOptionRequested);
+        connect(purchaseDialog, &Ui::PurchaseDialog::giftPressed, q,
+                [this](const Domain::PaymentOption& _option) {
+                    initPurchaseGiftDialog();
+                    purchaseGiftDialog->setPaymentOption(_option);
+                    purchaseGiftDialog->showDialog();
+                });
         connect(purchaseDialog, &Ui::PurchaseDialog::canceled, purchaseDialog,
                 &Ui::PurchaseDialog::hideDialog);
         connect(purchaseDialog, &Ui::PurchaseDialog::disappeared, purchaseDialog, [this] {
@@ -354,6 +367,22 @@ void AccountManager::Implementation::initPurchaseDialog()
     }
 
     purchaseDialog->setPaymentOptions(accountInfo.paymentOptions);
+}
+
+void AccountManager::Implementation::initPurchaseGiftDialog()
+{
+    if (purchaseGiftDialog == nullptr) {
+        purchaseGiftDialog = new Ui::PurchaseGiftDialog(view->topLevelWidget());
+        connect(purchaseGiftDialog, &Ui::PurchaseGiftDialog::purchasePressed, q,
+                &AccountManager::activatePaymentOptionAsGiftRequested);
+        connect(purchaseGiftDialog, &Ui::PurchaseGiftDialog::canceled, purchaseGiftDialog,
+                &Ui::PurchaseGiftDialog::hideDialog);
+        connect(purchaseGiftDialog, &Ui::PurchaseGiftDialog::disappeared, purchaseGiftDialog,
+                [this] {
+                    purchaseGiftDialog->deleteLater();
+                    purchaseGiftDialog = nullptr;
+                });
+    }
 }
 
 
@@ -461,6 +490,9 @@ void AccountManager::setAccountInfo(const Domain::AccountInfo& _accountInfo)
     // Если информация обновилась во время оплаты лицензии, то закроем диалог платежей
     //
     if (d->purchaseDialog != nullptr && d->purchaseDialog->isVisible()) {
+        d->purchaseDialog->hideDialog();
+    }
+    if (d->purchaseGiftDialog != nullptr && d->purchaseGiftDialog->isVisible()) {
         d->purchaseDialog->hideDialog();
     }
 }
@@ -688,6 +720,16 @@ void AccountManager::buyCredits()
     d->purchaseDialog->setPaymentOptions(creditPaymentOptions);
     d->purchaseDialog->selectOption(creditPaymentOptions.constLast());
     d->purchaseDialog->showDialog();
+}
+
+void AccountManager::showGiftSentMessage(const QString& _message)
+{
+    StandardDialog::information(d->view->topLevelWidget(), {}, _message);
+
+    d->initPurchaseGiftDialog();
+    d->purchaseGiftDialog->hideDialog();
+    d->initPurchaseDialog();
+    d->purchaseDialog->hideDialog();
 }
 
 void AccountManager::showPromocodeActivationMessage(const QString& _message)
