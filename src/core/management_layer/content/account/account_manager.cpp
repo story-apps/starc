@@ -601,7 +601,13 @@ void AccountManager::buyProLifetme()
         }
     }
 
+    const int discount = proPaymentOptions.constFirst().discount;
+    const auto discountInfo = discount > 0
+        ? tr("You have an additional %1% discount due to the promo code activation").arg(discount)
+        : "";
+
     d->initPurchaseDialog();
+    d->purchaseDialog->setDiscountInfo(discountInfo);
     d->purchaseDialog->setPaymentOptions(proPaymentOptions);
     d->purchaseDialog->selectOption(proPaymentOptions.constFirst());
     d->purchaseDialog->showDialog();
@@ -622,7 +628,13 @@ void AccountManager::renewPro()
         return;
     }
 
+    const int discount = proPaymentOptions.constFirst().discount;
+    const auto discountInfo = discount > 0
+        ? tr("You have an additional %1% discount due to the promo code activation").arg(discount)
+        : "";
+
     d->initPurchaseDialog();
+    d->purchaseDialog->setDiscountInfo(discountInfo);
     d->purchaseDialog->setPaymentOptions(proPaymentOptions);
     d->purchaseDialog->selectOption(proPaymentOptions.constLast());
     d->purchaseDialog->showDialog();
@@ -640,7 +652,13 @@ void AccountManager::giftPro()
         }
     }
 
+    const int discount = proPaymentOptions.constFirst().discount;
+    const auto discountInfo = discount > 0
+        ? tr("You have an additional %1% discount due to the promo code activation").arg(discount)
+        : "";
+
     d->initPurchaseDialog();
+    d->purchaseDialog->setDiscountInfo(discountInfo);
     d->purchaseDialog->setPaymentOptions(proPaymentOptions);
     d->purchaseDialog->setPurchaseAvailable(false);
     d->purchaseDialog->selectOption(proPaymentOptions.constFirst());
@@ -705,7 +723,30 @@ void AccountManager::renewCloud()
         return;
     }
 
+    const auto hasProLifetime
+        = std::find_if(d->accountInfo.subscriptions.begin(), d->accountInfo.subscriptions.end(),
+                       [](const Domain::SubscriptionInfo& _subscription) {
+                           return _subscription.type == Domain::SubscriptionType::ProLifetime;
+                       });
+    const int discount = cloudPaymentOptions.constFirst().discount;
+    QString discountInfo;
+    if (hasProLifetime) {
+        if (discount > 20) {
+            discountInfo
+                = tr("You have an additional 20% discount due to PRO lifetime subscription "
+                     "purchase, and %1% discount due to the promo code activation")
+                      .arg(discount - 20);
+        } else {
+            discountInfo = tr("You have an additional 20% discount thanks to the purchasing of the "
+                              "PRO lifetime subscription");
+        }
+    } else if (discount > 0) {
+        discountInfo = tr("You have an additional %1% discount due to the promo code activation")
+                           .arg(discount);
+    }
+
     d->initPurchaseDialog();
+    d->purchaseDialog->setDiscountInfo(discountInfo);
     d->purchaseDialog->setPaymentOptions(cloudPaymentOptions);
     d->purchaseDialog->selectOption(cloudPaymentOptions.constLast());
     d->purchaseDialog->showDialog();
@@ -726,7 +767,31 @@ void AccountManager::giftCloud()
         return;
     }
 
+    const auto hasProLifetime
+        = std::find_if(d->accountInfo.subscriptions.begin(), d->accountInfo.subscriptions.end(),
+                       [](const Domain::SubscriptionInfo& _subscription) {
+                           return _subscription.type == Domain::SubscriptionType::ProLifetime;
+                       });
+    const int discount = cloudPaymentOptions.constFirst().discount;
+    QString discountInfo;
+    if (hasProLifetime) {
+        if (discount > 20) {
+            discountInfo = tr("You have an additional 20% discount thanks to the purchasing of the "
+                              "PRO lifetime subscription and %1% discount thanks to the activation "
+                              "of the promo code")
+                               .arg(discount - 20);
+        } else {
+            discountInfo = tr("You have an additional 20% discount thanks to the purchasing of the "
+                              "PRO lifetime subscription");
+        }
+    } else if (discount > 0) {
+        discountInfo
+            = tr("You have an additional %1% discount thanks to the activation of the promo code")
+                  .arg(discount);
+    }
+
     d->initPurchaseDialog();
+    d->purchaseDialog->setDiscountInfo(discountInfo);
     d->purchaseDialog->setPaymentOptions(cloudPaymentOptions);
     d->purchaseDialog->setPurchaseAvailable(false);
     d->purchaseDialog->selectOption(cloudPaymentOptions.constLast());
@@ -754,11 +819,18 @@ void AccountManager::buyCredits()
         return;
     }
 
+    const int discount = creditPaymentOptions.constFirst().discount;
+    const auto discountInfo = discount > 0
+        ? tr("You have an additional %1% discount thanks to the activation of the promo code")
+              .arg(discount)
+        : "";
+
     d->initPurchaseDialog();
     d->purchaseDialog->setDescription(
         tr("Credits are our internal currency. They are used for AI tools, such as text "
            "generation.\n\n1 credit equals 1000 words processed by AI.\n1 credit equals 10 images "
            "generated by AI."));
+    d->purchaseDialog->setDiscountInfo(discountInfo);
     d->purchaseDialog->setPaymentOptions(creditPaymentOptions);
     d->purchaseDialog->selectOption(creditPaymentOptions.constLast());
     d->purchaseDialog->showDialog();

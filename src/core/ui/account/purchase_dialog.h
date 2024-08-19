@@ -26,6 +26,11 @@ public:
     void setDescription(const QString& _description);
 
     /**
+     * @brief Задать информацию о скидке
+     */
+    void setDiscountInfo(const QString& _info);
+
+    /**
      * @brief Задать возможность покупки подписки для себя
      */
     void setPurchaseAvailable(bool _available);

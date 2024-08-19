@@ -6,6 +6,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
+#include <utils/helpers/color_helper.h>
 
 #include <QApplication>
 #include <QHBoxLayout>
@@ -27,6 +28,9 @@ public:
     Body1Label* descriptionLabel = nullptr;
     Widget* content = nullptr;
     QVector<PurchaseDialogOptionWidget*> options;
+    Body1Label* information = nullptr;
+    IconsMidLabel* informationIcon = nullptr;
+    Body2Label* informationText = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
     Button* giftButton = nullptr;
@@ -37,12 +41,17 @@ public:
 PurchaseDialog::Implementation::Implementation(QWidget* _parent)
     : descriptionLabel(new Body1Label(_parent))
     , content(new Widget(_parent))
+    , information(new Body1Label(content))
+    , informationIcon(new IconsMidLabel(content))
+    , informationText(new Body2Label(content))
     , buttonsLayout(new QHBoxLayout)
     , giftButton(new Button(_parent))
     , cancelButton(new Button(_parent))
     , purchaseButton(new Button(_parent))
 {
     descriptionLabel->hide();
+    information->hide();
+    informationIcon->setIcon(u8"\U000F02FD");
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
@@ -74,9 +83,18 @@ PurchaseDialog::PurchaseDialog(QWidget* _parent)
     setAcceptButton(d->purchaseButton);
     setRejectButton(d->cancelButton);
 
-    contentsLayout()->addWidget(d->descriptionLabel, 0, 0);
-    contentsLayout()->addWidget(d->content, 1, 0);
-    contentsLayout()->addLayout(d->buttonsLayout, 2, 0);
+    auto informationLayout = new QHBoxLayout;
+    informationLayout->setContentsMargins({});
+    informationLayout->setSpacing(0);
+    informationLayout->addWidget(d->informationIcon, 0, Qt::AlignTop);
+    informationLayout->addWidget(d->informationText, 1);
+    d->information->setLayout(informationLayout);
+
+    int row = 0;
+    contentsLayout()->addWidget(d->descriptionLabel, row++, 0);
+    contentsLayout()->addWidget(d->content, row++, 0);
+    contentsLayout()->addWidget(d->information, row++, 0);
+    contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
 
     connect(d->giftButton, &Button::clicked, this, [this] {
         for (auto option : std::as_const(d->options)) {
@@ -103,6 +121,12 @@ void PurchaseDialog::setDescription(const QString& _description)
 {
     d->descriptionLabel->setText(_description);
     d->descriptionLabel->setVisible(!_description.isEmpty());
+}
+
+void PurchaseDialog::setDiscountInfo(const QString& _info)
+{
+    d->informationText->setText(_info);
+    d->information->setVisible(!_info.isEmpty());
 }
 
 void PurchaseDialog::setPurchaseAvailable(bool _available)
@@ -194,12 +218,31 @@ void PurchaseDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     setContentFixedWidth(DesignSystem::dialog().maximumWidth());
 
-    d->content->setBackgroundColor(DesignSystem::color().background());
-
     d->descriptionLabel->setBackgroundColor(DesignSystem::color().background());
     d->descriptionLabel->setTextColor(DesignSystem::color().onBackground());
     d->descriptionLabel->setContentsMargins(DesignSystem::layout().px24(), 0,
                                             DesignSystem::layout().px24(), 0);
+
+    d->content->setBackgroundColor(DesignSystem::color().background());
+
+    d->information->setBackgroundColor(ColorHelper::transparent(
+        DesignSystem::color().accent(), DesignSystem::focusBackgroundOpacity()));
+    d->information->setContentsMargins(DesignSystem::layout().px24(), DesignSystem::layout().px24(),
+                                       DesignSystem::layout().px24(), 0);
+    d->information->setBorderRadius(DesignSystem::layout().px4());
+    for (auto label : std::vector<AbstractLabel*>{
+             d->informationIcon,
+             d->informationText,
+         }) {
+        label->setBackgroundColor(Qt::transparent);
+        label->setTextColor(DesignSystem::color().onBackground());
+    }
+    d->informationIcon->setContentsMargins(DesignSystem::layout().px12(),
+                                           DesignSystem::layout().px16(),
+                                           DesignSystem::layout().px12(), 0);
+    d->informationText->setContentsMargins(0, DesignSystem::layout().px16(),
+                                           DesignSystem::layout().px12(),
+                                           DesignSystem::layout().px16());
 
     for (auto button : {
              d->giftButton,
