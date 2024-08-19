@@ -152,17 +152,12 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         : "CLOUD";
     const auto paymentMethodsTitle = tr("Pay with:");
     const auto regularPrice = QString("$%1").arg(d->option.amount / 100.0, 0, 'f', 2);
-    const auto basePrice = QString("$%1").arg(d->option.baseAmount() / 100.0, 0, 'f', 2);
     const auto totalPrice = QString("$%1").arg(d->option.totalAmount / 100.0, 0, 'f', 2);
     auto paymentMethodsText
         = [](int _price) { return _price >= 2000 ? u8" \U000F019B" : u8" \U000F019B"; };
 
     //
     // Вариант, когда рисуем опцию на всю ширину
-    // NOTE: Это может быть только лайфтайм, или другая опция в диалоге покупки подписки в подарок,
-    //       поэтому тут так по-дурацки сделана работа с ценами (на лайфтайм базовой скидки быть не
-    //       может, а когда мы берём в подарок то для опции покупки сразу показывается финальная
-    //       цена)
     //
     if (d->isFullWidth()) {
         auto textRect = contentsRect().adjusted(
@@ -182,12 +177,54 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
                    : tr("%1 credits").arg(d->option.credits));
         painter.drawText(textRect, Qt::AlignLeft | Qt::AlignTop, title);
         //
-        // ... цена
+        // ... размер скидки
+        //
+        QRectF discountRect;
+        if (const int discount = d->option.totalDiscount(); discount > 0) {
+            const auto backgroundColor = ColorHelper::transparent(
+                DesignSystem::color().accent(), DesignSystem::inactiveTextOpacity());
+            painter.setPen(backgroundColor);
+            painter.setBrush(backgroundColor);
+            discountRect = QRectF(contentsRect().right() - DesignSystem::layout().px(54),
+                                  DesignSystem::layout().px(20), DesignSystem::layout().px(38),
+                                  DesignSystem::layout().px(20));
+            painter.drawRoundedRect(discountRect, DesignSystem::layout().px4(),
+                                    DesignSystem::layout().px4());
+
+            painter.setPen(DesignSystem::color().onAccent());
+            painter.setBrush(Qt::NoBrush);
+            painter.setFont(DesignSystem::font().caption());
+            painter.drawText(discountRect, Qt::AlignCenter, QString("-%1%").arg(discount));
+        }
+        //
+        // ... цена со скидкой
+        //
+        QRectF totalPriceRect;
+        if (discountRect.isValid()) {
+            painter.setPen(DesignSystem::color().accent());
+            painter.setFont(DesignSystem::font().button());
+            totalPriceRect
+                = textRect.adjusted(0, discountRect.height() + DesignSystem::layout().px12(), 0, 0);
+            painter.drawText(totalPriceRect, Qt::AlignRight | Qt::AlignTop, totalPrice);
+        }
+        //
+        // ... цена без скидки
         //
         painter.setPen(DesignSystem::color().accent());
         painter.setFont(DesignSystem::font().button());
-        painter.drawText(textRect, Qt::AlignRight | Qt::AlignTop,
-                         d->showTotal ? totalPrice : regularPrice);
+        QRectF regularPriceRect = textRect;
+        if (totalPriceRect.isValid()) {
+            painter.setPen(
+                ColorHelper::transparent(textColor(), DesignSystem::disabledTextOpacity()));
+            auto font = painter.font();
+            font.setStrikeOut(true);
+            painter.setFont(font);
+            regularPriceRect = totalPriceRect.adjusted(
+                0, 0,
+                -painter.fontMetrics().horizontalAdvance(totalPrice) - DesignSystem::layout().px8(),
+                0);
+        }
+        painter.drawText(regularPriceRect, Qt::AlignRight | Qt::AlignTop, regularPrice);
         //
         // ... способы оплаты
         //
@@ -226,7 +263,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         //
         // ... размер скидки
         //
-        if (d->option.baseDiscount > 0) {
+        if (const int discount = d->option.totalDiscount(); discount > 0) {
             const auto backgroundColor = ColorHelper::transparent(
                 DesignSystem::color().accent(), DesignSystem::inactiveTextOpacity());
             painter.setPen(backgroundColor);
@@ -241,8 +278,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
             painter.setPen(DesignSystem::color().onAccent());
             painter.setBrush(Qt::NoBrush);
             painter.setFont(DesignSystem::font().caption());
-            painter.drawText(discountRect, Qt::AlignCenter,
-                             QString("-%1%").arg(static_cast<int>(d->option.baseDiscount)));
+            painter.drawText(discountRect, Qt::AlignCenter, QString("-%1%").arg(discount));
         }
         //
         // ... добавляем месячную стоимость
@@ -266,7 +302,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         textRect.setHeight(DesignSystem::layout().px24());
         painter.setPen(DesignSystem::color().accent());
         painter.setFont(DesignSystem::font().button());
-        if (d->option.amount != d->option.baseAmount()) {
+        if (d->option.amount != d->option.totalAmount) {
             painter.setPen(
                 ColorHelper::transparent(textColor(), DesignSystem::disabledTextOpacity()));
             auto font = painter.font();
@@ -277,14 +313,14 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         //
         // ... стоимость со скидкой
         //
-        if (d->option.amount != d->option.baseAmount()) {
+        if (d->option.amount != d->option.totalAmount) {
             auto totalPriceRect = textRect;
             totalPriceRect.setLeft(textRect.left()
                                    + TextHelper::fineTextWidthF(regularPrice, painter.font())
                                    + DesignSystem::layout().px8());
             painter.setPen(DesignSystem::color().accent());
             painter.setFont(DesignSystem::font().button());
-            painter.drawText(totalPriceRect, Qt::AlignLeft | Qt::AlignVCenter, basePrice);
+            painter.drawText(totalPriceRect, Qt::AlignLeft | Qt::AlignVCenter, totalPrice);
         }
         //
         // ... если это была цена одного месяца, то нужно ещё немного сместить, т.к. строка месячной

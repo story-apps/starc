@@ -108,6 +108,20 @@ struct PaymentOption {
     }
 
     /**
+     * @brief Итоговая скидска с перерасчётом включая базовую
+     */
+    qreal totalDiscount() const
+    {
+        if (qFuzzyCompare(discount, 0.0)) {
+            return baseDiscount;
+        }
+
+        const auto additionalDiscount
+            = (baseAmount() - totalAmount) / static_cast<qreal>(amount) * 100.0;
+        return baseDiscount + additionalDiscount;
+    }
+
+    /**
      * @brief Стоимость, в центах
      */
     int amount = -1;

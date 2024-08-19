@@ -537,7 +537,9 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
     // А потом показываем, в зависимости от активных подписок и доступных опций
     //
     bool hasProSubscription = false;
+    bool hasProLifetime = false;
     bool hasCloudSubscription = false;
+    bool hasCloudLifetime = false;
     d->cloudStorageSize = _account.cloudStorageSize;
     d->cloudStorageSizeUsed = _account.cloudStorageSizeUsed;
     auto isAccountTeamsCanBeAdded = false;
@@ -561,6 +563,8 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
 
         case Domain::SubscriptionType::ProLifetime: {
+            hasProLifetime = true;
+
             d->freeTitleIcon->hide();
             d->freeTitle->hide();
             d->freeSubtitle->hide();
@@ -587,6 +591,8 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
 
         case Domain::SubscriptionType::CloudLifetime: {
+            hasCloudLifetime = true;
+
             d->freeTitleIcon->hide();
             d->freeTitle->hide();
             d->freeSubtitle->hide();
@@ -683,6 +689,16 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         d->proTitle->hide();
         d->tryProButton->hide();
         d->renewProSubscriptionButton->hide();
+    }
+
+    //
+    // Если есть подписки навсегда, то просто оставляем заголовки, а кнопку продления скрываем
+    //
+    if (hasProLifetime) {
+        d->renewProSubscriptionButton->hide();
+    }
+    if (hasCloudLifetime) {
+        d->renewCloudSubscriptionButton->hide();
     }
 
     //
