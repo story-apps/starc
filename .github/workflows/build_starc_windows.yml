@@ -78,30 +78,11 @@ jobs:
           cd build/windows
           ./make-exe_64.sh ${{env.APP_VERSION}}
 
-      - name: Sign app executables
-        uses: skymatic/code-sign-action@v1
-        with:
-          certificate: '${{ secrets.WINDOWS_CERTIFICATE }}'
-          password: '${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}'
-          description: 'Story Architect'
-          timestampUrl: 'http://timestamp.digicert.com'
-          folder: 'build/windows/files_64'
-          recursive: true
-
       - name: Make installer
         uses: joncloud/makensis-action@v3.4
         with:
           arguments: "/V3"
           script-file: "build/windows/starc_64.nsi"
-
-      - name: Sign installer
-        uses: skymatic/code-sign-action@v1
-        with:
-          certificate: '${{ secrets.WINDOWS_CERTIFICATE }}'
-          password: '${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}'
-          description: 'Story Architect'
-          timestampUrl: 'http://timestamp.digicert.com'
-          folder: 'build/windows'
 
       - name: Make archive with portable version
         uses: vimtor/action-zip@v1
@@ -215,30 +196,11 @@ jobs:
           cd build/windows
           ./make-exe_32.sh ${{env.APP_VERSION}}
 
-      - name: Sign app executables
-        uses: skymatic/code-sign-action@v1
-        with:
-          certificate: '${{ secrets.WINDOWS_CERTIFICATE }}'
-          password: '${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}'
-          description: 'Story Architect'
-          timestampUrl: 'http://timestamp.digicert.com'
-          folder: 'build/windows/files_32'
-          recursive: true
-
       - name: Make installer
         uses: joncloud/makensis-action@v3.4
         with:
           arguments: "/V3"
           script-file: "build/windows/starc_32.nsi"
-
-      - name: Sign installer
-        uses: skymatic/code-sign-action@v1
-        with:
-          certificate: '${{ secrets.WINDOWS_CERTIFICATE }}'
-          password: '${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}'
-          description: 'Story Architect'
-          timestampUrl: 'http://timestamp.digicert.com'
-          folder: 'build/windows'
 
       - name: Make archive with portable version
         uses: vimtor/action-zip@v1
