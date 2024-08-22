@@ -39,7 +39,7 @@ void UiHelper::setFocusPolicyRecursively(QWidget* _widget, Qt::FocusPolicy _poli
     }
 }
 
-QScrollArea* UiHelper::createScrollArea(QWidget* _parent)
+QScrollArea* UiHelper::createScrollArea(QWidget* _parent, bool _withGridLayout)
 {
     auto content = new QScrollArea(_parent);
     QPalette palette;
@@ -53,10 +53,16 @@ QScrollArea* UiHelper::createScrollArea(QWidget* _parent)
     auto contentWidget = new QWidget;
     content->setWidget(contentWidget);
     content->setWidgetResizable(true);
-    auto layout = new QVBoxLayout(contentWidget);
-    layout->setContentsMargins({});
-    layout->setSpacing(0);
-    layout->addStretch();
+    if (_withGridLayout) {
+        auto layout = new QGridLayout(contentWidget);
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+    } else {
+        auto layout = new QVBoxLayout(contentWidget);
+        layout->setContentsMargins({});
+        layout->setSpacing(0);
+        layout->addStretch();
+    }
 
     return content;
 }

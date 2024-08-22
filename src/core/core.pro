@@ -74,6 +74,7 @@ SOURCES += \
     ui/account/account_view_teams.cpp \
     ui/account/account_view_teams_sidebar.cpp \
     ui/account/collaborators_tool_bar.cpp \
+    ui/account/compare_subscriptions_dialog.cpp \
     ui/account/connection_status_tool_bar.cpp \
     ui/account/login_dialog.cpp \
     ui/account/purchase_dialog.cpp \
@@ -164,6 +165,7 @@ HEADERS += \
     ui/account/account_view_teams.h \
     ui/account/account_view_teams_sidebar.h \
     ui/account/collaborators_tool_bar.h \
+    ui/account/compare_subscriptions_dialog.h \
     ui/account/connection_status_tool_bar.h \
     ui/account/login_dialog.h \
     ui/account/purchase_dialog.h \

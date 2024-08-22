@@ -26,7 +26,7 @@ public:
     /**
      * @brief Создать виджет скролареи с настроенной палитрой и скролбаром
      */
-    static QScrollArea* createScrollArea(QWidget* _parent);
+    static QScrollArea* createScrollArea(QWidget* _parent, bool _withGridLayout = false);
 
     /**
      * @brief Показать тултип в текущем положении мышки
