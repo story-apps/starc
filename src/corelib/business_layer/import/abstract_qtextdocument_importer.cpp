@@ -8,7 +8,10 @@
 
 #include <QRegularExpression>
 #include <QTextBlock>
+#include <QTextDocument>
 #include <QXmlStreamWriter>
+
+#include <set>
 
 
 namespace BusinessLayer {
@@ -20,6 +23,12 @@ namespace {
  */
 const QRegularExpression kPlaceContainsChecker(
     "^(INT|EXT|INT/EXT|ИНТ|НАТ|ИНТ/НАТ|ПАВ|ЭКСТ|ИНТ/ЭКСТ)([.]|[ - ])");
+
+/**
+ * @brief Регулярное выражение для определения строки, начинающейся с номера
+ */
+const QRegularExpression kStartFromNumberChecker(
+    "^([\\d]{1,}[\\d\\S]{0,})([.]|[-])(([\\d\\S]{1,})([.]|)|) ");
 
 /**
  * @brief Регулярное выражение для определения блока "Титр" по наличию ключевых слов
@@ -65,6 +74,140 @@ AbstractQTextDocumentImporter::AbstractQTextDocumentImporter()
 
 AbstractQTextDocumentImporter::~AbstractQTextDocumentImporter() = default;
 
+//
+// TODO: получение documentForImport сделать чисто виртуальной
+//
+AbstractImporter::Documents AbstractQTextDocumentImporter::importDocuments(
+    const ImportOptions& _options) const
+{
+    //
+    // Преобразовать заданный документ в QTextDocument
+    //
+    QTextDocument document;
+    const bool documentDone = documentForImport(_options.filePath, document);
+    if (!documentDone) {
+        return {};
+    }
+
+    //
+    // Найти минимальный отступ слева для всех блоков
+    // ЗАЧЕМ: во многих программах (Final Draft, Screeviner) сделано так, что поля
+    //		  задаются за счёт оступов. Получается что и заглавие сцены и описание действия
+    //		  имеют отступы. Так вот это и будет минимальным отступом, который не будем считать
+    //
+    int minLeftMargin = 1000;
+    {
+        QTextCursor cursor(&document);
+        while (!cursor.atEnd()) {
+            if (minLeftMargin > cursor.blockFormat().leftMargin()) {
+                minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
+            }
+
+            cursor.movePosition(QTextCursor::NextBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock);
+        }
+    }
+
+    QTextCursor cursor(&document);
+
+    //
+    // Для каждого блока текста определяем тип
+    //
+    // ... последний стиль блока
+    auto lastBlockType = TextParagraphType::Undefined;
+    // ... количество пустых строк
+    int emptyLines = 0;
+    std::set<QString> characterNames;
+    std::set<QString> locationNames;
+    do {
+        cursor.movePosition(QTextCursor::EndOfBlock);
+
+        //
+        // Если в блоке есть текст
+        //
+        if (!cursor.block().text().simplified().isEmpty()) {
+            //
+            // ... определяем тип
+            //
+            const auto blockType
+                = typeForTextCursor(cursor, lastBlockType, emptyLines, minLeftMargin);
+            QString paragraphText = cursor.block().text().simplified();
+
+            //
+            // Если текущий тип "Время и место", то удалим номер сцены
+            //
+            if (blockType == TextParagraphType::SceneHeading) {
+                paragraphText = TextHelper::smartToUpper(paragraphText);
+                const auto match = kStartFromNumberChecker.match(paragraphText);
+                if (match.hasMatch()) {
+                    paragraphText = paragraphText.mid(match.capturedEnd());
+                }
+            }
+
+            //
+            // Выполняем корректировки
+            //
+            paragraphText = clearBlockText(blockType, paragraphText);
+
+            switch (blockType) {
+            case TextParagraphType::SceneHeading: {
+                if (!_options.importLocations) {
+                    break;
+                }
+
+                const auto currentLocationName = locationName(paragraphText);
+                if (currentLocationName.isEmpty()) {
+                    break;
+                }
+
+                locationNames.emplace(currentLocationName);
+                break;
+            }
+
+            case TextParagraphType::Character: {
+                if (!_options.importCharacters) {
+                    break;
+                }
+
+                const auto currentCharacterName = characterName(paragraphText);
+                if (currentCharacterName.isEmpty()) {
+                    break;
+                }
+
+                characterNames.emplace(currentCharacterName);
+                break;
+            }
+
+            default:
+                break;
+            }
+
+            //
+            // Запомним последний стиль блока и обнулим счётчик пустых строк
+            //
+            lastBlockType = blockType;
+            emptyLines = 0;
+        }
+        //
+        // Если в блоке нет текста, то увеличиваем счётчик пустых строк
+        //
+        else {
+            ++emptyLines;
+        }
+
+        cursor.movePosition(QTextCursor::NextCharacter);
+    } while (!cursor.atEnd());
+
+    Documents documents;
+    for (const auto& characterName : characterNames) {
+        documents.characters.append(
+            { Domain::DocumentObjectType::Character, characterName, {}, {} });
+    }
+    for (const auto& locationName : locationNames) {
+        documents.locations.append({ Domain::DocumentObjectType::Location, locationName, {}, {} });
+    }
+    return documents;
+}
 
 QString AbstractQTextDocumentImporter::parseDocument(const ImportOptions& _options,
                                                      QTextDocument& _document) const
@@ -279,6 +422,11 @@ QString AbstractQTextDocumentImporter::processSceneHeading(const ImportOptions& 
     Q_UNUSED(_cursor)
 
     return QString();
+}
+
+QRegularExpression AbstractQTextDocumentImporter::startFromNumberChecker() const
+{
+    return kStartFromNumberChecker;
 }
 
 TextParagraphType AbstractQTextDocumentImporter::typeForTextCursor(const QTextCursor& _cursor,
