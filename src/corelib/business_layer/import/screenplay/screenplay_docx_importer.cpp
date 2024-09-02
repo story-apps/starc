@@ -4,7 +4,6 @@
 
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/text/text_model_xml.h>
-#include <business_layer/templates/screenplay_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <utils/helpers/text_helper.h>
@@ -18,160 +17,18 @@
 #include <format_helpers.h>
 #include <format_manager.h>
 #include <format_reader.h>
-#include <set>
 
 
 namespace BusinessLayer {
 
-namespace {
-
-/**
- * @brief Регулярное выражение для определения блока "Время и место" по началу с номера
- */
-const QRegularExpression kStartFromNumberChecker(
-    "^([\\d]{1,}[\\d\\S]{0,})([.]|[-])(([\\d\\S]{1,})([.]|)|) ");
-
-} // namespace
-
-AbstractScreenplayImporter::Documents ScreenplayDocxImporter::importDocuments(
-    const ImportOptions& _options) const
+ScreenplayDocxImporter::ScreenplayDocxImporter()
+    : AbstractScreenplayImporter()
+    , AbstractDocumentImporter()
 {
-    //
-    // Открываем файл
-    //
-    QFile documentFile(_options.filePath);
-    if (!documentFile.open(QIODevice::ReadOnly)) {
-        return {};
-    }
-
-    //
-    // Преобразовать заданный документ в QTextDocument
-    //
-    QTextDocument documentForImport;
-    {
-        QScopedPointer<FormatReader> reader(FormatManager::createReader(&documentFile));
-        reader->read(&documentFile, &documentForImport);
-    }
-
-    //
-    // Найти минимальный отступ слева для всех блоков
-    // ЗАЧЕМ: во многих программах (Final Draft, Screeviner) сделано так, что поля
-    //		  задаются за счёт оступов. Получается что и заглавие сцены и описание действия
-    //		  имеют отступы. Так вот это и будет минимальным отступом, который не будем считать
-    //
-    int minLeftMargin = 1000;
-    {
-        QTextCursor cursor(&documentForImport);
-        while (!cursor.atEnd()) {
-            if (minLeftMargin > cursor.blockFormat().leftMargin()) {
-                minLeftMargin = std::max(0.0, cursor.blockFormat().leftMargin());
-            }
-
-            cursor.movePosition(QTextCursor::NextBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock);
-        }
-    }
-
-    QTextCursor cursor(&documentForImport);
-
-    //
-    // Для каждого блока текста определяем тип
-    //
-    // ... последний стиль блока
-    auto lastBlockType = TextParagraphType::Undefined;
-    // ... количество пустых строк
-    int emptyLines = 0;
-    std::set<QString> characterNames;
-    std::set<QString> locationNames;
-    do {
-        cursor.movePosition(QTextCursor::EndOfBlock);
-
-        //
-        // Если в блоке есть текст
-        //
-        if (!cursor.block().text().simplified().isEmpty()) {
-            //
-            // ... определяем тип
-            //
-            const auto blockType
-                = typeForTextCursor(cursor, lastBlockType, emptyLines, minLeftMargin);
-            QString paragraphText = cursor.block().text().simplified();
-
-            //
-            // Если текущий тип "Время и место", то удалим номер сцены
-            //
-            if (blockType == TextParagraphType::SceneHeading) {
-                paragraphText = TextHelper::smartToUpper(paragraphText);
-                const auto match = kStartFromNumberChecker.match(paragraphText);
-                if (match.hasMatch()) {
-                    paragraphText = paragraphText.mid(match.capturedEnd());
-                }
-            }
-
-            //
-            // Выполняем корректировки
-            //
-            paragraphText = clearBlockText(blockType, paragraphText);
-
-            switch (blockType) {
-            case TextParagraphType::SceneHeading: {
-                if (!_options.importLocations) {
-                    break;
-                }
-
-                const auto locationName = ScreenplaySceneHeadingParser::location(paragraphText);
-                if (locationName.isEmpty()) {
-                    break;
-                }
-
-                locationNames.emplace(locationName);
-                break;
-            }
-
-            case TextParagraphType::Character: {
-                if (!_options.importCharacters) {
-                    break;
-                }
-
-                const auto characterName = ScreenplayCharacterParser::name(paragraphText);
-                if (characterName.isEmpty()) {
-                    break;
-                }
-
-                characterNames.emplace(characterName);
-                break;
-            }
-
-            default:
-                break;
-            }
-
-            //
-            // Запомним последний стиль блока и обнулим счётчик пустых строк
-            //
-            lastBlockType = blockType;
-            emptyLines = 0;
-        }
-        //
-        // Если в блоке нет текста, то увеличиваем счётчик пустых строк
-        //
-        else {
-            ++emptyLines;
-        }
-
-        cursor.movePosition(QTextCursor::NextCharacter);
-    } while (!cursor.atEnd());
-
-    Documents documents;
-    for (const auto& characterName : characterNames) {
-        documents.characters.append(
-            { Domain::DocumentObjectType::Character, characterName, {}, {} });
-    }
-    for (const auto& locationName : locationNames) {
-        documents.locations.append({ Domain::DocumentObjectType::Location, locationName, {}, {} });
-    }
-    return documents;
 }
+
+ScreenplayDocxImporter::~ScreenplayDocxImporter() = default;
+
 
 QVector<AbstractScreenplayImporter::Screenplay> ScreenplayDocxImporter::importScreenplays(
     const ScreenplayImportOptions& _options) const
@@ -184,49 +41,25 @@ QVector<AbstractScreenplayImporter::Screenplay> ScreenplayDocxImporter::importSc
     }
 
     //
-    // Открываем файл
+    // Преобразуем заданный документ в QTextDocument и парсим его
     //
-    QFile documentFile(_options.filePath);
-    if (!documentFile.open(QIODevice::ReadOnly)) {
-        return { screenplay };
+    if (QTextDocument document; documentForImport(_options.filePath, document)) {
+        screenplay.text = parseDocument(_options, document);
     }
-
-    //
-    // Преобразовать заданный документ в QTextDocument
-    //
-    QTextDocument documentForImport;
-    {
-        QScopedPointer<FormatReader> reader(FormatManager::createReader(&documentFile));
-        reader->read(&documentFile, &documentForImport);
-    }
-
-    screenplay.text = parseDocument(_options, documentForImport);
 
     return { screenplay };
 }
 
-QString ScreenplayDocxImporter::extractSceneNumber(const ImportOptions& _options,
-                                                   QTextCursor& _cursor) const
+bool ScreenplayDocxImporter::documentForImport(const QString& _filePath,
+                                               QTextDocument& _document) const
 {
-    QString sceneNumber;
-    const auto match = kStartFromNumberChecker.match(_cursor.block().text().simplified());
-    if (match.hasMatch()) {
-        _cursor.movePosition(QTextCursor::StartOfBlock);
-        _cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
-                             match.capturedEnd());
-        if (_cursor.hasSelection()) {
-            const auto& options = static_cast<const ScreenplayImportOptions&>(_options);
-            if (options.keepSceneNumbers) {
-                sceneNumber = _cursor.selectedText().trimmed();
-                if (sceneNumber.endsWith('.')) {
-                    sceneNumber.chop(1);
-                }
-            }
-            _cursor.deleteChar();
-        }
-        _cursor.movePosition(QTextCursor::EndOfBlock);
+    QFile documentFile(_filePath);
+    if (documentFile.open(QIODevice::ReadOnly)) {
+        QScopedPointer<FormatReader> reader(FormatManager::createReader(&documentFile));
+        reader->read(&documentFile, &_document);
+        return true;
     }
-    return sceneNumber;
+    return false;
 }
 
 void ScreenplayDocxImporter::writeReviewMarks(QXmlStreamWriter& _writer, QTextCursor& _cursor) const
@@ -279,6 +112,22 @@ void ScreenplayDocxImporter::writeReviewMarks(QXmlStreamWriter& _writer, QTextCu
         }
         _writer.writeEndElement(); // review marks
     }
+}
+
+bool ScreenplayDocxImporter::shouldKeepSceneNumbers(const ImportOptions& _options) const
+{
+    const auto& options = static_cast<const ScreenplayImportOptions&>(_options);
+    return options.keepSceneNumbers;
+}
+
+QString ScreenplayDocxImporter::characterName(const QString& _text) const
+{
+    return ScreenplayCharacterParser::name(_text);
+}
+
+QString ScreenplayDocxImporter::locationName(const QString& _text) const
+{
+    return ScreenplaySceneHeadingParser::location(_text);
 }
 
 } // namespace BusinessLayer
