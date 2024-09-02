@@ -215,13 +215,14 @@ SOURCES += \
     business_layer/export/stageplay/stageplay_exporter.cpp \
     business_layer/export/stageplay/stageplay_fountain_exporter.cpp \
     business_layer/export/stageplay/stageplay_pdf_exporter.cpp \
+    business_layer/import/abstract_document_importer.cpp \
     business_layer/import/abstract_fountain_importer.cpp \
     business_layer/import/abstract_markdown_importer.cpp \
     business_layer/import/audioplay/audioplay_fountain_importer.cpp \
     business_layer/import/comic_book/comic_book_fountain_importer.cpp \
     business_layer/import/novel/novel_markdown_importer.cpp \
     business_layer/import/screenplay/screenplay_celtx_importer.cpp \
-    business_layer/import/screenplay/screenplay_document_importer.cpp \
+    business_layer/import/screenplay/screenplay_docx_importer.cpp \
     business_layer/import/screenplay/screenplay_fdx_importer.cpp \
     business_layer/import/screenplay/screenplay_fountain_importer.cpp \
     business_layer/import/screenplay/screenplay_kit_scenarist_importer.cpp \
@@ -562,6 +563,7 @@ HEADERS += \
     business_layer/export/stageplay/stageplay_exporter.h \
     business_layer/export/stageplay/stageplay_fountain_exporter.h \
     business_layer/export/stageplay/stageplay_pdf_exporter.h \
+    business_layer/import/abstract_document_importer.h \
     business_layer/import/abstract_fountain_importer.h \
     business_layer/import/abstract_importer.h \
     business_layer/import/abstract_markdown_importer.h \
@@ -574,7 +576,7 @@ HEADERS += \
     business_layer/import/novel/novel_markdown_importer.h \
     business_layer/import/screenplay/abstract_screenplay_importer.h \
     business_layer/import/screenplay/screenplay_celtx_importer.h \
-    business_layer/import/screenplay/screenplay_document_importer.h \
+    business_layer/import/screenplay/screenplay_docx_importer.h \
     business_layer/import/screenplay/screenplay_fdx_importer.h \
     business_layer/import/screenplay/screenplay_fountain_importer.h \
     business_layer/import/screenplay/screenplay_import_options.h \

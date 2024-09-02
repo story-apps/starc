@@ -4,7 +4,7 @@
 #include <business_layer/import/comic_book/comic_book_fountain_importer.h>
 #include <business_layer/import/novel/novel_markdown_importer.h>
 #include <business_layer/import/screenplay/screenplay_celtx_importer.h>
-#include <business_layer/import/screenplay/screenplay_document_importer.h>
+#include <business_layer/import/screenplay/screenplay_docx_importer.h>
 #include <business_layer/import/screenplay/screenplay_fdx_importer.h>
 #include <business_layer/import/screenplay/screenplay_fountain_importer.h>
 #include <business_layer/import/screenplay/screenplay_import_options.h>
@@ -226,7 +226,7 @@ void ImportManager::Implementation::importScreenplay(
             importer.reset(new BusinessLayer::ScreenplayTrelbyImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())
                    || importFilePath.endsWith(ExtensionHelper::openDocumentXml())) {
-            importer.reset(new BusinessLayer::ScreenplayDocumentImporter);
+            importer.reset(new BusinessLayer::ScreenplayDocxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::celtx())) {
             importer.reset(new BusinessLayer::ScreenplayCeltxImporter);
         } else if (importFilePath.endsWith(ExtensionHelper::fountain())
