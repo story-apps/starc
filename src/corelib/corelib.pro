@@ -217,6 +217,7 @@ SOURCES += \
     business_layer/export/stageplay/stageplay_pdf_exporter.cpp \
     business_layer/import/abstract_fountain_importer.cpp \
     business_layer/import/abstract_markdown_importer.cpp \
+    business_layer/import/abstract_qtextdocument_importer.cpp \
     business_layer/import/audioplay/audioplay_fountain_importer.cpp \
     business_layer/import/comic_book/comic_book_fountain_importer.cpp \
     business_layer/import/novel/novel_markdown_importer.cpp \
@@ -565,6 +566,7 @@ HEADERS += \
     business_layer/import/abstract_fountain_importer.h \
     business_layer/import/abstract_importer.h \
     business_layer/import/abstract_markdown_importer.h \
+    business_layer/import/abstract_qtextdocument_importer.h \
     business_layer/import/audioplay/abstract_audioplay_importer.h \
     business_layer/import/audioplay/audioplay_fountain_importer.h \
     business_layer/import/comic_book/abstract_comic_book_importer.h \
