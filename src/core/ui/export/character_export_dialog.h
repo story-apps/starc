@@ -1,57 +1,28 @@
 #pragma once
 
-#include <ui/widgets/dialog/abstract_dialog.h>
+#include "document_export_dialog.h"
 
-
-namespace BusinessLayer {
-struct CharacterExportOptions;
-}
+#include <business_layer/export/characters/character_export_options.h>
 
 namespace Ui {
 
 /**
- * @brief Диалог настройки параметров экспорта
+ * @brief Диалог настройки параметров экспорта персонажа
  */
-class CharacterExportDialog : public AbstractDialog
+class CharacterExportDialog : public DocumentExportDialog
 {
     Q_OBJECT
 
 public:
-    explicit CharacterExportDialog(QWidget* _parent = nullptr);
+    explicit CharacterExportDialog(const QString& _uuidKey, QWidget* _parent = nullptr);
     ~CharacterExportDialog() override;
 
     /**
      * @brief Получить опции экспорта
      */
-    BusinessLayer::CharacterExportOptions exportOptions() const;
-
-    /**
-     * @brief Нужно ли открыть экспортированный документ после экспорта
-     */
-    bool openDocumentAfterExport() const;
-
-signals:
-    /**
-     * @brief Пользователь хочет экспортировать документ с заданными параметрами
-     */
-    void exportRequested();
-
-    /**
-     * @brief Пользователь передумал экспортировать данные
-     */
-    void canceled();
+    BusinessLayer::CharacterExportOptions& exportOptions() const override;
 
 protected:
-    /**
-     * @brief Определим виджет, который необходимо сфокусировать после отображения диалога
-     */
-    QWidget* focusedWidgetAfterShow() const override;
-
-    /**
-     * @brief Опеределим последний фокусируемый виджет в диалоге
-     */
-    QWidget* lastFocusableWidget() const override;
-
     /**
      * @brief Обновить переводы
      */

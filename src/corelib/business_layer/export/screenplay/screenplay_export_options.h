@@ -4,7 +4,17 @@
 
 namespace BusinessLayer {
 
+/**
+ * @brief Опции экспорта сценария
+ */
 struct CORE_LIBRARY_EXPORT ScreenplayExportOptions : public ExportOptions {
+
+    ScreenplayExportOptions() = default;
+    ScreenplayExportOptions(const ExportOptions& _other)
+    {
+        ExportOptions::copy(&_other, this);
+    }
+
     /**
      * @brief Печатать поэпизодник
      */

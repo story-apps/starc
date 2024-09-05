@@ -4,7 +4,17 @@
 
 namespace BusinessLayer {
 
+/**
+ * @brief Опции экспорта романа
+ */
 struct CORE_LIBRARY_EXPORT NovelExportOptions : public ExportOptions {
+
+    NovelExportOptions() = default;
+    NovelExportOptions(const ExportOptions& _other)
+    {
+        ExportOptions::copy(&_other, this);
+    }
+
     /**
      * @brief Печатать план
      */

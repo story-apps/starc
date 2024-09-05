@@ -1,9 +1,8 @@
 #include "locations_exporter.h"
 
-#include "locations_export_options.h"
-
 #include <business_layer/document/simple_text/simple_text_document.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/export/export_options.h>
 #include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/locations/locations_model.h>
 #include <business_layer/templates/simple_text_template.h>
@@ -87,14 +86,14 @@ TextDocument* LocationsExporter::prepareDocument(AbstractModel* _model,
         return format;
     };
 
-    const auto& exportOptions = static_cast<const LocationsExportOptions&>(_exportOptions);
+    const auto& exportOptions = static_cast<const DocumentsExportOptions&>(_exportOptions);
 
     TextCursor cursor(textDocument);
     int locationStartPosition = 0;
     int locationEndPosition = 0;
     for (int index = 0; index < locations->rowCount(); ++index) {
         auto location = locations->location(index);
-        if (!exportOptions.locations.contains(location->name())) {
+        if (!exportOptions.documents.contains(location->name())) {
             continue;
         }
 

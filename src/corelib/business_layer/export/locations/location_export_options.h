@@ -4,12 +4,16 @@
 
 namespace BusinessLayer {
 
-struct CORE_LIBRARY_EXPORT LocationExportOptions : public ExportOptions {
-    /**
-     * @brief Печатать фотографии
-     */
-    bool includeMainPhoto = true;
-    bool includeAdditionalPhotos = false;
+/**
+ * @brief Опции экспорта локации
+ */
+struct CORE_LIBRARY_EXPORT LocationExportOptions : public DocumentExportOptions {
+
+    LocationExportOptions() = default;
+    LocationExportOptions(const DocumentExportOptions& _other)
+    {
+        DocumentExportOptions::copy(&_other, this);
+    }
 
     /**
      * @brief Печатать дополнительные блоки данных о локации

@@ -1,57 +1,28 @@
 #pragma once
 
-#include <ui/widgets/dialog/abstract_dialog.h>
+#include "document_export_dialog.h"
 
-
-namespace BusinessLayer {
-struct LocationExportOptions;
-}
+#include <business_layer/export/locations/location_export_options.h>
 
 namespace Ui {
 
 /**
- * @brief Диалог настройки параметров экспорта
+ * @brief Диалог настройки параметров экспорта локации
  */
-class LocationExportDialog : public AbstractDialog
+class LocationExportDialog : public DocumentExportDialog
 {
     Q_OBJECT
 
 public:
-    explicit LocationExportDialog(QWidget* _parent = nullptr);
+    explicit LocationExportDialog(const QString& _uuidKey, QWidget* _parent = nullptr);
     ~LocationExportDialog() override;
 
     /**
      * @brief Получить опции экспорта
      */
-    BusinessLayer::LocationExportOptions exportOptions() const;
-
-    /**
-     * @brief Нужно ли открыть экспортированный документ после экспорта
-     */
-    bool openDocumentAfterExport() const;
-
-signals:
-    /**
-     * @brief Пользователь хочет экспортировать документ с заданными параметрами
-     */
-    void exportRequested();
-
-    /**
-     * @brief Пользователь передумал экспортировать данные
-     */
-    void canceled();
+    BusinessLayer::LocationExportOptions& exportOptions() const override;
 
 protected:
-    /**
-     * @brief Определим виджет, который необходимо сфокусировать после отображения диалога
-     */
-    QWidget* focusedWidgetAfterShow() const override;
-
-    /**
-     * @brief Опеределим последний фокусируемый виджет в диалоге
-     */
-    QWidget* lastFocusableWidget() const override;
-
     /**
      * @brief Обновить переводы
      */

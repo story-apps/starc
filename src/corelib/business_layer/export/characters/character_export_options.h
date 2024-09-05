@@ -4,12 +4,16 @@
 
 namespace BusinessLayer {
 
-struct CORE_LIBRARY_EXPORT CharacterExportOptions : public ExportOptions {
-    /**
-     * @brief Печатать фотографии
-     */
-    bool includeMainPhoto = true;
-    bool includeAdditionalPhotos = false;
+/**
+ * @brief Опции экспорта персонажа
+ */
+struct CORE_LIBRARY_EXPORT CharacterExportOptions : public DocumentExportOptions {
+
+    CharacterExportOptions() = default;
+    CharacterExportOptions(const DocumentExportOptions& _other)
+    {
+        DocumentExportOptions::copy(&_other, this);
+    }
 
     /**
      * @brief Печатать дополнительные блоки данных о персонаже

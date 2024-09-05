@@ -19,7 +19,6 @@
 #include <business_layer/export/locations/location_export_options.h>
 #include <business_layer/export/locations/location_pdf_exporter.h>
 #include <business_layer/export/locations/locations_docx_exporter.h>
-#include <business_layer/export/locations/locations_export_options.h>
 #include <business_layer/export/locations/locations_pdf_exporter.h>
 #include <business_layer/export/novel/novel_docx_exporter.h>
 #include <business_layer/export/novel/novel_export_options.h>
@@ -143,7 +142,8 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
     using namespace BusinessLayer;
 
     if (screenplayExportDialog == nullptr) {
-        screenplayExportDialog = new Ui::ScreenplayExportDialog(topLevelWidget);
+        screenplayExportDialog
+            = new Ui::ScreenplayExportDialog(_model->document()->uuid().toString(), topLevelWidget);
         connect(
             screenplayExportDialog, &Ui::ScreenplayExportDialog::exportRequested,
             screenplayExportDialog, [this, _model] {
@@ -332,7 +332,8 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
     using namespace BusinessLayer;
 
     if (comicBookExportDialog == nullptr) {
-        comicBookExportDialog = new Ui::ComicBookExportDialog(topLevelWidget);
+        comicBookExportDialog
+            = new Ui::ComicBookExportDialog(_model->document()->uuid().toString(), topLevelWidget);
         connect(
             comicBookExportDialog, &Ui::ComicBookExportDialog::exportRequested,
             comicBookExportDialog, [this, _model] {
@@ -496,7 +497,8 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
     using namespace BusinessLayer;
 
     if (audioplayExportDialog == nullptr) {
-        audioplayExportDialog = new Ui::AudioplayExportDialog(topLevelWidget);
+        audioplayExportDialog
+            = new Ui::AudioplayExportDialog(_model->document()->uuid().toString(), topLevelWidget);
         connect(
             audioplayExportDialog, &Ui::AudioplayExportDialog::exportRequested,
             audioplayExportDialog, [this, _model] {
@@ -665,7 +667,8 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
     using namespace BusinessLayer;
 
     if (stageplayExportDialog == nullptr) {
-        stageplayExportDialog = new Ui::StageplayExportDialog(topLevelWidget);
+        stageplayExportDialog
+            = new Ui::StageplayExportDialog(_model->document()->uuid().toString(), topLevelWidget);
         connect(
             stageplayExportDialog, &Ui::StageplayExportDialog::exportRequested,
             stageplayExportDialog, [this, _model] {
@@ -833,7 +836,8 @@ void ExportManager::Implementation::exportNovel(BusinessLayer::AbstractModel* _m
     using namespace BusinessLayer;
 
     if (novelExportDialog == nullptr) {
-        novelExportDialog = new Ui::NovelExportDialog(topLevelWidget);
+        novelExportDialog
+            = new Ui::NovelExportDialog(_model->document()->uuid().toString(), topLevelWidget);
         connect(
             novelExportDialog, &Ui::NovelExportDialog::exportRequested, novelExportDialog,
             [this, _model] {
@@ -983,7 +987,8 @@ void ExportManager::Implementation::exportSimpleText(BusinessLayer::AbstractMode
     using namespace BusinessLayer;
 
     if (simpleTextExportDialog == nullptr) {
-        simpleTextExportDialog = new Ui::SimpleTextExportDialog(topLevelWidget);
+        simpleTextExportDialog
+            = new Ui::SimpleTextExportDialog(_model->document()->uuid().toString(), topLevelWidget);
         connect(
             simpleTextExportDialog, &Ui::SimpleTextExportDialog::exportRequested,
             simpleTextExportDialog, [this, _model] {
@@ -1131,7 +1136,8 @@ void ExportManager::Implementation::exportCharacter(BusinessLayer::AbstractModel
     using namespace BusinessLayer;
 
     if (characterExportDialog == nullptr) {
-        characterExportDialog = new Ui::CharacterExportDialog(topLevelWidget);
+        characterExportDialog
+            = new Ui::CharacterExportDialog(_model->document()->uuid().toString(), topLevelWidget);
         connect(
             characterExportDialog, &Ui::CharacterExportDialog::exportRequested,
             characterExportDialog, [this, _model] {
@@ -1263,7 +1269,8 @@ void ExportManager::Implementation::exportCharacters(BusinessLayer::AbstractMode
     using namespace BusinessLayer;
 
     if (charactersExportDialog == nullptr) {
-        charactersExportDialog = new Ui::CharactersExportDialog(topLevelWidget);
+        charactersExportDialog
+            = new Ui::CharactersExportDialog(_model->document()->uuid().toString(), topLevelWidget);
         connect(
             charactersExportDialog, &Ui::CharactersExportDialog::exportRequested,
             charactersExportDialog, [this, _model] {
@@ -1396,7 +1403,8 @@ void ExportManager::Implementation::exportLocation(BusinessLayer::AbstractModel*
     using namespace BusinessLayer;
 
     if (locationExportDialog == nullptr) {
-        locationExportDialog = new Ui::LocationExportDialog(topLevelWidget);
+        locationExportDialog
+            = new Ui::LocationExportDialog(_model->document()->uuid().toString(), topLevelWidget);
         connect(
             locationExportDialog, &Ui::LocationExportDialog::exportRequested, locationExportDialog,
             [this, _model] {
@@ -1528,7 +1536,8 @@ void ExportManager::Implementation::exportLocations(BusinessLayer::AbstractModel
     using namespace BusinessLayer;
 
     if (locationsExportDialog == nullptr) {
-        locationsExportDialog = new Ui::LocationsExportDialog(topLevelWidget);
+        locationsExportDialog
+            = new Ui::LocationsExportDialog(_model->document()->uuid().toString(), topLevelWidget);
         connect(
             locationsExportDialog, &Ui::LocationsExportDialog::exportRequested,
             locationsExportDialog, [this, _model] {
