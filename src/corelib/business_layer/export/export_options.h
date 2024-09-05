@@ -23,6 +23,19 @@ enum class ExportFileFormat {
  * @brief Опции экспорта
  */
 struct CORE_LIBRARY_EXPORT ExportOptions {
+
+    ExportOptions() = default;
+    ExportOptions(const ExportOptions& _other)
+    {
+        copy(&_other, this);
+    }
+
+    /**
+     * @brief Скопировать опции
+     * @note Таким образом будем обходить внутреннюю ошибку g++ при инициализации наследников
+     */
+    static void copy(const ExportOptions* _source, ExportOptions* _dest);
+
     /**
      * @brief Путь к файлу
      */
@@ -113,5 +126,66 @@ struct CORE_LIBRARY_EXPORT ExportOptions {
      */
     bool printFooterOnTitlePage = false;
 };
+
+
+/**
+ * @brief Опции экспорта документов
+ */
+struct CORE_LIBRARY_EXPORT DocumentsExportOptions : public ExportOptions {
+
+    DocumentsExportOptions() = default;
+    DocumentsExportOptions(const ExportOptions& _other)
+    {
+        ExportOptions::copy(&_other, this);
+    }
+
+    /**
+     * @brief Скопировать опции
+     * @note Таким образом будем обходить внутреннюю ошибку g++ при инициализации наследников
+     */
+    static void copy(const DocumentsExportOptions* _source, DocumentsExportOptions* _dest);
+
+    /**
+     * @brief Печатать фотографии
+     */
+    bool includeMainPhoto = true;
+
+    /**
+     * @brief Список документов для выгрузки
+     */
+    QVector<QString> documents;
+
+    /**
+     * @brief Печатать конкретные параметры документов
+     */
+    bool includeStoryRole = true;
+    bool includeOneLineDescription = false;
+    bool includeLongDescription = false;
+};
+
+
+/**
+ * @brief Опции экспорта документа
+ */
+struct CORE_LIBRARY_EXPORT DocumentExportOptions : public ExportOptions {
+
+    DocumentExportOptions() = default;
+    DocumentExportOptions(const ExportOptions& _other)
+    {
+        ExportOptions::copy(&_other, this);
+    }
+
+    /**
+     * @brief Скопировать опции
+     * @note Таким образом будем обходить внутреннюю ошибку g++ при инициализации наследников
+     */
+    static void copy(const DocumentExportOptions* _source, DocumentExportOptions* _dest);
+    /**
+     * @brief Печатать фотографии
+     */
+    bool includeMainPhoto = true;
+    bool includeAdditionalPhotos = false;
+};
+
 
 } // namespace BusinessLayer

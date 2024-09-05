@@ -94,7 +94,7 @@ TextDocument* CharactersExporter::prepareDocument(AbstractModel* _model,
     int characterEndPosition = 0;
     for (int index = 0; index < characters->rowCount(); ++index) {
         auto character = characters->character(index);
-        if (!exportOptions.characters.contains(character->name())) {
+        if (!exportOptions.documents.contains(character->name())) {
             continue;
         }
 

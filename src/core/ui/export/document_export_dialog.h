@@ -1,25 +1,27 @@
 #pragma once
 
-#include <business_layer/export/audioplay/audioplay_export_options.h>
-#include <ui/export/script_export_dialog.h>
+#include "abstract_export_dialog.h"
+
+#include <business_layer/export/export_options.h>
 
 namespace Ui {
 
 /**
- * @brief Диалог настройки параметров экспорта аудиопьесы
+ * @brief Диалог настройки параметров экспорта документа
  */
-class AudioplayExportDialog : public ScriptExportDialog
+class DocumentExportDialog : public AbstractExportDialog
 {
     Q_OBJECT
 
 public:
-    explicit AudioplayExportDialog(const QString& _uuidKey, QWidget* _parent = nullptr);
-    ~AudioplayExportDialog() override;
+    explicit DocumentExportDialog(const QVector<BusinessLayer::ExportFileFormat>& _formats,
+                                  const QString& _uuidKey, QWidget* _parent = nullptr);
+    ~DocumentExportDialog() override;
 
     /**
      * @brief Получить опции экспорта
      */
-    BusinessLayer::AudioplayExportOptions& exportOptions() const override;
+    BusinessLayer::DocumentExportOptions& exportOptions() const override;
 
 protected:
     /**

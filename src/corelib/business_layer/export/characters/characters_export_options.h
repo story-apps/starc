@@ -4,25 +4,22 @@
 
 namespace BusinessLayer {
 
-struct CORE_LIBRARY_EXPORT CharactersExportOptions : public ExportOptions {
-    /**
-     * @brief Печатать фотографии
-     */
-    bool includeMainPhoto = true;
+/**
+ * @brief Опции экспорта персонажей
+ */
+struct CORE_LIBRARY_EXPORT CharactersExportOptions : public DocumentsExportOptions {
 
-    /**
-     * @brief Список персонажей для выгрузки
-     */
-    QVector<QString> characters;
+    CharactersExportOptions() = default;
+    CharactersExportOptions(const DocumentsExportOptions& _other)
+    {
+        DocumentsExportOptions::copy(&_other, this);
+    }
 
     /**
      * @brief Печатать конкретные параметры персонажей
      */
-    bool includeStoryRole = true;
     bool includeAge = false;
     bool includeGender = false;
-    bool includeOneLineDescription = false;
-    bool includeLongDescription = false;
 };
 
 } // namespace BusinessLayer

@@ -1,56 +1,27 @@
 #pragma once
 
-#include <ui/widgets/dialog/abstract_dialog.h>
-
-namespace BusinessLayer {
-struct ScreenplayExportOptions;
-}
+#include <business_layer/export/screenplay/screenplay_export_options.h>
+#include <ui/export/script_export_dialog.h>
 
 namespace Ui {
 
 /**
- * @brief Диалог настройки параметров экспорта
+ * @brief Диалог настройки параметров экспорта сценария
  */
-class ScreenplayExportDialog : public AbstractDialog
+class ScreenplayExportDialog : public ScriptExportDialog
 {
     Q_OBJECT
 
 public:
-    explicit ScreenplayExportDialog(QWidget* _parent = nullptr);
+    explicit ScreenplayExportDialog(const QString& _uuidKey, QWidget* _parent = nullptr);
     ~ScreenplayExportDialog() override;
 
     /**
      * @brief Получить опции экспорта
      */
-    BusinessLayer::ScreenplayExportOptions exportOptions() const;
-
-    /**
-     * @brief Нужно ли открыть экспортированный документ после экспорта
-     */
-    bool openDocumentAfterExport() const;
-
-signals:
-    /**
-     * @brief Пользователь хочет экспортировать сценарий с заданными параметрами
-     */
-    void exportRequested();
-
-    /**
-     * @brief Пользователь передумал импортировать данные
-     */
-    void canceled();
+    BusinessLayer::ScreenplayExportOptions& exportOptions() const override;
 
 protected:
-    /**
-     * @brief Определим виджет, который необходимо сфокусировать после отображения диалога
-     */
-    QWidget* focusedWidgetAfterShow() const override;
-
-    /**
-     * @brief Опеределим последний фокусируемый виджет в диалоге
-     */
-    QWidget* lastFocusableWidget() const override;
-
     /**
      * @brief Обновить переводы
      */
@@ -60,6 +31,31 @@ protected:
      * @brief Обновляем UI при изменении дизайн системы
      */
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
+
+    /**
+     * @brief Обновить видимость параметров
+     */
+    void updateParametersVisibility() const override;
+
+    /**
+     * @brief Следует ли показывать праметры справа
+     */
+    bool isRightLayoutVisible() const override;
+
+    /**
+     * @brief Обработать изменение параметра "Экспортировать текст сценария"
+     */
+    void processIncludeTextChanged(bool _checked) const override;
+
+    /**
+     * @brief Должа ли быть активна кнопка "Экспортировать"
+     */
+    bool isExportEnabled() const override;
+
+    /**
+     * @brief Стоит ли экспортировать текст документа
+     */
+    bool shouldIncludeText() const override;
 
 private:
     class Implementation;

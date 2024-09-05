@@ -86,14 +86,18 @@ SOURCES += \
     ui/application_style.cpp \
     ui/application_view.cpp \
     ui/crash_report_dialog.cpp \
+    ui/export/abstract_export_dialog.cpp \
     ui/export/audioplay_export_dialog.cpp \
     ui/export/character_export_dialog.cpp \
     ui/export/characters_export_dialog.cpp \
     ui/export/comic_book_export_dialog.cpp \
+    ui/export/document_export_dialog.cpp \
+    ui/export/documents_export_dialog.cpp \
     ui/export/location_export_dialog.cpp \
     ui/export/locations_export_dialog.cpp \
     ui/export/novel_export_dialog.cpp \
     ui/export/screenplay_export_dialog.cpp \
+    ui/export/script_export_dialog.cpp \
     ui/export/simple_text_export_dialog.cpp \
     ui/export/stageplay_export_dialog.cpp \
     ui/import/import_dialog.cpp \
@@ -177,14 +181,18 @@ HEADERS += \
     ui/application_style.h \
     ui/application_view.h \
     ui/crash_report_dialog.h \
+    ui/export/abstract_export_dialog.h \
     ui/export/audioplay_export_dialog.h \
     ui/export/character_export_dialog.h \
     ui/export/characters_export_dialog.h \
     ui/export/comic_book_export_dialog.h \
+    ui/export/document_export_dialog.h \
+    ui/export/documents_export_dialog.h \
     ui/export/location_export_dialog.h \
     ui/export/locations_export_dialog.h \
     ui/export/novel_export_dialog.h \
     ui/export/screenplay_export_dialog.h \
+    ui/export/script_export_dialog.h \
     ui/export/simple_text_export_dialog.h \
     ui/export/stageplay_export_dialog.h \
     ui/import/import_dialog.h \
