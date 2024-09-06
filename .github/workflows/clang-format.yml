@@ -24,7 +24,7 @@ jobs:
       uses: actions/checkout@master
 
     - name: Running clang-format
-      uses: DoozyX/clang-format-lint-action@v0.12
+      uses: DoozyX/clang-format-lint-action@v0.18.1
       with:
         source: 'src'
         exclude: 'src/3rd_party src/cloud src/corelib/utils/3rd_party'
