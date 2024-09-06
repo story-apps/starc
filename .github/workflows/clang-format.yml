@@ -22,14 +22,9 @@ jobs:
     - name: Checkout Sources for pull request event
       if: ${{ github.event_name == 'pull_request' }}
       uses: actions/checkout@master
-      
-    - name: Install dependencies
-      shell: bash
-      run: |
-        pip install setuptools
 
     - name: Running clang-format
-      uses: DoozyX/clang-format-lint-action@v0.12
+      uses: DoozyX/clang-format-lint-action@v0.18.1
       with:
         source: 'src'
         exclude: 'src/3rd_party src/cloud src/corelib/utils/3rd_party'
