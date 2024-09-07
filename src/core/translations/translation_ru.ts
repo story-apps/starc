@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ru">
 <context>
     <name>AppBar</name>
     <message>
@@ -432,11 +430,7 @@
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="413"/>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="578"/>
         <source>Passed %n time(s)</source>
-        <translation>
-            <numerusform>Проходит %n раз</numerusform>
-            <numerusform>Проходит %n раза</numerusform>
-            <numerusform>Проходит %n раз</numerusform>
-        </translation>
+        <translation><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раза</numerusform><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раз</numerusform></translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="573"/>
@@ -1828,11 +1822,7 @@
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="461"/>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="626"/>
         <source>Passed %n time(s)</source>
-        <translation>
-            <numerusform>Проходит %n раз</numerusform>
-            <numerusform>Проходит %n раза</numerusform>
-            <numerusform>Проходит %n раз</numerusform>
-        </translation>
+        <translation><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раза</numerusform><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раз</numerusform></translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="631"/>
@@ -2504,17 +2494,17 @@
 <context>
     <name>ColorPicker</name>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="262"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="274"/>
         <source>Color hex code</source>
         <translation>HEX-код цвета</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="263"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="275"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="264"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="276"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
@@ -2856,70 +2846,92 @@
 <context>
     <name>ManagementLayer::AccountManager</name>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="144"/>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="182"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="151"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="189"/>
         <source>The team should have a name</source>
         <translation>Необходимо задать название команды</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="205"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="212"/>
         <source>Do you really want to remove this team?</source>
         <translation>Вы действительно хотите удалить данную команду?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="206"/>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="231"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="213"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="238"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="207"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="214"/>
         <source>Yes, remove</source>
         <translation>Да, удалить</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="230"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="237"/>
         <source>Do you really want to leave this team?</source>
         <translation>Вы действительно хотите выйти из данной команды?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="232"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="239"/>
         <source>Yes, leave</source>
         <translation>Да, выйти</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="536"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="582"/>
         <source>Try PRO version for free</source>
         <translation>Попробовать PRO версию бесплатно</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="537"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="583"/>
         <source>You can try all the features of the PRO version during 30 days for free. After trial period, you can continue to use the PRO version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation>Вы можете бесплатно активировать PRO версию на 30 дней. После, вы сможете продолжить использование PRO версии, оплатив её. А если нет, то ваш аккаунт будет автоматически переведён на FREE версию.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="540"/>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="623"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="586"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="708"/>
         <source>Continue with FREE version</source>
         <translation>Остаться на FREE версии</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="619"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="616"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="643"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="670"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="757"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="801"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="836"/>
+        <source>You have an additional %1% discount due to the promo code activation</source>
+        <translation>У вас есть дополнительная скидка %1% благодаря активированному промо коду</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="704"/>
         <source>Try CLOUD version for free</source>
         <translation>Попробовать CLOUD версию бесплатно</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="620"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="705"/>
         <source>You can try all the features of the CLOUD version during 30 days for free. After trial period, you can continue to use the CLOUD version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation>Вы можете бесплатно активировать CLOUD версию на 30 дней. После, вы сможете продолжить использование CLOUD версии, оплатив её. А если нет, то ваш аккаунт будет автоматически переведён на FREE версию.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="624"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="709"/>
         <source>Activate CLOUD</source>
         <translation>Активировать CLOUD</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="683"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="749"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="793"/>
+        <source>You have an additional 20% discount due to PRO lifetime subscription purchase, and %1% discount due to the promo code activation</source>
+        <translation>У вас есть дополнительная скидка 20% благодаря покупке версии PRO навсегда, и %1% благодаря активированному промо коду</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="753"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="797"/>
+        <source>You have an additional 20% discount due to the purchasing of the PRO lifetime subscription</source>
+        <translation>У вас есть дополнительная скидка 20% благодаря покупке версии PRO навсегда</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="841"/>
         <source>Credits are our internal currency. They are used for AI tools, such as text generation.
 
 1 credit equals 1000 words processed by AI.
@@ -2930,7 +2942,7 @@
 1 кредит равен 10 изображениям созданным ИИ.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="541"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="587"/>
         <source>Activate PRO</source>
         <translation>Активировать PRO</translation>
     </message>
@@ -3081,23 +3093,28 @@
         <translation>Переключить на .STARC</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3235"/>
+        <location filename="../management_layer/application_manager.cpp" line="2963"/>
+        <source>Maximum active sessions reached. To authorize from a new device, end one of the current sessions.</source>
+        <translation>Достигнуто максимальное количество активных сеансов. Чтобы авторизоваться с нового устройства, завершите один из текущих сеансов.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="3246"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>У владельца проекта закончилась подписка на облачный сервис. Вы сможете продолжить работу с проектом, как только она будет возобновлена.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3479"/>
+        <location filename="../management_layer/application_manager.cpp" line="3490"/>
         <source>Novel</source>
         <translation>Роман</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3492"/>
+        <location filename="../management_layer/application_manager.cpp" line="3503"/>
         <source>Screenplay</source>
         <translation>Сценарий</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3216"/>
-        <location filename="../management_layer/application_manager.cpp" line="3237"/>
+        <location filename="../management_layer/application_manager.cpp" line="3227"/>
+        <location filename="../management_layer/application_manager.cpp" line="3248"/>
         <source>Continue offline</source>
         <translation>Продолжить в офлайн</translation>
     </message>
@@ -3113,12 +3130,12 @@
         <translation>Загрузка необходимых шрифтов</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3214"/>
+        <location filename="../management_layer/application_manager.cpp" line="3225"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>Подписка на облачный сервис закончилась. Активируйте подписку, чтобы продолжить работу с проектом.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3217"/>
+        <location filename="../management_layer/application_manager.cpp" line="3228"/>
         <source>Renew subscription</source>
         <translation>Продлите подписку</translation>
     </message>
@@ -3286,153 +3303,146 @@
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="461"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="462"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation>Промокод с %1% скидкой активирован и будет применён к следующему платежу.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="470"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="471"/>
         <source>PRO version subscription activated for %n month(s).</source>
-        <translation>
-            <numerusform>Подписка на PRO версию активирована на %n месяц.</numerusform>
-            <numerusform>Подписка на PRO версию активирована на %n месяца.</numerusform>
-            <numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform>
-        </translation>
+        <translation><numerusform>Подписка на PRO версию активирована на %n месяц.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяца.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform><numerusform>Подписка на PRO версию активирована на %n месяцев.</numerusform></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="475"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="476"/>
         <source>PRO version lifetime access granted.</source>
         <translation>Вам предоставлен пожизненный доступ к PRO версии.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="479"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="480"/>
         <source>CLOUD version subscription activated for %n month(s).</source>
-        <translation>
-            <numerusform>Подписка на CLOUD версию активирована на %n месяц.</numerusform>
-            <numerusform>Подписка на CLOUD версию активирована на %n месяца.</numerusform>
-            <numerusform>Подписка на CLOUD версию активирована на %n месяцев.</numerusform>
-        </translation>
+        <translation><numerusform>Подписка на CLOUD версию активирована на %n месяц.</numerusform><numerusform>Подписка на CLOUD версию активирована на %n месяца.</numerusform><numerusform>Подписка на CLOUD версию активирована на %n месяцев.</numerusform><numerusform>Подписка на CLOUD версию активирована на %n месяцев.</numerusform></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="484"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="485"/>
         <source>CLOUD version lifetime access granted.</source>
         <translation>Вам предоставлен пожизненный доступ к CLOUD версии.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="492"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="493"/>
         <source>%n credits were added to your balance.</source>
-        <translation>
-            <numerusform>Счёт пополнен на %n кредит</numerusform>
-            <numerusform>Счёт пополнен на %n кредита</numerusform>
-            <numerusform>Счёт пополнен на %n кредитов</numerusform>
-        </translation>
+        <translation><numerusform>Счёт пополнен на %n кредит</numerusform><numerusform>Счёт пополнен на %n кредита</numerusform><numerusform>Счёт пополнен на %n кредитов</numerusform><numerusform>Счёт пополнен на %n кредитов</numerusform></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="693"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="507"/>
+        <source>The gift has been sent to the recipient&apos;s mailbox</source>
+        <translation>Подарок был отправлен на электронную почту получателя</translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="704"/>
         <source>Promocode is incorrect</source>
         <translation>Некорректный промокод</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="697"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="708"/>
         <source>Promocode expired</source>
         <translation>Срок годности промокода истёк</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="701"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="712"/>
         <source>Maximum number of promocode activations done</source>
         <translation>Количество доступных активаций промокода исчерпано</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="705"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="716"/>
         <source>Promocode already used</source>
         <translation>Промокод уже был активирован ранее</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="774"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="785"/>
         <source>CUT TO:</source>
         <translation>CUT TO:</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="790"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="801"/>
         <source>To use AI assistant, you need to replenish credits&apos; balance.</source>
         <translation>Чтобы использовать интеллектуального помощника, необходимо пополнить баланс кредитов.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="791"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="802"/>
         <source>Maybe later</source>
         <translation>В другой раз</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="792"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="803"/>
         <source>Replenish</source>
         <translation>Пополнить</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1348"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1381"/>
         <source>Rephrasing text</source>
         <translation>Перефразирование текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1459"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1492"/>
         <source>Expanding text</source>
         <translation>Расширение текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1568"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1601"/>
         <source>Shortening text</source>
         <translation>Сокращение текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1677"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1710"/>
         <source>Inserting text</source>
         <translation>Вставка текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1786"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1819"/>
         <source>Summarizing text</source>
         <translation>Подытоживание текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1895"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1928"/>
         <source>Translating text</source>
         <translation>Перевод текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1940"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2057"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1973"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2090"/>
         <source>Generating synopsis (scene %1 from %2)</source>
         <translation>Генерация синопсиса (сцена %1 из %2)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2115"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2234"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2148"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2267"/>
         <source>Generating novel (scene %1 from %2)</source>
         <translation>Генерация романа (сцена %1 из %2)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2288"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2406"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2321"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2439"/>
         <source>Generating script (chapter %1 from %2)</source>
         <translation>Генерация сценария (глава %1 из %2)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="772"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="783"/>
         <source>INT.</source>
         <translation>ИНТ.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="773"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="784"/>
         <source>EXT.</source>
         <translation>НАТ.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2454"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2610"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2487"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2643"/>
         <source>Processing text</source>
         <translation>Обработка текста</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2563"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2596"/>
         <source>Generating image</source>
         <translation>Создание изображения</translation>
     </message>
@@ -3561,17 +3571,17 @@
 <context>
     <name>ManagementLayer::ImportManager</name>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="69"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="70"/>
         <source>File format not supported</source>
         <translation>Формат файла не поддерживается</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="70"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="71"/>
         <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
         <translation>Импорт файлов в формате DOC не поддерживается. Вам нужно сохранить файл в формате DOCX и повторить импорт.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="315"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="318"/>
         <source>Choose the file to import</source>
         <translation>Выберите файл для импорта</translation>
     </message>
@@ -4632,11 +4642,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="658"/>
         <source>Do you really want to remove element &quot;%1&quot; from entire screenplay? It participates in %n scene(s).</source>
-        <translation>
-            <numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сцене.</numerusform>
-            <numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сценах.</numerusform>
-            <numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сценах.</numerusform>
-        </translation>
+        <translation><numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сцене.</numerusform><numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сценах.</numerusform><numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сценах.</numerusform><numerusform>Вы действительно хотите удалить ресурс &quot;%1&quot; из всего сценария? Он участвует в %n сценах.</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_breakdown_structure/screenplay_breakdown_structure_manager.cpp" line="514"/>
@@ -6207,7 +6213,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="339"/>
         <source>When I say work I only mean writing. Everything else is just odd jobs.</source>
         <extracomment>Cite of the Margaret Laurence</extracomment>
-        <translation>Когда я говорю работа , я имею в виду только писательство. Все остальное - просто случайные подработки.</translation>
+        <translation>Когда я говорю работа, я имею в виду только писательство. Все остальное - просто случайные подработки.</translation>
     </message>
     <message>
         <location filename="../../corelib/utils/helpers/quotes_generator.cpp" line="343"/>
@@ -7092,32 +7098,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AboutApplicationDialog</name>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="155"/>
+        <location filename="../ui/about_application_dialog.cpp" line="158"/>
         <source>version</source>
         <translation>версия</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="157"/>
+        <location filename="../ui/about_application_dialog.cpp" line="162"/>
         <source>Designed, coded and crafted with love at the</source>
         <translation>Спроектировано и разработано с любовью в</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="159"/>
+        <location filename="../ui/about_application_dialog.cpp" line="166"/>
         <source>company</source>
         <translation>company</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="160"/>
+        <location filename="../ui/about_application_dialog.cpp" line="167"/>
         <source>The Logline Generator is powered by</source>
         <translation>Генератор логлайна заряжен в</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="164"/>
+        <location filename="../ui/about_application_dialog.cpp" line="171"/>
         <source>Starc is being developed with strong authors’ involvement and support so we won’t waste the app performance on the features you don’t need.</source>
         <translation>Starc создан в тесном сотрудничестве с авторами. Мы объединили современные технологии и только нужные функции, чтобы создать приложение, которым действительно удобно пользоваться.</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="167"/>
+        <location filename="../ui/about_application_dialog.cpp" line="174"/>
         <source>Feel free to contact us at any point of your creative journey to share your thoughts about the app, suggest ideas and report issues you met.</source>
         <translation>Если у вас есть идеи, как можно улучшить приложение, замечания, или вы столкнулись с проблемой, пишите нам и мы с удовольствием ответим на ваше письмо.</translation>
     </message>
@@ -7148,144 +7154,135 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AccountNavigator</name>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="321"/>
-        <location filename="../ui/account/account_navigator.cpp" line="337"/>
-        <location filename="../ui/account/account_navigator.cpp" line="353"/>
-        <location filename="../ui/account/account_navigator.cpp" line="719"/>
+        <location filename="../ui/account/account_navigator.cpp" line="328"/>
+        <location filename="../ui/account/account_navigator.cpp" line="344"/>
+        <location filename="../ui/account/account_navigator.cpp" line="360"/>
+        <location filename="../ui/account/account_navigator.cpp" line="780"/>
         <source>Lifetime access</source>
         <translation>Доступно навсегда</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="322"/>
-        <location filename="../ui/account/account_navigator.cpp" line="338"/>
-        <location filename="../ui/account/account_navigator.cpp" line="354"/>
+        <location filename="../ui/account/account_navigator.cpp" line="329"/>
+        <location filename="../ui/account/account_navigator.cpp" line="345"/>
+        <location filename="../ui/account/account_navigator.cpp" line="361"/>
         <source>Active until %1</source>
         <translation>Активна до %1</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/account/account_navigator.cpp" line="360"/>
+        <location filename="../ui/account/account_navigator.cpp" line="367"/>
         <source>%n credits available</source>
-        <translation>
-            <numerusform>%n кредит доступен</numerusform>
-            <numerusform>%n кредита доступно</numerusform>
-            <numerusform>%n кредитов доступно</numerusform>
-        </translation>
+        <translation><numerusform>%n кредит доступен</numerusform><numerusform>%n кредита доступно</numerusform><numerusform>%n кредитов доступно</numerusform><numerusform>%n кредитов доступно</numerusform></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="361"/>
+        <location filename="../ui/account/account_navigator.cpp" line="368"/>
         <source>No credits available</source>
         <translation>Нет доступных кредитов</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="715"/>
+        <location filename="../ui/account/account_navigator.cpp" line="776"/>
         <source>Account</source>
         <translation>Аккаунт</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="716"/>
+        <location filename="../ui/account/account_navigator.cpp" line="777"/>
         <source>Subscription</source>
         <translation>Подписка</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="717"/>
+        <location filename="../ui/account/account_navigator.cpp" line="778"/>
         <source>Sessions</source>
         <translation>Сессии</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="718"/>
+        <location filename="../ui/account/account_navigator.cpp" line="779"/>
         <source>FREE version</source>
         <translation>FREE версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="720"/>
+        <location filename="../ui/account/account_navigator.cpp" line="781"/>
         <source>PRO version</source>
         <translation>PRO версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="722"/>
-        <location filename="../ui/account/account_navigator.cpp" line="727"/>
+        <location filename="../ui/account/account_navigator.cpp" line="783"/>
+        <location filename="../ui/account/account_navigator.cpp" line="787"/>
         <source>Try for free</source>
         <translation>Попробовать бесплатно</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="724"/>
-        <location filename="../ui/account/account_navigator.cpp" line="728"/>
+        <location filename="../ui/account/account_navigator.cpp" line="784"/>
+        <location filename="../ui/account/account_navigator.cpp" line="788"/>
         <source>Renew</source>
         <translation>Продлить</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="725"/>
+        <location filename="../ui/account/account_navigator.cpp" line="785"/>
         <source>CLOUD version</source>
         <translation>CLOUD версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="735"/>
+        <location filename="../ui/account/account_navigator.cpp" line="795"/>
         <source>Owner</source>
         <translation>Владелец</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="737"/>
+        <location filename="../ui/account/account_navigator.cpp" line="797"/>
         <source>No one team created yet, press &quot;Add team&quot; button for adding your first team</source>
         <translation>Вы ещё не создали ни одной команды. Нажмите кнопку &quot;Добавить команду&quot;, чтобы создать первую.</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="738"/>
+        <location filename="../ui/account/account_navigator.cpp" line="798"/>
         <source>Member</source>
         <translation>Участник</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="739"/>
+        <location filename="../ui/account/account_navigator.cpp" line="799"/>
         <source>You are not on any team</source>
         <translation>Вы не состоите ни в одной команде</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="740"/>
+        <location filename="../ui/account/account_navigator.cpp" line="800"/>
         <source>Add team</source>
         <translation>Добавить команду</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="741"/>
+        <location filename="../ui/account/account_navigator.cpp" line="801"/>
         <source>Edit team</source>
         <translation>Изменить команду</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="742"/>
+        <location filename="../ui/account/account_navigator.cpp" line="802"/>
         <source>Remove team</source>
         <translation>Удалить команду</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="743"/>
+        <location filename="../ui/account/account_navigator.cpp" line="803"/>
         <source>Exit team</source>
         <translation>Выйти из команды</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="723"/>
-        <source>Buy lifetime</source>
-        <translation>Купить навсегда</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_navigator.cpp" line="331"/>
-        <location filename="../ui/account/account_navigator.cpp" line="347"/>
+        <location filename="../ui/account/account_navigator.cpp" line="338"/>
+        <location filename="../ui/account/account_navigator.cpp" line="354"/>
         <source>Used %1 GB from %2 GB</source>
         <translation>Использовано %1 ГБ из %2 ГБ</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="729"/>
+        <location filename="../ui/account/account_navigator.cpp" line="789"/>
         <source>STUDIO version</source>
         <translation>STUDIO версия</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="731"/>
+        <location filename="../ui/account/account_navigator.cpp" line="791"/>
         <source>Credits for Ai tools</source>
         <translation>Кредиты для AI инструментов</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="732"/>
+        <location filename="../ui/account/account_navigator.cpp" line="792"/>
         <source>Buy credits</source>
         <translation>Купить кредиты</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="733"/>
+        <location filename="../ui/account/account_navigator.cpp" line="793"/>
         <source>Logout</source>
         <translation>Выйти</translation>
     </message>
@@ -7311,131 +7308,95 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AccountView</name>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="278"/>
+        <location filename="../ui/account/account_view.cpp" line="228"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>Имя пользователя не может быть пустим, пожалуйста заполните его</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="436"/>
-        <source>FREE version</source>
-        <translation>FREE версия</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="455"/>
-        <location filename="../ui/account/account_view.cpp" line="462"/>
-        <source>CLOUD version</source>
-        <translation>CLOUD версия</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="635"/>
+        <location filename="../ui/account/account_view.cpp" line="528"/>
         <source>I want to receive STARC news</source>
         <translation>Хочу получать новости о STARC</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="641"/>
-        <source>Compare versions</source>
-        <translation>Сравнить версии</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="647"/>
-        <source>Upgrade to PRO</source>
-        <translation>Обновить до PRO</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="642"/>
-        <source>Try PRO for free</source>
-        <translation>Попробовать PRO бесплатно</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="245"/>
-        <location filename="../ui/account/account_view.cpp" line="437"/>
-        <source>Lifetime access</source>
-        <translation>Доступно навсегда</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="246"/>
-        <source>Active until %1</source>
-        <translation>Активна до %1</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="442"/>
-        <location filename="../ui/account/account_view.cpp" line="448"/>
-        <source>PRO version</source>
-        <translation>PRO версия</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="469"/>
-        <source>STUDIO version</source>
-        <translation>STUDIO версия</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="633"/>
+        <location filename="../ui/account/account_view.cpp" line="526"/>
         <source>Your name</source>
         <translation>Ваше имя</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="634"/>
+        <location filename="../ui/account/account_view.cpp" line="527"/>
         <source>Your bio</source>
         <translation>Информация о вас</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="636"/>
+        <location filename="../ui/account/account_view.cpp" line="529"/>
         <source>Add avatar +</source>
         <translation>Добавить аватар +</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="636"/>
+        <location filename="../ui/account/account_view.cpp" line="529"/>
         <source>Change avatar...</source>
         <translation>Изменить аватар...</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="637"/>
+        <location filename="../ui/account/account_view.cpp" line="530"/>
         <source>Do you want to delete your avatar?</source>
         <translation>Удалить аватар?</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="638"/>
+        <location filename="../ui/account/account_view.cpp" line="531"/>
         <source>Select an area for the avatar</source>
         <translation>Выберите область для аватара</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="639"/>
-        <source>Subscription type</source>
-        <translation>Тип подписки</translation>
+        <location filename="../ui/account/account_view.cpp" line="532"/>
+        <source>Subscriptions</source>
+        <translation>Подписки</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="643"/>
-        <source>Try CLOUD for free</source>
-        <translation>Попробовать CLOUD бесплатно</translation>
+        <location filename="../ui/account/account_view.cpp" line="533"/>
+        <source>Compare subscriptions</source>
+        <translation>Сравнить подписки</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="644"/>
-        <source>Buy lifetime</source>
-        <translation>Купить навсегда</translation>
+        <location filename="../ui/account/account_view.cpp" line="535"/>
+        <source>Advanced tools for professionals
+• Characters relations
+• Corkboard
+• Timeline
+• Mind maps
+• and more writer&apos;s tools...</source>
+        <translation>Расширенные инструменты для профессионалов
+• Отношения персонажей
+• Доска с карточками
+• Таймлайн событий
+• Ментальные карты
+• и другие инструменты автора...</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="645"/>
-        <location filename="../ui/account/account_view.cpp" line="646"/>
-        <source>Renew</source>
-        <translation>Продлить</translation>
+        <location filename="../ui/account/account_view.cpp" line="542"/>
+        <source>For those who are always on the move
+• 5GB cloud storage
+• Seamless synchronization across all your devices
+• Realtime collaboration
+• Production tools</source>
+        <translation>Для тех, кто всегда в движении
+• Облачное хранилище на 5Гб
+• Бесшовная синхронизация между всеми устройствами
+• Совместная работа в режиме реального времени
+• Производственные инструменты</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="648"/>
-        <source>Upgrade to CLOUD</source>
-        <translation>Обновить до CLOUD</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="649"/>
+        <location filename="../ui/account/account_view.cpp" line="547"/>
         <source>Active sessions</source>
         <translation>Активные сессии</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="650"/>
+        <location filename="../ui/account/account_view.cpp" line="548"/>
         <source>Promotional or gift code</source>
         <translation>Промо или подарочный код</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="651"/>
+        <location filename="../ui/account/account_view.cpp" line="549"/>
         <source>Activate</source>
         <translation>Активировать</translation>
     </message>
@@ -7587,11 +7548,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1090"/>
         <source>%n word(s) available</source>
-        <translation>
-            <numerusform>%n слово доступно</numerusform>
-            <numerusform>%n слова доступно</numerusform>
-            <numerusform>%n слов доступно</numerusform>
-        </translation>
+        <translation><numerusform>%n слово доступно</numerusform><numerusform>%n слова доступно</numerusform><numerusform>%n слов доступно</numerusform><numerusform>%n слов доступно</numerusform></translation>
     </message>
     <message>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1091"/>
@@ -8615,11 +8572,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="212"/>
         <source>Passed %n time(s)</source>
-        <translation>
-            <numerusform>Проходит %n раз</numerusform>
-            <numerusform>Проходит %n раза</numerusform>
-            <numerusform>Проходит %n раз</numerusform>
-        </translation>
+        <translation><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раза</numerusform><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раз</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_statistics/reports/audioplay_gender_report_view.cpp" line="277"/>
@@ -8667,11 +8620,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="122"/>
         <source>%n word(s)</source>
-        <translation>
-            <numerusform>%n слово</numerusform>
-            <numerusform>%n слова</numerusform>
-            <numerusform>%n слов</numerusform>
-        </translation>
+        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_information/audioplay_information_view.cpp" line="221"/>
@@ -9129,47 +9078,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="120"/>
         <source>%n page(s)</source>
-        <translation>
-            <numerusform>%n страница</numerusform>
-            <numerusform>%n страницы</numerusform>
-            <numerusform>%n страниц</numerusform>
-        </translation>
+        <translation><numerusform>%n страница</numerusform><numerusform>%n страницы</numerusform><numerusform>%n страниц</numerusform><numerusform>%n страниц</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="121"/>
         <source>%n scene(s)</source>
-        <translation>
-            <numerusform>%n сцена</numerusform>
-            <numerusform>%n сцены</numerusform>
-            <numerusform>%n сцен</numerusform>
-        </translation>
+        <translation><numerusform>%n сцена</numerusform><numerusform>%n сцены</numerusform><numerusform>%n сцен</numerusform><numerusform>%n сцен</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="122"/>
         <source>%n word(s)</source>
-        <translation>
-            <numerusform>%n слово</numerusform>
-            <numerusform>%n слова</numerusform>
-            <numerusform>%n слов</numerusform>
-        </translation>
+        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="123"/>
         <source>%n character(s)</source>
-        <translation>
-            <numerusform>%n символ</numerusform>
-            <numerusform>%n символа</numerusform>
-            <numerusform>%n символов</numerusform>
-        </translation>
+        <translation><numerusform>%n символ</numerusform><numerusform>%n символа</numerusform><numerusform>%n символов</numerusform><numerusform>%n символов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="124"/>
         <source>%n character(s) with spaces</source>
-        <translation>
-            <numerusform>%n символ с пробелами</numerusform>
-            <numerusform>%n символа с пробелами</numerusform>
-            <numerusform>%n символов с пробелами</numerusform>
-        </translation>
+        <translation><numerusform>%n символ с пробелами</numerusform><numerusform>%n символа с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/audioplay_text_structure/ui/audioplay_text_structure_view.cpp" line="247"/>
@@ -10411,11 +10340,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="123"/>
         <source>%n word(s)</source>
-        <translation>
-            <numerusform>%n слово</numerusform>
-            <numerusform>%n слова</numerusform>
-            <numerusform>%n слов</numerusform>
-        </translation>
+        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_information/comic_book_information_view.cpp" line="222"/>
@@ -10524,11 +10449,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1075"/>
         <source>%n panels</source>
-        <translation>
-            <numerusform>%n кадр</numerusform>
-            <numerusform>%n кадра</numerusform>
-            <numerusform>%n кадров</numerusform>
-        </translation>
+        <translation><numerusform>%n кадр</numerusform><numerusform>%n кадра</numerusform><numerusform>%n кадров</numerusform><numerusform>%n кадров</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1261"/>
@@ -10629,11 +10550,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_delegate.cpp" line="352"/>
         <source>%n PANELS</source>
-        <translation>
-            <numerusform>%n КАДР</numerusform>
-            <numerusform>%n КАДРА</numerusform>
-            <numerusform>%n КАДРОВ</numerusform>
-        </translation>
+        <translation><numerusform>%n КАДР</numerusform><numerusform>%n КАДРА</numerusform><numerusform>%n КАДРОВ</numerusform><numerusform>%n КАДРОВ</numerusform></translation>
     </message>
 </context>
 <context>
@@ -10641,47 +10558,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="118"/>
         <source>%n page(s)</source>
-        <translation>
-            <numerusform>%n страница</numerusform>
-            <numerusform>%n страницы</numerusform>
-            <numerusform>%n страниц</numerusform>
-        </translation>
+        <translation><numerusform>%n страница</numerusform><numerusform>%n страницы</numerusform><numerusform>%n страниц</numerusform><numerusform>%n страниц</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="119"/>
         <source>%n panel(s)</source>
-        <translation>
-            <numerusform>%n кадр</numerusform>
-            <numerusform>%n кадра</numerusform>
-            <numerusform>%n кадров</numerusform>
-        </translation>
+        <translation><numerusform>%n кадр</numerusform><numerusform>%n кадра</numerusform><numerusform>%n кадров</numerusform><numerusform>%n кадров</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="120"/>
         <source>%n word(s)</source>
-        <translation>
-            <numerusform>%n слово</numerusform>
-            <numerusform>%n слова</numerusform>
-            <numerusform>%n слов</numerusform>
-        </translation>
+        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="121"/>
         <source>%n character(s)</source>
-        <translation>
-            <numerusform>%n символ</numerusform>
-            <numerusform>%n символа</numerusform>
-            <numerusform>%n символов</numerusform>
-        </translation>
+        <translation><numerusform>%n символ</numerusform><numerusform>%n символа</numerusform><numerusform>%n символов</numerusform><numerusform>%n символов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="122"/>
         <source>%n character(s) with spaces</source>
-        <translation>
-            <numerusform>%n символ с пробелами</numerusform>
-            <numerusform>%n символа с пробелами</numerusform>
-            <numerusform>%n символов с пробелами</numerusform>
-        </translation>
+        <translation><numerusform>%n символ с пробелами</numerusform><numerusform>%n символа с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="242"/>
@@ -10767,11 +10664,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="283"/>
         <source>%n reply(s)</source>
-        <translation>
-            <numerusform>%n ответ</numerusform>
-            <numerusform>%n ответа</numerusform>
-            <numerusform>%n ответов</numerusform>
-        </translation>
+        <translation><numerusform>%n ответ</numerusform><numerusform>%n ответа</numerusform><numerusform>%n ответов</numerusform><numerusform>%n ответов</numerusform></translation>
     </message>
 </context>
 <context>
@@ -10859,6 +10752,261 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="140"/>
         <source>Remove selected notes</source>
         <translation>Удалить выбранные заметки</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::CompareSubscriptionsDialog</name>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="213"/>
+        <source>Unlimited number of projects</source>
+        <translation>Неограниченное количество проектов</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="214"/>
+        <source>Unlimited number of documents per project</source>
+        <translation>Неограниченное количество документов в проекте</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="215"/>
+        <source>Cover generator</source>
+        <translation>Конструктор постера</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="216"/>
+        <source>Folders</source>
+        <translation>Папки</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="217"/>
+        <source>Text documents</source>
+        <translation>Текстовые документы</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="218"/>
+        <source>Session statistics</source>
+        <translation>Статистика по сессии</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="219"/>
+        <source>Mind maps</source>
+        <translation>Ментальные карты</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="220"/>
+        <source>Images gallery</source>
+        <translation>Галерея изображений</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="221"/>
+        <source>Seamless synchronization across all your devices</source>
+        <translation>Бесшовная синхронизация между всеми устройствами</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="222"/>
+        <source>Realtime collaboration</source>
+        <translation>Работа с соавторами в режиме реального времени</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="223"/>
+        <source>5GB cloud storage</source>
+        <translation>Облачное хранилище на 5ГБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="224"/>
+        <source>Character</source>
+        <translation>Персонаж</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="225"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="231"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="237"/>
+        <source>Basic info</source>
+        <translation>Основная информация</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="226"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="232"/>
+        <source>Export</source>
+        <translation>Экспорт</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="227"/>
+        <source>Characters relations</source>
+        <translation>Отношения персонажей</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="228"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="234"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="239"/>
+        <source>Extended info</source>
+        <translation>Расширенное досье</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="229"/>
+        <source>Dialogues from all stories</source>
+        <translation>Реплики во всех историях</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="230"/>
+        <source>Location</source>
+        <translation>Локация</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="233"/>
+        <source>Locations map</source>
+        <translation>Карта локаций</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="235"/>
+        <source>Scenes from all stories</source>
+        <translation>Сцены во всех сериях</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="236"/>
+        <source>World</source>
+        <translation>Мир</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="238"/>
+        <source>Worlds map</source>
+        <translation>Карта миров</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="240"/>
+        <source>Screenplay</source>
+        <translation>Сценарий</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="241"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="253"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="259"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="265"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="270"/>
+        <source>Logline &amp; synopsis</source>
+        <translation>Логлайн и синопсис</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="242"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="254"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="260"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="266"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="271"/>
+        <source>Title page</source>
+        <translation>Титульная страница</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="243"/>
+        <source>Treatment text</source>
+        <translation>Текст поэпизодника</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="244"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="255"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="261"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="267"/>
+        <source>Script text</source>
+        <translation>Текст сценария</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="245"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="256"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="274"/>
+        <source>Basic statistics</source>
+        <translation>Базовая статистика</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="246"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="257"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="262"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="268"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="275"/>
+        <source>Import/export</source>
+        <translation>Импорт/экспорт</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="247"/>
+        <source>Scenes numbers locking</source>
+        <translation>Блокировка номеров сцен</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="248"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="276"/>
+        <source>Corkboard</source>
+        <translation>Доска с карточками</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="249"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="277"/>
+        <source>Timeline</source>
+        <translation>Таймлайн</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="250"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="263"/>
+        <source>Extended statistics</source>
+        <translation>Расширенная статистика</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="251"/>
+        <source>Script breakdown</source>
+        <translation>Разбивка сценария</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="252"/>
+        <source>Comics</source>
+        <translation>Комикс</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="258"/>
+        <source>Audio drama</source>
+        <translation>Аудиопостановка</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="264"/>
+        <source>Stageplay</source>
+        <translation>Пьеса</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="269"/>
+        <source>Novel</source>
+        <translation>Роман</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="272"/>
+        <source>Outline text</source>
+        <translation>Текст плана</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="273"/>
+        <source>Novel text</source>
+        <translation>Текст романа</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="334"/>
+        <source>For those who are at the beginning of creative journey</source>
+        <translation>Для тех, кто в начале творческого пути</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="336"/>
+        <source>Advanced tools for professionals</source>
+        <translation>Продвинутые инструменты для профессионалов</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="338"/>
+        <source>For those who are always on the move</source>
+        <translation>Для тех, кто всегда в движении</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="339"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="341"/>
+        <source>Renew</source>
+        <translation>Продлить</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="340"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="342"/>
+        <source>Buy as a gift</source>
+        <translation>Купить в подарок</translation>
     </message>
 </context>
 <context>
@@ -11695,11 +11843,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../ui/notifications/credits_view.cpp" line="58"/>
         <source>%n credits were added to your balance.</source>
-        <translation>
-            <numerusform>Счёт пополнен на %n кредит</numerusform>
-            <numerusform>Счёт пополнен на %n кредита</numerusform>
-            <numerusform>Счёт пополнен на %n кредитов</numerusform>
-        </translation>
+        <translation><numerusform>Счёт пополнен на %n кредит</numerusform><numerusform>Счёт пополнен на %n кредита</numerusform><numerusform>Счёт пополнен на %n кредитов</numerusform><numerusform>Счёт пополнен на %n кредитов</numerusform></translation>
     </message>
 </context>
 <context>
@@ -11824,7 +11968,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Пьеса</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="326"/>
+        <location filename="../ui/import/import_dialog.cpp" line="328"/>
         <source>Import to</source>
         <translation>Импортировать в</translation>
     </message>
@@ -12418,52 +12562,52 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LoginDialog</name>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="126"/>
+        <location filename="../ui/account/login_dialog.cpp" line="131"/>
         <source>Email invalid</source>
         <translation>Адрес электронной почты некорректен</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="75"/>
+        <location filename="../ui/account/login_dialog.cpp" line="78"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
         <translation>Срок действия кода подтверждения истёк.</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="77"/>
+        <location filename="../ui/account/login_dialog.cpp" line="80"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
         <translation>Письмо с кодом подтверждения отправлено на указанный адрес электронной почты, пожалуйста введите его для подтверждения</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="194"/>
+        <location filename="../ui/account/login_dialog.cpp" line="203"/>
         <source>Get into your account</source>
         <translation>Вход в аккаунт</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="197"/>
+        <location filename="../ui/account/login_dialog.cpp" line="206"/>
         <source>Sign in to get access to extended features of the FREE, PRO and CLOUD versions</source>
         <translation>Авторизуйтесь, чтобы получить доступ к расширенным возможностям FREE, PRO и CLOUD версий</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="198"/>
+        <location filename="../ui/account/login_dialog.cpp" line="207"/>
         <source>Email</source>
         <translation>Электронная почта</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="200"/>
+        <location filename="../ui/account/login_dialog.cpp" line="209"/>
         <source>Confirmation code</source>
         <translation>Код подтверждения</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="201"/>
+        <location filename="../ui/account/login_dialog.cpp" line="210"/>
         <source>Sign in</source>
         <translation>Войти</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="202"/>
+        <location filename="../ui/account/login_dialog.cpp" line="211"/>
         <source>Send code again</source>
         <translation>Отправить код повторно</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="203"/>
+        <location filename="../ui/account/login_dialog.cpp" line="212"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -13414,11 +13558,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="126"/>
         <source>%n word(s)</source>
-        <translation>
-            <numerusform>%n слово</numerusform>
-            <numerusform>%n слова</numerusform>
-            <numerusform>%n слов</numerusform>
-        </translation>
+        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_information/novel_information_view.cpp" line="233"/>
@@ -13802,47 +13942,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="120"/>
         <source>%n page(s)</source>
-        <translation>
-            <numerusform>%n страница</numerusform>
-            <numerusform>%n страницы</numerusform>
-            <numerusform>%n страниц</numerusform>
-        </translation>
+        <translation><numerusform>%n страница</numerusform><numerusform>%n страницы</numerusform><numerusform>%n страниц</numerusform><numerusform>%n страниц</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="121"/>
         <source>%n scene(s)</source>
-        <translation>
-            <numerusform>%n сцена</numerusform>
-            <numerusform>%n сцены</numerusform>
-            <numerusform>%n сцен</numerusform>
-        </translation>
+        <translation><numerusform>%n сцена</numerusform><numerusform>%n сцены</numerusform><numerusform>%n сцен</numerusform><numerusform>%n сцен</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="122"/>
         <source>%n word(s)</source>
-        <translation>
-            <numerusform>%n слово</numerusform>
-            <numerusform>%n слова</numerusform>
-            <numerusform>%n слов</numerusform>
-        </translation>
+        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="123"/>
         <source>%n character(s)</source>
-        <translation>
-            <numerusform>%n символ</numerusform>
-            <numerusform>%n символа</numerusform>
-            <numerusform>%n символов</numerusform>
-        </translation>
+        <translation><numerusform>%n символ</numerusform><numerusform>%n символа</numerusform><numerusform>%n символов</numerusform><numerusform>%n символов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="124"/>
         <source>%n character(s) with spaces</source>
-        <translation>
-            <numerusform>%n символ с пробелами</numerusform>
-            <numerusform>%n символа с пробелами</numerusform>
-            <numerusform>%n символов с пробелами</numerusform>
-        </translation>
+        <translation><numerusform>%n символ с пробелами</numerusform><numerusform>%n символа с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text_structure/ui/novel_text_structure_view.cpp" line="243"/>
@@ -13881,11 +14001,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1569"/>
         <source>Script generation will take %n word(s)</source>
-        <translation>
-            <numerusform>Генерация сценария потребует обработки %n слово</numerusform>
-            <numerusform>Генерация сценария потребует обработки %n слова</numerusform>
-            <numerusform>Генерация сценария потребует обработки %n слов</numerusform>
-        </translation>
+        <translation><numerusform>Генерация сценария потребует обработки %n слово</numerusform><numerusform>Генерация сценария потребует обработки %n слова</numerusform><numerusform>Генерация сценария потребует обработки %n слов</numerusform><numerusform>Генерация сценария потребует обработки %n слов</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1683"/>
@@ -14138,228 +14254,228 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::OnboardingNavigator</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="598"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="849"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="602"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="866"/>
         <source>Translation is ready for %1%</source>
         <translation>Перевод готов на %1%</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="640"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="647"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
         <translation>Срок действия кода подтверждения истёк.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="648"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="655"/>
         <source>Email invalid</source>
         <translation>Адрес электронной почты некорректен</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="652"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="807"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
         <translation>Письмо с кодом подтверждения отправлено на указанный адрес электронной почты, пожалуйста введите его для подтверждения</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="676"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="675"/>
         <source>Choose image</source>
         <translation>Выберите изображение</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="677"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="676"/>
         <source>Images</source>
         <translation>Изображения</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="686"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="685"/>
         <source>Select an area for the avatar</source>
         <translation>Выберите область для аватара</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="702"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="701"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>Имя пользователя не может быть пустим, пожалуйста заполните его</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="843"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="860"/>
         <source>Welcome to the Story Architect</source>
         <translation>Добро пожаловать в Story Architect</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="844"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="861"/>
         <source>Let&apos;s configure something before start</source>
         <translation>Давайте настроим кое-что перед началом</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="845"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="862"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="851"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="868"/>
         <source>Choose application theme</source>
         <translation>Выберите тему приложения</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="852"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="869"/>
         <source>Setup size of the user interface elements</source>
         <translation>Настройте размер элементов управления</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="853"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="870"/>
         <source>small</source>
         <translation>маленький</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="854"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="871"/>
         <source>big</source>
         <translation>большой</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="855"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="873"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="885"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="892"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="872"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="890"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="902"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="909"/>
         <source>Continue</source>
         <translation>Продолжить</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="858"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="875"/>
         <source>Sign in to get access to the extended
 FREE, PRO and CLOUD features</source>
         <translation>Авторизуйтесь, чтобы получить доступ к расширенным возможностям FREE, PRO и CLOUD версий</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="872"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="889"/>
         <source>I want to receive STARC news</source>
         <translation>Хочу получать новости о STARC</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="859"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="876"/>
         <source>Such as writing sprints, writing statistics, worldbuilding tools, story development tools, collaboration and more</source>
         <translation>Таким как писательские спринты, статистика продуктивности, инструменты для разработки мира и структуры истории, а также возможности соавторства</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="861"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="878"/>
         <source>Email</source>
         <translation>Электронная почта</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="862"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="879"/>
         <source>Confirmation code</source>
         <translation>Код подтверждения</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="863"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="880"/>
         <source>Sign up</source>
         <translation>Зарегистрироваться</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="864"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="881"/>
         <source>Send code again</source>
         <translation>Отправить код повторно</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="865"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="882"/>
         <source>Continue without sign in</source>
         <translation>Продолжить без авторизации</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="867"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="884"/>
         <source>Set up your account</source>
         <translation>Настройте свой аккаунт</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="868"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="885"/>
         <source>Personalize your workspace</source>
         <translation>Подстройте своё рабочее окружение под себя</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="869"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="886"/>
         <source>Change avatar</source>
         <translation>Сменить аватар</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="870"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="887"/>
         <source>Your name</source>
         <translation>Ваше имя</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="871"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="888"/>
         <source>Your bio</source>
         <translation>Информация о вас</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="875"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="892"/>
         <source>Customize your workspace</source>
         <translation>Настройте рабочее окружение под себя</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="876"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="888"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="893"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="905"/>
         <source>Feel at home</source>
         <translation>Будьте как дома</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="878"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="895"/>
         <source>Story Architect provides tools for working with any form of writing. Choose which ones you plan to use:</source>
         <translation>Story Architect предоставляет инструменты для работы над произведениями любых форм. Выберите, какие из них вы планируете использовать:</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="880"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="897"/>
         <source>Screenplay</source>
         <translation>Сценарий</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="881"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="898"/>
         <source>Comic book</source>
         <translation>Комикс</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="882"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="899"/>
         <source>Audioplay</source>
         <translation>Аудиопьеса</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="883"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="900"/>
         <source>Stageplay</source>
         <translation>Пьеса</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="884"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="901"/>
         <source>Novel</source>
         <translation>Роман</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="887"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="904"/>
         <source>Customize your work environment</source>
         <translation>Настройте рабочее окружение под себя</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="890"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="907"/>
         <source>We&apos;ll help you get used to STARC by leveraging your experience with other applications.</source>
         <translation>Мы поможем вам освоиться в STARC, используя ваш опыт работы в других приложениях.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="893"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="910"/>
         <source>Application</source>
         <translation>Приложение</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="894"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="911"/>
         <source>Adapt the interface and workflow</source>
         <translation>Адаптировать интерфейс и стиль работы</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="896"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="913"/>
         <source>Before you get started</source>
         <translation>Перед тем как начать</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="897"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="914"/>
         <source>Feel our care</source>
         <translation>Почувствуйте нашу заботу</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="899"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="916"/>
         <source>You should know that Story Architect cares about the safety of your work, so the app:
 
 • automatically saves changes every three seconds when there is no activity
@@ -14380,22 +14496,22 @@ This will help to protect your creativity in any unforeseen situation.</source>
 Эти меры помогут сберечь плоды вашего творчества в любой неприятной ситуации.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="907"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="924"/>
         <source>Thanks I&apos;ll know</source>
         <translation>Спасибо, буду знать</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="909"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="926"/>
         <source>Follow us on social media</source>
         <translation>Подписывайтесь на нас в соцсетях</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="910"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="927"/>
         <source>Let&apos;s unite to make the best app for writers</source>
         <translation>Давайте вместе создавать лучшее приложение для авторов</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="911"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="928"/>
         <source>Be the first to know our news, fresh updates and special offers.
 
 Get in touch with our technical support, share your feedback and suggest improvements.
@@ -14408,7 +14524,7 @@ Discuss everything with fellow community of writers, share your work in progress
 Общайтесь с дружественным сообществом авторов, делитесь своими рабочими моментами и вдохновляйте других.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="921"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="938"/>
         <source>Start writing</source>
         <translation>Приступить к работе</translation>
     </message>
@@ -14798,87 +14914,112 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::PurchaseDialog</name>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="168"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="209"/>
         <source>Choose what suits you</source>
         <translation>Выберите то, что вам подходит</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="169"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="210"/>
+        <source>Buy as a gift</source>
+        <translation>Купить в подарок</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_dialog.cpp" line="211"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="170"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="212"/>
         <source>Purchase</source>
         <translation>Оплатить</translation>
     </message>
 </context>
 <context>
-    <name>Ui::PurchaseDialogOption</name>
+    <name>Ui::PurchaseDialogOptionWidget</name>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="153"/>
         <source>Pay with:</source>
-        <translation type="vanished">Оплатить с помощью:</translation>
+        <translation>Оплатить с помощью:</translation>
     </message>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="172"/>
         <source>%1 lifetime</source>
-        <translation type="vanished">%1 навсегда</translation>
+        <translation>%1 навсегда</translation>
     </message>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="174"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="260"/>
         <source>%1 for %2</source>
-        <translation type="vanished">%1 на %2</translation>
+        <translation>%1 на %2</translation>
     </message>
     <message numerus="yes">
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="176"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="260"/>
         <source>%n month(s)</source>
-        <translation type="vanished">
-            <numerusform>%n месяц</numerusform>
-            <numerusform>%n месяца</numerusform>
-            <numerusform>%n месяцев</numerusform>
-        </translation>
+        <translation><numerusform>%n месяц</numerusform><numerusform>%n месяца</numerusform><numerusform>%n месяцев</numerusform><numerusform>%n месяцев</numerusform></translation>
     </message>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="177"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="261"/>
         <source>%1 credits</source>
-        <translation type="vanished">%1 кредитов</translation>
+        <translation>%1 кредитов</translation>
     </message>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="294"/>
         <source>$%1 per month</source>
-        <translation type="vanished">%1$ в месяц</translation>
+        <translation>%1$ в месяц</translation>
     </message>
 </context>
 <context>
-    <name>Ui::PurchaseDialogOptionWidget</name>
+    <name>Ui::PurchaseGiftDialog</name>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="116"/>
-        <source>Pay with:</source>
-        <translation type="unfinished">Оплатить с помощью:</translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="97"/>
+        <source>Email invalid</source>
+        <translation>Адрес электронной почты некорректен</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="135"/>
-        <source>%1 lifetime</source>
-        <translation type="unfinished">%1 навсегда</translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="126"/>
+        <source>Purchasing a gift</source>
+        <translation>Покупка подарка</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="211"/>
-        <source>%1 for %2</source>
-        <translation type="unfinished">%1 на %2</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="211"/>
-        <source>%n month(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n месяц</numerusform>
-            <numerusform>%n месяца</numerusform>
-            <numerusform>%n месяцев</numerusform>
-        </translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="127"/>
+        <source>Recepient email</source>
+        <translation>Адрес электронной почты получателя</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="212"/>
-        <source>%1 credits</source>
-        <translation type="unfinished">%1 кредитов</translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="128"/>
+        <source>A promo code to activate the gift will be sent here</source>
+        <translation>Промокод для активации подарка будет отправлен сюда</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="244"/>
-        <source>$%1 per month</source>
-        <translation type="unfinished">%1$ в месяц</translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="129"/>
+        <source>Greeting text</source>
+        <translation>Текст поздравления</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="130"/>
+        <source>You can leave it blank</source>
+        <translation>Можно оставить пустым</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="131"/>
+        <source>A promo code to activate the gift will be sent to the recipient immediately after payment.
+
+Promo code validity period is a 1 year</source>
+        <translation>Промокод для активации подарка будет отправлен получателю сразу после оплаты.
+
+Срок действия промокода - 1 год</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="134"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="135"/>
+        <source>Purchase</source>
+        <translation>Оплатить</translation>
     </message>
 </context>
 <context>
@@ -14896,11 +15037,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message numerus="yes">
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="75"/>
         <source>There are %n document(s) in the recycle bin.</source>
-        <translation>
-            <numerusform>В корзине %n документ.</numerusform>
-            <numerusform>В корзине %n документа.</numerusform>
-            <numerusform>В корзине %n документов.</numerusform>
-        </translation>
+        <translation><numerusform>В корзине %n документ.</numerusform><numerusform>В корзине %n документа.</numerusform><numerusform>В корзине %n документов.</numerusform><numerusform>В корзине %n документов.</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/recycle_bin/recycle_bin_view.cpp" line="76"/>
@@ -15879,11 +16016,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="212"/>
         <source>Passed %n time(s)</source>
-        <translation>
-            <numerusform>Проходит %n раз</numerusform>
-            <numerusform>Проходит %n раза</numerusform>
-            <numerusform>Проходит %n раз</numerusform>
-        </translation>
+        <translation><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раза</numerusform><numerusform>Проходит %n раз</numerusform><numerusform>Проходит %n раз</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_statistics/reports/screenplay_gender_report_view.cpp" line="277"/>
@@ -15931,11 +16064,7 @@ Discuss everything with fellow community of writers, share your work in progress
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="126"/>
         <source>%n word(s)</source>
-        <translation>
-            <numerusform>%n слово</numerusform>
-            <numerusform>%n слова</numerusform>
-            <numerusform>%n слов</numerusform>
-        </translation>
+        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_information/screenplay_information_view.cpp" line="233"/>
@@ -16840,47 +16969,27 @@ Discuss everything with fellow community of writers, share your work in progress
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="122"/>
         <source>%n page(s)</source>
-        <translation>
-            <numerusform>%n страница</numerusform>
-            <numerusform>%n страницы</numerusform>
-            <numerusform>%n страниц</numerusform>
-        </translation>
+        <translation><numerusform>%n страница</numerusform><numerusform>%n страницы</numerusform><numerusform>%n страниц</numerusform><numerusform>%n страниц</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="123"/>
         <source>%n scene(s)</source>
-        <translation>
-            <numerusform>%n сцена</numerusform>
-            <numerusform>%n сцены</numerusform>
-            <numerusform>%n сцен</numerusform>
-        </translation>
+        <translation><numerusform>%n сцена</numerusform><numerusform>%n сцены</numerusform><numerusform>%n сцен</numerusform><numerusform>%n сцен</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="124"/>
         <source>%n word(s)</source>
-        <translation>
-            <numerusform>%n слово</numerusform>
-            <numerusform>%n слова</numerusform>
-            <numerusform>%n слов</numerusform>
-        </translation>
+        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="125"/>
         <source>%n character(s)</source>
-        <translation>
-            <numerusform>%n символ</numerusform>
-            <numerusform>%n символа</numerusform>
-            <numerusform>%n символов</numerusform>
-        </translation>
+        <translation><numerusform>%n символ</numerusform><numerusform>%n символа</numerusform><numerusform>%n символов</numerusform><numerusform>%n символов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text_structure/ui/screenplay_text_structure_view.cpp" line="126"/>
         <source>%n character(s) with spaces</source>
-        <translation>
-            <numerusform>%n символ с пробелами</numerusform>
-            <numerusform>%n символа с пробелами</numerusform>
-            <numerusform>%n символов с пробелами</numerusform>
-        </translation>
+        <translation><numerusform>%n символ с пробелами</numerusform><numerusform>%n символа с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform></translation>
     </message>
 </context>
 <context>
@@ -16918,20 +17027,12 @@ Discuss everything with fellow community of writers, share your work in progress
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1757"/>
         <source>Synopsis generation will take %n word(s)</source>
-        <translation>
-            <numerusform>Генерация синопсиса потребует обработки %n слово</numerusform>
-            <numerusform>Генерация синопсиса потребует обработки %n слова</numerusform>
-            <numerusform>Генерация синопсиса потребует обработки %n слов</numerusform>
-        </translation>
+        <translation><numerusform>Генерация синопсиса потребует обработки %n слово</numerusform><numerusform>Генерация синопсиса потребует обработки %n слова</numerusform><numerusform>Генерация синопсиса потребует обработки %n слов</numerusform><numerusform>Генерация синопсиса потребует обработки %n слов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1759"/>
         <source>Novel generation will take %n word(s)</source>
-        <translation>
-            <numerusform>Генерация романа потребует обработки %n слово</numerusform>
-            <numerusform>Генерация романа потребует обработки %n слова</numerusform>
-            <numerusform>Генерация романа потребует обработки %n слов</numerusform>
-        </translation>
+        <translation><numerusform>Генерация романа потребует обработки %n слово</numerusform><numerusform>Генерация романа потребует обработки %n слова</numerusform><numerusform>Генерация романа потребует обработки %n слов</numerusform><numerusform>Генерация романа потребует обработки %n слов</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1878"/>
@@ -17457,11 +17558,7 @@ Discuss everything with fellow community of writers, share your work in progress
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="169"/>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="170"/>
         <source>word(s)</source>
-        <translation>
-            <numerusform>слово</numerusform>
-            <numerusform>слова</numerusform>
-            <numerusform>слов</numerusform>
-        </translation>
+        <translation><numerusform>слово</numerusform><numerusform>слова</numerusform><numerusform>слов</numerusform><numerusform>слов</numerusform></translation>
     </message>
     <message>
         <location filename="../ui/session_statistics/session_statistics_navigator.cpp" line="178"/>
@@ -17584,17 +17681,17 @@ STARTED</source>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="137"/>
         <source>today</source>
-        <translation type="unfinished">сегодня</translation>
+        <translation>сегодня</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="139"/>
         <source>yesterday</source>
-        <translation type="unfinished">вчера</translation>
+        <translation>вчера</translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="146"/>
         <source>was active %1 at %2</source>
-        <extracomment>Last active date (%1) and time (%2) of the user&apos;s device</extracomment>
+        <extracomment>Last active date (%1) and time (%2) of the user's device</extracomment>
         <translation>был активен %1 в %2</translation>
     </message>
     <message>
@@ -19093,38 +19190,22 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="115"/>
         <source>%n page(s)</source>
-        <translation>
-            <numerusform>%n страница</numerusform>
-            <numerusform>%n страницы</numerusform>
-            <numerusform>%n страниц</numerusform>
-        </translation>
+        <translation><numerusform>%n страница</numerusform><numerusform>%n страницы</numerusform><numerusform>%n страниц</numerusform><numerusform>%n страниц</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="116"/>
         <source>%n word(s)</source>
-        <translation>
-            <numerusform>%n слово</numerusform>
-            <numerusform>%n слова</numerusform>
-            <numerusform>%n слов</numerusform>
-        </translation>
+        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="117"/>
         <source>%n character(s)</source>
-        <translation>
-            <numerusform>%n символ</numerusform>
-            <numerusform>%n символа</numerusform>
-            <numerusform>%n символов</numerusform>
-        </translation>
+        <translation><numerusform>%n символ</numerusform><numerusform>%n символа</numerusform><numerusform>%n символов</numerusform><numerusform>%n символов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="118"/>
         <source>%n character(s) with spaces</source>
-        <translation>
-            <numerusform>%n символ с пробелами</numerusform>
-            <numerusform>%n символа с пробелами</numerusform>
-            <numerusform>%n символов с пробелами</numerusform>
-        </translation>
+        <translation><numerusform>%n символ с пробелами</numerusform><numerusform>%n символа с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/simple_text_structure/ui/simple_text_structure_view.cpp" line="237"/>
@@ -19254,11 +19335,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="123"/>
         <source>%n word(s)</source>
-        <translation>
-            <numerusform>%n слово</numerusform>
-            <numerusform>%n слова</numerusform>
-            <numerusform>%n слов</numerusform>
-        </translation>
+        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_information/stageplay_information_view.cpp" line="225"/>
@@ -19463,47 +19540,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="120"/>
         <source>%n page(s)</source>
-        <translation>
-            <numerusform>%n страница</numerusform>
-            <numerusform>%n страницы</numerusform>
-            <numerusform>%n страниц</numerusform>
-        </translation>
+        <translation><numerusform>%n страница</numerusform><numerusform>%n страницы</numerusform><numerusform>%n страниц</numerusform><numerusform>%n страниц</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="121"/>
         <source>%n scene(s)</source>
-        <translation>
-            <numerusform>%n сцена</numerusform>
-            <numerusform>%n сцены</numerusform>
-            <numerusform>%n сцен</numerusform>
-        </translation>
+        <translation><numerusform>%n сцена</numerusform><numerusform>%n сцены</numerusform><numerusform>%n сцен</numerusform><numerusform>%n сцен</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="122"/>
         <source>%n word(s)</source>
-        <translation>
-            <numerusform>%n слово</numerusform>
-            <numerusform>%n слова</numerusform>
-            <numerusform>%n слов</numerusform>
-        </translation>
+        <translation><numerusform>%n слово</numerusform><numerusform>%n слова</numerusform><numerusform>%n слов</numerusform><numerusform>%n слов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="123"/>
         <source>%n character(s)</source>
-        <translation>
-            <numerusform>%n символ</numerusform>
-            <numerusform>%n символа</numerusform>
-            <numerusform>%n символов</numerusform>
-        </translation>
+        <translation><numerusform>%n символ</numerusform><numerusform>%n символа</numerusform><numerusform>%n символов</numerusform><numerusform>%n символов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="124"/>
         <source>%n character(s) with spaces</source>
-        <translation>
-            <numerusform>%n символ с пробелами</numerusform>
-            <numerusform>%n символа с пробелами</numerusform>
-            <numerusform>%n символов с пробелами</numerusform>
-        </translation>
+        <translation><numerusform>%n символ с пробелами</numerusform><numerusform>%n символа с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform><numerusform>%n символов с пробелами</numerusform></translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/stageplay_text_structure/ui/stageplay_text_structure_view.cpp" line="247"/>
@@ -19620,11 +19677,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../ui/notifications/subscription_view.cpp" line="110"/>
         <source>Your CLOUD version subscription expires in %n day(s).</source>
-        <translation>
-            <numerusform>Ваша подписка на CLOUD версию закончится через %n день.</numerusform>
-            <numerusform>Ваша подписка на CLOUD версию закончится через %n дня.</numerusform>
-            <numerusform>Ваша подписка на CLOUD версию закончится через %n дней.</numerusform>
-        </translation>
+        <translation><numerusform>Ваша подписка на CLOUD версию закончится через %n день.</numerusform><numerusform>Ваша подписка на CLOUD версию закончится через %n дня.</numerusform><numerusform>Ваша подписка на CLOUD версию закончится через %n дней.</numerusform><numerusform>Ваша подписка на CLOUD версию закончится через %n дней.</numerusform></translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="121"/>
@@ -19639,11 +19692,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../ui/notifications/subscription_view.cpp" line="109"/>
         <source>Your PRO version subscription expires in %n day(s).</source>
-        <translation>
-            <numerusform>Ваша подписка на PRO версию закончится через %n день.</numerusform>
-            <numerusform>Ваша подписка на PRO версию закончится через %n дня.</numerusform>
-            <numerusform>Ваша подписка на PRO версию закончится через %n дней.</numerusform>
-        </translation>
+        <translation><numerusform>Ваша подписка на PRO версию закончится через %n день.</numerusform><numerusform>Ваша подписка на PRO версию закончится через %n дня.</numerusform><numerusform>Ваша подписка на PRO версию закончится через %n дней.</numerusform><numerusform>Ваша подписка на PRO версию закончится через %n дней.</numerusform></translation>
     </message>
     <message>
         <location filename="../ui/notifications/subscription_view.cpp" line="117"/>
@@ -19665,6 +19714,49 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/notifications/subscription_view.cpp" line="138"/>
         <source>Renew</source>
         <translation>Продлить</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::SubscriptionWidget</name>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="119"/>
+        <source>Lifetime access</source>
+        <translation>Доступно навсегда</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="120"/>
+        <source>Active until %1</source>
+        <translation>Активна до %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="157"/>
+        <source>from $%1/mo</source>
+        <translation>от %1$/мес</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="167"/>
+        <source>30 days for free</source>
+        <translation>30 дней бесплатно</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="168"/>
+        <source>Try for free</source>
+        <translation>Попробовать бесплатно</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="169"/>
+        <source>Renew</source>
+        <translation>Продлить</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="170"/>
+        <source>Buy lifetime</source>
+        <translation>Купить навсегда</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="171"/>
+        <source>Buy as a gift</source>
+        <translation>Купить в подарок</translation>
     </message>
 </context>
 <context>
@@ -20512,20 +20604,12 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="280"/>
         <source>Done! I&apos;ve just written %n word(s)</source>
-        <translation>
-            <numerusform>Готово! Я только что написал %n слово</numerusform>
-            <numerusform>Готово! Я только что написал %n слова</numerusform>
-            <numerusform>Готово! Я только что написал %n слов</numerusform>
-        </translation>
+        <translation><numerusform>Готово! Я только что написал %n слово</numerusform><numerusform>Готово! Я только что написал %n слова</numerusform><numerusform>Готово! Я только что написал %n слов</numerusform><numerusform>Готово! Я только что написал %n слов</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="281"/>
         <source>in %n minute(s)</source>
-        <translation>
-            <numerusform>за %n мунуту</numerusform>
-            <numerusform>за %n минуты</numerusform>
-            <numerusform>за %n минут</numerusform>
-        </translation>
+        <translation><numerusform>за %n мунуту</numerusform><numerusform>за %n минуты</numerusform><numerusform>за %n минут</numerusform><numerusform>за %n минут</numerusform></translation>
     </message>
     <message>
         <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="467"/>
