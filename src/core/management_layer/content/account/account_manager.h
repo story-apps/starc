@@ -37,6 +37,11 @@ public:
     void signIn();
 
     /**
+     * @brief Задать ошибку авторизации
+     */
+    void setAuthorizationError(const QString& _error);
+
+    /**
      * @brief Задать параметры кода активации
      */
     void setConfirmationCodeInfo(int _codeLength);

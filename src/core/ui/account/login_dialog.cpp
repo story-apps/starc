@@ -26,6 +26,7 @@ public:
 
     Body1Label* description = nullptr;
     TextField* email = nullptr;
+    Body1Label* authorizationError = nullptr;
     Body1Label* confirmationCodeSendedInfo = nullptr;
     TextField* confirmationCode = nullptr;
     QTimer confirmationCodeExpirationTimer;
@@ -39,6 +40,7 @@ public:
 LoginDialog::Implementation::Implementation(QWidget* _parent)
     : description(new Body1Label(_parent))
     , email(new TextField(_parent))
+    , authorizationError(new Body1Label(_parent))
     , confirmationCodeSendedInfo(new Body1Label(_parent))
     , confirmationCode(new TextField(_parent))
     , buttonsLayout(new QHBoxLayout)
@@ -60,6 +62,7 @@ LoginDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout->addWidget(resendCodeButton);
     buttonsLayout->addWidget(signInButton);
 
+    authorizationError->hide();
     confirmationCodeSendedInfo->hide();
     confirmationCode->hide();
     signInButton->hide();
@@ -93,6 +96,7 @@ LoginDialog::LoginDialog(QWidget* _parent)
     int row = 0;
     contentsLayout()->addWidget(d->description, row++, 0);
     contentsLayout()->addWidget(d->email, row++, 0);
+    contentsLayout()->addWidget(d->authorizationError, row++, 0);
     contentsLayout()->addWidget(d->confirmationCodeSendedInfo, row++, 0);
     contentsLayout()->addWidget(d->confirmationCode, row++, 0);
     contentsLayout()->setRowStretch(row++, 1);
@@ -119,6 +123,7 @@ LoginDialog::LoginDialog(QWidget* _parent)
         d->confirmationCode->hide();
     });
     connect(d->signInButton, &Button::clicked, this, [this] {
+        d->authorizationError->hide();
         d->confirmationCodeSendedInfo->hide();
         d->confirmationCode->hide();
 
@@ -127,14 +132,10 @@ LoginDialog::LoginDialog(QWidget* _parent)
             return;
         }
 
-        showConfirmationCodeStep();
-
         emit signInPressed();
     });
     connect(d->resendCodeButton, &Button::clicked, this, [this] {
         d->updateConfirmationCodeInfo();
-
-        showConfirmationCodeStep();
 
         emit signInPressed();
     });
@@ -146,6 +147,7 @@ LoginDialog::~LoginDialog() = default;
 void LoginDialog::showEmailStep()
 {
     d->confirmationCode->clear();
+    d->authorizationError->hide();
     d->confirmationCodeSendedInfo->hide();
     d->confirmationCode->hide();
     d->resendCodeButton->hide();
@@ -160,8 +162,15 @@ QString LoginDialog::email() const
     return d->email->text();
 }
 
+void LoginDialog::setAuthorizationError(const QString& _error)
+{
+    d->authorizationError->setText(_error);
+    d->authorizationError->show();
+}
+
 void LoginDialog::showConfirmationCodeStep()
 {
+    d->authorizationError->hide();
     d->confirmationCodeSendedInfo->show();
     d->confirmationCode->clear();
     d->confirmationCode->setError({});
@@ -209,15 +218,21 @@ void LoginDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     setContentFixedWidth(Ui::DesignSystem::dialog().minimumWidth());
 
-    for (auto label : { d->description, d->confirmationCodeSendedInfo }) {
+    for (auto label : {
+             d->description,
+             d->authorizationError,
+             d->confirmationCodeSendedInfo,
+         }) {
         label->setBackgroundColor(Ui::DesignSystem::color().background());
         label->setTextColor(Ui::DesignSystem::color().onBackground());
     }
+    d->authorizationError->setTextColor(Ui::DesignSystem::color().error());
     auto labelContentMargins = Ui::DesignSystem::label().margins().toMargins();
     labelContentMargins.setTop(0);
     labelContentMargins.setBottom(Ui::DesignSystem::layout().px12());
     d->description->setContentsMargins(labelContentMargins);
     labelContentMargins.setTop(Ui::DesignSystem::layout().px12());
+    d->authorizationError->setContentsMargins(labelContentMargins);
     d->confirmationCodeSendedInfo->setContentsMargins(labelContentMargins);
 
     for (auto textField : { d->email, d->confirmationCode }) {

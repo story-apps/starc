@@ -427,9 +427,19 @@ void AccountManager::signIn()
     d->loginDialog->showDialog();
 }
 
+void AccountManager::setAuthorizationError(const QString& _error)
+{
+    if (d->loginDialog != nullptr) {
+        d->loginDialog->setAuthorizationError(_error);
+    }
+}
+
 void AccountManager::setConfirmationCodeInfo(int _codeLength)
 {
     d->confirmationCodeLength = _codeLength;
+    if (d->loginDialog != nullptr) {
+        d->loginDialog->showConfirmationCodeStep();
+    }
 }
 
 void AccountManager::completeSignIn(bool _openAccount)

@@ -128,6 +128,7 @@ public:
     H6Label* signInTitle = nullptr;
     Body2Label* signInSubtitle = nullptr;
     TextField* signInEmail = nullptr;
+    Body1Label* signInAuthorizationError = nullptr;
     Body1Label* signInConfirmationCodeInfo = nullptr;
     TextField* signInConfirmationCode = nullptr;
     QTimer signInConfirmationCodeExpirationTimer;
@@ -219,6 +220,7 @@ OnboardingNavigator::Implementation::Implementation(OnboardingNavigator* _q)
     , signInTitle(new H6Label(signInPage))
     , signInSubtitle(new Body2Label(signInPage))
     , signInEmail(new TextField(signInPage))
+    , signInAuthorizationError(new Body1Label(signInPage))
     , signInConfirmationCodeInfo(new Body1Label(signInPage))
     , signInConfirmationCode(new TextField(signInPage))
     , signInSignInButton(new Button(signInPage))
@@ -400,6 +402,7 @@ void OnboardingNavigator::Implementation::initSignUpPage()
 {
     signInTitle->setAlignment(Qt::AlignCenter);
     signInSubtitle->setAlignment(Qt::AlignCenter);
+    signInAuthorizationError->hide();
     signInConfirmationCodeInfo->hide();
     signInEmail->setCapitalizeWords(false);
     signInEmail->setSpellCheckPolicy(SpellCheckPolicy::Manual);
@@ -419,6 +422,7 @@ void OnboardingNavigator::Implementation::initSignUpPage()
     pageLayout->addWidget(signInTitle);
     pageLayout->addWidget(signInSubtitle);
     pageLayout->addWidget(signInEmail);
+    pageLayout->addWidget(signInAuthorizationError);
     pageLayout->addWidget(signInConfirmationCodeInfo);
     pageLayout->addWidget(signInConfirmationCode);
     pageLayout->addWidget(signInSignInButton);
@@ -622,6 +626,8 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
     //
     connect(d->signInEmail, &TextField::textChanged, this, [this] {
         d->signInEmail->clearError();
+        d->signInAuthorizationError->hide();
+        d->signInConfirmationCodeInfo->hide();
         d->signInConfirmationCode->hide();
         d->signInConfirmationCode->clear();
         d->signInResendCodeButton->hide();
@@ -637,6 +643,7 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
         emit confirmationCodeChanged(code);
     });
     connect(&d->signInConfirmationCodeExpirationTimer, &QTimer::timeout, this, [this] {
+        d->signInAuthorizationError->hide();
         d->signInConfirmationCodeInfo->setText(tr("The confirmation code we've sent expired."));
         d->signInResendCodeButton->show();
         d->signInResendCodeButton->setFocus();
@@ -648,14 +655,6 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
             d->signInEmail->setError(tr("Email invalid"));
             return;
         }
-
-        d->signInConfirmationCodeInfo->setText(tr(
-            "We've sent a confirmation code to the e-mail above, please enter it here to verify"));
-        d->signInConfirmationCodeInfo->show();
-        d->signInConfirmationCode->show();
-        d->signInConfirmationCode->setFocus();
-        d->signInSignInButton->hide();
-        d->signInResendCodeButton->hide();
 
         emit signInPressed();
     });
@@ -801,9 +800,27 @@ QString OnboardingNavigator::email() const
     return d->signInEmail->text();
 }
 
+void OnboardingNavigator::showConfirmationCodeStep()
+{
+    d->signInAuthorizationError->hide();
+    d->signInConfirmationCodeInfo->setText(
+        tr("We've sent a confirmation code to the e-mail above, please enter it here to verify"));
+    d->signInConfirmationCodeInfo->show();
+    d->signInConfirmationCode->show();
+    d->signInConfirmationCode->setFocus();
+    d->signInSignInButton->hide();
+    d->signInResendCodeButton->hide();
+}
+
 QString OnboardingNavigator::confirmationCode() const
 {
     return d->signInConfirmationCode->text();
+}
+
+void OnboardingNavigator::setAuthorizationError(const QString& _error)
+{
+    d->signInAuthorizationError->setText(_error);
+    d->signInAuthorizationError->show();
 }
 
 void OnboardingNavigator::showAccountPage()
@@ -945,6 +962,7 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->signInPage,
              d->signInTitle,
              d->signInSubtitle,
+             d->signInAuthorizationError,
              d->signInConfirmationCodeInfo,
              //
              d->accountPage,
@@ -986,6 +1004,7 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
         widget->setBackgroundColor(DesignSystem::color().primary());
         widget->setTextColor(DesignSystem::color().onPrimary());
     }
+    d->signInAuthorizationError->setTextColor(DesignSystem::color().error());
     const auto margin = DesignSystem::layout().px(48);
     d->uiTitle->setContentsMargins(margin / 2.0, DesignSystem::layout().px24(), margin / 2.0,
                                    DesignSystem::layout().px4());
@@ -1000,6 +1019,8 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
     d->signInTitle->setContentsMargins(margin / 2.0, DesignSystem::layout().px24(), margin / 2.0,
                                        DesignSystem::layout().px4());
     d->signInSubtitle->setContentsMargins(margin, 0, margin, 0);
+    d->signInAuthorizationError->setContentsMargins(margin, DesignSystem::layout().px24(), margin,
+                                                    0);
     d->signInConfirmationCodeInfo->setContentsMargins(margin, DesignSystem::layout().px24(), margin,
                                                       0);
     d->accountTitle->setContentsMargins(margin / 2.0, DesignSystem::layout().px24(), margin / 2.0,

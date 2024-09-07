@@ -88,9 +88,15 @@ void OnboardingManager::showWelcomePage()
     d->navigator->showWelcomePage();
 }
 
+void OnboardingManager::setAuthorizationError(const QString& _error)
+{
+    d->navigator->setAuthorizationError(_error);
+}
+
 void OnboardingManager::setConfirmationCodeInfo(int _codeLength)
 {
     d->confirmationCodeLength = _codeLength;
+    d->navigator->showConfirmationCodeStep();
 }
 
 void OnboardingManager::completeSignIn()

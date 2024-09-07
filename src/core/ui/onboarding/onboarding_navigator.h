@@ -34,9 +34,19 @@ public:
     QString email() const;
 
     /**
+     * @brief Показать виджеты для ввода кода подтверждения
+     */
+    void showConfirmationCodeStep();
+
+    /**
      * @brief Код подтверждения авторизации
      */
     QString confirmationCode() const;
+
+    /**
+     * @brief Задать ошибку авторизации
+     */
+    void setAuthorizationError(const QString& _error);
 
     /**
      * @brief Показать страницу с информацией об аккаунте

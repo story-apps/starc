@@ -27,6 +27,11 @@ public:
     QString email() const;
 
     /**
+     * @brief Задать ошибку авторизации
+     */
+    void setAuthorizationError(const QString& _error);
+
+    /**
      * @brief Показать страницу ввода кода подтверждения
      */
     void showConfirmationCodeStep();
