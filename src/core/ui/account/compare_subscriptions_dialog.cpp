@@ -336,10 +336,10 @@ void CompareSubscriptionsDialog::updateTranslations()
     d->proSubtitle->setText(tr("Advanced tools for professionals"));
     d->cloudTitle->setText("CLOUD");
     d->cloudSubtitle->setText(tr("For those who are always on the move"));
-    d->buyPro->setText(tr("Buy PRO"));
-    d->giftPro->setText(tr("Gift PRO"));
-    d->buyCloud->setText(tr("Buy CLOUD"));
-    d->giftCloud->setText(tr("Gift CLOUD"));
+    d->buyPro->setText(tr("Renew"));
+    d->giftPro->setText(tr("Buy as a gift"));
+    d->buyCloud->setText(tr("Renew"));
+    d->giftCloud->setText(tr("Buy as a gift"));
 }
 
 void CompareSubscriptionsDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
