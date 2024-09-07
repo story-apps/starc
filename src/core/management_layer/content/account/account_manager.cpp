@@ -651,6 +651,9 @@ void AccountManager::giftPro()
             proPaymentOptions.removeAt(index);
         }
     }
+    if (proPaymentOptions.isEmpty()) {
+        return;
+    }
 
     const int discount = proPaymentOptions.constFirst().discount;
     const auto discountInfo = discount > 0
@@ -737,7 +740,7 @@ void AccountManager::renewCloud()
                      "purchase, and %1% discount due to the promo code activation")
                       .arg(discount - 20);
         } else {
-            discountInfo = tr("You have an additional 20% discount thanks to the purchasing of the "
+            discountInfo = tr("You have an additional 20% discount due to the purchasing of the "
                               "PRO lifetime subscription");
         }
     } else if (discount > 0) {
@@ -776,18 +779,17 @@ void AccountManager::giftCloud()
     QString discountInfo;
     if (hasProLifetime) {
         if (discount > 20) {
-            discountInfo = tr("You have an additional 20% discount thanks to the purchasing of the "
-                              "PRO lifetime subscription and %1% discount thanks to the activation "
-                              "of the promo code")
-                               .arg(discount - 20);
+            discountInfo
+                = tr("You have an additional 20% discount due to PRO lifetime subscription "
+                     "purchase, and %1% discount due to the promo code activation")
+                      .arg(discount - 20);
         } else {
-            discountInfo = tr("You have an additional 20% discount thanks to the purchasing of the "
+            discountInfo = tr("You have an additional 20% discount due to the purchasing of the "
                               "PRO lifetime subscription");
         }
     } else if (discount > 0) {
-        discountInfo
-            = tr("You have an additional %1% discount thanks to the activation of the promo code")
-                  .arg(discount);
+        discountInfo = tr("You have an additional %1% discount due to the promo code activation")
+                           .arg(discount);
     }
 
     d->initPurchaseDialog();
@@ -821,8 +823,7 @@ void AccountManager::buyCredits()
 
     const int discount = creditPaymentOptions.constFirst().discount;
     const auto discountInfo = discount > 0
-        ? tr("You have an additional %1% discount thanks to the activation of the promo code")
-              .arg(discount)
+        ? tr("You have an additional %1% discount due to the promo code activation").arg(discount)
         : "";
 
     d->initPurchaseDialog();

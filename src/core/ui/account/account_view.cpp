@@ -1,6 +1,7 @@
 #include "account_view.h"
 
 #include "account_view_teams.h"
+#include "compare_subscriptions_dialog.h"
 #include "session_widget.h"
 #include "subscription_widget.h"
 
@@ -40,6 +41,8 @@ public:
     //
     // Страница аккаунта
     //
+
+    bool isConnected = true;
 
     Widget* accountPage = nullptr;
     QScrollArea* accountContent = nullptr;
@@ -243,6 +246,23 @@ AccountView::AccountView(QWidget* _parent)
     //
     // Подписка
     //
+    connect(d->compareSubscriptions, &Body1LinkLabel::clicked, this, [this] {
+        auto dialog = new CompareSubscriptionsDialog(topLevelWidget());
+        dialog->setLifetimeOptions(d->proSubscription->isLifetime(),
+                                   d->cloudSubscription->isLifetime());
+        dialog->setConnected(d->isConnected);
+        connect(dialog, &CompareSubscriptionsDialog::purchaseProPressed, this,
+                &AccountView::renewProPressed);
+        connect(dialog, &CompareSubscriptionsDialog::giftProPressed, this,
+                &AccountView::giftProPressed);
+        connect(dialog, &CompareSubscriptionsDialog::purchaseCloudPressed, this,
+                &AccountView::renewCloudPressed);
+        connect(dialog, &CompareSubscriptionsDialog::giftCloudPressed, this,
+                &AccountView::giftCloudPressed);
+        connect(dialog, &CompareSubscriptionsDialog::disappeared, dialog,
+                &CompareSubscriptionsDialog::deleteLater);
+        dialog->showDialog();
+    });
     connect(d->proSubscription, &SubscriptionWidget::tryPressed, this,
             &AccountView::tryProForFreePressed);
     connect(d->proSubscription, &SubscriptionWidget::buyPressed, this,
@@ -309,16 +329,21 @@ void AccountView::showSessions()
 
 void AccountView::setConnected(bool _connected)
 {
-    d->name->setEnabled(_connected);
-    d->description->setEnabled(_connected);
-    d->newsletterSubscription->setEnabled(_connected);
-    d->avatar->setEnabled(_connected);
-    d->proSubscription->setEnabled(_connected);
-    d->cloudSubscription->setEnabled(_connected);
-    d->promocodeName->setEnabled(_connected);
-    d->activatePromocode->setEnabled(_connected);
+    if (d->isConnected == _connected) {
+        return;
+    }
+
+    d->isConnected = _connected;
+    d->name->setEnabled(d->isConnected);
+    d->description->setEnabled(d->isConnected);
+    d->newsletterSubscription->setEnabled(d->isConnected);
+    d->avatar->setEnabled(d->isConnected);
+    d->proSubscription->setEnabled(d->isConnected);
+    d->cloudSubscription->setEnabled(d->isConnected);
+    d->promocodeName->setEnabled(d->isConnected);
+    d->activatePromocode->setEnabled(d->isConnected);
     //
-    d->teamPage->setConnected(_connected);
+    d->teamPage->setConnected(d->isConnected);
 }
 
 void AccountView::setEmail(const QString& _email)
@@ -506,8 +531,6 @@ void AccountView::updateTranslations()
     d->avatar->setImageCroppingText(tr("Select an area for the avatar"));
     d->subscriptionsTitle->setText(tr("Subscriptions"));
     d->compareSubscriptions->setText(tr("Compare subscriptions"));
-    d->compareSubscriptions->setLink(
-        QUrl(isRussianSpeaking ? "https://starc.app/ru/pricing/" : "https://starc.app/pricing/"));
     d->proSubscription->setInfo("PRO",
                                 tr("Advanced tools for professionals\n"
                                    "• Characters relations\n"

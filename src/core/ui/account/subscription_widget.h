@@ -31,6 +31,11 @@ public:
     void setStatus(bool _isActive, bool _isLifetime, const QDateTime& _activeUntil);
 
     /**
+     * @brief Куплена ли подписка навсегда
+     */
+    bool isLifetime() const;
+
+    /**
      * @brief Задать опции покупки для подписки
      */
     void setPaymentOptions(const QVector<Domain::PaymentOption>& _paymentOptions);

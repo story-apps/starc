@@ -120,6 +120,11 @@ void SubscriptionWidget::setStatus(bool _isActive, bool _isLifetime, const QDate
                                  : tr("Active until %1").arg(_activeUntil.toString("dd.MM.yyyy")));
 }
 
+bool SubscriptionWidget::isLifetime() const
+{
+    return d->isLifetime;
+}
+
 void SubscriptionWidget::setPaymentOptions(const QVector<Domain::PaymentOption>& _paymentOptions)
 {
     bool hasTrial = false;
@@ -144,7 +149,7 @@ void SubscriptionWidget::setPaymentOptions(const QVector<Domain::PaymentOption>&
         }
     }
 
-    d->minimumPrice->setVisible(!d->isLifetime);
+    d->minimumPrice->setVisible(!d->isLifetime && !_paymentOptions.isEmpty());
     d->minimumPrice->setStrikeOut(hasTrial);
     d->minimumPrice->setTextColor(
         ColorHelper::transparent(DesignSystem::color().onBackground(),

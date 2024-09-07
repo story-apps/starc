@@ -13,6 +13,16 @@ public:
     explicit CompareSubscriptionsDialog(QWidget* _parent = nullptr);
     ~CompareSubscriptionsDialog() override;
 
+    /**
+     * @brief Задать наличие пожизненных подписок
+     */
+    void setLifetimeOptions(bool _hasPro, bool _hasCloud);
+
+    /**
+     * @brief Задать подключён ли клиент к сервисе
+     */
+    void setConnected(bool _connected);
+
 protected:
     /**
      * @brief Определим виджет, который необходимо сфокусировать после отображения диалога
@@ -38,7 +48,10 @@ signals:
     /**
      * @brief Пользователь нажал кнопку оплаты
      */
-    void purchasePressed();
+    void purchaseProPressed();
+    void giftProPressed();
+    void purchaseCloudPressed();
+    void giftCloudPressed();
 
     /**
      * @brief Пользователь передумал вносить платёж
