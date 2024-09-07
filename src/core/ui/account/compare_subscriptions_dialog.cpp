@@ -69,6 +69,141 @@ CompareSubscriptionsDialog::Implementation::Implementation(QWidget* _parent)
 
     new Shadow(Qt::TopEdge, content);
     new Shadow(Qt::BottomEdge, content);
+
+
+    //
+    // Настраиваем список фич для сравнения версий
+    // NOTE: т.к. диалог показывается когда язык интерфейса уже выбран, формируем текстовое
+    //       наполнение прямо в конструкторе
+    //
+    struct Row {
+        QString text = {};
+        bool free = false;
+        bool pro = false;
+        bool cloud = false;
+
+        bool isTitle() const
+        {
+            return !free && !pro && !cloud;
+        }
+    };
+    const QVector<Row> table = {
+        { tr("Unlimited number of projects"), true, true, true },
+        { tr("Unlimited number of documents per project"), true, true, true },
+        { tr("Cover generator"), true, true, true },
+        { tr("Folders"), true, true, true },
+        { tr("Text documents"), true, true, true },
+        { tr("Session statistics"), true, true, true },
+        { tr("Mind maps"), false, true, true },
+        { tr("Images gallery"), false, true, true },
+        { tr("Seamless synchronization across all your devices"), false, false, true },
+        { tr("Realtime collaboration"), false, false, true },
+        { tr("5GB cloud storage"), false, false, true },
+        { tr("Character") },
+        { tr("Basic info"), true, true, true },
+        { tr("Export"), true, true, true },
+        { tr("Characters relations"), false, true, true },
+        { tr("Extended info"), false, true, true },
+        { tr("Dialogues from all stories"), false, true, true },
+        { tr("Location") },
+        { tr("Basic info"), true, true, true },
+        { tr("Export"), true, true, true },
+        { tr("Locations map"), false, true, true },
+        { tr("Extended info"), false, true, true },
+        { tr("Scenes from all stories"), false, true, true },
+        { tr("World") },
+        { tr("Basic info"), true, true, true },
+        { tr("Worlds map"), false, true, true },
+        { tr("Extended info"), false, true, true },
+        { tr("Screenplay") },
+        { tr("Logline & synopsis"), true, true, true },
+        { tr("Title page"), true, true, true },
+        { tr("Treatment text"), true, true, true },
+        { tr("Script text"), true, true, true },
+        { tr("Basic statistics"), true, true, true },
+        { tr("Import/export"), true, true, true },
+        { tr("Scenes numbers locking"), true, true, true },
+        { tr("Corkboard"), false, true, true },
+        { tr("Timeline"), false, true, true },
+        { tr("Extended statistics"), false, true, true },
+        { tr("Script breakdown"), false, false, true },
+        { tr("Comics") },
+        { tr("Logline & synopsis"), true, true, true },
+        { tr("Title page"), true, true, true },
+        { tr("Script text"), true, true, true },
+        { tr("Basic statistics"), true, true, true },
+        { tr("Import/export"), true, true, true },
+        { tr("Audio drama") },
+        { tr("Logline & synopsis"), true, true, true },
+        { tr("Title page"), true, true, true },
+        { tr("Script text"), true, true, true },
+        { tr("Import/export"), true, true, true },
+        { tr("Extended statistics"), false, true, true },
+        { tr("Stageplay") },
+        { tr("Logline & synopsis"), true, true, true },
+        { tr("Title page"), true, true, true },
+        { tr("Script text"), true, true, true },
+        { tr("Import/export"), true, true, true },
+        { tr("Novel") },
+        { tr("Logline & synopsis"), true, true, true },
+        { tr("Title page"), true, true, true },
+        { tr("Outline text"), true, true, true },
+        { tr("Novel text"), true, true, true },
+        { tr("Basic statistics"), true, true, true },
+        { tr("Import/export"), true, true, true },
+        { tr("Corkboard"), false, true, true },
+        { tr("Timeline"), false, true, true },
+    };
+    int row = 0;
+    const auto unavailableIconColor = ColorHelper::transparent(DesignSystem::color().onBackground(),
+                                                               DesignSystem::inactiveItemOpacity());
+    for (const auto& rowData : table) {
+        if (rowData.isTitle()) {
+            auto label = new H6Label;
+            label->setBackgroundColor(DesignSystem::color().background());
+            label->setTextColor(DesignSystem::color().onBackground());
+            label->setContentsMargins(DesignSystem::layout().px24(), DesignSystem::layout().px24(),
+                                      DesignSystem::layout().px24(), DesignSystem::layout().px24());
+            label->setText(rowData.text);
+            contentLayout->addWidget(label, row, 0, 1, 4);
+        } else {
+            auto label = new Body2Label;
+            label->setBackgroundColor(DesignSystem::color().background());
+            label->setTextColor(DesignSystem::color().onBackground());
+            label->setContentsMargins(DesignSystem::layout().px24(), DesignSystem::layout().px16(),
+                                      DesignSystem::layout().px24(), DesignSystem::layout().px16());
+            label->setText(rowData.text);
+            contentLayout->addWidget(label, row, 0);
+            //
+            auto free = new IconsMidLabel;
+            free->setBackgroundColor(DesignSystem::color().background());
+            free->setTextColor(rowData.free ? DesignSystem::color().accent()
+                                            : unavailableIconColor);
+            free->setIcon(rowData.free ? u8"\U000F012C" : u8"\U000F0374");
+            contentLayout->addWidget(free, row, 1, Qt::AlignCenter);
+            //
+            auto pro = new IconsMidLabel;
+            pro->setBackgroundColor(DesignSystem::color().background());
+            pro->setTextColor(rowData.pro ? DesignSystem::color().accent() : unavailableIconColor);
+            pro->setIcon(rowData.pro ? u8"\U000F012C" : u8"\U000F0374");
+            contentLayout->addWidget(pro, row, 2, Qt::AlignCenter);
+            //
+            auto cloud = new IconsMidLabel;
+            cloud->setBackgroundColor(DesignSystem::color().background());
+            cloud->setTextColor(rowData.cloud ? DesignSystem::color().accent()
+                                              : unavailableIconColor);
+            cloud->setIcon(rowData.cloud ? u8"\U000F012C" : u8"\U000F0374");
+            contentLayout->addWidget(cloud, row, 3, Qt::AlignCenter);
+
+            contentWidgets.append({ label, free, pro, cloud });
+        }
+
+        ++row;
+    }
+    contentLayout->setColumnStretch(0, 1);
+    contentLayout->setColumnStretch(1, 1);
+    contentLayout->setColumnStretch(2, 1);
+    contentLayout->setColumnStretch(3, 1);
 }
 
 
@@ -187,149 +322,6 @@ QWidget* CompareSubscriptionsDialog::lastFocusableWidget() const
 
 void CompareSubscriptionsDialog::updateTranslations()
 {
-    //
-    // Настраиваем список фич для сравнения версий
-    //
-    for (const auto& row : std::as_const(d->contentWidgets)) {
-        for (auto widget : row) {
-            d->contentLayout->removeWidget(widget);
-            widget->deleteLater();
-        }
-    }
-    d->contentWidgets.clear();
-
-    struct Row {
-        QString text = {};
-        bool free = false;
-        bool pro = false;
-        bool cloud = false;
-
-        bool isTitle() const
-        {
-            return !free && !pro && !cloud;
-        }
-    };
-    const QVector<Row> table = {
-        { tr("Unlimited number of projects"), true, true, true },
-        { tr("Unlimited number of documents per project"), true, true, true },
-        { tr("Cover generator"), true, true, true },
-        { tr("Folders"), true, true, true },
-        { tr("Text documents"), true, true, true },
-        { tr("Session statistics"), true, true, true },
-        { tr("Mind maps"), false, true, true },
-        { tr("Images gallery"), false, true, true },
-        { tr("Seamless synchronization across all your devices"), false, false, true },
-        { tr("Realtime collaboration"), false, false, true },
-        { tr("5GB cloud storage"), false, false, true },
-        { tr("Character") },
-        { tr("Basic info"), true, true, true },
-        { tr("Export"), true, true, true },
-        { tr("Characters relations"), false, true, true },
-        { tr("Extended info"), false, true, true },
-        { tr("Dialogues from all stories"), false, true, true },
-        { tr("Location") },
-        { tr("Basic info"), true, true, true },
-        { tr("Export"), true, true, true },
-        { tr("Locations map"), false, true, true },
-        { tr("Extended info"), false, true, true },
-        { tr("Scenes from all stories"), false, true, true },
-        { tr("World") },
-        { tr("Basic info"), true, true, true },
-        { tr("Worlds map"), false, true, true },
-        { tr("Extended info"), false, true, true },
-        { tr("Screenplay") },
-        { tr("Logline & synopsis"), true, true, true },
-        { tr("Title page"), true, true, true },
-        { tr("Treatment text"), true, true, true },
-        { tr("Script text"), true, true, true },
-        { tr("Basic statistics"), true, true, true },
-        { tr("Import/export"), true, true, true },
-        { tr("Scenes numbers locking"), true, true, true },
-        { tr("Corkboard"), false, true, true },
-        { tr("Timeline"), false, true, true },
-        { tr("Extended statistics"), false, true, true },
-        { tr("Script breakdown"), false, false, true },
-        { tr("Comics") },
-        { tr("Logline & synopsis"), true, true, true },
-        { tr("Title page"), true, true, true },
-        { tr("Script text"), true, true, true },
-        { tr("Basic statistics"), true, true, true },
-        { tr("Import/export"), true, true, true },
-        { tr("Audio drama") },
-        { tr("Logline & synopsis"), true, true, true },
-        { tr("Title page"), true, true, true },
-        { tr("Script text"), true, true, true },
-        { tr("Import/export"), true, true, true },
-        { tr("Extended statistics"), false, true, true },
-        { tr("Stageplay") },
-        { tr("Logline & synopsis"), true, true, true },
-        { tr("Title page"), true, true, true },
-        { tr("Script text"), true, true, true },
-        { tr("Import/export"), true, true, true },
-        { tr("Novel") },
-        { tr("Logline & synopsis"), true, true, true },
-        { tr("Title page"), true, true, true },
-        { tr("Outline text"), true, true, true },
-        { tr("Novel text"), true, true, true },
-        { tr("Basic statistics"), true, true, true },
-        { tr("Import/export"), true, true, true },
-        { tr("Corkboard"), false, true, true },
-        { tr("Timeline"), false, true, true },
-    };
-    int row = 0;
-    const auto unavailableIconColor = ColorHelper::transparent(DesignSystem::color().onBackground(),
-                                                               DesignSystem::inactiveItemOpacity());
-    for (const auto& rowData : table) {
-        if (rowData.isTitle()) {
-            auto label = new H6Label;
-            label->setBackgroundColor(DesignSystem::color().background());
-            label->setTextColor(DesignSystem::color().onBackground());
-            label->setContentsMargins(DesignSystem::layout().px24(), DesignSystem::layout().px24(),
-                                      DesignSystem::layout().px24(), DesignSystem::layout().px24());
-            label->setText(rowData.text);
-            d->contentLayout->addWidget(label, row, 0, 1, 4);
-        } else {
-            auto label = new Body2Label;
-            label->setBackgroundColor(DesignSystem::color().background());
-            label->setTextColor(DesignSystem::color().onBackground());
-            label->setContentsMargins(DesignSystem::layout().px24(), DesignSystem::layout().px16(),
-                                      DesignSystem::layout().px24(), DesignSystem::layout().px16());
-            label->setText(rowData.text);
-            d->contentLayout->addWidget(label, row, 0);
-            //
-            auto free = new IconsMidLabel;
-            free->setBackgroundColor(DesignSystem::color().background());
-            free->setTextColor(rowData.free ? DesignSystem::color().accent()
-                                            : unavailableIconColor);
-            free->setIcon(rowData.free ? u8"\U000F012C" : u8"\U000F0374");
-            d->contentLayout->addWidget(free, row, 1, Qt::AlignCenter);
-            //
-            auto pro = new IconsMidLabel;
-            pro->setBackgroundColor(DesignSystem::color().background());
-            pro->setTextColor(rowData.pro ? DesignSystem::color().accent() : unavailableIconColor);
-            pro->setIcon(rowData.pro ? u8"\U000F012C" : u8"\U000F0374");
-            d->contentLayout->addWidget(pro, row, 2, Qt::AlignCenter);
-            //
-            auto cloud = new IconsMidLabel;
-            cloud->setBackgroundColor(DesignSystem::color().background());
-            cloud->setTextColor(rowData.cloud ? DesignSystem::color().accent()
-                                              : unavailableIconColor);
-            cloud->setIcon(rowData.cloud ? u8"\U000F012C" : u8"\U000F0374");
-            d->contentLayout->addWidget(cloud, row, 3, Qt::AlignCenter);
-
-            d->contentWidgets.append({ label, free, pro, cloud });
-        }
-
-        ++row;
-    }
-    d->contentLayout->setColumnStretch(0, 1);
-    d->contentLayout->setColumnStretch(1, 1);
-    d->contentLayout->setColumnStretch(2, 1);
-    d->contentLayout->setColumnStretch(3, 1);
-
-    //
-    // Все остальные виджеты
-    //
     d->freeTitle->setText("FREE");
     d->freeSubtitle->setText(tr("For those who are at the beginning of creative journey"));
     d->proTitle->setText("PRO");
