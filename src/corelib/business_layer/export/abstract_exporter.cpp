@@ -145,17 +145,30 @@ TextDocument* AbstractExporter::prepareDocument(AbstractModel* _model,
             // Если не нужно печатать редакторские заметки, убираем их
             //
             if (!_exportOptions.includeReviewMarks) {
+                //
+                // ...  сначала сбросим цветовой формат для всего абзаца, чтобы текст добавленный
+                // после не получился с цветным выделением
+                //
+                auto blockDefaultFormat = cursor.blockCharFormat();
+                blockDefaultFormat.clearProperty(QTextFormat::ForegroundBrush);
+                blockDefaultFormat.clearProperty(QTextFormat::BackgroundBrush);
+                cursor.setBlockCharFormat(blockDefaultFormat);
+                //
+                // ... а затем снимем цвет, но оставляем форматирование для текста внутри абзаца
+                //
                 const auto blockPosition = cursor.block().position();
-                for (const auto& formatRange : cursor.block().textFormats()) {
+                const auto textFormats = cursor.block().textFormats();
+                for (const auto& formatRange : textFormats) {
                     if (formatRange.format.boolProperty(TextBlockStyle::PropertyIsReviewMark)
                         == false) {
                         continue;
                     }
 
-                    auto blockFormat = cursor.blockCharFormat();
+                    auto blockFormat = blockDefaultFormat;
                     blockFormat.setFontWeight(formatRange.format.fontWeight());
                     blockFormat.setFontItalic(formatRange.format.fontItalic());
                     blockFormat.setFontUnderline(formatRange.format.fontUnderline());
+                    blockFormat.setFontStrikeOut(formatRange.format.fontStrikeOut());
                     cursor.setPosition(blockPosition + formatRange.start);
                     cursor.setPosition(blockPosition + formatRange.start + formatRange.length,
                                        QTextCursor::KeepAnchor);
