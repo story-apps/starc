@@ -3,19 +3,22 @@
 #include <business_layer/export/export_options.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/check_box/check_box.h>
+#include <ui/widgets/combo_box/combo_box.h>
 
 #include <QEvent>
 #include <QGridLayout>
 #include <QSettings>
+#include <QStringListModel>
 
 
 namespace Ui {
 namespace {
-const QString kIncludeTitlePageKey = "include-title-page";
-const QString kIncludeSynopsisKey = "include-synopsis";
-const QString kIncludeTextKey = "include-text";
-const QString kIncludeInlineNotesKey = "include-inline-notes";
-const QString kIncludeReviewMarksKey = "include-review-marks";
+const QLatin1String kIncludeTitlePageKey("include-title-page");
+const QLatin1String kIncludeSynopsisKey("include-synopsis");
+const QLatin1String kIncludeTextKey("include-text");
+const QLatin1String kVersionKey("version");
+const QLatin1String kIncludeInlineNotesKey("include-inline-notes");
+const QLatin1String kIncludeReviewMarksKey("include-review-marks");
 } // namespace
 
 class ScriptExportDialog::Implementation
@@ -28,6 +31,7 @@ public:
     CheckBox* includeSynopsis = nullptr;
     CheckBox* includeText = nullptr;
 
+    ComboBox* version = nullptr;
     CheckBox* includeInlineNotes = nullptr;
     CheckBox* includeReviewMarks = nullptr;
 
@@ -38,6 +42,7 @@ ScriptExportDialog::Implementation::Implementation(QWidget* _parent)
     : includeTitlePage(new CheckBox(_parent))
     , includeSynopsis(new CheckBox(_parent))
     , includeText(new CheckBox(_parent))
+    , version(new ComboBox(_parent))
     , includeInlineNotes(new CheckBox(_parent))
     , includeReviewMarks(new CheckBox(_parent))
 {
@@ -58,7 +63,7 @@ ScriptExportDialog::ScriptExportDialog(const QVector<BusinessLayer::ExportFileFo
     leftLayout()->addStretch();
 
     int row = 1;
-
+    rightLayout()->insertWidget(row++, d->version);
     rightLayout()->insertWidget(row++, d->includeInlineNotes);
     rightLayout()->insertWidget(row++, d->includeReviewMarks);
 
@@ -97,8 +102,42 @@ ScriptExportDialog::~ScriptExportDialog()
     settings.setValue(uniqueKey(kIncludeTitlePageKey), d->includeTitlePage->isChecked());
     settings.setValue(uniqueKey(kIncludeSynopsisKey), d->includeSynopsis->isChecked());
     settings.setValue(uniqueKey(kIncludeTextKey), d->includeText->isChecked());
+    settings.setValue(uniqueKey(kVersionKey), d->version->currentIndex().row());
     settings.setValue(uniqueKey(kIncludeInlineNotesKey), d->includeInlineNotes->isChecked());
     settings.setValue(uniqueKey(kIncludeReviewMarksKey), d->includeReviewMarks->isChecked());
+}
+
+void ScriptExportDialog::setVersions(const QVector<QString>& _versions)
+{
+    QStringListModel* model = nullptr;
+    const bool isInitialSetup = d->version->model() == nullptr;
+    if (isInitialSetup) {
+        model = new QStringListModel(d->version);
+        d->version->setModel(model);
+    } else {
+        model = qobject_cast<QStringListModel*>(d->version->model());
+    }
+
+    int versionRow = 0;
+    if (!isInitialSetup) {
+        versionRow = selectedVersion();
+    }
+    model->setStringList({ _versions.begin(), _versions.end() });
+    if (isInitialSetup) {
+        //
+        // Когда версии были заданы в первый раз для диалога восстановим прошлое значение выбранной
+        // версии
+        //
+        versionRow = QSettings().value(uniqueKey(kVersionKey), 0).toInt();
+    }
+    const auto versionIndex = d->version->model()->index(versionRow, 0);
+    d->version->setCurrentIndex(versionIndex);
+    d->version->setVisible(_versions.size() > 1);
+}
+
+int ScriptExportDialog::selectedVersion() const
+{
+    return d->version->currentIndex().row();
 }
 
 BusinessLayer::ExportOptions& ScriptExportDialog::exportOptions() const
@@ -114,34 +153,6 @@ BusinessLayer::ExportOptions& ScriptExportDialog::exportOptions() const
     d->options.includeReviewMarks
         = d->includeReviewMarks->isVisibleTo(this) && d->includeReviewMarks->isChecked();
     return d->options;
-}
-
-void ScriptExportDialog::updateTranslations()
-{
-    AbstractExportDialog::updateTranslations();
-
-    d->includeTitlePage->setText(tr("Title page"));
-    d->includeSynopsis->setText(tr("Synopsis"));
-    d->includeText->setText(tr("Text"));
-
-    d->includeInlineNotes->setText(tr("Include inline notes"));
-    d->includeReviewMarks->setText(tr("Include review marks"));
-}
-
-void ScriptExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
-{
-    AbstractExportDialog::designSystemChangeEvent(_event);
-
-    for (auto checkBox : {
-             d->includeTitlePage,
-             d->includeSynopsis,
-             d->includeText,
-             d->includeInlineNotes,
-             d->includeReviewMarks,
-         }) {
-        checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
-        checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
-    }
 }
 
 void ScriptExportDialog::updateParametersVisibility() const
@@ -223,6 +234,43 @@ void ScriptExportDialog::processIncludeTextChanged(bool _checked) const
 QWidget* ScriptExportDialog::focusedWidgetAfterShow() const
 {
     return d->includeTitlePage;
+}
+
+void ScriptExportDialog::updateTranslations()
+{
+    AbstractExportDialog::updateTranslations();
+
+    d->includeTitlePage->setText(tr("Title page"));
+    d->includeSynopsis->setText(tr("Synopsis"));
+    d->includeText->setText(tr("Text"));
+
+    d->version->setLabel(tr("Version"));
+    d->includeInlineNotes->setText(tr("Include inline notes"));
+    d->includeReviewMarks->setText(tr("Include review marks"));
+}
+
+void ScriptExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
+{
+    AbstractExportDialog::designSystemChangeEvent(_event);
+
+    for (auto combobox : {
+             d->version,
+         }) {
+        combobox->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+        combobox->setTextColor(Ui::DesignSystem::color().onBackground());
+        combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+    }
+
+    for (auto checkBox : {
+             d->includeTitlePage,
+             d->includeSynopsis,
+             d->includeText,
+             d->includeInlineNotes,
+             d->includeReviewMarks,
+         }) {
+        checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
+        checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
+    }
 }
 
 } // namespace Ui

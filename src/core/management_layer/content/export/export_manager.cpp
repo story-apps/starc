@@ -98,7 +98,7 @@ public:
     /**
      * @brief Экспортировать документ
      */
-    void exportScreenplay(BusinessLayer::AbstractModel* _model);
+    void exportScreenplays(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models);
     void exportScreenplay(BusinessLayer::AbstractModel* _model,
                           const BusinessLayer::ScreenplayExportOptions& _options);
     void exportComicBook(BusinessLayer::AbstractModel* _model);
@@ -137,92 +137,103 @@ ExportManager::Implementation::Implementation(ExportManager* _parent, QWidget* _
 {
 }
 
-void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractModel* _model)
+void ExportManager::Implementation::exportScreenplays(
+    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
 {
+    if (_models.isEmpty()) {
+        return;
+    }
+
+
     using namespace BusinessLayer;
 
     if (screenplayExportDialog == nullptr) {
-        screenplayExportDialog
-            = new Ui::ScreenplayExportDialog(_model->document()->uuid().toString(), topLevelWidget);
-        connect(
-            screenplayExportDialog, &Ui::ScreenplayExportDialog::exportRequested,
-            screenplayExportDialog, [this, _model] {
-                auto exportOptions = screenplayExportDialog->exportOptions();
+        const auto currentVersion = _models.constFirst().second;
+        screenplayExportDialog = new Ui::ScreenplayExportDialog(
+            currentVersion->document()->uuid().toString(), topLevelWidget);
+        connect(screenplayExportDialog, &Ui::ScreenplayExportDialog::exportRequested,
+                screenplayExportDialog, [this, _models] {
+                    auto exportOptions = screenplayExportDialog->exportOptions();
 
-                //
-                // Предоставим пользователю возможность выбрать файл, куда он будет экспортировать
-                //
-                QString exportFilter;
-                QString exportExtension;
-                switch (exportOptions.fileFormat) {
-                default:
-                case ExportFileFormat::Pdf: {
-                    exportFilter = DialogHelper::pdfFilter();
-                    exportExtension = ExtensionHelper::pdf();
-                    break;
-                }
-                case ExportFileFormat::Docx: {
-                    exportFilter = DialogHelper::msWordFilter();
-                    exportExtension = ExtensionHelper::msOfficeOpenXml();
-                    break;
-                }
-                case ExportFileFormat::Fdx: {
-                    exportFilter = DialogHelper::finalDraftFilter();
-                    exportExtension = ExtensionHelper::finalDraft();
-                    break;
-                }
-                case ExportFileFormat::Fountain: {
-                    exportFilter = DialogHelper::fountainFilter();
-                    exportExtension = ExtensionHelper::fountain();
-                    break;
-                }
-                }
-                const auto screenplayTextModel
-                    = qobject_cast<BusinessLayer::ScreenplayTextModel*>(_model);
-                const auto projectExportFolder
-                    = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
-                auto modelExportFile
-                    = QString("%1/%2.%3")
-                          .arg(projectExportFolder, screenplayTextModel->informationModel()->name(),
-                               exportExtension);
-                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
-                if (!modelExportFile.endsWith(exportExtension)) {
-                    const auto dotIndex = modelExportFile.lastIndexOf('.');
-                    if (dotIndex == -1) {
-                        modelExportFile += '.';
-                    } else {
-                        modelExportFile = modelExportFile.mid(0, dotIndex + 1);
+                    //
+                    // Предоставим пользователю возможность выбрать файл, куда он будет
+                    // экспортировать
+                    //
+                    QString exportFilter;
+                    QString exportExtension;
+                    switch (exportOptions.fileFormat) {
+                    default:
+                    case ExportFileFormat::Pdf: {
+                        exportFilter = DialogHelper::pdfFilter();
+                        exportExtension = ExtensionHelper::pdf();
+                        break;
                     }
-                    modelExportFile += exportExtension;
-                }
-                auto exportFilePath = QFileDialog::getSaveFileName(
-                    topLevelWidget, tr("Choose the file to export"), modelExportFile, exportFilter);
-                if (exportFilePath.isEmpty()) {
-                    return;
-                }
+                    case ExportFileFormat::Docx: {
+                        exportFilter = DialogHelper::msWordFilter();
+                        exportExtension = ExtensionHelper::msOfficeOpenXml();
+                        break;
+                    }
+                    case ExportFileFormat::Fdx: {
+                        exportFilter = DialogHelper::finalDraftFilter();
+                        exportExtension = ExtensionHelper::finalDraft();
+                        break;
+                    }
+                    case ExportFileFormat::Fountain: {
+                        exportFilter = DialogHelper::fountainFilter();
+                        exportExtension = ExtensionHelper::fountain();
+                        break;
+                    }
+                    }
+                    auto model = _models.at(screenplayExportDialog->selectedVersion()).second;
+                    const auto screenplayTextModel
+                        = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
+                    const auto projectExportFolder
+                        = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
+                    auto modelExportFile = QString("%1/%2.%3")
+                                               .arg(projectExportFolder,
+                                                    screenplayTextModel->informationModel()->name(),
+                                                    exportExtension);
+                    modelExportFile
+                        = settingsValue(exportModelKey(screenplayTextModel), modelExportFile)
+                              .toString();
+                    if (!modelExportFile.endsWith(exportExtension)) {
+                        const auto dotIndex = modelExportFile.lastIndexOf('.');
+                        if (dotIndex == -1) {
+                            modelExportFile += '.';
+                        } else {
+                            modelExportFile = modelExportFile.mid(0, dotIndex + 1);
+                        }
+                        modelExportFile += exportExtension;
+                    }
+                    auto exportFilePath = QFileDialog::getSaveFileName(
+                        topLevelWidget, tr("Choose the file to export"), modelExportFile,
+                        exportFilter);
+                    if (exportFilePath.isEmpty()) {
+                        return;
+                    }
 
-                //
-                // Сохраним файл, в который экспортировали данную модель
-                //
-                setSettingsValue(exportModelKey(_model), exportFilePath);
+                    //
+                    // Сохраним файл, в который экспортировали данную модель
+                    //
+                    setSettingsValue(exportModelKey(screenplayTextModel), exportFilePath);
 
-                //
-                // Если файл был выбран
-                //
-                exportOptions.filePath = exportFilePath;
-                exportScreenplay(_model, exportOptions);
+                    //
+                    // Если файл был выбран
+                    //
+                    exportOptions.filePath = exportFilePath;
+                    exportScreenplay(screenplayTextModel, exportOptions);
 
-                //
-                // Если необходимо, откроем экспортированный документ
-                //
-                if (screenplayExportDialog->openDocumentAfterExport()) {
-                    QDesktopServices::openUrl(QUrl::fromLocalFile(exportOptions.filePath));
-                }
-                //
-                // ... и закрываем диалог экспорта
-                //
-                screenplayExportDialog->hideDialog();
-            });
+                    //
+                    // Если необходимо, откроем экспортированный документ
+                    //
+                    if (screenplayExportDialog->openDocumentAfterExport()) {
+                        QDesktopServices::openUrl(QUrl::fromLocalFile(exportOptions.filePath));
+                    }
+                    //
+                    // ... и закрываем диалог экспорта
+                    //
+                    screenplayExportDialog->hideDialog();
+                });
         connect(screenplayExportDialog, &Ui::ScreenplayExportDialog::canceled,
                 screenplayExportDialog, &Ui::ScreenplayExportDialog::hideDialog);
         connect(screenplayExportDialog, &Ui::ScreenplayExportDialog::disappeared,
@@ -232,6 +243,11 @@ void ExportManager::Implementation::exportScreenplay(BusinessLayer::AbstractMode
                 });
     }
 
+    QVector<QString> versions;
+    for (const auto& version : _models) {
+        versions.append(version.first);
+    }
+    screenplayExportDialog->setVersions(versions);
     screenplayExportDialog->showDialog();
 }
 
@@ -1726,63 +1742,69 @@ bool ExportManager::canExportDocument(BusinessLayer::AbstractModel* _model) cons
     }
 }
 
-void ExportManager::exportDocument(BusinessLayer::AbstractModel* _model)
+void ExportManager::exportDocument(
+    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
 {
-    if (!canExportDocument(_model)) {
+    if (_models.isEmpty()) {
+        return;
+    }
+
+    auto firstModel = _models.constFirst().second;
+    if (!canExportDocument(firstModel)) {
         return;
     }
 
     Log::info("Exporting started. Export document of type %1",
-              Domain::mimeTypeFor(_model->document()->type()).constData());
+              Domain::mimeTypeFor(firstModel->document()->type()).constData());
 
-    switch (_model->document()->type()) {
+    switch (firstModel->document()->type()) {
     case Domain::DocumentObjectType::ScreenplayText: {
-        d->exportScreenplay(_model);
+        d->exportScreenplays(_models);
         break;
     }
 
     case Domain::DocumentObjectType::ComicBookText: {
-        d->exportComicBook(_model);
+        d->exportComicBook(firstModel);
         break;
     }
 
     case Domain::DocumentObjectType::AudioplayText: {
-        d->exportAudioplay(_model);
+        d->exportAudioplay(firstModel);
         break;
     }
 
     case Domain::DocumentObjectType::StageplayText: {
-        d->exportStageplay(_model);
+        d->exportStageplay(firstModel);
         break;
     }
 
     case Domain::DocumentObjectType::NovelText: {
-        d->exportNovel(_model);
+        d->exportNovel(firstModel);
         break;
     }
 
     case Domain::DocumentObjectType::SimpleText: {
-        d->exportSimpleText(_model);
+        d->exportSimpleText(firstModel);
         break;
     }
 
     case Domain::DocumentObjectType::Character: {
-        d->exportCharacter(_model);
+        d->exportCharacter(firstModel);
         break;
     }
 
     case Domain::DocumentObjectType::Characters: {
-        d->exportCharacters(_model);
+        d->exportCharacters(firstModel);
         break;
     }
 
     case Domain::DocumentObjectType::Location: {
-        d->exportLocation(_model);
+        d->exportLocation(firstModel);
         break;
     }
 
     case Domain::DocumentObjectType::Locations: {
-        d->exportLocations(_model);
+        d->exportLocations(firstModel);
         break;
     }
 

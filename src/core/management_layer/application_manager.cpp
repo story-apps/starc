@@ -2065,7 +2065,7 @@ void ApplicationManager::Implementation::exportCurrentDocument()
         Log::info("The current project is not defined and export cannot be performed.");
         return;
     }
-    exportManager->exportDocument(projectManager->currentModelForExport());
+    exportManager->exportDocument(projectManager->currentModelsForExport());
 }
 
 void ApplicationManager::Implementation::toggleFullScreen()

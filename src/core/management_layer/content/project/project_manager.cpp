@@ -3406,78 +3406,72 @@ void ProjectManager::addStageplay(const QString& _name, const QString& _titlePag
     d->setCurrentItem(stageplayItem);
 }
 
-BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
+QVector<QPair<QString, BusinessLayer::AbstractModel*>> ProjectManager::currentModelsForExport()
+    const
 {
-    auto scriptTextModel
-        = [this](const BusinessLayer::StructureModelItem* _item) -> BusinessLayer::AbstractModel* {
+    auto itemModels = [this](const BusinessLayer::StructureModelItem* _item)
+        -> QVector<QPair<QString, BusinessLayer::AbstractModel*>> {
         if (_item == nullptr) {
-            return nullptr;
+            return {};
         }
 
-        constexpr int scriptTextIndex = 2;
-        return d->modelsFacade.modelFor(_item->childAt(scriptTextIndex)->uuid());
+        QVector<QPair<QString, BusinessLayer::AbstractModel*>> models;
+        models.append({ tr("Current version"), d->modelsFacade.modelFor(_item->uuid()) });
+        for (const auto& version : _item->versions()) {
+            models.append({ version->name(), d->modelsFacade.modelFor(version->uuid()) });
+        }
+        return models;
+    };
+    auto scriptTextModel = [itemModels](const BusinessLayer::StructureModelItem* _item)
+        -> QVector<QPair<QString, BusinessLayer::AbstractModel*>> {
+        if (_item == nullptr) {
+            return {};
+        }
+
+        const QSet<Domain::DocumentObjectType> scriptTypes = {
+            Domain::DocumentObjectType::AudioplayText,  Domain::DocumentObjectType::ComicBookText,
+            Domain::DocumentObjectType::ScreenplayText, Domain::DocumentObjectType::StageplayText,
+            Domain::DocumentObjectType::NovelText,
+        };
+        for (int childIndex = 2; childIndex < _item->childCount(); ++childIndex) {
+            if (scriptTypes.contains(_item->childAt(childIndex)->type())) {
+                return itemModels(_item->childAt(childIndex));
+            }
+        }
+        return {};
     };
 
     const auto document = d->view.activeModel->document();
     const auto item = d->projectStructureModel->itemForUuid(document->uuid());
     switch (document->type()) {
-    case Domain::DocumentObjectType::Audioplay: {
+    case Domain::DocumentObjectType::Audioplay:
+    case Domain::DocumentObjectType::ComicBook:
+    case Domain::DocumentObjectType::Screenplay:
+    case Domain::DocumentObjectType::Stageplay:
+    case Domain::DocumentObjectType::Novel: {
         return scriptTextModel(item);
     }
     case Domain::DocumentObjectType::AudioplayTitlePage:
     case Domain::DocumentObjectType::AudioplaySynopsis:
-    case Domain::DocumentObjectType::AudioplayStatistics: {
-        if (item == nullptr) {
-            break;
-        }
-
-        return scriptTextModel(item->parent());
-    }
-
-    case Domain::DocumentObjectType::ComicBook: {
-        return scriptTextModel(item);
-    }
+    case Domain::DocumentObjectType::AudioplayText:
+    case Domain::DocumentObjectType::AudioplayStatistics:
     case Domain::DocumentObjectType::ComicBookTitlePage:
     case Domain::DocumentObjectType::ComicBookSynopsis:
-    case Domain::DocumentObjectType::ComicBookStatistics: {
-        if (item == nullptr) {
-            break;
-        }
-
-        return scriptTextModel(item->parent());
-    }
-
-    case Domain::DocumentObjectType::Screenplay: {
-        return scriptTextModel(item);
-    }
+    case Domain::DocumentObjectType::ComicBookText:
+    case Domain::DocumentObjectType::ComicBookStatistics:
     case Domain::DocumentObjectType::ScreenplayTitlePage:
     case Domain::DocumentObjectType::ScreenplaySynopsis:
-    case Domain::DocumentObjectType::ScreenplayStatistics: {
-        if (item == nullptr) {
-            break;
-        }
-
-        return scriptTextModel(item->parent());
-    }
-
-    case Domain::DocumentObjectType::Stageplay: {
-        return scriptTextModel(item);
-    }
+    case Domain::DocumentObjectType::ScreenplayTreatment:
+    case Domain::DocumentObjectType::ScreenplayText:
+    case Domain::DocumentObjectType::ScreenplayStatistics:
     case Domain::DocumentObjectType::StageplayTitlePage:
     case Domain::DocumentObjectType::StageplaySynopsis:
-    case Domain::DocumentObjectType::StageplayStatistics: {
-        if (item == nullptr) {
-            break;
-        }
-
-        return scriptTextModel(item->parent());
-    }
-
-    case Domain::DocumentObjectType::Novel: {
-        return scriptTextModel(item);
-    }
+    case Domain::DocumentObjectType::StageplayText:
+    case Domain::DocumentObjectType::StageplayStatistics:
     case Domain::DocumentObjectType::NovelTitlePage:
     case Domain::DocumentObjectType::NovelSynopsis:
+    case Domain::DocumentObjectType::NovelOutline:
+    case Domain::DocumentObjectType::NovelText:
     case Domain::DocumentObjectType::NovelStatistics: {
         if (item == nullptr) {
             break;
@@ -3491,7 +3485,7 @@ BusinessLayer::AbstractModel* ProjectManager::currentModelForExport() const
     }
     }
 
-    return d->view.activeModel;
+    return itemModels(item);
 }
 
 BusinessLayer::AbstractModel* ProjectManager::firstScriptModel() const

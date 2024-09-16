@@ -85,8 +85,8 @@ NovelExportDialog::NovelExportDialog(const QString& _uuidKey, QWidget* _parent)
     , d(new Implementation(this))
 {
     leftLayout()->insertWidget(2, d->includeOutline);
-    rightLayout()->insertWidget(1, d->includeFooters);
-    rightLayout()->insertWidget(4, d->ornamentalBreak);
+    rightLayout()->insertWidget(2, d->includeFooters);
+    rightLayout()->insertWidget(5, d->ornamentalBreak);
 
     connect(d->includeOutline, &CheckBox::checkedChanged, this, [this](bool _checked) {
         if (_checked) {

@@ -114,11 +114,11 @@ public:
     void addStageplay(const QString& _name, const QString& _titlePage, const QString& _text);
 
     /**
-     * @brief Модель документа для экспорта
+     * @brief Версии модели документа для экспорта
      * @note Маппим модели для случаев, когда у пользователя выбрана титульная страница, чтобы
      *       экспортировался сам скрипт
      */
-    BusinessLayer::AbstractModel* currentModelForExport() const;
+    QVector<QPair<QString, BusinessLayer::AbstractModel*> > currentModelsForExport() const;
 
     /**
      * @brief Получить первую модель проекта со сценарием

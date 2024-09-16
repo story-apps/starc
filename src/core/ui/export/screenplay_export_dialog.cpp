@@ -11,12 +11,12 @@ namespace Ui {
 
 namespace {
 
-const QString kFormatKey = "format";
-const QString kIncludeTreatmentKey = "include-treatment";
-const QString kIncludeSequencesKey = "include-sequences";
-const QString kHighlightCharacterKey = "highlight-character";
-const QString kHighlightCharacterWithDialogueKey = "highlight-character-with-dialogue";
-const QString kScenesToPrintKey = "scenes-to-print";
+const QLatin1String kFormatKey("format");
+const QLatin1String kIncludeTreatmentKey("include-treatment");
+const QLatin1String kIncludeSequencesKey("include-sequences");
+const QLatin1String kHighlightCharacterKey("highlight-character");
+const QLatin1String kHighlightCharacterWithDialogueKey("highlight-character-with-dialogue");
+const QLatin1String kScenesToPrintKey("scenes-to-print");
 
 static const QVector<BusinessLayer::ExportFileFormat> kScreenplayExportFormats({
     BusinessLayer::ExportFileFormat::Pdf,
@@ -95,7 +95,7 @@ ScreenplayExportDialog::ScreenplayExportDialog(const QString& _uuidKey, QWidget*
 {
     leftLayout()->insertWidget(2, d->includeTreatment);
 
-    rightLayout()->insertWidget(1, d->includeSequences);
+    rightLayout()->insertWidget(2, d->includeSequences);
     {
         auto layout = new QHBoxLayout;
         layout->setContentsMargins({});
@@ -103,9 +103,9 @@ ScreenplayExportDialog::ScreenplayExportDialog(const QString& _uuidKey, QWidget*
         layout->addWidget(d->highlightCharacters);
         layout->addWidget(d->highlightCharactersWithDialogue);
         layout->addStretch();
-        rightLayout()->insertLayout(4, layout);
+        rightLayout()->insertLayout(5, layout);
     }
-    rightLayout()->insertWidget(5, d->exportConcreteScenes);
+    rightLayout()->insertWidget(6, d->exportConcreteScenes);
 
     QSettings settings;
     setCurrentFileFormat(settings.value(uniqueKey(kFormatKey), 0).toInt());

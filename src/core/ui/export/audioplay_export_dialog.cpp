@@ -55,7 +55,7 @@ AudioplayExportDialog::AudioplayExportDialog(const QString& _uuidKey, QWidget* _
         layout->addWidget(d->highlightCharacters);
         layout->addWidget(d->highlightCharactersWithDialogue);
         layout->addStretch();
-        rightLayout()->insertLayout(3, layout);
+        rightLayout()->insertLayout(4, layout);
     }
 
     QSettings settings;

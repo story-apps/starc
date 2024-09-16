@@ -26,7 +26,7 @@ public:
     /**
      * @brief Экспортировать заданный документ
      */
-    void exportDocument(BusinessLayer::AbstractModel* _model);
+    void exportDocument(const QVector<QPair<QString, BusinessLayer::AbstractModel*> >& _models);
 
     /**
      * @brief Экспортировать заданный документ в заданный файл

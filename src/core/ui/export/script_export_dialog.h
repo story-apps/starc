@@ -21,21 +21,21 @@ public:
     ~ScriptExportDialog() override;
 
     /**
+     * @brief Задать список версий сценария для экспорта
+     */
+    void setVersions(const QVector<QString>& _versions);
+
+    /**
+     * @brief Индекс версии для экспорта
+     */
+    int selectedVersion() const;
+
+    /**
      * @brief Получить опции экспорта
      */
     BusinessLayer::ExportOptions& exportOptions() const override;
 
 protected:
-    /**
-     * @brief Обновить переводы
-     */
-    void updateTranslations() override;
-
-    /**
-     * @brief Обновляем UI при изменении дизайн системы
-     */
-    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
-
     /**
      * @brief Обновить видимость параметров
      */
@@ -70,6 +70,16 @@ protected:
      * @brief Определим виджет, который необходимо сфокусировать после отображения диалога
      */
     QWidget* focusedWidgetAfterShow() const override;
+
+    /**
+     * @brief Обновить переводы
+     */
+    void updateTranslations() override;
+
+    /**
+     * @brief Обновляем UI при изменении дизайн системы
+     */
+    void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
 private:
     class Implementation;
