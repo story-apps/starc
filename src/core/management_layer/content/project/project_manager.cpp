@@ -3416,7 +3416,7 @@ QVector<QPair<QString, BusinessLayer::AbstractModel*>> ProjectManager::currentMo
         }
 
         QVector<QPair<QString, BusinessLayer::AbstractModel*>> models;
-        models.append({ tr("Current version"), d->modelsFacade.modelFor(_item->uuid()) });
+        models.append({ tr("Current draft"), d->modelsFacade.modelFor(_item->uuid()) });
         for (const auto& version : _item->versions()) {
             models.append({ version->name(), d->modelsFacade.modelFor(version->uuid()) });
         }

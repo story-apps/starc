@@ -101,10 +101,11 @@ public:
     void exportScreenplays(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models);
     void exportScreenplay(BusinessLayer::AbstractModel* _model,
                           const BusinessLayer::ScreenplayExportOptions& _options);
-    void exportComicBook(BusinessLayer::AbstractModel* _model);
-    void exportAudioplay(BusinessLayer::AbstractModel* _model);
-    void exportStageplay(BusinessLayer::AbstractModel* _model);
-    void exportNovel(BusinessLayer::AbstractModel* _model);
+    void exportComicBooks(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models);
+    void exportAudioplays(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models);
+    void exportStageplays(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models);
+    void exportNovels(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models);
+    //
     void exportSimpleText(BusinessLayer::AbstractModel* _model);
     void exportCharacter(BusinessLayer::AbstractModel* _model);
     void exportCharacters(BusinessLayer::AbstractModel* _model);
@@ -140,11 +141,6 @@ ExportManager::Implementation::Implementation(ExportManager* _parent, QWidget* _
 void ExportManager::Implementation::exportScreenplays(
     const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
 {
-    if (_models.isEmpty()) {
-        return;
-    }
-
-
     using namespace BusinessLayer;
 
     if (screenplayExportDialog == nullptr) {
@@ -343,16 +339,18 @@ void ExportManager::Implementation::exportScreenplay(
     exporter->exportTo(screenplayTextModel, exportOptions);
 }
 
-void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel* _model)
+void ExportManager::Implementation::exportComicBooks(
+    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
 {
     using namespace BusinessLayer;
 
     if (comicBookExportDialog == nullptr) {
-        comicBookExportDialog
-            = new Ui::ComicBookExportDialog(_model->document()->uuid().toString(), topLevelWidget);
+        const auto currentVersion = _models.constFirst().second;
+        comicBookExportDialog = new Ui::ComicBookExportDialog(
+            currentVersion->document()->uuid().toString(), topLevelWidget);
         connect(
             comicBookExportDialog, &Ui::ComicBookExportDialog::exportRequested,
-            comicBookExportDialog, [this, _model] {
+            comicBookExportDialog, [this, _models] {
                 auto exportOptions = comicBookExportDialog->exportOptions();
 
                 //
@@ -379,15 +377,17 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                     break;
                 }
                 }
+                auto model = _models.at(comicBookExportDialog->selectedVersion()).second;
                 const auto comicBookTextModel
-                    = qobject_cast<BusinessLayer::ComicBookTextModel*>(_model);
+                    = qobject_cast<BusinessLayer::ComicBookTextModel*>(model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
                 auto modelExportFile
                     = QString("%1/%2.%3")
                           .arg(projectExportFolder, comicBookTextModel->informationModel()->name(),
                                exportExtension);
-                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                modelExportFile
+                    = settingsValue(exportModelKey(comicBookTextModel), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
                     if (dotIndex == -1) {
@@ -406,7 +406,7 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                 //
                 // Сохраним файл, в который экспортировали данную модель
                 //
-                setSettingsValue(exportModelKey(_model), exportFilePath);
+                setSettingsValue(exportModelKey(comicBookTextModel), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -505,19 +505,26 @@ void ExportManager::Implementation::exportComicBook(BusinessLayer::AbstractModel
                 });
     }
 
+    QVector<QString> versions;
+    for (const auto& version : _models) {
+        versions.append(version.first);
+    }
+    comicBookExportDialog->setVersions(versions);
     comicBookExportDialog->showDialog();
 }
 
-void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel* _model)
+void ExportManager::Implementation::exportAudioplays(
+    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
 {
     using namespace BusinessLayer;
 
     if (audioplayExportDialog == nullptr) {
-        audioplayExportDialog
-            = new Ui::AudioplayExportDialog(_model->document()->uuid().toString(), topLevelWidget);
+        const auto currentVersion = _models.constFirst().second;
+        audioplayExportDialog = new Ui::AudioplayExportDialog(
+            currentVersion->document()->uuid().toString(), topLevelWidget);
         connect(
             audioplayExportDialog, &Ui::AudioplayExportDialog::exportRequested,
-            audioplayExportDialog, [this, _model] {
+            audioplayExportDialog, [this, _models] {
                 auto exportOptions = audioplayExportDialog->exportOptions();
 
                 //
@@ -543,15 +550,17 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
                     break;
                 }
                 }
+                auto model = _models.at(audioplayExportDialog->selectedVersion()).second;
                 const auto audioplayTextModel
-                    = qobject_cast<BusinessLayer::AudioplayTextModel*>(_model);
+                    = qobject_cast<BusinessLayer::AudioplayTextModel*>(model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
                 auto modelExportFile
                     = QString("%1/%2.%3")
                           .arg(projectExportFolder, audioplayTextModel->informationModel()->name(),
                                exportExtension);
-                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                modelExportFile
+                    = settingsValue(exportModelKey(audioplayTextModel), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
                     if (dotIndex == -1) {
@@ -570,7 +579,7 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
                 //
                 // Сохраним файл, в который экспортировали данную модель
                 //
-                setSettingsValue(exportModelKey(_model), exportFilePath);
+                setSettingsValue(exportModelKey(audioplayTextModel), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -675,19 +684,26 @@ void ExportManager::Implementation::exportAudioplay(BusinessLayer::AbstractModel
                 });
     }
 
+    QVector<QString> versions;
+    for (const auto& version : _models) {
+        versions.append(version.first);
+    }
+    audioplayExportDialog->setVersions(versions);
     audioplayExportDialog->showDialog();
 }
 
-void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel* _model)
+void ExportManager::Implementation::exportStageplays(
+    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
 {
     using namespace BusinessLayer;
 
     if (stageplayExportDialog == nullptr) {
-        stageplayExportDialog
-            = new Ui::StageplayExportDialog(_model->document()->uuid().toString(), topLevelWidget);
+        const auto currentVersion = _models.constFirst().second;
+        stageplayExportDialog = new Ui::StageplayExportDialog(
+            currentVersion->document()->uuid().toString(), topLevelWidget);
         connect(
             stageplayExportDialog, &Ui::StageplayExportDialog::exportRequested,
-            stageplayExportDialog, [this, _model] {
+            stageplayExportDialog, [this, _models] {
                 auto exportOptions = stageplayExportDialog->exportOptions();
 
                 //
@@ -713,15 +729,17 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
                     break;
                 }
                 }
+                auto model = _models.at(stageplayExportDialog->selectedVersion()).second;
                 const auto stageplayTextModel
-                    = qobject_cast<BusinessLayer::StageplayTextModel*>(_model);
+                    = qobject_cast<BusinessLayer::StageplayTextModel*>(model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
                 auto modelExportFile
                     = QString("%1/%2.%3")
                           .arg(projectExportFolder, stageplayTextModel->informationModel()->name(),
                                exportExtension);
-                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                modelExportFile
+                    = settingsValue(exportModelKey(stageplayTextModel), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
                     if (dotIndex == -1) {
@@ -740,7 +758,7 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
                 //
                 // Сохраним файл, в который экспортировали данную модель
                 //
-                setSettingsValue(exportModelKey(_model), exportFilePath);
+                setSettingsValue(exportModelKey(stageplayTextModel), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -844,19 +862,26 @@ void ExportManager::Implementation::exportStageplay(BusinessLayer::AbstractModel
                 });
     }
 
+    QVector<QString> versions;
+    for (const auto& version : _models) {
+        versions.append(version.first);
+    }
+    stageplayExportDialog->setVersions(versions);
     stageplayExportDialog->showDialog();
 }
 
-void ExportManager::Implementation::exportNovel(BusinessLayer::AbstractModel* _model)
+void ExportManager::Implementation::exportNovels(
+    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
 {
     using namespace BusinessLayer;
 
     if (novelExportDialog == nullptr) {
-        novelExportDialog
-            = new Ui::NovelExportDialog(_model->document()->uuid().toString(), topLevelWidget);
+        const auto currentVersion = _models.constFirst().second;
+        novelExportDialog = new Ui::NovelExportDialog(currentVersion->document()->uuid().toString(),
+                                                      topLevelWidget);
         connect(
             novelExportDialog, &Ui::NovelExportDialog::exportRequested, novelExportDialog,
-            [this, _model] {
+            [this, _models] {
                 auto exportOptions = novelExportDialog->exportOptions();
 
                 //
@@ -882,14 +907,16 @@ void ExportManager::Implementation::exportNovel(BusinessLayer::AbstractModel* _m
                     break;
                 }
                 }
-                const auto novelTextModel = qobject_cast<BusinessLayer::NovelTextModel*>(_model);
+                auto model = _models.at(novelExportDialog->selectedVersion()).second;
+                const auto novelTextModel = qobject_cast<BusinessLayer::NovelTextModel*>(model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
                 auto modelExportFile
                     = QString("%1/%2.%3")
                           .arg(projectExportFolder, novelTextModel->informationModel()->name(),
                                exportExtension);
-                modelExportFile = settingsValue(exportModelKey(_model), modelExportFile).toString();
+                modelExportFile
+                    = settingsValue(exportModelKey(novelTextModel), modelExportFile).toString();
                 if (!modelExportFile.endsWith(exportExtension)) {
                     const auto dotIndex = modelExportFile.lastIndexOf('.');
                     if (dotIndex == -1) {
@@ -908,7 +935,7 @@ void ExportManager::Implementation::exportNovel(BusinessLayer::AbstractModel* _m
                 //
                 // Сохраним файл, в который экспортировали данную модель
                 //
-                setSettingsValue(exportModelKey(_model), exportFilePath);
+                setSettingsValue(exportModelKey(novelTextModel), exportFilePath);
 
                 //
                 // Если файл был выбран
@@ -995,6 +1022,11 @@ void ExportManager::Implementation::exportNovel(BusinessLayer::AbstractModel* _m
         });
     }
 
+    QVector<QString> versions;
+    for (const auto& version : _models) {
+        versions.append(version.first);
+    }
+    novelExportDialog->setVersions(versions);
     novelExportDialog->showDialog();
 }
 
@@ -1764,22 +1796,22 @@ void ExportManager::exportDocument(
     }
 
     case Domain::DocumentObjectType::ComicBookText: {
-        d->exportComicBook(firstModel);
+        d->exportComicBooks(_models);
         break;
     }
 
     case Domain::DocumentObjectType::AudioplayText: {
-        d->exportAudioplay(firstModel);
+        d->exportAudioplays(_models);
         break;
     }
 
     case Domain::DocumentObjectType::StageplayText: {
-        d->exportStageplay(firstModel);
+        d->exportStageplays(_models);
         break;
     }
 
     case Domain::DocumentObjectType::NovelText: {
-        d->exportNovel(firstModel);
+        d->exportNovels(_models);
         break;
     }
 
