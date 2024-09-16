@@ -57,11 +57,6 @@ public:
     StageplayInformationModel* informationModel = nullptr;
 
     /**
-     * @brief Запланировано ли обновление нумерации
-     */
-    bool isUpdateNumberingPlanned = false;
-
-    /**
      * @brief Количество сцен
      */
     int scenesCount = 0;
@@ -70,6 +65,16 @@ public:
      * @brief Количество страниц
      */
     int textPageCount = 0;
+
+    /**
+     * @brief Последний сохранённый хэш документа
+     */
+    QByteArray lastContentHash;
+
+    /**
+     * @brief Запланировано ли обновление нумерации
+     */
+    bool isUpdateNumberingPlanned = false;
 };
 
 StageplayTextModel::Implementation::Implementation(StageplayTextModel* _q)
@@ -177,7 +182,11 @@ StageplayTextModel::StageplayTextModel(QObject* _parent)
     , d(new Implementation(this))
 {
     auto updateCounters = [this](const QModelIndex& _index) {
-        d->updateNumbering();
+        if (const auto hash = contentHash(); d->lastContentHash != hash) {
+            d->updateNumbering();
+            d->lastContentHash = hash;
+        }
+
         d->updateChildrenCounters(itemForIndex(_index));
     };
     //

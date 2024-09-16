@@ -38,17 +38,17 @@ public:
     TextModelItem* rootItem() const;
 
     /**
-     * @brief Пересчитать счетчики элемента и всех детей
-     */
-    void updateChildrenCounters(const TextModelItem* _item);
-
-    /**
      * @brief Пересчитать количество сцен
      */
     //
     // TODO: Возможно стоит добавить обновление номеров сцен, как в аналогичных моделях
     //
     void updateNumbering();
+
+    /**
+     * @brief Пересчитать счетчики элемента и всех детей
+     */
+    void updateChildrenCounters(const TextModelItem* _item);
 
 
     /**
@@ -76,6 +76,16 @@ public:
      * @brief Количество сцен
      */
     int scenesCount = 0;
+
+    /**
+     * @brief Последний сохранённый хэш документа
+     */
+    QByteArray lastContentHash;
+
+    /**
+     * @brief Запланировано ли обновление нумерации
+     */
+    bool isUpdateNumberingPlanned = false;
 };
 
 NovelTextModel::Implementation::Implementation(NovelTextModel* _q)
@@ -86,6 +96,39 @@ NovelTextModel::Implementation::Implementation(NovelTextModel* _q)
 TextModelItem* NovelTextModel::Implementation::rootItem() const
 {
     return q->itemForIndex({});
+}
+
+void NovelTextModel::Implementation::updateNumbering()
+{
+    if (isUpdateNumberingPlanned) {
+        return;
+    }
+
+    scenesCount = 0;
+    std::function<void(const TextModelItem*)> updateChildNumbering;
+    updateChildNumbering = [this, &updateChildNumbering](const TextModelItem* _item) {
+        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+            auto childItem = _item->childAt(childIndex);
+            switch (childItem->type()) {
+            case TextModelItemType::Folder: {
+                updateChildNumbering(childItem);
+                break;
+            }
+
+            case TextModelItemType::Group: {
+                auto groupItem = static_cast<TextModelGroupItem*>(childItem);
+                if (groupItem->groupType() == TextGroupType::Scene) {
+                    ++scenesCount;
+                }
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
+    updateChildNumbering(rootItem());
 }
 
 void NovelTextModel::Implementation::updateChildrenCounters(const TextModelItem* _item)
@@ -114,35 +157,6 @@ void NovelTextModel::Implementation::updateChildrenCounters(const TextModelItem*
     }
 }
 
-void NovelTextModel::Implementation::updateNumbering()
-{
-    scenesCount = 0;
-    std::function<void(const TextModelItem*)> updateChildNumbering;
-    updateChildNumbering = [this, &updateChildNumbering](const TextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case TextModelItemType::Folder: {
-                updateChildNumbering(childItem);
-                break;
-            }
-
-            case TextModelItemType::Group: {
-                auto groupItem = static_cast<TextModelGroupItem*>(childItem);
-                if (groupItem->groupType() == TextGroupType::Scene) {
-                    ++scenesCount;
-                }
-                break;
-            }
-
-            default:
-                break;
-            }
-        }
-    };
-    updateChildNumbering(rootItem());
-}
-
 
 // ****
 
@@ -152,7 +166,11 @@ NovelTextModel::NovelTextModel(QObject* _parent)
     , d(new Implementation(this))
 {
     auto updateCounters = [this](const QModelIndex& _index) {
-        d->updateNumbering();
+        if (const auto hash = contentHash(); d->lastContentHash != hash) {
+            d->updateNumbering();
+            d->lastContentHash = hash;
+        }
+
         d->updateChildrenCounters(itemForIndex(_index));
     };
     //
@@ -162,6 +180,17 @@ NovelTextModel::NovelTextModel(QObject* _parent)
     //
     connect(this, &NovelTextModel::afterRowsInserted, this, updateCounters);
     connect(this, &NovelTextModel::afterRowsRemoved, this, updateCounters);
+    //
+    // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
+    //
+    connect(this, &NovelTextModel::rowsAboutToBeChanged, this,
+            [this] { d->isUpdateNumberingPlanned = true; });
+    connect(this, &NovelTextModel::rowsChanged, this, [this] {
+        if (d->isUpdateNumberingPlanned) {
+            d->isUpdateNumberingPlanned = false;
+            d->updateNumbering();
+        }
+    });
 }
 
 NovelTextModel::~NovelTextModel() = default;

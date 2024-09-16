@@ -71,14 +71,19 @@ public:
     QString name;
 
     /**
-     * @brief Запланировано ли обновление нумерации
-     */
-    bool isUpdateNumberingPlanned = false;
-
-    /**
      * @brief Количество страниц
      */
     int textPageCount = 0;
+
+    /**
+     * @brief Последний сохранённый хэш документа
+     */
+    QByteArray lastContentHash;
+
+    /**
+     * @brief Запланировано ли обновление нумерации
+     */
+    bool isUpdateNumberingPlanned = false;
 };
 
 SimpleTextModel::Implementation::Implementation(SimpleTextModel* _q)
@@ -172,7 +177,11 @@ SimpleTextModel::SimpleTextModel(QObject* _parent)
             [this](const QModelIndex& _index) { d->updateDocumentName(_index); });
 
     auto updateCounters = [this](const QModelIndex& _index) {
-        d->updateNumbering();
+        if (const auto hash = contentHash(); d->lastContentHash != hash) {
+            d->updateNumbering();
+            d->lastContentHash = hash;
+        }
+
         d->updateChildrenCounters(itemForIndex(_index));
     };
 

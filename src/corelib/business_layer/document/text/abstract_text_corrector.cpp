@@ -126,6 +126,7 @@ TextModelItem* AbstractTextCorrector::visibleTopLevelItem() const
 
 bool AbstractTextCorrector::isBlockVisible(TextParagraphType _type) const
 {
+    Q_UNUSED(_type)
     return true;
 }
 

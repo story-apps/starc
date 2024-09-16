@@ -67,11 +67,6 @@ public:
     ComicBookDictionariesModel* dictionariesModel = nullptr;
 
     /**
-     * @brief Запланировано ли обновление нумерации
-     */
-    bool isUpdateNumberingPlanned = false;
-
-    /**
      * @brief Количество панелей
      */
     int panelsCount = 0;
@@ -80,6 +75,16 @@ public:
      * @brief Количество страниц
      */
     int textPageCount = 0;
+
+    /**
+     * @brief Последний сохранённый хэш документа
+     */
+    QByteArray lastContentHash;
+
+    /**
+     * @brief Запланировано ли обновление нумерации
+     */
+    bool isUpdateNumberingPlanned = false;
 };
 
 ComicBookTextModel::Implementation::Implementation(ComicBookTextModel* _q)
@@ -198,7 +203,11 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
     , d(new Implementation(this))
 {
     auto updateCounters = [this](const QModelIndex& _index) {
-        d->updateNumbering();
+        if (const auto hash = contentHash(); d->lastContentHash != hash) {
+            d->updateNumbering();
+            d->lastContentHash = hash;
+        }
+
         d->updateChildrenCounters(itemForIndex(_index));
     };
 

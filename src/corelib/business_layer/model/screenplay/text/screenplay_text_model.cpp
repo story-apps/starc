@@ -71,6 +71,11 @@ public:
     int scenesCount = 0;
 
     /**
+     * @brief Последний сохранённый хэш документа
+     */
+    QByteArray lastContentHash;
+
+    /**
      * @brief Запланировано ли обновление нумерации
      */
     bool isUpdateNumberingPlanned = false;
@@ -117,13 +122,16 @@ void ScreenplayTextModel::Implementation::updateChildrenCounters(const TextModel
 
 // ****
 
-
 ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
     : ScriptTextModel(_parent, ScreenplayTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
     auto updateCounters = [this](const QModelIndex& _index) {
-        updateNumbering();
+        if (const auto hash = contentHash(); d->lastContentHash != hash) {
+            updateNumbering();
+            d->lastContentHash = hash;
+        }
+
         d->updateChildrenCounters(itemForIndex(_index));
     };
     //
