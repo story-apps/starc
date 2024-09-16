@@ -135,12 +135,12 @@ AbstractExportDialog::AbstractExportDialog(const QVector<BusinessLayer::ExportFi
     setRejectButton(d->cancelButton);
 
     QSettings settings;
-    d->watermark->setText(settings.value(uniqueKey(kWatermarkKey)).toString());
+    d->watermark->setText(settings.value(settingsKey(kWatermarkKey)).toString());
     d->watermarkColorPopup->setSelectedColor(
-        settings.value(uniqueKey(kWatermarkColorKey), QColor("#B7B7B7")).value<QColor>());
+        settings.value(settingsKey(kWatermarkColorKey), QColor("#B7B7B7")).value<QColor>());
     d->watermark->setTrailingIconColor(d->watermarkColorPopup->selectedColor());
     d->openDocumentAfterExport->setChecked(
-        settings.value(uniqueKey(kOpenDocumentAfterExportKey), true).toBool());
+        settings.value(settingsKey(kOpenDocumentAfterExportKey), true).toBool());
 
     connect(d->exportButton, &Button::clicked, this, &AbstractExportDialog::exportRequested);
     connect(d->cancelButton, &Button::clicked, this, &AbstractExportDialog::canceled);
@@ -157,9 +157,9 @@ AbstractExportDialog::AbstractExportDialog(const QVector<BusinessLayer::ExportFi
 AbstractExportDialog::~AbstractExportDialog()
 {
     QSettings settings;
-    settings.setValue(uniqueKey(kWatermarkKey), d->watermark->text());
-    settings.setValue(uniqueKey(kWatermarkColorKey), d->watermarkColorPopup->selectedColor());
-    settings.setValue(uniqueKey(kOpenDocumentAfterExportKey),
+    settings.setValue(settingsKey(kWatermarkKey), d->watermark->text());
+    settings.setValue(settingsKey(kWatermarkColorKey), d->watermarkColorPopup->selectedColor());
+    settings.setValue(settingsKey(kOpenDocumentAfterExportKey),
                       d->openDocumentAfterExport->isChecked());
 }
 
@@ -287,9 +287,9 @@ QWidget* AbstractExportDialog::lastFocusableWidget() const
     return d->exportButton;
 }
 
-QString AbstractExportDialog::uniqueKey(const QString& _parameterKey) const
+QString AbstractExportDialog::settingsKey(const QString& _parameter) const
 {
-    return QString("%1/%2/%3").arg(kGroupKey, d->uuidKey, _parameterKey);
+    return QString("%1/%2/%3").arg(kGroupKey, d->uuidKey, _parameter);
 }
 
 } // namespace Ui

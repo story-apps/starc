@@ -61,17 +61,17 @@ SimpleTextExportDialog::SimpleTextExportDialog(const QString& _uuidKey, QWidget*
     setCurrentFileFormat(settings.value(kFormatKey, 0).toInt());
     updateDialog();
     d->includeInlineNotes->setChecked(
-        settings.value(uniqueKey(kIncludeInlineNotesKey), false).toBool());
+        settings.value(settingsKey(kIncludeInlineNotesKey), false).toBool());
     d->includeReviewMarks->setChecked(
-        settings.value(uniqueKey(kIncludeReviewMarksKey), true).toBool());
+        settings.value(settingsKey(kIncludeReviewMarksKey), true).toBool());
 }
 
 SimpleTextExportDialog::~SimpleTextExportDialog()
 {
     QSettings settings;
-    settings.setValue(uniqueKey(kFormatKey), currentFileFormatRow());
-    settings.setValue(uniqueKey(kIncludeInlineNotesKey), d->includeInlineNotes->isChecked());
-    settings.setValue(uniqueKey(kIncludeReviewMarksKey), d->includeReviewMarks->isChecked());
+    settings.setValue(settingsKey(kFormatKey), currentFileFormatRow());
+    settings.setValue(settingsKey(kIncludeInlineNotesKey), d->includeInlineNotes->isChecked());
+    settings.setValue(settingsKey(kIncludeReviewMarksKey), d->includeReviewMarks->isChecked());
 }
 
 BusinessLayer::ExportOptions& SimpleTextExportDialog::exportOptions() const

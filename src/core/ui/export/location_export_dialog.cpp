@@ -61,12 +61,13 @@ LocationExportDialog::LocationExportDialog(const QString& _uuidKey, QWidget* _pa
     contentsLayout()->addLayout(bottomLayout(), row, column);
 
     QSettings settings;
-    setCurrentFileFormat(settings.value(uniqueKey(kFormatKey), 0).toInt());
-    d->includeSenseInfo->setChecked(settings.value(uniqueKey(kIncludeSenseInfoKey), true).toBool());
+    setCurrentFileFormat(settings.value(settingsKey(kFormatKey), 0).toInt());
+    d->includeSenseInfo->setChecked(
+        settings.value(settingsKey(kIncludeSenseInfoKey), true).toBool());
     d->includeGeographyInfo->setChecked(
-        settings.value(uniqueKey(kIncludeGeographyInfoKey), false).toBool());
+        settings.value(settingsKey(kIncludeGeographyInfoKey), false).toBool());
     d->includeBackgroundInfo->setChecked(
-        settings.value(uniqueKey(kIncludeBackgroundInfoKey), false).toBool());
+        settings.value(settingsKey(kIncludeBackgroundInfoKey), false).toBool());
 
     updateDialog();
 }
@@ -74,10 +75,11 @@ LocationExportDialog::LocationExportDialog(const QString& _uuidKey, QWidget* _pa
 LocationExportDialog::~LocationExportDialog()
 {
     QSettings settings;
-    settings.setValue(uniqueKey(kFormatKey), currentFileFormatRow());
-    settings.setValue(uniqueKey(kIncludeSenseInfoKey), d->includeSenseInfo->isChecked());
-    settings.setValue(uniqueKey(kIncludeGeographyInfoKey), d->includeGeographyInfo->isChecked());
-    settings.setValue(uniqueKey(kIncludeBackgroundInfoKey), d->includeBackgroundInfo->isChecked());
+    settings.setValue(settingsKey(kFormatKey), currentFileFormatRow());
+    settings.setValue(settingsKey(kIncludeSenseInfoKey), d->includeSenseInfo->isChecked());
+    settings.setValue(settingsKey(kIncludeGeographyInfoKey), d->includeGeographyInfo->isChecked());
+    settings.setValue(settingsKey(kIncludeBackgroundInfoKey),
+                      d->includeBackgroundInfo->isChecked());
 }
 
 BusinessLayer::LocationExportOptions& LocationExportDialog::exportOptions() const

@@ -56,17 +56,18 @@ DocumentExportDialog::DocumentExportDialog(const QVector<BusinessLayer::ExportFi
     contentsLayout()->addLayout(bottomLayout(), row, column);
 
     QSettings settings;
-    d->includeMainPhoto->setChecked(settings.value(uniqueKey(kIncludeMainPhotoKey), true).toBool());
+    d->includeMainPhoto->setChecked(
+        settings.value(settingsKey(kIncludeMainPhotoKey), true).toBool());
     d->includeAdditionalPhotos->setChecked(
-        settings.value(uniqueKey(kIncludeAdditionalPhototsKey), false).toBool());
+        settings.value(settingsKey(kIncludeAdditionalPhototsKey), false).toBool());
 }
 
 DocumentExportDialog::~DocumentExportDialog()
 {
     QSettings settings;
-    settings.setValue(uniqueKey(kIncludeMainPhotoKey),
+    settings.setValue(settingsKey(kIncludeMainPhotoKey),
                       d->includeMainPhoto->isVisible() && d->includeMainPhoto->isChecked());
-    settings.setValue(uniqueKey(kIncludeAdditionalPhototsKey),
+    settings.setValue(settingsKey(kIncludeAdditionalPhototsKey),
                       d->includeAdditionalPhotos->isVisible()
                           && d->includeAdditionalPhotos->isChecked());
 }

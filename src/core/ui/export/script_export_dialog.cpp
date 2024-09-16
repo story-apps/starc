@@ -77,13 +77,14 @@ ScriptExportDialog::ScriptExportDialog(const QVector<BusinessLayer::ExportFileFo
     contentsLayout()->setColumnStretch(1, 1);
 
     QSettings settings;
-    d->includeTitlePage->setChecked(settings.value(uniqueKey(kIncludeTitlePageKey), true).toBool());
-    d->includeSynopsis->setChecked(settings.value(uniqueKey(kIncludeSynopsisKey), true).toBool());
-    d->includeText->setChecked(settings.value(uniqueKey(kIncludeTextKey), true).toBool());
+    d->includeTitlePage->setChecked(
+        settings.value(settingsKey(kIncludeTitlePageKey), true).toBool());
+    d->includeSynopsis->setChecked(settings.value(settingsKey(kIncludeSynopsisKey), true).toBool());
+    d->includeText->setChecked(settings.value(settingsKey(kIncludeTextKey), true).toBool());
     d->includeInlineNotes->setChecked(
-        settings.value(uniqueKey(kIncludeInlineNotesKey), false).toBool());
+        settings.value(settingsKey(kIncludeInlineNotesKey), false).toBool());
     d->includeReviewMarks->setChecked(
-        settings.value(uniqueKey(kIncludeReviewMarksKey), true).toBool());
+        settings.value(settingsKey(kIncludeReviewMarksKey), true).toBool());
 
     connect(d->includeText, &CheckBox::checkedChanged, this,
             &ScriptExportDialog::processIncludeTextChanged);
@@ -99,12 +100,12 @@ ScriptExportDialog::ScriptExportDialog(const QVector<BusinessLayer::ExportFileFo
 ScriptExportDialog::~ScriptExportDialog()
 {
     QSettings settings;
-    settings.setValue(uniqueKey(kIncludeTitlePageKey), d->includeTitlePage->isChecked());
-    settings.setValue(uniqueKey(kIncludeSynopsisKey), d->includeSynopsis->isChecked());
-    settings.setValue(uniqueKey(kIncludeTextKey), d->includeText->isChecked());
-    settings.setValue(uniqueKey(kVersionKey), d->version->currentIndex().row());
-    settings.setValue(uniqueKey(kIncludeInlineNotesKey), d->includeInlineNotes->isChecked());
-    settings.setValue(uniqueKey(kIncludeReviewMarksKey), d->includeReviewMarks->isChecked());
+    settings.setValue(settingsKey(kIncludeTitlePageKey), d->includeTitlePage->isChecked());
+    settings.setValue(settingsKey(kIncludeSynopsisKey), d->includeSynopsis->isChecked());
+    settings.setValue(settingsKey(kIncludeTextKey), d->includeText->isChecked());
+    settings.setValue(settingsKey(kVersionKey), d->version->currentIndex().row());
+    settings.setValue(settingsKey(kIncludeInlineNotesKey), d->includeInlineNotes->isChecked());
+    settings.setValue(settingsKey(kIncludeReviewMarksKey), d->includeReviewMarks->isChecked());
 }
 
 void ScriptExportDialog::setVersions(const QVector<QString>& _versions)
@@ -128,7 +129,7 @@ void ScriptExportDialog::setVersions(const QVector<QString>& _versions)
         // Когда версии были заданы в первый раз для диалога восстановим прошлое значение выбранной
         // версии
         //
-        versionRow = QSettings().value(uniqueKey(kVersionKey), 0).toInt();
+        versionRow = QSettings().value(settingsKey(kVersionKey), 0).toInt();
     }
     const auto versionIndex = d->version->model()->index(versionRow, 0);
     d->version->setCurrentIndex(versionIndex);

@@ -59,11 +59,11 @@ AudioplayExportDialog::AudioplayExportDialog(const QString& _uuidKey, QWidget* _
     }
 
     QSettings settings;
-    setCurrentFileFormat(settings.value(uniqueKey(kFormatKey), 0).toInt());
+    setCurrentFileFormat(settings.value(settingsKey(kFormatKey), 0).toInt());
     d->highlightCharacters->setChecked(
-        settings.value(uniqueKey(kHighlightCharacterKey), false).toBool());
+        settings.value(settingsKey(kHighlightCharacterKey), false).toBool());
     d->highlightCharactersWithDialogue->setChecked(
-        settings.value(uniqueKey(kHighlightCharacterWithDialogueKey), false).toBool());
+        settings.value(settingsKey(kHighlightCharacterWithDialogueKey), false).toBool());
 
     connect(d->highlightCharacters, &CheckBox::checkedChanged, d->highlightCharactersWithDialogue,
             &CheckBox::setEnabled);
@@ -74,9 +74,9 @@ AudioplayExportDialog::AudioplayExportDialog(const QString& _uuidKey, QWidget* _
 AudioplayExportDialog::~AudioplayExportDialog()
 {
     QSettings settings;
-    settings.setValue(uniqueKey(kFormatKey), currentFileFormatRow());
-    settings.setValue(uniqueKey(kHighlightCharacterKey), d->highlightCharacters->isChecked());
-    settings.setValue(uniqueKey(kHighlightCharacterWithDialogueKey),
+    settings.setValue(settingsKey(kFormatKey), currentFileFormatRow());
+    settings.setValue(settingsKey(kHighlightCharacterKey), d->highlightCharacters->isChecked());
+    settings.setValue(settingsKey(kHighlightCharacterWithDialogueKey),
                       d->highlightCharactersWithDialogue->isChecked());
 }
 

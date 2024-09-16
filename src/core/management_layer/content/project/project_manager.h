@@ -118,7 +118,7 @@ public:
      * @note Маппим модели для случаев, когда у пользователя выбрана титульная страница, чтобы
      *       экспортировался сам скрипт
      */
-    QVector<QPair<QString, BusinessLayer::AbstractModel*> > currentModelsForExport() const;
+    QVector<QPair<QString, BusinessLayer::AbstractModel*>> currentModelsForExport() const;
 
     /**
      * @brief Получить первую модель проекта со сценарием

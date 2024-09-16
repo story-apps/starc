@@ -128,7 +128,7 @@ protected:
     /**
      * @brief Уникальный ключ для сохранения настроек
      */
-    QString uniqueKey(const QString& _parameterKey) const;
+    QString settingsKey(const QString& _parameter) const;
 
 private:
     class Implementation;

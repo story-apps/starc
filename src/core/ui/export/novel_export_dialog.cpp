@@ -97,19 +97,19 @@ NovelExportDialog::NovelExportDialog(const QString& _uuidKey, QWidget* _parent)
     connect(d->includeOutline, &CheckBox::checkedChanged, this, &NovelExportDialog::updateDialog);
 
     QSettings settings;
-    setCurrentFileFormat(settings.value(uniqueKey(kFormatKey), 0).toInt());
-    d->includeOutline->setChecked(settings.value(uniqueKey(kIncludeOutlineKey), false).toBool());
-    d->includeFooters->setChecked(settings.value(uniqueKey(kIncludeFootersKey), false).toBool());
-    d->ornamentalBreak->setText(settings.value(uniqueKey(kScenesToPrintKey)).toString());
+    setCurrentFileFormat(settings.value(settingsKey(kFormatKey), 0).toInt());
+    d->includeOutline->setChecked(settings.value(settingsKey(kIncludeOutlineKey), false).toBool());
+    d->includeFooters->setChecked(settings.value(settingsKey(kIncludeFootersKey), false).toBool());
+    d->ornamentalBreak->setText(settings.value(settingsKey(kScenesToPrintKey)).toString());
 }
 
 NovelExportDialog::~NovelExportDialog()
 {
     QSettings settings;
-    settings.setValue(uniqueKey(kFormatKey), currentFileFormatRow());
-    settings.setValue(uniqueKey(kIncludeOutlineKey), d->includeOutline->isChecked());
-    settings.setValue(uniqueKey(kIncludeFootersKey), d->includeFooters->isChecked());
-    settings.setValue(uniqueKey(kScenesToPrintKey), d->ornamentalBreak->text());
+    settings.setValue(settingsKey(kFormatKey), currentFileFormatRow());
+    settings.setValue(settingsKey(kIncludeOutlineKey), d->includeOutline->isChecked());
+    settings.setValue(settingsKey(kIncludeFootersKey), d->includeFooters->isChecked());
+    settings.setValue(settingsKey(kScenesToPrintKey), d->ornamentalBreak->text());
 }
 
 BusinessLayer::NovelExportOptions& NovelExportDialog::exportOptions() const

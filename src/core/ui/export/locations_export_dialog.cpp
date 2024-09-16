@@ -25,7 +25,7 @@ LocationsExportDialog::LocationsExportDialog(const QString& _uuidKey, QWidget* _
     : DocumentsExportDialog(kLocationsExportFormats, _uuidKey, _parent)
 {
     QSettings settings;
-    setCurrentFileFormat(settings.value(uniqueKey(kFormatKey), 0).toInt());
+    setCurrentFileFormat(settings.value(settingsKey(kFormatKey), 0).toInt());
 
     updateDialog();
 }
@@ -33,8 +33,8 @@ LocationsExportDialog::LocationsExportDialog(const QString& _uuidKey, QWidget* _
 LocationsExportDialog::~LocationsExportDialog()
 {
     QSettings settings;
-    settings.setValue(uniqueKey(kLocationsKey), checkedDocuments());
-    settings.setValue(uniqueKey(kFormatKey), currentFileFormatRow());
+    settings.setValue(settingsKey(kLocationsKey), checkedDocuments());
+    settings.setValue(settingsKey(kFormatKey), currentFileFormatRow());
 }
 
 BusinessLayer::DocumentsExportOptions& LocationsExportDialog::exportOptions() const

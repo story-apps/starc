@@ -34,14 +34,14 @@ StageplayExportDialog::StageplayExportDialog(const QString& _uuidKey, QWidget* _
     , d(new Implementation())
 {
     QSettings settings;
-    setCurrentFileFormat(settings.value(uniqueKey(kFormatKey), 0).toInt());
+    setCurrentFileFormat(settings.value(settingsKey(kFormatKey), 0).toInt());
     updateDialog();
 }
 
 StageplayExportDialog::~StageplayExportDialog()
 {
     QSettings settings;
-    settings.setValue(uniqueKey(kFormatKey), currentFileFormatRow());
+    settings.setValue(settingsKey(kFormatKey), currentFileFormatRow());
 }
 
 BusinessLayer::StageplayExportOptions& StageplayExportDialog::exportOptions() const

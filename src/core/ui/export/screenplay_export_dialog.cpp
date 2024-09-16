@@ -108,15 +108,16 @@ ScreenplayExportDialog::ScreenplayExportDialog(const QString& _uuidKey, QWidget*
     rightLayout()->insertWidget(6, d->exportConcreteScenes);
 
     QSettings settings;
-    setCurrentFileFormat(settings.value(uniqueKey(kFormatKey), 0).toInt());
+    setCurrentFileFormat(settings.value(settingsKey(kFormatKey), 0).toInt());
     d->includeTreatment->setChecked(
-        settings.value(uniqueKey(kIncludeTreatmentKey), false).toBool());
-    d->includeSequences->setChecked(settings.value(uniqueKey(kIncludeSequencesKey), true).toBool());
+        settings.value(settingsKey(kIncludeTreatmentKey), false).toBool());
+    d->includeSequences->setChecked(
+        settings.value(settingsKey(kIncludeSequencesKey), true).toBool());
     d->highlightCharacters->setChecked(
-        settings.value(uniqueKey(kHighlightCharacterKey), false).toBool());
+        settings.value(settingsKey(kHighlightCharacterKey), false).toBool());
     d->highlightCharactersWithDialogue->setChecked(
-        settings.value(uniqueKey(kHighlightCharacterWithDialogueKey), false).toBool());
-    d->exportConcreteScenes->setText(settings.value(uniqueKey(kScenesToPrintKey)).toString());
+        settings.value(settingsKey(kHighlightCharacterWithDialogueKey), false).toBool());
+    d->exportConcreteScenes->setText(settings.value(settingsKey(kScenesToPrintKey)).toString());
 
     connect(d->includeTreatment, &CheckBox::checkedChanged, this,
             &ScreenplayExportDialog::updateDialog);
@@ -135,12 +136,12 @@ ScreenplayExportDialog::ScreenplayExportDialog(const QString& _uuidKey, QWidget*
 ScreenplayExportDialog::~ScreenplayExportDialog()
 {
     QSettings settings;
-    settings.setValue(uniqueKey(kFormatKey), currentFileFormatRow());
-    settings.setValue(uniqueKey(kIncludeTreatmentKey), d->includeTreatment->isChecked());
-    settings.setValue(uniqueKey(kIncludeSequencesKey), d->includeSequences->isChecked());
-    settings.setValue(uniqueKey(kScenesToPrintKey), d->exportConcreteScenes->text());
-    settings.setValue(uniqueKey(kHighlightCharacterKey), d->highlightCharacters->isChecked());
-    settings.setValue(uniqueKey(kHighlightCharacterWithDialogueKey),
+    settings.setValue(settingsKey(kFormatKey), currentFileFormatRow());
+    settings.setValue(settingsKey(kIncludeTreatmentKey), d->includeTreatment->isChecked());
+    settings.setValue(settingsKey(kIncludeSequencesKey), d->includeSequences->isChecked());
+    settings.setValue(settingsKey(kScenesToPrintKey), d->exportConcreteScenes->text());
+    settings.setValue(settingsKey(kHighlightCharacterKey), d->highlightCharacters->isChecked());
+    settings.setValue(settingsKey(kHighlightCharacterWithDialogueKey),
                       d->highlightCharactersWithDialogue->isChecked());
 }
 

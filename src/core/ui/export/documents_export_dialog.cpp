@@ -130,12 +130,14 @@ DocumentsExportDialog::DocumentsExportDialog(
             &DocumentsExportDialog::updateExportEnabled);
 
     QSettings settings;
-    d->includeMainPhoto->setChecked(settings.value(uniqueKey(kIncludeMainPhotoKey), true).toBool());
-    d->includeStoryRole->setChecked(settings.value(uniqueKey(kIncludeStoryRoleKey), true).toBool());
+    d->includeMainPhoto->setChecked(
+        settings.value(settingsKey(kIncludeMainPhotoKey), true).toBool());
+    d->includeStoryRole->setChecked(
+        settings.value(settingsKey(kIncludeStoryRoleKey), true).toBool());
     d->includeOneLineDescription->setChecked(
-        settings.value(uniqueKey(kIncludeOneLineDescriptionKey), true).toBool());
+        settings.value(settingsKey(kIncludeOneLineDescriptionKey), true).toBool());
     d->includeLongDescription->setChecked(
-        settings.value(uniqueKey(kIncludeLongDescriptionKey), true).toBool());
+        settings.value(settingsKey(kIncludeLongDescriptionKey), true).toBool());
 
     updateDialog();
 }
@@ -147,11 +149,11 @@ DocumentsExportDialog::~DocumentsExportDialog()
     for (const auto documentsCheckBox : std::as_const(d->documents)) {
         documents[documentsCheckBox->text()] = documentsCheckBox->isChecked();
     }
-    settings.setValue(uniqueKey(kIncludeMainPhotoKey), d->includeMainPhoto->isChecked());
-    settings.setValue(uniqueKey(kIncludeStoryRoleKey), d->includeStoryRole->isChecked());
-    settings.setValue(uniqueKey(kIncludeOneLineDescriptionKey),
+    settings.setValue(settingsKey(kIncludeMainPhotoKey), d->includeMainPhoto->isChecked());
+    settings.setValue(settingsKey(kIncludeStoryRoleKey), d->includeStoryRole->isChecked());
+    settings.setValue(settingsKey(kIncludeOneLineDescriptionKey),
                       d->includeOneLineDescription->isChecked());
-    settings.setValue(uniqueKey(kIncludeLongDescriptionKey),
+    settings.setValue(settingsKey(kIncludeLongDescriptionKey),
                       d->includeLongDescription->isChecked());
 }
 

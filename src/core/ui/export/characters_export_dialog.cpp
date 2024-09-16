@@ -52,9 +52,9 @@ CharactersExportDialog::CharactersExportDialog(const QString& _uuidKey, QWidget*
     rightLayout()->insertWidget(row++, d->includeGender);
 
     QSettings settings;
-    setCurrentFileFormat(settings.value(uniqueKey(kFormatKey), 0).toInt());
-    d->includeAge->setChecked(settings.value(uniqueKey(kIncludeAgeKey), true).toBool());
-    d->includeGender->setChecked(settings.value(uniqueKey(kIncludeGenderKey), true).toBool());
+    setCurrentFileFormat(settings.value(settingsKey(kFormatKey), 0).toInt());
+    d->includeAge->setChecked(settings.value(settingsKey(kIncludeAgeKey), true).toBool());
+    d->includeGender->setChecked(settings.value(settingsKey(kIncludeGenderKey), true).toBool());
 
     updateDialog();
 }
@@ -62,10 +62,10 @@ CharactersExportDialog::CharactersExportDialog(const QString& _uuidKey, QWidget*
 CharactersExportDialog::~CharactersExportDialog()
 {
     QSettings settings;
-    settings.setValue(uniqueKey(kCharactersKey), checkedDocuments());
-    settings.setValue(uniqueKey(kFormatKey), currentFileFormatRow());
-    settings.setValue(uniqueKey(kIncludeAgeKey), d->includeAge->isChecked());
-    settings.setValue(uniqueKey(kIncludeGenderKey), d->includeGender->isChecked());
+    settings.setValue(settingsKey(kCharactersKey), checkedDocuments());
+    settings.setValue(settingsKey(kFormatKey), currentFileFormatRow());
+    settings.setValue(settingsKey(kIncludeAgeKey), d->includeAge->isChecked());
+    settings.setValue(settingsKey(kIncludeGenderKey), d->includeGender->isChecked());
 }
 
 BusinessLayer::CharactersExportOptions& CharactersExportDialog::exportOptions() const

@@ -74,16 +74,18 @@ CharacterExportDialog::CharacterExportDialog(const QString& _uuidKey, QWidget* _
 
     QSettings settings;
     setCurrentFileFormat(settings.value(kFormatKey, 0).toInt());
-    d->includeStoryInfo->setChecked(settings.value(uniqueKey(kIncludeStoryInfoKey), true).toBool());
+    d->includeStoryInfo->setChecked(
+        settings.value(settingsKey(kIncludeStoryInfoKey), true).toBool());
     d->includePersonalInfo->setChecked(
-        settings.value(uniqueKey(kIncludePersonalInfoKey), false).toBool());
+        settings.value(settingsKey(kIncludePersonalInfoKey), false).toBool());
     d->includePhysiqueInfo->setChecked(
-        settings.value(uniqueKey(kIncludePhysiqueInfoKey), false).toBool());
-    d->includeLifeInfo->setChecked(settings.value(uniqueKey(kIncludeLifeInfoKey), false).toBool());
+        settings.value(settingsKey(kIncludePhysiqueInfoKey), false).toBool());
+    d->includeLifeInfo->setChecked(
+        settings.value(settingsKey(kIncludeLifeInfoKey), false).toBool());
     d->includeAttitudeInfo->setChecked(
-        settings.value(uniqueKey(kIncludeAttitudeInfoKey), false).toBool());
+        settings.value(settingsKey(kIncludeAttitudeInfoKey), false).toBool());
     d->includeBiographyInfo->setChecked(
-        settings.value(uniqueKey(kIncludeBiographyInfoKey), false).toBool());
+        settings.value(settingsKey(kIncludeBiographyInfoKey), false).toBool());
 
     updateDialog();
 }
@@ -91,13 +93,13 @@ CharacterExportDialog::CharacterExportDialog(const QString& _uuidKey, QWidget* _
 CharacterExportDialog::~CharacterExportDialog()
 {
     QSettings settings;
-    settings.setValue(uniqueKey(kFormatKey), currentFileFormatRow());
-    settings.setValue(uniqueKey(kIncludeStoryInfoKey), d->includeStoryInfo->isChecked());
-    settings.setValue(uniqueKey(kIncludePersonalInfoKey), d->includePersonalInfo->isChecked());
-    settings.setValue(uniqueKey(kIncludePhysiqueInfoKey), d->includePhysiqueInfo->isChecked());
-    settings.setValue(uniqueKey(kIncludeLifeInfoKey), d->includeLifeInfo->isChecked());
-    settings.setValue(uniqueKey(kIncludeAttitudeInfoKey), d->includeAttitudeInfo->isChecked());
-    settings.setValue(uniqueKey(kIncludeBiographyInfoKey), d->includeBiographyInfo->isChecked());
+    settings.setValue(settingsKey(kFormatKey), currentFileFormatRow());
+    settings.setValue(settingsKey(kIncludeStoryInfoKey), d->includeStoryInfo->isChecked());
+    settings.setValue(settingsKey(kIncludePersonalInfoKey), d->includePersonalInfo->isChecked());
+    settings.setValue(settingsKey(kIncludePhysiqueInfoKey), d->includePhysiqueInfo->isChecked());
+    settings.setValue(settingsKey(kIncludeLifeInfoKey), d->includeLifeInfo->isChecked());
+    settings.setValue(settingsKey(kIncludeAttitudeInfoKey), d->includeAttitudeInfo->isChecked());
+    settings.setValue(settingsKey(kIncludeBiographyInfoKey), d->includeBiographyInfo->isChecked());
 }
 
 BusinessLayer::CharacterExportOptions& CharacterExportDialog::exportOptions() const
