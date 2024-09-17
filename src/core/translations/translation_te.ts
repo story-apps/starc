@@ -1273,19 +1273,19 @@
     <name>BusinessLayer::LocationExporter</name>
     <message>
         <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="127"/>
-        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="144"/>
+        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="143"/>
         <source>primary location</source>
         <translation>ప్రైమరీ లొకేషన్ </translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="132"/>
-        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="149"/>
+        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="148"/>
         <source>secondary location</source>
         <translation>సెకండరీ లొకేషన్ </translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="137"/>
-        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="154"/>
+        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="153"/>
         <source>tertiary location</source>
         <translation>మూడవ లొకేషన్ </translation>
     </message>
@@ -1410,7 +1410,7 @@
 <context>
     <name>BusinessLayer::NovelTextModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/novel/text/novel_text_model.cpp" line="171"/>
+        <location filename="../../corelib/business_layer/model/novel/text/novel_text_model.cpp" line="200"/>
         <source>Novel</source>
         <translation>నవల</translation>
     </message>
@@ -2128,7 +2128,7 @@
 <context>
     <name>BusinessLayer::ScreenplayTextModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/text/screenplay_text_model.cpp" line="156"/>
+        <location filename="../../corelib/business_layer/model/screenplay/text/screenplay_text_model.cpp" line="164"/>
         <source>Screenplay</source>
         <translation>స్క్రీన్ ప్లే </translation>
     </message>
@@ -2502,17 +2502,17 @@
 <context>
     <name>ColorPicker</name>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="262"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="274"/>
         <source>Color hex code</source>
         <translation>రంగు హెక్స్ కోడ్</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="263"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="275"/>
         <source>Cancel</source>
         <translation>క్యాన్సిల్ </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="264"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="276"/>
         <source>Add</source>
         <translation>యాడ్ చెయ్యి </translation>
     </message>
@@ -2854,70 +2854,92 @@
 <context>
     <name>ManagementLayer::AccountManager</name>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="144"/>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="182"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="151"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="189"/>
         <source>The team should have a name</source>
         <translation>జట్టుకు పేరు ఉండాలి</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="205"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="212"/>
         <source>Do you really want to remove this team?</source>
         <translation>మీరు నిజంగా ఈ బృందాన్ని తీసివేయాలనుకుంటున్నారా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="206"/>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="231"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="213"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="238"/>
         <source>No</source>
         <translation>వద్దు </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="207"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="214"/>
         <source>Yes, remove</source>
         <translation>అవును, రిమూవ్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="230"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="237"/>
         <source>Do you really want to leave this team?</source>
         <translation>మీరు నిజంగా ఈ బృందాన్ని విడిచిపెట్టాలనుకుంటున్నారా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="232"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="239"/>
         <source>Yes, leave</source>
         <translation>అవును, వదిలేయండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="536"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="582"/>
         <source>Try PRO version for free</source>
         <translation>ప్రో వెర్షన్ ని ఉచితంగా ట్రై చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="537"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="583"/>
         <source>You can try all the features of the PRO version during 30 days for free. After trial period, you can continue to use the PRO version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation>ప్రో వెర్షన్ యొక్క అన్నీ ఫీచర్స్ 30 రోజులు ఉచితంగా ట్రై చేయవచ్చు. ట్రయిల్ పిరీయడ్ అయిన తర్వాత రెన్యూవల్ చేసుకుని ప్రో వెర్షన్ ని కొనసాగించవచ్చు. లేదంటే ఆటోమాటిక్ గా మీ అకౌంట్ ఫ్రీ వెర్షన్ గా మార్చబడుతుంది. </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="540"/>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="623"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="586"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="708"/>
         <source>Continue with FREE version</source>
         <translation>ఫ్రీ వెర్షన్ తో కొనసాగించండి. </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="619"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="616"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="643"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="670"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="757"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="801"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="836"/>
+        <source>You have an additional %1% discount due to the promo code activation</source>
+        <translation>ప్రోమో కోడ్ యాక్టివేషన్ కారణంగా మీకు అదనంగా %1% తగ్గింపు ఉంది</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="704"/>
         <source>Try CLOUD version for free</source>
         <translation>ఉచితంగా CLOUD వెర్షన్‌ని ప్రయత్నించండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="620"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="705"/>
         <source>You can try all the features of the CLOUD version during 30 days for free. After trial period, you can continue to use the CLOUD version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation>మీరు CLOUD వెర్షన్ యొక్క అన్ని ఫీచర్లను 30 రోజులలో ఉచితంగా ప్రయత్నించవచ్చు. ట్రయల్ వ్యవధి తర్వాత, మీరు మీ సభ్యత్వాన్ని పునరుద్ధరించడం ద్వారా CLOUD సంస్కరణను ఉపయోగించడం కొనసాగించవచ్చు. లేకపోతే, మీరు స్వయంచాలకంగా ఉచిత సంస్కరణకు తిరిగి వస్తారు.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="624"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="709"/>
         <source>Activate CLOUD</source>
         <translation>CLOUDని యాక్టివేట్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="683"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="749"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="793"/>
+        <source>You have an additional 20% discount due to PRO lifetime subscription purchase, and %1% discount due to the promo code activation</source>
+        <translation>PRO జీవితకాల చందా కొనుగోలు కారణంగా మీకు అదనంగా 20% తగ్గింపు మరియు ప్రోమో కోడ్ యాక్టివేషన్ కారణంగా %1% తగ్గింపు ఉంది</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="753"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="797"/>
+        <source>You have an additional 20% discount due to the purchasing of the PRO lifetime subscription</source>
+        <translation>PRO జీవితకాల సభ్యత్వాన్ని కొనుగోలు చేసినందున మీకు అదనంగా 20% తగ్గింపు ఉంది</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="841"/>
         <source>Credits are our internal currency. They are used for AI tools, such as text generation.
 
 1 credit equals 1000 words processed by AI.
@@ -2928,7 +2950,7 @@
 1 క్రెడిట్ AI ద్వారా రూపొందించబడిన 10 చిత్రాలకు సమానం.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="541"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="587"/>
         <source>Activate PRO</source>
         <translation>యాక్టివేట్ ప్రో </translation>
     </message>
@@ -3079,23 +3101,28 @@
         <translation>.STARCకి మారండి</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3235"/>
+        <location filename="../management_layer/application_manager.cpp" line="2963"/>
+        <source>Maximum active sessions reached. To authorize from a new device, end one of the current sessions.</source>
+        <translation>మ్యాగ్జిమమ్ యాక్టివ్ సెషన్స్ చేరుకున్నారు. కొత్త డివైజ్ నుండి ఆధరైజ్ చేయడానికి ప్రస్తుత సెషన్స్ లో ఒకదాన్ని ఎండ్ చెయ్యండి. </translation>
+    </message>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="3246"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>ప్రాజెక్ట్ యజమానుల క్లౌడ్ సేవా సభ్యత్వం గడువు ముగిసింది. వారు సబ్‌స్క్రిప్షన్‌ను పునరుద్ధరించిన వెంటనే మీరు ప్రాజెక్ట్‌తో పని చేయడం కొనసాగించవచ్చు.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3479"/>
+        <location filename="../management_layer/application_manager.cpp" line="3490"/>
         <source>Novel</source>
         <translation>నవల</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3492"/>
+        <location filename="../management_layer/application_manager.cpp" line="3503"/>
         <source>Screenplay</source>
         <translation>స్క్రీన్ ప్లే </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3216"/>
-        <location filename="../management_layer/application_manager.cpp" line="3237"/>
+        <location filename="../management_layer/application_manager.cpp" line="3227"/>
+        <location filename="../management_layer/application_manager.cpp" line="3248"/>
         <source>Continue offline</source>
         <translation>ఆఫ్ లైన్ లో కొనసాగించండి </translation>
     </message>
@@ -3111,12 +3138,12 @@
         <translation>మిస్ అయిన ఫాంట్స్ లోడ్ అవుతున్నాయి </translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3214"/>
+        <location filename="../management_layer/application_manager.cpp" line="3225"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>మీ క్లౌడ్ సేవా సభ్యత్వం గడువు ముగిసింది. ప్రాజెక్ట్‌తో పని చేయడం కొనసాగించడానికి సభ్యత్వాన్ని సక్రియం చేయండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3217"/>
+        <location filename="../management_layer/application_manager.cpp" line="3228"/>
         <source>Renew subscription</source>
         <translation>రెన్యూవల్ చేసుకోండి </translation>
     </message>
@@ -3251,17 +3278,17 @@
         <translation>అక్షర సంబంధాల గ్రాఫ్‌ని సవరించడానికి యాప్‌ను PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="529"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="545"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>క్యారెక్టర్  పేరు &quot;%1&quot; నుండి &quot;%2&quot;కి మార్చబడింది. మార్పులను వర్తింపజేయాలా?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="531"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="547"/>
         <source>No</source>
         <translation>వద్దు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="532"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="548"/>
         <source>Yes</source>
         <translation>అవును </translation>
     </message>
@@ -3284,12 +3311,12 @@
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="461"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="462"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation>%1% తగ్గింపుతో ప్రోమో కోడ్ యాక్టివేట్  చేయబడింది మరియు తదుపరి కొనుగోలుతో ఉపయోగించబడుతుంది.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="470"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="471"/>
         <source>PRO version subscription activated for %n month(s).</source>
         <translation>
             <numerusform>PRO వెర్షన్ సబ్‌స్క్రిప్షన్ %n నెల(ల)కి యాక్టివేట్ చేయబడింది.</numerusform>
@@ -3297,12 +3324,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="475"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="476"/>
         <source>PRO version lifetime access granted.</source>
         <translation>PRO వెర్షన్ జీవితకాల యాక్సెస్ మంజూరు చేయబడింది.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="479"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="480"/>
         <source>CLOUD version subscription activated for %n month(s).</source>
         <translation>
             <numerusform>%n నెల(ల)కి CLOUD వెర్షన్ సబ్‌స్క్రిప్షన్ యాక్టివేట్ చేయబడింది.</numerusform>
@@ -3310,12 +3337,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="484"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="485"/>
         <source>CLOUD version lifetime access granted.</source>
         <translation>CLOUD వెర్షన్ జీవితకాల యాక్సెస్ మంజూరు చేయబడింది.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="492"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="493"/>
         <source>%n credits were added to your balance.</source>
         <translation>
             <numerusform>మీ బ్యాలెన్స్‌కు %n క్రెడిట్‌లు జోడించబడ్డాయి.</numerusform>
@@ -3323,111 +3350,116 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="693"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="507"/>
+        <source>The gift has been sent to the recipient&apos;s mailbox</source>
+        <translation>బహుమతి గ్రహీత మెయిల్‌బాక్స్‌కు పంపబడింది</translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="704"/>
         <source>Promocode is incorrect</source>
         <translation>ప్రోమో కోడ్ తప్పు</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="697"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="708"/>
         <source>Promocode expired</source>
         <translation>ప్రోమో కోడ్ చెల్లదు </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="701"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="712"/>
         <source>Maximum number of promocode activations done</source>
         <translation>ప్రోమో కోడ్స్ పరిమితి మించినది </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="705"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="716"/>
         <source>Promocode already used</source>
         <translation>ఈ ప్రోమో కోడ్ మునుపు వాడబడింది </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="774"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="785"/>
         <source>CUT TO:</source>
         <translation>CUT TO:</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="790"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="801"/>
         <source>To use AI assistant, you need to replenish credits&apos; balance.</source>
         <translation>AI అసిస్టెంట్‌ని ఉపయోగించడానికి, మీరు క్రెడిట్‌ల బ్యాలెన్స్‌ని భర్తీ చేయాలి.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="791"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="802"/>
         <source>Maybe later</source>
         <translation>తర్వాత </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="792"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="803"/>
         <source>Replenish</source>
         <translation>తిరిగి నింపు</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1348"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1381"/>
         <source>Rephrasing text</source>
         <translation>టెక్స్ట్  పునఃప్రారంభించడం</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1459"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1492"/>
         <source>Expanding text</source>
         <translation>వచనాన్ని విస్తరిస్తోంది</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1568"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1601"/>
         <source>Shortening text</source>
         <translation>వచనాన్ని కుదించడం</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1677"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1710"/>
         <source>Inserting text</source>
         <translation>వచనాన్ని చొప్పించడం</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1786"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1819"/>
         <source>Summarizing text</source>
         <translation>వచనాన్ని సంగ్రహించడం</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1895"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1928"/>
         <source>Translating text</source>
         <translation>వచనాన్ని అనువదిస్తోంది</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1940"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2057"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1973"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2090"/>
         <source>Generating synopsis (scene %1 from %2)</source>
         <translation>సారాంశాన్ని రూపొందిస్తోంది (%2 నుండి సీన్% 1)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2115"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2234"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2148"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2267"/>
         <source>Generating novel (scene %1 from %2)</source>
         <translation>నవలని రూపొందిస్తోంది (%2 నుండి దృశ్యం% 1)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2288"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2406"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2321"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2439"/>
         <source>Generating script (chapter %1 from %2)</source>
         <translation>స్క్రిప్ట్‌ని రూపొందిస్తోంది (%2 నుండి అధ్యాయం% 1)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="772"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="783"/>
         <source>INT.</source>
         <translation>INT.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="773"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="784"/>
         <source>EXT.</source>
         <translation>EXT.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2454"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2610"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2487"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2643"/>
         <source>Processing text</source>
         <translation>వచనాన్ని ప్రాసెస్ చేస్తోంది</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2563"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2596"/>
         <source>Generating image</source>
         <translation>చిత్రాన్ని రూపొందిస్తోంది</translation>
     </message>
@@ -3454,68 +3486,68 @@
 <context>
     <name>ManagementLayer::ExportManager</name>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="199"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="384"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="547"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="716"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="883"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1032"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1175"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1307"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1440"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1572"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="205"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="401"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="574"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="753"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="930"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1085"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1229"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1362"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1496"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1629"/>
         <source>Choose the file to export</source>
         <translation>Choose the file to export</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="258"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="411"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="574"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="743"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="910"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1059"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1202"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1334"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1467"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1599"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="270"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="428"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="601"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="780"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="957"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1112"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1256"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1389"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1523"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1656"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="261"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="414"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="577"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="746"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="913"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1062"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1205"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1337"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1470"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1602"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="273"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="431"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="604"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="783"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="960"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1115"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1259"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1392"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1526"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1659"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="264"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="417"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="580"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="749"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="916"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1065"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1208"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1340"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1473"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1605"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="276"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="434"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="607"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="786"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="963"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1118"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1262"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1395"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1529"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1662"/>
         <source>Export error</source>
         <translation>Export error</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1295"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1350"/>
         <source>Characters</source>
         <translation>క్యారెక్టర్స్ </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1560"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1617"/>
         <source>Locations</source>
         <translation>లొకేషన్స్ </translation>
     </message>
@@ -3556,17 +3588,17 @@
 <context>
     <name>ManagementLayer::ImportManager</name>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="69"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="70"/>
         <source>File format not supported</source>
         <translation>ఫైల్ ఫార్మాట్ సపోర్ట్ చేయబడదు </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="70"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="71"/>
         <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
         <translation>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="315"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="318"/>
         <source>Choose the file to import</source>
         <translation>ఇంపోర్ట్ చేసే ఫైల్ సెలక్ట్ చేసుకోండి </translation>
     </message>
@@ -3641,17 +3673,17 @@
         <translation>లొకేషన్ మ్యాప్‌ని ఎడిట్ చేయడానికి యాప్‌ని PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="514"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="532"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="516"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="534"/>
         <source>No</source>
         <translation>వద్దు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="517"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="535"/>
         <source>Yes</source>
         <translation>అవును </translation>
     </message>
@@ -3796,7 +3828,9 @@ If you want to continue editing novel text, switch to the corresponding module v
         <source>Upgrade the app to the PRO version to edit novel timeline.
 
 If you want to continue editing novel text, switch to the corresponding module via icons on the top left toolbar.</source>
-        <translation type="unfinished"></translation>
+        <translation>నవల కాలక్రమాన్ని సవరించడానికి యాప్‌ను PRO వెర్షన్‌కి అప్‌గ్రేడ్ చేయండి.
+
+మీరు నవల వచనాన్ని సవరించడాన్ని కొనసాగించాలనుకుంటే, ఎగువ ఎడమవైపు టూల్‌బార్‌లోని చిహ్నాల ద్వారా సంబంధిత మాడ్యూల్‌కు మారండి.</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/novel_timeline/novel_timeline_manager.cpp" line="122"/>
@@ -3927,6 +3961,7 @@ If you want to continue editing novel text, switch to the corresponding module v
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1004"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3419"/>
         <source>Current draft</source>
         <translation>ప్రస్తుత డ్రాఫ్ట్</translation>
     </message>
@@ -4130,7 +4165,7 @@ If you want to continue editing novel text, switch to the corresponding module v
         <translation>స్టేజ్ ప్లే </translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3675"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3669"/>
         <source>Conflicted version</source>
         <translation>వివాదాస్పద సంస్కరణ</translation>
     </message>
@@ -5077,17 +5112,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>ఈ పేరుతో ఆల్రెడీ ప్రపంచం ఉంది </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="503"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="521"/>
         <source>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="505"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="523"/>
         <source>No</source>
         <translation>వద్దు </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="506"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="524"/>
         <source>Yes</source>
         <translation>అవును </translation>
     </message>
@@ -7084,34 +7119,62 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AboutApplicationDialog</name>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="155"/>
+        <location filename="../ui/about_application_dialog.cpp" line="158"/>
         <source>version</source>
         <translation>వెర్షన్ </translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="157"/>
+        <location filename="../ui/about_application_dialog.cpp" line="162"/>
         <source>Designed, coded and crafted with love at the</source>
         <translation>ప్రేమతో రూపొందించబడింది, కోడ్ చేయబడింది మరియు రూపొందించబడింది</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="159"/>
+        <location filename="../ui/about_application_dialog.cpp" line="166"/>
         <source>company</source>
         <translation>కంపెనీ </translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="160"/>
+        <location filename="../ui/about_application_dialog.cpp" line="167"/>
         <source>The Logline Generator is powered by</source>
         <translation>లాగ్‌లైన్ జనరేటర్ దీని ద్వారా ఆధారితమైనది</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="164"/>
+        <location filename="../ui/about_application_dialog.cpp" line="171"/>
         <source>Starc is being developed with strong authors’ involvement and support so we won’t waste the app performance on the features you don’t need.</source>
         <translation>స్టార్క్ బలమైన రచయితల ప్రమేయం మరియు మద్దతుతో అభివృద్ధి చేయబడుతోంది కాబట్టి మేము మీకు అవసరం లేని ఫీచర్‌లపై యాప్ పనితీరును వృధా చేయము.</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="167"/>
+        <location filename="../ui/about_application_dialog.cpp" line="174"/>
         <source>Feel free to contact us at any point of your creative journey to share your thoughts about the app, suggest ideas and report issues you met.</source>
         <translation>యాప్ గురించి మీ ఆలోచనలను పంచుకోవడానికి, ఆలోచనలను సూచించడానికి మరియు మీరు ఎదుర్కొన్న  సమస్యలను నివేదించడానికి మీ సృజనాత్మక ప్రయాణంలో ఏ సమయంలోనైనా మమ్మల్ని సంప్రదించడానికి సంకోచించకండి.</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::AbstractExportDialog</name>
+    <message>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="221"/>
+        <source>Format</source>
+        <translation>ఫార్మాట్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="222"/>
+        <source>Watermark</source>
+        <translation>వాటర్ మార్క్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="223"/>
+        <source>Open document after export</source>
+        <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
+    </message>
+    <message>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="224"/>
+        <source>Export</source>
+        <translation>ఎక్స్ పోర్ట్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="225"/>
+        <source>Cancel</source>
+        <translation>క్యాన్సిల్ </translation>
     </message>
 </context>
 <context>
@@ -7140,22 +7203,22 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AccountNavigator</name>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="321"/>
-        <location filename="../ui/account/account_navigator.cpp" line="337"/>
-        <location filename="../ui/account/account_navigator.cpp" line="353"/>
-        <location filename="../ui/account/account_navigator.cpp" line="719"/>
+        <location filename="../ui/account/account_navigator.cpp" line="328"/>
+        <location filename="../ui/account/account_navigator.cpp" line="344"/>
+        <location filename="../ui/account/account_navigator.cpp" line="360"/>
+        <location filename="../ui/account/account_navigator.cpp" line="780"/>
         <source>Lifetime access</source>
         <translation>జీవితకాల యాక్సెస్</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="322"/>
-        <location filename="../ui/account/account_navigator.cpp" line="338"/>
-        <location filename="../ui/account/account_navigator.cpp" line="354"/>
+        <location filename="../ui/account/account_navigator.cpp" line="329"/>
+        <location filename="../ui/account/account_navigator.cpp" line="345"/>
+        <location filename="../ui/account/account_navigator.cpp" line="361"/>
         <source>Active until %1</source>
         <translation>%1 వరకు యాక్టివ్ గా ఉంది </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/account/account_navigator.cpp" line="360"/>
+        <location filename="../ui/account/account_navigator.cpp" line="367"/>
         <source>%n credits available</source>
         <translation>
             <numerusform>%n క్రెడిట్‌లు అందుబాటులో ఉన్నాయి</numerusform>
@@ -7163,120 +7226,115 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="361"/>
+        <location filename="../ui/account/account_navigator.cpp" line="368"/>
         <source>No credits available</source>
         <translation>క్రెడిట్‌లు అందుబాటులో లేవు</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="715"/>
+        <location filename="../ui/account/account_navigator.cpp" line="776"/>
         <source>Account</source>
         <translation>అకౌంట్ </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="716"/>
+        <location filename="../ui/account/account_navigator.cpp" line="777"/>
         <source>Subscription</source>
         <translation>సబ్ స్క్రిప్షన్ </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="717"/>
+        <location filename="../ui/account/account_navigator.cpp" line="778"/>
         <source>Sessions</source>
         <translation>సెషన్స్ </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="718"/>
+        <location filename="../ui/account/account_navigator.cpp" line="779"/>
         <source>FREE version</source>
         <translation>ఉచిత వెర్షన్ </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="720"/>
+        <location filename="../ui/account/account_navigator.cpp" line="781"/>
         <source>PRO version</source>
         <translation>ప్రో వెర్షన్ </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="722"/>
-        <location filename="../ui/account/account_navigator.cpp" line="727"/>
+        <location filename="../ui/account/account_navigator.cpp" line="783"/>
+        <location filename="../ui/account/account_navigator.cpp" line="787"/>
         <source>Try for free</source>
         <translation>ఉచితంగా ట్రై చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="724"/>
-        <location filename="../ui/account/account_navigator.cpp" line="728"/>
+        <location filename="../ui/account/account_navigator.cpp" line="784"/>
+        <location filename="../ui/account/account_navigator.cpp" line="788"/>
         <source>Renew</source>
         <translation>రెన్యూవల్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="725"/>
+        <location filename="../ui/account/account_navigator.cpp" line="785"/>
         <source>CLOUD version</source>
         <translation>క్లౌడ్ వెర్షన్</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="735"/>
+        <location filename="../ui/account/account_navigator.cpp" line="795"/>
         <source>Owner</source>
         <translation>యజమాని</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="737"/>
+        <location filename="../ui/account/account_navigator.cpp" line="797"/>
         <source>No one team created yet, press &quot;Add team&quot; button for adding your first team</source>
         <translation>ఇంకా ఏ బృందం సృష్టించబడలేదు, మీ మొదటి బృందాన్ని జోడించడం కోసం &quot;జట్టును జోడించు&quot; బటన్‌ను నొక్కండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="738"/>
+        <location filename="../ui/account/account_navigator.cpp" line="798"/>
         <source>Member</source>
         <translation>సభ్యుడు</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="739"/>
+        <location filename="../ui/account/account_navigator.cpp" line="799"/>
         <source>You are not on any team</source>
         <translation>మీరు ఏ జట్టులోనూ లేరు</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="740"/>
+        <location filename="../ui/account/account_navigator.cpp" line="800"/>
         <source>Add team</source>
         <translation>జట్టును జోడించండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="741"/>
+        <location filename="../ui/account/account_navigator.cpp" line="801"/>
         <source>Edit team</source>
         <translation>బృందాన్ని సవరించండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="742"/>
+        <location filename="../ui/account/account_navigator.cpp" line="802"/>
         <source>Remove team</source>
         <translation>బృందాన్ని తీసివేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="743"/>
+        <location filename="../ui/account/account_navigator.cpp" line="803"/>
         <source>Exit team</source>
         <translation>జట్టు నుండి నిష్క్రమించండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="723"/>
-        <source>Buy lifetime</source>
-        <translation>జీవితకాలానికి కొనుగోలు చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_navigator.cpp" line="331"/>
-        <location filename="../ui/account/account_navigator.cpp" line="347"/>
+        <location filename="../ui/account/account_navigator.cpp" line="338"/>
+        <location filename="../ui/account/account_navigator.cpp" line="354"/>
         <source>Used %1 GB from %2 GB</source>
         <translation>Used %1 GB from %2 GB</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="729"/>
+        <location filename="../ui/account/account_navigator.cpp" line="789"/>
         <source>STUDIO version</source>
         <translation>STUDIO వెర్షన్</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="731"/>
+        <location filename="../ui/account/account_navigator.cpp" line="791"/>
         <source>Credits for Ai tools</source>
         <translation>Ai సాధనాల కోసం క్రెడిట్స్ </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="732"/>
+        <location filename="../ui/account/account_navigator.cpp" line="792"/>
         <source>Buy credits</source>
         <translation>క్రెడిట్‌లను కొనుగోలు చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="733"/>
+        <location filename="../ui/account/account_navigator.cpp" line="793"/>
         <source>Logout</source>
         <translation>లాగ్అవుట్</translation>
     </message>
@@ -7302,131 +7360,95 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AccountView</name>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="278"/>
+        <location filename="../ui/account/account_view.cpp" line="228"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>వినియోగదారు పేరు ఖాళీగా ఉండకూడదు, దయచేసి దాన్ని పూరించండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="436"/>
-        <source>FREE version</source>
-        <translation>ఉచిత వెర్షన్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="455"/>
-        <location filename="../ui/account/account_view.cpp" line="462"/>
-        <source>CLOUD version</source>
-        <translation>క్లౌడ్ వెర్షన్</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="635"/>
+        <location filename="../ui/account/account_view.cpp" line="528"/>
         <source>I want to receive STARC news</source>
         <translation>నేను స్టార్క్ వార్తలను అందుకోవాలనుకుంటున్నాను</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="641"/>
-        <source>Compare versions</source>
-        <translation>వెర్షన్స్  సరిపోల్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="647"/>
-        <source>Upgrade to PRO</source>
-        <translation>ప్రో కి అప్ గ్రేడ్ అవ్వండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="642"/>
-        <source>Try PRO for free</source>
-        <translation>ప్రో ని ఉచితంగా ట్రై చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="245"/>
-        <location filename="../ui/account/account_view.cpp" line="437"/>
-        <source>Lifetime access</source>
-        <translation>జీవితకాల యాక్సెస్</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="246"/>
-        <source>Active until %1</source>
-        <translation>%1 వరకు యాక్టివ్ గా ఉంది </translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="442"/>
-        <location filename="../ui/account/account_view.cpp" line="448"/>
-        <source>PRO version</source>
-        <translation>ప్రో వెర్షన్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="469"/>
-        <source>STUDIO version</source>
-        <translation>STUDIO వెర్షన్</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="633"/>
+        <location filename="../ui/account/account_view.cpp" line="526"/>
         <source>Your name</source>
         <translation>మీ పేరు </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="634"/>
+        <location filename="../ui/account/account_view.cpp" line="527"/>
         <source>Your bio</source>
         <translation>మీ బయోడేటా </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="636"/>
+        <location filename="../ui/account/account_view.cpp" line="529"/>
         <source>Add avatar +</source>
         <translation>అవతార్ యాడ్ చెయ్యండి +</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="636"/>
+        <location filename="../ui/account/account_view.cpp" line="529"/>
         <source>Change avatar...</source>
         <translation>అవతార్ మార్చండి </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="637"/>
+        <location filename="../ui/account/account_view.cpp" line="530"/>
         <source>Do you want to delete your avatar?</source>
         <translation>మీ అవతార్ డిలీట్ చేయాలనుకుంటున్నారా </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="638"/>
+        <location filename="../ui/account/account_view.cpp" line="531"/>
         <source>Select an area for the avatar</source>
         <translation>అవతార్ కోసం ప్రదేశం సెలక్ట్ చేసుకోండి </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="639"/>
-        <source>Subscription type</source>
-        <translation>సబ్ స్క్రిప్షన్ రకం </translation>
+        <location filename="../ui/account/account_view.cpp" line="532"/>
+        <source>Subscriptions</source>
+        <translation>సభ్యత్వాలు </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="643"/>
-        <source>Try CLOUD for free</source>
-        <translation>ఉచితంగా CLOUDని ప్రయత్నించండి</translation>
+        <location filename="../ui/account/account_view.cpp" line="533"/>
+        <source>Compare subscriptions</source>
+        <translation>సభ్యత్వాలను సరిపోల్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="644"/>
-        <source>Buy lifetime</source>
-        <translation>జీవితకాలానికి కొనండి </translation>
+        <location filename="../ui/account/account_view.cpp" line="535"/>
+        <source>Advanced tools for professionals
+• Characters relations
+• Corkboard
+• Timeline
+• Mind maps
+• and more writer&apos;s tools...</source>
+        <translation>నిపుణుల కోసం అధునాతన సాధనాలు
+• పాత్రల సంబంధాలు
+• కార్క్‌బోర్డ్
+• కాలక్రమం
+• మైండ్ మ్యాప్‌లు
+• మరియు మరిన్ని రచయితల సాధనాలు...</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="645"/>
-        <location filename="../ui/account/account_view.cpp" line="646"/>
-        <source>Renew</source>
-        <translation>రెన్యూవల్ చెయ్యండి </translation>
+        <location filename="../ui/account/account_view.cpp" line="542"/>
+        <source>For those who are always on the move
+• 5GB cloud storage
+• Seamless synchronization across all your devices
+• Realtime collaboration
+• Production tools</source>
+        <translation>ఎప్పుడూ ట్రావెల్ లో  ఉండే వారికి
+• 5GB క్లౌడ్ నిల్వ
+• మీ అన్ని పరికరాలలో అతుకులు లేని సమకాలీకరణ
+• నిజ సమయ సహకారం
+• ఉత్పత్తి సాధనాలు</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="648"/>
-        <source>Upgrade to CLOUD</source>
-        <translation>CLOUDకి అప్‌గ్రేడ్ చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="649"/>
+        <location filename="../ui/account/account_view.cpp" line="547"/>
         <source>Active sessions</source>
         <translation>యాక్టివ్ సెషన్స్ </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="650"/>
+        <location filename="../ui/account/account_view.cpp" line="548"/>
         <source>Promotional or gift code</source>
         <translation>ప్రమోషనల్ లేదా గిఫ్ట్ కోడ్ </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="651"/>
+        <location filename="../ui/account/account_view.cpp" line="549"/>
         <source>Activate</source>
         <translation>యాక్టివేట్ </translation>
     </message>
@@ -8530,69 +8552,19 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayExportDialog</name>
     <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="296"/>
+        <location filename="../ui/export/audioplay_export_dialog.cpp" line="97"/>
         <source>Export audioplay</source>
         <translation>ఆడియో ప్లే ఎక్స్ పోర్ట్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="298"/>
-        <source>Title page</source>
-        <translation>టైటిల్ పేజీ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="299"/>
-        <source>Synopsis</source>
-        <translation>సారాంశం</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="300"/>
-        <source>Script</source>
-        <translation>స్క్రిప్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="302"/>
-        <source>Format</source>
-        <translation>ఫార్మాట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="303"/>
-        <source>Include inline notes</source>
-        <translation>ఇన్‌లైన్ నోట్స్ చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="304"/>
-        <source>Include review marks</source>
-        <translation>రివ్యూ మార్క్స్ చేర్చండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="305"/>
+        <location filename="../ui/export/audioplay_export_dialog.cpp" line="98"/>
         <source>Highlight characters</source>
         <translation>పాత్రలను హైలైట్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="306"/>
+        <location filename="../ui/export/audioplay_export_dialog.cpp" line="99"/>
         <source>with dialogues</source>
         <translation>డైలాగ్స్ తో</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="307"/>
-        <source>Watermark</source>
-        <translation>వాటర్ మార్క్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="309"/>
-        <source>Open document after export</source>
-        <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="310"/>
-        <source>Export</source>
-        <translation>ఎక్స్ పోర్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="311"/>
-        <source>Cancel</source>
-        <translation>క్యాన్సిల్ </translation>
     </message>
 </context>
 <context>
@@ -9400,74 +9372,39 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharacterExportDialog</name>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="260"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="127"/>
         <source>Export character</source>
         <translation>ఎగుమతి పాత్ర</translation>
     </message>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="262"/>
-        <source>Format</source>
-        <translation>ఫార్మాట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="263"/>
-        <source>Include main photo</source>
-        <translation>ప్రధాన ఫోటోను చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="264"/>
-        <source>additional photos</source>
-        <translation>అదనపు ఫోటోలు</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="265"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="129"/>
         <source>Include story info</source>
         <translation>కథన సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="266"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="130"/>
         <source>Include personal info</source>
         <translation>వ్యక్తిగత సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="267"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="131"/>
         <source>Include physique info</source>
         <translation>శరీరాకృతి సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="268"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="132"/>
         <source>Include life info</source>
         <translation>జీవిత సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="269"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="133"/>
         <source>Include attitude info</source>
         <translation>వైఖరి సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="270"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="134"/>
         <source>Include biography</source>
         <translation>జీవిత చరిత్రను చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="271"/>
-        <source>Watermark</source>
-        <translation>వాటర్ మార్క్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="273"/>
-        <source>Open document after export</source>
-        <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="274"/>
-        <source>Export</source>
-        <translation>ఎక్స్ పోర్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="275"/>
-        <source>Cancel</source>
-        <translation>క్యాన్సిల్ </translation>
     </message>
 </context>
 <context>
@@ -9994,69 +9931,19 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharactersExportDialog</name>
     <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="352"/>
+        <location filename="../ui/export/characters_export_dialog.cpp" line="84"/>
         <source>Export characters</source>
         <translation>అక్షరాలను ఎగుమతి చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="354"/>
-        <source>Select all</source>
-        <translation>అన్నీ సెలక్ట్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="355"/>
-        <source>Format</source>
-        <translation>ఫార్మాట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="356"/>
-        <source>Include main photo</source>
-        <translation>ప్రధాన ఫోటోను చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="357"/>
-        <source>Include story role</source>
-        <translation>కథా పాత్రను చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="358"/>
+        <location filename="../ui/export/characters_export_dialog.cpp" line="86"/>
         <source>Include age</source>
         <translation>వయస్సును చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="359"/>
+        <location filename="../ui/export/characters_export_dialog.cpp" line="87"/>
         <source>Include gender</source>
         <translation>జెండర్  చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="360"/>
-        <source>Include one line description</source>
-        <translation>ఒక లైన్ వివరణను చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="361"/>
-        <source>Include long description</source>
-        <translation>సుదీర్ఘ వివరణను చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="362"/>
-        <source>Watermark</source>
-        <translation>వాటర్ మార్క్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="364"/>
-        <source>Open document after export</source>
-        <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="365"/>
-        <source>Export</source>
-        <translation>ఎక్స్ పోర్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="366"/>
-        <source>Cancel</source>
-        <translation>క్యాన్సిల్ </translation>
     </message>
 </context>
 <context>
@@ -10319,59 +10206,9 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ComicBookExportDialog</name>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="266"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="57"/>
         <source>Export comic book</source>
         <translation>కామిక్ పుస్తకాన్ని ఎక్స్ పోర్ట్  చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="268"/>
-        <source>Title page</source>
-        <translation>టైటిల్ పేజీ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="269"/>
-        <source>Synopsis</source>
-        <translation>సారాంశం</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="270"/>
-        <source>Script</source>
-        <translation>స్క్రిప్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="272"/>
-        <source>Format</source>
-        <translation>ఫార్మాట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="273"/>
-        <source>Print inline notes</source>
-        <translation>ఇన్ లైన్ నోట్స్ ప్రింట్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="274"/>
-        <source>Print review marks</source>
-        <translation>రివ్యూ మార్క్స్ ప్రింట్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="275"/>
-        <source>Watermark</source>
-        <translation>వాటర్ మార్క్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="277"/>
-        <source>Open document after export</source>
-        <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="278"/>
-        <source>Export</source>
-        <translation>ఎక్స్ పోర్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="279"/>
-        <source>Cancel</source>
-        <translation>క్యాన్సిల్ </translation>
     </message>
 </context>
 <context>
@@ -10629,9 +10466,9 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message numerus="yes">
         <location filename="../management_layer/plugins/comic_book_text_structure/ui/comic_book_text_structure_view.cpp" line="119"/>
         <source>%n panel(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n ప్యానెల్(లు)</numerusform>
+            <numerusform>%n ప్యానెల్(లు)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -10833,6 +10670,261 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="140"/>
         <source>Remove selected notes</source>
         <translation>సెలక్ట్ చేసిన నోట్స్ రిమూవ్ చెయ్యి </translation>
+    </message>
+</context>
+<context>
+    <name>Ui::CompareSubscriptionsDialog</name>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="91"/>
+        <source>Unlimited number of projects</source>
+        <translation>అపరిమిత సంఖ్యలో ప్రాజెక్ట్‌లు</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="92"/>
+        <source>Unlimited number of documents per project</source>
+        <translation>ఒక్కో ప్రాజెక్ట్‌కు అపరిమిత సంఖ్యలో పత్రాలు</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="93"/>
+        <source>Cover generator</source>
+        <translation>కవర్ జనరేటర్</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="94"/>
+        <source>Folders</source>
+        <translation>ఫోల్డర్లు</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="95"/>
+        <source>Text documents</source>
+        <translation>టెక్స్ట్ డాక్యుమెంట్స్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="96"/>
+        <source>Session statistics</source>
+        <translation>సెషన్ స్టాటిస్టిక్స్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="97"/>
+        <source>Mind maps</source>
+        <translation>మైండ్ మ్యాప్స్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="98"/>
+        <source>Images gallery</source>
+        <translation>ఇమేజ్ గ్యాలరీ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="99"/>
+        <source>Seamless synchronization across all your devices</source>
+        <translation>మీ అన్ని పరికరాల్లో ఆటంకం లేని సమకాలీకరణ</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="100"/>
+        <source>Realtime collaboration</source>
+        <translation>రియల్ టైమ్ సహకారం</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="101"/>
+        <source>5GB cloud storage</source>
+        <translation>5GB క్లౌడ్ నిల్వ</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="102"/>
+        <source>Character</source>
+        <translation>క్యారెక్టర్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="103"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="109"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="115"/>
+        <source>Basic info</source>
+        <translation>ప్రాథమిక సమాచారం</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="104"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="110"/>
+        <source>Export</source>
+        <translation>ఎక్స్ పోర్ట్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="105"/>
+        <source>Characters relations</source>
+        <translation>క్యారెక్టర్స్  సంబంధాలు</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="106"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="112"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="117"/>
+        <source>Extended info</source>
+        <translation>విస్తరించిన సమాచారం</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="107"/>
+        <source>Dialogues from all stories</source>
+        <translation>అన్ని కథల నుండి డైలాగ్స్</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="108"/>
+        <source>Location</source>
+        <translation>లొకేషన్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="111"/>
+        <source>Locations map</source>
+        <translation>లొకేషన్స్ మ్యాప్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="113"/>
+        <source>Scenes from all stories</source>
+        <translation>అన్ని కథల నుండి సన్నివేశాలు </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="114"/>
+        <source>World</source>
+        <translation>ప్రపంచం </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="116"/>
+        <source>Worlds map</source>
+        <translation>ప్రపంచ మ్యాప్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="118"/>
+        <source>Screenplay</source>
+        <translation>స్క్రీన్ ప్లే </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="119"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="131"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="137"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="143"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="148"/>
+        <source>Logline &amp; synopsis</source>
+        <translation>లాగ్‌లైన్ మరియు సారాంశం</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="120"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="132"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="138"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="144"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="149"/>
+        <source>Title page</source>
+        <translation>టైటిల్ పేజీ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="121"/>
+        <source>Treatment text</source>
+        <translation>ట్రీట్ మెంట్ టెక్ట్స్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="122"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="133"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="139"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="145"/>
+        <source>Script text</source>
+        <translation>స్క్రిప్ట్ టెక్స్ట్</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="123"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="134"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="152"/>
+        <source>Basic statistics</source>
+        <translation>ప్రాథమిక గణాంకాలు</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="124"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="135"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="140"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="146"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="153"/>
+        <source>Import/export</source>
+        <translation>ఇంపోర్ట్/ఎక్స్పోర్ట్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="125"/>
+        <source>Scenes numbers locking</source>
+        <translation>సీన్స్ నంబర్లు లాక్ అవుతున్నాయి</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="126"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="154"/>
+        <source>Corkboard</source>
+        <translation>కార్క్‌బోర్డ్</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="127"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="155"/>
+        <source>Timeline</source>
+        <translation>టైమ్ లైన్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="128"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="141"/>
+        <source>Extended statistics</source>
+        <translation>విస్తరించిన గణాంకాలు</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="129"/>
+        <source>Script breakdown</source>
+        <translation>స్క్రిప్ట్ బ్రేక్ డౌన్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="130"/>
+        <source>Comics</source>
+        <translation>కామిక్స్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="136"/>
+        <source>Audio drama</source>
+        <translation>ఆడియో డ్రామా </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="142"/>
+        <source>Stageplay</source>
+        <translation>స్టేజ్ ప్లే </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="147"/>
+        <source>Novel</source>
+        <translation>నవల</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="150"/>
+        <source>Outline text</source>
+        <translation>అవుట్‌లైన్ టెక్స్ట్</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="151"/>
+        <source>Novel text</source>
+        <translation>నవల టెక్ట్స్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="326"/>
+        <source>For those who are at the beginning of creative journey</source>
+        <translation>సృజనాత్మక ప్రయాణం ప్రారంభంలో ఉన్న వారికి</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="328"/>
+        <source>Advanced tools for professionals</source>
+        <translation>నిపుణుల కోసం అధునాతన సాధనాలు</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="330"/>
+        <source>For those who are always on the move</source>
+        <translation>ఎప్పుడూ ట్రావెల్ లో  ఉండే వారికి</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="331"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="333"/>
+        <source>Renew</source>
+        <translation>రెన్యూవల్ చెయ్యండి </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="332"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="334"/>
+        <source>Buy as a gift</source>
+        <translation>బహుమతిగా కొనండి</translation>
     </message>
 </context>
 <context>
@@ -11691,6 +11783,47 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
 </context>
 <context>
+    <name>Ui::DocumentExportDialog</name>
+    <message>
+        <location filename="../ui/export/document_export_dialog.cpp" line="87"/>
+        <source>Include main photo</source>
+        <translation>ప్రధాన ఫోటోను చేర్చండి</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/document_export_dialog.cpp" line="88"/>
+        <source>additional photos</source>
+        <translation>అదనపు ఫోటోలు</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::DocumentsExportDialog</name>
+    <message>
+        <location filename="../ui/export/documents_export_dialog.cpp" line="227"/>
+        <source>Select all</source>
+        <translation>అన్నీ సెలక్ట్ చెయ్యండి </translation>
+    </message>
+    <message>
+        <location filename="../ui/export/documents_export_dialog.cpp" line="228"/>
+        <source>Include main photo</source>
+        <translation>ప్రధాన ఫోటోను చేర్చండి</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/documents_export_dialog.cpp" line="229"/>
+        <source>Include story role</source>
+        <translation>కథా పాత్రను చేర్చండి</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/documents_export_dialog.cpp" line="230"/>
+        <source>Include one line description</source>
+        <translation>ఒక లైన్ వివరణను చేర్చండి</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/documents_export_dialog.cpp" line="231"/>
+        <source>Include long description</source>
+        <translation>సుదీర్ఘ వివరణను చేర్చండి</translation>
+    </message>
+</context>
+<context>
     <name>Ui::FastFormatWidget</name>
     <message>
         <location filename="../../corelib/ui/modules/fast_format_widget/fast_format_widget.cpp" line="260"/>
@@ -11734,17 +11867,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="128"/>
         <source>Import script text</source>
-        <translation type="unfinished"></translation>
+        <translation>స్క్రిప్ట్ వచనాన్ని దిగుమతి చేయండి</translation>
     </message>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="132"/>
         <source>Import novel text</source>
-        <translation type="unfinished"></translation>
+        <translation>నవల వచనాన్ని దిగుమతి చేయండి</translation>
     </message>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="136"/>
         <source>Import text</source>
-        <translation type="unfinished"></translation>
+        <translation>వచనాన్ని దిగుమతి చేయండి</translation>
     </message>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="279"/>
@@ -11779,7 +11912,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="296"/>
         <source>Comic Book</source>
-        <translation type="unfinished"></translation>
+        <translation>కామిక్ బుక్ </translation>
     </message>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="297"/>
@@ -11797,9 +11930,9 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>స్టేజ్ ప్లే </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="326"/>
+        <location filename="../ui/import/import_dialog.cpp" line="328"/>
         <source>Import to</source>
-        <translation type="unfinished"></translation>
+        <translation>కు దిగుమతి చేయండి</translation>
     </message>
     <message>
         <location filename="../ui/import/import_dialog.cpp" line="286"/>
@@ -11863,59 +11996,24 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationExportDialog</name>
     <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="236"/>
+        <location filename="../ui/export/location_export_dialog.cpp" line="102"/>
         <source>Export location</source>
         <translation>ఎక్స్ పోర్ట్ చేసే లొకేషన్ </translation>
     </message>
     <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="238"/>
-        <source>Format</source>
-        <translation>ఫార్మాట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="239"/>
-        <source>Include main photo</source>
-        <translation>ప్రధాన ఫోటోను చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="240"/>
-        <source>additional photos</source>
-        <translation>అదనపు ఫోటోలు</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="241"/>
+        <location filename="../ui/export/location_export_dialog.cpp" line="104"/>
         <source>Include sense info</source>
         <translation>ఇంద్రియ సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="242"/>
+        <location filename="../ui/export/location_export_dialog.cpp" line="105"/>
         <source>Include geography info</source>
         <translation>భౌగోళిక సమాచారాన్ని చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="243"/>
+        <location filename="../ui/export/location_export_dialog.cpp" line="106"/>
         <source>Include background info</source>
         <translation>నేపథ్య సమాచారాన్ని చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="244"/>
-        <source>Watermark</source>
-        <translation>వాటర్ మార్క్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="246"/>
-        <source>Open document after export</source>
-        <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="247"/>
-        <source>Export</source>
-        <translation>ఎక్స్ పోర్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="248"/>
-        <source>Cancel</source>
-        <translation>క్యాన్సిల్ </translation>
     </message>
 </context>
 <context>
@@ -12110,59 +12208,9 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationsExportDialog</name>
     <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="338"/>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="49"/>
         <source>Export locations</source>
         <translation>లొకేషన్స్ ఎక్స్ పోర్ట్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="340"/>
-        <source>Select all</source>
-        <translation>అన్నీ సెలక్ట్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="341"/>
-        <source>Format</source>
-        <translation>ఫార్మాట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="342"/>
-        <source>Include main photo</source>
-        <translation>ప్రధాన ఫోటోను చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="343"/>
-        <source>Include story role</source>
-        <translation>కథా పాత్రను చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="344"/>
-        <source>Include one line description</source>
-        <translation>ఒక లైన్ వివరణను చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="345"/>
-        <source>Include long description</source>
-        <translation>సుదీర్ఘ వివరణను చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="346"/>
-        <source>Watermark</source>
-        <translation>వాటర్ మార్క్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="348"/>
-        <source>Open document after export</source>
-        <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="349"/>
-        <source>Export</source>
-        <translation>ఎక్స్ పోర్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="350"/>
-        <source>Cancel</source>
-        <translation>క్యాన్సిల్ </translation>
     </message>
 </context>
 <context>
@@ -12391,52 +12439,52 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LoginDialog</name>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="126"/>
+        <location filename="../ui/account/login_dialog.cpp" line="131"/>
         <source>Email invalid</source>
         <translation>ఇమెయిల్ చెల్లదు</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="75"/>
+        <location filename="../ui/account/login_dialog.cpp" line="78"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
         <translation>మేము పంపిన నిర్ధారణ కోడ్ గడువు ముగిసింది.</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="77"/>
+        <location filename="../ui/account/login_dialog.cpp" line="80"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
         <translation>మేము ఎగువన ఉన్న ఇ-మెయిల్‌కి నిర్ధారణ కోడ్‌ని పంపాము, దయచేసి ధృవీకరించడానికి దాన్ని ఇక్కడ నమోదు చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="194"/>
+        <location filename="../ui/account/login_dialog.cpp" line="203"/>
         <source>Get into your account</source>
         <translation>మీ ఖాతాలోకి ప్రవేశించండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="197"/>
+        <location filename="../ui/account/login_dialog.cpp" line="206"/>
         <source>Sign in to get access to extended features of the FREE, PRO and CLOUD versions</source>
         <translation>ఉచిత, PRO మరియు CLOUD సంస్కరణల యొక్క పొడిగించిన ఫీచర్‌లకు ప్రాప్యత పొందడానికి సైన్ ఇన్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="198"/>
+        <location filename="../ui/account/login_dialog.cpp" line="207"/>
         <source>Email</source>
         <translation>ఇమెయిల్</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="200"/>
+        <location filename="../ui/account/login_dialog.cpp" line="209"/>
         <source>Confirmation code</source>
         <translation>నిర్ధారణ కోడ్</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="201"/>
+        <location filename="../ui/account/login_dialog.cpp" line="210"/>
         <source>Sign in</source>
         <translation>సైన్ ఇన్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="202"/>
+        <location filename="../ui/account/login_dialog.cpp" line="211"/>
         <source>Send code again</source>
         <translation>కోడ్ మళ్ళి పంపించు</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="203"/>
+        <location filename="../ui/account/login_dialog.cpp" line="212"/>
         <source>Cancel</source>
         <translation>క్యాన్సిల్ </translation>
     </message>
@@ -13292,79 +13340,29 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelExportDialog</name>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="339"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="132"/>
         <source>Export novel</source>
         <translation>నవల ఎక్స్ పోర్ట్ చెయ్యి </translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="341"/>
-        <source>Title page</source>
-        <translation>టైటిల్ పేజీ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="342"/>
-        <source>Synopsis</source>
-        <translation>సారాంశం</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="343"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="133"/>
         <source>Outline</source>
         <translation>కథ అవుట్ లైన్ </translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="344"/>
-        <source>Novel</source>
-        <translation>నవల</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="346"/>
-        <source>Format</source>
-        <translation>ఫార్మాట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="347"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="134"/>
         <source>Include parts &amp; chapters footers</source>
         <translation>భాగాలు మరియు అధ్యాయాల ఫుటర్‌లను చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="348"/>
-        <source>Include inline notes</source>
-        <translation>ఇన్‌లైన్ నోట్స్ చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="349"/>
-        <source>Include review marks</source>
-        <translation>రివ్యూ మార్క్స్ చేర్చండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="350"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="135"/>
         <source>Scenes&apos; ornamental break</source>
         <translation>సన్నివేశాల అలంకార విరామం</translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="351"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="136"/>
         <source>Keep empty, if you want to print scene headings instead</source>
         <translation> సీన్ హెడ్డింగ్స్  ప్రింట్ చేయాలనుకుంటే ఖాళీగా ఉంచండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="352"/>
-        <source>Watermark</source>
-        <translation>వాటర్ మార్క్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="354"/>
-        <source>Open document after export</source>
-        <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="355"/>
-        <source>Export</source>
-        <translation>ఎక్స్ పోర్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="356"/>
-        <source>Cancel</source>
-        <translation>క్యాన్సిల్ </translation>
     </message>
 </context>
 <context>
@@ -14104,229 +14102,229 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::OnboardingNavigator</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="598"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="849"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="602"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="866"/>
         <source>Translation is ready for %1%</source>
         <translation>%1%కి అనువాదం సిద్ధంగా ఉంది</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="640"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="647"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
         <translation>మేము పంపిన నిర్ధారణ కోడ్ గడువు ముగిసింది.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="648"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="655"/>
         <source>Email invalid</source>
         <translation>ఇమెయిల్ చెల్లదు</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="652"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="807"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
         <translation>మేము ఎగువన ఉన్న ఇ-మెయిల్‌కి నిర్ధారణ కోడ్‌ని పంపాము, దయచేసి ధృవీకరించడానికి దాన్ని ఇక్కడ నమోదు చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="676"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="675"/>
         <source>Choose image</source>
         <translation>ఇమేజ్ సెలక్ట్ చెయ్యి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="677"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="676"/>
         <source>Images</source>
         <translation>ఇమేజస్ </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="686"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="685"/>
         <source>Select an area for the avatar</source>
         <translation>అవతార్ కోసం ప్రదేశం సెలక్ట్ చేసుకోండి </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="702"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="701"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>వినియోగదారు పేరు ఖాళీగా ఉండకూడదు, దయచేసి దాన్ని పూరించండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="843"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="860"/>
         <source>Welcome to the Story Architect</source>
         <translation>స్టోరీ ఆర్కిటెక్ట్‌కి స్వాగతం</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="844"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="861"/>
         <source>Let&apos;s configure something before start</source>
         <translation>ప్రారంభించడానికి ముందు ఏదైనా కాన్ఫిగర్ చేద్దాం</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="845"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="862"/>
         <source>Language</source>
         <translation>భాష</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="851"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="868"/>
         <source>Choose application theme</source>
         <translation>అప్లికేషన్ థీమ్‌ని ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="852"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="869"/>
         <source>Setup size of the user interface elements</source>
         <translation>వినియోగదారు ఇంటర్‌ఫేస్ మూలకాల యొక్క సెటప్ పరిమాణం</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="853"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="870"/>
         <source>small</source>
         <translation>చిన్నది</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="854"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="871"/>
         <source>big</source>
         <translation>పెద్దది </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="855"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="873"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="885"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="892"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="872"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="890"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="902"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="909"/>
         <source>Continue</source>
         <translation>కొనసాగించు</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="858"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="875"/>
         <source>Sign in to get access to the extended
 FREE, PRO and CLOUD features</source>
         <translation>విస్తరించిన వాటికి యాక్సెస్ పొందడానికి సైన్ ఇన్ చేయండి
 ఉచిత, ప్రో మరియు క్లౌడ్ ఫీచర్‌లు</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="872"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="889"/>
         <source>I want to receive STARC news</source>
         <translation>నేను స్టార్క్ వార్తలను అందుకోవాలనుకుంటున్నాను</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="859"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="876"/>
         <source>Such as writing sprints, writing statistics, worldbuilding tools, story development tools, collaboration and more</source>
         <translation>స్ప్రింట్లు రాయడం, గణాంకాలు రాయడం, ప్రపంచ నిర్మాణ సాధనాలు, కథన అభివృద్ధి సాధనాలు, సహకారం మరియు మరిన్ని</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="861"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="878"/>
         <source>Email</source>
         <translation>ఇమెయిల్</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="862"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="879"/>
         <source>Confirmation code</source>
         <translation>నిర్ధారణ కోడ్</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="863"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="880"/>
         <source>Sign up</source>
         <translation>సైన్ అప్ </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="864"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="881"/>
         <source>Send code again</source>
         <translation>కోడ్ మళ్ళి పంపించు</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="865"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="882"/>
         <source>Continue without sign in</source>
         <translation>సైన్ ఇన్ చేయకుండానే కొనసాగించండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="867"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="884"/>
         <source>Set up your account</source>
         <translation>మీ ఖాతాను సెటప్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="868"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="885"/>
         <source>Personalize your workspace</source>
         <translation>మీ కార్యస్థలాన్ని వ్యక్తిగతీకరించండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="869"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="886"/>
         <source>Change avatar</source>
         <translation>అవతార్ మార్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="870"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="887"/>
         <source>Your name</source>
         <translation>మీ పేరు </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="871"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="888"/>
         <source>Your bio</source>
         <translation>మీ బయోడేటా </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="875"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="892"/>
         <source>Customize your workspace</source>
         <translation>మీ కార్యస్థలాన్ని అనుకూలీకరించండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="876"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="888"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="893"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="905"/>
         <source>Feel at home</source>
         <translation>ఇంట్లో ఉన్న అనుభూతి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="878"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="895"/>
         <source>Story Architect provides tools for working with any form of writing. Choose which ones you plan to use:</source>
         <translation>స్టోరీ ఆర్కిటెక్ట్ ఏదైనా రకమైన రచనతో పని చేయడానికి సాధనాలను అందిస్తుంది. మీరు ఉపయోగించాలనుకుంటున్న వాటిని ఎంచుకోండి:</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="880"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="897"/>
         <source>Screenplay</source>
         <translation>స్క్రీన్ ప్లే </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="881"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="898"/>
         <source>Comic book</source>
         <translation>కామిక్ బుక్ </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="882"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="899"/>
         <source>Audioplay</source>
         <translation>ఆడియో ప్లే </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="883"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="900"/>
         <source>Stageplay</source>
         <translation>నాటకం </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="884"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="901"/>
         <source>Novel</source>
         <translation>నవల</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="887"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="904"/>
         <source>Customize your work environment</source>
         <translation>మీ పని వాతావరణాన్ని అనుకూలీకరించండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="890"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="907"/>
         <source>We&apos;ll help you get used to STARC by leveraging your experience with other applications.</source>
         <translation>ఇతర అప్లికేషన్‌లతో మీ అనుభవాన్ని ఉపయోగించుకోవడం ద్వారా STARCని అలవాటు చేసుకోవడానికి మేము మీకు సహాయం చేస్తాము.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="893"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="910"/>
         <source>Application</source>
         <translation>అప్లికేషన్</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="894"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="911"/>
         <source>Adapt the interface and workflow</source>
         <translation>ఇంటర్‌ఫేస్ మరియు వర్క్‌ఫ్లోను అడాప్ట్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="896"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="913"/>
         <source>Before you get started</source>
         <translation>మీరు ప్రారంభించడానికి ముందు</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="897"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="914"/>
         <source>Feel our care</source>
         <translation>మా సంరక్షణ అనుభూతి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="899"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="916"/>
         <source>You should know that Story Architect cares about the safety of your work, so the app:
 
 • automatically saves changes every three seconds when there is no activity
@@ -14347,22 +14345,22 @@ This will help to protect your creativity in any unforeseen situation.</source>
 ఏదైనా ఊహించని పరిస్థితిలో మీ సృజనాత్మకతను రక్షించుకోవడానికి ఇది సహాయపడుతుంది.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="907"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="924"/>
         <source>Thanks I&apos;ll know</source>
         <translation>ధన్యవాదాలు నేను తెలుసుకుంటాను</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="909"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="926"/>
         <source>Follow us on social media</source>
         <translation>సోషల్ మీడియాలో మమ్మల్ని అనుసరించండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="910"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="927"/>
         <source>Let&apos;s unite to make the best app for writers</source>
         <translation>రచయితల కోసం ఉత్తమమైన యాప్‌ను రూపొందించడానికి ఏకం అవుదాం </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="911"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="928"/>
         <source>Be the first to know our news, fresh updates and special offers.
 
 Get in touch with our technical support, share your feedback and suggest improvements.
@@ -14375,7 +14373,7 @@ Discuss everything with fellow community of writers, share your work in progress
 తోటి రచయితల సంఘంతో ప్రతిదీ చర్చించండి, పురోగతిలో ఉన్న మీ పనిని పంచుకోండి మరియు జీవితం గురించి చాట్ చేయండి.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="921"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="938"/>
         <source>Start writing</source>
         <translation>రాయడం ప్రారంభించండి</translation>
     </message>
@@ -14765,85 +14763,115 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::PurchaseDialog</name>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="168"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="209"/>
         <source>Choose what suits you</source>
         <translation>మీకు ఏది సరిపోతుందో ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="169"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="210"/>
+        <source>Buy as a gift</source>
+        <translation>బహుమతిగా కొనండి</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_dialog.cpp" line="211"/>
         <source>Cancel</source>
         <translation>క్యాన్సిల్ </translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="170"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="212"/>
         <source>Purchase</source>
         <translation>కొనుగోలు</translation>
     </message>
 </context>
 <context>
-    <name>Ui::PurchaseDialogOption</name>
+    <name>Ui::PurchaseDialogOptionWidget</name>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="153"/>
         <source>Pay with:</source>
-        <translation type="vanished">దీనితో చెల్లించండి:</translation>
+        <translation>దీనితో చెల్లించండి:</translation>
     </message>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="172"/>
         <source>%1 lifetime</source>
-        <translation type="vanished">%1 జీవితకాలం</translation>
+        <translation>%1 జీవితకాలం</translation>
     </message>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="174"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="260"/>
         <source>%1 for %2</source>
-        <translation type="vanished">%2 కోసం %1</translation>
+        <translation>%2 కోసం %1</translation>
     </message>
     <message numerus="yes">
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="176"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="260"/>
         <source>%n month(s)</source>
-        <translation type="vanished">
+        <translation>
             <numerusform>%n నెల(లు)</numerusform>
             <numerusform>%n month(s)</numerusform>
         </translation>
     </message>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="177"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="261"/>
         <source>%1 credits</source>
-        <translation type="vanished">%1 క్రెడిట్‌లు</translation>
+        <translation>%1 క్రెడిట్‌లు</translation>
     </message>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="294"/>
         <source>$%1 per month</source>
-        <translation type="vanished">నెలకు $%1</translation>
+        <translation>నెలకు $%1</translation>
     </message>
 </context>
 <context>
-    <name>Ui::PurchaseDialogOptionWidget</name>
+    <name>Ui::PurchaseGiftDialog</name>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="116"/>
-        <source>Pay with:</source>
-        <translation type="unfinished">దీనితో చెల్లించండి:</translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="97"/>
+        <source>Email invalid</source>
+        <translation>ఇమెయిల్ చెల్లదు</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="135"/>
-        <source>%1 lifetime</source>
-        <translation type="unfinished">%1 జీవితకాలం</translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="126"/>
+        <source>Purchasing a gift</source>
+        <translation>బహుమతిని కొనుగోలు చేయడం</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="211"/>
-        <source>%1 for %2</source>
-        <translation type="unfinished">%2 కోసం %1</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="211"/>
-        <source>%n month(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n నెల(లు)</numerusform>
-            <numerusform>%n month(s)</numerusform>
-        </translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="127"/>
+        <source>Recepient email</source>
+        <translation>స్వీకర్త ఇమెయిల్</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="212"/>
-        <source>%1 credits</source>
-        <translation type="unfinished">%1 క్రెడిట్‌లు</translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="128"/>
+        <source>A promo code to activate the gift will be sent here</source>
+        <translation>బహుమతిని సక్రియం చేయడానికి ప్రోమో కోడ్ ఇక్కడ పంపబడుతుంది</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="244"/>
-        <source>$%1 per month</source>
-        <translation type="unfinished">నెలకు $%1</translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="129"/>
+        <source>Greeting text</source>
+        <translation>గ్రీటింగ్ టెక్స్ట్</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="130"/>
+        <source>You can leave it blank</source>
+        <translation>మీరు దానిని ఖాళీగా ఉంచవచ్చు</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="131"/>
+        <source>A promo code to activate the gift will be sent to the recipient immediately after payment.
+
+Promo code validity period is a 1 year</source>
+        <translation>బహుమతిని సక్రియం చేయడానికి ప్రోమో కోడ్ చెల్లింపు తర్వాత వెంటనే స్వీకర్తకు పంపబడుతుంది.
+
+ప్రోమో కోడ్ చెల్లుబాటు వ్యవధి 1 సంవత్సరం</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="134"/>
+        <source>Cancel</source>
+        <translation>క్యాన్సిల్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="135"/>
+        <source>Purchase</source>
+        <translation>కొనుగోలు</translation>
     </message>
 </context>
 <context>
@@ -15748,89 +15776,39 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ScreenplayExportDialog</name>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="376"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="169"/>
         <source>Export screenplay</source>
         <translation>స్క్రీన్‌ప్లేను ఎక్స్ పోర్ట్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="378"/>
-        <source>Title page</source>
-        <translation>టైటిల్ పేజీ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="379"/>
-        <source>Synopsis</source>
-        <translation>సారాంశం</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="380"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="170"/>
         <source>Treatment</source>
         <translation>ట్రీమ్ మెంట్ </translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="381"/>
-        <source>Screenplay</source>
-        <translation>స్క్రీన్ ప్లే </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="383"/>
-        <source>Format</source>
-        <translation>ఫార్మాట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="384"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="171"/>
         <source>Include sequences headers and footers</source>
         <translation>సీక్వెన్స్ హెడర్‌లు మరియు ఫుటర్‌లను చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="385"/>
-        <source>Include inline notes</source>
-        <translation>ఇన్‌లైన్ నోట్స్ చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="386"/>
-        <source>Include review marks</source>
-        <translation>రివ్యూ మార్క్స్ చేర్చండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="387"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="172"/>
         <source>Highlight characters</source>
         <translation>పాత్రలను హైలైట్ చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="388"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="173"/>
         <source>with dialogues</source>
         <translation>డైలాగ్స్ తో</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="389"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="174"/>
         <source>Export concrete scenes</source>
         <translation>కాంక్రీట్ సీన్స్ ఎక్స్ పోర్ట్  చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="390"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="175"/>
         <source>Keep empty, if you want to print all scenes</source>
         <translation>మీరు అన్ని దృశ్యాలను ప్రింట్ చేయాలనుకుంటే, ఖాళీగా ఉంచండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="391"/>
-        <source>Watermark</source>
-        <translation>వాటర్ మార్క్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="393"/>
-        <source>Open document after export</source>
-        <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="394"/>
-        <source>Export</source>
-        <translation>ఎక్స్ పోర్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="395"/>
-        <source>Cancel</source>
-        <translation>క్యాన్సిల్ </translation>
     </message>
 </context>
 <context>
@@ -17331,6 +17309,39 @@ Discuss everything with fellow community of writers, share your work in progress
     </message>
 </context>
 <context>
+    <name>Ui::ScriptExportDialog</name>
+    <message>
+        <location filename="../ui/export/script_export_dialog.cpp" line="244"/>
+        <source>Title page</source>
+        <translation>టైటిల్ పేజీ </translation>
+    </message>
+    <message>
+        <location filename="../ui/export/script_export_dialog.cpp" line="245"/>
+        <source>Synopsis</source>
+        <translation>సారాంశం</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/script_export_dialog.cpp" line="246"/>
+        <source>Text</source>
+        <translation>టెక్స్ట్ </translation>
+    </message>
+    <message>
+        <location filename="../ui/export/script_export_dialog.cpp" line="248"/>
+        <source>Draft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/script_export_dialog.cpp" line="249"/>
+        <source>Include inline notes</source>
+        <translation>ఇన్‌లైన్ నోట్స్ చేర్చండి</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/script_export_dialog.cpp" line="250"/>
+        <source>Include review marks</source>
+        <translation>రివ్యూ మార్క్స్ చేర్చండి </translation>
+    </message>
+</context>
+<context>
     <name>Ui::SearchToolbar</name>
     <message>
         <location filename="../../corelib/ui/modules/search_toolbar/search_toolbar.cpp" line="193"/>
@@ -17538,12 +17549,12 @@ STARTED</translation>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="137"/>
         <source>today</source>
-        <translation type="unfinished">ఈరోజు </translation>
+        <translation>ఈరోజు </translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="139"/>
         <source>yesterday</source>
-        <translation type="unfinished">నిన్న </translation>
+        <translation>నిన్న </translation>
     </message>
     <message>
         <location filename="../ui/account/session_widget.cpp" line="146"/>
@@ -19002,44 +19013,19 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::SimpleTextExportDialog</name>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="226"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="90"/>
         <source>Export text document</source>
         <translation>టెక్ట్స్ డాక్యుమెంట్  ఎక్స్ పోర్ట్  చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="228"/>
-        <source>Format</source>
-        <translation>ఫార్మాట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="229"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="91"/>
         <source>Include inline notes</source>
         <translation>ఇన్‌లైన్ నోట్స్ చేర్చండి</translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="230"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="92"/>
         <source>Include review marks</source>
         <translation>రివ్యూ మార్క్స్ చేర్చండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="231"/>
-        <source>Watermark</source>
-        <translation>వాటర్ మార్క్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="233"/>
-        <source>Open document after export</source>
-        <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="234"/>
-        <source>Export</source>
-        <translation>ఎక్స్ పోర్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="235"/>
-        <source>Cancel</source>
-        <translation>క్యాన్సిల్ </translation>
     </message>
 </context>
 <context>
@@ -19129,59 +19115,9 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayExportDialog</name>
     <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="263"/>
+        <location filename="../ui/export/stageplay_export_dialog.cpp" line="56"/>
         <source>Export stageplay</source>
         <translation>స్టేజ్‌ప్లేను ఎక్స్ పోర్ట్  చేయండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="265"/>
-        <source>Title page</source>
-        <translation>టైటిల్ పేజీ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="266"/>
-        <source>Synopsis</source>
-        <translation>సారాంశం</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="267"/>
-        <source>Script</source>
-        <translation>స్క్రిప్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="269"/>
-        <source>Format</source>
-        <translation>ఫార్మాట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="270"/>
-        <source>Include inline notes</source>
-        <translation>ఇన్‌లైన్ నోట్స్ చేర్చండి</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="271"/>
-        <source>Include review marks</source>
-        <translation>రివ్యూ మార్క్స్ చేర్చండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="272"/>
-        <source>Watermark</source>
-        <translation>వాటర్ మార్క్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="274"/>
-        <source>Open document after export</source>
-        <translation>ఎక్స్ పోర్ట్ చేశాక డాక్యుమెంట్ ఓపెన్ చెయ్యండి </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="275"/>
-        <source>Export</source>
-        <translation>ఎక్స్ పోర్ట్ </translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="276"/>
-        <source>Cancel</source>
-        <translation>క్యాన్సిల్ </translation>
     </message>
 </context>
 <context>
@@ -19607,6 +19543,49 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/notifications/subscription_view.cpp" line="138"/>
         <source>Renew</source>
         <translation>రెన్యూవల్ చెయ్యండి </translation>
+    </message>
+</context>
+<context>
+    <name>Ui::SubscriptionWidget</name>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="119"/>
+        <source>Lifetime access</source>
+        <translation>జీవితకాల యాక్సెస్</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="120"/>
+        <source>Active until %1</source>
+        <translation>%1 వరకు యాక్టివ్ గా ఉంది </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="157"/>
+        <source>from $%1/mo</source>
+        <translation>నెలకు $%1 నుండి</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="167"/>
+        <source>30 days for free</source>
+        <translation>30 రోజులు ఉచితంగా</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="168"/>
+        <source>Try for free</source>
+        <translation>ఉచితంగా ట్రై చెయ్యండి </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="169"/>
+        <source>Renew</source>
+        <translation>రెన్యూవల్ చెయ్యండి </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="170"/>
+        <source>Buy lifetime</source>
+        <translation>జీవితకాలానికి కొనుగోలు చెయ్యండి </translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="171"/>
+        <source>Buy as a gift</source>
+        <translation>బహుమతిగా కొనండి</translation>
     </message>
 </context>
 <context>

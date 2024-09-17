@@ -245,7 +245,7 @@ void ScriptExportDialog::updateTranslations()
     d->includeSynopsis->setText(tr("Synopsis"));
     d->includeText->setText(tr("Text"));
 
-    d->version->setLabel(tr("Version"));
+    d->version->setLabel(tr("Draft"));
     d->includeInlineNotes->setText(tr("Include inline notes"));
     d->includeReviewMarks->setText(tr("Include review marks"));
 }

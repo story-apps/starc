@@ -1273,19 +1273,19 @@
     <name>BusinessLayer::LocationExporter</name>
     <message>
         <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="127"/>
-        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="144"/>
+        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="143"/>
         <source>primary location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="132"/>
-        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="149"/>
+        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="148"/>
         <source>secondary location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../corelib/business_layer/export/locations/location_exporter.cpp" line="137"/>
-        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="154"/>
+        <location filename="../../corelib/business_layer/export/locations/locations_exporter.cpp" line="153"/>
         <source>tertiary location</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1410,7 +1410,7 @@
 <context>
     <name>BusinessLayer::NovelTextModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/novel/text/novel_text_model.cpp" line="171"/>
+        <location filename="../../corelib/business_layer/model/novel/text/novel_text_model.cpp" line="200"/>
         <source>Novel</source>
         <translation>Novel·la</translation>
     </message>
@@ -2128,7 +2128,7 @@
 <context>
     <name>BusinessLayer::ScreenplayTextModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/screenplay/text/screenplay_text_model.cpp" line="156"/>
+        <location filename="../../corelib/business_layer/model/screenplay/text/screenplay_text_model.cpp" line="164"/>
         <source>Screenplay</source>
         <translation>Guió</translation>
     </message>
@@ -2502,17 +2502,17 @@
 <context>
     <name>ColorPicker</name>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="262"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="274"/>
         <source>Color hex code</source>
         <translation>Codi de color hexadecimal</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="263"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="275"/>
         <source>Cancel</source>
         <translation>Cancel·lar</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="264"/>
+        <location filename="../../corelib/ui/widgets/color_picker/color_picker.cpp" line="276"/>
         <source>Add</source>
         <translation>Afegir</translation>
     </message>
@@ -2854,70 +2854,92 @@
 <context>
     <name>ManagementLayer::AccountManager</name>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="144"/>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="182"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="151"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="189"/>
         <source>The team should have a name</source>
         <translation>L&apos;equip ha de tenir un nom</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="205"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="212"/>
         <source>Do you really want to remove this team?</source>
         <translation>Realment voleu suprimir aquest equip?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="206"/>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="231"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="213"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="238"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="207"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="214"/>
         <source>Yes, remove</source>
         <translation>Sí, esborra&apos;l</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="230"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="237"/>
         <source>Do you really want to leave this team?</source>
         <translation>Realment voleu abandonar aquest equip?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="232"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="239"/>
         <source>Yes, leave</source>
         <translation>Sí, abandona</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="536"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="582"/>
         <source>Try PRO version for free</source>
         <translation>Prova la versió PRO gratis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="537"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="583"/>
         <source>You can try all the features of the PRO version during 30 days for free. After trial period, you can continue to use the PRO version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation>Podeu provar totes les funcions de la versió PRO gratuïtament durant 30 dies. Després d&apos;aquest període podreu seguir utilitzant la versió PRO renovant la vostra subscripció. Altrament, tornareu a tenir la versió GRATIS automàticament.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="540"/>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="623"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="586"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="708"/>
         <source>Continue with FREE version</source>
         <translation>Continua amb la versió GRATIS</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="619"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="616"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="643"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="670"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="757"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="801"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="836"/>
+        <source>You have an additional %1% discount due to the promo code activation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="704"/>
         <source>Try CLOUD version for free</source>
         <translation>Prova la versió NÚVOL gratis</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="620"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="705"/>
         <source>You can try all the features of the CLOUD version during 30 days for free. After trial period, you can continue to use the CLOUD version by renewing your subscription. Otherwise, you&apos;ll be returned to the FREE version automatically.</source>
         <translation>Podeu provar totes les funcions de la versió NÚVOL gratuïtament durant 30 dies. Després d&apos;aquest període podreu seguir utilitzant la versió NÚVOL renovant la vostra subscripció. Altrament, tornareu a tenir la versió GRATIS automàticament.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="624"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="709"/>
         <source>Activate CLOUD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="683"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="749"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="793"/>
+        <source>You have an additional 20% discount due to PRO lifetime subscription purchase, and %1% discount due to the promo code activation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="753"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="797"/>
+        <source>You have an additional 20% discount due to the purchasing of the PRO lifetime subscription</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="841"/>
         <source>Credits are our internal currency. They are used for AI tools, such as text generation.
 
 1 credit equals 1000 words processed by AI.
@@ -2928,7 +2950,7 @@
 1 crèdit equival a 10 imatges generades per IA.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/account/account_manager.cpp" line="541"/>
+        <location filename="../management_layer/content/account/account_manager.cpp" line="587"/>
         <source>Activate PRO</source>
         <translation>Activar PRO</translation>
     </message>
@@ -3079,23 +3101,28 @@
         <translation>Canvia a .STARC</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3235"/>
+        <location filename="../management_layer/application_manager.cpp" line="2963"/>
+        <source>Maximum active sessions reached. To authorize from a new device, end one of the current sessions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/application_manager.cpp" line="3246"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>La subscripció del servei del Núvol dels propietaris del projecte ha caducat. Podreu continuar treballant amb el projecte tan aviat com renovin la subscripció.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3479"/>
+        <location filename="../management_layer/application_manager.cpp" line="3490"/>
         <source>Novel</source>
         <translation>Novel·la</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3492"/>
+        <location filename="../management_layer/application_manager.cpp" line="3503"/>
         <source>Screenplay</source>
         <translation>Guió</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3216"/>
-        <location filename="../management_layer/application_manager.cpp" line="3237"/>
+        <location filename="../management_layer/application_manager.cpp" line="3227"/>
+        <location filename="../management_layer/application_manager.cpp" line="3248"/>
         <source>Continue offline</source>
         <translation>Continua sense connexió</translation>
     </message>
@@ -3111,12 +3138,12 @@
         <translation>Carregant les fonts perdudes</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3214"/>
+        <location filename="../management_layer/application_manager.cpp" line="3225"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>La vostra subscripció al servei del núvol ha caducat. Activeu la subscripció per a continuar treballant amb el projecte.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3217"/>
+        <location filename="../management_layer/application_manager.cpp" line="3228"/>
         <source>Renew subscription</source>
         <translation>Renova la subscripció</translation>
     </message>
@@ -3251,17 +3278,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="529"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="545"/>
         <source>Character name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>El nom del personatge ha canviat de &quot;%1&quot; a &quot;%2&quot;. Aplicar els canvis?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="531"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="547"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="532"/>
+        <location filename="../management_layer/plugins/characters_relations/characters_relations_manager.cpp" line="548"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
@@ -3284,12 +3311,12 @@
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="461"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="462"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation>El codi de promoció amb un descompte del %1% s&apos;ha activat i s&apos;utilitzarà en la següent compra.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="470"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="471"/>
         <source>PRO version subscription activated for %n month(s).</source>
         <translation>
             <numerusform>Accés a la versió PRO activat durant %n mes.</numerusform>
@@ -3297,12 +3324,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="475"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="476"/>
         <source>PRO version lifetime access granted.</source>
         <translation>Accés a la versió PRO activat de per vida.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="479"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="480"/>
         <source>CLOUD version subscription activated for %n month(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3310,12 +3337,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="484"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="485"/>
         <source>CLOUD version lifetime access granted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="492"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="493"/>
         <source>%n credits were added to your balance.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3323,111 +3350,116 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="693"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="507"/>
+        <source>The gift has been sent to the recipient&apos;s mailbox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="704"/>
         <source>Promocode is incorrect</source>
         <translation>El codi de descompte és incorrecte</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="697"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="708"/>
         <source>Promocode expired</source>
         <translation>El codi de descompte ha caducat</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="701"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="712"/>
         <source>Maximum number of promocode activations done</source>
         <translation>Heu assolit el nombre màxim de codis de descompte</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="705"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="716"/>
         <source>Promocode already used</source>
         <translation>El codi de descompte ja s&apos;ha utilitzat</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="774"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="785"/>
         <source>CUT TO:</source>
         <translation>TALLA A:</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="790"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="801"/>
         <source>To use AI assistant, you need to replenish credits&apos; balance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="791"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="802"/>
         <source>Maybe later</source>
         <translation>Potser més tard</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="792"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="803"/>
         <source>Replenish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1348"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1381"/>
         <source>Rephrasing text</source>
         <translation>Reformulant el text</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1459"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1492"/>
         <source>Expanding text</source>
         <translation>Expandint text</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1568"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1601"/>
         <source>Shortening text</source>
         <translation>Escurçant el text</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1677"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1710"/>
         <source>Inserting text</source>
         <translation>Inserint el text</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1786"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1819"/>
         <source>Summarizing text</source>
         <translation>Resumint el text</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1895"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1928"/>
         <source>Translating text</source>
         <translation>Traduint el text</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1940"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2057"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1973"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2090"/>
         <source>Generating synopsis (scene %1 from %2)</source>
         <translation>S&apos;està generant la sinopsi (escena %1 de %2)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2115"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2234"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2148"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2267"/>
         <source>Generating novel (scene %1 from %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2288"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2406"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2321"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2439"/>
         <source>Generating script (chapter %1 from %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="772"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="783"/>
         <source>INT.</source>
         <translation>INT.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="773"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="784"/>
         <source>EXT.</source>
         <translation>EXT.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2454"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2610"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2487"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2643"/>
         <source>Processing text</source>
         <translation>Processant el text</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2563"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2596"/>
         <source>Generating image</source>
         <translation>Generant imatge</translation>
     </message>
@@ -3454,68 +3486,68 @@
 <context>
     <name>ManagementLayer::ExportManager</name>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="199"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="384"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="547"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="716"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="883"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1032"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1175"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1307"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1440"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1572"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="205"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="401"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="574"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="753"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="930"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1085"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1229"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1362"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1496"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1629"/>
         <source>Choose the file to export</source>
         <translation>Escull el fitxer per exportar</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="258"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="411"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="574"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="743"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="910"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1059"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1202"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1334"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1467"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1599"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="270"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="428"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="601"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="780"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="957"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1112"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1256"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1389"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1523"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1656"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation>No es pot escriure el fitxer. Sembla que està obert per una altra aplicació. Si us plau, tanca&apos;l i torna a internar l&apos;exportació.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="261"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="414"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="577"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="746"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="913"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1062"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1205"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1337"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1470"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1602"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="273"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="431"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="604"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="783"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="960"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1115"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1259"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1392"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1526"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1659"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation>No es pot escriure el fitxer. Comproveu els permisos per a escriure a la carpeta escollida o triï&apos;n una de nova.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="264"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="417"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="580"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="749"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="916"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1065"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1208"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1340"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1473"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1605"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="276"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="434"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="607"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="786"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="963"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1118"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1262"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1395"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1529"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1662"/>
         <source>Export error</source>
         <translation>Error d&apos;exportació</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1295"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1350"/>
         <source>Characters</source>
         <translation>Personatges</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1560"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1617"/>
         <source>Locations</source>
         <translation>Localitzacions</translation>
     </message>
@@ -3556,17 +3588,17 @@
 <context>
     <name>ManagementLayer::ImportManager</name>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="69"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="70"/>
         <source>File format not supported</source>
         <translation>Format d&apos;arxiu no suportat</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="70"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="71"/>
         <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
         <translation>Els arxius en format DOC no estan suportats. Necessites desar el fitxer en format DOCX i tornar a importar-lo.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="315"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="318"/>
         <source>Choose the file to import</source>
         <translation>Escull el fitxer per a importar</translation>
     </message>
@@ -3641,17 +3673,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="514"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="532"/>
         <source>Location name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>El nom de la localització ha canviat de &quot;%1&quot; a &quot;%2&quot;. Aplicar els canvis?  </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="516"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="534"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="517"/>
+        <location filename="../management_layer/plugins/locations_map/locations_map_manager.cpp" line="535"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
@@ -3925,6 +3957,7 @@ If you want to continue editing novel text, switch to the corresponding module v
     </message>
     <message>
         <location filename="../management_layer/content/project/project_manager.cpp" line="1004"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3419"/>
         <source>Current draft</source>
         <translation>Esborrany actual</translation>
     </message>
@@ -4128,7 +4161,7 @@ If you want to continue editing novel text, switch to the corresponding module v
         <translation>Obra de teatre</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3675"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3669"/>
         <source>Conflicted version</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5069,17 +5102,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Ja existeix un món amb aquest nom</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="503"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="521"/>
         <source>World name was changed from &quot;%1&quot; to &quot;%2&quot;. Apply changes?</source>
         <translation>El nom del món s&apos;ha canviat de &quot;%1&quot; a &quot;%2&quot;. Voleu aplicar els canvis?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="505"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="523"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="506"/>
+        <location filename="../management_layer/plugins/worlds_map/worlds_map_manager.cpp" line="524"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
@@ -7076,34 +7109,62 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AboutApplicationDialog</name>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="155"/>
+        <location filename="../ui/about_application_dialog.cpp" line="158"/>
         <source>version</source>
         <translation>versió</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="157"/>
+        <location filename="../ui/about_application_dialog.cpp" line="162"/>
         <source>Designed, coded and crafted with love at the</source>
         <translation>Dissenyat, programat i construït amb amor al</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="159"/>
+        <location filename="../ui/about_application_dialog.cpp" line="166"/>
         <source>company</source>
         <translation>companyia</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="160"/>
+        <location filename="../ui/about_application_dialog.cpp" line="167"/>
         <source>The Logline Generator is powered by</source>
         <translation>El Generador de Logline és impulsat per</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="164"/>
+        <location filename="../ui/about_application_dialog.cpp" line="171"/>
         <source>Starc is being developed with strong authors’ involvement and support so we won’t waste the app performance on the features you don’t need.</source>
         <translation>Starc s&apos;està desenvolupant amb una gran implicació i suport per part dels autors, de manera que no malgastarem el rendiment de l&apos;aplicació amb les funcions que no necessiteu.</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="167"/>
+        <location filename="../ui/about_application_dialog.cpp" line="174"/>
         <source>Feel free to contact us at any point of your creative journey to share your thoughts about the app, suggest ideas and report issues you met.</source>
         <translation>Sent-te lliure de contactar amb nosaltres en qualsevol punt de la teva jornada creativa per a compartir els teus pensaments sobre l&apos;aplicació, suggerir idees i informar d&apos;errors que et trobis.</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::AbstractExportDialog</name>
+    <message>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="221"/>
+        <source>Format</source>
+        <translation>Format</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="222"/>
+        <source>Watermark</source>
+        <translation>Marca d&apos;aigua</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="223"/>
+        <source>Open document after export</source>
+        <translation>Obre el document després d&apos;exportar-lo</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="224"/>
+        <source>Export</source>
+        <translation>Exporta</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="225"/>
+        <source>Cancel</source>
+        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -7132,22 +7193,22 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AccountNavigator</name>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="321"/>
-        <location filename="../ui/account/account_navigator.cpp" line="337"/>
-        <location filename="../ui/account/account_navigator.cpp" line="353"/>
-        <location filename="../ui/account/account_navigator.cpp" line="719"/>
+        <location filename="../ui/account/account_navigator.cpp" line="328"/>
+        <location filename="../ui/account/account_navigator.cpp" line="344"/>
+        <location filename="../ui/account/account_navigator.cpp" line="360"/>
+        <location filename="../ui/account/account_navigator.cpp" line="780"/>
         <source>Lifetime access</source>
         <translation>Accés de per vida</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="322"/>
-        <location filename="../ui/account/account_navigator.cpp" line="338"/>
-        <location filename="../ui/account/account_navigator.cpp" line="354"/>
+        <location filename="../ui/account/account_navigator.cpp" line="329"/>
+        <location filename="../ui/account/account_navigator.cpp" line="345"/>
+        <location filename="../ui/account/account_navigator.cpp" line="361"/>
         <source>Active until %1</source>
         <translation>Actiu fins a les %1</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/account/account_navigator.cpp" line="360"/>
+        <location filename="../ui/account/account_navigator.cpp" line="367"/>
         <source>%n credits available</source>
         <translation>
             <numerusform>%n crèdit disponible</numerusform>
@@ -7155,120 +7216,115 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         </translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="361"/>
+        <location filename="../ui/account/account_navigator.cpp" line="368"/>
         <source>No credits available</source>
         <translation>Cap crèdit disponible</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="715"/>
+        <location filename="../ui/account/account_navigator.cpp" line="776"/>
         <source>Account</source>
         <translation>Compte</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="716"/>
+        <location filename="../ui/account/account_navigator.cpp" line="777"/>
         <source>Subscription</source>
         <translation>Subscripció</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="717"/>
+        <location filename="../ui/account/account_navigator.cpp" line="778"/>
         <source>Sessions</source>
         <translation>Sessions</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="718"/>
+        <location filename="../ui/account/account_navigator.cpp" line="779"/>
         <source>FREE version</source>
         <translation>versió GRATIS</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="720"/>
+        <location filename="../ui/account/account_navigator.cpp" line="781"/>
         <source>PRO version</source>
         <translation>Versió PRO</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="722"/>
-        <location filename="../ui/account/account_navigator.cpp" line="727"/>
+        <location filename="../ui/account/account_navigator.cpp" line="783"/>
+        <location filename="../ui/account/account_navigator.cpp" line="787"/>
         <source>Try for free</source>
         <translation>Prova gratis</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="724"/>
-        <location filename="../ui/account/account_navigator.cpp" line="728"/>
+        <location filename="../ui/account/account_navigator.cpp" line="784"/>
+        <location filename="../ui/account/account_navigator.cpp" line="788"/>
         <source>Renew</source>
         <translation>Renova</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="725"/>
+        <location filename="../ui/account/account_navigator.cpp" line="785"/>
         <source>CLOUD version</source>
         <translation>Versió al NÚVOL</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="735"/>
+        <location filename="../ui/account/account_navigator.cpp" line="795"/>
         <source>Owner</source>
         <translation>Propietari</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="737"/>
+        <location filename="../ui/account/account_navigator.cpp" line="797"/>
         <source>No one team created yet, press &quot;Add team&quot; button for adding your first team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="738"/>
+        <location filename="../ui/account/account_navigator.cpp" line="798"/>
         <source>Member</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="739"/>
+        <location filename="../ui/account/account_navigator.cpp" line="799"/>
         <source>You are not on any team</source>
         <translation>No sou a cap equip</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="740"/>
+        <location filename="../ui/account/account_navigator.cpp" line="800"/>
         <source>Add team</source>
         <translation>Afegeix equip</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="741"/>
+        <location filename="../ui/account/account_navigator.cpp" line="801"/>
         <source>Edit team</source>
         <translation>Edita l&apos;equip</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="742"/>
+        <location filename="../ui/account/account_navigator.cpp" line="802"/>
         <source>Remove team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="743"/>
+        <location filename="../ui/account/account_navigator.cpp" line="803"/>
         <source>Exit team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="723"/>
-        <source>Buy lifetime</source>
-        <translation>Comprar de per vida</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_navigator.cpp" line="331"/>
-        <location filename="../ui/account/account_navigator.cpp" line="347"/>
+        <location filename="../ui/account/account_navigator.cpp" line="338"/>
+        <location filename="../ui/account/account_navigator.cpp" line="354"/>
         <source>Used %1 GB from %2 GB</source>
         <translation>%1 GB utilitzat/s de %2 GB</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="729"/>
+        <location filename="../ui/account/account_navigator.cpp" line="789"/>
         <source>STUDIO version</source>
         <translation>Versió ESTUDI</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="731"/>
+        <location filename="../ui/account/account_navigator.cpp" line="791"/>
         <source>Credits for Ai tools</source>
         <translation>Crèdits per a eines d&apos;IA</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="732"/>
+        <location filename="../ui/account/account_navigator.cpp" line="792"/>
         <source>Buy credits</source>
         <translation>Compra crèdits</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="733"/>
+        <location filename="../ui/account/account_navigator.cpp" line="793"/>
         <source>Logout</source>
         <translation>Tanca la sessió</translation>
     </message>
@@ -7294,131 +7350,86 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AccountView</name>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="278"/>
+        <location filename="../ui/account/account_view.cpp" line="228"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>El nom d&apos;usuari no pot estar buit, omple&apos;l si us plau</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="436"/>
-        <source>FREE version</source>
-        <translation>versió GRATIS</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="455"/>
-        <location filename="../ui/account/account_view.cpp" line="462"/>
-        <source>CLOUD version</source>
-        <translation>Versió al NÚVOL</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="635"/>
+        <location filename="../ui/account/account_view.cpp" line="528"/>
         <source>I want to receive STARC news</source>
         <translation>Vull rebre les notícies d&apos;STARC</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="641"/>
-        <source>Compare versions</source>
-        <translation>Compareu versions</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="647"/>
-        <source>Upgrade to PRO</source>
-        <translation>Actualitza a PRO</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="642"/>
-        <source>Try PRO for free</source>
-        <translation>Prova PRO gratis</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="245"/>
-        <location filename="../ui/account/account_view.cpp" line="437"/>
-        <source>Lifetime access</source>
-        <translation>Accés de per vida</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="246"/>
-        <source>Active until %1</source>
-        <translation>Actiu fins a les %1</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="442"/>
-        <location filename="../ui/account/account_view.cpp" line="448"/>
-        <source>PRO version</source>
-        <translation>Versió PRO</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="469"/>
-        <source>STUDIO version</source>
-        <translation>Versió ESTUDI</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="633"/>
+        <location filename="../ui/account/account_view.cpp" line="526"/>
         <source>Your name</source>
         <translation>El vostre nom</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="634"/>
+        <location filename="../ui/account/account_view.cpp" line="527"/>
         <source>Your bio</source>
         <translation>La vostra biografia</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="636"/>
+        <location filename="../ui/account/account_view.cpp" line="529"/>
         <source>Add avatar +</source>
         <translation>Afegir avatar +</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="636"/>
+        <location filename="../ui/account/account_view.cpp" line="529"/>
         <source>Change avatar...</source>
         <translation>Canvia l&apos;avatar...</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="637"/>
+        <location filename="../ui/account/account_view.cpp" line="530"/>
         <source>Do you want to delete your avatar?</source>
         <translation>Voleu esborrar el vostre avatar?</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="638"/>
+        <location filename="../ui/account/account_view.cpp" line="531"/>
         <source>Select an area for the avatar</source>
         <translation>Selecciona una àrea per a l&apos;avatar</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="639"/>
-        <source>Subscription type</source>
-        <translation>Tipus de subscripció</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="643"/>
-        <source>Try CLOUD for free</source>
+        <location filename="../ui/account/account_view.cpp" line="532"/>
+        <source>Subscriptions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="644"/>
-        <source>Buy lifetime</source>
-        <translation>Comprar de per vida</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="645"/>
-        <location filename="../ui/account/account_view.cpp" line="646"/>
-        <source>Renew</source>
-        <translation>Renova</translation>
-    </message>
-    <message>
-        <location filename="../ui/account/account_view.cpp" line="648"/>
-        <source>Upgrade to CLOUD</source>
+        <location filename="../ui/account/account_view.cpp" line="533"/>
+        <source>Compare subscriptions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="649"/>
+        <location filename="../ui/account/account_view.cpp" line="535"/>
+        <source>Advanced tools for professionals
+• Characters relations
+• Corkboard
+• Timeline
+• Mind maps
+• and more writer&apos;s tools...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="542"/>
+        <source>For those who are always on the move
+• 5GB cloud storage
+• Seamless synchronization across all your devices
+• Realtime collaboration
+• Production tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_view.cpp" line="547"/>
         <source>Active sessions</source>
         <translation>Sessions actives</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="650"/>
+        <location filename="../ui/account/account_view.cpp" line="548"/>
         <source>Promotional or gift code</source>
         <translation>Codi promocional o de regal</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_view.cpp" line="651"/>
+        <location filename="../ui/account/account_view.cpp" line="549"/>
         <source>Activate</source>
         <translation>Activa</translation>
     </message>
@@ -8522,69 +8533,19 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayExportDialog</name>
     <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="296"/>
+        <location filename="../ui/export/audioplay_export_dialog.cpp" line="97"/>
         <source>Export audioplay</source>
         <translation>Exportar guió d&apos;àudio</translation>
     </message>
     <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="298"/>
-        <source>Title page</source>
-        <translation>Portada</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="299"/>
-        <source>Synopsis</source>
-        <translation>Sinopsi</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="300"/>
-        <source>Script</source>
-        <translation>Guió</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="302"/>
-        <source>Format</source>
-        <translation>Format</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="303"/>
-        <source>Include inline notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="304"/>
-        <source>Include review marks</source>
-        <translation>Inclou marques de revisió</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="305"/>
+        <location filename="../ui/export/audioplay_export_dialog.cpp" line="98"/>
         <source>Highlight characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="306"/>
+        <location filename="../ui/export/audioplay_export_dialog.cpp" line="99"/>
         <source>with dialogues</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="307"/>
-        <source>Watermark</source>
-        <translation>Marca d&apos;aigua</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="309"/>
-        <source>Open document after export</source>
-        <translation>Obre el document després d&apos;exportar-lo</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="310"/>
-        <source>Export</source>
-        <translation>Exporta</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/audioplay_export_dialog.cpp" line="311"/>
-        <source>Cancel</source>
-        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -9392,74 +9353,39 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharacterExportDialog</name>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="260"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="127"/>
         <source>Export character</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="262"/>
-        <source>Format</source>
-        <translation>Format</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="263"/>
-        <source>Include main photo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="264"/>
-        <source>additional photos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="265"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="129"/>
         <source>Include story info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="266"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="130"/>
         <source>Include personal info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="267"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="131"/>
         <source>Include physique info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="268"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="132"/>
         <source>Include life info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="269"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="133"/>
         <source>Include attitude info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="270"/>
+        <location filename="../ui/export/character_export_dialog.cpp" line="134"/>
         <source>Include biography</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="271"/>
-        <source>Watermark</source>
-        <translation>Marca d&apos;aigua</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="273"/>
-        <source>Open document after export</source>
-        <translation>Obre el document després d&apos;exportar-lo</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="274"/>
-        <source>Export</source>
-        <translation>Exporta</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/character_export_dialog.cpp" line="275"/>
-        <source>Cancel</source>
-        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -9986,69 +9912,19 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharactersExportDialog</name>
     <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="352"/>
+        <location filename="../ui/export/characters_export_dialog.cpp" line="84"/>
         <source>Export characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="354"/>
-        <source>Select all</source>
-        <translation>Selecciona-ho tot</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="355"/>
-        <source>Format</source>
-        <translation>Format</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="356"/>
-        <source>Include main photo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="357"/>
-        <source>Include story role</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="358"/>
+        <location filename="../ui/export/characters_export_dialog.cpp" line="86"/>
         <source>Include age</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="359"/>
+        <location filename="../ui/export/characters_export_dialog.cpp" line="87"/>
         <source>Include gender</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="360"/>
-        <source>Include one line description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="361"/>
-        <source>Include long description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="362"/>
-        <source>Watermark</source>
-        <translation>Marca d&apos;aigua</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="364"/>
-        <source>Open document after export</source>
-        <translation>Obre el document després d&apos;exportar-lo</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="365"/>
-        <source>Export</source>
-        <translation>Exporta</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/characters_export_dialog.cpp" line="366"/>
-        <source>Cancel</source>
-        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -10311,59 +10187,9 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ComicBookExportDialog</name>
     <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="266"/>
+        <location filename="../ui/export/comic_book_export_dialog.cpp" line="57"/>
         <source>Export comic book</source>
         <translation>Exporta el comic</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="268"/>
-        <source>Title page</source>
-        <translation>Portada</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="269"/>
-        <source>Synopsis</source>
-        <translation>Sinopsi</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="270"/>
-        <source>Script</source>
-        <translation>Guió</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="272"/>
-        <source>Format</source>
-        <translation>Format</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="273"/>
-        <source>Print inline notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="274"/>
-        <source>Print review marks</source>
-        <translation>Imprimeix les marques de revisió</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="275"/>
-        <source>Watermark</source>
-        <translation>Marca d&apos;aigua</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="277"/>
-        <source>Open document after export</source>
-        <translation>Obre el document després d&apos;exportar-lo</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="278"/>
-        <source>Export</source>
-        <translation>Exporta</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/comic_book_export_dialog.cpp" line="279"/>
-        <source>Cancel</source>
-        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -10825,6 +10651,261 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="140"/>
         <source>Remove selected notes</source>
         <translation>Esborra les notes seleccionades</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::CompareSubscriptionsDialog</name>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="91"/>
+        <source>Unlimited number of projects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="92"/>
+        <source>Unlimited number of documents per project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="93"/>
+        <source>Cover generator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="94"/>
+        <source>Folders</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="95"/>
+        <source>Text documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="96"/>
+        <source>Session statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="97"/>
+        <source>Mind maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="98"/>
+        <source>Images gallery</source>
+        <translation>Galera d&apos;imatges</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="99"/>
+        <source>Seamless synchronization across all your devices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="100"/>
+        <source>Realtime collaboration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="101"/>
+        <source>5GB cloud storage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="102"/>
+        <source>Character</source>
+        <translation>Personatge</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="103"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="109"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="115"/>
+        <source>Basic info</source>
+        <translation>Informació bàsica</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="104"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="110"/>
+        <source>Export</source>
+        <translation>Exporta</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="105"/>
+        <source>Characters relations</source>
+        <translation>Relacions dels personatges</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="106"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="112"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="117"/>
+        <source>Extended info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="107"/>
+        <source>Dialogues from all stories</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="108"/>
+        <source>Location</source>
+        <translation>Localització</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="111"/>
+        <source>Locations map</source>
+        <translation>Mapa de localitzacions</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="113"/>
+        <source>Scenes from all stories</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="114"/>
+        <source>World</source>
+        <translation>Món</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="116"/>
+        <source>Worlds map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="118"/>
+        <source>Screenplay</source>
+        <translation>Guió</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="119"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="131"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="137"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="143"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="148"/>
+        <source>Logline &amp; synopsis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="120"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="132"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="138"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="144"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="149"/>
+        <source>Title page</source>
+        <translation>Portada</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="121"/>
+        <source>Treatment text</source>
+        <translation>Text del tractament</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="122"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="133"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="139"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="145"/>
+        <source>Script text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="123"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="134"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="152"/>
+        <source>Basic statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="124"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="135"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="140"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="146"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="153"/>
+        <source>Import/export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="125"/>
+        <source>Scenes numbers locking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="126"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="154"/>
+        <source>Corkboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="127"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="155"/>
+        <source>Timeline</source>
+        <translation>Cronologia</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="128"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="141"/>
+        <source>Extended statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="129"/>
+        <source>Script breakdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="130"/>
+        <source>Comics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="136"/>
+        <source>Audio drama</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="142"/>
+        <source>Stageplay</source>
+        <translation>Obra de teatre</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="147"/>
+        <source>Novel</source>
+        <translation>Novel·la</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="150"/>
+        <source>Outline text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="151"/>
+        <source>Novel text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="326"/>
+        <source>For those who are at the beginning of creative journey</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="328"/>
+        <source>Advanced tools for professionals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="330"/>
+        <source>For those who are always on the move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="331"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="333"/>
+        <source>Renew</source>
+        <translation>Renova</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="332"/>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="334"/>
+        <source>Buy as a gift</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -11683,6 +11764,47 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     </message>
 </context>
 <context>
+    <name>Ui::DocumentExportDialog</name>
+    <message>
+        <location filename="../ui/export/document_export_dialog.cpp" line="87"/>
+        <source>Include main photo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/document_export_dialog.cpp" line="88"/>
+        <source>additional photos</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Ui::DocumentsExportDialog</name>
+    <message>
+        <location filename="../ui/export/documents_export_dialog.cpp" line="227"/>
+        <source>Select all</source>
+        <translation>Selecciona-ho tot</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/documents_export_dialog.cpp" line="228"/>
+        <source>Include main photo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/documents_export_dialog.cpp" line="229"/>
+        <source>Include story role</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/documents_export_dialog.cpp" line="230"/>
+        <source>Include one line description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/documents_export_dialog.cpp" line="231"/>
+        <source>Include long description</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ui::FastFormatWidget</name>
     <message>
         <location filename="../../corelib/ui/modules/fast_format_widget/fast_format_widget.cpp" line="260"/>
@@ -11789,7 +11911,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Obra de teatre</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="326"/>
+        <location filename="../ui/import/import_dialog.cpp" line="328"/>
         <source>Import to</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11855,59 +11977,24 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationExportDialog</name>
     <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="236"/>
+        <location filename="../ui/export/location_export_dialog.cpp" line="102"/>
         <source>Export location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="238"/>
-        <source>Format</source>
-        <translation>Format</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="239"/>
-        <source>Include main photo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="240"/>
-        <source>additional photos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="241"/>
+        <location filename="../ui/export/location_export_dialog.cpp" line="104"/>
         <source>Include sense info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="242"/>
+        <location filename="../ui/export/location_export_dialog.cpp" line="105"/>
         <source>Include geography info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="243"/>
+        <location filename="../ui/export/location_export_dialog.cpp" line="106"/>
         <source>Include background info</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="244"/>
-        <source>Watermark</source>
-        <translation>Marca d&apos;aigua</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="246"/>
-        <source>Open document after export</source>
-        <translation>Obre el document després d&apos;exportar-lo</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="247"/>
-        <source>Export</source>
-        <translation>Exporta</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/location_export_dialog.cpp" line="248"/>
-        <source>Cancel</source>
-        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -12102,59 +12189,9 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LocationsExportDialog</name>
     <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="338"/>
+        <location filename="../ui/export/locations_export_dialog.cpp" line="49"/>
         <source>Export locations</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="340"/>
-        <source>Select all</source>
-        <translation>Selecciona-ho tot</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="341"/>
-        <source>Format</source>
-        <translation>Format</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="342"/>
-        <source>Include main photo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="343"/>
-        <source>Include story role</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="344"/>
-        <source>Include one line description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="345"/>
-        <source>Include long description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="346"/>
-        <source>Watermark</source>
-        <translation>Marca d&apos;aigua</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="348"/>
-        <source>Open document after export</source>
-        <translation>Obre el document després d&apos;exportar-lo</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="349"/>
-        <source>Export</source>
-        <translation>Exporta</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/locations_export_dialog.cpp" line="350"/>
-        <source>Cancel</source>
-        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -12383,52 +12420,52 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LoginDialog</name>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="126"/>
+        <location filename="../ui/account/login_dialog.cpp" line="131"/>
         <source>Email invalid</source>
         <translation>Correu invàlid</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="75"/>
+        <location filename="../ui/account/login_dialog.cpp" line="78"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
         <translation>El codi de confirmació que t&apos;hem enviat ha caducat.</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="77"/>
+        <location filename="../ui/account/login_dialog.cpp" line="80"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
         <translation>Hem enviat un correu de confirmació a l&apos;email de dalt, si us plau, entreu-lo aquí per a verificar</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="194"/>
+        <location filename="../ui/account/login_dialog.cpp" line="203"/>
         <source>Get into your account</source>
         <translation>Entra al teu compte</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="197"/>
+        <location filename="../ui/account/login_dialog.cpp" line="206"/>
         <source>Sign in to get access to extended features of the FREE, PRO and CLOUD versions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="198"/>
+        <location filename="../ui/account/login_dialog.cpp" line="207"/>
         <source>Email</source>
         <translation>Email</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="200"/>
+        <location filename="../ui/account/login_dialog.cpp" line="209"/>
         <source>Confirmation code</source>
         <translation>Codi de confirmació</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="201"/>
+        <location filename="../ui/account/login_dialog.cpp" line="210"/>
         <source>Sign in</source>
         <translation>Inicia sessió</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="202"/>
+        <location filename="../ui/account/login_dialog.cpp" line="211"/>
         <source>Send code again</source>
         <translation>Tornar a enviar el codi</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="203"/>
+        <location filename="../ui/account/login_dialog.cpp" line="212"/>
         <source>Cancel</source>
         <translation>Cancel·lar</translation>
     </message>
@@ -13284,79 +13321,29 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelExportDialog</name>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="339"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="132"/>
         <source>Export novel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="341"/>
-        <source>Title page</source>
-        <translation>Portada</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="342"/>
-        <source>Synopsis</source>
-        <translation>Sinopsi</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="343"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="133"/>
         <source>Outline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="344"/>
-        <source>Novel</source>
-        <translation>Novel·la</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="346"/>
-        <source>Format</source>
-        <translation>Format</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="347"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="134"/>
         <source>Include parts &amp; chapters footers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="348"/>
-        <source>Include inline notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="349"/>
-        <source>Include review marks</source>
-        <translation>Inclou marques de revisió</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="350"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="135"/>
         <source>Scenes&apos; ornamental break</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="351"/>
+        <location filename="../ui/export/novel_export_dialog.cpp" line="136"/>
         <source>Keep empty, if you want to print scene headings instead</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="352"/>
-        <source>Watermark</source>
-        <translation>Marca d&apos;aigua</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="354"/>
-        <source>Open document after export</source>
-        <translation>Obre el document després d&apos;exportar-lo</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="355"/>
-        <source>Export</source>
-        <translation>Exporta</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/novel_export_dialog.cpp" line="356"/>
-        <source>Cancel</source>
-        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -14096,228 +14083,228 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::OnboardingNavigator</name>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="598"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="849"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="602"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="866"/>
         <source>Translation is ready for %1%</source>
         <translation>Està traduït el %1%.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="640"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="647"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
         <translation>El codi de confirmació que t&apos;hem enviat ha caducat.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="648"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="655"/>
         <source>Email invalid</source>
         <translation>Correu invàlid</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="652"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="807"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
         <translation>Hem enviat un correu de confirmació a l&apos;email de dalt, si us plau, entreu-lo aquí per a verificar</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="676"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="675"/>
         <source>Choose image</source>
         <translation>Escull la imatge</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="677"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="676"/>
         <source>Images</source>
         <translation>Imatges</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="686"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="685"/>
         <source>Select an area for the avatar</source>
         <translation>Selecciona una àrea per a l&apos;avatar</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="702"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="701"/>
         <source>Username can&apos;t be empty, please fill it</source>
         <translation>El nom d&apos;usuari no pot estar buit, omple&apos;l si us plau</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="843"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="860"/>
         <source>Welcome to the Story Architect</source>
         <translation>Benvingut a Story Architect</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="844"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="861"/>
         <source>Let&apos;s configure something before start</source>
         <translation>Configurem algunes coses abans de començar</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="845"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="862"/>
         <source>Language</source>
         <translation>Llengua</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="851"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="868"/>
         <source>Choose application theme</source>
         <translation>Trieu el tema de l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="852"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="869"/>
         <source>Setup size of the user interface elements</source>
         <translation>Configura la mida dels elements de la interfície d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="853"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="870"/>
         <source>small</source>
         <translation>petit</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="854"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="871"/>
         <source>big</source>
         <translation>gran</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="855"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="873"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="885"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="892"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="872"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="890"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="902"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="909"/>
         <source>Continue</source>
         <translation>Continua</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="858"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="875"/>
         <source>Sign in to get access to the extended
 FREE, PRO and CLOUD features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="872"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="889"/>
         <source>I want to receive STARC news</source>
         <translation>Vull rebre les notícies d&apos;STARC</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="859"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="876"/>
         <source>Such as writing sprints, writing statistics, worldbuilding tools, story development tools, collaboration and more</source>
         <translation>Com esprints d&apos;escriptura, estadístiques, eines per construir el món, eines per desenvolupar la història, col·laboració i més</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="861"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="878"/>
         <source>Email</source>
         <translation>Email</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="862"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="879"/>
         <source>Confirmation code</source>
         <translation>Codi de confirmació</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="863"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="880"/>
         <source>Sign up</source>
         <translation>Registreu-vos</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="864"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="881"/>
         <source>Send code again</source>
         <translation>Tornar a enviar el codi</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="865"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="882"/>
         <source>Continue without sign in</source>
         <translation>Continueu sense iniciar sessió</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="867"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="884"/>
         <source>Set up your account</source>
         <translation>Configureu el vostre compte</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="868"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="885"/>
         <source>Personalize your workspace</source>
         <translation>Personalitzeu el vostre esplai de treball</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="869"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="886"/>
         <source>Change avatar</source>
         <translation>Canvia l&apos;avatar</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="870"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="887"/>
         <source>Your name</source>
         <translation>El vostre nom</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="871"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="888"/>
         <source>Your bio</source>
         <translation>La vostra biografia</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="875"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="892"/>
         <source>Customize your workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="876"/>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="888"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="893"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="905"/>
         <source>Feel at home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="878"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="895"/>
         <source>Story Architect provides tools for working with any form of writing. Choose which ones you plan to use:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="880"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="897"/>
         <source>Screenplay</source>
         <translation>Guió</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="881"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="898"/>
         <source>Comic book</source>
         <translation>Còmic</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="882"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="899"/>
         <source>Audioplay</source>
         <translation>Guió d&apos;àudio</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="883"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="900"/>
         <source>Stageplay</source>
         <translation>Obra de teatre</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="884"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="901"/>
         <source>Novel</source>
         <translation>Novel·la</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="887"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="904"/>
         <source>Customize your work environment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="890"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="907"/>
         <source>We&apos;ll help you get used to STARC by leveraging your experience with other applications.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="893"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="910"/>
         <source>Application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="894"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="911"/>
         <source>Adapt the interface and workflow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="896"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="913"/>
         <source>Before you get started</source>
         <translation>Abans que comenceu</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="897"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="914"/>
         <source>Feel our care</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="899"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="916"/>
         <source>You should know that Story Architect cares about the safety of your work, so the app:
 
 • automatically saves changes every three seconds when there is no activity
@@ -14338,22 +14325,22 @@ This will help to protect your creativity in any unforeseen situation.</source>
 Això us ajudarà a protegir la vostra creativitat en qualsevol situació imprevista.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="907"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="924"/>
         <source>Thanks I&apos;ll know</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="909"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="926"/>
         <source>Follow us on social media</source>
         <translation>Seguiu-nos a les xarxes socials</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="910"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="927"/>
         <source>Let&apos;s unite to make the best app for writers</source>
         <translation>Unim-nos per fer la millor aplicació per a escriptors</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="911"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="928"/>
         <source>Be the first to know our news, fresh updates and special offers.
 
 Get in touch with our technical support, share your feedback and suggest improvements.
@@ -14366,7 +14353,7 @@ Estigueu en contacte amb el nostre suport tècnic, compartiu els vostres comenta
 Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xerreu sobre la vida.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="921"/>
+        <location filename="../ui/onboarding/onboarding_navigator.cpp" line="938"/>
         <source>Start writing</source>
         <translation>Comença a escriure</translation>
     </message>
@@ -14756,85 +14743,113 @@ Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xer
 <context>
     <name>Ui::PurchaseDialog</name>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="168"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="209"/>
         <source>Choose what suits you</source>
         <translation>Trieu el que més us convingui</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="169"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="210"/>
+        <source>Buy as a gift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_dialog.cpp" line="211"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="170"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="212"/>
         <source>Purchase</source>
         <translation>Compra</translation>
     </message>
 </context>
 <context>
-    <name>Ui::PurchaseDialogOption</name>
+    <name>Ui::PurchaseDialogOptionWidget</name>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="153"/>
         <source>Pay with:</source>
-        <translation type="vanished">Pagueu amb:</translation>
+        <translation>Pagueu amb:</translation>
     </message>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="172"/>
         <source>%1 lifetime</source>
-        <translation type="vanished">%1 de per vida</translation>
+        <translation>%1 de per vida</translation>
     </message>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="174"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="260"/>
         <source>%1 for %2</source>
-        <translation type="vanished">%1 per %2</translation>
+        <translation>%1 per %2</translation>
     </message>
     <message numerus="yes">
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="176"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="260"/>
         <source>%n month(s)</source>
-        <translation type="vanished">
+        <translation>
             <numerusform>%n mes</numerusform>
             <numerusform>%n mesos</numerusform>
         </translation>
     </message>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="177"/>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="261"/>
         <source>%1 credits</source>
-        <translation type="vanished">%1 crèdits</translation>
+        <translation>%1 crèdits</translation>
     </message>
     <message>
+        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="294"/>
         <source>$%1 per month</source>
-        <translation type="vanished">$%1 per mes</translation>
+        <translation>$%1 per mes</translation>
     </message>
 </context>
 <context>
-    <name>Ui::PurchaseDialogOptionWidget</name>
+    <name>Ui::PurchaseGiftDialog</name>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="116"/>
-        <source>Pay with:</source>
-        <translation type="unfinished">Pagueu amb:</translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="97"/>
+        <source>Email invalid</source>
+        <translation>Correu invàlid</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="135"/>
-        <source>%1 lifetime</source>
-        <translation type="unfinished">%1 de per vida</translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="126"/>
+        <source>Purchasing a gift</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="211"/>
-        <source>%1 for %2</source>
-        <translation type="unfinished">%1 per %2</translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="211"/>
-        <source>%n month(s)</source>
-        <translation type="unfinished">
-            <numerusform>%n mes</numerusform>
-            <numerusform>%n mesos</numerusform>
-        </translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="127"/>
+        <source>Recepient email</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="212"/>
-        <source>%1 credits</source>
-        <translation type="unfinished">%1 crèdits</translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="128"/>
+        <source>A promo code to activate the gift will be sent here</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog_option_widget.cpp" line="244"/>
-        <source>$%1 per month</source>
-        <translation type="unfinished">$%1 per mes</translation>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="129"/>
+        <source>Greeting text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="130"/>
+        <source>You can leave it blank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="131"/>
+        <source>A promo code to activate the gift will be sent to the recipient immediately after payment.
+
+Promo code validity period is a 1 year</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="134"/>
+        <source>Cancel</source>
+        <translation>Cancel·la</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="135"/>
+        <source>Purchase</source>
+        <translation>Compra</translation>
     </message>
 </context>
 <context>
@@ -15739,89 +15754,39 @@ Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xer
 <context>
     <name>Ui::ScreenplayExportDialog</name>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="376"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="169"/>
         <source>Export screenplay</source>
         <translation>Exporta el guió</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="378"/>
-        <source>Title page</source>
-        <translation>Portada</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="379"/>
-        <source>Synopsis</source>
-        <translation>Sinopsi</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="380"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="170"/>
         <source>Treatment</source>
         <translation>Tractament</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="381"/>
-        <source>Screenplay</source>
-        <translation>Guió</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="383"/>
-        <source>Format</source>
-        <translation>Format</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="384"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="171"/>
         <source>Include sequences headers and footers</source>
         <translation>Inclou les capçaleres i peus de pàgina de les seqüències</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="385"/>
-        <source>Include inline notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="386"/>
-        <source>Include review marks</source>
-        <translation>Inclou marques de revisió</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="387"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="172"/>
         <source>Highlight characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="388"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="173"/>
         <source>with dialogues</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="389"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="174"/>
         <source>Export concrete scenes</source>
         <translation>Exporta escenes concretes</translation>
     </message>
     <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="390"/>
+        <location filename="../ui/export/screenplay_export_dialog.cpp" line="175"/>
         <source>Keep empty, if you want to print all scenes</source>
         <translation>Mantingueu-ho buit, si voleu imprimir totes les escenes</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="391"/>
-        <source>Watermark</source>
-        <translation>Marca d&apos;aigua</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="393"/>
-        <source>Open document after export</source>
-        <translation>Obre el document després d&apos;exportar-lo</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="394"/>
-        <source>Export</source>
-        <translation>Exporta</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/screenplay_export_dialog.cpp" line="395"/>
-        <source>Cancel</source>
-        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -17319,6 +17284,39 @@ Discutiu-ho tot amb altres escriptors, compartiu el vostre treball en curs i xer
         <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1740"/>
         <source>In beats</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Ui::ScriptExportDialog</name>
+    <message>
+        <location filename="../ui/export/script_export_dialog.cpp" line="244"/>
+        <source>Title page</source>
+        <translation>Portada</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/script_export_dialog.cpp" line="245"/>
+        <source>Synopsis</source>
+        <translation>Sinopsi</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/script_export_dialog.cpp" line="246"/>
+        <source>Text</source>
+        <translation>Text</translation>
+    </message>
+    <message>
+        <location filename="../ui/export/script_export_dialog.cpp" line="248"/>
+        <source>Draft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/script_export_dialog.cpp" line="249"/>
+        <source>Include inline notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/script_export_dialog.cpp" line="250"/>
+        <source>Include review marks</source>
+        <translation>Inclou marques de revisió</translation>
     </message>
 </context>
 <context>
@@ -18993,44 +18991,19 @@ Si treballes sense interrupcions, desa el projecte cada 3 minuts.</translation>
 <context>
     <name>Ui::SimpleTextExportDialog</name>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="226"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="90"/>
         <source>Export text document</source>
         <translation>Exporta document de text</translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="228"/>
-        <source>Format</source>
-        <translation>Format</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="229"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="91"/>
         <source>Include inline notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="230"/>
+        <location filename="../ui/export/simple_text_export_dialog.cpp" line="92"/>
         <source>Include review marks</source>
         <translation>Inclou marques de revisió</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="231"/>
-        <source>Watermark</source>
-        <translation>Marca d&apos;aigua</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="233"/>
-        <source>Open document after export</source>
-        <translation>Obre el document després d&apos;exportar-lo</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="234"/>
-        <source>Export</source>
-        <translation>Exporta</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/simple_text_export_dialog.cpp" line="235"/>
-        <source>Cancel</source>
-        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -19120,59 +19093,9 @@ Si treballes sense interrupcions, desa el projecte cada 3 minuts.</translation>
 <context>
     <name>Ui::StageplayExportDialog</name>
     <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="263"/>
+        <location filename="../ui/export/stageplay_export_dialog.cpp" line="56"/>
         <source>Export stageplay</source>
         <translation>Exporta obra de teatre</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="265"/>
-        <source>Title page</source>
-        <translation>Portada</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="266"/>
-        <source>Synopsis</source>
-        <translation>Sinopsi</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="267"/>
-        <source>Script</source>
-        <translation>Guió</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="269"/>
-        <source>Format</source>
-        <translation>Format</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="270"/>
-        <source>Include inline notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="271"/>
-        <source>Include review marks</source>
-        <translation>Inclou marques de revisió</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="272"/>
-        <source>Watermark</source>
-        <translation>Marca d&apos;aigua</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="274"/>
-        <source>Open document after export</source>
-        <translation>Obre el document després d&apos;exportar-lo</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="275"/>
-        <source>Export</source>
-        <translation>Exporta</translation>
-    </message>
-    <message>
-        <location filename="../ui/export/stageplay_export_dialog.cpp" line="276"/>
-        <source>Cancel</source>
-        <translation>Cancel·la</translation>
     </message>
 </context>
 <context>
@@ -19598,6 +19521,49 @@ Si treballes sense interrupcions, desa el projecte cada 3 minuts.</translation>
         <location filename="../ui/notifications/subscription_view.cpp" line="138"/>
         <source>Renew</source>
         <translation>Renova</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::SubscriptionWidget</name>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="119"/>
+        <source>Lifetime access</source>
+        <translation>Accés de per vida</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="120"/>
+        <source>Active until %1</source>
+        <translation>Actiu fins a les %1</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="157"/>
+        <source>from $%1/mo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="167"/>
+        <source>30 days for free</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="168"/>
+        <source>Try for free</source>
+        <translation>Prova gratis</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="169"/>
+        <source>Renew</source>
+        <translation>Renova</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="170"/>
+        <source>Buy lifetime</source>
+        <translation>Comprar de per vida</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/subscription_widget.cpp" line="171"/>
+        <source>Buy as a gift</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
