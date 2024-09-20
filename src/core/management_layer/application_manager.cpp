@@ -2241,7 +2241,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
 #endif
     Log::init(loggingLevel, logFilePath);
 
-    QString applicationVersion = "0.7.4";
+    QString applicationVersion = "0.7.5";
 #if defined(DEV_BUILD) && DEV_BUILD > 0
     applicationVersion += QString(" dev %1").arg(DEV_BUILD);
 #endif
