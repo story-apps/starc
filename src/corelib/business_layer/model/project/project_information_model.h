@@ -32,6 +32,8 @@ public:
     const QPixmap& cover() const;
     void setCover(const QPixmap& _cover);
     void setCover(const QUuid& _uuid, const QPixmap& _cover);
+    void resetCoverFromBuffer();
+    void clearCoverBuffer();
     Q_SIGNAL void coverChanged(const QPixmap& _cover);
 
     BusinessLayer::StructureModel* structureModel() const;

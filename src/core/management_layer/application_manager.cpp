@@ -1346,6 +1346,11 @@ void ApplicationManager::Implementation::saveChanges()
     markChangesSaved(true);
 
     //
+    // Очистим буфер обложки проекта
+    //
+    projectManager->clearCoverBuffer();
+
+    //
     // И, если необходимо создадим резервную копию закрываемого файла
     //
     if (settingsValue(DataStorageLayer::kApplicationSaveBackupsKey).toBool()) {
@@ -1417,6 +1422,7 @@ void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _cal
             // Пользователь не хочет сохранять изменения
             //
             if (_buttonInfo.id == kNoButtonId) {
+                projectManager->resetCoverFromBuffer();
                 markChangesSaved(true);
             }
             //
@@ -2755,16 +2761,8 @@ void ApplicationManager::initConnections()
             [this] { d->markChangesSaved(false); });
     connect(d->projectManager.data(), &ProjectManager::projectUuidChanged,
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectUuid);
-    connect(d->projectManager.data(), &ProjectManager::projectNameChanged, this,
-            [this](const QString& _name) {
-                d->projectsManager->setCurrentProjectName(_name);
-                d->menuView->setProjectTitle(_name);
-                d->updateWindowTitle();
-            });
-    connect(d->projectManager.data(), &ProjectManager::projectLoglineChanged,
-            d->projectsManager.data(), &ProjectsManager::setCurrentProjectLogline);
-    connect(d->projectManager.data(), &ProjectManager::projectCoverChanged,
-            d->projectsManager.data(), &ProjectsManager::setCurrentProjectCover);
+    connect(d->projectManager.data(), &ProjectManager::changesSaved, d->projectsManager.data(),
+            &ProjectsManager::updateCurrentProject);
     connect(d->projectManager.data(), &ProjectManager::currentModelChanged, this,
             [this](BusinessLayer::AbstractModel* _model) {
                 const bool _available = d->exportManager->canExportDocument(_model);

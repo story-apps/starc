@@ -1453,4 +1453,12 @@ BusinessLayer::ProjectsModelProjectItem* ProjectsManager::currentProject() const
     return d->currentProject;
 }
 
+void ProjectsManager::updateCurrentProject(const QString& _name, const QString& _logline,
+                                           const QPixmap& _cover)
+{
+    setCurrentProjectName(_name);
+    setCurrentProjectLogline(_logline);
+    setCurrentProjectCover(_cover);
+}
+
 } // namespace ManagementLayer

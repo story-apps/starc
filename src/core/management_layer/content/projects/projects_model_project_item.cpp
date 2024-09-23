@@ -173,6 +173,7 @@ QString ProjectsModelProjectItem::name() const
 void ProjectsModelProjectItem::setName(const QString& _name)
 {
     d->name = _name;
+    setChanged(true);
 }
 
 QString ProjectsModelProjectItem::logline() const
@@ -183,6 +184,7 @@ QString ProjectsModelProjectItem::logline() const
 void ProjectsModelProjectItem::setLogline(const QString& _logline)
 {
     d->logline = _logline;
+    setChanged(true);
 }
 
 QString ProjectsModelProjectItem::displayLastEditTime() const
