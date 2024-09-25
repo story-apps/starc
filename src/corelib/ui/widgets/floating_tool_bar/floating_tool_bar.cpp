@@ -11,10 +11,12 @@
 #include <QToolTip>
 #include <QVariantAnimation>
 
-
 namespace {
 const char* kActionWidthKey = "action-width";
-}
+const char* kActionColorKey = "action-color";
+const char* kActionBackgroundKey = "action-background";
+} // namespace
+
 
 class FloatingToolBar::Implementation
 {
@@ -56,6 +58,11 @@ public:
     bool isCurtain = false;
 
     /**
+     * @brief Сторона к которой магнитится шторка
+     */
+    Qt::Edge curtainEdge = Qt::TopEdge;
+
+    /**
      * @brief Отображать ли панель в плоском виде
      */
     bool isFlat = false;
@@ -64,11 +71,6 @@ public:
      * @brief Иконка на которой кликнули последней
      */
     QAction* lastPressedAction = nullptr;
-
-    /**
-     * @brief Цвета иконок
-     */
-    QMap<const QAction*, QColor> actionToColor;
 
     /**
      * @brief  Декорации иконки при клике
@@ -240,13 +242,14 @@ void FloatingToolBar::setOrientation(Qt::Orientation _orientation)
     update();
 }
 
-void FloatingToolBar::setCurtain(bool _curtain)
+void FloatingToolBar::setCurtain(bool _curtain, Qt::Edge _edge)
 {
-    if (d->isCurtain == _curtain) {
+    if (d->isCurtain == _curtain && d->curtainEdge == _edge) {
         return;
     }
 
     d->isCurtain = _curtain;
+    d->curtainEdge = _edge;
     update();
 }
 
@@ -334,11 +337,11 @@ QSize FloatingToolBar::sizeHint() const
 
 QColor FloatingToolBar::actionColor(QAction* _action) const
 {
-    if (!actions().contains(_action)) {
+    if (!actions().contains(_action) || !_action->property(kActionColorKey).isValid()) {
         return {};
     }
 
-    return d->actionToColor.value(_action);
+    return _action->property(kActionColorKey).value<QColor>();
 }
 
 void FloatingToolBar::setActionColor(QAction* _action, const QColor& _color)
@@ -347,12 +350,17 @@ void FloatingToolBar::setActionColor(QAction* _action, const QColor& _color)
         return;
     }
 
-    if (_color.isValid()) {
-        d->actionToColor[_action] = _color;
-    } else {
-        d->actionToColor.remove(_action);
+    _action->setProperty(kActionColorKey, _color);
+    update();
+}
+
+void FloatingToolBar::setActionBackground(QAction* _action, const QColor& _color)
+{
+    if (!actions().contains(_action)) {
+        return;
     }
 
+    _action->setProperty(kActionBackgroundKey, _color);
     update();
 }
 
@@ -411,7 +419,15 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         const auto rect = QRect({ 0, 0 }, backgroundImage.size());
         backgroundImagePainter.drawRoundedRect(rect, radius, radius);
         if (d->isCurtain) {
-            backgroundImagePainter.fillRect(rect.adjusted(0, 0, 0, -radius), backgroundColor());
+            if (d->curtainEdge == Qt::TopEdge) {
+                backgroundImagePainter.fillRect(rect.adjusted(0, 0, 0, -radius), backgroundColor());
+            } else if (d->curtainEdge == Qt::BottomEdge) {
+                backgroundImagePainter.fillRect(rect.adjusted(0, radius, 0, 0), backgroundColor());
+            } else if (d->curtainEdge == Qt::LeftEdge) {
+                backgroundImagePainter.fillRect(rect.adjusted(0, 0, -radius, 0), backgroundColor());
+            } else if (d->curtainEdge == Qt::RightEdge) {
+                backgroundImagePainter.fillRect(rect.adjusted(radius, 0, 0, 0), backgroundColor());
+            }
         }
     }
     //
@@ -432,11 +448,31 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     painter.setPen(Qt::NoPen);
     painter.setBrush(backgroundColor());
     if (d->isCurtain) {
-        const auto topRect = backgroundRect.adjusted(0, 0, 0, -radius);
-        painter.fillRect(topRect, painter.brush());
-        const auto bottomRect = backgroundRect.adjusted(0, topRect.height(), 0, 0);
-        painter.setClipRect(bottomRect);
-        painter.drawRoundedRect(backgroundRect, radius, radius);
+        if (d->curtainEdge == Qt::TopEdge) {
+            const auto topRect = backgroundRect.adjusted(0, 0, 0, -radius);
+            painter.fillRect(topRect, painter.brush());
+            const auto bottomRect = backgroundRect.adjusted(0, topRect.height(), 0, 0);
+            painter.setClipRect(bottomRect);
+            painter.drawRoundedRect(backgroundRect, radius, radius);
+        } else if (d->curtainEdge == Qt::BottomEdge) {
+            const auto bottomRect = backgroundRect.adjusted(0, radius, 0, 0);
+            painter.fillRect(bottomRect, painter.brush());
+            const auto topRect = backgroundRect.adjusted(0, 0, 0, -bottomRect.height());
+            painter.setClipRect(topRect);
+            painter.drawRoundedRect(backgroundRect, radius, radius);
+        } else if (d->curtainEdge == Qt::LeftEdge) {
+            const auto leftRect = backgroundRect.adjusted(0, 0, -radius, 0);
+            painter.fillRect(leftRect, painter.brush());
+            const auto rightRect = backgroundRect.adjusted(leftRect.width(), 0, 0, 0);
+            painter.setClipRect(rightRect);
+            painter.drawRoundedRect(backgroundRect, radius, radius);
+        } else if (d->curtainEdge == Qt::RightEdge) {
+            const auto rightRect = backgroundRect.adjusted(radius, 0, 0, 0);
+            painter.fillRect(rightRect, painter.brush());
+            const auto leftRect = backgroundRect.adjusted(0, 0, -rightRect.width(), 0);
+            painter.setClipRect(leftRect);
+            painter.drawRoundedRect(backgroundRect, radius, radius);
+        }
         painter.setClipRect(QRectF(), Qt::NoClip);
     } else {
         painter.drawRoundedRect(backgroundRect, radius, radius);
@@ -490,8 +526,8 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         // Настроим цвет отрисовки действия
         //
         const QColor penColor = [this, action] {
-            if (d->actionToColor.contains(action)) {
-                return d->actionToColor.value(action);
+            if (action->property(kActionColorKey).isValid()) {
+                return action->property(kActionColorKey).value<QColor>();
             }
 
             return ColorHelper::transparent(
@@ -535,9 +571,6 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         // Рисуем действие с одной лишь иконкой
         //
         else {
-            //
-            // ... сама иконка
-            //
             const QRectF actionRect = d->orientation == Qt::Horizontal
                 ? QRectF(QPointF(actionIconX, actionIconY), actionIconSize)
                 : QRectF(QPointF(actionIconY, actionIconX), actionIconSize);
@@ -545,6 +578,22 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
                 continue;
             }
 
+            //
+            // ... фон
+            //
+            if (action->property(kActionBackgroundKey).isValid()) {
+                painter.setPen(Qt::NoPen);
+                painter.setBrush(action->property(kActionBackgroundKey).value<QColor>());
+                painter.drawEllipse(actionRect.adjusted(
+                    -Ui::DesignSystem::layout().px(6), -Ui::DesignSystem::layout().px8(),
+                    Ui::DesignSystem::layout().px8(), Ui::DesignSystem::layout().px(6)));
+            }
+
+            //
+            // ... сама иконка
+            //
+            painter.setPen(penColor);
+            painter.setBrush(Qt::NoBrush);
             painter.setFont(Ui::DesignSystem::font().iconsMid());
             painter.drawText(actionRect, Qt::AlignCenter,
                              IconHelper::directedIcon(action->iconText()));

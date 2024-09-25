@@ -21,9 +21,8 @@ public:
 
     /**
      * @brief Задать режим отрисовки в виде шторки (true) или плавающей панели (false)
-     * @default false
      */
-    void setCurtain(bool _curtain);
+    void setCurtain(bool _curtain, Qt::Edge _edge = Qt::TopEdge);
 
     /**
      * @brief Задать плоский режим работы тулбара
@@ -65,6 +64,11 @@ protected:
      * @brief Задать цвет действия
      */
     void setActionColor(QAction* _action, const QColor& _color);
+
+    /**
+     * @brief Задать цвет фона действия
+     */
+    void setActionBackground(QAction* _action, const QColor& _color);
 
     /**
      * @brief Можно ли анимировать эффект покидания курсора из панели
