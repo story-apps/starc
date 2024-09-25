@@ -90,7 +90,7 @@ int AbstractMarkdownExporter::Implementation::closeFormatIndex(
     // Вставлять закрывающую форматную строку будем сразу после непробельных символов текущего
     // формата
     //
-    while (_paragraph[index - 1].isSpace()) {
+    while (index > 0 && _paragraph[index - 1].isSpace()) {
         --index;
     }
     return index;
@@ -237,7 +237,7 @@ int AbstractMarkdownExporter::Implementation::openFormatIndex(
     // Вставлять открывающую форматную строку будем непосредственно перед непробельными
     // символами следующего формата, иначе Markdown неправильно нас поймет
     //
-    while (_paragraph[index].isSpace()) {
+    while (index < _paragraph.length() && _paragraph[index].isSpace()) {
         ++index;
     }
     return index;
