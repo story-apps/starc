@@ -100,20 +100,28 @@ void CommentsView::Implementation::updateCommentsViewContextMenu(const QModelInd
             q->showCommentRepliesView(commentsView->selectedIndexes().constFirst());
         });
         menuActions.append(discuss);
+        //
+        // ... отметить как выполненное можно только редакторскую заметку, но не ривизию
+        //
         if (_indexes.constFirst()
-                .data(BusinessLayer::CommentsModel::ReviewMarkIsDoneRole)
-                .toBool()) {
-            auto markAsUndone = new QAction(tr("Mark as undone"));
-            markAsUndone->setIconText(u8"\U000F0131");
-            connect(markAsUndone, &QAction::triggered, q,
-                    [this] { emit q->markAsUndoneRequested(commentsView->selectedIndexes()); });
-            menuActions.append(markAsUndone);
-        } else {
-            auto markAsDone = new QAction(tr("Mark as done"));
-            markAsDone->setIconText(u8"\U000F0135");
-            connect(markAsDone, &QAction::triggered, q,
-                    [this] { emit q->markAsDoneRequested(commentsView->selectedIndexes()); });
-            menuActions.append(markAsDone);
+                .data(BusinessLayer::CommentsModel::ReviewMarkIsRevisionRole)
+                .toBool()
+            == false) {
+            if (_indexes.constFirst()
+                    .data(BusinessLayer::CommentsModel::ReviewMarkIsDoneRole)
+                    .toBool()) {
+                auto markAsUndone = new QAction(tr("Mark as undone"));
+                markAsUndone->setIconText(u8"\U000F0131");
+                connect(markAsUndone, &QAction::triggered, q,
+                        [this] { emit q->markAsUndoneRequested(commentsView->selectedIndexes()); });
+                menuActions.append(markAsUndone);
+            } else {
+                auto markAsDone = new QAction(tr("Mark as done"));
+                markAsDone->setIconText(u8"\U000F0135");
+                connect(markAsDone, &QAction::triggered, q,
+                        [this] { emit q->markAsDoneRequested(commentsView->selectedIndexes()); });
+                menuActions.append(markAsDone);
+            }
         }
         auto remove = new QAction(tr("Remove"));
         remove->setIconText(u8"\U000F01B4");

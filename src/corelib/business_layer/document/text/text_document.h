@@ -126,7 +126,7 @@ public:
      * @brief Добавить редакторсую заметку в текущее выделение
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                       const QString& _comment, const TextCursor& _cursor);
+                       const QString& _comment, bool _isRevision, const TextCursor& _cursor);
 
     /**
      * @brief Добавить ресурсную заметку в текущее выделение

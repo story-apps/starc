@@ -663,14 +663,14 @@ int ScreenplayTextEdit::positionForModelIndex(const QModelIndex& _index)
 }
 
 void ScreenplayTextEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                                       const QString& _comment)
+                                       const QString& _comment, bool _isRevision)
 {
     BusinessLayer::TextCursor cursor(textCursor());
     if (!cursor.hasSelection()) {
         return;
     }
 
-    d->document.addReviewMark(_textColor, _backgroundColor, _comment, cursor);
+    d->document.addReviewMark(_textColor, _backgroundColor, _comment, _isRevision, cursor);
 }
 
 void ScreenplayTextEdit::setCursors(const QVector<Domain::CursorInfo>& _cursors)
@@ -939,7 +939,7 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
             }
 
             //
-            // Если информация о бите была нарисонавана, затрём её
+            // Если информация о бите была нарисонавана, очистим её
             //
             if (lastBeat.isPainted) {
                 lastBeat = {};
@@ -1369,7 +1369,6 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                             }
                         }
                     }
-
                     //
                     // Прорисовка автоматических (ПРОД) для реплик
                     //
@@ -1396,6 +1395,66 @@ void ScreenplayTextEdit::paintEvent(QPaintEvent* _event)
                         const QRect rect(topLeft, bottomRight);
                         painter.drawText(rect, Qt::AlignRight | Qt::AlignTop,
                                          BusinessLayer::ScreenplayTextCorrector::continuedTerm());
+                    }
+                    //
+                    // Прорисовка ревизий
+                    //
+                    {
+                        //
+                        // Собираем ревизии для отображения
+                        //
+                        QVector<QPair<QRectF, QColor>> revisionMarks;
+                        for (const auto& format : block.textFormats()) {
+                            if (const auto revision
+                                = format.format.property(TextBlockStyle::PropertyCommentsIsRevision)
+                                      .toStringList();
+                                !revision.isEmpty() && revision.constFirst() == "true") {
+                                auto revisionCursor = cursor;
+                                revisionCursor.setPosition(revisionCursor.block().position()
+                                                           + format.start);
+                                do {
+                                    if (revisionCursor.positionInBlock() != format.start) {
+                                        revisionCursor.movePosition(QTextCursor::NextCharacter);
+                                    }
+                                    const auto revisionCursorR = cursorRect(revisionCursor);
+                                    QPointF topLeft(isLeftToRight ? (textRight + leftDelta)
+                                                                  : (pageLeft - leftDelta),
+                                                    revisionCursorR.top());
+                                    QPointF bottomRight(isLeftToRight ? pageRight
+                                                                      : textLeft - leftDelta,
+                                                        revisionCursorR.bottom());
+                                    const QRectF rect(topLeft, bottomRight);
+                                    const auto revisionColor = format.format.foreground().color();
+                                    //
+                                    // ... первая звёздочка, или звёздочка на следующей строке
+                                    //
+                                    if (revisionMarks.isEmpty()
+                                        || revisionMarks.constLast().first != rect) {
+                                        revisionMarks.append({ rect, revisionColor });
+                                    }
+                                    //
+                                    // ... звёздочка на той же строке - проверяем уровень
+                                    //
+                                    else if (ColorHelper::revisionLevel(
+                                                 revisionMarks.constLast().second)
+                                             < ColorHelper::revisionLevel(revisionColor)) {
+                                        revisionMarks.last().second = revisionColor;
+                                    }
+                                    if (!revisionCursor.movePosition(QTextCursor::EndOfLine)) {
+                                        revisionCursor.movePosition(QTextCursor::EndOfBlock);
+                                    }
+                                } while (revisionCursor.positionInBlock()
+                                             < (format.start + format.length)
+                                         && !revisionCursor.atBlockEnd());
+                            }
+                        }
+
+                        painter.setFont(cursor.charFormat().font());
+                        for (const auto& reviewMark : std::as_const(revisionMarks)) {
+                            setPainterPen(reviewMark.second);
+                            painter.drawText(reviewMark.first, Qt::AlignHCenter | Qt::AlignTop,
+                                             "*");
+                        }
                     }
                 }
 

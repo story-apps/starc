@@ -576,14 +576,14 @@ int ComicBookTextEdit::positionForModelIndex(const QModelIndex& _index)
 }
 
 void ComicBookTextEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                                      const QString& _comment)
+                                      const QString& _comment, bool _isRevision)
 {
     BusinessLayer::TextCursor cursor(textCursor());
     if (!cursor.hasSelection()) {
         return;
     }
 
-    d->document.addReviewMark(_textColor, _backgroundColor, _comment, cursor);
+    d->document.addReviewMark(_textColor, _backgroundColor, _comment, _isRevision, cursor);
 }
 
 void ComicBookTextEdit::setCursors(const QVector<Domain::CursorInfo>& _cursors)

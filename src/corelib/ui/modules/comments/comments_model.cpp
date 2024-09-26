@@ -1057,6 +1057,10 @@ QVariant CommentsModel::data(const QModelIndex& _index, int _role) const
         }
     }
 
+    case ReviewMarkIsRevisionRole: {
+        return reviewMarkWrapper.reviewMark.comments.constFirst().isRevision;
+    }
+
     case ReviewMarkIsDoneRole: {
         return reviewMarkWrapper.reviewMark.isDone;
     }

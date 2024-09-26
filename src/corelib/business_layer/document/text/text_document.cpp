@@ -1943,7 +1943,8 @@ int TextDocument::mergeParagraph(const TextCursor& _cursor)
 }
 
 void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                                 const QString& _comment, const TextCursor& _cursor)
+                                 const QString& _comment, bool _isRevision,
+                                 const TextCursor& _cursor)
 {
     TextModelTextItem::ReviewMark reviewMark;
     if (_textColor.isValid()) {
@@ -1952,9 +1953,11 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
     if (_backgroundColor.isValid()) {
         reviewMark.backgroundColor = _backgroundColor;
     }
+    const bool isEdited = false;
     reviewMark.comments.append({ DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
                                  DataStorageLayer::StorageFacade::settingsStorage()->accountEmail(),
-                                 QDateTime::currentDateTime().toString(Qt::ISODate), _comment });
+                                 QDateTime::currentDateTime().toString(Qt::ISODate), _comment,
+                                 isEdited, _isRevision });
 
     auto cursor = _cursor;
     cursor.mergeCharFormat(reviewMark.charFormat());

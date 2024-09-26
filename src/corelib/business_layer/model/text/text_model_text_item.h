@@ -56,6 +56,7 @@ public:
         QString date;
         QString text;
         bool isEdited = false;
+        bool isRevision = false;
 
         bool operator==(const ReviewComment& _other) const;
 

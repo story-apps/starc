@@ -132,7 +132,7 @@ public:
      * @brief Добавить редакторскую заметку для текущего выделения
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                       const QString& _comment);
+                       const QString& _comment, bool _isRevision);
 
 
     NovelTextView* q = nullptr;
@@ -559,14 +559,14 @@ void NovelTextView::Implementation::showParametersFor(BusinessLayer::TextModelIt
 
 void NovelTextView::Implementation::addReviewMark(const QColor& _textColor,
                                                   const QColor& _backgroundColor,
-                                                  const QString& _comment)
+                                                  const QString& _comment, bool _isRevision)
 {
     //
     // Добавим заметку
     //
     const auto textColor
         = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
-    textEdit->addReviewMark(textColor, _backgroundColor, _comment);
+    textEdit->addReviewMark(textColor, _backgroundColor, _comment, _isRevision);
 
     //
     // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение
@@ -679,9 +679,9 @@ NovelTextView::NovelTextView(QWidget* _parent)
             [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
     connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,
-            [this](const QColor& _color) { d->addReviewMark(_color, {}, {}); });
+            [this](const QColor& _color) { d->addReviewMark(_color, {}, {}, false); });
     connect(d->commentsToolbar, &CommentsToolbar::textBackgoundColorChangeRequested, this,
-            [this](const QColor& _color) { d->addReviewMark({}, _color, {}); });
+            [this](const QColor& _color) { d->addReviewMark({}, _color, {}, false); });
     connect(d->commentsToolbar, &CommentsToolbar::commentAddRequested, this,
             [this](const QColor& _color) {
                 d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
@@ -692,6 +692,8 @@ NovelTextView::NovelTextView(QWidget* _parent)
                             d->textEdit->cursorRect().topLeft()))
                         .y());
             });
+    connect(d->commentsToolbar, &CommentsToolbar::revisionMarkAddRequested, this,
+            [this](const QColor& _color) { d->addReviewMark(_color, {}, {}, true); });
     connect(d->commentsToolbar, &CommentsToolbar::markAsDoneRequested, this, [this](bool _checked) {
         QSignalBlocker blocker(d->commentsView);
         if (_checked) {
@@ -1124,7 +1126,7 @@ NovelTextView::NovelTextView(QWidget* _parent)
     //
     connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
             [this](const QColor& _color, const QString& _comment) {
-                d->addReviewMark({}, _color, _comment);
+                d->addReviewMark({}, _color, _comment, false);
             });
     connect(d->commentsView, &CommentsView::changeReviewMarkRequested, this,
             [this](const QModelIndex& _index, const QString& _comment) {

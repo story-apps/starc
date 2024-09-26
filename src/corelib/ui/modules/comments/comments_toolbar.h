@@ -14,6 +14,15 @@ class CORE_LIBRARY_EXPORT CommentsToolbar : public FloatingToolBar
 
 public:
     /**
+     * @brief Режим работы рецензирования (комменты, изменения, ревизии)
+     */
+    enum class CommentsType {
+        Review,
+        Changes,
+        Revision,
+    };
+
+    /**
      * @brief Режим работы панели инструментов
      */
     enum class Mode {
@@ -52,6 +61,11 @@ public:
 
 signals:
     /**
+     * @brief Изменился режим работы рецензирования
+     */
+    void commentsTypeChanged(Ui::CommentsToolbar::CommentsType _type);
+
+    /**
      * @brief Пользователь хочет изменить цвет текста
      */
     void textColorChangeRequested(const QColor& _color);
@@ -67,6 +81,11 @@ signals:
     void commentAddRequested(const QColor& _color);
 
     /**
+     * @brief Пользователь хочет добавить пометку ревизии
+     */
+    void revisionMarkAddRequested(const QColor& _color);
+
+    /**
      * @brief Пользователь хочет пометить текущий комментарий как решённый
      */
     void markAsDoneRequested(bool _isDone);
@@ -77,10 +96,17 @@ signals:
     void removeRequested();
 
 protected:
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
     /**
      * @brief Добавим возможность анимированного отображения
      */
     void paintEvent(QPaintEvent* _event) override;
+
+    /**
+     * @brief При смещении панели инструментов, сдвигаем панель режимов, если она была открыта
+     */
+    void moveEvent(QMoveEvent* _event) override;
 
     /**
      * @brief Скрываем попап, когда фокус ушёл из виджета

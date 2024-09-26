@@ -29,6 +29,7 @@ public:
         ReviewMarkCommentRole,
         ReviewMarkIsEditedRole,
         ReviewMarkColorRole,
+        ReviewMarkIsRevisionRole,
         ReviewMarkIsDoneRole,
         ReviewMarkRepliesRole
     };

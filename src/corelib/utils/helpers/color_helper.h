@@ -59,4 +59,14 @@ public:
      * @brief Получить цвет для заданного числа
      */
     static QColor forNumber(int _number);
+
+    /**
+     * @brief Цвет ревизии по уровню
+     */
+    static QColor revisionColor(int _level);
+
+    /**
+     * @brief Уровень ревизии по цвету
+     */
+    static int revisionLevel(const QColor& _color);
 };

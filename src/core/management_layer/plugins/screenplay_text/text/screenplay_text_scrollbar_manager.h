@@ -44,6 +44,11 @@ public:
     void setScrollBarVisible(bool _visible, bool _animate = true);
 
     /**
+     * @brief Ширина скролбара
+     */
+    int scrollBarWidth() const;
+
+    /**
      * @brief Ловим события об изменении размера родивиджета,
      *        для коррктировки положения и размера таймлайна
      */

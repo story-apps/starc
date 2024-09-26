@@ -205,6 +205,7 @@ public:
         PropertyCommentsAuthors, //!< Список авторов комментариев
         PropertyCommentsAuthorsEmails, //!< Список email'ов авторов комментариев
         PropertyCommentsDates, //!< Список дат комментариев
+        PropertyCommentsIsRevision, //!< Список признаков того, что комментарий является ревизией
         PropertyCommentsIsEdited, //!< Список признаков изменений комментариев
         //
         // Свойства ресурсов

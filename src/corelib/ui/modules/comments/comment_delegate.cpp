@@ -79,11 +79,12 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     //
     // ... цвет заметки
     //
+    const auto markColor = _index.data(CommentsModel::ReviewMarkColorRole).value<QColor>();
     const QRectF colorRect(
         QPointF(isLeftToRight ? 0.0 : (backgroundRectRight - DesignSystem::layout().px4()),
                 backgroundRect.top()),
         QSizeF(DesignSystem::layout().px4(), backgroundRect.height()));
-    _painter->fillRect(colorRect, _index.data(CommentsModel::ReviewMarkColorRole).value<QColor>());
+    _painter->fillRect(colorRect, markColor);
 
     //
     // ... аватар
@@ -100,17 +101,18 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     _painter->drawPixmap(avatarRect, avatar, avatar.rect());
 
     //
-    // ... галочка выполнено
+    // ... звёздочка ревизии, или галочка выполнено
     //
+    const auto revision = _index.data(CommentsModel::ReviewMarkIsRevisionRole).toBool();
     const auto done = _index.data(CommentsModel::ReviewMarkIsDoneRole).toBool();
-    QRectF doneIconRect;
-    if (m_isSingleCommentMode || done) {
+    QRectF statusIconRect;
+    if (m_isSingleCommentMode || revision || done) {
         //
         // ... в режиме единичного комментария также рисуем крестик, который будет закрывать
         // представление с комментарием
         //
         const QSizeF iconSize = DesignSystem::treeOneLineItem().iconSize();
-        doneIconRect
+        statusIconRect
             = QRectF(QPointF(isLeftToRight ? (backgroundRectRight - iconSize.width()
                                               - DesignSystem::treeOneLineItem().margins().right())
                                            : (backgroundRect.left()
@@ -119,17 +121,33 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
                                  + (avatarRect.height() - iconSize.height()) / 2.0),
                      iconSize);
         _painter->setFont(DesignSystem::font().iconsMid());
-        _painter->setPen(m_isSingleCommentMode ? textColor : DesignSystem::color().accent());
-        _painter->drawText(doneIconRect, Qt::AlignCenter,
-                           m_isSingleCommentMode ? u8"\U000f0156" : u8"\U000F012C");
-        if (m_isSingleCommentMode && done) {
-            if (isLeftToRight) {
-                doneIconRect.moveRight(doneIconRect.left());
-            } else {
-                doneIconRect.moveLeft(doneIconRect.right());
+        //
+        // ... в режиме одного коммента
+        //
+        if (m_isSingleCommentMode) {
+            //
+            // ... рисуем крестик
+            //
+            _painter->setPen(textColor);
+            _painter->drawText(statusIconRect, Qt::AlignCenter, u8"\U000f0156");
+            //
+            // ... смещаем область иконки, чтобы нарисовать её чуть сбоку
+            //
+            if (revision || done) {
+                if (isLeftToRight) {
+                    statusIconRect.moveRight(statusIconRect.left());
+                } else {
+                    statusIconRect.moveLeft(statusIconRect.right());
+                }
             }
-            _painter->setPen(DesignSystem::color().accent());
-            _painter->drawText(doneIconRect, Qt::AlignCenter, u8"\U000F012C");
+        }
+        //
+        // ... рисуем иконку заметки
+        //
+        if (revision || done) {
+            _painter->setPen(revision ? markColor : DesignSystem::color().accent());
+            _painter->drawText(statusIconRect, Qt::AlignCenter,
+                               revision ? u8"\U000F0382" : u8"\U000F012C");
         }
     }
 
@@ -140,10 +158,10 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     _painter->setPen(textColor);
     const qreal textLeft = isLeftToRight
         ? (avatarRect.right() + DesignSystem::treeOneLineItem().spacing())
-        : ((doneIconRect.isEmpty() ? 0.0 : doneIconRect.right())
+        : ((statusIconRect.isEmpty() ? 0.0 : statusIconRect.right())
            + DesignSystem::treeOneLineItem().spacing());
     const qreal textWidth = isLeftToRight
-        ? ((doneIconRect.isEmpty() ? backgroundRectRight : doneIconRect.left()) - textLeft
+        ? ((statusIconRect.isEmpty() ? backgroundRectRight : statusIconRect.left()) - textLeft
            - DesignSystem::treeOneLineItem().spacing())
         : (avatarRect.left() - textLeft - DesignSystem::treeOneLineItem().spacing());
     const QRectF textRect(QPointF(textLeft, avatarRect.top()),

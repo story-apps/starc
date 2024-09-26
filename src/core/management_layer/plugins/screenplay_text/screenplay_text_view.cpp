@@ -138,7 +138,7 @@ public:
      * @brief Добавить редакторскую заметку для текущего выделения
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                       const QString& _comment);
+                       const QString& _comment, bool _isRevision);
 
 
     ScreenplayTextView* q = nullptr;
@@ -157,7 +157,7 @@ public:
     ScreenplayTextEdit* textEdit = nullptr;
     ScreenplayTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
-    ScreenplayTextScrollBarManager* screenplayTextScrollbarManager = nullptr;
+    //    ScreenplayTextScrollBarManager* screenplayTextScrollbarManager = nullptr;
     std::optional<int> pendingCursorPosition;
 
     //
@@ -209,7 +209,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     , textEdit(new ScreenplayTextEdit(_q))
     , shortcutsManager(textEdit)
     , scalableWrapper(new ScalableWrapper(textEdit, _q))
-    , screenplayTextScrollbarManager(new ScreenplayTextScrollBarManager(scalableWrapper))
+    //    , screenplayTextScrollbarManager(new ScreenplayTextScrollBarManager(scalableWrapper))
     , toolbar(new ScreenplayTextEditToolbar(scalableWrapper))
     , searchManager(new BusinessLayer::SearchManager(scalableWrapper, textEdit))
     , toolbarAnimation(new FloatingToolbarAnimator(_q))
@@ -243,9 +243,10 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     //
     // Вертикальный скрол настраивается менеджером screenplayTextScrollbarManager
     //
+    scalableWrapper->setVerticalScrollBar(new ScrollBar);
     scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
-    screenplayTextScrollbarManager->initScrollBarsSyncing();
+    //    screenplayTextScrollbarManager->initScrollBarsSyncing();
 
     textEdit->setUsePageMode(true);
 
@@ -491,9 +492,7 @@ void ScreenplayTextView::Implementation::updateCommentsToolbar()
     //
     // Настроим список доступных действий панели рецензирования
     //
-    if (textEdit->textCursor().hasSelection()) {
-        commentsToolbar->setMode(CommentsToolbar::Mode::AddNewComment);
-    } else if (commentsView->currentIndex().isValid()) {
+    if (!textEdit->textCursor().hasSelection() && commentsView->currentIndex().isValid()) {
         commentsToolbar->setMode(CommentsToolbar::Mode::EditComment);
         commentsToolbar->setCurrentCommentIsDone(
             commentsModel
@@ -501,31 +500,17 @@ void ScreenplayTextView::Implementation::updateCommentsToolbar()
                        BusinessLayer::CommentsModel::ReviewMarkIsDoneRole)
                 .toBool());
     } else {
-        commentsToolbar->hideToolbar();
-        return;
+        commentsToolbar->setMode(CommentsToolbar::Mode::AddNewComment);
     }
 
-    //
-    // Определяем точку на границе страницы, либо если страница не влезает в экран, то с боку экрана
-    //
-    const int x = (q->isLeftToRight() ? ((textEdit->width() - textEdit->viewport()->width()) / 2
-                                         + textEdit->viewport()->width())
-                                      : ((textEdit->width() - textEdit->viewport()->width()) / 2))
-        - commentsToolbar->width();
-    const qreal textRight = scalableWrapper->mapFromEditor(QPoint(x, 0)).x();
     const auto cursorRect = textEdit->cursorRect();
     const auto globalCursorCenter = textEdit->mapToGlobal(cursorRect.center());
     const auto localCursorCenter
         = commentsToolbar->parentWidget()->mapFromGlobal(globalCursorCenter);
-    //
-    // И смещаем панель рецензирования к этой точке
-    //
     commentsToolbar->moveToolbar(QPoint(
         q->isLeftToRight()
-            ? std::min(scalableWrapper->width() - commentsToolbar->width()
-                           - Ui::DesignSystem::layout().px24(),
-                       textRight)
-            : sidebarWidget->width() + std::max(Ui::DesignSystem::layout().px24(), textRight),
+            ? (scalableWrapper->width() - commentsToolbar->width() + DesignSystem::layout().px(3))
+            : (sidebarWidget->width() - DesignSystem::layout().px(3)),
         localCursorCenter.y() - (commentsToolbar->height() / 3)));
 
     //
@@ -616,14 +601,14 @@ void ScreenplayTextView::Implementation::showParametersFor(BusinessLayer::TextMo
 
 void ScreenplayTextView::Implementation::addReviewMark(const QColor& _textColor,
                                                        const QColor& _backgroundColor,
-                                                       const QString& _comment)
+                                                       const QString& _comment, bool _isRevision)
 {
     //
     // Добавим заметку
     //
     const auto textColor
         = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
-    textEdit->addReviewMark(textColor, _backgroundColor, _comment);
+    textEdit->addReviewMark(textColor, _backgroundColor, _comment, _isRevision);
 
     //
     // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение
@@ -706,8 +691,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                 if (_enabled) {
                     d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
                     d->sidebarContent->setCurrentWidget(d->commentsView);
-                    d->updateCommentsToolbar();
                 }
+                d->updateCommentsToolbar();
                 d->updateSideBarVisibility(this);
             });
     connect(d->toolbar, &ScreenplayTextEditToolbar::aiAssistantEnabledChanged, this,
@@ -726,7 +711,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                                                                   : QModelIndex());
 
                 const bool animate = false;
-                d->screenplayTextScrollbarManager->setScrollBarVisible(!_enabled, animate);
+                //                d->screenplayTextScrollbarManager->setScrollBarVisible(!_enabled,
+                //                animate);
                 d->textEdit->ensureCursorVisible(d->textEdit->textCursor(), animate);
             });
     connect(d->toolbar, &ScreenplayTextEditToolbar::searchPressed, this, [this] {
@@ -740,9 +726,9 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
     connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,
-            [this](const QColor& _color) { d->addReviewMark(_color, {}, {}); });
+            [this](const QColor& _color) { d->addReviewMark(_color, {}, {}, false); });
     connect(d->commentsToolbar, &CommentsToolbar::textBackgoundColorChangeRequested, this,
-            [this](const QColor& _color) { d->addReviewMark({}, _color, {}); });
+            [this](const QColor& _color) { d->addReviewMark({}, _color, {}, false); });
     connect(d->commentsToolbar, &CommentsToolbar::commentAddRequested, this,
             [this](const QColor& _color) {
                 d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
@@ -753,6 +739,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                             d->textEdit->cursorRect().topLeft()))
                         .y());
             });
+    connect(d->commentsToolbar, &CommentsToolbar::revisionMarkAddRequested, this,
+            [this](const QColor& _color) { d->addReviewMark(_color, {}, {}, true); });
     connect(d->commentsToolbar, &CommentsToolbar::markAsDoneRequested, this, [this](bool _checked) {
         QSignalBlocker blocker(d->commentsView);
         if (_checked) {
@@ -1197,7 +1185,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
     //
     connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
             [this](const QColor& _color, const QString& _comment) {
-                d->addReviewMark({}, _color, _comment);
+                d->addReviewMark({}, _color, _comment, false);
             });
     connect(d->commentsView, &CommentsView::changeReviewMarkRequested, this,
             [this](const QModelIndex& _index, const QString& _comment) {
@@ -1349,7 +1337,7 @@ QWidget* ScreenplayTextView::asQWidget()
 void ScreenplayTextView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
-    d->screenplayTextScrollbarManager->setScrollBarVisible(!_isFullScreen);
+    //    d->screenplayTextScrollbarManager->setScrollBarVisible(!_isFullScreen);
 }
 
 QVector<QAction*> ScreenplayTextView::options() const
@@ -1805,7 +1793,7 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 
     d->textEdit->setCursors({});
     d->textEdit->initWithModel(d->model);
-    d->screenplayTextScrollbarManager->setModel(d->model);
+    //    d->screenplayTextScrollbarManager->setModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);
 

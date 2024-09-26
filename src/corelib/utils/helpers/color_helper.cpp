@@ -3,6 +3,13 @@
 #include <QColor>
 
 
+namespace {
+const QVector<QColor> kRevisionColors = {
+    "#bcddff", "#f8c4df", "#fbff8e", "#a6fdb6", "#f6d848",
+    "#dab37e", "#f8cfb6", "#f283ae", "#CFAF84",
+};
+}
+
 QColor ColorHelper::transparent(const QColor& _color, qreal _alphaF)
 {
     if (qFuzzyCompare(_alphaF, 1.0)) {
@@ -103,4 +110,17 @@ QColor ColorHelper::forNumber(int _number)
     case 9:
         return "#FE3235";
     }
+}
+
+QColor ColorHelper::revisionColor(int _level)
+{
+    while (_level >= kRevisionColors.size()) {
+        _level -= kRevisionColors.size();
+    }
+    return kRevisionColors.at(_level);
+}
+
+int ColorHelper::revisionLevel(const QColor& _color)
+{
+    return kRevisionColors.indexOf(_color);
 }

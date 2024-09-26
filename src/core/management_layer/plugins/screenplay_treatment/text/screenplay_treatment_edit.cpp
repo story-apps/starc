@@ -505,14 +505,15 @@ int ScreenplayTreatmentEdit::positionForModelIndex(const QModelIndex& _index)
 }
 
 void ScreenplayTreatmentEdit::addReviewMark(const QColor& _textColor,
-                                            const QColor& _backgroundColor, const QString& _comment)
+                                            const QColor& _backgroundColor, const QString& _comment,
+                                            bool _isRevision)
 {
     BusinessLayer::TextCursor cursor(textCursor());
     if (!cursor.hasSelection()) {
         return;
     }
 
-    d->document.addReviewMark(_textColor, _backgroundColor, _comment, cursor);
+    d->document.addReviewMark(_textColor, _backgroundColor, _comment, _isRevision, cursor);
 }
 
 void ScreenplayTreatmentEdit::setCursors(const QVector<Domain::CursorInfo>& _cursors)

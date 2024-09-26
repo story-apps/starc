@@ -59,6 +59,7 @@ const QLatin1String kDoneAttribute("done");
 const QLatin1String kAuthorAttribute("author");
 const QLatin1String kEmailAttribute("email");
 const QLatin1String kDateAttribute("date");
+const QLatin1String kIsCommentRevisionAttribute("r");
 const QLatin1String kIsCommentEditedAttribute("e");
 const QLatin1String kBoldAttribute("bold");
 const QLatin1String kItalicAttribute("italic");
