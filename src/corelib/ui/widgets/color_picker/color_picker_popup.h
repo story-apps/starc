@@ -15,6 +15,11 @@ public:
     ~ColorPickerPopup() override;
 
     /**
+     * @brief Задать кастомную палитру цветов
+     */
+    void setCustomPalette(const QVector<QColor>& _palette);
+
+    /**
      * @brief Задать возможность удаления выбранного цвета, если выбрать его ещё раз
      */
     void setColorCanBeDeselected(bool _can);

@@ -182,6 +182,12 @@ ColorPicker::~ColorPicker()
     qDeleteAll(d->screenOverlays);
 }
 
+void ColorPicker::setCustomPalette(const QVector<QColor>& _palette)
+{
+    d->colorPallete->setCustomPalette(_palette);
+    updateGeometry();
+}
+
 void ColorPicker::setColorCanBeDeselected(bool _can)
 {
     d->colorPallete->setColorCanBeDeselected(_can);
@@ -201,6 +207,10 @@ void ColorPicker::setSelectedColor(const QColor& _color)
 QSize ColorPicker::sizeHint() const
 {
     auto sizeHint = d->colorPallete->sizeHint();
+    if (d->colorPallete->hasCustomPalette()) {
+        return sizeHint;
+    }
+
     if (const auto panelSizeHint = d->customColorPanel->sizeHint();
         sizeHint.width() < panelSizeHint.width() || sizeHint.height() < panelSizeHint.height()) {
         sizeHint.setWidth(std::max(sizeHint.width(), panelSizeHint.width()));

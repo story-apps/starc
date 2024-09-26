@@ -74,6 +74,11 @@ ColorPickerPopup::ColorPickerPopup(QWidget* _parent)
 
 ColorPickerPopup::~ColorPickerPopup() = default;
 
+void ColorPickerPopup::setCustomPalette(const QVector<QColor>& _palette)
+{
+    d->colorPicker->setCustomPalette(_palette);
+}
+
 void ColorPickerPopup::setColorCanBeDeselected(bool _can)
 {
     d->colorPicker->setColorCanBeDeselected(_can);
@@ -116,16 +121,23 @@ void ColorPickerPopup::showPopup(QWidget* _parent, Qt::Alignment _alignment)
     d->watchedWidget = _parent;
     _parent->installEventFilter(this);
 
-    resize(sizeHint().width(), 1);
+    //
+    // Размер панели с цветами мог измениться, пока виджет был скрыт, но для того, чтобы всё
+    // обновилось, виджет нужно показать, поэтому тут форсим перерасчёт размеров лейаута
+    //
+    contentLayout()->invalidate();
+
+    const auto sizeHint = this->sizeHint();
+    resize(sizeHint.width(), 1);
 
     QPoint leftTop;
     if (_alignment.testFlag(Qt::AlignHCenter)) {
         leftTop
-            = QPoint(_parent->rect().center().x() - width() / 2,
+            = QPoint(_parent->rect().center().x() - sizeHint.width() / 2,
                      _parent->rect().bottom() - Ui::DesignSystem::textField().margins().bottom());
     } else if (_alignment.testFlag(Qt::AlignRight)) {
         leftTop
-            = QPoint(_parent->rect().right() - width(),
+            = QPoint(_parent->rect().right() - sizeHint.width(),
                      _parent->rect().bottom() - Ui::DesignSystem::textField().margins().bottom());
     }
     auto pos = _parent->mapToGlobal(leftTop);
@@ -133,7 +145,6 @@ void ColorPickerPopup::showPopup(QWidget* _parent, Qt::Alignment _alignment)
     //
     // Если не влезает внизу экрана, то смещаем наверх от нижнего края
     //
-    const auto sizeHint = this->sizeHint();
     const auto screenGeometry = screen()->geometry();
     if (pos.y() + sizeHint.height() > screenGeometry.bottom()) {
         pos.setY(screenGeometry.bottom() - sizeHint.height());

@@ -28,6 +28,7 @@ public:
     bool hasColor(const QColor& _color) const;
 
 
+    QVector<QColor> customPalette;
     struct ColorItem {
         bool operator==(const ColorItem& _other) const
         {
@@ -50,7 +51,6 @@ void ColorPallete::Implementation::buildPalette()
 {
     colorsPalette.clear();
 
-    const int colorRectColumns = 10;
     const QSizeF colorRectSize
         = { Ui::DesignSystem::layout().px24(), Ui::DesignSystem::layout().px24() };
     const qreal colorRectSpace = Ui::DesignSystem::layout().px4();
@@ -58,12 +58,18 @@ void ColorPallete::Implementation::buildPalette()
     //
     // Формируем первый ряд
     //
-    int topMargin = Ui::DesignSystem::layout().px24();
+    int topMargin = Ui::DesignSystem::layout().px12();
     int leftMargin = Ui::DesignSystem::layout().px12();
-    QList<QColor> colors;
-    colors << QColor("#000000") << QColor("#434343") << QColor("#666666") << QColor("#999999")
-           << QColor("#B7B7B7") << QColor("#CCCCCC") << QColor("#D9D9D9") << QColor("#EFEFEF")
-           << QColor("#F3F3F3") << QColor("#FFFFFF");
+    QVector<QColor> colors;
+    if (customPalette.isEmpty()) {
+        colors = {
+            "#000000", "#434343", "#666666", "#999999", "#B7B7B7",
+            "#CCCCCC", "#D9D9D9", "#EFEFEF", "#F3F3F3", "#FFFFFF",
+        };
+    } else {
+        colors = customPalette;
+    }
+    const int colorRectColumns = customPalette.isEmpty() ? 10 : customPalette.size();
     for (int column = 0; column < colorRectColumns; ++column) {
         QRectF colorRect;
         colorRect.setLeft(leftMargin);
@@ -74,28 +80,71 @@ void ColorPallete::Implementation::buildPalette()
 
         leftMargin += colorRectSize.width() + colorRectSpace;
     }
-    topMargin += colorRectSize.height() + Ui::DesignSystem::layout().px48();
+    topMargin += colorRectSize.height() + Ui::DesignSystem::layout().px(36);
 
+    if (!customPalette.isEmpty()) {
+        return;
+    }
 
     //
     // Остальные ряды
     //
-    colors.clear();
-    colors << QColor("#FE0000") << QColor("#FF7401") << QColor("#FFD302") << QColor("#00FF00")
-           << QColor("#01CC01") << QColor("#06E3E4") << QColor("#0046F4") << QColor("#4F18FF")
-           << QColor("#9706E7") << QColor("#FF00A5") // ****
-           << QColor("#FE3235") << QColor("#FF9036") << QColor("#FFDB34") << QColor("#A3FA14")
-           << QColor("#35D533") << QColor("#44D0D1") << QColor("#4174F0") << QColor("#653EE0")
-           << QColor("#A048CF") << QColor("#F22B9E") // ****
-           << QColor("#FF686A") << QColor("#FFAC66") << QColor("#FCE364") << QColor("#C6F567")
-           << QColor("#65DF66") << QColor("#77DDE0") << QColor("#7293F4") << QColor("#8964EF")
-           << QColor("#B74EED") << QColor("#F35EB2") // ****
-           << QColor("#FF999C") << QColor("#FFC79C") << QColor("#FFEC99") << QColor("#DAF798")
-           << QColor("#99EB99") << QColor("#B2F0F1") << QColor("#94B3F6") << QColor("#B29BF5")
-           << QColor("#CF92F4") << QColor("#FE8ACA") // ****
-           << QColor("#F4CCCC") << QColor("#FCE5CD") << QColor("#FFF2CC") << QColor("#D9EAD3")
-           << QColor("#CAFFCA") << QColor("#BEFEFF") << QColor("#B2CEFF") << QColor("#CFBDF8")
-           << QColor("#E3B6FF") << QColor("#FFAADA");
+    colors = {
+        "#FE0000",
+        "#FF7401",
+        "#FFD302",
+        "#00FF00",
+        "#01CC01",
+        "#06E3E4",
+        "#0046F4",
+        "#4F18FF",
+        "#9706E7",
+        "#FF00A5",
+        // ****
+        "#FE3235",
+        "#FF9036",
+        "#FFDB34",
+        "#A3FA14",
+        "#35D533",
+        "#44D0D1",
+        "#4174F0",
+        "#653EE0",
+        "#A048CF",
+        "#F22B9E",
+        // ****
+        "#FF686A",
+        "#FFAC66",
+        "#FCE364",
+        "#C6F567",
+        "#65DF66",
+        "#77DDE0",
+        "#7293F4",
+        "#8964EF",
+        "#B74EED",
+        "#F35EB2",
+        // ****
+        "#FF999C",
+        "#FFC79C",
+        "#FFEC99",
+        "#DAF798",
+        "#99EB99",
+        "#B2F0F1",
+        "#94B3F6",
+        "#B29BF5",
+        "#CF92F4",
+        "#FE8ACA",
+        // ****
+        "#F4CCCC",
+        "#FCE5CD",
+        "#FFF2CC",
+        "#D9EAD3",
+        "#CAFFCA",
+        "#BEFEFF",
+        "#B2CEFF",
+        "#CFBDF8",
+        "#E3B6FF",
+        "#FFAADA",
+    };
     const int colorRectRows = colors.size() / 10;
     for (int row = 0; row < colorRectRows; ++row) {
         leftMargin = Ui::DesignSystem::layout().px12();
@@ -112,7 +161,7 @@ void ColorPallete::Implementation::buildPalette()
         topMargin += colorRectSize.height() + colorRectSpace;
     }
 
-    topMargin += -colorRectSpace + Ui::DesignSystem::layout().px62();
+    topMargin += -colorRectSpace + Ui::DesignSystem::layout().px(42);
     leftMargin = Ui::DesignSystem::layout().px12();
     for (const auto& color : std::as_const(customColors)) {
         QRectF colorRect;
@@ -159,6 +208,23 @@ ColorPallete::ColorPallete(QWidget* _parent)
 }
 
 ColorPallete::~ColorPallete() = default;
+
+void ColorPallete::setCustomPalette(const QVector<QColor>& _palette)
+{
+    if (d->customPalette == _palette) {
+        return;
+    }
+
+    d->customPalette = _palette;
+    d->buildPalette();
+    updateGeometry();
+    update();
+}
+
+bool ColorPallete::hasCustomPalette() const
+{
+    return !d->customPalette.isEmpty();
+}
 
 void ColorPallete::setColorCanBeDeselected(bool _can)
 {
@@ -235,8 +301,15 @@ void ColorPallete::addCustomColor(const QColor& _color)
 
 QSize ColorPallete::sizeHint() const
 {
-    return QSize(d->colorsPalette.value(9).rect.right() + Ui::DesignSystem::layout().px12(),
-                 d->addCustomColorRect.bottom() + Ui::DesignSystem::layout().px12());
+    if (d->customPalette.isEmpty()) {
+        return QSize(d->colorsPalette.value(9).rect.right() + Ui::DesignSystem::layout().px12(),
+                     d->addCustomColorRect.bottom() + Ui::DesignSystem::layout().px12());
+    }
+
+    return QSize(d->colorsPalette.value(d->customPalette.size() - 1).rect.right()
+                     + Ui::DesignSystem::layout().px12(),
+                 d->colorsPalette.value(d->customPalette.size() - 1).rect.bottom()
+                     + Ui::DesignSystem::layout().px12());
 }
 
 void ColorPallete::paintEvent(QPaintEvent* _event)
@@ -287,10 +360,14 @@ void ColorPallete::paintEvent(QPaintEvent* _event)
         }
     }
 
+    if (!d->customPalette.isEmpty()) {
+        return;
+    }
+
     //
     // Разделитель между верхней и центральной
     //
-    const QRectF dividerRect(0, Ui::DesignSystem::layout().px(72), width(),
+    const QRectF dividerRect(0, Ui::DesignSystem::layout().px(12 + 24 + 18), width(),
                              Ui::DesignSystem::scaleFactor());
     painter.fillRect(dividerRect, smoothTextColor);
 
@@ -303,7 +380,7 @@ void ColorPallete::paintEvent(QPaintEvent* _event)
     painter.setBrush(Qt::NoBrush);
     painter.setFont(Ui::DesignSystem::font().button());
     const qreal otherColorsLabelTop
-        = (24 + 24 + 24 + 24 + 24 * 5 + 4 * 4 + 24) * Ui::DesignSystem::scaleFactor();
+        = (12 + 24 + 36 + 24 * 5 + 4 * 4 + 16) * Ui::DesignSystem::scaleFactor();
     const QRectF otherColorsLabelRect(Ui::DesignSystem::layout().px12(), otherColorsLabelTop,
                                       width() - Ui::DesignSystem::layout().px24(),
                                       Ui::DesignSystem::layout().px16());
