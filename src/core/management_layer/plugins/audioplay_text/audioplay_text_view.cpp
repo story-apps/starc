@@ -187,7 +187,6 @@ AudioplayTextView::Implementation::Implementation(AudioplayTextView* _q)
     , textEdit(new AudioplayTextEdit(_q))
     , shortcutsManager(textEdit)
     , scalableWrapper(new ScalableWrapper(textEdit, _q))
-    , audioplayTextScrollbarManager(new AudioplayTextScrollBarManager(scalableWrapper))
     , toolbar(new AudioplayTextEditToolbar(scalableWrapper))
     , searchManager(new BusinessLayer::SearchManager(scalableWrapper, textEdit))
     , toolbarAnimation(new FloatingToolbarAnimator(_q))
@@ -213,11 +212,10 @@ AudioplayTextView::Implementation::Implementation(AudioplayTextView* _q)
     textEdit->setVerticalScrollBar(new ScrollBar);
     textEdit->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
-    //
-    // Вертикальный скрол настраивается менеджером audioplayTextScrollbarManager
-    //
+    scalableWrapper->setVerticalScrollBar(new ScrollBar);
     scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
+    audioplayTextScrollbarManager = new AudioplayTextScrollBarManager(scalableWrapper);
     audioplayTextScrollbarManager->initScrollBarsSyncing();
 
     textEdit->setUsePageMode(true);

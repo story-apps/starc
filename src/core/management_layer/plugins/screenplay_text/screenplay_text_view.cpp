@@ -157,7 +157,7 @@ public:
     ScreenplayTextEdit* textEdit = nullptr;
     ScreenplayTextEditShortcutsManager shortcutsManager;
     ScalableWrapper* scalableWrapper = nullptr;
-    //    ScreenplayTextScrollBarManager* screenplayTextScrollbarManager = nullptr;
+    ScreenplayTextScrollBarManager* screenplayTextScrollbarManager = nullptr;
     std::optional<int> pendingCursorPosition;
 
     //
@@ -209,7 +209,6 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     , textEdit(new ScreenplayTextEdit(_q))
     , shortcutsManager(textEdit)
     , scalableWrapper(new ScalableWrapper(textEdit, _q))
-    //    , screenplayTextScrollbarManager(new ScreenplayTextScrollBarManager(scalableWrapper))
     , toolbar(new ScreenplayTextEditToolbar(scalableWrapper))
     , searchManager(new BusinessLayer::SearchManager(scalableWrapper, textEdit))
     , toolbarAnimation(new FloatingToolbarAnimator(_q))
@@ -240,13 +239,11 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     textEdit->verticalScrollBar()->setObjectName("screenplay-vertical-scroll-bar");
     textEdit->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
-    //
-    // Вертикальный скрол настраивается менеджером screenplayTextScrollbarManager
-    //
     scalableWrapper->setVerticalScrollBar(new ScrollBar);
     scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
-    //    screenplayTextScrollbarManager->initScrollBarsSyncing();
+    screenplayTextScrollbarManager = new ScreenplayTextScrollBarManager(scalableWrapper);
+    screenplayTextScrollbarManager->initScrollBarsSyncing();
 
     textEdit->setUsePageMode(true);
 
@@ -711,8 +708,7 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
                                                                   : QModelIndex());
 
                 const bool animate = false;
-                //                d->screenplayTextScrollbarManager->setScrollBarVisible(!_enabled,
-                //                animate);
+                d->screenplayTextScrollbarManager->setScrollBarVisible(!_enabled, animate);
                 d->textEdit->ensureCursorVisible(d->textEdit->textCursor(), animate);
             });
     connect(d->toolbar, &ScreenplayTextEditToolbar::searchPressed, this, [this] {
@@ -1337,7 +1333,7 @@ QWidget* ScreenplayTextView::asQWidget()
 void ScreenplayTextView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
-    //    d->screenplayTextScrollbarManager->setScrollBarVisible(!_isFullScreen);
+    d->screenplayTextScrollbarManager->setScrollBarVisible(!_isFullScreen);
 }
 
 QVector<QAction*> ScreenplayTextView::options() const
@@ -1793,7 +1789,7 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
 
     d->textEdit->setCursors({});
     d->textEdit->initWithModel(d->model);
-    //    d->screenplayTextScrollbarManager->setModel(d->model);
+    d->screenplayTextScrollbarManager->setModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);
 
