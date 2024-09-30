@@ -194,7 +194,16 @@ void CommentsToolbar::Implementation::animateMove(const QPoint& _from, const QPo
         }
     }
 
-    moveAnimation.setStartValue(_from);
+    //
+    // Сначала сразу сдвигаем по горизонтали
+    //
+    const QPoint fromCorrected(_to.x(), _from.y());
+    q->move(fromCorrected);
+
+    //
+    // А потом анимируем смещение по вертикали
+    //
+    moveAnimation.setStartValue(fromCorrected);
     moveAnimation.setEndValue(_to);
     moveAnimation.start();
 }

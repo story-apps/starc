@@ -450,9 +450,7 @@ void ScreenplayTreatmentView::Implementation::updateCommentsToolBar()
     //
     // Настроим список доступных действий панели рецензирования
     //
-    if (textEdit->textCursor().hasSelection()) {
-        commentsToolbar->setMode(CommentsToolbar::Mode::AddNewComment);
-    } else if (commentsView->currentIndex().isValid()) {
+    if (!textEdit->textCursor().hasSelection() && commentsView->currentIndex().isValid()) {
         commentsToolbar->setMode(CommentsToolbar::Mode::EditComment);
         commentsToolbar->setCurrentCommentIsDone(
             commentsModel
@@ -460,27 +458,18 @@ void ScreenplayTreatmentView::Implementation::updateCommentsToolBar()
                        BusinessLayer::CommentsModel::ReviewMarkIsDoneRole)
                 .toBool());
     } else {
-        commentsToolbar->hideToolbar();
-        return;
+        commentsToolbar->setMode(CommentsToolbar::Mode::AddNewComment);
     }
 
-    //
-    // Определяем точку на границе страницы, либо если страница не влезает в экран, то с боку экрана
-    //
-    const int x = (textEdit->width() - textEdit->viewport()->width()) / 2
-        + textEdit->viewport()->width() - commentsToolbar->width();
-    const qreal textRight = scalableWrapper->mapFromEditor(QPoint(x, 0)).x();
     const auto cursorRect = textEdit->cursorRect();
     const auto globalCursorCenter = textEdit->mapToGlobal(cursorRect.center());
     const auto localCursorCenter
         = commentsToolbar->parentWidget()->mapFromGlobal(globalCursorCenter);
-    //
-    // И смещаем панель рецензирования к этой точке
-    //
-    commentsToolbar->moveToolbar(QPoint(std::min(scalableWrapper->width() - commentsToolbar->width()
-                                                     - Ui::DesignSystem::layout().px24(),
-                                                 textRight),
-                                        localCursorCenter.y() - (commentsToolbar->height() / 3)));
+    commentsToolbar->moveToolbar(QPoint(
+        q->isLeftToRight()
+            ? (scalableWrapper->width() - commentsToolbar->width() + DesignSystem::layout().px(3))
+            : (sidebarWidget->width() - DesignSystem::layout().px(3)),
+        localCursorCenter.y() - (commentsToolbar->height() / 3)));
 
     //
     // Если панель ещё не была показана, отобразим её
