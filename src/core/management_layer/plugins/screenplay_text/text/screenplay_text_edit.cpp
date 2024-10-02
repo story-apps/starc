@@ -75,6 +75,11 @@ public:
      */
     bool canSplitParagraph(const BusinessLayer::TextCursor& _cursor) const;
 
+    /**
+     * @brief Обновить редакторскую заметку в заданном интервале
+     */
+    void updateReviewMark(QKeyEvent* _event, int _from, int _to);
+
 
     ScreenplayTextEdit* q = nullptr;
 
@@ -85,6 +90,13 @@ public:
     bool showSceneNumberOnLeft = false;
     bool showSceneNumberOnRight = false;
     bool showDialogueNumber = false;
+
+    struct {
+        bool isEnabled = false;
+        QColor textColor;
+        QColor backgroundColor;
+        bool isRevision = false;
+    } autoReviewMode;
 
     QVector<Domain::CursorInfo> collaboratorsCursorInfo;
     QVector<Domain::CursorInfo> pendingCollaboratorsCursorInfo;
@@ -183,6 +195,33 @@ bool ScreenplayTextEdit::Implementation::canSplitParagraph(
         && blockType != TextParagraphType::SequenceHeading
         && blockType != TextParagraphType::SequenceHeadingShadow
         && blockType != TextParagraphType::SequenceFooter;
+}
+
+void ScreenplayTextEdit::Implementation::updateReviewMark(QKeyEvent* _event, int _from, int _to)
+{
+    if (!autoReviewMode.isEnabled) {
+        return;
+    }
+
+    //
+    // Если включён режим автоматического добавления редакторских заметок
+    // ... и текст добавляется с клавиатуры
+    // ... или вставляется из буфера обмена
+    // ... и позиция курсора изменилась после обработки события
+    //
+    if ((!_event->text().isEmpty() || _event == QKeySequence::Paste) && _from < _to) {
+        //
+        // То автоматически добавим редакторскую заметку
+        //
+        const auto lastCursor = q->textCursor();
+        auto cursor = lastCursor;
+        cursor.setPosition(_from);
+        cursor.setPosition(_to, QTextCursor::KeepAnchor);
+        q->setTextCursor(cursor);
+        q->addReviewMark(autoReviewMode.textColor, autoReviewMode.backgroundColor, {},
+                         autoReviewMode.isRevision);
+        q->setTextCursor(lastCursor);
+    }
 }
 
 
@@ -673,6 +712,20 @@ void ScreenplayTextEdit::addReviewMark(const QColor& _textColor, const QColor& _
     d->document.addReviewMark(_textColor, _backgroundColor, _comment, _isRevision, cursor);
 }
 
+void ScreenplayTextEdit::setAutoReviewModeEnabled(bool _enabled)
+{
+    d->autoReviewMode.isEnabled = _enabled;
+}
+
+void ScreenplayTextEdit::setAutoReviewMode(const QColor& _textColor, const QColor& _backgroundColor,
+                                           bool _isRevision)
+{
+    d->autoReviewMode.textColor
+        = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
+    d->autoReviewMode.backgroundColor = _backgroundColor;
+    d->autoReviewMode.isRevision = _isRevision;
+}
+
 void ScreenplayTextEdit::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
     d->pendingCollaboratorsCursorInfo = _cursors;
@@ -710,14 +763,17 @@ void ScreenplayTextEdit::keyPressEvent(QKeyEvent* _event)
     // Отправить событие в базовый класс
     //
     if (handler->needSendEventToBaseClass()) {
+        const int positionBeforeEventHandling = textCursor().position();
         if (keyPressEventReimpl(_event)) {
             _event->accept();
         } else {
             ScriptTextEdit::keyPressEvent(_event);
             _event->ignore();
         }
+        const int positionAfterEventHandling = textCursor().position();
 
         updateEnteredText(_event);
+        d->updateReviewMark(_event, positionBeforeEventHandling, positionAfterEventHandling);
     }
 
     //

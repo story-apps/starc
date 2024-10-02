@@ -49,7 +49,7 @@ public:
     CommentsToolbar* q = nullptr;
 
     CommentsType type = CommentsType::Review;
-    Mode mode = Mode::AddNewComment;
+    Mode mode = Mode::AddReview;
 
     QAction* typeAction = nullptr;
     FloatingToolBar* typeToolbar = nullptr;
@@ -62,10 +62,11 @@ public:
     QAction* reviewCommentAction = nullptr;
     QAction* changesTextBackgroundColorAction = nullptr;
     QAction* revisionMarkAction = nullptr;
+    QAction* colorSeparatorAction = nullptr;
+    QAction* colorAction = nullptr;
+    QAction* markAsDoneSeparatorAction = nullptr;
     QAction* markAsDoneAction = nullptr;
     QAction* removeAction = nullptr;
-    QAction* separatorAction = nullptr;
-    QAction* colorAction = nullptr;
 
     QVariantAnimation opacityAnimation;
     QTimer hideTimer;
@@ -88,10 +89,11 @@ CommentsToolbar::Implementation::Implementation(CommentsToolbar* _q)
     , reviewCommentAction(new QAction)
     , changesTextBackgroundColorAction(new QAction)
     , revisionMarkAction(new QAction)
+    , colorSeparatorAction(new QAction)
+    , colorAction(new QAction)
+    , markAsDoneSeparatorAction(new QAction)
     , markAsDoneAction(new QAction)
     , removeAction(new QAction)
-    , separatorAction(new QAction)
-    , colorAction(new QAction)
     , colorPickerPopup(new ColorPickerPopup(_q))
 {
     reviewType->setIconText(u8"\U000F0E31");
@@ -112,14 +114,13 @@ CommentsToolbar::Implementation::Implementation(CommentsToolbar* _q)
 
 void CommentsToolbar::Implementation::updateActions()
 {
-    const auto isAddNewCommentVisible = mode == Mode::AddNewComment;
-    const auto isEditCommentVisible = !isAddNewCommentVisible;
+    const auto isEditCommentVisible = mode == Mode::EditReview;
 
     switch (type) {
     case CommentsType::Review: {
-        reviewTextColorAction->setVisible(isAddNewCommentVisible);
-        reviewTextBackgroundColorAction->setVisible(isAddNewCommentVisible);
-        reviewCommentAction->setVisible(isAddNewCommentVisible);
+        reviewTextColorAction->setVisible(true);
+        reviewTextBackgroundColorAction->setVisible(true);
+        reviewCommentAction->setVisible(true);
         changesTextBackgroundColorAction->setVisible(false);
         revisionMarkAction->setVisible(false);
         markAsDoneAction->setVisible(isEditCommentVisible);
@@ -131,7 +132,7 @@ void CommentsToolbar::Implementation::updateActions()
         reviewTextColorAction->setVisible(false);
         reviewTextBackgroundColorAction->setVisible(false);
         reviewCommentAction->setVisible(false);
-        changesTextBackgroundColorAction->setVisible(isAddNewCommentVisible);
+        changesTextBackgroundColorAction->setVisible(true);
         revisionMarkAction->setVisible(false);
         markAsDoneAction->setVisible(isEditCommentVisible);
         removeAction->setVisible(isEditCommentVisible);
@@ -143,15 +144,14 @@ void CommentsToolbar::Implementation::updateActions()
         reviewTextBackgroundColorAction->setVisible(false);
         reviewCommentAction->setVisible(false);
         changesTextBackgroundColorAction->setVisible(false);
-        revisionMarkAction->setVisible(isAddNewCommentVisible);
+        revisionMarkAction->setVisible(true);
         markAsDoneAction->setVisible(false);
         removeAction->setVisible(isEditCommentVisible);
         break;
     }
     }
 
-    separatorAction->setVisible(isAddNewCommentVisible);
-    colorAction->setVisible(isAddNewCommentVisible);
+    markAsDoneSeparatorAction->setVisible(isEditCommentVisible);
 
     if (type == CommentsType::Revision) {
         QVector<QColor> palette;
@@ -221,8 +221,8 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
 
     d->typeToolbar->installEventFilter(this);
 
-    if (QSettings settings; settings.value(kCommentsTypeKey).isValid()) {
-        d->type = static_cast<CommentsType>(settings.value(kCommentsTypeKey).toInt());
+    if (const auto value = QSettings().value(kCommentsTypeKey); value.isValid()) {
+        d->type = static_cast<CommentsType>(value.toInt());
         switch (d->type) {
         case CommentsType::Review: {
             d->typeAction->setIconText(d->reviewType->iconText());
@@ -237,6 +237,7 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
             break;
         }
         }
+        d->updateActions();
     } else {
         d->typeAction->setIconText(u8"\U000F0E31");
     }
@@ -258,6 +259,9 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
     d->revisionMarkAction->setIconText(u8"\U000F0382");
     addAction(d->revisionMarkAction);
 
+    d->markAsDoneSeparatorAction->setSeparator(true);
+    addAction(d->markAsDoneSeparatorAction);
+
     d->markAsDoneAction->setIconText(u8"\U000F012C");
     d->markAsDoneAction->setCheckable(true);
     addAction(d->markAsDoneAction);
@@ -265,13 +269,13 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
     d->removeAction->setIconText(u8"\U000F01B4");
     addAction(d->removeAction);
 
-    d->separatorAction->setSeparator(true);
-    addAction(d->separatorAction);
+    d->colorSeparatorAction->setSeparator(true);
+    addAction(d->colorSeparatorAction);
 
     d->colorAction->setIconText(u8"\U000f0765");
     addAction(d->colorAction);
-    if (QSettings settings; settings.value(kColorKey).isValid()) {
-        setActionColor(d->colorAction, settings.value(kColorKey).value<QColor>());
+    if (const auto value = QSettings().value(kColorKey); value.isValid()) {
+        setActionColor(d->colorAction, value.value<QColor>());
     } else {
         setActionColor(d->colorAction, "#FE0000");
     }
@@ -313,22 +317,22 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
     });
     //
     connect(d->reviewTextColorAction, &QAction::triggered, this,
-            [this] { emit textColorChangeRequested(actionColor(d->colorAction)); });
+            [this] { emit textColorChangeRequested(color()); });
     connect(d->reviewTextBackgroundColorAction, &QAction::triggered, this,
-            [this] { emit textBackgoundColorChangeRequested(actionColor(d->colorAction)); });
+            [this] { emit textBackgoundColorChangeRequested(color()); });
     connect(d->reviewCommentAction, &QAction::triggered, this,
-            [this] { emit commentAddRequested(actionColor(d->colorAction)); });
+            [this] { emit commentAddRequested(color()); });
     connect(d->changesTextBackgroundColorAction, &QAction::triggered, this,
-            [this] { emit textBackgoundColorChangeRequested(actionColor(d->colorAction)); });
+            [this] { emit textBackgoundColorChangeRequested(color()); });
     connect(d->revisionMarkAction, &QAction::triggered, this,
-            [this] { emit revisionMarkAddRequested(actionColor(d->colorAction)); });
+            [this] { emit revisionMarkAddRequested(color()); });
     connect(d->markAsDoneAction, &QAction::toggled, this, &CommentsToolbar::markAsDoneRequested);
     connect(d->removeAction, &QAction::triggered, this, &CommentsToolbar::removeRequested);
     connect(d->colorAction, &QAction::triggered, this, [this] {
         if (d->colorPickerPopup->isPopupShown()) {
             d->colorPickerPopup->hidePopup();
         } else {
-            d->colorPickerPopup->setSelectedColor(actionColor(d->colorAction));
+            d->colorPickerPopup->setSelectedColor(color());
             d->colorPickerPopup->showPopup(this);
         }
     });
@@ -337,6 +341,8 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
                 setActionColor(d->colorAction, _color);
 
                 QSettings().setValue(kColorKey, _color);
+
+                emit colorChanged(_color);
             });
 
     connect(&d->opacityAnimation, &QVariantAnimation::valueChanged, this, [this] { update(); });
@@ -346,6 +352,16 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
 }
 
 CommentsToolbar::~CommentsToolbar() = default;
+
+CommentsToolbar::CommentsType CommentsToolbar::commentsType() const
+{
+    return d->type;
+}
+
+QColor CommentsToolbar::color() const
+{
+    return actionColor(d->colorAction);
+}
 
 void CommentsToolbar::setMode(Mode _mode)
 {
@@ -404,9 +420,9 @@ void CommentsToolbar::hideToolbar()
     d->animateHide();
 }
 
-void CommentsToolbar::moveToolbar(const QPoint& _position)
+void CommentsToolbar::moveToolbar(const QPoint& _position, bool _force)
 {
-    if (isHidden()) {
+    if (isHidden() || _force) {
         move(_position);
         return;
     }

@@ -26,13 +26,23 @@ public:
      * @brief Режим работы панели инструментов
      */
     enum class Mode {
-        AddNewComment,
-        EditComment,
+        AddReview,
+        EditReview,
     };
 
 public:
     explicit CommentsToolbar(QWidget* _parent = nullptr);
     ~CommentsToolbar() override;
+
+    /**
+     * @brief Текущий режим работы панели
+     */
+    CommentsType commentsType() const;
+
+    /**
+     * @brief Текущий цвет режима
+     */
+    QColor color() const;
 
     /**
      * @brief Настроить режим работы панели инструментов
@@ -57,13 +67,18 @@ public:
     /**
      * @brief Сместить тулбар в заданную точку
      */
-    void moveToolbar(const QPoint& _position);
+    void moveToolbar(const QPoint& _position, bool _force = false);
 
 signals:
     /**
      * @brief Изменился режим работы рецензирования
      */
     void commentsTypeChanged(Ui::CommentsToolbar::CommentsType _type);
+
+    /**
+     * @brief Изменился цвет заметки
+     */
+    void colorChanged(const QColor& _color);
 
     /**
      * @brief Пользователь хочет изменить цвет текста

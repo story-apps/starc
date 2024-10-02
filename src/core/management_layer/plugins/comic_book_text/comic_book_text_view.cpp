@@ -389,14 +389,14 @@ void ComicBookTextView::Implementation::updateCommentsToolbar()
     // Настроим список доступных действий панели рецензирования
     //
     if (!textEdit->textCursor().hasSelection() && commentsView->currentIndex().isValid()) {
-        commentsToolbar->setMode(CommentsToolbar::Mode::EditComment);
+        commentsToolbar->setMode(CommentsToolbar::Mode::EditReview);
         commentsToolbar->setCurrentCommentIsDone(
             commentsModel
                 ->data(commentsView->currentIndex(),
                        BusinessLayer::CommentsModel::ReviewMarkIsDoneRole)
                 .toBool());
     } else {
-        commentsToolbar->setMode(CommentsToolbar::Mode::AddNewComment);
+        commentsToolbar->setMode(CommentsToolbar::Mode::AddReview);
     }
 
     const auto cursorRect = textEdit->cursorRect();
