@@ -245,6 +245,7 @@ bool ColorPicker::eventFilter(QObject* _watched, QEvent* _event)
             for (auto screenOverlay : std::as_const(d->screenOverlays)) {
                 screenOverlay->hide();
             }
+            emit selectedColorChanged(d->colorSlider->color());
             break;
         }
 
