@@ -1003,9 +1003,10 @@ QString AbstractFountainImporter::documentText(const QString& _text, bool _keepS
                 paragraphText.remove(0, 1);
                 movePreviousTypes(0, 1);
             }
+            d->processBlock(paragraphText, currentBlockType, writer);
         } else {
             //
-            // ... если не директория и не сцена - сразу отправим на обработку
+            // ... иначе сразу отправим на обработку
             //
             d->processBlock(paragraphText, currentBlockType, writer);
         }
