@@ -106,11 +106,6 @@ public:
     QVector<ResourceMark> resourceMarks;
 
     /**
-     * @brief Ревизии в блоке
-     */
-    QVector<Revision> revisions;
-
-    /**
      * @brief Закешированный XML блока
      */
     QByteArray xml;
@@ -653,11 +648,6 @@ QTextCharFormat TextModelTextItem::ResourceMark::charFormat() const
     return format;
 }
 
-bool TextModelTextItem::Revision::operator==(const Revision& _other) const
-{
-    return from == _other.from && length == _other.length && color == _other.color;
-}
-
 bool TextModelTextItem::Bookmark::operator==(const TextModelTextItem::Bookmark& _other) const
 {
     return color == _other.color && name == _other.name;
@@ -1087,11 +1077,6 @@ void TextModelTextItem::setResourceMarks(const QVector<QTextLayout::FormatRange>
     setResourceMarks(newResourceMarks);
 }
 
-const QVector<TextModelTextItem::Revision>& TextModelTextItem::revisions() const
-{
-    return d->revisions;
-}
-
 void TextModelTextItem::mergeWith(const TextModelTextItem* _other)
 {
     if (_other == nullptr || _other->text().isEmpty()) {
@@ -1191,7 +1176,6 @@ void TextModelTextItem::copyFrom(TextModelItem* _item)
     d->reviewMarks = textItem->d->reviewMarks;
     d->resourceMarks = textItem->d->resourceMarks;
     d->formats = textItem->d->formats;
-    d->revisions = textItem->d->revisions;
     d->xml = textItem->d->xml;
 
     markChanged();
@@ -1213,8 +1197,7 @@ bool TextModelTextItem::isEqual(TextModelItem* _item) const
         && textToSave() == textItem->textToSave()
         //
         && d->reviewMarks == textItem->d->reviewMarks
-        && d->resourceMarks == textItem->d->resourceMarks && d->formats == textItem->d->formats
-        && d->revisions == textItem->d->revisions;
+        && d->resourceMarks == textItem->d->resourceMarks && d->formats == textItem->d->formats;
 }
 
 void TextModelTextItem::updateCounters(bool _force)

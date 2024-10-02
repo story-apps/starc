@@ -87,11 +87,6 @@ public:
 
         QTextCharFormat charFormat() const;
     };
-    struct CORE_LIBRARY_EXPORT Revision : TextPart {
-        QColor color;
-
-        bool operator==(const Revision& _other) const;
-    };
     struct CORE_LIBRARY_EXPORT Number {
         int value = 0;
         QString text;
@@ -198,11 +193,6 @@ public:
     const QVector<ResourceMark>& resourceMarks() const;
     void setResourceMarks(const QVector<ResourceMark>& _resourceMarks);
     void setResourceMarks(const QVector<QTextLayout::FormatRange>& _formats);
-
-    /**
-     * @brief Ревизии
-     */
-    const QVector<Revision>& revisions() const;
 
     /**
      * @brief Объединить с заданным элементом
