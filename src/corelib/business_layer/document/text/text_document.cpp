@@ -1953,12 +1953,73 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
     if (_backgroundColor.isValid()) {
         reviewMark.backgroundColor = _backgroundColor;
     }
+
+    //
+    // Пробуем сшить редакторские заметки
+    //
+    do {
+        //
+        // ... определим область которую будет занимать новый контент
+        //
+        auto selectionInterval = _cursor.selectionInterval();
+        const auto blockPosition = _cursor.block().position();
+        selectionInterval.from -= blockPosition;
+        selectionInterval.to -= blockPosition;
+        //
+        // ... ищем текстовый элемент для текста куда добавляется новый текст
+        //
+        const auto iter = d->positionsToItems.lower_bound(blockPosition);
+        if (iter == d->positionsToItems.end() || iter->second->type() != TextModelItemType::Text) {
+            break;
+        }
+        //
+        // ... ищем редакторскую заметку с которой пересекается добавляемая
+        //
+        auto textItem = static_cast<TextModelTextItem*>(iter->second);
+        auto reviewMarks = textItem->reviewMarks();
+        for (auto& mark : reviewMarks) {
+            const auto markEnd = mark.end();
+            if (mark.from > selectionInterval.to || markEnd < selectionInterval.from) {
+                continue;
+            }
+
+            //
+            // Если нашли редакторскую заметку с которой пересекается добавляемая
+            //
+            if (mark.textColor == _textColor && mark.backgroundColor == _backgroundColor
+                && mark.comments.constFirst().isRevision == _isRevision
+                && mark.comments.constFirst().author
+                    == DataStorageLayer::StorageFacade::settingsStorage()->accountName()
+                && mark.comments.constFirst().authorEmail
+                    == DataStorageLayer::StorageFacade::settingsStorage()->accountEmail()) {
+                //
+                // ... и они равны по формату, то объединим их
+                //
+                mark.from = std::min(mark.from, selectionInterval.from);
+                mark.length = std::max(markEnd, selectionInterval.to) - mark.from;
+                mark.comments.first().date = QDateTime::currentDateTime().toString(Qt::ISODate);
+                mark.comments.first().isEdited = true;
+                textItem->setReviewMarks(reviewMarks);
+                d->model->updateItem(textItem);
+                return;
+            }
+
+            //
+            // Если формат не совпал, то выходим и будем добавлять новую заметку
+            //
+            break;
+        }
+    }
+    once;
+
+    //
+    // Добавляем новую редакторскую заметку
+    //
     const bool isEdited = false;
     reviewMark.comments.append({ DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
                                  DataStorageLayer::StorageFacade::settingsStorage()->accountEmail(),
                                  QDateTime::currentDateTime().toString(Qt::ISODate), _comment,
                                  isEdited, _isRevision });
-
     auto cursor = _cursor;
     cursor.mergeCharFormat(reviewMark.charFormat());
 }
