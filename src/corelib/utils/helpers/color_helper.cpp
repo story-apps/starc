@@ -5,8 +5,8 @@
 
 namespace {
 const QVector<QColor> kRevisionColors = {
-    "#bcddff", "#f8c4df", "#fbff8e", "#a6fdb6", "#f6d848",
-    "#dab37e", "#f8cfb6", "#f283ae", "#CFAF84",
+    "#3030ff", "#ff00ff", "#a0a000", "#008000", "#cc7f32",
+    "#8e6b23", "#a74242", "#d5236b", "#db9370",
 };
 }
 
