@@ -2364,9 +2364,33 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 // Переносим дочерние элементы на уровень родительского элемента
                 //
                 TextModelItem* lastMovedItem = nullptr;
-                while (itemParent->childCount() > 0) {
+                while (itemParent->hasChildren()) {
                     auto childItem = itemParent->childAt(0);
                     d->model->takeItem(childItem);
+
+                    //
+                    // Если дальше идут текстовые элементы пробуем вытащить их все
+                    //
+                    QVector<TextModelItem*> itemsToMove;
+                    itemsToMove.append(childItem);
+                    if (childItem->type() == TextModelItemType::Text) {
+                        TextModelItem* fromItem = nullptr;
+                        TextModelItem* toItem = nullptr;
+                        int childIndex = 0;
+                        while (itemParent->childCount() > childIndex
+                               && itemParent->childAt(childIndex)->type()
+                                   == TextModelItemType::Text) {
+                            auto nextChildItem = itemParent->childAt(childIndex);
+                            itemsToMove.append(nextChildItem);
+
+                            if (fromItem == nullptr) {
+                                fromItem = nextChildItem;
+                            }
+                            toItem = nextChildItem;
+                            ++childIndex;
+                        }
+                        d->model->takeItems(fromItem, toItem, itemParent);
+                    }
 
                     //
                     // Папки и сцены переносим на один уровень с текущим элементом
@@ -2415,28 +2439,28 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                             //
                             if (previousItem != nullptr
                                 && previousItem->type() == TextModelItemType::Group) {
-                                d->model->appendItem(childItem, previousItem);
+                                d->model->appendItems(itemsToMove, previousItem);
                             }
                             //
                             // Если перед удаляемым внутри родителя нет ни одного элемента, то
                             // вставляем в начало к деду
                             //
                             else if (previousItem == nullptr && itemParent->parent() != nullptr) {
-                                d->model->prependItem(childItem, itemParent->parent());
+                                d->model->prependItems(itemsToMove, itemParent->parent());
                             }
                             //
                             // Во всех остальных случаях просто кладём на один уровень с
                             // предыдущим элементом
                             //
                             else {
-                                d->model->insertItem(childItem, previousItem);
+                                d->model->insertItems(itemsToMove, previousItem);
                             }
                         } else {
-                            d->model->insertItem(childItem, lastMovedItem);
+                            d->model->insertItems(itemsToMove, lastMovedItem);
                         }
                     }
 
-                    lastMovedItem = childItem;
+                    lastMovedItem = itemsToMove.constLast();
                 }
 
                 //
