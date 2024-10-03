@@ -105,9 +105,14 @@ public:
     void updateTextEditPageMargins();
 
     /**
+     * @brief Обновить параметры режима автоматических редакторских заметок
+     */
+    void updateTextEditAutoReviewMode();
+
+    /**
      * @brief Обновить видимость и положение панели инструментов рецензирования
      */
-    void updateCommentsToolbar();
+    void updateCommentsToolbar(bool _force = false);
 
     /**
      * @brief Обновить видимость боковой панели (показана, если показана хотя бы одна из вложенных
@@ -360,7 +365,27 @@ void StageplayTextView::Implementation::updateTextEditPageMargins()
     textEdit->setPageMarginsMm(pageMargins);
 }
 
-void StageplayTextView::Implementation::updateCommentsToolbar()
+void StageplayTextView::Implementation::updateTextEditAutoReviewMode()
+{
+    switch (commentsToolbar->commentsType()) {
+    case Ui::CommentsToolbar::CommentsType::Review: {
+        textEdit->setAutoReviewModeEnabled(false);
+        break;
+    }
+    case Ui::CommentsToolbar::CommentsType::Changes: {
+        textEdit->setAutoReviewModeEnabled(toolbar->isCommentsModeEnabled() && true);
+        textEdit->setAutoReviewMode({}, commentsToolbar->color(), false);
+        break;
+    }
+    case Ui::CommentsToolbar::CommentsType::Revision: {
+        textEdit->setAutoReviewModeEnabled(toolbar->isCommentsModeEnabled() && true);
+        textEdit->setAutoReviewMode(commentsToolbar->color(), {}, true);
+        break;
+    }
+    }
+}
+
+void StageplayTextView::Implementation::updateCommentsToolbar(bool _force)
 {
     if (!q->isVisible()) {
         return;
@@ -389,11 +414,52 @@ void StageplayTextView::Implementation::updateCommentsToolbar()
     const auto globalCursorCenter = textEdit->mapToGlobal(cursorRect.center());
     const auto localCursorCenter
         = commentsToolbar->parentWidget()->mapFromGlobal(globalCursorCenter);
-    commentsToolbar->moveToolbar(QPoint(
-        q->isLeftToRight()
-            ? (scalableWrapper->width() - commentsToolbar->width() + DesignSystem::layout().px(3))
-            : (sidebarWidget->width() - DesignSystem::layout().px(3)),
-        localCursorCenter.y() - (commentsToolbar->height() / 3)));
+    //
+    // Если вьюпорт вмещается аккурат в видимую область, или не влезает,
+    //
+    if (textEdit->width() - textEdit->verticalScrollBar()->width()
+        <= textEdit->viewport()->width() + commentsToolbar->width()) {
+        commentsToolbar->setCurtain(true, q->isLeftToRight() ? Qt::RightEdge : Qt::LeftEdge);
+        //
+        // ... то позиционируем панель рецензирования по краю панели комментариев
+        //
+        commentsToolbar->moveToolbar(
+            QPoint(q->isLeftToRight() ? (scalableWrapper->width() - commentsToolbar->width()
+                                         + DesignSystem::layout().px(3))
+                                      : (sidebarWidget->width() - DesignSystem::layout().px(3)),
+                   localCursorCenter.y() - commentsToolbar->width()),
+            _force);
+    }
+    //
+    // В противном случае позиционируем её по краю листа
+    //
+    else {
+        commentsToolbar->setCurtain(true, q->isLeftToRight() ? Qt::LeftEdge : Qt::RightEdge);
+        //
+        // ... определяем точку на границе страницы
+        //
+        const auto textEditWidth = scalableWrapper->zoomRange() * textEdit->width();
+        const auto textEditViewportWidth
+            = scalableWrapper->zoomRange() * textEdit->viewport()->width();
+        const auto pos = q->isLeftToRight()
+            ? ((textEditWidth - textEditViewportWidth) / 2.0 + textEditViewportWidth
+               - (scalableWrapper->zoomRange()
+                      * (DesignSystem::card().shadowMargins().left()
+                         + DesignSystem::card().shadowMargins().right()
+                         - DesignSystem::layout().px8())
+                  + DesignSystem::floatingToolBar().shadowMargins().left()))
+            : ((textEditWidth - textEditViewportWidth) / 2.0 + sidebarWidget->width()
+               - (scalableWrapper->zoomRange()
+                      * (DesignSystem::card().shadowMargins().left()
+                         + DesignSystem::card().shadowMargins().right()
+                         - DesignSystem::layout().px8())
+                  + DesignSystem::floatingToolBar().shadowMargins().left()));
+        //
+        // ... и смещаем панель рецензирования к этой точке
+        //
+        commentsToolbar->moveToolbar(QPoint(pos, localCursorCenter.y() - commentsToolbar->width()),
+                                     _force);
+    }
 
     //
     // Если панель ещё не была показана, отобразим её
@@ -440,9 +506,9 @@ void StageplayTextView::Implementation::addReviewMark(const QColor& _textColor,
     // ... делаем танец с бубном, чтобы получить сигнал об обновлении позиции курсора
     //     и выделить новую заметку в общем списке
     //
-    cursor.setPosition(selectionInterval.to);
-    textEdit->setTextCursorAndKeepScrollBars(cursor);
     cursor.setPosition(selectionInterval.from);
+    textEdit->setTextCursorAndKeepScrollBars(cursor);
+    cursor.setPosition(selectionInterval.to);
     textEdit->setTextCursorAndKeepScrollBars(cursor);
 
     //
@@ -507,6 +573,8 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
                     d->sidebarContent->setCurrentWidget(d->commentsView);
                     d->updateCommentsToolbar();
                 }
+                d->updateTextEditAutoReviewMode();
+                d->updateCommentsToolbar();
                 d->updateSideBarVisibility(this);
             });
     connect(d->toolbar, &StageplayTextEditToolbar::aiAssistantEnabledChanged, this,
@@ -539,6 +607,10 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
     connect(d->searchManager, &BusinessLayer::SearchManager::hideToolbarRequested, this,
             [this] { d->toolbarAnimation->switchToolbarsBack(); });
     //
+    connect(d->commentsToolbar, &CommentsToolbar::commentsTypeChanged, this,
+            [this] { d->updateTextEditAutoReviewMode(); });
+    connect(d->commentsToolbar, &CommentsToolbar::colorChanged, this,
+            [this] { d->updateTextEditAutoReviewMode(); });
     connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,
             [this](const QColor& _color) { d->addReviewMark(_color, {}, {}, false); });
     connect(d->commentsToolbar, &CommentsToolbar::textBackgoundColorChangeRequested, this,
@@ -698,9 +770,9 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
             });
     //
     connect(d->scalableWrapper->verticalScrollBar(), &QScrollBar::valueChanged, this,
-            [this] { d->updateCommentsToolbar(); });
+            [this] { d->updateCommentsToolbar(true); });
     connect(d->scalableWrapper->horizontalScrollBar(), &QScrollBar::valueChanged, this,
-            [this] { d->updateCommentsToolbar(); });
+            [this] { d->updateCommentsToolbar(true); });
     connect(
         d->scalableWrapper, &ScalableWrapper::zoomRangeChanged, this,
         [this] {
@@ -728,6 +800,10 @@ StageplayTextView::StageplayTextView(QWidget* _parent)
         const auto commentModelIndex
             = d->commentsModel->mapFromModel(stageplayModelIndex, positionInBlock);
         d->commentsView->setCurrentIndex(commentModelIndex);
+        //
+        // После того, как комментарий был выбран, скорректируем состояние панели рецензирования
+        //
+        d->updateCommentsToolbar();
         //
         // Выберем закладку, если курсор в блоке с закладкой
         //

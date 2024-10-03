@@ -118,6 +118,13 @@ public:
                        const QString& _comment, bool _isRevision);
 
     /**
+     * @brief Настроить автоматический режим добавления редакторских заметок
+     */
+    void setAutoReviewModeEnabled(bool _enabled);
+    void setAutoReviewMode(const QColor& _textColor, const QColor& _backgroundColor,
+                           bool _isRevision);
+
+    /**
      * @brief Задать курсоры соавторов
      */
     void setCursors(const QVector<Domain::CursorInfo>& _cursors);

@@ -51,9 +51,20 @@ class ComicBookTextEdit::Implementation
 public:
     explicit Implementation(ComicBookTextEdit* _q);
 
+    /**
+     * @brief Текущий шаблон документа
+     */
     const BusinessLayer::ComicBookTemplate& comicBookTemplate() const;
 
+    /**
+     * @brief Отменить/повторить последнее действие
+     */
     void revertAction(bool previous);
+
+    /**
+     * @brief Обновить редакторскую заметку в заданном интервале
+     */
+    void updateReviewMark(QKeyEvent* _event, int _from, int _to);
 
 
     ComicBookTextEdit* q = nullptr;
@@ -65,6 +76,13 @@ public:
     bool showSceneNumberOnLeft = false;
     bool showSceneNumberOnRight = false;
     bool showDialogueNumber = false;
+
+    struct {
+        bool isEnabled = false;
+        QColor textColor;
+        QColor backgroundColor;
+        bool isRevision = false;
+    } autoReviewMode;
 
     QVector<Domain::CursorInfo> collaboratorsCursorInfo;
     QVector<Domain::CursorInfo> pendingCollaboratorsCursorInfo;
@@ -126,6 +144,35 @@ void ComicBookTextEdit::Implementation::revertAction(bool previous)
     // сменилась позиция курсора, чтобы обновить состояние панелей
     //
     emit q->cursorPositionChanged();
+}
+
+void ComicBookTextEdit::Implementation::updateReviewMark(QKeyEvent* _event, int _from, int _to)
+{
+    if (!autoReviewMode.isEnabled) {
+        return;
+    }
+
+    //
+    // Если включён режим автоматического добавления редакторских заметок
+    // ... и текст добавляется с клавиатуры и это не шорткат
+    // ... или вставляется из буфера обмена
+    // ... и позиция курсора изменилась после обработки события
+    //
+    if (((_event->modifiers().testFlag(Qt::NoModifier) && !_event->text().isEmpty())
+         || _event == QKeySequence::Paste)
+        && _from < _to) {
+        //
+        // То автоматически добавим редакторскую заметку
+        //
+        const auto lastCursor = q->textCursor();
+        auto cursor = lastCursor;
+        cursor.setPosition(_from);
+        cursor.setPosition(_to, QTextCursor::KeepAnchor);
+        q->setTextCursor(cursor);
+        q->addReviewMark(autoReviewMode.textColor, autoReviewMode.backgroundColor, {},
+                         autoReviewMode.isRevision);
+        q->setTextCursor(lastCursor);
+    }
 }
 
 
@@ -586,6 +633,20 @@ void ComicBookTextEdit::addReviewMark(const QColor& _textColor, const QColor& _b
     d->document.addReviewMark(_textColor, _backgroundColor, _comment, _isRevision, cursor);
 }
 
+void ComicBookTextEdit::setAutoReviewModeEnabled(bool _enabled)
+{
+    d->autoReviewMode.isEnabled = _enabled;
+}
+
+void ComicBookTextEdit::setAutoReviewMode(const QColor& _textColor, const QColor& _backgroundColor,
+                                          bool _isRevision)
+{
+    d->autoReviewMode.textColor
+        = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
+    d->autoReviewMode.backgroundColor = _backgroundColor;
+    d->autoReviewMode.isRevision = _isRevision;
+}
+
 void ComicBookTextEdit::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
     d->pendingCollaboratorsCursorInfo = _cursors;
@@ -623,14 +684,17 @@ void ComicBookTextEdit::keyPressEvent(QKeyEvent* _event)
     // Отправить событие в базовый класс
     //
     if (handler->needSendEventToBaseClass()) {
+        const int positionBeforeEventHandling = textCursor().position();
         if (keyPressEventReimpl(_event)) {
             _event->accept();
         } else {
             ScriptTextEdit::keyPressEvent(_event);
             _event->ignore();
         }
+        const int positionAfterEventHandling = textCursor().position();
 
         updateEnteredText(_event);
+        d->updateReviewMark(_event, positionBeforeEventHandling, positionAfterEventHandling);
     }
 
     //
@@ -1175,6 +1239,66 @@ void ComicBookTextEdit::paintEvent(QPaintEvent* _event)
                                     paintLeftPageIcon(leftPageIcon);
                                 }
                             }
+                        }
+                    }
+                    //
+                    // Прорисовка ревизий
+                    //
+                    {
+                        //
+                        // Собираем ревизии для отображения
+                        //
+                        QVector<QPair<QRectF, QColor>> revisionMarks;
+                        for (const auto& format : block.textFormats()) {
+                            if (const auto revision
+                                = format.format.property(TextBlockStyle::PropertyCommentsIsRevision)
+                                      .toStringList();
+                                !revision.isEmpty() && revision.constFirst() == "true") {
+                                auto revisionCursor = cursor;
+                                revisionCursor.setPosition(revisionCursor.block().position()
+                                                           + format.start);
+                                do {
+                                    if (revisionCursor.positionInBlock() != format.start) {
+                                        revisionCursor.movePosition(QTextCursor::NextCharacter);
+                                    }
+                                    const auto revisionCursorR = cursorRect(revisionCursor);
+                                    QPointF topLeft(isLeftToRight ? (textRight + leftDelta)
+                                                                  : (pageLeft - leftDelta),
+                                                    revisionCursorR.top());
+                                    QPointF bottomRight(isLeftToRight ? pageRight
+                                                                      : textLeft - leftDelta,
+                                                        revisionCursorR.bottom());
+                                    const QRectF rect(topLeft, bottomRight);
+                                    const auto revisionColor = format.format.foreground().color();
+                                    //
+                                    // ... первая звёздочка, или звёздочка на следующей строке
+                                    //
+                                    if (revisionMarks.isEmpty()
+                                        || revisionMarks.constLast().first != rect) {
+                                        revisionMarks.append({ rect, revisionColor });
+                                    }
+                                    //
+                                    // ... звёздочка на той же строке - проверяем уровень
+                                    //
+                                    else if (ColorHelper::revisionLevel(
+                                                 revisionMarks.constLast().second)
+                                             < ColorHelper::revisionLevel(revisionColor)) {
+                                        revisionMarks.last().second = revisionColor;
+                                    }
+                                    if (!revisionCursor.movePosition(QTextCursor::EndOfLine)) {
+                                        revisionCursor.movePosition(QTextCursor::EndOfBlock);
+                                    }
+                                } while (revisionCursor.positionInBlock()
+                                             < (format.start + format.length)
+                                         && !revisionCursor.atBlockEnd());
+                            }
+                        }
+
+                        painter.setFont(cursor.charFormat().font());
+                        for (const auto& reviewMark : std::as_const(revisionMarks)) {
+                            setPainterPen(reviewMark.second);
+                            painter.drawText(reviewMark.first, Qt::AlignHCenter | Qt::AlignTop,
+                                             "*");
                         }
                     }
                 }
