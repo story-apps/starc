@@ -16,8 +16,9 @@
 namespace Ui {
 
 namespace {
-const QString kColorKey = QLatin1String("widgets/screenplay-text-comments-toolbar/color");
-const QString kCommentsTypeKey = QLatin1String("widgets/screenplay-text-comments-toolbar/type");
+const QLatin1String kColorKey("widgets/screenplay-text-comments-toolbar/color");
+const QLatin1String kRevisionColorKey("widgets/screenplay-text-comments-toolbar/revision-color");
+const QLatin1String kCommentsTypeKey("widgets/screenplay-text-comments-toolbar/type");
 } // namespace
 
 class CommentsToolbar::Implementation
@@ -153,14 +154,29 @@ void CommentsToolbar::Implementation::updateActions()
 
     markAsDoneSeparatorAction->setVisible(isEditCommentVisible);
 
+    //
+    // Настроим палитру и выберем цвет
+    //
     if (type == CommentsType::Revision) {
         QVector<QColor> palette;
         for (int level = 0; level < 9; ++level) {
             palette.append(ColorHelper::revisionColor(level));
         }
         colorPickerPopup->setCustomPalette(palette);
+
+        if (const auto value = QSettings().value(kRevisionColorKey); value.isValid()) {
+            q->setActionColor(colorAction, value.value<QColor>());
+        } else {
+            q->setActionColor(colorAction, palette.constFirst());
+        }
     } else {
         colorPickerPopup->setCustomPalette({});
+
+        if (const auto value = QSettings().value(kColorKey); value.isValid()) {
+            q->setActionColor(colorAction, value.value<QColor>());
+        } else {
+            q->setActionColor(colorAction, "#FE0000");
+        }
     }
 
     q->resize(q->sizeHint());
@@ -242,21 +258,25 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
         d->typeAction->setIconText(u8"\U000F0E31");
     }
     addAction(d->typeAction);
-    d->updateActions();
 
     d->reviewTextColorAction->setIconText(u8"\U000f069e");
+    d->reviewTextColorAction->setShortcut(QKeySequence("Ctrl+Shift+T"));
     addAction(d->reviewTextColorAction);
 
     d->reviewTextBackgroundColorAction->setIconText(u8"\U000f0266");
+    d->reviewTextBackgroundColorAction->setShortcut(QKeySequence("Ctrl+Shift+H"));
     addAction(d->reviewTextBackgroundColorAction);
 
     d->reviewCommentAction->setIconText(u8"\U000f0188");
+    d->reviewCommentAction->setShortcut(QKeySequence("Ctrl+Shift+C"));
     addAction(d->reviewCommentAction);
 
     d->changesTextBackgroundColorAction->setIconText(u8"\U000f0266");
+    d->changesTextBackgroundColorAction->setShortcut(QKeySequence("Ctrl+Shift+H"));
     addAction(d->changesTextBackgroundColorAction);
 
     d->revisionMarkAction->setIconText(u8"\U000F0382");
+    d->revisionMarkAction->setShortcut(QKeySequence("Ctrl+Shift+R"));
     addAction(d->revisionMarkAction);
 
     d->markAsDoneSeparatorAction->setSeparator(true);
@@ -274,11 +294,6 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
 
     d->colorAction->setIconText(u8"\U000f0765");
     addAction(d->colorAction);
-    if (const auto value = QSettings().value(kColorKey); value.isValid()) {
-        setActionColor(d->colorAction, value.value<QColor>());
-    } else {
-        setActionColor(d->colorAction, "#FE0000");
-    }
 
 
     connect(d->typeAction, &QAction::triggered, this, [this] {
@@ -340,7 +355,8 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
             [this](const QColor& _color) {
                 setActionColor(d->colorAction, _color);
 
-                QSettings().setValue(kColorKey, _color);
+                QSettings().setValue(
+                    d->type == CommentsType::Revision ? kRevisionColorKey : kColorKey, _color);
 
                 emit colorChanged(_color);
             });
@@ -349,6 +365,9 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
     connect(&d->hideTimer, &QTimer::timeout, this, &Widget::hide);
     connect(&d->moveAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) { move(_value.toPoint()); });
+
+
+    d->updateActions();
 }
 
 CommentsToolbar::~CommentsToolbar() = default;
@@ -486,11 +505,26 @@ void CommentsToolbar::updateTranslations()
     d->reviewType->setToolTip(tr("Review mode"));
     d->changesType->setToolTip(tr("Track additions mode"));
     d->revisionType->setToolTip(tr("Revision mode"));
-    d->reviewTextColorAction->setToolTip(tr("Change text color"));
-    d->reviewTextBackgroundColorAction->setToolTip(tr("Change text highlight color"));
-    d->reviewCommentAction->setToolTip(tr("Add comment"));
-    d->changesTextBackgroundColorAction->setToolTip(tr("Change text highlight color"));
-    d->revisionMarkAction->setToolTip(tr("Mark revisited"));
+    d->reviewTextColorAction->setToolTip(
+        tr("Change text color")
+        + QString(" (%1)").arg(
+            d->reviewTextColorAction->shortcut().toString(QKeySequence::NativeText)));
+    d->reviewTextBackgroundColorAction->setToolTip(
+        tr("Change text highlight color")
+        + QString(" (%1)").arg(
+            d->reviewTextBackgroundColorAction->shortcut().toString(QKeySequence::NativeText)));
+    d->reviewCommentAction->setToolTip(
+        tr("Add comment")
+        + QString(" (%1)").arg(
+            d->reviewCommentAction->shortcut().toString(QKeySequence::NativeText)));
+    d->changesTextBackgroundColorAction->setToolTip(
+        tr("Change text highlight color")
+        + QString(" (%1)").arg(
+            d->changesTextBackgroundColorAction->shortcut().toString(QKeySequence::NativeText)));
+    d->revisionMarkAction->setToolTip(
+        tr("Mark revisited")
+        + QString(" (%1)").arg(
+            d->revisionMarkAction->shortcut().toString(QKeySequence::NativeText)));
     //: This allow user to choose color for the review mode actions like text higlight or comments
     d->colorAction->setToolTip(tr("Choose color for the action"));
     d->markAsDoneAction->setToolTip(tr("Mark as done"));

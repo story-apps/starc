@@ -205,11 +205,13 @@ void ScreenplayTextEdit::Implementation::updateReviewMark(QKeyEvent* _event, int
 
     //
     // Если включён режим автоматического добавления редакторских заметок
-    // ... и текст добавляется с клавиатуры
+    // ... и текст добавляется с клавиатуры и это не шорткат
     // ... или вставляется из буфера обмена
     // ... и позиция курсора изменилась после обработки события
     //
-    if ((!_event->text().isEmpty() || _event == QKeySequence::Paste) && _from < _to) {
+    if (((_event->modifiers().testFlag(Qt::NoModifier) && !_event->text().isEmpty())
+         || _event == QKeySequence::Paste)
+        && _from < _to) {
         //
         // То автоматически добавим редакторскую заметку
         //
