@@ -158,6 +158,8 @@ SearchManager::SearchManager(QWidget* _parent, BaseTextEdit* _textEdit)
     : QObject(_parent)
     , d(new Implementation(_parent, _textEdit))
 {
+    connect(d->toolbar, &Ui::SearchToolbar::reactivatePressed, this,
+            &SearchManager::activateSearhToolbar);
     connect(d->toolbar, &Ui::SearchToolbar::closePressed, this,
             &SearchManager::hideToolbarRequested);
     connect(d->toolbar, &Ui::SearchToolbar::focusTextRequested, _parent,
@@ -237,10 +239,8 @@ void SearchManager::activateSearhToolbar()
     if (const auto selectedText = d->textEdit->textCursor().selectedText();
         !selectedText.isEmpty()) {
         d->toolbar->setSearchText(selectedText);
-        d->toolbar->selectSearchText();
-    } else {
-        d->toolbar->selectSearchText();
     }
+    d->toolbar->setFocus();
 }
 
 void SearchManager::setSearchInBlockTypes(

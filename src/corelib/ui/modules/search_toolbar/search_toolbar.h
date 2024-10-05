@@ -52,16 +52,16 @@ public:
     void setSearchText(const QString& _text);
 
     /**
-     * @brief Выделить текст в поле поиска
-     */
-    void selectSearchText();
-
-    /**
      * @brief Задать список строк для попапа
      */
     void setPopupStringList(const QStringList& _list);
 
 signals:
+    /**
+     * @brief Пользователь хочет реактивировать панель поиска
+     */
+    void reactivatePressed();
+
     /**
      * @brief Пользователь хочет закрыть панель поиска
      */

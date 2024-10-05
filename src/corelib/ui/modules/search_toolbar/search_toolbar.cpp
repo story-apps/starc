@@ -159,10 +159,14 @@ SearchToolbar::SearchToolbar(QWidget* _parent)
     addAction(d->closeAction);
     connect(d->closeAction, &QAction::triggered, this, [this] {
         if (d->searchText->hasFocus()) {
-            emit closePressed();
+            if (d->searchText->text().isEmpty()
+                || d->searchText->text() == d->searchText->selectedText()) {
+                emit closePressed();
+            } else {
+                d->searchText->selectAll();
+            }
         } else {
-            d->searchText->setFocus();
-            d->searchText->selectAll();
+            emit reactivatePressed();
         }
     });
     //
@@ -241,11 +245,6 @@ void SearchToolbar::setSearchText(const QString& _text)
     d->searchText->setText(_text);
 }
 
-void SearchToolbar::selectSearchText()
-{
-    d->searchText->selectAll();
-}
-
 bool SearchToolbar::eventFilter(QObject* _watched, QEvent* _event)
 {
     switch (_event->type()) {
@@ -257,22 +256,46 @@ bool SearchToolbar::eventFilter(QObject* _watched, QEvent* _event)
     }
 
     case QEvent::KeyPress: {
-        if (_watched == d->searchText) {
-            const auto keyEvent = static_cast<QKeyEvent*>(_event);
-            if ((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
-                && !d->searchText->text().isEmpty()) {
+        const auto keyEvent = static_cast<QKeyEvent*>(_event);
+        if ((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
+            && !d->searchText->text().isEmpty()) {
+            if (_watched == d->searchText) {
                 emit findTextRequested();
+            } else if (_watched == d->replaceText) {
+                emit replaceOnePressed();
             }
         }
         break;
     }
 
     case QEvent::KeyRelease: {
-        if (_watched == d->searchText) {
+        if (_watched == d->searchText || _watched == d->replaceText) {
             const auto keyEvent = static_cast<QKeyEvent*>(_event);
             if (keyEvent->key() == Qt::Key_Escape) {
                 emit focusTextRequested();
             }
+        }
+        break;
+    }
+
+    case QEvent::FocusIn: {
+        if (_watched == d->searchText) {
+            d->searchText->selectAll();
+        } else if (_watched == d->replaceText) {
+            d->replaceText->selectAll();
+        }
+        break;
+    }
+
+    case QEvent::FocusOut: {
+        if (_watched == d->searchText) {
+            auto cursor = d->searchText->textCursor();
+            cursor.clearSelection();
+            d->searchText->setTextCursor(cursor);
+        } else if (_watched == d->replaceText) {
+            auto cursor = d->replaceText->textCursor();
+            cursor.clearSelection();
+            d->replaceText->setTextCursor(cursor);
         }
         break;
     }
