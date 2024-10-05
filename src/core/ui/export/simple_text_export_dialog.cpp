@@ -89,7 +89,7 @@ void SimpleTextExportDialog::updateTranslations()
     AbstractExportDialog::updateTranslations();
     setTitle(tr("Export text document"));
     d->includeInlineNotes->setText(tr("Include inline notes"));
-    d->includeReviewMarks->setText(tr("Include review marks"));
+    d->includeReviewMarks->setText(tr("Include review marks / revisions"));
 }
 
 void SimpleTextExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)

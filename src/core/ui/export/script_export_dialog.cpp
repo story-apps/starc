@@ -247,7 +247,7 @@ void ScriptExportDialog::updateTranslations()
 
     d->version->setLabel(tr("Draft"));
     d->includeInlineNotes->setText(tr("Include inline notes"));
-    d->includeReviewMarks->setText(tr("Include review marks"));
+    d->includeReviewMarks->setText(tr("Include review marks / revisions"));
 }
 
 void ScriptExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
