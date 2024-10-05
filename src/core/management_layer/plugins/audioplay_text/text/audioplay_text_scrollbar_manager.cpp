@@ -478,7 +478,7 @@ void AudioplayTextTimeline::paintEvent(QPaintEvent* _event)
     // Считаем область для отрисовки метки хэндла
     //
     const qreal handleTextTop = handleRect.top() + DesignSystem::layout().px16();
-    const qreal handleTextWidth = DesignSystem::layout().px(36);
+    const qreal handleTextWidth = DesignSystem::layout().px(42);
     QRectF handleLeftTextRect;
     QRectF handleRightTextRect;
     if (handleRect.width() > handleTextWidth * 2 + DesignSystem::layout().px8()) {
