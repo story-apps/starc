@@ -217,7 +217,11 @@ void SearchToolbar::setReadOnly(bool _readOnly)
 
 void SearchToolbar::refocus()
 {
-    d->searchText->setFocus();
+    if (d->replaceText->hasFocus()) {
+        d->replaceText->setFocus();
+    } else {
+        d->searchText->setFocus();
+    }
 }
 
 QString SearchToolbar::searchText() const
@@ -260,7 +264,11 @@ bool SearchToolbar::eventFilter(QObject* _watched, QEvent* _event)
         if ((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
             && !d->searchText->text().isEmpty()) {
             if (_watched == d->searchText) {
-                emit findTextRequested();
+                if (keyEvent->modifiers().testFlag(Qt::ShiftModifier)) {
+                    emit findPreviousRequested();
+                } else {
+                    emit findTextRequested();
+                }
             } else if (_watched == d->replaceText) {
                 emit replaceOnePressed();
             }
