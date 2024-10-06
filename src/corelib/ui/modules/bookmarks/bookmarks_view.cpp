@@ -46,6 +46,7 @@ BookmarksView::Implementation::Implementation(QWidget* _parent)
     , commentsViewContextMenu(new ContextMenu(bookmarksView))
     , addBookmarkView(new AddBookmarkView(_parent))
 {
+    bookmarksView->setRootIsDecorated(false);
     bookmarksView->setAutoAdjustSize(true);
     bookmarksView->setContextMenuPolicy(Qt::CustomContextMenu);
     bookmarksView->setItemDelegate(new BookmarkDelegate(bookmarksView));

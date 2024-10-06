@@ -76,39 +76,54 @@ void BookmarkDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _op
     if (!itemColor.isNull() && itemColor.canConvert<QColor>()) {
         const QColor color = itemColor.value<QColor>();
         if (color.isValid()) {
-            auto fullIndicatorWidth = [_index] {
-                int level = 0;
-                auto index = _index;
-                while (index.isValid()) {
-                    ++level;
-                    index = index.parent();
-                }
-                return level * DesignSystem::tree().indicatorWidth();
-            };
             const auto backgroundRect = _option.rect;
-            itemColorRect = QRectF(isLeftToRight ? 0.0
-                                                 : (backgroundRect.right() + fullIndicatorWidth()
-                                                    - DesignSystem::layout().px4()),
-                                   backgroundRect.top(), DesignSystem::layout().px4(),
-                                   backgroundRect.height());
+            itemColorRect = QRectF(
+                isLeftToRight ? 0.0 : (backgroundRect.right() - DesignSystem::layout().px4()),
+                backgroundRect.top(), DesignSystem::layout().px4(), backgroundRect.height());
             _painter->fillRect(itemColorRect, color);
         }
     }
 
     //
+    // ... иконка
+    //
+    _painter->setPen(textColor);
+    QRectF iconRect;
+    if (isLeftToRight) {
+        iconRect = QRectF(QPointF(std::max(backgroundRect.left(),
+                                           DesignSystem::treeOneLineItem().margins().left()),
+                                  backgroundRect.top()),
+                          QSizeF(DesignSystem::treeOneLineItem().iconSize().width(),
+                                 DesignSystem::treeOneLineItem().height()));
+    } else {
+        iconRect = QRectF(QPointF(backgroundRect.right()
+                                      - DesignSystem::treeOneLineItem().iconSize().width()
+                                      - DesignSystem::treeOneLineItem().margins().right(),
+                                  backgroundRect.top()),
+                          QSizeF(DesignSystem::treeOneLineItem().iconSize().width(),
+                                 DesignSystem::treeOneLineItem().height()));
+    }
+    _painter->setFont(DesignSystem::font().iconsMid());
+    _painter->drawText(iconRect, Qt::AlignLeft | Qt::AlignVCenter, u8"\U000F00C0");
+
+    //
     // ... заголовок
     //
     _painter->setFont(DesignSystem::font().subtitle2());
-    _painter->setPen(textColor);
-    const qreal textLeft = isLeftToRight ? (itemColorRect.right() + DesignSystem::layout().px16())
-                                         : DesignSystem::treeOneLineItem().margins().left();
-    const qreal textWidth = isLeftToRight
-        ? (backgroundRect.right() - textLeft - DesignSystem::treeOneLineItem().margins().right())
-        : (backgroundRect.right() + DesignSystem::tree().indicatorWidth() - textLeft
-           - itemColorRect.width() - DesignSystem::treeOneLineItem().margins().right());
+    qreal headingLeft = 0.0;
+    qreal headingWidth = 0.0;
+    if (isLeftToRight) {
+        headingLeft = iconRect.right() + DesignSystem::treeOneLineItem().spacing();
+        headingWidth
+            = backgroundRect.right() - headingLeft - DesignSystem::treeOneLineItem().spacing();
+    } else {
+        headingLeft = DesignSystem::treeOneLineItem().spacing();
+        headingWidth = iconRect.left() - headingLeft - DesignSystem::treeOneLineItem().spacing();
+    }
     const QRectF headingRect(
-        QPointF(textLeft, backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()),
-        QSizeF(textWidth, DesignSystem::treeOneLineItem().contentHeight()));
+        QPointF(headingLeft,
+                backgroundRect.top() + DesignSystem::treeOneLineItem().margins().top()),
+        QSizeF(headingWidth, DesignSystem::layout().px24()));
     auto header
         = TextHelper::smartToUpper(_index.data(BookmarksModel::BookmarkItemTextRole).toString());
     header = _painter->fontMetrics().elidedText(header, Qt::ElideRight,
@@ -120,11 +135,19 @@ void BookmarkDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _op
     //
     const auto bookmarkName = _index.data(BookmarksModel::BookmarkNameRole).toString();
     if (!bookmarkName.isEmpty()) {
+        const qreal textLeft = isLeftToRight
+            ? iconRect.left()
+            : backgroundRect.left() + DesignSystem::treeOneLineItem().margins().left();
+        const qreal textWidth = isLeftToRight
+            ? backgroundRect.width() - iconRect.left()
+                - DesignSystem::treeOneLineItem().margins().right()
+            : iconRect.right() - DesignSystem::treeOneLineItem().margins().left();
         const QRectF bookamrkNameRect(
-            QPointF(headingRect.left(), headingRect.bottom() + DesignSystem::compactLayout().px8()),
-            QSizeF(headingRect.width(),
-                   TextHelper::heightForWidth(bookmarkName, DesignSystem::font().body2(),
-                                              headingRect.width())));
+            QPointF(textLeft, headingRect.bottom() + DesignSystem::compactLayout().px8()),
+            QSizeF(
+                textWidth,
+                TextHelper::heightForWidth(bookmarkName, DesignSystem::font().body2(), textWidth)));
+
         _painter->setFont(DesignSystem::font().body2());
         _painter->setPen(textColor);
         QTextOption commentTextOption;
