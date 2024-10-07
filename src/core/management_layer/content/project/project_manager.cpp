@@ -3182,6 +3182,15 @@ void ProjectManager::saveChanges()
     // Сохраняем все изменения документов
     //
     DataStorageLayer::StorageFacade::documentChangeStorage()->store();
+
+    //
+    // Посылаем сигнал о том, что изменения сохранены
+    //
+    auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(
+        d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
+            Domain::DocumentObjectType::Project)));
+    emit changesSaved(projectInformationModel->name(), projectInformationModel->logline(),
+                      projectInformationModel->cover());
 }
 
 void ProjectManager::addCharacter(const QString& _name, const QString& _content)
@@ -4230,6 +4239,22 @@ void ProjectManager::setGeneratedImage(const QPixmap& _image)
     if (view != nullptr) {
         view->setGeneratedImage(_image);
     }
+}
+
+void ProjectManager::resetCoverFromBuffer()
+{
+    auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(
+        d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
+            Domain::DocumentObjectType::Project)));
+    projectInformationModel->resetCoverFromBuffer();
+}
+
+void ProjectManager::clearCoverBuffer()
+{
+    auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(
+        d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
+            Domain::DocumentObjectType::Project)));
+    projectInformationModel->clearCoverBuffer();
 }
 
 bool ProjectManager::event(QEvent* _event)

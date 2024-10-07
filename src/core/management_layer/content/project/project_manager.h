@@ -204,6 +204,12 @@ public:
     void setGeneratedText(const QString& _text);
     void setGeneratedImage(const QPixmap& _image);
 
+    /**
+     * @brief Буфер обложки проекта
+     */
+    void resetCoverFromBuffer();
+    void clearCoverBuffer();
+
 signals:
     /**
      * @brief Запрос на отображение меню
@@ -312,6 +318,11 @@ signals:
                                const QString& _promptSuffix);
     void generateImageRequested(const QString& _promptPrefix, const QString& _prompt,
                                 const QString& _promptSuffix);
+
+    /**
+     * @brief Изменения сохранены
+     */
+    void changesSaved(const QString& _name, const QString& _logline, const QPixmap& _cover);
 
 protected:
     /**

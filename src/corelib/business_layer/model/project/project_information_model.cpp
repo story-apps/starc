@@ -27,6 +27,10 @@ public:
     QString name;
     QString logline;
     Domain::DocumentImage cover;
+    struct {
+        Domain::DocumentImage cover = {};
+        bool isChanged = false;
+    } coverBuffer;
 
     StructureModel* structureModel = nullptr;
 
@@ -109,19 +113,33 @@ void ProjectInformationModel::setCover(const QPixmap& _cover)
     }
 
     //
-    // Если ранее обложка была задана, то удалим её
+    // Следует ли заменить существующее изображение в списке новых
     //
-    if (!d->cover.uuid.isNull()) {
-        imageWrapper()->remove(d->cover.uuid);
-        d->cover = {};
+    const bool shouldReplaceImage = d->coverBuffer.isChanged;
+
+    //
+    // Сохраняем старую обложку в буфер
+    //
+    if (d->coverBuffer.isChanged == false) {
+        d->coverBuffer.cover = d->cover;
+        d->coverBuffer.isChanged = true;
     }
 
     //
     // Если задана новая обложка, то добавляем её
     //
     if (!_cover.isNull()) {
-        d->cover.uuid = imageWrapper()->save(_cover);
+        if (shouldReplaceImage) {
+            imageWrapper()->save(d->cover.uuid, _cover);
+        } else {
+            d->cover.uuid = imageWrapper()->save(_cover);
+        }
         d->cover.image = _cover;
+    } else {
+        //
+        // ... иначе просто удалим старую из памяти
+        //
+        d->cover = {};
     }
 
     emit coverChanged(d->cover.image);
@@ -138,6 +156,28 @@ void ProjectInformationModel::setCover(const QUuid& _uuid, const QPixmap& _cover
         d->cover.uuid = _uuid;
     }
     emit coverChanged(d->cover.image);
+}
+
+void ProjectInformationModel::resetCoverFromBuffer()
+{
+    if (d->coverBuffer.isChanged) {
+        if (!d->coverBuffer.cover.uuid.isNull() && !d->coverBuffer.cover.image.isNull()) {
+            setCover(d->coverBuffer.cover.uuid, d->coverBuffer.cover.image);
+        } else {
+            setCover({});
+        }
+        d->coverBuffer.isChanged = false;
+        d->coverBuffer.cover = {};
+    }
+}
+
+void ProjectInformationModel::clearCoverBuffer()
+{
+    if (d->coverBuffer.isChanged && !d->coverBuffer.cover.uuid.isNull()) {
+        imageWrapper()->remove(d->coverBuffer.cover.uuid);
+    }
+    d->coverBuffer.isChanged = false;
+    d->coverBuffer.cover = {};
 }
 
 StructureModel* ProjectInformationModel::structureModel() const
