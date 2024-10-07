@@ -358,15 +358,17 @@ void AbstractCardItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* _event)
     // Возвращаем карточку на место
     //
     // Делаем отложенный вызов, чтобы mouseGrabber сцены освободился
+    // NOTE: при этом сразу захватим сцену и индекс, т.к. карточка может быть удалена к моменту
+    // вызова метода (если файл проекта был переименован/удалён во время работы приложения)
     //
     QMetaObject::invokeMethod(
         scene(),
-        [this, needToEmitClickSingal] {
+        [needToEmitClickSingal, scene = d->cardsScene(), index = d->modelItemIndex] {
             if (needToEmitClickSingal) {
-                emit d->cardsScene()->itemClicked(d->modelItemIndex);
+                emit scene->itemClicked(index);
             }
-            emit d->cardsScene()->itemChanged(d->modelItemIndex);
-            emit d->cardsScene()->itemDropped(d->modelItemIndex);
+            emit scene->itemChanged(index);
+            emit scene->itemDropped(index);
         },
         Qt::QueuedConnection);
 }
