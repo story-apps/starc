@@ -28,6 +28,11 @@ protected:
     bool documentForImport(const QString& _filePath, QTextDocument& _document) const override;
 
     /**
+     * @brief Записать редакторские заметки
+     */
+    void writeReviewMarks(QXmlStreamWriter& _writer, QTextCursor& _cursor) const override;
+
+    /**
      * @brief Следует ли сохранять номера сцен
      */
     bool shouldKeepSceneNumbers(const ImportOptions& _options) const override;

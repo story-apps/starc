@@ -65,6 +65,91 @@ const QRegularExpression NOISE_AT_START("^" + NOISE);
  */
 const QRegularExpression NOISE_AT_END(NOISE + "$");
 
+/**
+ * @brief Очистить блок от лишних пробельных символов
+ * @note Аналог QString::simplified(), только при этом форматы символов остаются на своих местах
+ */
+void simplifyTextBlock(QTextCursor& _cursor)
+{
+    auto findEndPosition = [&_cursor]() {
+        const int currentPosition = _cursor.position();
+        _cursor.movePosition(QTextCursor::EndOfBlock);
+        const int end = _cursor.position();
+        _cursor.setPosition(currentPosition);
+        return end;
+    };
+
+    int endPosition = findEndPosition();
+    _cursor.movePosition(QTextCursor::StartOfBlock);
+    while (true) {
+        Q_ASSERT(_cursor.position() < endPosition);
+        _cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+
+        //
+        // Удаляем пробельные символы
+        //
+        while (_cursor.selectedText().simplified().isEmpty()) {
+            _cursor.removeSelectedText();
+            endPosition = findEndPosition();
+            if (_cursor.position() == endPosition) {
+                break;
+            }
+            _cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+        }
+
+        //
+        // Если конец, выходим из цикла
+        //
+        if (_cursor.position() == endPosition) {
+            break;
+        }
+
+        //
+        // Перемещаем anchor на позицию курсора
+        //
+        _cursor.movePosition(QTextCursor::NextCharacter);
+
+        //
+        // Пропускаем непробельные символы
+        //
+        _cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+        while (_cursor.position() != endPosition
+               && !_cursor.selectedText().simplified().isEmpty()) {
+            //
+            // Перемещаем anchor на позицию курсора
+            //
+            _cursor.movePosition(QTextCursor::NextCharacter);
+
+            _cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+        }
+
+        //
+        // Если конец, выходим из цикла
+        //
+        if (_cursor.position() == endPosition) {
+            break;
+        } else {
+            //
+            // ... если не конец, вставляем пробел после слова
+            //
+            const auto format = _cursor.charFormat();
+            _cursor.removeSelectedText();
+            _cursor.insertText(QString(QChar::Space), format);
+        }
+    }
+
+    //
+    // В конце мог остаться пробельный символ
+    //
+    _cursor.movePosition(QTextCursor::EndOfBlock);
+    _cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+    if (_cursor.selectedText().simplified().isEmpty()) {
+        _cursor.removeSelectedText();
+    }
+
+    _cursor.movePosition(QTextCursor::EndOfBlock);
+}
+
 } // namespace
 
 
@@ -129,7 +214,13 @@ AbstractImporter::Documents AbstractDocumentImporter::importDocuments(
             //
             const auto blockType
                 = typeForTextCursor(cursor, lastBlockType, emptyLines, minLeftMargin);
-            QString paragraphText = cursor.block().text().simplified();
+
+            //
+            // ... удаляем лишние пробельные символы
+            //
+            simplifyTextBlock(cursor);
+
+            QString paragraphText = cursor.block().text();
 
             //
             // Если текущий тип "Время и место", то удалим номер сцены
@@ -285,8 +376,8 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
             //
             // Выполняем корректировки
             //
-            const auto paragraphText
-                = clearBlockText(blockType, cursor.block().text().simplified());
+            simplifyTextBlock(cursor);
+            const auto paragraphText = clearBlockText(blockType, cursor.block().text());
 
             //
             // Формируем блок сценария

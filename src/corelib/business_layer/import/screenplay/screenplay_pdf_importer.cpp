@@ -4,9 +4,14 @@
 #include "screenplay_import_options.h"
 
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
+#include <business_layer/model/text/text_model_xml.h>
+#include <data_layer/storage/settings_storage.h>
+#include <data_layer/storage/storage_facade.h>
 
 #include <QFileInfo>
+#include <QTextBlock>
 #include <QTextDocument>
+#include <QXmlStreamWriter>
 
 
 namespace BusinessLayer {
@@ -46,7 +51,7 @@ bool ScreenplayPdfImporter::documentForImport(const QString& _filePath,
     QFile documentFile(_filePath);
     if (documentFile.open(QIODevice::ReadOnly)) {
         //
-        // Используем TableExtraction, чтобы извлечь не только текст, но и линии
+        // Используем TableExtraction, чтобы извлечь не только текст, но и линии.
         //
         TableExtraction tableExtractor;
         tableExtractor.ExtractTables(_filePath.toStdString(), 0, -1, true);
@@ -54,6 +59,44 @@ bool ScreenplayPdfImporter::documentForImport(const QString& _filePath,
         return true;
     }
     return false;
+}
+
+void ScreenplayPdfImporter::writeReviewMarks(QXmlStreamWriter& _writer, QTextCursor& _cursor) const
+{
+    const QTextBlock currentBlock = _cursor.block();
+    if (!currentBlock.textFormats().isEmpty()) {
+        _writer.writeStartElement(xml::kReviewMarksTag);
+        for (const auto& range : currentBlock.textFormats()) {
+            if (range.format.hasProperty(QTextFormat::BackgroundBrush)
+                || range.format.hasProperty(QTextFormat::BackgroundBrush)) {
+                _writer.writeStartElement(xml::kReviewMarkTag);
+                _writer.writeAttribute(xml::kFromAttribute, QString::number(range.start));
+                _writer.writeAttribute(xml::kLengthAttribute, QString::number(range.length));
+                if (range.format.hasProperty(QTextFormat::ForegroundBrush)) {
+                    _writer.writeAttribute(xml::kColorAttribute,
+                                           range.format.foreground().color().name());
+                }
+                if (range.format.hasProperty(QTextFormat::BackgroundBrush)) {
+                    _writer.writeAttribute(xml::kBackgroundColorAttribute,
+                                           range.format.background().color().name());
+                }
+                //
+                // Пишем пустой комментарий
+                //
+                _writer.writeStartElement(xml::kCommentTag);
+                _writer.writeAttribute(
+                    xml::kAuthorAttribute,
+                    DataStorageLayer::StorageFacade::settingsStorage()->accountName());
+                _writer.writeAttribute(xml::kDateAttribute,
+                                       QDateTime::currentDateTime().toString(Qt::ISODate));
+                _writer.writeCDATA(QString());
+                _writer.writeEndElement(); // comment
+                //
+                _writer.writeEndElement(); // review mark
+            }
+        }
+        _writer.writeEndElement(); // review marks
+    }
 }
 
 bool ScreenplayPdfImporter::shouldKeepSceneNumbers(const ImportOptions& _options) const
