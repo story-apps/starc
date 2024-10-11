@@ -2,10 +2,14 @@
 
 #include "search_toolbar.h"
 
+#include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/text/text_model_group_item.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/novel_template.h>
 #include <business_layer/templates/text_template.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/shugar.h>
 
 #include <QTextBlock>
 
@@ -25,7 +29,9 @@ public:
     /**
      * @brief Найти текст в заданном направлении
      */
-    void findText(bool _backward = false);
+    void find(bool _backward = false);
+    void findText(bool _backward);
+    void findNumber();
 
 
     /**
@@ -58,7 +64,7 @@ TextParagraphType SearchManager::Implementation::searchInType() const
     return blockTypes.value(toolbar->searchInType(), TextParagraphType::Undefined);
 }
 
-void SearchManager::Implementation::findText(bool _backward)
+void SearchManager::Implementation::find(bool _backward)
 {
     const QString searchText = toolbar->searchText();
     if (searchText.isEmpty()) {
@@ -74,6 +80,22 @@ void SearchManager::Implementation::findText(bool _backward)
 
         return;
     }
+
+    if (searchText.startsWith("#")) {
+        findNumber();
+    } else {
+        findText(_backward);
+    }
+
+    //
+    // Возвращаем фокус в панель поиска
+    //
+    toolbar->refocus();
+}
+
+void SearchManager::Implementation::findText(bool _backward)
+{
+    const QString searchText = toolbar->searchText();
 
     //
     // Поиск осуществляется от позиции курсора
@@ -143,11 +165,58 @@ void SearchManager::Implementation::findText(bool _backward)
     // Сохраняем искомый текст
     //
     m_lastSearchText = searchText;
+}
+
+void SearchManager::Implementation::findNumber()
+{
+    //
+    // Искомая строка идёт сразу за символом решётки
+    //
+    const QString searchText = toolbar->searchText().mid(1);
+    if (searchText.isEmpty()) {
+        return;
+    }
 
     //
-    // Возвращаем фокус в панель поиска
+    // Поиск осуществляется от начала документа
     //
-    toolbar->refocus();
+    TextCursor cursor(textEdit->document());
+    auto block = cursor.block();
+    while (block.isValid()) {
+        do {
+            if (block.userData() == nullptr) {
+                break;
+            }
+
+            const auto blockData = static_cast<TextBlockData*>(block.userData());
+            if (blockData == nullptr) {
+                break;
+            }
+
+            if (blockData->item() == nullptr
+                || blockData->item()->type() != TextModelItemType::Text) {
+                break;
+            }
+
+            const auto textItem = static_cast<TextModelTextItem*>(blockData->item());
+            if (textItem->paragraphType() != TextParagraphType::SceneHeading
+                || textItem->parent() == nullptr
+                || textItem->parent()->type() != TextModelItemType::Group) {
+                break;
+            }
+
+            const auto groupItem = static_cast<TextModelGroupItem*>(textItem->parent());
+            if (groupItem->number()->text.startsWith(searchText)) {
+                cursor.setPosition(block.position());
+                textEdit->setTextCursor(cursor);
+                textEdit->ensureCursorVisible(cursor);
+                return;
+            }
+        }
+        once;
+
+        block = block.next();
+    }
 }
 
 
@@ -164,16 +233,16 @@ SearchManager::SearchManager(QWidget* _parent, BaseTextEdit* _textEdit)
             &SearchManager::hideToolbarRequested);
     connect(d->toolbar, &Ui::SearchToolbar::focusTextRequested, _parent,
             qOverload<>(&QWidget::setFocus));
-    connect(d->toolbar, &Ui::SearchToolbar::findTextRequested, this, [this] { d->findText(); });
-    connect(d->toolbar, &Ui::SearchToolbar::findNextRequested, this, [this] { d->findText(); });
+    connect(d->toolbar, &Ui::SearchToolbar::findTextRequested, this, [this] { d->find(); });
+    connect(d->toolbar, &Ui::SearchToolbar::findNextRequested, this, [this] { d->find(); });
     connect(d->toolbar, &Ui::SearchToolbar::findPreviousRequested, this, [this] {
         const bool backward = true;
-        d->findText(backward);
+        d->find(backward);
     });
     connect(d->toolbar, &Ui::SearchToolbar::replaceOnePressed, this, [this] {
         auto cursor = d->textEdit->textCursor();
         if (!cursor.hasSelection()) {
-            d->findText();
+            d->find();
             return;
         }
 
@@ -184,7 +253,7 @@ SearchManager::SearchManager(QWidget* _parent, BaseTextEdit* _textEdit)
                 == TextHelper::smartToLower(searchText);
         if (selectedTextEqual) {
             cursor.insertText(d->toolbar->replaceText());
-            d->findText();
+            d->find();
         }
     });
     connect(d->toolbar, &Ui::SearchToolbar::replaceAllPressed, this, [this] {
@@ -194,7 +263,7 @@ SearchManager::SearchManager(QWidget* _parent, BaseTextEdit* _textEdit)
             return;
         }
 
-        d->findText();
+        d->find();
         auto cursor = d->textEdit->textCursor();
         int firstCursorPosition = cursor.selectionStart();
         const auto caseSensitive
@@ -208,7 +277,7 @@ SearchManager::SearchManager(QWidget* _parent, BaseTextEdit* _textEdit)
         while (cursor.hasSelection()) {
             cursor.insertText(replaceText);
 
-            d->findText();
+            d->find();
             cursor = d->textEdit->textCursor();
 
             //
