@@ -2667,6 +2667,15 @@ void ApplicationManager::initConnections()
         setSettingsValue(DataStorageLayer::kApplicationScaleFactorKey,
                          Ui::DesignSystem::scaleFactor());
 
+        //
+        // Перечитаем настройки после завершения онбординга, чтобы учесть настройки заданные
+        // пользователем во время работы с ним
+        //
+        d->settingsManager->reloadSettings();
+
+        //
+        // И затем отображаем контент самого приложения
+        //
         d->showContent();
         const int duration = d->applicationView->slideViewOut();
         //

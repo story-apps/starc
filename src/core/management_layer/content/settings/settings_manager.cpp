@@ -82,6 +82,8 @@ public:
     void loadShortcutsForStageplaySettings();
     void loadShortcutsForNovelSettings();
 
+    void reloadSettings();
+
 
     Ui::SettingsToolBar* toolBar = nullptr;
     Ui::SettingsNavigator* navigator = nullptr;
@@ -870,6 +872,13 @@ void SettingsManager::Implementation::loadShortcutsForNovelSettings()
     view->setShortcutsForNovelModel(model);
 }
 
+void SettingsManager::Implementation::reloadSettings()
+{
+    loadApplicationSettings();
+    loadComponentsSettings();
+    loadShortcutsSettings();
+}
+
 
 // ****
 
@@ -880,9 +889,7 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
     : QObject(_parent)
     , d(new Implementation(this, _parentWidget, _pluginsBuilder, _shortcutsManager))
 {
-    d->loadApplicationSettings();
-    d->loadComponentsSettings();
-    d->loadShortcutsSettings();
+    d->reloadSettings();
     d->view->installEventFilter(this);
 
     connect(d->toolBar, &Ui::SettingsToolBar::backPressed, this,
@@ -1633,6 +1640,11 @@ void SettingsManager::updateScaleFactor()
 {
     d->view->setApplicationScaleFactor(
         settingsValue(DataStorageLayer::kApplicationScaleFactorKey).toReal());
+}
+
+void SettingsManager::reloadSettings()
+{
+    d->reloadSettings();
 }
 
 bool SettingsManager::eventFilter(QObject* _watched, QEvent* _event)
