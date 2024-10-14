@@ -172,7 +172,7 @@ BusinessLayer::ExportOptions& AbstractExportDialog::exportOptions() const
 {
     d->options.fileFormat = currentFileFormat();
     d->options.watermark = d->watermark->isVisibleTo(this) ? d->watermark->text() : "";
-    d->options.watermarkColor = d->watermarkColorPopup->isVisibleTo(this)
+    d->options.watermarkColor = d->watermark->isVisibleTo(this)
         ? ColorHelper::transparent(d->watermarkColorPopup->selectedColor(), 0.3)
         : QColor();
     return d->options;
