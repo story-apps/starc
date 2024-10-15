@@ -143,6 +143,7 @@ bool ScreenplayExporter::prepareBlock(const ExportOptions& _exportOptions,
                       auto format = _format;
                       format.setBackground(color);
                       format.setForeground(ColorHelper::contrasted(color));
+                      format.setProperty(TextBlockStyle::PropertyIsReviewMark, true);
                       return format;
                   };
             TextHelper::updateSelectionFormatting(_cursor, updateFormatting);
