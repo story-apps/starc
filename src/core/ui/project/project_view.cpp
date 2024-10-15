@@ -154,8 +154,7 @@ ProjectView::ProjectView(QWidget* _parent)
 
     connect(d->defaultPageAddItemButton, &Body1LinkLabel::clicked, this,
             &ProjectView::createNewItemPressed);
-    connect(d->documentDrafts, &TabBar::currentIndexChanged, this,
-            &ProjectView::showDraftPressed);
+    connect(d->documentDrafts, &TabBar::currentIndexChanged, this, &ProjectView::showDraftPressed);
     connect(d->documentDrafts, &TabBar::customContextMenuRequested, this,
             [this](const QPoint _position) {
                 emit showDraftContextMenuPressed(d->documentDrafts->tabAt(_position));
@@ -257,8 +256,7 @@ void ProjectView::setDocumentDraft(const QVector<BusinessLayer::StructureModelIt
 void ProjectView::setDraftsVisible(bool _visible)
 {
     if (d->documentDraftsHeightAnimation.state() == QVariantAnimation::Running) {
-        if ((d->documentDraftsHeightAnimation.direction() == QVariantAnimation::Forward
-             && _visible)
+        if ((d->documentDraftsHeightAnimation.direction() == QVariantAnimation::Forward && _visible)
             || (d->documentDraftsHeightAnimation.direction() == QVariantAnimation::Backward
                 && !_visible)) {
             return;
@@ -271,7 +269,7 @@ void ProjectView::setDraftsVisible(bool _visible)
         d->documentDrafts->show();
     }
     d->documentDraftsHeightAnimation.setDirection(_visible ? QVariantAnimation::Forward
-                                                             : QVariantAnimation::Backward);
+                                                           : QVariantAnimation::Backward);
     d->documentDraftsHeightAnimation.start();
 }
 
