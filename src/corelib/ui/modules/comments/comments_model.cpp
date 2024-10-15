@@ -989,7 +989,7 @@ void CommentsModel::removeReply(const QModelIndex& _index, int _replyIndex)
 void CommentsModel::remove(const QModelIndexList& _indexes)
 {
     for (const auto& index : reversed(_indexes)) {
-        const auto reviewMarkWrapper = d->reviewMarks.at(index.row());
+        const auto reviewMarkWrapper = d->reviewMarks.value(index.row());
         for (auto textItem : reviewMarkWrapper.items) {
             auto updatedReviewMarks = textItem->reviewMarks();
             updatedReviewMarks.erase(std::remove_if(updatedReviewMarks.begin(),
