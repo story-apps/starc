@@ -56,20 +56,20 @@ public:
     void setActive(bool _active);
 
     /**
-     * @brief Задать версии документа для отображения
+     * @brief Задать драфты документа для отображения
      */
-    void setDocumentVersions(const QVector<BusinessLayer::StructureModelItem*>& _versions);
+    void setDocumentDraft(const QVector<BusinessLayer::StructureModelItem*>& _drafts);
 
     /**
-     * @brief Настроить видимость списка версий документа
+     * @brief Настроить видимость списка драфтов документа
      */
-    void setVersionsVisible(bool _visible);
+    void setDraftsVisible(bool _visible);
 
     /**
-     * @brief Задать текущую версию
+     * @brief Задать текущий драфт
      */
-    int currentVersion() const;
-    void setCurrentVersion(int _index);
+    int currentDraft() const;
+    void setCurrentDraft(int _index);
 
 signals:
     /**
@@ -78,15 +78,15 @@ signals:
     void createNewItemPressed();
 
     /**
-     * @brief Пользователь хочет отобразить версию с заданным индексом
-     * @note 0 - текущая версия, последующие индексы идут увеличнными на единицу
+     * @brief Пользователь хочет отобразить драфт с заданным индексом
+     * @note 0 - текущий драфт, последующие индексы идут увеличнными на единицу
      */
-    void showVersionPressed(int _versionIndex);
+    void showDraftPressed(int _versionIndex);
 
     /**
-     * @brief Пользователь вызвал контекстное меню версии
+     * @brief Пользователь вызвал контекстное меню драфта
      */
-    void showVersionContextMenuPressed(int _versionIndex);
+    void showDraftContextMenuPressed(int _versionIndex);
 
 protected:
     /**

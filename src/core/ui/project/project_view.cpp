@@ -33,8 +33,8 @@ public:
     Body1Label* notImplementedPageBodyLabel = nullptr;
 
     Widget* documentEditorPage = nullptr;
-    TabBar* documentVersions = nullptr;
-    QVariantAnimation documentVersionsHeightAnimation;
+    TabBar* documentDrafts = nullptr;
+    QVariantAnimation documentDraftsHeightAnimation;
     StackWidget* documentEditor = nullptr;
 
     Widget* overlay = nullptr;
@@ -53,7 +53,7 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
     , notImplementedPageTitleLabel(new H6Label(notImplementedPage))
     , notImplementedPageBodyLabel(new Body1Label(notImplementedPage))
     , documentEditorPage(new Widget(_parent))
-    , documentVersions(new TabBar(documentEditorPage))
+    , documentDrafts(new TabBar(documentEditorPage))
     , documentEditor(new StackWidget(documentEditorPage))
     , overlay(new Widget(_parent))
 {
@@ -63,8 +63,8 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
     documentLoadingPageBodyLabel->setAlignment(Qt::AlignCenter);
     notImplementedPage->setFocusPolicy(Qt::StrongFocus);
     notImplementedPageBodyLabel->setAlignment(Qt::AlignCenter);
-    documentVersions->hide();
-    documentVersions->setContextMenuPolicy(Qt::CustomContextMenu);
+    documentDrafts->hide();
+    documentDrafts->setContextMenuPolicy(Qt::CustomContextMenu);
     documentEditor->setAnimationType(AnimationType::FadeThrough);
     overlay->setAttribute(Qt::WA_TransparentForMouseEvents);
     overlay->hide();
@@ -126,12 +126,12 @@ ProjectView::Implementation::Implementation(QWidget* _parent)
         auto layout = new QVBoxLayout(documentEditorPage);
         layout->setContentsMargins({});
         layout->setSpacing(0);
-        layout->addWidget(documentVersions);
+        layout->addWidget(documentDrafts);
         layout->addWidget(documentEditor, 1);
     }
 
-    documentVersionsHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    documentVersionsHeightAnimation.setDuration(160);
+    documentDraftsHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    documentDraftsHeightAnimation.setDuration(160);
 }
 
 
@@ -154,21 +154,20 @@ ProjectView::ProjectView(QWidget* _parent)
 
     connect(d->defaultPageAddItemButton, &Body1LinkLabel::clicked, this,
             &ProjectView::createNewItemPressed);
-    connect(d->documentVersions, &TabBar::currentIndexChanged, this,
-            &ProjectView::showVersionPressed);
-    connect(d->documentVersions, &TabBar::customContextMenuRequested, this,
+    connect(d->documentDrafts, &TabBar::currentIndexChanged, this,
+            &ProjectView::showDraftPressed);
+    connect(d->documentDrafts, &TabBar::customContextMenuRequested, this,
             [this](const QPoint _position) {
-                emit showVersionContextMenuPressed(d->documentVersions->tabAt(_position));
+                emit showDraftContextMenuPressed(d->documentDrafts->tabAt(_position));
             });
-    connect(
-        &d->documentVersionsHeightAnimation, &QVariantAnimation::valueChanged, this,
-        [this](const QVariant& _value) { d->documentVersions->setFixedHeight(_value.toInt()); });
-    connect(&d->documentVersionsHeightAnimation, &QVariantAnimation::finished, this, [this] {
-        if (d->documentVersionsHeightAnimation.direction() == QVariantAnimation::Backward) {
-            d->documentVersions->hide();
+    connect(&d->documentDraftsHeightAnimation, &QVariantAnimation::valueChanged, this,
+            [this](const QVariant& _value) { d->documentDrafts->setFixedHeight(_value.toInt()); });
+    connect(&d->documentDraftsHeightAnimation, &QVariantAnimation::finished, this, [this] {
+        if (d->documentDraftsHeightAnimation.direction() == QVariantAnimation::Backward) {
+            d->documentDrafts->hide();
         }
-        d->documentVersions->setMinimumHeight(0);
-        d->documentVersions->setMaximumHeight(QWIDGETSIZE_MAX);
+        d->documentDrafts->setMinimumHeight(0);
+        d->documentDrafts->setMaximumHeight(QWIDGETSIZE_MAX);
     });
     connect(&d->overlayOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) { d->overlay->setOpacity(_value.toReal()); });
@@ -229,9 +228,9 @@ void ProjectView::setActive(bool _active)
     }
 }
 
-void ProjectView::setDocumentVersions(const QVector<BusinessLayer::StructureModelItem*>& _versions)
+void ProjectView::setDocumentDraft(const QVector<BusinessLayer::StructureModelItem*>& _drafts)
 {
-    if (d->documentVersions->count() == 1 && _versions.isEmpty()) {
+    if (d->documentDrafts->count() == 1 && _drafts.isEmpty()) {
         return;
     }
 
@@ -240,51 +239,50 @@ void ProjectView::setDocumentVersions(const QVector<BusinessLayer::StructureMode
     //
     QSignalBlocker blocker(this);
 
-    const auto lastActiveVersion = d->documentVersions->currentTab();
+    const auto lastActiveDraft = d->documentDrafts->currentTab();
 
-    d->documentVersions->removeAllTabs();
-    d->documentVersions->addTab(tr("Current draft"));
-    for (const auto version : _versions) {
-        d->documentVersions->addTab(version->name(),
-                                    version->isReadOnly() ? u8"\U000F033E" : u8"\U000F0765",
-                                    version->color());
+    d->documentDrafts->removeAllTabs();
+    d->documentDrafts->addTab(tr("Current draft"));
+    for (const auto draft : _drafts) {
+        d->documentDrafts->addTab(
+            draft->name(), draft->isReadOnly() ? u8"\U000F033E" : u8"\U000F0765", draft->color());
     }
 
-    d->documentVersions->setCurrentTab(lastActiveVersion);
+    d->documentDrafts->setCurrentTab(lastActiveDraft);
 
-    d->documentVersionsHeightAnimation.setStartValue(0);
-    d->documentVersionsHeightAnimation.setEndValue(d->documentVersions->sizeHint().height());
+    d->documentDraftsHeightAnimation.setStartValue(0);
+    d->documentDraftsHeightAnimation.setEndValue(d->documentDrafts->sizeHint().height());
 }
 
-void ProjectView::setVersionsVisible(bool _visible)
+void ProjectView::setDraftsVisible(bool _visible)
 {
-    if (d->documentVersionsHeightAnimation.state() == QVariantAnimation::Running) {
-        if ((d->documentVersionsHeightAnimation.direction() == QVariantAnimation::Forward
+    if (d->documentDraftsHeightAnimation.state() == QVariantAnimation::Running) {
+        if ((d->documentDraftsHeightAnimation.direction() == QVariantAnimation::Forward
              && _visible)
-            || (d->documentVersionsHeightAnimation.direction() == QVariantAnimation::Backward
+            || (d->documentDraftsHeightAnimation.direction() == QVariantAnimation::Backward
                 && !_visible)) {
             return;
         }
-        d->documentVersionsHeightAnimation.stop();
+        d->documentDraftsHeightAnimation.stop();
     }
 
     if (_visible) {
-        d->documentVersions->setFixedHeight(0);
-        d->documentVersions->show();
+        d->documentDrafts->setFixedHeight(0);
+        d->documentDrafts->show();
     }
-    d->documentVersionsHeightAnimation.setDirection(_visible ? QVariantAnimation::Forward
+    d->documentDraftsHeightAnimation.setDirection(_visible ? QVariantAnimation::Forward
                                                              : QVariantAnimation::Backward);
-    d->documentVersionsHeightAnimation.start();
+    d->documentDraftsHeightAnimation.start();
 }
 
-int ProjectView::currentVersion() const
+int ProjectView::currentDraft() const
 {
-    return d->documentVersions->currentTab();
+    return d->documentDrafts->currentTab();
 }
 
-void ProjectView::setCurrentVersion(int _index)
+void ProjectView::setCurrentDraft(int _index)
 {
-    d->documentVersions->setCurrentTab(_index);
+    d->documentDrafts->setCurrentTab(_index);
 }
 
 void ProjectView::resizeEvent(QResizeEvent* _event)
@@ -310,7 +308,7 @@ void ProjectView::updateTranslations()
     d->notImplementedPageBodyLabel->setText(
         tr("But don't worry, it will be here in one of the future updates!"));
 
-    d->documentVersions->setTabName(0, tr("Current draft"));
+    d->documentDrafts->setTabName(0, tr("Current draft"));
 }
 
 void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -359,9 +357,8 @@ void ProjectView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     d->documentEditorPage->setBackgroundColor(DesignSystem::color().surface());
-    d->documentVersions->setBackgroundColor(
-        ColorHelper::nearby(DesignSystem::color().background()));
-    d->documentVersions->setTextColor(DesignSystem::color().onBackground());
+    d->documentDrafts->setBackgroundColor(ColorHelper::nearby(DesignSystem::color().background()));
+    d->documentDrafts->setTextColor(DesignSystem::color().onBackground());
     d->documentEditor->setBackgroundColor(DesignSystem::color().surface());
 
     d->overlay->setBackgroundColor(backgroundColor());

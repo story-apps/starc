@@ -1007,7 +1007,7 @@ void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIn
             }
             return versions;
         }(),
-        view.active->currentVersion());
+        view.active->currentDraft());
     connect(dialog, &Ui::CreateDraftDialog::savePressed, view.active,
             [this, _itemIndex, dialog](const QString& _name, const QColor& _color,
                                        int _versionIndex, bool _readOnly) {
@@ -1019,7 +1019,7 @@ void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIn
                                        : item->versions().at(_versionIndex - 1)->uuid());
                 projectStructureModel->addItemVersion(item, _name, _color, _readOnly,
                                                       model->document()->content());
-                view.active->setDocumentVersions(item->versions());
+                view.active->setDocumentDraft(item->versions());
 
                 //
                 // Если версии скрыты, то отображим их список при добавлении новой
@@ -1049,7 +1049,7 @@ void ProjectManager::Implementation::editVersion(const QModelIndex& _itemIndex, 
 
                 projectStructureModel->updateItemVersion(item, _versionIndex, _name, _color,
                                                          _readOnly);
-                view.active->setDocumentVersions(item->versions());
+                view.active->setDocumentDraft(item->versions());
 
                 //
                 // Пеерзагрузим отображение, чтобы обновить флаг редактируемости версии
@@ -1088,7 +1088,7 @@ void ProjectManager::Implementation::removeVersion(const QModelIndex& _itemIndex
             //
             // Если таки хочет, то сперва выберем другой документ для редактирования
             //
-            if ((view.active->currentVersion() - 1) == _versionIndex) {
+            if ((view.active->currentDraft() - 1) == _versionIndex) {
                 //
                 // ... если удалена последняя версия, то покажем текущую
                 //
@@ -1104,7 +1104,7 @@ void ProjectManager::Implementation::removeVersion(const QModelIndex& _itemIndex
                 //
                 // ... уменьшим на один индекс вкладки выбранной версии
                 //
-                view.active->setCurrentVersion(_versionIndex);
+                view.active->setCurrentDraft(_versionIndex);
             }
             //
             // ... а потом собственно удалим заданную версию
@@ -1115,7 +1115,7 @@ void ProjectManager::Implementation::removeVersion(const QModelIndex& _itemIndex
             modelsFacade.removeModelFor(document);
             DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
             projectStructureModel->removeItemVersion(item, _versionIndex);
-            view.active->setDocumentVersions(item->versions());
+            view.active->setDocumentDraft(item->versions());
             emit q->documentRemoved(documentUuid);
         });
     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
@@ -1820,7 +1820,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     //
     connect(d->showVersionsAction, &QAction::toggled, this, [this](bool _checked) {
         d->updateOptionsText();
-        d->view.active->setVersionsVisible(_checked);
+        d->view.active->setDraftsVisible(_checked);
     });
 
     //
@@ -1931,7 +1931,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 }
 
                 auto item = d->aliasedItemForIndex(sourceIndex);
-                d->view.active->setDocumentVersions(item->versions());
+                d->view.active->setDocumentDraft(item->versions());
             });
     connect(
         d->projectStructureModel, &BusinessLayer::StructureModel::rowsInserted, this,
@@ -2218,7 +2218,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     //
     for (auto view : { d->view.left, d->view.right }) {
         connect(view, &Ui::ProjectView::createNewItemPressed, this, [this] { d->addDocument(); });
-        connect(view, &Ui::ProjectView::showVersionPressed, this, [this](int _versionIndex) {
+        connect(view, &Ui::ProjectView::showDraftPressed, this, [this](int _versionIndex) {
             const auto currentItemIndex
                 = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
             const auto currentItem = d->aliasedItemForIndex(currentItemIndex);
@@ -2236,7 +2236,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             //
             showViewForVersion(currentItem->versions().at(_versionIndex - 1));
         });
-        connect(view, &Ui::ProjectView::showVersionContextMenuPressed, this,
+        connect(view, &Ui::ProjectView::showDraftContextMenuPressed, this,
                 [this](int _versionIndex) {
                     const auto currentItemIndex
                         = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
@@ -2851,7 +2851,7 @@ void ProjectManager::toggleFullScreen(bool _isFullScreen)
             d->view.inactive->hide();
         }
         if (d->showVersionsAction->isChecked()) {
-            d->view.active->setVersionsVisible(false);
+            d->view.active->setDraftsVisible(false);
         }
     }
 
@@ -2874,7 +2874,7 @@ void ProjectManager::toggleFullScreen(bool _isFullScreen)
             d->view.container->restoreState(d->view.stateBeforeFullscreen);
         }
         if (d->showVersionsAction->isChecked()) {
-            d->view.active->setVersionsVisible(true);
+            d->view.active->setDraftsVisible(true);
         }
     }
 }
@@ -3093,7 +3093,7 @@ void ProjectManager::closeCurrentProject(const QString& _path)
         setSettingsValue(documentSettingsKey(item->uuid(), kVersionsVisibleKey),
                          d->showVersionsAction->isChecked());
         setSettingsValue(documentSettingsKey(item->uuid(), kCurrentVersionKey),
-                         d->view.active->currentVersion());
+                         d->view.active->currentDraft());
     }
 
     //
@@ -3672,7 +3672,7 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
                 const auto readOnly = false;
                 d->projectStructureModel->addItemVersion(item, versionName, color, readOnly,
                                                          lastDocumentVersion);
-                d->view.active->setDocumentVersions(item->versions());
+                d->view.active->setDocumentDraft(item->versions());
 
                 //
                 // Если версии скрыты, то отображим их список при добавлении новой
@@ -3785,10 +3785,10 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         const auto item = d->projectStructureModel->itemForIndex(
             d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex()));
         if (item != nullptr) {
-            if (d->view.active->currentVersion() == 0 && item->uuid() == _documentInfo.uuid) {
+            if (d->view.active->currentDraft() == 0 && item->uuid() == _documentInfo.uuid) {
                 showView(d->navigator->currentIndex(), d->view.activeViewMimeType);
             } else if (const auto versionItem
-                       = item->versions().value(d->view.active->currentVersion() - 1);
+                       = item->versions().value(d->view.active->currentDraft() - 1);
                        versionItem != nullptr && versionItem->uuid() == _documentInfo.uuid) {
                 showViewForVersion(versionItem);
             }
@@ -4395,12 +4395,12 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             documentSettingsKey(previousActiveAliasedItem->uuid(), kVersionsVisibleKey),
             d->showVersionsAction->isChecked());
         setSettingsValue(documentSettingsKey(previousActiveAliasedItem->uuid(), kCurrentVersionKey),
-                         d->view.active->currentVersion());
+                         d->view.active->currentDraft());
     }
 
     if (!_itemIndex.isValid()) {
         updateCurrentDocument(nullptr, {});
-        d->view.active->setVersionsVisible(false);
+        d->view.active->setDraftsVisible(false);
         d->view.active->showDefaultPage();
         return;
     }
@@ -4441,7 +4441,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     updateCurrentDocument(d->modelsFacade.modelFor(itemForShow->uuid()), viewMimeType);
     if (d->view.activeModel == nullptr) {
         d->view.active->showDocumentLoadingPage();
-        d->view.active->setVersionsVisible(false);
+        d->view.active->setDraftsVisible(false);
         return;
     }
 
@@ -4458,7 +4458,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
     if (view == nullptr) {
         d->view.active->showNotImplementedPage();
-        d->view.active->setVersionsVisible(false);
+        d->view.active->setDraftsVisible(false);
         return;
     }
     Log::trace("Set project info");
@@ -4468,7 +4468,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     Log::trace("Set view cursors");
     view->setCursors({ d->collaboratorsCursors.begin(), d->collaboratorsCursors.end() });
     Log::trace("Set document versions");
-    d->view.active->setDocumentVersions(aliasedItem->versions());
+    d->view.active->setDocumentDraft(aliasedItem->versions());
     Log::trace("Show view");
     d->view.active->showEditor(view->asQWidget());
     d->view.activeIndex = sourceItemIndex;
@@ -4612,7 +4612,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     d->showVersionsAction->setChecked(
         settingsValue(documentSettingsKey(aliasedItem->uuid(), kVersionsVisibleKey), false)
             .toBool());
-    d->view.active->setCurrentVersion(
+    d->view.active->setCurrentDraft(
         settingsValue(documentSettingsKey(aliasedItem->uuid(), kCurrentVersionKey), 0).toInt());
 
     //
@@ -4732,7 +4732,7 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     }
 
     auto item = d->aliasedItemForIndex(sourceItemIndex);
-    if (int versionIndex = d->view.active->currentVersion() - 1;
+    if (int versionIndex = d->view.active->currentDraft() - 1;
         versionIndex != -1 && item->versions().size() > versionIndex) {
         item = item->versions().at(versionIndex);
     }
@@ -4892,13 +4892,13 @@ void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex&
     // ... если нужно, активируем заданную версию
     //
     if (versionIndex != invalidVersionIndex) {
-        d->view.active->setCurrentVersion(versionIndex);
+        d->view.active->setCurrentDraft(versionIndex);
     }
     //
     // ... если работаем с текущей версией, но редактор находится на другой, возвращаемся к текущей
     //
-    else if (d->view.active->currentVersion() > 0) {
-        d->view.active->setCurrentVersion(0);
+    else if (d->view.active->currentDraft() > 0) {
+        d->view.active->setCurrentDraft(0);
     }
     //
     // ... фокусируем в представлении элемент с заданным индексом
