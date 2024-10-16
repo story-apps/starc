@@ -420,7 +420,7 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
                     writer.writeStartElement(xml::kFormatsTag);
                     for (const auto& range : currentBlock.textFormats()) {
                         if (range.format.fontWeight() != QFont::Normal || range.format.fontItalic()
-                            || range.format.fontUnderline()) {
+                            || range.format.fontUnderline() || range.format.fontStrikeOut()) {
                             writer.writeEmptyElement(xml::kFormatTag);
                             writer.writeAttribute(xml::kFromAttribute,
                                                   QString::number(range.start));
@@ -429,13 +429,13 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
                             if (range.format.fontWeight() != QFont::Normal) {
                                 writer.writeAttribute(xml::kBoldAttribute, "true");
                             }
-                            if (range.format.boolProperty(QTextFormat::FontItalic)) {
+                            if (range.format.fontItalic()) {
                                 writer.writeAttribute(xml::kItalicAttribute, "true");
                             }
-                            if (range.format.boolProperty(QTextFormat::TextUnderlineStyle)) {
+                            if (range.format.fontUnderline()) {
                                 writer.writeAttribute(xml::kUnderlineAttribute, "true");
                             }
-                            if (range.format.boolProperty(QTextFormat::FontStrikeOut)) {
+                            if (range.format.fontStrikeOut()) {
                                 writer.writeAttribute(xml::kStrikethroughAttribute, "true");
                             }
                         }
