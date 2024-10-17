@@ -51,10 +51,10 @@ bool ScreenplayPdfImporter::documentForImport(const QString& _filePath,
     QFile documentFile(_filePath);
     if (documentFile.open(QIODevice::ReadOnly)) {
         //
-        // Используем TableExtraction, чтобы извлечь не только текст, но и линии.
+        // Используем TableExtraction, чтобы извлечь не только текст, но и линии
         //
         TableExtraction tableExtractor;
-        tableExtractor.ExtractTables(_filePath.toStdString(), 0, -1, true);
+        tableExtractor.ExtractTables(_filePath.toStdString(), 0, -1, false);
         tableExtractor.GetResultsAsDocument(_document);
         return true;
     }
