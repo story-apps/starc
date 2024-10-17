@@ -16,7 +16,7 @@ on:
 jobs:
   build_mac:
     name: Build Mac OS X version
-    runs-on: macos-12
+    runs-on: macos-latest
     timeout-minutes: 120
     steps:
       - name: Checkout Sources for push or create tag event
