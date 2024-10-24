@@ -34,6 +34,11 @@ public:
      * @brief Список новых изображений
      */
     mutable QHash<QUuid, QPixmap> newImages;
+
+    /**
+     * @brief Список изображений на удаление
+     */
+    QList<QUuid> imagesToRemove;
 };
 
 DocumentImageStorage::Implementation::Implementation(DocumentImageStorage* _q)
@@ -174,9 +179,13 @@ void DocumentImageStorage::save(const QUuid& _uuid, const QByteArray& _imageData
 
 void DocumentImageStorage::remove(const QUuid& _uuid)
 {
-    StorageFacade::documentStorage()->removeDocument(
-        StorageFacade::documentStorage()->document(_uuid));
-
+    //
+    // Если изображение новое, просто удаляем его из списка новых, иначе добавляем в список на
+    // удаление из БД
+    //
+    if (!d->newImages.remove(_uuid)) {
+        d->imagesToRemove.append(_uuid);
+    }
     emit imageRemoved(_uuid);
 }
 
@@ -188,6 +197,7 @@ void DocumentImageStorage::clear()
     //
 
     d->newImages.clear();
+    d->imagesToRemove.clear();
 }
 
 void DocumentImageStorage::saveChanges()
@@ -196,6 +206,11 @@ void DocumentImageStorage::saveChanges()
         StorageFacade::documentStorage()->saveDocument(imageIter.key());
     }
     d->newImages.clear();
+
+    while (!d->imagesToRemove.isEmpty()) {
+        StorageFacade::documentStorage()->removeDocument(
+            StorageFacade::documentStorage()->document(d->imagesToRemove.takeFirst()));
+    }
 }
 
 } // namespace DataStorageLayer

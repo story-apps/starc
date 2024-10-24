@@ -204,6 +204,13 @@ public:
     void setGeneratedText(const QString& _text);
     void setGeneratedImage(const QPixmap& _image);
 
+    /**
+     * @brief Получить информацию о проекте
+     */
+    QString projectName() const;
+    QString projectLogline() const;
+    QPixmap projectCover() const;
+
 signals:
     /**
      * @brief Запрос на отображение меню

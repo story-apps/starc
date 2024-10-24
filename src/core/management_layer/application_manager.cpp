@@ -216,7 +216,7 @@ public:
     /**
      * @brief Обновить заголовок приложения
      */
-    void updateWindowTitle();
+    void updateWindowTitle(const QString& _projectName = {});
 
     /**
      * @brief Настроить состояние приложения сохранены ли все изменения или нет
@@ -1218,7 +1218,7 @@ void ApplicationManager::Implementation::setDesignSystemDensity(int _density)
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
-void ApplicationManager::Implementation::updateWindowTitle()
+void ApplicationManager::Implementation::updateWindowTitle(const QString& _projectName)
 {
     if (projectsManager->currentProject() == nullptr) {
         applicationView->setWindowTitle("Story Architect");
@@ -1235,7 +1235,7 @@ void ApplicationManager::Implementation::updateWindowTitle()
                 ""
 #endif
                 ,
-                currentProject->name(),
+                _projectName.isEmpty() ? currentProject->name() : _projectName,
                 (currentProject->isLocal() ? currentProject->path() : tr("in cloud")),
                 (currentProject->isReadOnly() ? QString(" - %1").arg(tr("Read only")) : "")));
 
@@ -1343,6 +1343,13 @@ void ApplicationManager::Implementation::saveChanges()
     // Если изменения сохранились без ошибок, то изменим статус окна на сохранение изменений
     //
     markChangesSaved(true);
+
+    //
+    // Обновляем информацию в списке проектов
+    //
+    projectsManager->updateCurrentProject(projectManager->projectName(),
+                                          projectManager->projectLogline(),
+                                          projectManager->projectCover());
 
     //
     // И, если необходимо создадим резервную копию закрываемого файла
@@ -2765,9 +2772,8 @@ void ApplicationManager::initConnections()
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectUuid);
     connect(d->projectManager.data(), &ProjectManager::projectNameChanged, this,
             [this](const QString& _name) {
-                d->projectsManager->setCurrentProjectName(_name);
                 d->menuView->setProjectTitle(_name);
-                d->updateWindowTitle();
+                d->updateWindowTitle(_name);
             });
     connect(d->projectManager.data(), &ProjectManager::projectLoglineChanged,
             d->projectsManager.data(), &ProjectsManager::setCurrentProjectLogline);
