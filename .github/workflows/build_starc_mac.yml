@@ -48,7 +48,6 @@ jobs:
         with:
           version: 5.15.2
           target: desktop
-          setup-python: false
 
       - name: Run QMake
         shell: bash
