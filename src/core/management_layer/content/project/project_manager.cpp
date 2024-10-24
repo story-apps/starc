@@ -2318,10 +2318,6 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this,
             &ProjectManager::projectNameChanged);
-    connect(&d->modelsFacade, &ProjectModelsFacade::projectLoglineChanged, this,
-            &ProjectManager::projectLoglineChanged);
-    connect(&d->modelsFacade, &ProjectModelsFacade::projectCoverChanged, this,
-            &ProjectManager::projectCoverChanged);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectCollaboratorInviteRequested, this,
             &ProjectManager::projectCollaboratorInviteRequested);
     connect(&d->modelsFacade, &ProjectModelsFacade::projectCollaboratorUpdateRequested, this,
@@ -3136,7 +3132,7 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     d->modelsFacade.clear();
 
     //
-    // Сбрасываем загруженные изображения
+    // Сбрасываем помеченные на удаление и загруженные изображения
     //
     d->documentImageStorage.clear();
 
@@ -4230,6 +4226,30 @@ void ProjectManager::setGeneratedImage(const QPixmap& _image)
     if (view != nullptr) {
         view->setGeneratedImage(_image);
     }
+}
+
+QString ProjectManager::projectName() const
+{
+    const auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(
+        d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
+            Domain::DocumentObjectType::Project)));
+    return projectInformationModel->name();
+}
+
+QString ProjectManager::projectLogline() const
+{
+    const auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(
+        d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
+            Domain::DocumentObjectType::Project)));
+    return projectInformationModel->logline();
+}
+
+QPixmap ProjectManager::projectCover() const
+{
+    const auto projectInformationModel = qobject_cast<BusinessLayer::ProjectInformationModel*>(
+        d->modelsFacade.modelFor(DataStorageLayer::StorageFacade::documentStorage()->document(
+            Domain::DocumentObjectType::Project)));
+    return projectInformationModel->cover();
 }
 
 bool ProjectManager::event(QEvent* _event)

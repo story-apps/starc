@@ -171,6 +171,11 @@ public:
      */
     BusinessLayer::ProjectsModelProjectItem* currentProject() const;
 
+    /**
+     * @brief Обновить текущий проект
+     */
+    void updateCurrentProject(const QString& _name, const QString& _logline, const QPixmap& _cover);
+
 signals:
     /**
      * @brief Запрос на отображение меню
