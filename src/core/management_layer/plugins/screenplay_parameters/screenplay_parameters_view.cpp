@@ -430,7 +430,7 @@ void ScreenplayParametersView::updateTranslations()
     d->scenesNumbersTemplate->setTrailingIconToolTip(tr("Reset scene numbers template"));
     d->scenesNumberingStartAt->setLabel(tr("Scenes numbering start at"));
     d->lockScenesNumbers->setText(tr("Lock numbering"));
-    d->relockScenesNumbers->setText(tr("Lock numbering agian"));
+    d->relockScenesNumbers->setText(tr("Lock numbering again"));
     d->unlockScenesNumbers->setText(tr("Unlock numbering"));
     d->overrideCommonSettings->setText(tr("Override common settings for this screenplay"));
     d->screenplayTemplate->setLabel(tr("Template"));
