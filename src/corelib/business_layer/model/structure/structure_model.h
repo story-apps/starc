@@ -131,7 +131,7 @@ public:
     StructureModelItem* itemForType(Domain::DocumentObjectType _type) const;
 
     /**
-     * @brief Получить элемент корзины
+     * @brief Переместить элемент в корзину
      */
     void moveItemToRecycleBin(StructureModelItem* _item);
 
