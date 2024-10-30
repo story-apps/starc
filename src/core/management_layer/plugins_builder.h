@@ -138,11 +138,6 @@ public:
     void checkAvailabilityToEdit(bool _projectInTeam) const;
 
     /**
-     * @brief Задать режим работы с документами
-     */
-    void setEditingMode(DocumentEditingMode _mode) const;
-
-    /**
      * @brief Задать права доступа к конкретным документам
      */
     void setEditingPermissions(const QHash<QUuid, DocumentEditingMode>& _permissions) const;

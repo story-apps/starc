@@ -262,9 +262,29 @@ public:
     void emptyRecycleBin();
 
     /**
-     * @brief Отсортировать по алфавиту дочерние элеиенты
+     * @brief Находится ли итем в корзине
+     */
+    bool isInRecycleBin(BusinessLayer::StructureModelItem* _item) const;
+
+    /**
+     * @brief Отсортировать по алфавиту дочерние элементы
      */
     void sortChildrenAlphabetically();
+
+    /**
+     * @brief Получить интерфейс активного редактора документа
+     */
+    Ui::IDocumentView* activeDocumentView() const;
+
+    /**
+     * @brief Получить интерфейс неактивного редактора документа
+     */
+    Ui::IDocumentView* inactiveDocumentView() const;
+
+    /**
+     * @brief Обновить режим редактирования представлений
+     */
+    void updateViewsEditingMode();
 
     //
     // Данные
@@ -288,7 +308,11 @@ public:
         //
         // Список представлений, открытых в отдельных окнах
         //
-        QVector<QWidget*> windows = {};
+        struct Window {
+            Ui::IDocumentView* view = nullptr;
+            QModelIndex itemIndex = {};
+        };
+        QVector<Window> windows = {};
 
         //
         // Ссылки на активное представление и неактивное
@@ -738,21 +762,28 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
         return;
     }
 
-    if (auto window = windowView->asQWidget()) {
-        window->resize(800, 600);
-        window->show();
+    if (auto windowWidget = windowView->asQWidget()) {
+        windowWidget->resize(800, 600);
+        windowWidget->show();
         //
         // TODO: Ещё сюда нужно писать версию открытого документа, если это не текущая версия
         //
-        window->setWindowTitle(view.activeModel->documentName());
+        windowWidget->setWindowTitle(view.activeModel->documentName());
 
-        view.windows.append(window);
+        view.windows.append({ windowView, view.activeIndex });
+
+        const auto item = projectStructureModel->itemForIndex(view.activeIndex);
+        windowView->setEditingMode(documentEditingMode(item));
     }
 }
 
 DocumentEditingMode ProjectManager::Implementation::documentEditingMode(
     BusinessLayer::StructureModelItem* _documentItem) const
 {
+    if (_documentItem->isReadOnly() || isInRecycleBin(_documentItem)) {
+        return DocumentEditingMode::Read;
+    }
+
     if (editingPermissions.isEmpty()) {
         return editingMode;
     }
@@ -1678,6 +1709,20 @@ void ProjectManager::Implementation::emptyRecycleBin()
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
+bool ProjectManager::Implementation::isInRecycleBin(BusinessLayer::StructureModelItem* _item) const
+{
+    if (_item == nullptr) {
+        return false;
+    }
+
+    for (auto parent = _item->parent(); parent != nullptr; parent = parent->parent()) {
+        if (parent->type() == Domain::DocumentObjectType::RecycleBin) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void ProjectManager::Implementation::sortChildrenAlphabetically()
 {
     const auto currentItemIndex
@@ -1690,6 +1735,51 @@ void ProjectManager::Implementation::sortChildrenAlphabetically()
         };
     currentItem->sortChildren(sorter);
     projectStructureModel->saveChanges();
+}
+
+Ui::IDocumentView* ProjectManager::Implementation::activeDocumentView() const
+{
+    Ui::IDocumentView* documentView = nullptr;
+    auto plugin = pluginsBuilder.plugin(view.activeViewMimeType);
+    if (plugin != nullptr) {
+        if (view.active == view.left) {
+            documentView = plugin->view(view.activeModel);
+        } else {
+            documentView = plugin->secondaryView(view.activeModel);
+        }
+    }
+    return documentView;
+}
+
+Ui::IDocumentView* ProjectManager::Implementation::inactiveDocumentView() const
+{
+    Ui::IDocumentView* documentView = nullptr;
+    auto plugin = pluginsBuilder.plugin(view.inactiveViewMimeType);
+    if (plugin != nullptr) {
+        if (view.inactive == view.left) {
+            documentView = plugin->view(view.inactiveModel);
+        } else {
+            documentView = plugin->secondaryView(view.inactiveModel);
+        }
+    }
+    return documentView;
+}
+
+void ProjectManager::Implementation::updateViewsEditingMode()
+{
+    if (auto activeView = activeDocumentView(); activeView != nullptr) {
+        const auto item = projectStructureModel->itemForIndex(view.activeIndex);
+        activeView->setEditingMode(documentEditingMode(item));
+    }
+    if (auto inactiveView = inactiveDocumentView(); inactiveView != nullptr) {
+        const auto item = projectStructureModel->itemForIndex(view.inactiveIndex);
+        inactiveView->setEditingMode(documentEditingMode(item));
+    }
+
+    for (auto window : view.windows) {
+        const auto item = projectStructureModel->itemForIndex(window.itemIndex);
+        window.view->setEditingMode(documentEditingMode(item));
+    }
 }
 
 
@@ -2028,6 +2118,25 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 }
             }
         });
+
+    connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsMoved, this,
+            [this](const QModelIndex& _sourceParent, int _sourceStart, int _sourceEnd,
+                   const QModelIndex& _destinationParent) {
+                const auto sourceParentItem = d->projectStructureModel->itemForIndex(_sourceParent);
+                const auto destinationItem
+                    = d->projectStructureModel->itemForIndex(_destinationParent);
+                if (sourceParentItem == nullptr || destinationItem == nullptr) {
+                    return;
+                }
+                //
+                // Обновляем режим редактирования представлений при перемещении в корзину или из неё
+                //
+                if (destinationItem->type() == Domain::DocumentObjectType::RecycleBin
+                    || sourceParentItem->type() == Domain::DocumentObjectType::RecycleBin) {
+                    d->updateViewsEditingMode();
+                }
+            });
+
     connect(
         d->projectStructureModel, &BusinessLayer::StructureModel::rowsAboutToBeMoved, this,
         [this](const QModelIndex& _sourceParent, int _sourceStart, int _sourceEnd,
@@ -3006,6 +3115,11 @@ void ProjectManager::loadCurrentProject(BusinessLayer::ProjectsModelProjectItem*
     // Восстанавливаем состояние проекта
     //
     restoreCurrentProjectState(_project->path());
+
+    //
+    // Обновляем режим редактирования для всех вьюх
+    //
+    d->updateViewsEditingMode();
 }
 
 void ProjectManager::updateCurrentProject(BusinessLayer::ProjectsModelProjectItem* _project)
@@ -3022,7 +3136,6 @@ void ProjectManager::updateCurrentProject(BusinessLayer::ProjectsModelProjectIte
         = d->isProjectOwner || (projectTeam != nullptr && projectTeam->allowGrantAccessToProject());
     d->editingMode = _project->editingMode();
     d->editingPermissions = _project->editingPermissions();
-    d->pluginsBuilder.setEditingMode(d->editingMode);
     d->pluginsBuilder.setEditingPermissions(d->editingPermissions);
     d->projectStructureProxyModel->setItemsFilter(d->editingPermissions.keys());
     d->navigator->setReadOnly(d->editingMode != DocumentEditingMode::Edit);
@@ -3079,8 +3192,8 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     //
     while (!d->view.windows.isEmpty()) {
         auto window = d->view.windows.takeFirst();
-        window->close();
-        window->deleteLater();
+        window.view->asQWidget()->close();
+        window.view->asQWidget()->deleteLater();
     }
     if (d->splitScreenAction->isChecked()) {
         d->splitScreenAction->toggle();
@@ -4070,14 +4183,7 @@ void ProjectManager::setAvailableCredits(int _credits)
 
 void ProjectManager::setRephrasedText(const QString& _text)
 {
-    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
-    Ui::IDocumentView* view = nullptr;
-    if (d->view.active == d->view.left) {
-        view = plugin->view(d->view.activeModel);
-    } else {
-        view = plugin->secondaryView(d->view.activeModel);
-    }
-
+    auto view = d->activeDocumentView();
     if (view != nullptr) {
         view->setRephrasedText(_text);
     }
@@ -4085,14 +4191,7 @@ void ProjectManager::setRephrasedText(const QString& _text)
 
 void ProjectManager::setExpandedText(const QString& _text)
 {
-    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
-    Ui::IDocumentView* view = nullptr;
-    if (d->view.active == d->view.left) {
-        view = plugin->view(d->view.activeModel);
-    } else {
-        view = plugin->secondaryView(d->view.activeModel);
-    }
-
+    auto view = d->activeDocumentView();
     if (view != nullptr) {
         view->setExpandedText(_text);
     }
@@ -4100,14 +4199,7 @@ void ProjectManager::setExpandedText(const QString& _text)
 
 void ProjectManager::setShortenedText(const QString& _text)
 {
-    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
-    Ui::IDocumentView* view = nullptr;
-    if (d->view.active == d->view.left) {
-        view = plugin->view(d->view.activeModel);
-    } else {
-        view = plugin->secondaryView(d->view.activeModel);
-    }
-
+    auto view = d->activeDocumentView();
     if (view != nullptr) {
         view->setShortenedText(_text);
     }
@@ -4115,14 +4207,7 @@ void ProjectManager::setShortenedText(const QString& _text)
 
 void ProjectManager::setInsertedText(const QString& _text)
 {
-    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
-    Ui::IDocumentView* view = nullptr;
-    if (d->view.active == d->view.left) {
-        view = plugin->view(d->view.activeModel);
-    } else {
-        view = plugin->secondaryView(d->view.activeModel);
-    }
-
+    auto view = d->activeDocumentView();
     if (view != nullptr) {
         view->setInsertedText(_text);
     }
@@ -4130,14 +4215,7 @@ void ProjectManager::setInsertedText(const QString& _text)
 
 void ProjectManager::setSummarizeedText(const QString& _text)
 {
-    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
-    Ui::IDocumentView* view = nullptr;
-    if (d->view.active == d->view.left) {
-        view = plugin->view(d->view.activeModel);
-    } else {
-        view = plugin->secondaryView(d->view.activeModel);
-    }
-
+    auto view = d->activeDocumentView();
     if (view != nullptr) {
         view->setSummarizedText(_text);
     }
@@ -4145,14 +4223,7 @@ void ProjectManager::setSummarizeedText(const QString& _text)
 
 void ProjectManager::setTranslatedText(const QString& _text)
 {
-    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
-    Ui::IDocumentView* view = nullptr;
-    if (d->view.active == d->view.left) {
-        view = plugin->view(d->view.activeModel);
-    } else {
-        view = plugin->secondaryView(d->view.activeModel);
-    }
-
+    auto view = d->activeDocumentView();
     if (view != nullptr) {
         view->setTranslatedText(_text);
     }
@@ -4160,14 +4231,7 @@ void ProjectManager::setTranslatedText(const QString& _text)
 
 void ProjectManager::setGeneratedSynopsis(const QString& _text)
 {
-    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
-    Ui::IDocumentView* view = nullptr;
-    if (d->view.active == d->view.left) {
-        view = plugin->view(d->view.activeModel);
-    } else {
-        view = plugin->secondaryView(d->view.activeModel);
-    }
-
+    auto view = d->activeDocumentView();
     if (view != nullptr) {
         view->setGeneratedSynopsis(_text);
     }
@@ -4175,14 +4239,7 @@ void ProjectManager::setGeneratedSynopsis(const QString& _text)
 
 void ProjectManager::setGeneratedText(const QString& _text)
 {
-    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
-    Ui::IDocumentView* view = nullptr;
-    if (d->view.active == d->view.left) {
-        view = plugin->view(d->view.activeModel);
-    } else {
-        view = plugin->secondaryView(d->view.activeModel);
-    }
-
+    auto view = d->activeDocumentView();
     if (view != nullptr) {
         view->setGeneratedText(_text);
     }
@@ -4190,14 +4247,7 @@ void ProjectManager::setGeneratedText(const QString& _text)
 
 void ProjectManager::setGeneratedImage(const QPixmap& _image)
 {
-    auto plugin = d->pluginsBuilder.plugin(d->view.activeViewMimeType);
-    Ui::IDocumentView* view = nullptr;
-    if (d->view.active == d->view.left) {
-        view = plugin->view(d->view.activeModel);
-    } else {
-        view = plugin->secondaryView(d->view.activeModel);
-    }
-
+    auto view = d->activeDocumentView();
     if (view != nullptr) {
         view->setGeneratedImage(_image);
     }
@@ -4281,8 +4331,8 @@ bool ProjectManager::eventFilter(QObject* _watched, QEvent* _event)
 {
     if (static_cast<EventType>(_event->type()) == EventType::DesignSystemChangeEvent
         && _watched == d->view.active) {
-        for (auto window : std::as_const(d->view.windows)) {
-            QCoreApplication::sendEvent(window, _event);
+        for (const auto& window : std::as_const(d->view.windows)) {
+            QCoreApplication::sendEvent(window.view->asQWidget(), _event);
         }
     } else if (_event->type() == QEvent::LanguageChange) {
         d->updateOptionsText();
@@ -4621,8 +4671,7 @@ void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item
         d->view.active->showNotImplementedPage();
         return;
     }
-    view->setEditingMode(_item->isReadOnly() ? DocumentEditingMode::Read
-                                             : d->documentEditingMode(_item));
+    view->setEditingMode(d->documentEditingMode(_item));
     view->setCursors({ d->collaboratorsCursors.begin(), d->collaboratorsCursors.end() });
     d->view.active->showEditor(view->asQWidget());
 

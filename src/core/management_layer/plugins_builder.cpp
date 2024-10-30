@@ -302,11 +302,6 @@ public:
     bool isProjectInTeam = false;
 
     /**
-     * @brief Текущий режим работы редакторов
-     */
-    DocumentEditingMode editingMode = DocumentEditingMode::Edit;
-
-    /**
      * @brief Права доступа к конкретным документам
      */
     QHash<QUuid, DocumentEditingMode> editingPermissions;
@@ -383,7 +378,6 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
         }
 
         auto plugin = qobject_cast<ManagementLayer::IDocumentManager*>(pluginObject);
-        plugin->setEditingMode(editingMode);
         plugin->setAvailableCredits(availableCredits);
         plugins.insert(_mimeType, plugin);
     }
@@ -421,12 +415,10 @@ Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
     // Настроим доступность для редактирования в плагине
     //
     plugin->checkAvailabilityToEdit(isProjectInTeam);
-    plugin->setEditingMode(editingMode);
     plugin->setEditingPermissions(editingPermissions);
     //
-    // ... а также режим работы для самого представления и доступные кредиты для работы с ИИ
+    // ... а также доступные кредиты для работы с ИИ
     //
-    view->setEditingMode(editingMode);
     view->setAvailableCredits(availableCredits);
 
     return view;
@@ -955,24 +947,6 @@ void PluginsBuilder::checkAvailabilityToEdit(bool _projectInTeam) const
     d->isProjectInTeam = _projectInTeam;
     for (auto plugin : std::as_const(d->plugins)) {
         plugin->checkAvailabilityToEdit(d->isProjectInTeam);
-
-        //
-        // После того, как обновили доступность плагинов, нужно обновить их возможность к
-        // редактированию текущего документа
-        //
-        plugin->setEditingMode(d->editingMode);
-    }
-}
-
-void PluginsBuilder::setEditingMode(DocumentEditingMode _mode) const
-{
-    if (d->editingMode == _mode) {
-        return;
-    }
-
-    d->editingMode = _mode;
-    for (auto plugin : std::as_const(d->plugins)) {
-        plugin->setEditingMode(d->editingMode);
     }
 }
 
