@@ -264,6 +264,10 @@ void ProjectView::setDraftsVisible(bool _visible)
         d->documentDraftsHeightAnimation.stop();
     }
 
+    if (d->documentDrafts->isVisible() == _visible) {
+        return;
+    }
+
     if (_visible) {
         d->documentDrafts->setFixedHeight(0);
         d->documentDrafts->show();

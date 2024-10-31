@@ -174,6 +174,16 @@ signals:
                        const QByteArray& _content);
 
     /**
+     * @brief Была добавлена версия документа
+     */
+    void versionAdded(const QUuid& _uuid);
+
+    /**
+     * @brief Была удалена версия документа
+     */
+    void versionRemoved(const QUuid& _uuid);
+
+    /**
      * @brief Документ сейчас будет удалён
      */
     void documentAboutToBeRemoved(const QUuid& _uuid);
