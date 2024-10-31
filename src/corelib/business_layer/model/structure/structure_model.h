@@ -174,6 +174,11 @@ signals:
                        const QByteArray& _content);
 
     /**
+     * @brief Изменилось количество версий документа
+     */
+    void versionsCountChanged(int _count);
+
+    /**
      * @brief Документ сейчас будет удалён
      */
     void documentAboutToBeRemoved(const QUuid& _uuid);

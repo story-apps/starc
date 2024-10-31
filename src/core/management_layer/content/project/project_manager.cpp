@@ -70,7 +70,6 @@ namespace ManagementLayer {
 namespace {
 
 const QLatin1String kCurrentViewMimeTypeKey("view-mime-type");
-const QLatin1String kVersionsVisibleKey("versions-visible");
 const QLatin1String kCurrentVersionKey("current-version");
 constexpr int kCollaboratorsUpdateTimeoutMs = 60 * 1000;
 
@@ -348,11 +347,6 @@ public:
     QShortcut* splitScreenShortcut = nullptr;
 
     /**
-     * @brief Действие отображения списка версий документа
-     */
-    QAction* showVersionsAction = nullptr;
-
-    /**
      * @brief Модели списка документов
      */
     BusinessLayer::StructureModel* projectStructureModel = nullptr;
@@ -453,7 +447,6 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
     , collaboratorsToolBar(new Ui::CollaboratorsToolBar(_parent))
     , splitScreenAction(new QAction(_parent))
     , splitScreenShortcut(new QShortcut(_parent))
-    , showVersionsAction(new QAction(_parent))
     , projectStructureModel(new BusinessLayer::StructureModel(navigator))
     , projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel))
     , modelsFacade(projectStructureModel, &documentImageStorage)
@@ -475,8 +468,6 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
     splitScreenAction->setCheckable(true);
     splitScreenAction->setIconText(u8"\U000F10E7");
     splitScreenAction->setWhatsThis(QKeySequence("F2").toString(QKeySequence::NativeText));
-    showVersionsAction->setCheckable(true);
-    showVersionsAction->setIconText(u8"\U000F0AB8");
     updateOptionsText();
     toolBar->setOptions({ splitScreenAction }, AppBarOptionsLevel::App);
     splitScreenShortcut->setKey(QKeySequence("F2"));
@@ -487,8 +478,6 @@ void ProjectManager::Implementation::updateOptionsText()
 {
     splitScreenAction->setText(splitScreenAction->isChecked() ? tr("Remove split")
                                                               : tr("Split window"));
-    showVersionsAction->setText(showVersionsAction->isChecked() ? tr("Hide document drafts")
-                                                                : tr("Show document drafts"));
 }
 
 void ProjectManager::Implementation::switchViews(bool _withActivation)
@@ -1045,13 +1034,6 @@ void ProjectManager::Implementation::createNewVersion(const QModelIndex& _itemIn
                 projectStructureModel->addItemVersion(item, _name, _color, _readOnly,
                                                       model->document()->content());
                 view.active->setDocumentDraft(item->versions());
-
-                //
-                // Если версии скрыты, то отображим их список при добавлении новой
-                //
-                if (!showVersionsAction->isChecked()) {
-                    showVersionsAction->toggle();
-                }
             });
     connect(dialog, &Ui::CreateDraftDialog::disappeared, dialog,
             &Ui::CreateDraftDialog::deleteLater);
@@ -1883,14 +1865,6 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     });
 
     //
-    // Отобразить панель со списком версий
-    //
-    connect(d->showVersionsAction, &QAction::toggled, this, [this](bool _checked) {
-        d->updateOptionsText();
-        d->view.active->setDraftsVisible(_checked);
-    });
-
-    //
     // Соединения с моделью структуры проекта
     //
     connect(
@@ -2299,6 +2273,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 }
             }
         });
+    connect(d->projectStructureModel, &BusinessLayer::StructureModel::versionsCountChanged, this,
+            [this](int _count) { d->view.active->setDraftsVisible(_count > 0); });
 
     //
     // Соединения представления
@@ -2937,9 +2913,7 @@ void ProjectManager::toggleFullScreen(bool _isFullScreen)
             d->view.stateBeforeFullscreen = d->view.container->saveState();
             d->view.inactive->hide();
         }
-        if (d->showVersionsAction->isChecked()) {
-            d->view.active->setDraftsVisible(false);
-        }
+        d->view.active->setDraftsVisible(false);
     }
 
     //
@@ -2960,9 +2934,9 @@ void ProjectManager::toggleFullScreen(bool _isFullScreen)
             d->view.inactive->show();
             d->view.container->restoreState(d->view.stateBeforeFullscreen);
         }
-        if (d->showVersionsAction->isChecked()) {
-            d->view.active->setDraftsVisible(true);
-        }
+
+        const auto item = d->aliasedItemForIndex(d->view.activeIndex);
+        d->view.active->setDraftsVisible(item->versions().count() > 0);
     }
 }
 
@@ -3177,8 +3151,6 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     //
     if (d->view.activeModel != nullptr && d->view.activeModel->document() != nullptr) {
         const auto item = d->aliasedItemForIndex(d->view.activeIndex);
-        setSettingsValue(documentSettingsKey(item->uuid(), kVersionsVisibleKey),
-                         d->showVersionsAction->isChecked());
         setSettingsValue(documentSettingsKey(item->uuid(), kCurrentVersionKey),
                          d->view.active->currentDraft());
     }
@@ -3760,13 +3732,6 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
                 d->projectStructureModel->addItemVersion(item, versionName, color, readOnly,
                                                          lastDocumentVersion);
                 d->view.active->setDocumentDraft(item->versions());
-
-                //
-                // Если версии скрыты, то отображим их список при добавлении новой
-                //
-                if (!d->showVersionsAction->isChecked()) {
-                    d->showVersionsAction->toggle();
-                }
             }
 
             //
@@ -4415,9 +4380,6 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     if (!d->view.activeModel.isNull() && d->view.activeModel->document() != nullptr) {
 
         const auto previousActiveAliasedItem = d->aliasedItemForIndex(d->view.activeIndex);
-        setSettingsValue(
-            documentSettingsKey(previousActiveAliasedItem->uuid(), kVersionsVisibleKey),
-            d->showVersionsAction->isChecked());
         setSettingsValue(documentSettingsKey(previousActiveAliasedItem->uuid(), kCurrentVersionKey),
                          d->view.active->currentDraft());
     }
@@ -4514,14 +4476,10 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     d->pluginsBuilder.syncModelAndBindEditors(viewMimeType, d->view.activeModel, isPrimaryView);
 
     //
-    // Настроим опции редактора
+    // Устанавливаем опции редактора
     //
     Log::debug("Activate plugin view options");
-    auto viewOptions = view->options();
-    if (isTextItem(aliasedItem)) {
-        viewOptions.prepend(d->showVersionsAction);
-    }
-    d->toolBar->setOptions(viewOptions, AppBarOptionsLevel::View);
+    d->toolBar->setOptions(view->options(), AppBarOptionsLevel::View);
 
     //
     // Настроим уведомления редактора
@@ -4549,6 +4507,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     if (!d->navigator->isProjectNavigatorShown() && d->view.active == d->view.left) {
         showNavigator(_itemIndex, viewMimeType);
     }
+
+    //
+    // Установим видимость панели драфтов
+    //
+    d->view.active->setDraftsVisible(aliasedItem->versions().count() > 0);
 
     //
     // Настроим уведомления плагина
@@ -4642,11 +4605,8 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
 
     //
-    // Отобразим версии документа и выберем нужную, если необходимо
+    // Выберем нужную версию документа
     //
-    d->showVersionsAction->setChecked(
-        settingsValue(documentSettingsKey(aliasedItem->uuid(), kVersionsVisibleKey), false)
-            .toBool());
     d->view.active->setCurrentDraft(
         settingsValue(documentSettingsKey(aliasedItem->uuid(), kCurrentVersionKey), 0).toInt());
 
@@ -4750,16 +4710,7 @@ void ProjectManager::activateView(const QModelIndex& _itemIndex, const QString& 
         view->setEditingMode(DocumentEditingMode::Read);
     }
 
-    //
-    // Настроим опции редактора
-    //
-    const auto sourceItemIndex = d->projectStructureProxyModel->mapToSource(_itemIndex);
-    auto aliasedItem = d->aliasedItemForIndex(sourceItemIndex);
-    auto viewOptions = view->options();
-    if (isTextItem(aliasedItem)) {
-        viewOptions.prepend(d->showVersionsAction);
-    }
-    d->toolBar->setOptions(viewOptions, AppBarOptionsLevel::View);
+    d->toolBar->setOptions(view->options(), AppBarOptionsLevel::View);
 }
 
 void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType)

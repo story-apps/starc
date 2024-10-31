@@ -1207,6 +1207,8 @@ void StructureModel::addItemVersion(StructureModelItem* _item, const QString& _n
 
     emit documentAdded(newVersion->uuid(), _item->parent()->uuid(), newVersion->type(),
                        newVersion->name(), _content);
+
+    emit versionsCountChanged(_item->versions().count());
 }
 
 void StructureModel::updateItemVersion(StructureModelItem* _item, int _versionIndex,
@@ -1233,6 +1235,7 @@ void StructureModel::removeItemVersion(StructureModelItem* _item, int _versionIn
     const auto itemIndex = indexForItem(_item);
     _item->removeVersion(_versionIndex);
     emit dataChanged(itemIndex, itemIndex);
+    emit versionsCountChanged(_item->versions().count());
 }
 
 void StructureModel::setNavigatorAvailableFor(const QModelIndex& _index, bool isAvailable)
