@@ -73,7 +73,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
             && blockData->item()->parent()->type() == TextModelItemType::Group
             && static_cast<TextGroupType>(blockData->item()->parent()->subtype())
                 == TextGroupType::Scene) {
-            _painter->setFont(_block.charFormat().font());
+            _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
             //
             const auto sceneItem
                 = static_cast<ScreenplayTextModelSceneItem*>(blockData->item()->parent());
@@ -118,7 +118,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
         if (exportOptions.showDialoguesNumbers) {
             const auto blockData = static_cast<TextBlockData*>(_block.userData());
             if (blockData != nullptr) {
-                _painter->setFont(_block.charFormat().font());
+                _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
                 //
                 const auto textItem = static_cast<ScreenplayTextModelTextItem*>(blockData->item());
                 if (textItem && textItem->number().has_value()) {
@@ -182,7 +182,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
         //
         if (_block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCharacterContinued)
             && !_block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
-            _painter->setFont(_block.charFormat().font());
+            _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
 
             const auto continuedTerm = BusinessLayer::ScreenplayTextCorrector::continuedTerm();
 
@@ -227,7 +227,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
         // ... префикс
         //
         if (_block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)) {
-            _painter->setFont(_block.charFormat().font());
+            _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
 
             const auto prefix = _block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
             auto prefixRect = _blockRect;
@@ -241,7 +241,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
         // ... постфикс
         //
         if (_block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix)) {
-            _painter->setFont(_block.charFormat().font());
+            _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
 
             const auto postfix
                 = _block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
@@ -316,7 +316,7 @@ void ScreenplayPdfExporter::printBlockDecorations(
             }
         }
 
-        _painter->setFont(_block.charFormat().font());
+        _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
         for (const auto& reviewMark : std::as_const(revisionMarks)) {
             _painter->setPen(reviewMark.second);
             _painter->drawText(reviewMark.first, Qt::AlignCenter, "*");

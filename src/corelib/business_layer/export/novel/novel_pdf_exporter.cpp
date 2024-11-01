@@ -85,7 +85,7 @@ void NovelPdfExporter::printBlockDecorations(QPainter* _painter, qreal _pageYPos
             }
         }
 
-        _painter->setFont(_block.charFormat().font());
+        _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
         for (const auto& reviewMark : std::as_const(revisionMarks)) {
             _painter->setPen(reviewMark.second);
             _painter->drawText(reviewMark.first, Qt::AlignCenter, "*");

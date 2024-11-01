@@ -77,7 +77,7 @@ void ScreenplayDocxExporter::processBlock(const TextCursor& _cursor,
 
             auto cursor = _cursor;
             cursor.setPosition(block.position());
-            cursor.insertText(sceneNumber, block.charFormat());
+            cursor.insertText(sceneNumber, TextHelper::fineBlockCharFormat(block));
         }
     }
     //
@@ -92,19 +92,20 @@ void ScreenplayDocxExporter::processBlock(const TextCursor& _cursor,
         const auto rightMargin = block.textDirection() == Qt::LeftToRight
             ? block.blockFormat().rightMargin()
             : block.blockFormat().leftMargin();
+        const auto charFormat = TextHelper::fineBlockCharFormat(block);
         _documentXml.append(
             QString("<w:ind w:left=\"%1\" w:right=\"%2\" w:hanging=\"%3\" />")
                 .arg(MeasurementHelper::pxToTwips(leftMargin))
                 .arg(MeasurementHelper::pxToTwips(
-                    rightMargin - TextHelper::fineTextWidthF(postfix, block.charFormat().font())))
+                    rightMargin - TextHelper::fineTextWidthF(postfix, charFormat.font())))
                 .arg(MeasurementHelper::pxToTwips(
-                    TextHelper::fineTextWidthF(prefix, block.charFormat().font()))));
+                    TextHelper::fineTextWidthF(prefix, charFormat.font()))));
 
         auto cursor = _cursor;
         cursor.setPosition(block.position());
-        cursor.insertText(prefix, block.charFormat());
+        cursor.insertText(prefix, charFormat);
         cursor.movePosition(TextCursor::EndOfBlock);
-        cursor.insertText(postfix, block.charFormat());
+        cursor.insertText(postfix, charFormat);
     }
 }
 

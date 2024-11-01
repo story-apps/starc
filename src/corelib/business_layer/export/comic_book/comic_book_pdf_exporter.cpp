@@ -9,6 +9,7 @@
 #include <business_layer/templates/audioplay_template.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/measurement_helper.h>
+#include <utils/helpers/text_helper.h>
 
 #include <QLocale>
 #include <QPainter>
@@ -90,7 +91,7 @@ void ComicBookPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
             }
         }
 
-        _painter->setFont(_block.charFormat().font());
+        _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
         for (const auto& reviewMark : std::as_const(revisionMarks)) {
             _painter->setPen(reviewMark.second);
             _painter->drawText(reviewMark.first, Qt::AlignCenter, "*");

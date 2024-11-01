@@ -590,6 +590,23 @@ void TextHelper::applyTextFormattingForBlock(QTextCursor& _cursor,
     _cursor.clearSelection();
 }
 
+QTextCharFormat TextHelper::fineBlockCharFormat(const QTextBlock& _block)
+{
+    //
+    // Если в блоке лишь один формат, охватывающий весь текст блока, то его и будем считать
+    // правильным форматом блока
+    //
+    if (_block.textFormats().size() == 1 && _block.textFormats().constFirst().start == 0
+        && _block.textFormats().constFirst().length == _block.length() - 1) {
+        return _block.textFormats().constFirst().format;
+    }
+
+    //
+    // В противном случае возвращаем дефолтный формат
+    //
+    return _block.charFormat();
+}
+
 bool TextHelper::isUppercase(const QString& _text)
 {
     return _text == TextHelper::smartToUpper(_text);

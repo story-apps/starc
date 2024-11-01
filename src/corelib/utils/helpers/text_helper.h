@@ -10,6 +10,7 @@ class QFont;
 class QFontMetricsF;
 class QRectF;
 class QString;
+class QTextBlock;
 class QTextCharFormat;
 class QTextCursor;
 
@@ -108,6 +109,11 @@ public:
      */
     static void applyTextFormattingForBlock(QTextCursor& _cursor,
                                             const QTextCharFormat& _newFormat);
+
+    /**
+     * @brief Получить правильный формат блока
+     */
+    static QTextCharFormat fineBlockCharFormat(const QTextBlock& _block);
 
     /**
      * @brief Находится ли текст в верхнем регистре

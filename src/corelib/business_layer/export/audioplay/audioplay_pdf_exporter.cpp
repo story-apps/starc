@@ -70,8 +70,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
 
         const auto blockData = static_cast<TextBlockData*>(_block.userData());
         if (blockData != nullptr) {
-            QFont font = _block.charFormat().font();
-            font.setBold(false);
+            QFont font = TextHelper::fineBlockCharFormat(_block).font();
             font.setUnderline(false);
             _painter->setFont(font);
             //
@@ -143,7 +142,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
     //
     const auto& paragraphStyle = exportTemplate.paragraphStyle(_paragraphType);
     if (!_block.text().isEmpty() && paragraphStyle.isTitleVisible()) {
-        _painter->setFont(_block.charFormat().font());
+        _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
 
         //
         // Определим область для отрисовки (отступы используем от стиля персонажа)
@@ -226,7 +225,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
             }
         }
 
-        _painter->setFont(_block.charFormat().font());
+        _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
         for (const auto& reviewMark : std::as_const(revisionMarks)) {
             _painter->setPen(reviewMark.second);
             _painter->drawText(reviewMark.first, Qt::AlignCenter, "*");

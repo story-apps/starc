@@ -53,8 +53,7 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
 
         const auto blockData = static_cast<TextBlockData*>(_block.userData());
         if (blockData != nullptr) {
-            QFont font = _block.charFormat().font();
-            font.setBold(false);
+            QFont font = TextHelper::fineBlockCharFormat(_block).font();
             font.setUnderline(false);
             _painter->setFont(font);
             //
@@ -131,7 +130,7 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
         // ... префикс
         //
         if (_block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)) {
-            _painter->setFont(_block.charFormat().font());
+            _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
 
             const auto prefix = _block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
             auto prefixRect = _blockRect;
@@ -145,7 +144,7 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
         // ... постфикс
         //
         if (_block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix)) {
-            _painter->setFont(_block.charFormat().font());
+            _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
 
             const auto postfix
                 = _block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
@@ -220,7 +219,7 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
             }
         }
 
-        _painter->setFont(_block.charFormat().font());
+        _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
         for (const auto& reviewMark : std::as_const(revisionMarks)) {
             _painter->setPen(reviewMark.second);
             _painter->drawText(reviewMark.first, Qt::AlignCenter, "*");
