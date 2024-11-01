@@ -743,7 +743,7 @@ void AccountManager::renewCloud()
                        });
     const int discount = cloudPaymentOptions.constFirst().discount;
     QString discountInfo;
-    if (hasProLifetime) {
+    if (hasProLifetime != d->accountInfo.subscriptions.end()) {
         if (discount > 20) {
             discountInfo
                 = tr("You have an additional 20% discount due to PRO lifetime subscription "
@@ -787,7 +787,7 @@ void AccountManager::giftCloud()
                        });
     const int discount = cloudPaymentOptions.constFirst().discount;
     QString discountInfo;
-    if (hasProLifetime) {
+    if (hasProLifetime != d->accountInfo.subscriptions.end()) {
         if (discount > 20) {
             discountInfo
                 = tr("You have an additional 20% discount due to PRO lifetime subscription "
