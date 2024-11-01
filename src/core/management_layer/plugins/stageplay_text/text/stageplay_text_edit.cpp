@@ -157,7 +157,9 @@ void StageplayTextEdit::Implementation::updateReviewMark(QKeyEvent* _event, int 
     // ... или вставляется из буфера обмена
     // ... и позиция курсора изменилась после обработки события
     //
-    if (((_event->modifiers().testFlag(Qt::NoModifier) && !_event->text().isEmpty())
+    if ((((_event->modifiers().testFlag(Qt::NoModifier)
+           || _event->modifiers().testFlag(Qt::ShiftModifier))
+          && !_event->text().isEmpty())
          || _event == QKeySequence::Paste)
         && _from < _to) {
         //
