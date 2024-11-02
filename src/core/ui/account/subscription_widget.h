@@ -28,7 +28,13 @@ public:
     /**
      * @brief Задать статус активности подписки
      */
-    void setStatus(bool _isActive, bool _isLifetime, const QDateTime& _activeUntil);
+    void setStatus(bool _isActive, bool _isLifetime, bool _isSecondary,
+                   const QDateTime& _activeUntil);
+
+    /**
+     * @brief Активна ли подписка
+     */
+    bool isActive() const;
 
     /**
      * @brief Куплена ли подписка навсегда

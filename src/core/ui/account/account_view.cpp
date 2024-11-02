@@ -396,29 +396,38 @@ void AccountView::setSubscriptions(const QVector<Domain::SubscriptionInfo>& _sub
 {
     bool isActive = true;
     bool isLifetime = true;
-    d->proSubscription->setStatus(!isActive, !isLifetime, {});
-    d->cloudSubscription->setStatus(!isActive, !isLifetime, {});
+    bool isSecondary = true;
+    d->proSubscription->setStatus(!isActive, !isLifetime, !isSecondary, {});
+    d->cloudSubscription->setStatus(!isActive, !isLifetime, !isSecondary, {});
 
     for (const auto& subscription : _subscriptions) {
         switch (subscription.type) {
         case Domain::SubscriptionType::ProMonthly: {
-            d->proSubscription->setStatus(isActive, !isLifetime, subscription.end);
+            d->proSubscription->setStatus(isActive, !isLifetime, !isSecondary, subscription.end);
             break;
         }
         case Domain::SubscriptionType::ProLifetime: {
-            d->proSubscription->setStatus(isActive, isLifetime, {});
+            d->proSubscription->setStatus(isActive, isLifetime, !isSecondary, {});
             break;
         }
         case Domain::SubscriptionType::CloudMonthly: {
-            d->cloudSubscription->setStatus(isActive, !isLifetime, subscription.end);
+            d->cloudSubscription->setStatus(isActive, !isLifetime, !isSecondary, subscription.end);
+            //
+            // Когда активна клауд, считаем, что и про тоже активна
+            //
+            if (!d->proSubscription->isActive()) {
+                d->proSubscription->setStatus(isActive, !isLifetime, isSecondary, subscription.end);
+            }
             break;
         }
         case Domain::SubscriptionType::CloudLifetime: {
-            d->cloudSubscription->setStatus(isActive, isLifetime, {});
+            d->cloudSubscription->setStatus(isActive, isLifetime, !isSecondary, {});
             //
             // Когда активна клауд, считаем, что и про тоже активна навсегда
             //
-            d->proSubscription->setStatus(isActive, isLifetime, {});
+            if (!d->proSubscription->isActive()) {
+                d->proSubscription->setStatus(isActive, isLifetime, isSecondary, {});
+            }
             break;
         }
         default: {

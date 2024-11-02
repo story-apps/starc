@@ -20,6 +20,7 @@ public:
 
     bool isActive = false;
     bool isLifetime = false;
+    bool isSecondary = false;
 
     H6Label* subscriptionName = nullptr;
     Body1Label* minimumPrice = nullptr;
@@ -108,16 +109,26 @@ void SubscriptionWidget::setInfo(const QString& _name, const QString& _descripti
     d->subscriptionDescription->setText(_description);
 }
 
-void SubscriptionWidget::setStatus(bool _isActive, bool _isLifetime, const QDateTime& _activeUntil)
+void SubscriptionWidget::setStatus(bool _isActive, bool _isLifetime, bool _isSecondary,
+                                   const QDateTime& _activeUntil)
 {
     d->isActive = _isActive;
     d->isLifetime = _isLifetime;
+    d->isSecondary = _isSecondary;
 
+    d->isActiveIcon->setTextColor(ColorHelper::transparent(
+        d->isSecondary ? DesignSystem::color().onBackground() : DesignSystem::color().accent(),
+        DesignSystem::inactiveTextOpacity()));
     d->isActiveIcon->setVisible(d->isActive);
     d->isActiveInfo->setVisible(d->isActive);
     d->isActiveInfo->setText(d->isLifetime
                                  ? tr("Lifetime access")
                                  : tr("Active until %1").arg(_activeUntil.toString("dd.MM.yyyy")));
+}
+
+bool SubscriptionWidget::isActive() const
+{
+    return d->isActive;
 }
 
 bool SubscriptionWidget::isLifetime() const
@@ -204,8 +215,9 @@ void SubscriptionWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event
     labelMargins.setTop(DesignSystem::layout().px12());
     labelMargins.setBottom(DesignSystem::layout().px4());
     d->isActiveIcon->setBackgroundColor(DesignSystem::color().background());
-    d->isActiveIcon->setTextColor(ColorHelper::transparent(DesignSystem::color().accent(),
-                                                           DesignSystem::inactiveTextOpacity()));
+    d->isActiveIcon->setTextColor(ColorHelper::transparent(
+        d->isSecondary ? DesignSystem::color().onBackground() : DesignSystem::color().accent(),
+        DesignSystem::inactiveTextOpacity()));
     d->isActiveIcon->setContentsMargins(labelMargins);
     labelMargins.setLeft(DesignSystem::layout().px8());
     d->isActiveInfo->setContentsMargins(labelMargins);
