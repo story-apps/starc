@@ -94,7 +94,7 @@ jobs:
           ./make-starc-app-image.sh ${{env.APP_VERSION}}
 
       - name: Collect artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux packages
           path: build/linux/starc-setup.AppImage

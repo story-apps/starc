@@ -25,7 +25,6 @@
 #include <data_layer/mapper/document_change_mapper.h>
 #include <data_layer/mapper/mapper_facade.h>
 #include <data_layer/storage/document_image_storage.h>
-#include <domain/objects_builder.h>
 #endif
 
 #include <business_layer/model/abstract_model.h>

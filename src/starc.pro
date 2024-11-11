@@ -8,6 +8,7 @@ SUBDIRS += \
     core \
 #    testapp \
 #    starcaiapp \
+#    starcservices \
 
 CONFIG += ordered
 
