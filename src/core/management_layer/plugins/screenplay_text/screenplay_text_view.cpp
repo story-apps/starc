@@ -473,10 +473,7 @@ void ScreenplayTextView::Implementation::updateTextEditPageMargins()
     }
 
     const QMarginsF pageMargins
-        = QMarginsF{ 15, 20 / scalableWrapper->zoomRange(),
-                     12 / scalableWrapper->zoomRange()
-                         + MeasurementHelper::pxToMm(scalableWrapper->verticalScrollBar()->width()),
-                     5 };
+        = QMarginsF{ 15, 20 / scalableWrapper->zoomRange(), 12 / scalableWrapper->zoomRange(), 5 };
     textEdit->setPageMarginsMm(pageMargins);
 }
 
