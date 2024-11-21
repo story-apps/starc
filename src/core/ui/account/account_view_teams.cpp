@@ -376,6 +376,7 @@ void AccountViewTeams::showTeam(int _teamId)
                    : _member.email);
         auto item = new QStandardItem(displayName);
         item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        item->setData(_member.email, Qt::UserRole);
         item->setData(AvatarGenerator::avatar(_member.name, _member.email), Qt::DecorationRole);
         return item;
     };
