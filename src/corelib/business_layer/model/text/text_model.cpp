@@ -113,6 +113,10 @@ void TextModel::Implementation::buildModel(Domain::DocumentObject* _document)
             break;
         }
 
+        if (currentTag == xml::kHeaderTag) {
+            q->readDocumentHeader(contentReader);
+        }
+
         if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
             rootItem->appendItem(q->createFolderItem(contentReader));
         } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
@@ -134,10 +138,11 @@ QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _document) c
     //
     // Формируем xml модели
     //
-    const bool addXMlHeader = true;
-    xml::TextModelXmlWriter xml(addXMlHeader);
+    const bool addXmlHeader = true;
+    xml::TextModelXmlWriter xml(addXmlHeader);
     xml += "<document mime-type=\"" + Domain::mimeTypeFor(_document->type())
         + "\" version=\"1.0\">\n";
+    xml += QString("<%1>%2</%1>\n").arg(xml::kHeaderTag, QString(q->documentHeader()));
     for (int childIndex = 0; childIndex < rootItem->childCount(); ++childIndex) {
         xml += rootItem->childAt(childIndex)->toXml();
     }
@@ -2610,6 +2615,16 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
 #endif
 
     return { lastChangedItem, lastChangedItemPosition };
+}
+
+QByteArray TextModel::documentHeader() const
+{
+    return {};
+}
+
+void TextModel::readDocumentHeader(QXmlStreamReader& _reader)
+{
+    Q_UNUSED(_reader)
 }
 
 } // namespace BusinessLayer

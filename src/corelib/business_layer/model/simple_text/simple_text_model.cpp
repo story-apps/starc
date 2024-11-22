@@ -3,15 +3,20 @@
 #include "simple_text_model_chapter_item.h"
 #include "simple_text_model_folder_item.h"
 
+#include <business_layer/model/abstract_model_xml.h>
 #include <business_layer/model/text/text_model_folder_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
+#include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <domain/document_object.h>
+#include <utils/helpers/text_helper.h>
 
 
 namespace BusinessLayer {
 
 namespace {
+
+const QLatin1String kDocumentNameKey("document_name");
 
 const char* kMimeType = "application/x-starc/text/item";
 
@@ -47,7 +52,7 @@ public:
     /**
      * @brief Обновить название документа
      */
-    void updateDocumentName(const QModelIndex& _index = {});
+    void updateDisplayName(const QModelIndex& _index = {});
 
     /**
      * @brief Обновить номера глав
@@ -69,6 +74,17 @@ public:
      * @brief Название документа
      */
     QString name;
+
+    /**
+     * @brief Отображаемое название документа
+     * @note Если название не задано явно, то тут хранится текст из первой строки документа
+     */
+    QString displayName;
+
+    /**
+     * @brief Цвет документа
+     */
+    QColor color;
 
     /**
      * @brief Количество страниц
@@ -96,19 +112,43 @@ TextModelItem* SimpleTextModel::Implementation::rootItem() const
     return q->itemForIndex({});
 }
 
-void SimpleTextModel::Implementation::updateDocumentName(const QModelIndex& _index)
+void SimpleTextModel::Implementation::updateDisplayName(const QModelIndex& _index)
 {
-    if (_index.isValid()) {
-        return;
+    //
+    // Если задано название, то его и отображаем
+    //
+    if (!name.isEmpty()) {
+        if (displayName == name) {
+            return;
+        }
+
+        displayName = name;
+    }
+    //
+    // А если название не задано, то используем текст из первой строчки документа
+    //
+    else {
+        //
+        // ... обновление производим, только когда нужно обрабовать изменение в корне модели
+        //
+        if (_index.isValid()) {
+            return;
+        }
+
+        const auto item = firstTextItem(rootItem());
+        QString newDisplayName;
+        if (item != nullptr && item->type() == TextModelItemType::Text) {
+            const auto textItem = static_cast<TextModelTextItem*>(item);
+            newDisplayName = textItem->text();
+        }
+        if (displayName == newDisplayName) {
+            return;
+        }
+
+        displayName = newDisplayName;
     }
 
-    const auto item = firstTextItem(rootItem());
-    if (item == nullptr || item->type() != TextModelItemType::Text) {
-        q->setDocumentName({});
-    } else {
-        const auto textItem = static_cast<TextModelTextItem*>(item);
-        q->setDocumentName(textItem->text());
-    }
+    emit q->documentNameChanged(displayName);
 }
 
 
@@ -174,7 +214,7 @@ SimpleTextModel::SimpleTextModel(QObject* _parent)
     , d(new Implementation(this))
 {
     connect(this, &SimpleTextModel::dataChanged, this,
-            [this](const QModelIndex& _index) { d->updateDocumentName(_index); });
+            [this](const QModelIndex& _index) { d->updateDisplayName(_index); });
 
     auto updateCounters = [this](const QModelIndex& _index) {
         if (const auto hash = contentHash(); d->lastContentHash != hash) {
@@ -224,7 +264,7 @@ TextModelTextItem* SimpleTextModel::createTextItem() const
 
 QString SimpleTextModel::name() const
 {
-    return d->name;
+    return d->displayName;
 }
 
 void SimpleTextModel::setName(const QString& _name)
@@ -233,14 +273,18 @@ void SimpleTextModel::setName(const QString& _name)
         return;
     }
 
+    d->name = _name;
+    emit nameChanged(d->name);
+
+    d->updateDisplayName();
+
     const auto item = firstTextItem(d->rootItem());
     if (item != nullptr && item->type() == TextModelItemType::Text) {
         auto textItem = static_cast<TextModelTextItem*>(item);
-        textItem->setText(_name);
+        if (textItem->text().isEmpty() && !_name.isEmpty()) {
+            textItem->setText(_name);
+        }
     }
-
-    d->name = _name;
-    emit nameChanged(d->name);
 }
 
 QString SimpleTextModel::documentName() const
@@ -251,7 +295,6 @@ QString SimpleTextModel::documentName() const
 void SimpleTextModel::setDocumentName(const QString& _name)
 {
     setName(_name);
-    emit documentNameChanged(_name);
 }
 
 void SimpleTextModel::setDocumentContent(const QByteArray& _content)
@@ -304,11 +347,53 @@ void SimpleTextModel::initEmptyDocument()
 
 void SimpleTextModel::finalizeInitialization()
 {
-    d->updateDocumentName();
+    d->updateDisplayName();
 
     beginChangeRows();
     d->updateNumbering();
     endChangeRows();
+}
+
+QByteArray SimpleTextModel::documentHeader() const
+{
+    QByteArray xml;
+    xml += QString("<%1%2><![CDATA[%3]]></%1>\n")
+               .arg(kDocumentNameKey,
+                    d->color.isValid()
+                        ? QString(" %1=\"%2\"").arg(xml::kColorAttribute, d->color.name())
+                        : "",
+                    TextHelper::toHtmlEscaped(d->name))
+               .toUtf8();
+    return xml;
+}
+
+void SimpleTextModel::readDocumentHeader(QXmlStreamReader& _reader)
+{
+    //
+    // Заходим в моменте, когда ридер на тэге открывающем заголовок документа
+    //
+    Q_ASSERT(_reader.name() == xml::kHeaderTag);
+
+    auto currentTag = xml::readNextElement(_reader); // next
+    if (currentTag == kDocumentNameKey) {
+        if (_reader.attributes().hasAttribute(xml::kColorAttribute)) {
+            d->color = _reader.attributes().value(xml::kColorAttribute).toString();
+        }
+        d->name = TextHelper::fromHtmlEscaped(xml::readContent(_reader).toString());
+        currentTag = xml::readNextElement(_reader); // end
+    }
+
+    //
+    // Считываем закрывающий тэг заголовка перед выходом
+    //
+    while (currentTag != xml::kHeaderTag) {
+        currentTag = xml::readNextElement(_reader); // end of header
+    }
+
+    //
+    // Переходим к телу документа
+    //
+    xml::readNextElement(_reader); // next
 }
 
 ChangeCursor SimpleTextModel::applyPatch(const QByteArray& _patch)

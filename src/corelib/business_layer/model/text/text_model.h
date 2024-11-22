@@ -164,6 +164,12 @@ protected:
      */
     virtual void finalizeInitialization() = 0;
 
+    /**
+     * @brief Методы для сохранения/загрузки служебной информации о документе
+     */
+    virtual QByteArray documentHeader() const;
+    virtual void readDocumentHeader(QXmlStreamReader& _reader);
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

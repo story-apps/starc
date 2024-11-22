@@ -71,6 +71,12 @@ protected:
     void finalizeInitialization() override;
 
     /**
+     * @brief Методы для сохранения/загрузки служебной информации о документе
+     */
+    QByteArray documentHeader() const override;
+    void readDocumentHeader(QXmlStreamReader& _reader) override;
+
+    /**
      * @brief Добавляем дополнительную логику после применения патча в модели
      */
     ChangeCursor applyPatch(const QByteArray& _patch) override;
