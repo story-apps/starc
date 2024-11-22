@@ -609,16 +609,49 @@ AbstractScreenplayImporter::Documents ScreenplayKitScenaristImporter::importDocu
             //
             if (options.importResearch) {
                 QSqlQuery documentsQuery(database);
-                documentsQuery.prepare("SELECT * FROM research WHERE type not in (?, ?) ORDER by "
+                documentsQuery.prepare("SELECT * FROM research WHERE type IN (?, ?) ORDER BY "
                                        "parent_id, sort_order");
-                documentsQuery.addBindValue(Character);
-                documentsQuery.addBindValue(Location);
+                documentsQuery.addBindValue(Folder);
+                documentsQuery.addBindValue(Text);
                 documentsQuery.exec();
                 while (documentsQuery.next()) {
+                    const auto id = documentsQuery.value("id").toInt();
+                    const auto parentId = documentsQuery.value("parent_id").toInt();
                     const auto name = documentsQuery.value("name").toString();
                     const auto content
                         = readPlainTextDocument(documentsQuery.value("description").toString());
-                    result.locations.append({ typeFor(documentsQuery), name, content, {} });
+                    const Document newDocument = { typeFor(documentsQuery), name, content, {}, id };
+                    //
+                    // Если нет родителя, то добавляем в корень
+                    //
+                    if (parentId == 0) {
+                        result.research.append(newDocument);
+                    }
+                    //
+                    // а если родитель есть, то рекурсивно ищем его внутри
+                    //
+                    else {
+                        std::function<bool(Document&)> placeDocument;
+                        placeDocument
+                            = [&placeDocument, newDocument, parentId](Document& _document) {
+                                  if (_document.id == parentId) {
+                                      _document.children.append(newDocument);
+                                      return true;
+                                  } else {
+                                      for (auto& child : _document.children) {
+                                          const auto isFound = placeDocument(child);
+                                          if (isFound) {
+                                              return true;
+                                          }
+                                      }
+                                  }
+                                  return false;
+                              };
+
+                        for (auto& document : result.research) {
+                            placeDocument(document);
+                        }
+                    }
                 }
             }
         }

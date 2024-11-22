@@ -1,6 +1,12 @@
 #pragma once
 
+#include <business_layer/import/abstract_importer.h>
+
 #include <QObject>
+
+namespace Domain {
+enum class DocumentObjectType;
+}
 
 
 namespace ManagementLayer {
@@ -37,6 +43,11 @@ signals:
      * @brief Локация загружена
      */
     void locationImported(const QString& _name, const QString& _content);
+
+    /**
+     * @brief Импортирован документ разработки
+     */
+    void documentImported(const BusinessLayer::AbstractImporter::Document& _document);
 
     /**
      * @brief Документ загружен

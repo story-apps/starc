@@ -1,5 +1,7 @@
 #pragma once
 
+#include <business_layer/import/abstract_importer.h>
+
 #include <QObject>
 
 
@@ -102,6 +104,12 @@ public:
      * @brief Добавить локацию
      */
     void addLocation(const QString& _name, const QString& _content);
+
+    /**
+     * @brief Добавить документ
+     */
+    void addDocument(const BusinessLayer::AbstractImporter::Document& _document,
+                     BusinessLayer::StructureModelItem* _parentItem = nullptr);
 
     /**
      * @brief Добавить данные по документу

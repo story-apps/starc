@@ -22,6 +22,7 @@ const QString kGroupKey = "widgets/import-dialog/";
 const QString kDocumentType = kGroupKey + "document-type";
 const QString kImportCharacters = kGroupKey + "import-characters";
 const QString kImportLocations = kGroupKey + "import-locations";
+const QString kImportResearch = kGroupKey + "import-research";
 const QString kImportText = kGroupKey + "import-text";
 const QString kKeepSceneNumbers = kGroupKey + "keep-scene-numbers";
 } // namespace
@@ -53,6 +54,7 @@ public:
     OverlineLabel* documentsTitle = nullptr;
     CheckBox* importCharacters = nullptr;
     CheckBox* importLocations = nullptr;
+    CheckBox* importResearch = nullptr;
     OverlineLabel* textTitle = nullptr;
     CheckBox* importText = nullptr;
     CheckBox* keepSceneNumbers = nullptr;
@@ -71,6 +73,7 @@ ImportDialog::Implementation::Implementation(const QString& _importFilePath, QWi
     , documentsTitle(new OverlineLabel(_parent))
     , importCharacters(new CheckBox(_parent))
     , importLocations(new CheckBox(_parent))
+    , importResearch(new CheckBox(_parent))
     , textTitle(new OverlineLabel(_parent))
     , importText(new CheckBox(_parent))
     , keepSceneNumbers(new CheckBox(_parent))
@@ -80,7 +83,13 @@ ImportDialog::Implementation::Implementation(const QString& _importFilePath, QWi
 {
     documentType->setSpellCheckPolicy(SpellCheckPolicy::Manual);
 
-    for (auto checkBox : { importCharacters, importLocations, importText, keepSceneNumbers }) {
+    for (auto checkBox : {
+             importCharacters,
+             importLocations,
+             importResearch,
+             importText,
+             keepSceneNumbers,
+         }) {
         checkBox->setChecked(true);
     }
 
@@ -155,18 +164,22 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     contentsLayout()->addWidget(d->documentsTitle, row++, 0);
     contentsLayout()->addWidget(d->importCharacters, row++, 0);
     contentsLayout()->addWidget(d->importLocations, row++, 0);
+    contentsLayout()->addWidget(d->importResearch, row++, 0);
     contentsLayout()->addWidget(d->textTitle, row++, 0);
     contentsLayout()->addWidget(d->importText, row++, 0);
     contentsLayout()->addWidget(d->keepSceneNumbers, row++, 0);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
 
     auto configureImportAvailability = [this] {
-        d->importButton->setEnabled(d->importCharacters->isChecked()
-                                    || d->importLocations->isChecked()
-                                    || d->importText->isChecked());
+        d->importButton->setEnabled(
+            (d->importCharacters->isVisibleTo(this) && d->importCharacters->isChecked())
+            || (d->importLocations->isVisibleTo(this) && d->importLocations->isChecked())
+            || (d->importResearch->isVisibleTo(this) && d->importResearch->isChecked())
+            || (d->importText->isVisibleTo(this) && d->importText->isChecked()));
     };
     connect(d->importCharacters, &CheckBox::checkedChanged, this, configureImportAvailability);
     connect(d->importLocations, &CheckBox::checkedChanged, this, configureImportAvailability);
+    connect(d->importResearch, &CheckBox::checkedChanged, this, configureImportAvailability);
     connect(d->importText, &CheckBox::checkedChanged, this, configureImportAvailability);
     connect(d->importText, &CheckBox::checkedChanged, this, [this](bool _checked) {
         if (d->importInType() == Domain::DocumentObjectType::Screenplay) {
@@ -179,18 +192,21 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     auto updateParameters = [this] {
         auto isImportCharactersVisible = true;
         auto isImportLocationsVisible = true;
+        auto isImportResearchVisible = true;
         auto isKeepSceneNumbersVisible = true;
         switch (d->importInType()) {
         case Domain::DocumentObjectType::Audioplay:
         case Domain::DocumentObjectType::ComicBook:
         case Domain::DocumentObjectType::Stageplay: {
             isImportLocationsVisible = false;
+            isImportResearchVisible = false;
             isKeepSceneNumbersVisible = false;
             break;
         }
         case Domain::DocumentObjectType::Novel: {
             isImportCharactersVisible = false;
             isImportLocationsVisible = false;
+            isImportResearchVisible = false;
             isKeepSceneNumbersVisible = false;
             break;
         }
@@ -202,12 +218,14 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
         }
         default: {
             isImportLocationsVisible = false;
+            isImportResearchVisible = false;
             isKeepSceneNumbersVisible = false;
             break;
         }
         }
         d->importCharacters->setVisible(isImportCharactersVisible);
         d->importLocations->setVisible(isImportLocationsVisible);
+        d->importResearch->setVisible(isImportResearchVisible);
         d->keepSceneNumbers->setVisible(isKeepSceneNumbersVisible);
         d->documentsTitle->setVisible(isImportCharactersVisible || isImportLocationsVisible);
 
@@ -219,6 +237,7 @@ ImportDialog::ImportDialog(const QString& _importFilePath, QWidget* _parent)
     QSettings settings;
     d->importCharacters->setChecked(settings.value(kImportCharacters, true).toBool());
     d->importLocations->setChecked(settings.value(kImportLocations, true).toBool());
+    d->importResearch->setChecked(settings.value(kImportResearch, true).toBool());
     d->importText->setChecked(settings.value(kImportText, true).toBool());
     d->keepSceneNumbers->setChecked(settings.value(kKeepSceneNumbers, false).toBool());
 }
@@ -229,6 +248,7 @@ ImportDialog::~ImportDialog()
     settings.setValue(kDocumentType, d->documentType->currentText());
     settings.setValue(kImportCharacters, d->importCharacters->isChecked());
     settings.setValue(kImportLocations, d->importLocations->isChecked());
+    settings.setValue(kImportResearch, d->importResearch->isChecked());
     settings.setValue(kImportText, d->importText->isChecked());
     settings.setValue(kKeepSceneNumbers, d->keepSceneNumbers->isChecked());
 }
@@ -258,6 +278,7 @@ BusinessLayer::ScreenplayImportOptions ImportDialog::screenplayImportOptions() c
         = d->importCharacters->isVisibleTo(this) && d->importCharacters->isChecked();
     options.importLocations
         = d->importLocations->isVisibleTo(this) && d->importLocations->isChecked();
+    options.importResearch = d->importResearch->isVisibleTo(this) && d->importResearch->isChecked();
     options.keepSceneNumbers
         = d->keepSceneNumbers->isVisibleTo(this) && d->keepSceneNumbers->isChecked();
     return options;
@@ -281,6 +302,7 @@ void ImportDialog::updateTranslations()
     d->documentsTitle->setText(tr("Documents"));
     d->importCharacters->setText(tr("Import characters"));
     d->importLocations->setText(tr("Import locations"));
+    d->importResearch->setText(tr("Import research"));
     d->textTitle->setText(tr("Text"));
     d->updateImportTextLabel();
     d->keepSceneNumbers->setText(tr("Keep scene numbers"));
@@ -341,13 +363,21 @@ void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         label->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
-    for (auto checkBox :
-         { d->importCharacters, d->importLocations, d->importText, d->keepSceneNumbers }) {
+    for (auto checkBox : {
+             d->importCharacters,
+             d->importLocations,
+             d->importResearch,
+             d->importText,
+             d->keepSceneNumbers,
+         }) {
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
 
-    for (auto button : { d->importButton, d->cancelButton }) {
+    for (auto button : {
+             d->importButton,
+             d->cancelButton,
+         }) {
         button->setBackgroundColor(Ui::DesignSystem::color().accent());
         button->setTextColor(Ui::DesignSystem::color().accent());
     }

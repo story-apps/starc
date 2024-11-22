@@ -237,8 +237,8 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
                                         bool _visible)
 {
     //
-    // ATTENTION: В ProjectManager::addScreenplay есть копипаста отсюда, быть внимательным при
-    // обновлении
+    // ATTENTION: В ProjectManager::addDocument и ProjectManager::addScreenplay есть копипаста
+    // отсюда, быть внимательным при обновлении
     //
 
     using namespace Domain;

@@ -247,6 +247,9 @@ void ImportManager::Implementation::importScreenplay(
     for (const auto& location : documents.locations) {
         emit q->locationImported(location.name, location.content);
     }
+    for (const auto& document : documents.research) {
+        emit q->documentImported(document);
+    }
 
     //
     // Импортируем текст сценариев

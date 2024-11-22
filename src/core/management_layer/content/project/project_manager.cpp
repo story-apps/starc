@@ -3297,6 +3297,66 @@ void ProjectManager::addLocation(const QString& _name, const QString& _content)
     locationsModel->createLocation(_name, _content.toUtf8());
 }
 
+void ProjectManager::addDocument(const BusinessLayer::AbstractImporter::Document& _document,
+                                 BusinessLayer::StructureModelItem* _parentItem)
+{
+    //
+    // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
+    //
+
+    using namespace Domain;
+
+    auto createItem = [](DocumentObjectType _type, const QString& _name) {
+        auto uuid = QUuid::createUuid();
+        const auto visible = true;
+        const auto readOnly = false;
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly);
+    };
+
+    const auto parentItem
+        = _parentItem == nullptr ? d->projectStructureModel->itemForIndex({}) : _parentItem;
+
+    BusinessLayer::StructureModelItem* item = nullptr;
+    switch (_document.type) {
+    case DocumentObjectType::Folder:
+    case DocumentObjectType::SimpleText: {
+        item = createItem(_document.type, _document.name);
+        break;
+    }
+
+    case DocumentObjectType::MindMap: {
+        item = createItem(_document.type,
+                          !_document.name.isEmpty() ? _document.name : tr("Mind map"));
+        break;
+    }
+
+    case DocumentObjectType::ImagesGallery: {
+        item = createItem(_document.type,
+                          !_document.name.isEmpty() ? _document.name : tr("Images gallery"));
+        break;
+    }
+
+    default: {
+        Q_ASSERT(false);
+        break;
+    }
+    }
+
+    //
+    // Если удалось создать документ, добавляем его в проект
+    //
+    if (item != nullptr) {
+        d->projectStructureModel->appendItem(item, parentItem, _document.content.toUtf8());
+    }
+
+    //
+    // Добавляем вложенные документы, если таковые имеются
+    //
+    for (const auto& child : _document.children) {
+        addDocument(child, item);
+    }
+}
+
 void ProjectManager::addAudioplay(const QString& _name, const QString& _titlePage,
                                   const QString& _text)
 {

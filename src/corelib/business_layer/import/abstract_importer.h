@@ -25,6 +25,8 @@ public:
         QString name;
         QString content;
         QVector<Document> children;
+
+        int id = 0;
     };
     struct Documents {
         //

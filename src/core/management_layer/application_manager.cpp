@@ -2795,6 +2795,10 @@ void ApplicationManager::initConnections()
             &ProjectManager::addCharacter);
     connect(d->importManager.data(), &ImportManager::locationImported, d->projectManager.data(),
             &ProjectManager::addLocation);
+    connect(d->importManager.data(), &ImportManager::documentImported, d->projectManager.data(),
+            [this](const BusinessLayer::AbstractImporter::Document& _document) {
+                d->projectManager->addDocument(_document);
+            });
     connect(d->importManager.data(), &ImportManager::audioplayImported, d->projectManager.data(),
             &ProjectManager::addAudioplay);
     connect(d->importManager.data(), &ImportManager::comicbookImported, d->projectManager.data(),
