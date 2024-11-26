@@ -432,7 +432,8 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                         }
                         do {
                             cursor.movePosition(TextCursor::NextBlock, TextCursor::KeepAnchor);
-                        } while (TextBlockStyle::forCursor(cursor) != TextParagraphType::PageSplitter
+                        } while (TextBlockStyle::forCursor(cursor)
+                                     != TextParagraphType::PageSplitter
                                  && cursor.position() < selectionInterval.to);
                         //
                         // ... удаляем таблицу
