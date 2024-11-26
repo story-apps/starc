@@ -2114,6 +2114,13 @@ void ApplicationManager::Implementation::toggleFullScreen()
     const char* isMaximizedKey = "is-window-maximized";
     if (applicationView->isFullScreen()) {
         if (applicationView->property(isMaximizedKey).toBool()) {
+#ifdef Q_OS_LINUX
+            //
+            // В Linux почему-то не возвращается нормально в режим максимизировано,
+            // поэтому сперва отобразив в нормальном состоянии, а потом масимизируем
+            //
+            applicationView->showNormal();
+#endif
             applicationView->showMaximized();
         } else {
             applicationView->showNormal();
