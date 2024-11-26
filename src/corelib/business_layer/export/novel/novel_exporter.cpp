@@ -40,7 +40,7 @@ bool NovelExporter::prepareBlock(const ExportOptions& _exportOptions, TextCursor
     //
     // Убираем блоки завершений частей и глав
     //
-    if (const auto blockType = TextBlockStyle::forBlock(_cursor); !exportOptions.includeFooters
+    if (const auto blockType = TextBlockStyle::forCursor(_cursor); !exportOptions.includeFooters
         && (blockType == TextParagraphType::PartFooter
             || blockType == TextParagraphType::ChapterFooter)) {
         _cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -58,7 +58,7 @@ bool NovelExporter::prepareBlock(const ExportOptions& _exportOptions, TextCursor
     // Если нужно использовать декоративные разрывы вместо заголовков сцен
     //
     if (!exportOptions.ornamentalBreak.isEmpty()) {
-        switch (TextBlockStyle::forBlock(_cursor)) {
+        switch (TextBlockStyle::forCursor(_cursor)) {
         case TextParagraphType::PartHeading:
         case TextParagraphType::PartFooter:
         case TextParagraphType::ChapterHeading:

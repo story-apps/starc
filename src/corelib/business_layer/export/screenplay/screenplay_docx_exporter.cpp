@@ -47,7 +47,7 @@ void ScreenplayDocxExporter::processBlock(const TextCursor& _cursor,
                                           const ExportOptions& _exportOptions,
                                           QString& _documentXml) const
 {
-    const auto currentBlockType = TextBlockStyle::forBlock(_cursor);
+    const auto currentBlockType = TextBlockStyle::forCursor(_cursor);
     const auto block = _cursor.block();
     const auto& exportOptions = static_cast<const ScreenplayExportOptions&>(_exportOptions);
 

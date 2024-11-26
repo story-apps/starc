@@ -980,7 +980,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
             auto fillTargetBlockInfo = [&cursor, &targetBlockFormat, &targetBlockType,
                                         &targetBlockData] {
                 targetBlockFormat = cursor.blockFormat();
-                targetBlockType = TextBlockStyle::forBlock(cursor);
+                targetBlockType = TextBlockStyle::forCursor(cursor);
                 if (cursor.block().userData() != nullptr) {
                     targetBlockData
                         = new TextBlockData(static_cast<TextBlockData*>(cursor.block().userData()));

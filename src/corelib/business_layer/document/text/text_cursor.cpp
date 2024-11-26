@@ -334,7 +334,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                     const auto topBlock = checkCursor.block();
                     checkCursor.setPosition(bottomCursorPosition);
                     if (topBlock.next() == checkCursor.block()
-                        && TextBlockStyle::forBlock(checkCursor)
+                        && TextBlockStyle::forCursor(checkCursor)
                             == TextParagraphType::PageSplitter) {
                         //
                         // ... если блок пуст, то удалим блок, пододвинув таблицу наверх
@@ -361,7 +361,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
             {
                 auto checkCursor = cursor;
                 checkCursor.setPosition(topCursorPosition);
-                if (TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter) {
+                if (TextBlockStyle::forCursor(checkCursor) == TextParagraphType::PageSplitter) {
                     checkCursor.setPosition(bottomCursorPosition);
                     if (!checkCursor.inTable()) {
                         //
@@ -426,13 +426,13 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                         //
                         const auto selectionInterval = cursor.selectionInterval();
                         cursor.setPosition(selectionInterval.from);
-                        while (TextBlockStyle::forBlock(cursor)
+                        while (TextBlockStyle::forCursor(cursor)
                                != TextParagraphType::PageSplitter) {
                             cursor.movePosition(TextCursor::PreviousBlock);
                         }
                         do {
                             cursor.movePosition(TextCursor::NextBlock, TextCursor::KeepAnchor);
-                        } while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter
+                        } while (TextBlockStyle::forCursor(cursor) != TextParagraphType::PageSplitter
                                  && cursor.position() < selectionInterval.to);
                         //
                         // ... удаляем таблицу
@@ -452,7 +452,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                         // ... а если осталось, то вернём курсор на символ назад, если он попал в
                         // таблицу
                         //
-                        else if (TextBlockStyle::forBlock(cursor)
+                        else if (TextBlockStyle::forCursor(cursor)
                                  == TextParagraphType::PageSplitter) {
                             cursor.movePosition(TextCursor::PreviousBlock);
                             cursor.movePosition(TextCursor::EndOfBlock);
@@ -476,7 +476,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                         // Идём до конца таблицы
                         //
                         while (!cursor.atEnd()
-                               && TextBlockStyle::forBlock(cursor)
+                               && TextBlockStyle::forCursor(cursor)
                                    != TextParagraphType::PageSplitter) {
                             cursor.movePosition(TextCursor::EndOfBlock);
                             cursor.movePosition(TextCursor::NextBlock);
@@ -499,7 +499,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                         //
                         // Если попали в конец предыдущей таблицы, то зайдём в неё
                         //
-                        if (TextBlockStyle::forBlock(cursor) == TextParagraphType::PageSplitter) {
+                        if (TextBlockStyle::forCursor(cursor) == TextParagraphType::PageSplitter) {
                             cursor.movePosition(TextCursor::PreviousCharacter);
                             _editor->setTextCursor(cursor);
                         }
@@ -517,7 +517,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                             cursor.setPosition(_backward ? topCursorPosition - delta
                                                          : bottomCursorPosition + delta);
                             ++delta;
-                        } while (TextBlockStyle::forBlock(cursor)
+                        } while (TextBlockStyle::forCursor(cursor)
                                  == TextParagraphType::PageSplitter);
                         _editor->setTextCursor(cursor);
                     }
@@ -537,10 +537,10 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
             auto checkCursor = cursor;
             checkCursor.setPosition(topCursorPosition);
             const auto topCursorInPageSplitter
-                = TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter;
+                = TextBlockStyle::forCursor(checkCursor) == TextParagraphType::PageSplitter;
             checkCursor.setPosition(bottomCursorPosition);
             const auto bottomCursorInPageSplitter
-                = TextBlockStyle::forBlock(checkCursor) == TextParagraphType::PageSplitter;
+                = TextBlockStyle::forCursor(checkCursor) == TextParagraphType::PageSplitter;
             if (topCursorInPageSplitter && bottomCursorInPageSplitter) {
                 //
                 // ... выделяем таблицу вместе с границами
@@ -564,7 +564,7 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
                 // ... а если осталось, то вернём курсор на символ назад, если он попал в
                 // таблицу
                 //
-                else if (TextBlockStyle::forBlock(cursor) == TextParagraphType::PageSplitter) {
+                else if (TextBlockStyle::forCursor(cursor) == TextParagraphType::PageSplitter) {
                     cursor.movePosition(TextCursor::PreviousBlock);
                     cursor.movePosition(TextCursor::EndOfBlock);
                     _editor->setTextCursor(cursor);
@@ -882,7 +882,7 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
         //
         // Если первый блок не будет удалён, то пропускаем его, т.к. он остаётся с текущим стилем
         //
-        if (const auto cursorParagraphType = TextBlockStyle::forBlock(cursor);
+        if (const auto cursorParagraphType = TextBlockStyle::forCursor(cursor);
             !isTopBlockShouldBeRemoved
             && (cursorParagraphType == TextParagraphType::ActFooter
                 || cursorParagraphType == TextParagraphType::SequenceFooter
@@ -958,7 +958,7 @@ void TextCursor::removeGroupsPairs(int _cursorPosition,
         //
         // Если первый блок не будет удалён, то пропускаем его, т.к. он остаётся с текущим стилем
         //
-        if (const auto cursorParagraphType = TextBlockStyle::forBlock(cursor);
+        if (const auto cursorParagraphType = TextBlockStyle::forCursor(cursor);
             !isTopBlockShouldBeRemoved
             && (cursorParagraphType == TextParagraphType::ActHeading
                 || cursorParagraphType == TextParagraphType::SequenceHeading

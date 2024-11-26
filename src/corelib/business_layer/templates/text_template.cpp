@@ -310,7 +310,7 @@ bool isTextParagraphHeading(TextParagraphType _type)
 // ****
 
 
-TextParagraphType TextBlockStyle::forBlock(const QTextCursor& _cursor)
+TextParagraphType TextBlockStyle::forCursor(const QTextCursor& _cursor)
 {
     return forBlock(_cursor.block());
 }

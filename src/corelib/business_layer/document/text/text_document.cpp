@@ -922,7 +922,7 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                         do {
                             cursor.movePosition(TextCursor::PreviousBlock);
                             --row;
-                        } while (TextBlockStyle::forBlock(cursor)
+                        } while (TextBlockStyle::forCursor(cursor)
                                  != TextParagraphType::PageSplitter);
                         fromPosition = cursor.position();
                     }
@@ -1825,7 +1825,7 @@ int TextDocument::mergeParagraph(const TextCursor& _cursor)
                 // Если всё сходится, то переносим блок
                 //
                 cursor.beginEditBlock();
-                addParagraph(TextBlockStyle::forBlock(_cursor), cursor);
+                addParagraph(TextBlockStyle::forCursor(_cursor), cursor);
                 cursor.setPosition(_cursor.position());
                 cursor.deletePreviousChar();
                 cursor.endEditBlock();
@@ -1841,13 +1841,13 @@ int TextDocument::mergeParagraph(const TextCursor& _cursor)
     //
     TextCursor cursor = _cursor;
     cursor.movePosition(QTextCursor::StartOfBlock);
-    const auto sourceBlockType = TextBlockStyle::forBlock(cursor);
+    const auto sourceBlockType = TextBlockStyle::forCursor(cursor);
     cursor.beginEditBlock();
 
     //
     // Идём до начала таблицы
     //
-    while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter) {
+    while (TextBlockStyle::forCursor(cursor) != TextParagraphType::PageSplitter) {
         cursor.movePosition(QTextCursor::PreviousBlock);
     }
 

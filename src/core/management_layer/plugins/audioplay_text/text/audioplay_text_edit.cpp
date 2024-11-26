@@ -1590,12 +1590,12 @@ void AudioplayTextEdit::insertFromMimeData(const QMimeData* _source)
         //
         if (!isMimeContainsJustOneBlock || isMimeContainsFolderOrSequence) {
             bool isTableEmpty = true;
-            while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter) {
+            while (TextBlockStyle::forCursor(cursor) != TextParagraphType::PageSplitter) {
                 cursor.movePosition(TextCursor::PreviousBlock);
             }
             const auto tableBeginningPosition = cursor.position();
             cursor.movePosition(TextCursor::NextBlock);
-            while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter) {
+            while (TextBlockStyle::forCursor(cursor) != TextParagraphType::PageSplitter) {
                 if (!cursor.block().text().isEmpty()) {
                     isTableEmpty = false;
                     break;
@@ -1615,7 +1615,7 @@ void AudioplayTextEdit::insertFromMimeData(const QMimeData* _source)
             // ... а если не пуста, то выходим из таблицы и будем производить вставку после неё
             //
             else {
-                while (TextBlockStyle::forBlock(cursor) != TextParagraphType::PageSplitter) {
+                while (TextBlockStyle::forCursor(cursor) != TextParagraphType::PageSplitter) {
                     cursor.movePosition(TextCursor::NextBlock);
                 }
                 setTextCursor(cursor);

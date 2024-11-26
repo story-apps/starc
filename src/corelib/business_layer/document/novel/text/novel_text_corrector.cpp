@@ -709,7 +709,7 @@ void NovelTextCorrector::Implementation::correctPageBreaks(int _position)
                 //     этом случае в блоке будет сохранятся форматирование удалённого блока
                 //
                 if (cursor.block().text().isEmpty()) {
-                    const auto blockType = TextBlockStyle::forBlock(cursor);
+                    const auto blockType = TextBlockStyle::forCursor(cursor);
                     const auto& blockStyle
                         = TemplatesFacade::novelTemplate(q->templateId()).paragraphStyle(blockType);
                     cursor.setBlockCharFormat(blockStyle.charFormat());

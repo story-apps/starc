@@ -236,10 +236,9 @@ public:
     };
 
     /**
-     * @brief Получить тип параграфа для заданного блока
-     * TODO: Для курсора стоит переименовать метод
+     * @brief Получить тип параграфа для заданного курсора/блока
      */
-    static TextParagraphType forBlock(const QTextCursor& _cursor);
+    static TextParagraphType forCursor(const QTextCursor& _cursor);
     static TextParagraphType forBlock(const QTextBlock& _block);
 
 public:

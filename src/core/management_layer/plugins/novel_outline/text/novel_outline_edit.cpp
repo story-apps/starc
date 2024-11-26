@@ -1274,13 +1274,13 @@ QMimeData* NovelOutlineEdit::createMimeDataFromSelection() const
     cursor.setPosition(selection.from);
     cursor.setPosition(selection.to, QTextCursor::KeepAnchor);
     if (cursor.atBlockEnd()
-        && BusinessLayer::TextBlockStyle::forBlock(cursor)
+        && BusinessLayer::TextBlockStyle::forCursor(cursor)
             == BusinessLayer::TextParagraphType::BeatHeading) {
         do {
             cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
-            if (kEndOfBeatTypes.contains(BusinessLayer::TextBlockStyle::forBlock(cursor))) {
+            if (kEndOfBeatTypes.contains(BusinessLayer::TextBlockStyle::forCursor(cursor))) {
                 cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 break;
