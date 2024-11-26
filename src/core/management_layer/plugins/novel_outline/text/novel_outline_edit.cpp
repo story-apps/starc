@@ -1269,22 +1269,23 @@ QMimeData* NovelOutlineEdit::createMimeDataFromSelection() const
     BusinessLayer::TextCursor cursor = textCursor();
     auto selection = cursor.selectionInterval();
     //
-    // Расширим выделение, чтобы туда попало содержимое битов
+    // При необходимости расширим выделение, чтобы туда попало содержимое битов
     //
-    cursor.setPosition(selection.to);
-    if (BusinessLayer::TextBlockStyle::forBlock(cursor)
-        == BusinessLayer::TextParagraphType::BeatHeading) {
+    cursor.setPosition(selection.from);
+    cursor.setPosition(selection.to, QTextCursor::KeepAnchor);
+    if (cursor.atBlockEnd()
+        && BusinessLayer::TextBlockStyle::forBlock(cursor)
+            == BusinessLayer::TextParagraphType::BeatHeading) {
         do {
-            cursor.movePosition(QTextCursor::NextBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock);
+            cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
             if (kEndOfBeatTypes.contains(BusinessLayer::TextBlockStyle::forBlock(cursor))) {
-                cursor.movePosition(QTextCursor::PreviousBlock);
-                cursor.movePosition(QTextCursor::EndOfBlock);
+                cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                 break;
             }
         } while (!cursor.atEnd());
-        cursor.setPosition(selection.from, QTextCursor::KeepAnchor);
     }
     selection = cursor.selectionInterval();
 
