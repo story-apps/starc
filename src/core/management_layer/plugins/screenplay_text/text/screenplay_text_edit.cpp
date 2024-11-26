@@ -309,6 +309,7 @@ void ScreenplayTextEdit::initWithModel(BusinessLayer::ScreenplayTextModel* _mode
         setPageFormat(currentTemplate.pageSizeId());
         setPageMarginsMm(currentTemplate.pageMargins());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+        setShowPageNumberAtFirstPage(currentTemplate.isFirstPageNumberVisible());
     }
 
     //

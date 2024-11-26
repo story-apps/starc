@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<style id="us" default="true" page_format="Letter" page_margins="25,25,20,15" page_numbers_alignment="top,right" left_half_of_page_width="36" place_dialogues_in_table="true">
+<style id="us" default="true" page_format="Letter" page_margins="25,25,20,15" page_numbers_alignment="top,right" is_first_page_number_visible="false" left_half_of_page_width="36" place_dialogues_in_table="true">
     <titlepage>
         <document mime-type="application/x-starc/document/audioplay/title-page" version="1.0">
             <text><v><![CDATA[]]></v></text>

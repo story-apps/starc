@@ -43,6 +43,8 @@ public:
     void setPageMargins(const QMarginsF& _margins);
     Qt::Alignment pageNumbersAlignment() const;
     void setPageNumbersAlignment(Qt::Alignment _alignment);
+    bool isFirstPageNumberVisible() const;
+    void setFirstPageNumberVisible(bool _visible);
     int leftHalfOfPageWidthPercents() const;
     void setLeftHalfOfPage(int _value);
 

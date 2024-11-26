@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<style id="modern_letter" default="true" page_format="Letter" page_margins="25.4,25.4,25.4,25.4" page_numbers_alignment="hcenter,bottom" left_half_of_page_width="0" place_dialogues_in_table="false">
+<style id="modern_letter" default="true" page_format="Letter" page_margins="25.4,25.4,25.4,25.4" page_numbers_alignment="hcenter,bottom" is_first_page_number_visible="true" left_half_of_page_width="0" place_dialogues_in_table="false">
     <titlepage>
         <document mime-type="application/x-starc/document/novel/title-page" version="1.0">
             <text><params align="hcenter"/><v><![CDATA[]]></v></text>

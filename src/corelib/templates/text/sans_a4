@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<style id="sans_a4" default="true" page_format="A4" page_margins="38,24,17,24" page_numbers_alignment="top,right">
+<style id="sans_a4" default="true" page_format="A4" page_margins="38,24,17,24" page_numbers_alignment="top,right" is_first_page_number_visible="true">
     <titlepage/>
     <blocks>
         <block id="heading_1" active="true" starts_from_new_page="false" font_family="Roboto" font_size="36" bold="true" italic="false" underline="false" uppercase="false" alignment="left" lines_before="0" lines_after="0" margins="0,0,0,8" line_spacing="single" line_spacing_value="0"/>

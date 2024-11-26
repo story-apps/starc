@@ -94,7 +94,7 @@ public:
     void writeStyles(QtZipWriter* _zip, const ExportOptions& _exportOptions) const;
     void writeHeader(QtZipWriter* _zip, const ExportOptions& _exportOptions) const;
     void writeFooter(QtZipWriter* _zip, const ExportOptions& _exportOptions) const;
-    void writeDocument(QtZipWriter* _zip, TextDocument* _audioplayText,
+    void writeDocument(QtZipWriter* _zip, TextDocument* _documentText,
                        QMap<int, QStringList>& _comments,
                        const ExportOptions& _exportOptions) const;
     void writeComments(QtZipWriter* _zip, const QMap<int, QStringList>& _comments) const;
@@ -932,11 +932,11 @@ void AbstractDocxExporter::Implementation::writeStyles(QtZipWriter* _zip,
     //
     // Настройки в соответсвии со стилем
     //
-    const auto& audioplayTemplate = q->documentTemplate(_exportOptions);
+    const auto& documentTemplate = q->documentTemplate(_exportOptions);
     const QString defaultFontFamily
-        = audioplayTemplate.paragraphStyle(TextParagraphType::Description).font().family();
+        = documentTemplate.paragraphStyle(TextParagraphType::Description).font().family();
     for (const auto& paragraphType : q->paragraphTypes()) {
-        const auto& blockStyle = audioplayTemplate.paragraphStyle(paragraphType);
+        const auto& blockStyle = documentTemplate.paragraphStyle(paragraphType);
         styleXml.append(docxBlockStyle(blockStyle, defaultFontFamily));
         const auto onHalfPage = true;
         styleXml.append(docxBlockStyle(blockStyle, defaultFontFamily, onHalfPage));
@@ -953,13 +953,13 @@ void AbstractDocxExporter::Implementation::writeStyles(QtZipWriter* _zip,
 void AbstractDocxExporter::Implementation::writeHeader(QtZipWriter* _zip,
                                                        const ExportOptions& _exportOptions) const
 {
-    const auto& audioplayTemplate = q->documentTemplate(_exportOptions);
+    const auto& documentTemplate = q->documentTemplate(_exportOptions);
 
     //
     // Если нужна нумерация вверху
     //
     const bool needPrintPageNumbers
-        = audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignTop);
+        = documentTemplate.pageNumbersAlignment().testFlag(Qt::AlignTop);
     if (!needPrintPageNumbers && _exportOptions.header.isEmpty()) {
         return;
     }
@@ -974,9 +974,9 @@ void AbstractDocxExporter::Implementation::writeHeader(QtZipWriter* _zip,
                         "wordprocessingDrawing\">";
 
     headerXml.append("<w:p><w:pPr><w:jc w:val=\"");
-    if (audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignLeft) || !needPrintPageNumbers) {
+    if (documentTemplate.pageNumbersAlignment().testFlag(Qt::AlignLeft) || !needPrintPageNumbers) {
         headerXml.append("left");
-    } else if (audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignHCenter)) {
+    } else if (documentTemplate.pageNumbersAlignment().testFlag(Qt::AlignHCenter)) {
         headerXml.append("center");
     } else {
         headerXml.append("right");
@@ -992,7 +992,7 @@ void AbstractDocxExporter::Implementation::writeHeader(QtZipWriter* _zip,
     const QString pageHeaderXml
         = QString("<w:r><w:rPr/><w:t>%1</w:t></w:r>").arg(_exportOptions.header);
     const QString pageHeaderSeparatorXml = "<w:r><w:rPr/><w:t> </w:t></w:r>";
-    if (audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignRight)) {
+    if (documentTemplate.pageNumbersAlignment().testFlag(Qt::AlignRight)) {
         headerXml.append(pageHeaderXml);
         headerXml.append(pageHeaderSeparatorXml);
         headerXml.append(pageNumbersXml);
@@ -1013,13 +1013,13 @@ void AbstractDocxExporter::Implementation::writeHeader(QtZipWriter* _zip,
 void AbstractDocxExporter::Implementation::writeFooter(QtZipWriter* _zip,
                                                        const ExportOptions& _exportOptions) const
 {
-    const auto& audioplayTemplate = q->documentTemplate(_exportOptions);
+    const auto& documentTemplate = q->documentTemplate(_exportOptions);
 
     //
     // Если нужна нумерация внизу
     //
     const bool needPrintPageNumbers
-        = audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignBottom);
+        = documentTemplate.pageNumbersAlignment().testFlag(Qt::AlignBottom);
     if (!needPrintPageNumbers && _exportOptions.footer.isEmpty()) {
         return;
     }
@@ -1034,9 +1034,9 @@ void AbstractDocxExporter::Implementation::writeFooter(QtZipWriter* _zip,
                         "wordprocessingDrawing\">";
 
     footerXml.append("<w:p><w:pPr><w:jc w:val=\"");
-    if (audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignLeft) || !needPrintPageNumbers) {
+    if (documentTemplate.pageNumbersAlignment().testFlag(Qt::AlignLeft) || !needPrintPageNumbers) {
         footerXml.append("left");
-    } else if (audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignHCenter)) {
+    } else if (documentTemplate.pageNumbersAlignment().testFlag(Qt::AlignHCenter)) {
         footerXml.append("center");
     } else {
         footerXml.append("right");
@@ -1052,7 +1052,7 @@ void AbstractDocxExporter::Implementation::writeFooter(QtZipWriter* _zip,
     const QString pageFooterXml
         = QString("<w:r><w:rPr/><w:t>%1</w:t></w:r>").arg(_exportOptions.footer);
     const QString pageFooterSeparatorXml = "<w:r><w:rPr/><w:t> </w:t></w:r>";
-    if (audioplayTemplate.pageNumbersAlignment().testFlag(Qt::AlignRight)) {
+    if (documentTemplate.pageNumbersAlignment().testFlag(Qt::AlignRight)) {
         footerXml.append(pageFooterXml);
         footerXml.append(pageFooterSeparatorXml);
         footerXml.append(pageNumbersXml);
@@ -1071,7 +1071,7 @@ void AbstractDocxExporter::Implementation::writeFooter(QtZipWriter* _zip,
 }
 
 void AbstractDocxExporter::Implementation::writeDocument(QtZipWriter* _zip,
-                                                         TextDocument* _audioplayText,
+                                                         TextDocument* _documentText,
                                                          QMap<int, QStringList>& _comments,
                                                          const ExportOptions& _exportOptions) const
 {
@@ -1089,7 +1089,7 @@ void AbstractDocxExporter::Implementation::writeDocument(QtZipWriter* _zip,
     // Данные считываются из исходного документа, определяется тип блока
     // и записываются прямо в файл
     //
-    TextCursor documentCursor(_audioplayText);
+    TextCursor documentCursor(_documentText);
     do {
         if (!documentCursor.block().isVisible()) {
             continue;
@@ -1114,8 +1114,8 @@ void AbstractDocxExporter::Implementation::writeDocument(QtZipWriter* _zip,
     //
     // ... размер страницы
     //
-    const auto& audioplayTemplate = q->documentTemplate(_exportOptions);
-    QSizeF paperSize = QPageSize(audioplayTemplate.pageSizeId()).size(QPageSize::Millimeter);
+    const auto& documentTemplate = q->documentTemplate(_exportOptions);
+    QSizeF paperSize = QPageSize(documentTemplate.pageSizeId()).size(QPageSize::Millimeter);
     documentXml.append(QString("<w:pgSz w:w=\"%1\" w:h=\"%2\"/>")
                            .arg(mmToTwips(paperSize.width()))
                            .arg(mmToTwips(paperSize.height())));
@@ -1124,12 +1124,12 @@ void AbstractDocxExporter::Implementation::writeDocument(QtZipWriter* _zip,
     //
     documentXml.append(QString("<w:pgMar w:left=\"%1\" w:right=\"%2\" w:top=\"%3\" w:bottom=\"%4\" "
                                "w:header=\"%5\" w:footer=\"%6\" w:gutter=\"0\"/>")
-                           .arg(mmToTwips(audioplayTemplate.pageMargins().left()))
-                           .arg(mmToTwips(audioplayTemplate.pageMargins().right()))
-                           .arg(mmToTwips(audioplayTemplate.pageMargins().top()))
-                           .arg(mmToTwips(audioplayTemplate.pageMargins().bottom()))
-                           .arg(mmToTwips(audioplayTemplate.pageMargins().top() / 2))
-                           .arg(mmToTwips(audioplayTemplate.pageMargins().bottom() / 2)));
+                           .arg(mmToTwips(documentTemplate.pageMargins().left()))
+                           .arg(mmToTwips(documentTemplate.pageMargins().right()))
+                           .arg(mmToTwips(documentTemplate.pageMargins().top()))
+                           .arg(mmToTwips(documentTemplate.pageMargins().bottom()))
+                           .arg(mmToTwips(documentTemplate.pageMargins().top() / 2))
+                           .arg(mmToTwips(documentTemplate.pageMargins().bottom() / 2)));
     //
     // ... нужна ли титульная страница
     //

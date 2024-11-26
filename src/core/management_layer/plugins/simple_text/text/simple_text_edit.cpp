@@ -176,6 +176,7 @@ SimpleTextEdit::SimpleTextEdit(QWidget* _parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
     setShowPageNumbers(true);
+    setShowPageNumberAtFirstPage(false);
 
     setDocument(&d->document);
     setCapitalizeWords(false);
@@ -220,6 +221,7 @@ void SimpleTextEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
         setPageFormat(currentTemplate.pageSizeId());
         setPageMarginsMm(currentTemplate.pageMargins());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+        setShowPageNumberAtFirstPage(currentTemplate.isFirstPageNumberVisible());
     }
 
     //

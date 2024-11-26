@@ -5,6 +5,7 @@
 #include <domain/document_object.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card.h>
+#include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
@@ -57,6 +58,7 @@ public:
     RadioButton* pageNumbersAlignLeft = nullptr;
     RadioButton* pageNumbersAlignCenter = nullptr;
     RadioButton* pageNumbersAlignRight = nullptr;
+    CheckBox* isFirstPageNumberVisible = nullptr;
     CaptionLabel* pageSplitterTitle = nullptr;
     Slider* pageSplitter = nullptr;
     CaptionLabel* pageSplitterLeft = nullptr;
@@ -85,6 +87,7 @@ ScreenplayTemplatePageView::Implementation::Implementation(QWidget* _parent)
     , pageNumbersAlignLeft(new RadioButton(card))
     , pageNumbersAlignCenter(new RadioButton(card))
     , pageNumbersAlignRight(new RadioButton(card))
+    , isFirstPageNumberVisible(new CheckBox(card))
     , pageSplitterTitle(new CaptionLabel(card))
     , pageSplitter(new Slider(card))
     , pageSplitterLeft(new CaptionLabel(card))
@@ -133,6 +136,7 @@ ScreenplayTemplatePageView::Implementation::Implementation(QWidget* _parent)
     cardLayout->addWidget(pageNumbersAlignLeft, row++, 0, 1, 2);
     cardLayout->addWidget(pageNumbersAlignCenter, row++, 0, 1, 2);
     cardLayout->addWidget(pageNumbersAlignRight, row++, 0, 1, 2);
+    cardLayout->addWidget(isFirstPageNumberVisible, row++, 0, 1, 2);
     cardLayout->addWidget(pageSplitterTitle, row++, 0, 1, 2);
     cardLayout->addWidget(pageSplitter, row++, 0, 1, 2);
     cardLayout->addWidget(pageSplitterLeft, row, 0, 1, 1, Qt::AlignLeft);
@@ -205,6 +209,8 @@ ScreenplayTemplatePageView::ScreenplayTemplatePageView(QWidget* _parent)
     connect(d->pageNumbersAlignLeft, &RadioButton::checkedChanged, this, updatePageNumberAlignment);
     connect(d->pageNumbersAlignCenter, &RadioButton::checkedChanged, this,
             updatePageNumberAlignment);
+    connect(d->isFirstPageNumberVisible, &CheckBox::checkedChanged, this,
+            &ScreenplayTemplatePageView::pageChanged);
     connect(d->pageSplitter, &Slider::valueChanged, this, [this](int _value) {
         d->pageSplitterLeft->setText(QString("%1%").arg(_value));
         d->pageSplitterRight->setText(QString("%1%").arg(d->pageSplitter->maximumValue() - _value));
@@ -306,6 +312,16 @@ void ScreenplayTemplatePageView::setPageNumbersAlignment(Qt::Alignment _alignmen
     }
 }
 
+bool ScreenplayTemplatePageView::isFirstPageNumberVisible() const
+{
+    return d->isFirstPageNumberVisible->isChecked();
+}
+
+void ScreenplayTemplatePageView::setFirstPageNumberVisible(bool _visible)
+{
+    d->isFirstPageNumberVisible->setChecked(_visible);
+}
+
 int ScreenplayTemplatePageView::leftHalfOfPageWidthPercents() const
 {
     return d->pageSplitter->value();
@@ -329,7 +345,7 @@ bool ScreenplayTemplatePageView::eventFilter(QObject* _watched, QEvent* _event)
             d->pageLayoutPreview->setCurrentItem(PageLayoutItem::BottomMargin);
         } else if (_watched == d->pageNumbersAlignTop || _watched == d->pageNumbersAlignBottom
                    || _watched == d->pageNumbersAlignLeft || _watched == d->pageNumbersAlignCenter
-                   || _watched == d->pageNumbersAlignRight) {
+                   || _watched == d->pageNumbersAlignRight || d->isFirstPageNumberVisible) {
             d->pageLayoutPreview->setCurrentItem(PageLayoutItem::PageNumber);
         } else if (_watched == d->pageSplitter) {
             d->pageLayoutPreview->setCurrentItem(PageLayoutItem::Splitter);
@@ -378,6 +394,7 @@ void ScreenplayTemplatePageView::updateTranslations()
     d->pageNumbersAlignLeft->setText(tr("Left"));
     d->pageNumbersAlignCenter->setText(tr("Center"));
     d->pageNumbersAlignRight->setText(tr("Right"));
+    d->isFirstPageNumberVisible->setText(tr("Show number on the first page"));
     d->pageSplitterTitle->setText(tr("Split page into columns in proportion"));
 }
 
@@ -434,11 +451,18 @@ void ScreenplayTemplatePageView::designSystemChangeEvent(DesignSystemChangeEvent
         DesignSystem::layout().px24(), DesignSystem::layout().px4(), DesignSystem::layout().px24(),
         DesignSystem::layout().px24());
 
-    for (auto radioButton :
-         { d->pageFormatA4, d->pageFormatLetter, d->pageNumbersAlignTop, d->pageNumbersAlignBottom,
-           d->pageNumbersAlignLeft, d->pageNumbersAlignCenter, d->pageNumbersAlignRight }) {
-        radioButton->setBackgroundColor(DesignSystem::color().background());
-        radioButton->setTextColor(DesignSystem::color().onBackground());
+    for (auto widget : std::vector<Widget*>{
+             d->pageFormatA4,
+             d->pageFormatLetter,
+             d->pageNumbersAlignTop,
+             d->pageNumbersAlignBottom,
+             d->pageNumbersAlignLeft,
+             d->pageNumbersAlignCenter,
+             d->pageNumbersAlignRight,
+             d->isFirstPageNumberVisible,
+         }) {
+        widget->setBackgroundColor(DesignSystem::color().background());
+        widget->setTextColor(DesignSystem::color().onBackground());
     }
 
     d->cardLayout->setRowMinimumHeight(d->marginsSplitterRow, DesignSystem::compactLayout().px16());

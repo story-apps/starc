@@ -200,7 +200,9 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
         //
         // На титульной и на первой странице сценария
         //
-        if ((_exportOptions.includeTitlePage && _pageNumber < 3) || _pageNumber == 1) {
+        const int firstPageNumberDelta = _template.isFirstPageNumberVisible() ? 1 : 0;
+        if ((_exportOptions.includeTitlePage && _pageNumber < 3 - firstPageNumberDelta)
+            || _pageNumber == 1 - firstPageNumberDelta) {
             //
             // ... не печатаем номер
             //

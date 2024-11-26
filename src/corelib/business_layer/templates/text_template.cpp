@@ -805,6 +805,11 @@ public:
     Qt::Alignment pageNumbersAlignment;
 
     /**
+     * @brief Отображать ли номер первой страницы
+     */
+    bool isFirstPageNumberVisible = true;
+
+    /**
      * @brief Процент от ширины страницы, которые занимает левая часть разделения
      */
     int leftHalfOfPageWidthPercents = 50;
@@ -1026,6 +1031,7 @@ TextTemplate::TextTemplate(const TextTemplate& _other)
     d->pageSizeId = _other.d->pageSizeId;
     d->pageMargins = _other.d->pageMargins;
     d->pageNumbersAlignment = _other.d->pageNumbersAlignment;
+    d->isFirstPageNumberVisible = _other.d->isFirstPageNumberVisible;
     d->leftHalfOfPageWidthPercents = _other.d->leftHalfOfPageWidthPercents;
     d->placeDialoguesInTable = _other.d->placeDialoguesInTable;
     d->titlePage = _other.d->titlePage;
@@ -1042,6 +1048,7 @@ TextTemplate& TextTemplate::operator=(const TextTemplate& _other)
         d->pageSizeId = _other.d->pageSizeId;
         d->pageMargins = _other.d->pageMargins;
         d->pageNumbersAlignment = _other.d->pageNumbersAlignment;
+        d->isFirstPageNumberVisible = _other.d->isFirstPageNumberVisible;
         d->leftHalfOfPageWidthPercents = _other.d->leftHalfOfPageWidthPercents;
         d->placeDialoguesInTable = _other.d->placeDialoguesInTable;
         d->titlePage = _other.d->titlePage;
@@ -1082,6 +1089,8 @@ void TextTemplate::load(const QString& _fromFile)
     d->pageMargins = marginsFromString(templateAttributes.value("page_margins").toString());
     d->pageNumbersAlignment
         = alignmentFromString(templateAttributes.value("page_numbers_alignment").toString());
+    d->isFirstPageNumberVisible
+        = templateAttributes.value("is_first_page_number_visible").toString() == "true";
     d->leftHalfOfPageWidthPercents = templateAttributes.value("left_half_of_page_width").toInt();
     d->placeDialoguesInTable
         = templateAttributes.value("place_dialogues_in_table").toString() == "true";
@@ -1193,6 +1202,7 @@ void TextTemplate::saveToFile(const QString& _filePath) const
     writer.writeAttribute("page_format", toString(d->pageSizeId));
     writer.writeAttribute("page_margins", ::toString(d->pageMargins));
     writer.writeAttribute("page_numbers_alignment", ::toString(d->pageNumbersAlignment));
+    writer.writeAttribute("is_first_page_number_visible", ::toString(d->isFirstPageNumberVisible));
     writer.writeAttribute("left_half_of_page_width", ::toString(d->leftHalfOfPageWidthPercents));
     writer.writeAttribute("place_dialogues_in_table", ::toString(d->placeDialoguesInTable));
     writer.writeStartElement("titlepage");
@@ -1299,6 +1309,16 @@ Qt::Alignment TextTemplate::pageNumbersAlignment() const
 void TextTemplate::setPageNumbersAlignment(Qt::Alignment _alignment)
 {
     d->pageNumbersAlignment = _alignment;
+}
+
+bool TextTemplate::isFirstPageNumberVisible() const
+{
+    return d->isFirstPageNumberVisible;
+}
+
+void TextTemplate::setFirstPageNumberVisible(bool _visible)
+{
+    d->isFirstPageNumberVisible = _visible;
 }
 
 int TextTemplate::leftHalfOfPageWidthPercents() const

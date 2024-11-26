@@ -285,6 +285,7 @@ void ScreenplayTreatmentEdit::initWithModel(BusinessLayer::ScreenplayTextModel* 
         setPageFormat(currentTemplate.pageSizeId());
         setPageMarginsMm(currentTemplate.pageMargins());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+        setShowPageNumberAtFirstPage(currentTemplate.isFirstPageNumberVisible());
     }
 
     //

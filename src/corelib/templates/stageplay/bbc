@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<style id="bbc" default="true" page_format="A4" page_margins="24,25,17,25" page_numbers_alignment="bottom,hcenter" left_half_of_page_width="23" place_dialogues_in_table="true">
+<style id="bbc" default="true" page_format="A4" page_margins="24,25,17,25" page_numbers_alignment="bottom,hcenter" is_first_page_number_visible="false" left_half_of_page_width="23" place_dialogues_in_table="true">
     <titlepage>
         <document mime-type="application/x-starc/document/stageplay/title-page" version="1.0">
             <text><v><![CDATA[]]></v></text>

@@ -249,6 +249,7 @@ void AudioplayTextEdit::initWithModel(BusinessLayer::AudioplayTextModel* _model)
         setPageFormat(currentTemplate.pageSizeId());
         setPageMarginsMm(currentTemplate.pageMargins());
         setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+        setShowPageNumberAtFirstPage(currentTemplate.isFirstPageNumberVisible());
     }
 
     //

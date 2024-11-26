@@ -540,6 +540,12 @@ public:
     void setPageNumbersAlignment(Qt::Alignment _alignment);
 
     /**
+     * @brief Необходимо ли отображать номер на первой странице текста
+     */
+    bool isFirstPageNumberVisible() const;
+    void setFirstPageNumberVisible(bool _visible);
+
+    /**
      * @brief Процент ширины страницы для левой части разделителя
      */
     int leftHalfOfPageWidthPercents() const;

@@ -115,6 +115,7 @@ void TextModel::Implementation::buildModel(Domain::DocumentObject* _document)
 
         if (currentTag == xml::kHeaderTag) {
             q->readDocumentHeader(contentReader);
+            continue;
         }
 
         if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
@@ -2624,7 +2625,13 @@ QByteArray TextModel::documentHeader() const
 
 void TextModel::readDocumentHeader(QXmlStreamReader& _reader)
 {
-    Q_UNUSED(_reader)
+    //
+    // Заходим в моменте, когда ридер на тэге открывающем заголовок документа
+    //
+    Q_ASSERT(_reader.name() == xml::kHeaderTag);
+
+    xml::readNextElement(_reader); // end of header
+    xml::readNextElement(_reader); // next
 }
 
 } // namespace BusinessLayer

@@ -249,6 +249,7 @@ void TemplateOptionsManager::Implementation::updatePageParameters()
     pageView->setPageSize(currentTemplate.get().pageSizeId());
     pageView->setPageMargins(mmMarginsToCurrentMetrics(currentTemplate.get().pageMargins()));
     pageView->setPageNumbersAlignment(currentTemplate.get().pageNumbersAlignment());
+    pageView->setFirstPageNumberVisible(currentTemplate.get().isFirstPageNumberVisible());
     pageView->setLeftHalfOfPage(currentTemplate.get().leftHalfOfPageWidthPercents());
 }
 
@@ -258,6 +259,7 @@ void TemplateOptionsManager::Implementation::savePageParameters()
     currentTemplate.get().setPageSizeId(pageView->pageSizeId());
     currentTemplate.get().setPageMargins(mmMarginsFromCurrentMetrics(pageView->pageMargins()));
     currentTemplate.get().setPageNumbersAlignment(pageView->pageNumbersAlignment());
+    currentTemplate.get().setFirstPageNumberVisible(pageView->isFirstPageNumberVisible());
     currentTemplate.get().setLeftHalfOfPageWidthPercents(pageView->leftHalfOfPageWidthPercents());
 }
 
