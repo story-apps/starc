@@ -285,10 +285,13 @@ CardItemParametersView::CardItemParametersView(QWidget* _parent)
             return;
         }
 
-        const auto datetime = QDateTime::fromString(datetimeText, "dd.MM.yyyy hh:mm");
+        auto datetime = QDateTime::fromString(datetimeText, "dd.MM.yyyy hh:mm");
         if (!datetime.isValid()) {
-            d->startDateTime->setError(tr("Value should be in format DD.MM.YYYY HH:MM"));
-            return;
+            datetime = QDateTime::fromString(datetimeText, "dd.MM.yyyy");
+            if (!datetime.isValid()) {
+                d->startDateTime->setError(tr("Value should be in format DD.MM.YYYY HH:MM"));
+                return;
+            }
         }
 
         d->startDateTime->clearError();
@@ -604,7 +607,8 @@ void CardItemParametersView::setStartDateTimeVisible(bool _visible)
 
 void CardItemParametersView::setStartDateTime(const QDateTime& _startDateTime)
 {
-    if (d->startDateTime->text() == _startDateTime.toString("dd.MM.yyyy hh:mm")) {
+    if (d->startDateTime->text() == _startDateTime.toString("dd.MM.yyyy hh:mm")
+        || d->startDateTime->text() == _startDateTime.toString("dd.MM.yyyy")) {
         return;
     }
 
