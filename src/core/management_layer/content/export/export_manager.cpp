@@ -98,13 +98,18 @@ public:
     /**
      * @brief Экспортировать документ
      */
-    void exportScreenplays(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models);
+    void exportScreenplays(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models,
+                           int _currentModelIndex);
     void exportScreenplay(BusinessLayer::AbstractModel* _model,
                           const BusinessLayer::ScreenplayExportOptions& _options);
-    void exportComicBooks(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models);
-    void exportAudioplays(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models);
-    void exportStageplays(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models);
-    void exportNovels(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models);
+    void exportComicBooks(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models,
+                          int _currentModelIndex);
+    void exportAudioplays(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models,
+                          int _currentModelIndex);
+    void exportStageplays(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models,
+                          int _currentModelIndex);
+    void exportNovels(const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models,
+                      int _currentModelIndex);
     //
     void exportSimpleText(BusinessLayer::AbstractModel* _model);
     void exportCharacter(BusinessLayer::AbstractModel* _model);
@@ -139,7 +144,7 @@ ExportManager::Implementation::Implementation(ExportManager* _parent, QWidget* _
 }
 
 void ExportManager::Implementation::exportScreenplays(
-    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
+    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models, int _currentModelIndex)
 {
     using namespace BusinessLayer;
 
@@ -243,7 +248,7 @@ void ExportManager::Implementation::exportScreenplays(
     for (const auto& version : _models) {
         versions.append(version.first);
     }
-    screenplayExportDialog->setVersions(versions);
+    screenplayExportDialog->setVersions(versions, _currentModelIndex);
     screenplayExportDialog->showDialog();
 }
 
@@ -340,7 +345,7 @@ void ExportManager::Implementation::exportScreenplay(
 }
 
 void ExportManager::Implementation::exportComicBooks(
-    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
+    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models, int _currentModelIndex)
 {
     using namespace BusinessLayer;
 
@@ -509,12 +514,12 @@ void ExportManager::Implementation::exportComicBooks(
     for (const auto& version : _models) {
         versions.append(version.first);
     }
-    comicBookExportDialog->setVersions(versions);
+    comicBookExportDialog->setVersions(versions, _currentModelIndex);
     comicBookExportDialog->showDialog();
 }
 
 void ExportManager::Implementation::exportAudioplays(
-    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
+    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models, int _currentModelIndex)
 {
     using namespace BusinessLayer;
 
@@ -688,12 +693,12 @@ void ExportManager::Implementation::exportAudioplays(
     for (const auto& version : _models) {
         versions.append(version.first);
     }
-    audioplayExportDialog->setVersions(versions);
+    audioplayExportDialog->setVersions(versions, _currentModelIndex);
     audioplayExportDialog->showDialog();
 }
 
 void ExportManager::Implementation::exportStageplays(
-    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
+    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models, int _currentModelIndex)
 {
     using namespace BusinessLayer;
 
@@ -866,12 +871,12 @@ void ExportManager::Implementation::exportStageplays(
     for (const auto& version : _models) {
         versions.append(version.first);
     }
-    stageplayExportDialog->setVersions(versions);
+    stageplayExportDialog->setVersions(versions, _currentModelIndex);
     stageplayExportDialog->showDialog();
 }
 
 void ExportManager::Implementation::exportNovels(
-    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
+    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models, int _currentModelIndex)
 {
     using namespace BusinessLayer;
 
@@ -1026,7 +1031,7 @@ void ExportManager::Implementation::exportNovels(
     for (const auto& version : _models) {
         versions.append(version.first);
     }
-    novelExportDialog->setVersions(versions);
+    novelExportDialog->setVersions(versions, _currentModelIndex);
     novelExportDialog->showDialog();
 }
 
@@ -1775,7 +1780,7 @@ bool ExportManager::canExportDocument(BusinessLayer::AbstractModel* _model) cons
 }
 
 void ExportManager::exportDocument(
-    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models)
+    const QVector<QPair<QString, BusinessLayer::AbstractModel*>>& _models, int _currentModelIndex)
 {
     if (_models.isEmpty()) {
         return;
@@ -1791,27 +1796,27 @@ void ExportManager::exportDocument(
 
     switch (firstModel->document()->type()) {
     case Domain::DocumentObjectType::ScreenplayText: {
-        d->exportScreenplays(_models);
+        d->exportScreenplays(_models, _currentModelIndex);
         break;
     }
 
     case Domain::DocumentObjectType::ComicBookText: {
-        d->exportComicBooks(_models);
+        d->exportComicBooks(_models, _currentModelIndex);
         break;
     }
 
     case Domain::DocumentObjectType::AudioplayText: {
-        d->exportAudioplays(_models);
+        d->exportAudioplays(_models, _currentModelIndex);
         break;
     }
 
     case Domain::DocumentObjectType::StageplayText: {
-        d->exportStageplays(_models);
+        d->exportStageplays(_models, _currentModelIndex);
         break;
     }
 
     case Domain::DocumentObjectType::NovelText: {
-        d->exportNovels(_models);
+        d->exportNovels(_models, _currentModelIndex);
         break;
     }
 

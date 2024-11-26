@@ -2071,7 +2071,27 @@ void ApplicationManager::Implementation::exportCurrentDocument()
         Log::info("The current project is not defined and export cannot be performed.");
         return;
     }
-    exportManager->exportDocument(projectManager->currentModelsForExport());
+
+    const auto models = projectManager->currentModelsForExport();
+    if (models.isEmpty()) {
+        return;
+    }
+
+    //
+    // Если экпортируем напрямую из редактора сценария, то предустановим выбранным драфтом тот,
+    // с которым идёт работа в данный момент
+    //
+    int currentModelIndex = -1;
+    if (const auto currentDocument = projectManager->currentDocument();
+        models.constFirst().second->document()->type() == currentDocument->type()) {
+        for (int index = 0; index < models.size(); ++index) {
+            if (models[index].second->document()->uuid() == currentDocument->uuid()) {
+                currentModelIndex = index;
+                break;
+            }
+        }
+    }
+    exportManager->exportDocument(models, currentModelIndex);
 }
 
 void ApplicationManager::Implementation::toggleFullScreen()

@@ -23,7 +23,7 @@ public:
     /**
      * @brief Задать список версий сценария для экспорта
      */
-    void setVersions(const QVector<QString>& _versions);
+    void setVersions(const QVector<QString>& _versions, int _currentVersionIndex);
 
     /**
      * @brief Индекс версии для экспорта

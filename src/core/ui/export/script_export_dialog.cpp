@@ -108,7 +108,7 @@ ScriptExportDialog::~ScriptExportDialog()
     settings.setValue(settingsKey(kIncludeReviewMarksKey), d->includeReviewMarks->isChecked());
 }
 
-void ScriptExportDialog::setVersions(const QVector<QString>& _versions)
+void ScriptExportDialog::setVersions(const QVector<QString>& _versions, int _currentVersionIndex)
 {
     QStringListModel* model = nullptr;
     const bool isInitialSetup = d->version->model() == nullptr;
@@ -119,12 +119,18 @@ void ScriptExportDialog::setVersions(const QVector<QString>& _versions)
         model = qobject_cast<QStringListModel*>(d->version->model());
     }
 
+    const int invalidIndex = -1;
     int versionRow = 0;
     if (!isInitialSetup) {
         versionRow = selectedVersion();
     }
     model->setStringList({ _versions.begin(), _versions.end() });
-    if (isInitialSetup) {
+    if (_currentVersionIndex != invalidIndex) {
+        //
+        // Если задан индекс напрямую, то используем его
+        //
+        versionRow = _currentVersionIndex;
+    } else if (isInitialSetup) {
         //
         // Когда версии были заданы в первый раз для диалога восстановим прошлое значение выбранной
         // версии
