@@ -83,8 +83,6 @@ LocationsModel::LocationsModel(QObject* _parent)
             &LocationsModel::updateDocumentContent);
     connect(this, &LocationsModel::locationPositionChanged, this,
             &LocationsModel::updateDocumentContent);
-    connect(this, &LocationsModel::moveLocationRequested, this,
-            &LocationsModel::updateDocumentContent);
 }
 
 void LocationsModel::addLocationModel(LocationModel* _locationModel)
@@ -147,12 +145,15 @@ void LocationsModel::moveLocation(const QString& _name, int _index)
     for (int index = 0; index < d->locationModels.size(); ++index) {
         auto locationModel = d->locationModels[index];
         if (locationModel->name() == nameCorrected) {
-            if (index == _index) {
+            //
+            // Если перемещение происходит вниз списка, то корректируем целевой индекс
+            //
+            const int indexCorrected = index < _index ? _index - 1 : _index;
+            if (index == indexCorrected) {
                 break;
             }
 
-            d->locationModels.move(index, _index);
-            emit moveLocationRequested(locationModel->document()->uuid(), _index);
+            d->locationModels.move(index, indexCorrected);
             break;
         }
     }

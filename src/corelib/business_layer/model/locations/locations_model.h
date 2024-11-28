@@ -122,11 +122,6 @@ signals:
      */
     void createLocationRequested(const QString& _name, const QByteArray& _content);
 
-    /**
-     * @brief Необходимо перенести локацию на заданную позицию
-     */
-    void moveLocationRequested(const QUuid& _uuid, int _to);
-
 protected:
     /**
      * @brief Реализация модели для работы с документами

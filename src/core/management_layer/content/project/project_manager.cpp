@@ -2420,9 +2420,6 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 d->addDocumentToContainer(Domain::DocumentObjectType::Characters,
                                           Domain::DocumentObjectType::Character, _name, _content);
             });
-    connect(&d->modelsFacade, &ProjectModelsFacade::moveCharacterRequested,
-            d->projectStructureModel,
-            qOverload<const QUuid&, int>(&BusinessLayer::StructureModel::moveItem));
     connect(&d->modelsFacade, &ProjectModelsFacade::characterNameChanged, this,
             [this](BusinessLayer::AbstractModel* _character, const QString& _newName,
                    const QString& _oldName) {
@@ -2594,8 +2591,6 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 d->addDocumentToContainer(Domain::DocumentObjectType::Locations,
                                           Domain::DocumentObjectType::Location, _name, _content);
             });
-    connect(&d->modelsFacade, &ProjectModelsFacade::moveLocationRequested, d->projectStructureModel,
-            qOverload<const QUuid&, int>(&BusinessLayer::StructureModel::moveItem));
     connect(&d->modelsFacade, &ProjectModelsFacade::locationNameChanged, this,
             [this](BusinessLayer::AbstractModel* _location, const QString& _newName,
                    const QString& _oldName) {

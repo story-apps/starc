@@ -85,8 +85,6 @@ CharactersModel::CharactersModel(QObject* _parent)
             &CharactersModel::updateDocumentContent);
     connect(this, &CharactersModel::characterPositionChanged, this,
             &CharactersModel::updateDocumentContent);
-    connect(this, &CharactersModel::moveCharacterRequested, this,
-            &CharactersModel::updateDocumentContent);
 }
 
 void CharactersModel::addCharacterModel(CharacterModel* _characterModel)
@@ -147,12 +145,15 @@ void CharactersModel::moveCharacter(const QString& _name, int _index)
     for (int index = 0; index < d->characterModels.size(); ++index) {
         auto characterModel = d->characterModels[index];
         if (characterModel->name() == nameCorrected) {
-            if (index == _index) {
+            //
+            // Если перемещение происходит вниз списка, то корректируем целевой индекс
+            //
+            const int indexCorrected = index < _index ? _index - 1 : _index;
+            if (index == indexCorrected) {
                 break;
             }
 
-            d->characterModels.move(index, _index);
-            emit moveCharacterRequested(characterModel->document()->uuid(), _index);
+            d->characterModels.move(index, indexCorrected);
             break;
         }
     }

@@ -1083,8 +1083,6 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
 
             connect(charactersModel, &BusinessLayer::CharactersModel::createCharacterRequested,
                     this, &ProjectModelsFacade::createCharacterRequested);
-            connect(charactersModel, &BusinessLayer::CharactersModel::moveCharacterRequested, this,
-                    &ProjectModelsFacade::moveCharacterRequested);
 
             model = charactersModel;
             break;
@@ -1126,8 +1124,6 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
 
             connect(locationsModel, &BusinessLayer::LocationsModel::createLocationRequested, this,
                     &ProjectModelsFacade::createLocationRequested);
-            connect(locationsModel, &BusinessLayer::LocationsModel::moveLocationRequested, this,
-                    &ProjectModelsFacade::moveLocationRequested);
 
             model = locationsModel;
             break;

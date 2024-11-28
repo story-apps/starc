@@ -172,11 +172,6 @@ signals:
     void createCharacterRequested(const QString& _name, const QByteArray& _content);
 
     /**
-     * @brief Необходимо переставить персонажа в новое место
-     */
-    void moveCharacterRequested(const QUuid& _uuid, int _to);
-
-    /**
      * @brief Изменилось имя персонажа
      */
     void characterNameChanged(BusinessLayer::AbstractModel* _character, const QString& _oldName,
@@ -191,11 +186,6 @@ signals:
      * @brief Неоходимо создать локацию с заданным именем
      */
     void createLocationRequested(const QString& _name, const QByteArray& _content);
-
-    /**
-     * @brief Необходимо переставить локацию в новое место
-     */
-    void moveLocationRequested(const QUuid& _uuid, int _to);
 
     /**
      * @brief Изменилось название локации
