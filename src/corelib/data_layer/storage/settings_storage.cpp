@@ -1450,9 +1450,29 @@ void SettingsStorage::resetToDefaults()
     d->isReadOnly = true;
 
     //
-    // Стираем всё, что было изменено
+    // Стираем всё, что было изменено, кроме нескольких параметров, которые по-сути не являются
+    // настройками приложения и пользователь не ожидает, что они будут удалены при сбросе параметров
     //
+    QHash<QString, QVariant> settings;
+    for (const auto& key : d->appSettings.allKeys()) {
+        const QString realKey = QByteArray::fromHex(key.toUtf8());
+        if (realKey == kDeviceUuidKey || realKey == kApplicationProjectsKey
+            || realKey.startsWith(kAccountGroupKey) || realKey.startsWith(kProjectGroupKey)
+            || realKey.startsWith(QLatin1String("starc"))) {
+            settings.insert(key, d->appSettings.value(key));
+        }
+    }
     d->appSettings.clear();
+
+    //
+    // Восстанавливаем необходимые параметры
+    //
+    for (auto iter = settings.begin(); iter != settings.end(); ++iter) {
+        d->appSettings.setValue(iter.key(), iter.value());
+    }
+    //
+    // Форсим сохранение файла с настройками
+    //
     d->appSettings.sync();
 }
 

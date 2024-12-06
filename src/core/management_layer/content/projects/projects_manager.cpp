@@ -480,6 +480,13 @@ void ProjectsManager::setHasUnreadNotifications(bool _hasUnreadNotifications)
 
 void ProjectsManager::loadProjects()
 {
+    //
+    // Если проекты уже загружены, нет нужды загружать их ещё раз
+    //
+    if (!d->projects->isEmpty()) {
+        return;
+    }
+
     const auto projectsData = settingsValue(DataStorageLayer::kApplicationProjectsKey);
     const auto projectsJson
         = QJsonDocument::fromJson(QByteArray::fromHex(projectsData.toByteArray()));

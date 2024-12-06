@@ -620,8 +620,16 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
         emit scaleFactorChanged(0.5 + static_cast<qreal>(_value) / 1000.0);
     });
     connect(d->uiContinueButton, &Button::clicked, this, [this] {
-        setCurrentWidget(d->signInPage);
-        QTimer::singleShot(animationDuration(), this, [this] { d->signInEmail->setFocus(); });
+        if (!d->accountInfo.isValid()) {
+            setCurrentWidget(d->signInPage);
+            QTimer::singleShot(animationDuration(), this, [this] { d->signInEmail->setFocus(); });
+        } else {
+            setCurrentWidget(d->accountPage);
+            QTimer::singleShot(animationDuration(), this, [this] {
+                QTimer::singleShot(animationDuration(), this,
+                                   [this] { d->accountName->setFocus(); });
+            });
+        }
     });
     //
     connect(d->signInEmail, &TextField::textChanged, this, [this] {
@@ -847,7 +855,7 @@ void OnboardingNavigator::setAccountInfo(const Domain::AccountInfo& _accountInfo
     const auto signalBlocker = QSignalBlocker(d->accountSubscription);
     d->accountSubscription->setChecked(d->accountInfo.newsletterSubscribed);
 
-    if (currentWidget() != d->accountPage) {
+    if (currentWidget() == d->signInPage) {
         QTimer::singleShot(animationDuration(), this, [this] {
             setCurrentWidget(d->accountPage);
             QTimer::singleShot(animationDuration(), this, [this] { d->accountName->setFocus(); });

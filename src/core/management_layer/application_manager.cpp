@@ -824,6 +824,14 @@ void ApplicationManager::Implementation::configureAutoSave()
 void ApplicationManager::Implementation::showContent()
 {
     //
+    // Загружаем локальные проекты (облачные автоматом загружаются в момент подключения к серверу)
+    // NOTE: загрузку проектов необходимо делать даже до запуска онбординга, т.к. при сбросе
+    //       параметров приложения, мы сохраняем список проектов и ключ сессии, поэтому, если не
+    //       загрузить проекты, то список проекта полученный из облака задублируется
+    //
+    projectsManager->loadProjects();
+
+    //
     // Если это первый запуск приложения, то покажем онбординг
     //
     if (settingsValue(DataStorageLayer::kApplicationConfiguredKey).toBool() == false) {
@@ -833,15 +841,6 @@ void ApplicationManager::Implementation::showContent()
     // В противном случае показываем недавние проекты
     //
     else {
-        //
-        // Сперва проекты нужно загрузить
-        //
-        // ... локальные
-        //
-        projectsManager->loadProjects();
-        //
-        // ... облачные автоматом загружаются в момент подключения к серверу
-        //
         //
         // ... а затем уже отобразить
         //
@@ -1760,6 +1759,11 @@ bool ApplicationManager::Implementation::openProject(const QString& _path)
     // ... переключаемся на работу с выбранным файлом
     //
     projectsManager->setCurrentProject(_path, projectFilePath);
+
+    //
+    // ... сохраняем открытый проект в списке недавних
+    //
+    projectsManager->saveProjects();
 
     //
     // ... перейдём к редактированию
@@ -3122,6 +3126,7 @@ void ApplicationManager::initConnections()
         d->projectsManager->setTeams({});
         d->projectsManager->setCloudProjects({});
         d->projectsManager->setProjectsInCloudCanBeCreated(false, Domain::SubscriptionType::Free);
+        d->projectsManager->saveProjects();
     });
     //
     connect(Ui::AvatarGenerator::instance(), &Ui::AvatarGenerator::avatarRequested,
