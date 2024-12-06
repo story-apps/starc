@@ -292,7 +292,7 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
             painter.drawText(
                 textRect, Qt::AlignLeft | Qt::AlignVCenter,
                 tr("$%1 per month")
-                    .arg(d->option.baseAmount() / 100.0 / static_cast<qreal>(d->option.duration), 0,
+                    .arg(d->option.totalAmount / 100.0 / static_cast<qreal>(d->option.duration), 0,
                          'f', 2));
         }
         //
