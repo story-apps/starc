@@ -159,14 +159,13 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                     || tagContent.startsWith("chapter_heading")
                     || tagContent.startsWith("chapter_footer")
                     || tagContent.startsWith("scene_heading")
-                    || tagContent.startsWith("beat_heading")
-                    || tagContent.startsWith("scene_characters")) {
+                    || tagContent.startsWith("beat_heading")) {
                     copyWithEndTagWithoutModification = true;
                 }
                 //
                 // Некоторые тэги просто копируем без поиска завершающего
                 //
-                else if (tagContent.startsWith("?xml") || tagContent.startsWith("document")
+                else if (tagContent.startsWith("?xml") || tagContent.startsWith("document ")
                          || tagContent.startsWith("part ") || tagContent == QLatin1String("part")
                          || tagContent.startsWith("chapter") || tagContent.startsWith("scene")
                          || tagContent == "content") {
@@ -182,11 +181,7 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                 // Остальные копируем целиком, дойдя до завершающего, при необходимости преобразуя
                 //
                 else if (tagContent.startsWith("unformatted_text")
-                         || tagContent.startsWith("inline_note") || tagContent.startsWith("action")
-                         || tagContent.startsWith("character")
-                         || tagContent.startsWith("parenthetical")
-                         || tagContent.startsWith("dialogue") || tagContent.startsWith("lyrics")
-                         || tagContent.startsWith("transition") || tagContent.startsWith("shot")) {
+                         || tagContent.startsWith("inline_note") || tagContent.startsWith("text")) {
                     if (copyAsIs) {
                         copyWithEndTagWithoutModification = true;
                     } else {
@@ -205,15 +200,14 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                     || tagContent.startsWith("chapter_heading")
                     || tagContent.startsWith("chapter_footer")
                     || tagContent.startsWith("scene_heading")
-                    || tagContent.startsWith("beat_heading")
-                    || tagContent.startsWith("scene_characters")) {
+                    || tagContent.startsWith("beat_heading")) {
                     copyWithEndTagWithoutModification = false;
                     correctedMime += _mime.midRef(startTag.from, endTag.to - startTag.from + 1);
                 }
                 //
                 // Некоторые тэги просто копируем целиком, без учёта начала
                 //
-                else if (tagContent.startsWith("?xml") || tagContent.startsWith("document")
+                else if (tagContent.startsWith("?xml") || tagContent.startsWith("document ")
                          || tagContent.startsWith("part ") || tagContent == QLatin1String("part")
                          || tagContent.startsWith("chapter") || tagContent.startsWith("scene")
                          || tagContent == "content") {
@@ -230,11 +224,7 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                 // Копируем содержимое текстового блока, при необходимости преобразуя в бит
                 //
                 else if (tagContent.startsWith("unformatted_text")
-                         || tagContent.startsWith("inline_note") || tagContent.startsWith("action")
-                         || tagContent.startsWith("character")
-                         || tagContent.startsWith("parenthetical")
-                         || tagContent.startsWith("dialogue") || tagContent.startsWith("lyrics")
-                         || tagContent.startsWith("transition") || tagContent.startsWith("shot")) {
+                         || tagContent.startsWith("inline_note") || tagContent.startsWith("text")) {
                     if (copyAsIs) {
                         copyWithEndTagWithoutModification = false;
                         correctedMime += _mime.midRef(startTag.from, endTag.to - startTag.from + 1);

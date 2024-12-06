@@ -1383,12 +1383,12 @@ void NovelOutlineEdit::insertFromMimeData(const QMimeData* _source)
         //
         BusinessLayer::NovelMarkdownImporter markdownImporter;
         textToInsert = markdownImporter.novelText("\n" + _source->text()).text;
-
-        //
-        // Преобразовываем все текстовые блоки в биты
-        //
-        textToInsert = BusinessLayer::NovelTextMimeHandler::convertTextBlocksToBeats(textToInsert);
     }
+
+    //
+    // Преобразовываем все текстовые блоки в биты
+    //
+    textToInsert = BusinessLayer::NovelTextMimeHandler::convertTextBlocksToBeats(textToInsert);
 
     //
     // Собственно вставка данных
