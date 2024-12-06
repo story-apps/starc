@@ -542,14 +542,14 @@ void MenuView::updateTranslations()
     d->projects->setText(tr("Stories"));
     d->createProject->setText(tr("Create story"));
     d->openProject->setText(tr("Open story"));
-    d->saveProject->setText(d->saveProject->isEnabled() ? tr("Save changes")
+    d->saveProject->setText(d->saveProject->isEnabled() ? tr("Save story changes")
                                                         : tr("All changes saved"));
     d->saveProject->setWhatsThis(
         QKeySequence(QKeySequence::Save).toString(QKeySequence::NativeText));
-    d->saveProjectAs->setText(tr("Save current story as..."));
-    d->importProject->setText(tr("Import..."));
+    d->saveProjectAs->setText(tr("Save story as..."));
+    d->importProject->setText(tr("Import document..."));
     d->exportCurrentDocument->setText(tr("Export current document..."));
-    d->fullScreen->setText(tr("Toggle full screen"));
+    d->fullScreen->setText(tr("Full screen"));
     d->fullScreen->setWhatsThis(
         QKeySequence(QKeySequence::FullScreen).toString(QKeySequence::NativeText));
     d->settings->setText(tr("Application settings"));
