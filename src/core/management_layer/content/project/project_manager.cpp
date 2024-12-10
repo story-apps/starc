@@ -236,14 +236,9 @@ public:
     void removeVersion(const QModelIndex& _itemIndex, int _versionIndex);
 
     /**
-     * @brief Удалить выделенные документы
+     * @brief Удалить документы
      */
-    void removeSelectedDocuments();
-
-    /**
-     * @brief Удалить документ
-     */
-    void removeDocument(BusinessLayer::StructureModelItem* _item, bool _force);
+    void removeDocuments(const QList<QModelIndex>& _itemsIndexes);
     void removeDocumentImpl(BusinessLayer::StructureModelItem* _item);
 
     /**
@@ -264,7 +259,7 @@ public:
     /**
      * @brief Находится ли итем в корзине
      */
-    bool isInRecycleBin(BusinessLayer::StructureModelItem* _item) const;
+    bool isInsideRecycleBin(BusinessLayer::StructureModelItem* _item) const;
 
     /**
      * @brief Отсортировать по алфавиту дочерние элементы
@@ -526,57 +521,207 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
     const auto enabled = editingMode == DocumentEditingMode::Edit;
 
     //
-    // Формируем список действий для конкретных элементов структуры проекта
+    // Определяем, где находятся элементы: все корзине/все не в корзине
     //
-    if (currentItem->type() == Domain::DocumentObjectType::Characters) {
-        auto findAllCharacters = new QAction(tr("Find all characters"));
-        findAllCharacters->setIconText(u8"\U000F0016");
-        findAllCharacters->setEnabled(enabled);
-        connect(findAllCharacters, &QAction::triggered, q, [this] { this->findAllCharacters(); });
-        menuActions.append(findAllCharacters);
-        //
-        auto addCharacter = new QAction(tr("Add character"));
-        addCharacter->setIconText(u8"\U000F0014");
-        connect(addCharacter, &QAction::triggered, q, [this] { addDocument(); });
-        menuActions.append(addCharacter);
-    } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
-        auto findAllLocations = new QAction(tr("Find all locations"));
-        findAllLocations->setIconText(u8"\U000F13B0");
-        findAllLocations->setEnabled(enabled);
-        connect(findAllLocations, &QAction::triggered, q, [this] { this->findAllLocations(); });
-        menuActions.append(findAllLocations);
-        //
-        auto addLocation = new QAction(tr("Add location"));
-        addLocation->setIconText(u8"\U000F0975");
-        connect(addLocation, &QAction::triggered, q, [this] { addDocument(); });
-        menuActions.append(addLocation);
-    } else if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
-        if (currentItem->hasChildren()) {
-            auto emptyRecycleBin = new QAction(tr("Empty recycle bin"));
-            emptyRecycleBin->setIconText(u8"\U000f05e8");
-            emptyRecycleBin->setEnabled(enabled);
-            connect(emptyRecycleBin, &QAction::triggered, q, [this] { this->emptyRecycleBin(); });
-            menuActions.append(emptyRecycleBin);
+    bool allInsideRecycleBin = true;
+    bool allOutsideRecycleBin = true;
+    if (!_index.isValid()) {
+        allInsideRecycleBin = false;
+        allOutsideRecycleBin = false;
+    } else {
+        for (const auto index : selectedIndexes) {
+            const auto currentItemIndex = projectStructureProxyModel->mapToSource(index);
+            const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
+            if (!isInsideRecycleBin(currentItem)) {
+                allInsideRecycleBin = false;
+            } else {
+                allOutsideRecycleBin = false;
+            }
         }
     }
-    //
-    // ... для остальных элементов
-    //
-    else {
-        auto addFolder = new QAction(tr("Add folder"));
-        addFolder->setIconText(u8"\U000F0257");
-        addFolder->setEnabled(enabled);
-        connect(addFolder, &QAction::triggered, q,
-                [this] { addDocument(Domain::DocumentObjectType::Folder); });
-        menuActions.append(addFolder);
-        //
-        auto addDocument = new QAction(tr("Add document"));
-        addDocument->setIconText(u8"\U000F0415");
-        addDocument->setEnabled(enabled);
-        connect(addDocument, &QAction::triggered, q, [this] { this->addDocument(); });
-        menuActions.append(addDocument);
 
-        if (_index.isValid()) {
+    //
+    // Если все выделенные элементы находятся в корзине, то их можно только удалить навсегда
+    //
+    if (allInsideRecycleBin) {
+        auto removeDocument = new QAction(tr("Remove permanently"));
+        removeDocument->setIconText(u8"\U000f01b4");
+        removeDocument->setEnabled(enabled);
+        connect(removeDocument, &QAction::triggered, q,
+                [this, selectedIndexes] { removeDocuments(selectedIndexes); });
+        menuActions.append(removeDocument);
+    } else if (allOutsideRecycleBin) {
+        //
+        // ... если один элемент не в корзине, то формируем список действий для конкретных элементов
+        // структуры проекта
+        //
+        if (selectedIndexes.size() == 1 && _index.isValid()) {
+            if (currentItem->type() == Domain::DocumentObjectType::Characters) {
+                auto findAllCharacters = new QAction(tr("Find all characters"));
+                findAllCharacters->setIconText(u8"\U000F0016");
+                findAllCharacters->setEnabled(enabled);
+                connect(findAllCharacters, &QAction::triggered, q,
+                        [this] { this->findAllCharacters(); });
+                menuActions.append(findAllCharacters);
+                //
+                auto addCharacter = new QAction(tr("Add character"));
+                addCharacter->setIconText(u8"\U000F0014");
+                connect(addCharacter, &QAction::triggered, q, [this] { addDocument(); });
+                menuActions.append(addCharacter);
+            } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
+                auto findAllLocations = new QAction(tr("Find all locations"));
+                findAllLocations->setIconText(u8"\U000F13B0");
+                findAllLocations->setEnabled(enabled);
+                connect(findAllLocations, &QAction::triggered, q,
+                        [this] { this->findAllLocations(); });
+                menuActions.append(findAllLocations);
+                //
+                auto addLocation = new QAction(tr("Add location"));
+                addLocation->setIconText(u8"\U000F0975");
+                connect(addLocation, &QAction::triggered, q, [this] { addDocument(); });
+                menuActions.append(addLocation);
+            } else if (currentItem->type() == Domain::DocumentObjectType::RecycleBin) {
+                if (currentItem->hasChildren()) {
+                    auto emptyRecycleBin = new QAction(tr("Empty recycle bin"));
+                    emptyRecycleBin->setIconText(u8"\U000f05e8");
+                    emptyRecycleBin->setEnabled(enabled);
+                    connect(emptyRecycleBin, &QAction::triggered, q,
+                            [this] { this->emptyRecycleBin(); });
+                    menuActions.append(emptyRecycleBin);
+                }
+            }
+
+            //
+            // Персонажей и локации можно отсортировать по алфавиту, если выделен один элемент
+            //
+            if (currentItem->type() == Domain::DocumentObjectType::Characters
+                || currentItem->type() == Domain::DocumentObjectType::Locations) {
+                auto sortAlphabetically = new QAction(tr("Sort alphabetically"));
+                sortAlphabetically->setIconText(u8"\U000F05BD");
+                connect(sortAlphabetically, &QAction::triggered, q,
+                        [this] { sortChildrenAlphabetically(); });
+                menuActions.append(sortAlphabetically);
+            }
+
+            //
+            // Для текстовых документов можно создать версию
+            //
+            if (isTextItem(currentItem)) {
+                auto createNewVersion = new QAction(tr("Create new draft"));
+                createNewVersion->setSeparator(!menuActions.isEmpty());
+                createNewVersion->setIconText(u8"\U000F00FB");
+                createNewVersion->setEnabled(enabled);
+                connect(createNewVersion, &QAction::triggered, q,
+                        [this, currentItemIndex] { this->createNewVersion(currentItemIndex); });
+                menuActions.append(createNewVersion);
+            }
+
+            //
+            // Каждый из элементов можно открыть в своём окне, кроме корзины
+            //
+            if (currentItem->type() != Domain::DocumentObjectType::RecycleBin) {
+                auto openInNewWindow = new QAction(tr("Open in new window"));
+                openInNewWindow->setSeparator(!menuActions.isEmpty());
+                openInNewWindow->setIconText(u8"\U000F03CC");
+                connect(openInNewWindow, &QAction::triggered, q,
+                        [this] { openCurrentDocumentInNewWindow(); });
+                menuActions.append(openInNewWindow);
+            }
+
+            //
+            // Для документов, имеющих разрешение на экспорт, можно вызвать экспорт
+            //
+            if (isCurrentDocumentExportAvailable) {
+                auto exportCurrentFileAction = new QAction(tr("Export..."));
+                exportCurrentFileAction->setSeparator(true);
+                exportCurrentFileAction->setIconText(u8"\U000f0207");
+                connect(exportCurrentFileAction, &QAction::triggered, q,
+                        &ProjectManager::exportCurrentDocumentRequested);
+                menuActions.append(exportCurrentFileAction);
+            }
+
+            //
+            // Документы облачного проекта можно расшарить
+            //
+            if (isProjectRemote && allowGrantAccessToProject
+                && currentItem->type() != Domain::DocumentObjectType::RecycleBin) {
+                QModelIndex documentIndexToShare;
+                const auto documentUuidToShare = [currentItem, _index, &documentIndexToShare] {
+                    switch (currentItem->type()) {
+                    case Domain::DocumentObjectType::Character:
+                    case Domain::DocumentObjectType::Location:
+                    case Domain::DocumentObjectType::World:
+                    case Domain::DocumentObjectType::AudioplayTitlePage:
+                    case Domain::DocumentObjectType::AudioplaySynopsis:
+                    case Domain::DocumentObjectType::AudioplayText:
+                    case Domain::DocumentObjectType::AudioplayStatistics:
+                    case Domain::DocumentObjectType::ComicBookTitlePage:
+                    case Domain::DocumentObjectType::ComicBookSynopsis:
+                    case Domain::DocumentObjectType::ComicBookText:
+                    case Domain::DocumentObjectType::ComicBookStatistics:
+                    case Domain::DocumentObjectType::NovelTitlePage:
+                    case Domain::DocumentObjectType::NovelSynopsis:
+                    case Domain::DocumentObjectType::NovelOutline:
+                    case Domain::DocumentObjectType::NovelText:
+                    case Domain::DocumentObjectType::NovelStatistics:
+                    case Domain::DocumentObjectType::ScreenplayTitlePage:
+                    case Domain::DocumentObjectType::ScreenplaySynopsis:
+                    case Domain::DocumentObjectType::ScreenplayTreatment:
+                    case Domain::DocumentObjectType::ScreenplayText:
+                    case Domain::DocumentObjectType::ScreenplayStatistics:
+                    case Domain::DocumentObjectType::StageplayTitlePage:
+                    case Domain::DocumentObjectType::StageplaySynopsis:
+                    case Domain::DocumentObjectType::StageplayText:
+                    case Domain::DocumentObjectType::StageplayStatistics: {
+                        documentIndexToShare = _index.parent();
+                        return currentItem->parent()->uuid();
+                    }
+                    default: {
+                        documentIndexToShare = _index;
+                        return currentItem->uuid();
+                    }
+                    }
+                }();
+                //
+                // ... если пользователь владелец, или может изменять этот документ
+                //
+                if ((isProjectOwner || editingMode == DocumentEditingMode::Edit
+                     || editingPermissions.value(documentUuidToShare, DocumentEditingMode::Read)
+                         == DocumentEditingMode::Edit)) {
+                    auto shareAccess = new QAction(tr("Share access"));
+                    shareAccess->setSeparator(!menuActions.isEmpty());
+                    shareAccess->setIconText(u8"\U000F0010");
+                    connect(shareAccess, &QAction::triggered, q, [this, documentIndexToShare] {
+                        auto projectCollaboratorsView = pluginsBuilder.projectCollaboratorsView(
+                            modelsFacade.modelFor(Domain::DocumentObjectType::Project));
+                        view.left->addEditor(projectCollaboratorsView->asQWidget());
+
+                        QMetaObject::invokeMethod(projectCollaboratorsView->asQWidget(),
+                                                  "configureDocumentAccessPressed",
+                                                  Q_ARG(QModelIndex, documentIndexToShare));
+                    });
+                    menuActions.append(shareAccess);
+                }
+            }
+        }
+        //
+        // ... для одного или нескольких элементов не в корзине и кроме самой корзины
+        //
+        if (currentItem->type() != Domain::DocumentObjectType::RecycleBin) {
+            auto addFolder = new QAction(tr("Add folder"));
+            addFolder->setSeparator(!menuActions.isEmpty());
+            addFolder->setIconText(u8"\U000F0257");
+            addFolder->setEnabled(enabled);
+            connect(addFolder, &QAction::triggered, q,
+                    [this] { addDocument(Domain::DocumentObjectType::Folder); });
+            menuActions.append(addFolder);
+            //
+            auto addDocument = new QAction(tr("Add document"));
+            addDocument->setIconText(u8"\U000F0415");
+            addDocument->setEnabled(enabled);
+            connect(addDocument, &QAction::triggered, q, [this] { this->addDocument(); });
+            menuActions.append(addDocument);
+
             //
             // Если хотя бы один выделенный элемент можно удалить, добавим действие
             //
@@ -596,128 +741,9 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
                 removeDocument->setIconText(u8"\U000f01b4");
                 removeDocument->setEnabled(enabled);
                 connect(removeDocument, &QAction::triggered, q,
-                        [this] { removeSelectedDocuments(); });
+                        [this, selectedIndexes] { removeDocuments(selectedIndexes); });
                 menuActions.append(removeDocument);
             }
-        }
-    }
-
-    //
-    // Персонажей и локации можно отсортировать по алфавиту
-    //
-    if (currentItem->type() == Domain::DocumentObjectType::Characters
-        || currentItem->type() == Domain::DocumentObjectType::Locations) {
-        auto sortAlphabetically = new QAction(tr("Sort alphabetically"));
-        sortAlphabetically->setIconText(u8"\U000F05BD");
-        connect(sortAlphabetically, &QAction::triggered, q,
-                [this] { sortChildrenAlphabetically(); });
-        menuActions.append(sortAlphabetically);
-    }
-
-    bool isDocumentActionAdded = false;
-    //
-    // Для текстовых документов можно создать версию
-    //
-    if (_index.isValid() && selectedIndexes.size() == 1 && isTextItem(currentItem)) {
-        auto createNewVersion = new QAction(tr("Create new draft"));
-        createNewVersion->setSeparator(true);
-        createNewVersion->setIconText(u8"\U000F00FB");
-        createNewVersion->setEnabled(enabled);
-        connect(createNewVersion, &QAction::triggered, q,
-                [this, currentItemIndex] { this->createNewVersion(currentItemIndex); });
-        menuActions.append(createNewVersion);
-        isDocumentActionAdded = true;
-    }
-
-    //
-    // Каждый из элементов можно открыть в своём окне, кроме корзины
-    //
-    if (_index.isValid() && selectedIndexes.size() == 1
-        && currentItem->type() != Domain::DocumentObjectType::RecycleBin) {
-        auto openInNewWindow = new QAction(tr("Open in new window"));
-        openInNewWindow->setSeparator(!isDocumentActionAdded && !menuActions.isEmpty());
-        openInNewWindow->setIconText(u8"\U000F03CC");
-        connect(openInNewWindow, &QAction::triggered, q,
-                [this] { openCurrentDocumentInNewWindow(); });
-        menuActions.append(openInNewWindow);
-        isDocumentActionAdded = true;
-    }
-
-    //
-    // Для документов, имеющих разрешение на экспорт, можно вызвать экспорт
-    //
-    if (_index.isValid() && selectedIndexes.size() == 1 && isCurrentDocumentExportAvailable) {
-        auto exportCurrentFileAction = new QAction(tr("Export..."));
-        exportCurrentFileAction->setSeparator(true);
-        exportCurrentFileAction->setIconText(u8"\U000f0207");
-        connect(exportCurrentFileAction, &QAction::triggered, q,
-                &ProjectManager::exportCurrentDocumentRequested);
-        menuActions.append(exportCurrentFileAction);
-    }
-
-    //
-    // Документы облачного проекта можно расшарить
-    //
-    if (isProjectRemote && allowGrantAccessToProject && _index.isValid()
-        && selectedIndexes.size() == 1
-        && currentItem->type() != Domain::DocumentObjectType::RecycleBin) {
-        QModelIndex documentIndexToShare;
-        const auto documentUuidToShare = [currentItem, _index, &documentIndexToShare] {
-            switch (currentItem->type()) {
-            case Domain::DocumentObjectType::Character:
-            case Domain::DocumentObjectType::Location:
-            case Domain::DocumentObjectType::World:
-            case Domain::DocumentObjectType::AudioplayTitlePage:
-            case Domain::DocumentObjectType::AudioplaySynopsis:
-            case Domain::DocumentObjectType::AudioplayText:
-            case Domain::DocumentObjectType::AudioplayStatistics:
-            case Domain::DocumentObjectType::ComicBookTitlePage:
-            case Domain::DocumentObjectType::ComicBookSynopsis:
-            case Domain::DocumentObjectType::ComicBookText:
-            case Domain::DocumentObjectType::ComicBookStatistics:
-            case Domain::DocumentObjectType::NovelTitlePage:
-            case Domain::DocumentObjectType::NovelSynopsis:
-            case Domain::DocumentObjectType::NovelOutline:
-            case Domain::DocumentObjectType::NovelText:
-            case Domain::DocumentObjectType::NovelStatistics:
-            case Domain::DocumentObjectType::ScreenplayTitlePage:
-            case Domain::DocumentObjectType::ScreenplaySynopsis:
-            case Domain::DocumentObjectType::ScreenplayTreatment:
-            case Domain::DocumentObjectType::ScreenplayText:
-            case Domain::DocumentObjectType::ScreenplayStatistics:
-            case Domain::DocumentObjectType::StageplayTitlePage:
-            case Domain::DocumentObjectType::StageplaySynopsis:
-            case Domain::DocumentObjectType::StageplayText:
-            case Domain::DocumentObjectType::StageplayStatistics: {
-                documentIndexToShare = _index.parent();
-                return currentItem->parent()->uuid();
-            }
-            default: {
-                documentIndexToShare = _index;
-                return currentItem->uuid();
-            }
-            }
-        }();
-        //
-        // ... если пользователь владелец, или может изменять этот документ
-        //
-        if ((isProjectOwner || editingMode == DocumentEditingMode::Edit
-             || editingPermissions.value(documentUuidToShare, DocumentEditingMode::Read)
-                 == DocumentEditingMode::Edit)) {
-            auto shareAccess = new QAction(tr("Share access"));
-            shareAccess->setSeparator(!menuActions.isEmpty());
-            shareAccess->setIconText(u8"\U000F0010");
-            connect(shareAccess, &QAction::triggered, q, [this, documentIndexToShare] {
-                auto projectCollaboratorsView = pluginsBuilder.projectCollaboratorsView(
-                    modelsFacade.modelFor(Domain::DocumentObjectType::Project));
-                view.left->addEditor(projectCollaboratorsView->asQWidget());
-
-                QMetaObject::invokeMethod(projectCollaboratorsView->asQWidget(),
-                                          "configureDocumentAccessPressed",
-                                          Q_ARG(QModelIndex, documentIndexToShare));
-            });
-            menuActions.append(shareAccess);
-            isDocumentActionAdded = true;
         }
     }
 
@@ -780,7 +806,7 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
 DocumentEditingMode ProjectManager::Implementation::documentEditingMode(
     BusinessLayer::StructureModelItem* _documentItem) const
 {
-    if (_documentItem->isReadOnly() || isInRecycleBin(_documentItem)) {
+    if (_documentItem->isReadOnly() || isInsideRecycleBin(_documentItem)) {
         return DocumentEditingMode::Read;
     }
 
@@ -1134,13 +1160,17 @@ void ProjectManager::Implementation::removeVersion(const QModelIndex& _itemIndex
     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
-void ProjectManager::Implementation::removeSelectedDocuments()
+void ProjectManager::Implementation::removeDocuments(const QList<QModelIndex>& _itemsIndexes)
 {
+    if (_itemsIndexes.isEmpty()) {
+        return;
+    }
+
     //
-    // Собираем выделенные элементы для удаления
+    // Собираем элементы для удаления
     //
-    QList<BusinessLayer::StructureModelItem*> itemList;
-    for (const auto index : navigator->selectedIndexes()) {
+    QList<BusinessLayer::StructureModelItem*> itemsList;
+    for (const auto index : _itemsIndexes) {
         const auto itemIndex = projectStructureProxyModel->mapToSource(index);
 
         //
@@ -1150,7 +1180,7 @@ void ProjectManager::Implementation::removeSelectedDocuments()
         bool shouldToAdd = true;
         auto parentItemIndex = itemIndex.parent();
         while (parentItemIndex.isValid()) {
-            if (itemList.contains(projectStructureModel->itemForIndex(parentItemIndex))) {
+            if (itemsList.contains(projectStructureModel->itemForIndex(parentItemIndex))) {
                 shouldToAdd = false;
                 break;
             }
@@ -1158,85 +1188,69 @@ void ProjectManager::Implementation::removeSelectedDocuments()
         }
         if (const auto item = projectStructureModel->itemForIndex(itemIndex);
             shouldToAdd && canDocumentBeRemoved(item)) {
-            itemList.append(item);
+            itemsList.append(item);
         }
     }
 
     //
-    // Удаляем собранные элементы
+    // Если документы не все в корзине, то переносим их в корзину
     //
-    for (auto item : itemList) {
-        if (item == nullptr) {
-            continue;
+    bool allInsideRecycleBin = true;
+    for (const auto item : itemsList) {
+        if (!isInsideRecycleBin(item)) {
+            projectStructureModel->moveItemToRecycleBin(item);
+            allInsideRecycleBin = false;
+        }
+    }
+
+    //
+    // Из корзины удаляем только если все элементы уже были в ней
+    //
+    if (!allInsideRecycleBin) {
+        return;
+    }
+
+    QString question;
+    if (itemsList.size() > 1) {
+        QString documentsList;
+        for (const auto& item : itemsList) {
+            documentsList += "\n" + item->name();
         }
 
-        const bool forceRemove = false;
-        removeDocument(item, forceRemove);
+        question = tr("Do you really want to permanently remove following document?%1")
+                       .arg(documentsList);
+    } else {
+        question = tr("Do you really want to permanently remove document: \"%1\"?")
+                       .arg(itemsList.first()->name());
     }
-}
-
-void ProjectManager::Implementation::removeDocument(BusinessLayer::StructureModelItem* _item,
-                                                    bool _force)
-{
-    if (_item == nullptr) {
-        return;
-    }
-
     //
-    // Если тут нужно принудительное удаление, то удаляем сразу без лишних вопросов
-    //
-    if (_force) {
-        removeDocumentImpl(_item);
-        return;
-    }
-
-    //
-    // В противном случае идём по обобщённой схеме: корзина - вопрос - удаление
-    //
-    auto itemTopLevelParent = _item->parent();
-    if (itemTopLevelParent == nullptr) {
-        return;
-    }
-    while (itemTopLevelParent->parent()
-           && itemTopLevelParent->parent()->type() != Domain::DocumentObjectType::Undefined) {
-        itemTopLevelParent = itemTopLevelParent->parent();
-    }
-
-    //
-    // Если документ ещё не в корзине, то переносим его в корзину
-    //
-    if (itemTopLevelParent->type() != Domain::DocumentObjectType::RecycleBin) {
-        projectStructureModel->moveItemToRecycleBin(_item);
-        return;
-    }
-
-    //
-    // Если документ в корзине
-    //
-    // ... то спросим действительно ли пользователь хочет его удалить
+    // Спросим действительно ли пользователь хочет удалить документы
     //
     const int kCancelButtonId = 0;
     const int kRemoveButtonId = 1;
     auto dialog = new Dialog(topLevelWidget);
-    dialog->showDialog({}, tr("Do you really want to permanently remove document?"),
+    dialog->showDialog({}, question,
                        { { kCancelButtonId, tr("No"), Dialog::RejectButton },
                          { kRemoveButtonId, tr("Yes, remove"), Dialog::NormalButton } });
-    QObject::connect(dialog, &Dialog::finished,
-                     [this, _item, kCancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
-                         dialog->hideDialog();
+    QObject::connect(
+        dialog, &Dialog::finished,
+        [this, itemsList, kCancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
+            dialog->hideDialog();
 
-                         //
-                         // Пользователь передумал удалять
-                         //
-                         if (_buttonInfo.id == kCancelButtonId) {
-                             return;
-                         }
+            //
+            // Пользователь передумал удалять
+            //
+            if (_buttonInfo.id == kCancelButtonId) {
+                return;
+            }
 
-                         //
-                         // Если таки хочет, то удаляем документ
-                         //
-                         removeDocumentImpl(_item);
-                     });
+            //
+            // Если таки хочет, то удаляем документы
+            //
+            for (const auto item : itemsList) {
+                removeDocumentImpl(item);
+            }
+        });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
@@ -1498,8 +1512,7 @@ void ProjectManager::Implementation::findAllCharacters()
                     const auto characterModel = charactersModel->character(duplicateRow);
                     auto item
                         = projectStructureModel->itemForUuid(characterModel->document()->uuid());
-                    const auto forceRemove = true;
-                    removeDocument(item, forceRemove);
+                    removeDocumentImpl(item);
                 }
             }
 
@@ -1511,8 +1524,7 @@ void ProjectManager::Implementation::findAllCharacters()
                     const auto characterModel = charactersModel->character(characterName);
                     auto item
                         = projectStructureModel->itemForUuid(characterModel->document()->uuid());
-                    const auto forceRemove = true;
-                    removeDocument(item, forceRemove);
+                    removeDocumentImpl(item);
                 }
             }
 
@@ -1630,8 +1642,7 @@ void ProjectManager::Implementation::findAllLocations()
                     const auto locationModel = locationsModel->location(duplicateRow);
                     auto item
                         = projectStructureModel->itemForUuid(locationModel->document()->uuid());
-                    const auto forceRemove = true;
-                    removeDocument(item, forceRemove);
+                    removeDocumentImpl(item);
                 }
             }
 
@@ -1643,8 +1654,7 @@ void ProjectManager::Implementation::findAllLocations()
                     const auto locationModel = locationsModel->location(locationName);
                     auto item
                         = projectStructureModel->itemForUuid(locationModel->document()->uuid());
-                    const auto forceRemove = true;
-                    removeDocument(item, forceRemove);
+                    removeDocumentImpl(item);
                 }
             }
 
@@ -1697,8 +1707,7 @@ void ProjectManager::Implementation::emptyRecycleBin()
             //
             while (recycleBin->hasChildren()) {
                 auto itemToRemove = recycleBin->childAt(0);
-                const auto forceRemove = true;
-                removeDocument(itemToRemove, forceRemove);
+                removeDocumentImpl(itemToRemove);
             }
 
             //
@@ -1709,7 +1718,8 @@ void ProjectManager::Implementation::emptyRecycleBin()
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 }
 
-bool ProjectManager::Implementation::isInRecycleBin(BusinessLayer::StructureModelItem* _item) const
+bool ProjectManager::Implementation::isInsideRecycleBin(
+    BusinessLayer::StructureModelItem* _item) const
 {
     if (_item == nullptr) {
         return false;
@@ -2404,8 +2414,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(&d->modelsFacade, &ProjectModelsFacade::modelRemoveRequested, this,
             [this](BusinessLayer::AbstractModel* _model) {
                 auto item = d->projectStructureModel->itemForUuid(_model->document()->uuid());
-                const auto forceRemove = false;
-                d->removeDocument(item, forceRemove);
+                auto index = d->projectStructureModel->indexForItem(item);
+                d->removeDocuments({ index });
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this,
             &ProjectManager::projectNameChanged);
