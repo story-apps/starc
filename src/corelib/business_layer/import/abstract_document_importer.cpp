@@ -476,7 +476,7 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
     //
     const QString blockText = _cursor.block().text();
     const QString blockTextUppercase = TextHelper::smartToUpper(blockText);
-    const QString BlockTextWithoutParentheses
+    const QString blockTextWithoutParentheses
         = _cursor.block().text().remove(kTextInParenthesisChecker);
 
     //
@@ -495,8 +495,8 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
         || blockText == TextHelper::smartToUpper(blockText);
     // ... блоки находящиеся в центре
     bool isCentered = !blockFormat.alignment().testFlag(Qt::AlignRight)
-        && (((blockFormat.leftMargin() + blockFormat.indent()) > 0
-             && (blockFormat.leftMargin() + blockFormat.indent())
+        && (((blockFormat.leftMargin() + blockFormat.indent() + blockFormat.textIndent()) > 0
+             && (blockFormat.leftMargin() + blockFormat.indent() + blockFormat.textIndent())
                  > kLeftMarginDelta + _minLeftMargin)
             || (blockFormat.alignment().testFlag(Qt::AlignHCenter))
             || blockText.startsWith(kOldSchoolCenteringPrefix));
@@ -507,9 +507,10 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
     {
         //
         // Самым первым пробуем определить заголовок сцены
-        // 1. содержит ключевые сокращения места действия
+        // 1. содержит ключевые сокращения места действия или начинается с номера сцены
         //
-        if (blockTextUppercase.contains(kPlaceContainsChecker)) {
+        if (blockTextUppercase.contains(kPlaceContainsChecker)
+            || blockTextUppercase.contains(kStartFromNumberChecker)) {
             blockType = TextParagraphType::SceneHeading;
         }
 
@@ -537,8 +538,8 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
             // 1. В верхнем регистре
             //
             else if ((textIsUppercase
-                      || BlockTextWithoutParentheses
-                          == TextHelper::smartToUpper(BlockTextWithoutParentheses))
+                      || blockTextWithoutParentheses
+                          == TextHelper::smartToUpper(blockTextWithoutParentheses))
                      && _lastBlockType != TextParagraphType::Character) {
                 blockType = TextParagraphType::Character;
             }

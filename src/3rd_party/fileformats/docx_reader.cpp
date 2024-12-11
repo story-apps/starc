@@ -446,7 +446,8 @@ void DocxReader::readParagraph()
 
 void DocxReader::readParagraphProperties(Style& style, bool allowstyles)
 {
-    int left_indent = 0, right_indent = 0, indent = 0, top_indent = 0, bottom_indent = 0;
+    int left_indent = 0, right_indent = 0, text_indent = 0, indent = 0, top_indent = 0,
+        bottom_indent = 0;
     while (m_xml.readNextStartElement()) {
         const QXmlStreamAttributes& attributes = m_xml.attributes();
         const auto value = attributes.value("w:val");
@@ -476,6 +477,10 @@ void DocxReader::readParagraphProperties(Style& style, bool allowstyles)
             if (attributes.hasAttribute("w:right")) {
                 right_indent = pixelsFromTwips(attributes.value("w:right").toString().toInt());
                 style.block_format.setRightMargin(right_indent);
+            }
+            if (attributes.hasAttribute("w:firstLine")) {
+                text_indent = pixelsFromTwips(attributes.value("w:firstLine").toString().toInt());
+                style.block_format.setTextIndent(text_indent);
             }
             if (attributes.hasAttribute("w:hanging")) {
                 auto t = attributes.value("w:hanging").toString();
