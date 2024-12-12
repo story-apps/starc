@@ -50,6 +50,11 @@ public:
     void setMode(Mode _mode);
 
     /**
+     * @brief Задать возможность добавления редакторских заметок
+     */
+    void setAddingAvailable(bool _available);
+
+    /**
      * @brief Установить решённость текущего комментария
      */
     void setCurrentCommentIsDone(bool _isDone);

@@ -407,6 +407,11 @@ void StageplayTextView::Implementation::updateCommentsToolbar(bool _force)
         commentsToolbar->setMode(CommentsToolbar::Mode::AddReview);
     }
 
+    //
+    // Настроим доступность действий добавления редакторских заметок
+    //
+    commentsToolbar->setAddingAvailable(textEdit->textCursor().hasSelection());
+
     const auto cursorRect = textEdit->cursorRect();
     const auto globalCursorCenter = textEdit->mapToGlobal(cursorRect.center());
     const auto localCursorCenter

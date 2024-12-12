@@ -392,6 +392,21 @@ void CommentsToolbar::setMode(Mode _mode)
     d->updateActions();
 }
 
+void CommentsToolbar::setAddingAvailable(bool _available)
+{
+    for (auto action : {
+             d->reviewTextColorAction,
+             d->reviewTextBackgroundColorAction,
+             d->reviewCommentAction,
+             d->changesTextBackgroundColorAction,
+             d->revisionMarkAction,
+         }) {
+        action->setEnabled(_available);
+    }
+
+    updateTranslations();
+}
+
 void CommentsToolbar::setCurrentCommentIsDone(bool _isDone)
 {
     QSignalBlocker signalBlocker(d->markAsDoneAction);
@@ -505,26 +520,33 @@ void CommentsToolbar::updateTranslations()
     d->reviewType->setToolTip(tr("Review mode"));
     d->changesType->setToolTip(tr("Track additions mode"));
     d->revisionType->setToolTip(tr("Revision mode"));
+    const auto addingActionNote = d->reviewTextColorAction->isEnabled()
+        ? ""
+        : (" " + tr("[select text to activate option]"));
     d->reviewTextColorAction->setToolTip(
         tr("Change text color")
         + QString(" (%1)").arg(
-            d->reviewTextColorAction->shortcut().toString(QKeySequence::NativeText)));
+            d->reviewTextColorAction->shortcut().toString(QKeySequence::NativeText))
+        + addingActionNote);
     d->reviewTextBackgroundColorAction->setToolTip(
         tr("Change text highlight color")
         + QString(" (%1)").arg(
-            d->reviewTextBackgroundColorAction->shortcut().toString(QKeySequence::NativeText)));
+            d->reviewTextBackgroundColorAction->shortcut().toString(QKeySequence::NativeText))
+        + addingActionNote);
     d->reviewCommentAction->setToolTip(
         tr("Add comment")
         + QString(" (%1)").arg(
-            d->reviewCommentAction->shortcut().toString(QKeySequence::NativeText)));
+            d->reviewCommentAction->shortcut().toString(QKeySequence::NativeText))
+        + addingActionNote);
     d->changesTextBackgroundColorAction->setToolTip(
         tr("Change text highlight color")
         + QString(" (%1)").arg(
-            d->changesTextBackgroundColorAction->shortcut().toString(QKeySequence::NativeText)));
+            d->changesTextBackgroundColorAction->shortcut().toString(QKeySequence::NativeText))
+        + addingActionNote);
     d->revisionMarkAction->setToolTip(
         tr("Mark revisited")
-        + QString(" (%1)").arg(
-            d->revisionMarkAction->shortcut().toString(QKeySequence::NativeText)));
+        + QString(" (%1)").arg(d->revisionMarkAction->shortcut().toString(QKeySequence::NativeText))
+        + addingActionNote);
     //: This allow user to choose color for the review mode actions like text higlight or comments
     d->colorAction->setToolTip(tr("Choose color for the action"));
     d->markAsDoneAction->setToolTip(tr("Mark as done"));
