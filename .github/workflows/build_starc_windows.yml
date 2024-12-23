@@ -90,6 +90,25 @@ jobs:
           files: build/windows/files_64
           dest: build/windows/starc-64.zip
 
+      - name: Update manifest
+        shell: pwsh
+        env:
+          APPXMANIFEST_PATH: build\windows\msix\AppxManifest.xml
+          BUILD_VERSION: ${{ env.APP_VERSION }}.${{ env.DEV_BUILD }}
+        run: |
+          $xml = [xml](Get-Content $env:APPXMANIFEST_PATH)
+          $xml.Package.Identity.Version = $env:BUILD_VERSION
+          $xml.save($env:APPXMANIFEST_PATH)
+
+      - name: Build MSIX package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path build/windows/files_64/images
+          Copy-Item -Path build/windows/msix/visual-elements/* -Destination build/windows/files_64/images -Recurse
+          cp build/windows/msix/AppxManifest.xml build/windows/files_64
+          $env:PATH = $env:PATH + ";C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64"
+          makeappx.exe pack /d build/windows/files_64 /p build/windows/starc-package-64.msix
+
       - name: Collect artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -97,6 +116,7 @@ jobs:
           path: |
             build/windows/starc-setup-64.exe
             build/windows/starc-64.zip
+            build/windows/starc-package-64.msix
 
       - name: Publish artifacts to the dev stream and notify clients
         if: startsWith(github.ref, 'refs/tags/') != true
@@ -125,6 +145,7 @@ jobs:
           files: |
             build/windows/starc-setup-64.exe
             build/windows/starc-64.zip
+            build/windows/starc-package-64.msix
 
       - name: Notify clients that stable release published
         if: startsWith(github.ref, 'refs/tags/')
@@ -208,6 +229,26 @@ jobs:
           files: build/windows/files_32
           dest: build/windows/starc-32.zip
 
+      - name: Update manifest
+        shell: pwsh
+        env:
+          APPXMANIFEST_PATH: build\windows\msix\AppxManifest.xml
+          BUILD_VERSION: ${{ env.APP_VERSION }}.${{ env.DEV_BUILD }}
+        run: |
+          $xml = [xml](Get-Content $env:APPXMANIFEST_PATH)
+          $xml.Package.Identity.Version = $env:BUILD_VERSION
+          $xml.save($env:APPXMANIFEST_PATH)
+
+      - name: Build MSIX package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path build/windows/files_32/images
+          Copy-Item -Path build/windows/msix/visual-elements/* -Destination build/windows/files_32/images -Recurse
+          cp build/windows/msix/AppxManifest.xml build/windows/files_32
+          $env:PATH = $env:PATH + ";C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x86"
+          makeappx.exe pack /d build/windows/files_32 /p build/windows/starc-package-32.msix
+
+
       - name: Collect artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -215,6 +256,7 @@ jobs:
           path: |
             build/windows/starc-setup-32.exe
             build/windows/starc-32.zip
+            build/windows/starc-package-32.msix
 
       - name: Publish artifacts to the dev stream and notify clients
         if: startsWith(github.ref, 'refs/tags/') != true
@@ -243,6 +285,7 @@ jobs:
           files: |
             build/windows/starc-setup-32.exe
             build/windows/starc-32.zip
+            build/windows/starc-package-32.msix
 
       - name: Notify clients that stable release published
         if: startsWith(github.ref, 'refs/tags/')
