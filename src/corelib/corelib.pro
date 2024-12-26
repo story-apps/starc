@@ -588,7 +588,6 @@ HEADERS += \
     business_layer/import/screenplay/screenplay_docx_importer.h \
     business_layer/import/screenplay/screenplay_fdx_importer.h \
     business_layer/import/screenplay/screenplay_fountain_importer.h \
-    business_layer/import/screenplay/screenplay_import_options.h \
     business_layer/import/screenplay/screenplay_kit_scenarist_importer.h \
     business_layer/import/screenplay/screenplay_pdf_importer.h \
     business_layer/import/screenplay/screenplay_trelby_importer.h \

@@ -101,6 +101,7 @@ SOURCES += \
     ui/export/simple_text_export_dialog.cpp \
     ui/export/stageplay_export_dialog.cpp \
     ui/import/import_dialog.cpp \
+    ui/import/import_file_delegate.cpp \
     ui/menu_view.cpp \
     ui/notifications/credits_view.cpp \
     ui/notifications/release_view.cpp \
@@ -196,6 +197,7 @@ HEADERS += \
     ui/export/simple_text_export_dialog.h \
     ui/export/stageplay_export_dialog.h \
     ui/import/import_dialog.h \
+    ui/import/import_file_delegate.h \
     ui/menu_view.h \
     ui/notifications/credits_view.h \
     ui/notifications/release_view.h \

@@ -18,7 +18,7 @@ public:
     /**
      * @brief Импортировать сценарии
      */
-    QVector<Screenplay> importScreenplays(const ScreenplayImportOptions& _options) const override;
+    QVector<Screenplay> importScreenplays(const ImportOptions& _options) const override;
 
 protected:
     /**

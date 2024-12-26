@@ -2,19 +2,21 @@
 
 #include <business_layer/import/audioplay/audioplay_fountain_importer.h>
 #include <business_layer/import/comic_book/comic_book_fountain_importer.h>
+#include <business_layer/import/import_options.h>
 #include <business_layer/import/novel/novel_markdown_importer.h>
 #include <business_layer/import/screenplay/screenplay_celtx_importer.h>
 #include <business_layer/import/screenplay/screenplay_docx_importer.h>
 #include <business_layer/import/screenplay/screenplay_fdx_importer.h>
 #include <business_layer/import/screenplay/screenplay_fountain_importer.h>
-#include <business_layer/import/screenplay/screenplay_import_options.h>
 #include <business_layer/import/screenplay/screenplay_kit_scenarist_importer.h>
 #include <business_layer/import/screenplay/screenplay_pdf_importer.h>
 #include <business_layer/import/screenplay/screenplay_trelby_importer.h>
 #include <business_layer/import/stageplay/stageplay_fountain_importer.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <ui/design_system/design_system.h>
 #include <ui/import/import_dialog.h>
+#include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/extension_helper.h>
@@ -30,9 +32,9 @@ public:
     explicit Implementation(ImportManager* _parent, QWidget* _topLevelWidget);
 
     /**
-     * @brief Показать диалог импорта для заданного файла
+     * @brief Показать диалог импорта для заданных файлов
      */
-    void showImportDialogFor(const QString& _path);
+    void showImportDialogFor(const QStringList& _paths);
 
     /**
      * @brief Импортировать данные документа из заданного файла
@@ -40,7 +42,7 @@ public:
     void importAudioplay(const BusinessLayer::ImportOptions& _options);
     void importComicBook(const BusinessLayer::ImportOptions& _options);
     void importNovel(const BusinessLayer::ImportOptions& _options);
-    void importScreenplay(const BusinessLayer::ScreenplayImportOptions& _options);
+    void importScreenplay(const BusinessLayer::ImportOptions& _options);
     void importStageplay(const BusinessLayer::ImportOptions& _options);
 
     //
@@ -60,54 +62,64 @@ ImportManager::Implementation::Implementation(ImportManager* _parent, QWidget* _
 {
 }
 
-void ImportManager::Implementation::showImportDialogFor(const QString& _path)
+void ImportManager::Implementation::showImportDialogFor(const QStringList& _paths)
 {
     //
     // Формат MS DOC не поддерживается, он отображается только для того, чтобы пользователи
     // не теряли свои файлы
     //
-    if (_path.toLower().endsWith(ExtensionHelper::msOfficeBinary())) {
+    QStringList docFiles;
+    QStringList filesToImport;
+    for (const auto& path : _paths) {
+        if (path.toLower().endsWith(ExtensionHelper::msOfficeBinary())) {
+            docFiles.append(path);
+        } else {
+            filesToImport.append(path);
+        }
+    }
+
+    if (!docFiles.isEmpty() && filesToImport.isEmpty()) {
         StandardDialog::information(topLevelWidget, tr("File format not supported"),
                                     tr("Importing from DOC files is not supported. You need to "
                                        "save the file in DOCX format and repeat the import."));
         return;
     }
 
+    //
+    // Создаем диалог импорта
+    //
     if (importDialog == nullptr) {
-        importDialog = new Ui::ImportDialog(_path, topLevelWidget);
+        importDialog = new Ui::ImportDialog(filesToImport, topLevelWidget);
         connect(importDialog, &Ui::ImportDialog::importRequested, importDialog, [this] {
-            const auto importOptions = importDialog->importOptions();
-            switch (importOptions.documentType) {
-            default:
-            case Domain::DocumentObjectType::Undefined: {
-                break;
-            }
-            case Domain::DocumentObjectType::Audioplay: {
-                importDialog->hideDialog();
-                importAudioplay(importOptions);
-                break;
-            }
-            case Domain::DocumentObjectType::ComicBook: {
-                importDialog->hideDialog();
-                importComicBook(importOptions);
-                break;
-            }
-            case Domain::DocumentObjectType::Novel: {
-                importDialog->hideDialog();
-                importNovel(importOptions);
-                break;
-            }
-            case Domain::DocumentObjectType::Screenplay: {
-                const auto screenplayImportOptions = importDialog->screenplayImportOptions();
-                importDialog->hideDialog();
-                importScreenplay(screenplayImportOptions);
-                break;
-            }
-            case Domain::DocumentObjectType::Stageplay: {
-                importDialog->hideDialog();
-                importStageplay(importOptions);
-                break;
-            }
+            const auto optionsList = importDialog->importOptions();
+            importDialog->hideDialog();
+            for (const auto& importOptions : optionsList) {
+                switch (importOptions.documentType) {
+                default:
+                case Domain::DocumentObjectType::Undefined: {
+                    break;
+                }
+                case Domain::DocumentObjectType::Audioplay: {
+                    importAudioplay(importOptions);
+                    break;
+                }
+                case Domain::DocumentObjectType::ComicBook: {
+                    importComicBook(importOptions);
+                    break;
+                }
+                case Domain::DocumentObjectType::Novel: {
+                    importNovel(importOptions);
+                    break;
+                }
+                case Domain::DocumentObjectType::Screenplay: {
+                    importScreenplay(importOptions);
+                    break;
+                }
+                case Domain::DocumentObjectType::Stageplay: {
+                    importStageplay(importOptions);
+                    break;
+                }
+                }
             }
         });
         connect(importDialog, &Ui::ImportDialog::canceled, importDialog,
@@ -118,7 +130,32 @@ void ImportManager::Implementation::showImportDialogFor(const QString& _path)
         });
     }
 
-    importDialog->showDialog();
+    //
+    // Прежде чем показать диалог импорта, выведем предупреждение, если нужно
+    //
+    if (!docFiles.isEmpty() && !filesToImport.isEmpty()) {
+        QString filesList;
+        for (const auto& file : docFiles) {
+            QFileInfo fileInfo(file);
+            filesList += fileInfo.fileName() + "\n";
+        }
+        QString title("File format not supported");
+        QString text(tr("Importing from DOC files is not supported. You need to "
+                        "save the file in DOCX format and repeat the import.\n\nThe "
+                        "following files will not be imported:\n")
+                     + filesList);
+        auto dialog = new Dialog(topLevelWidget);
+        dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+        dialog->showDialog(title, text,
+                           { { 0, StandardDialog::generateOkTerm(), Dialog::RejectButton } });
+        QObject::connect(dialog, &Dialog::finished, dialog, [this, dialog]() {
+            dialog->hideDialog();
+            importDialog->showDialog();
+        });
+        QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+    } else {
+        importDialog->showDialog();
+    }
 }
 
 void ImportManager::Implementation::importAudioplay(const BusinessLayer::ImportOptions& _options)
@@ -209,7 +246,7 @@ void ImportManager::Implementation::importNovel(const BusinessLayer::ImportOptio
 }
 
 void ImportManager::Implementation::importScreenplay(
-    const BusinessLayer::ScreenplayImportOptions& _importOptions)
+    const BusinessLayer::ImportOptions& _importOptions)
 {
     //
     // Определим нужный импортер
@@ -317,29 +354,29 @@ void ImportManager::import()
     //
     const auto projectImportFolder
         = settingsValue(DataStorageLayer::kProjectImportFolderKey).toString();
-    const auto importFilePath
-        = QFileDialog::getOpenFileName(d->topLevelWidget, tr("Choose the file to import"),
-                                       projectImportFolder, DialogHelper::filtersForImport());
-    if (importFilePath.isEmpty()) {
+    const auto importFilePaths
+        = QFileDialog::getOpenFileNames(d->topLevelWidget, tr("Choose files to import"),
+                                        projectImportFolder, DialogHelper::filtersForImport());
+    if (importFilePaths.isEmpty()) {
         return;
     }
 
     //
-    // Если файл был выбран
+    // Если файлы были выбраны
     //
     // ... обновим папку, откуда в следующий раз он предположительно опять будет импортировать
     // проекты
     //
-    setSettingsValue(DataStorageLayer::kProjectImportFolderKey, importFilePath);
+    setSettingsValue(DataStorageLayer::kProjectImportFolderKey, importFilePaths.last());
     //
     // ... и переходим к подготовке импорта
     //
-    d->showImportDialogFor(importFilePath);
+    d->showImportDialogFor(importFilePaths);
 }
 
 void ImportManager::importScreenplay(const QString& _filePath, bool _importDocuments)
 {
-    BusinessLayer::ScreenplayImportOptions options;
+    BusinessLayer::ImportOptions options;
     options.filePath = _filePath;
     options.documentType = Domain::DocumentObjectType::Screenplay;
     options.importCharacters = _importDocuments;

@@ -1,8 +1,8 @@
 #include "screenplay_pdf_importer.h"
 
 #include "TableExtraction.h"
-#include "screenplay_import_options.h"
 
+#include <business_layer/import/import_options.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/text/text_model_xml.h>
 #include <data_layer/storage/settings_storage.h>
@@ -26,7 +26,7 @@ ScreenplayPdfImporter::~ScreenplayPdfImporter() = default;
 
 
 QVector<AbstractScreenplayImporter::Screenplay> ScreenplayPdfImporter::importScreenplays(
-    const ScreenplayImportOptions& _options) const
+    const ImportOptions& _options) const
 {
     Screenplay screenplay;
     screenplay.name = QFileInfo(_options.filePath).completeBaseName();
@@ -101,8 +101,7 @@ void ScreenplayPdfImporter::writeReviewMarks(QXmlStreamWriter& _writer, QTextCur
 
 bool ScreenplayPdfImporter::shouldKeepSceneNumbers(const ImportOptions& _options) const
 {
-    const auto& options = static_cast<const ScreenplayImportOptions&>(_options);
-    return options.keepSceneNumbers;
+    return _options.keepSceneNumbers;
 }
 
 QString ScreenplayPdfImporter::characterName(const QString& _text) const

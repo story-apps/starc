@@ -1,7 +1,6 @@
 #include "screenplay_trelby_importer.h"
 
-#include "screenplay_import_options.h"
-
+#include <business_layer/import/import_options.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -119,7 +118,7 @@ AbstractScreenplayImporter::Documents ScreenplayTrelbyImporter::importDocuments(
 }
 
 QVector<AbstractScreenplayImporter::Screenplay> ScreenplayTrelbyImporter::importScreenplays(
-    const ScreenplayImportOptions& _options) const
+    const ImportOptions& _options) const
 {
     if (_options.importText == false) {
         return {};
