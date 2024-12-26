@@ -36,6 +36,16 @@ struct CORE_LIBRARY_EXPORT ImportOptions {
      * @brief Нужно ли импортировать текст
      */
     bool importText = true;
+
+    /**
+     * @brief Нужно ли импортировать документы
+     */
+    bool importResearch = true;
+
+    /**
+     * @brief Сохранять номера сцен импортируемого сценария
+     */
+    bool keepSceneNumbers = false;
 };
 
 } // namespace BusinessLayer

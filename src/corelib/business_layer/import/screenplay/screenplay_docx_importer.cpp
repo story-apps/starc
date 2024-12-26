@@ -1,7 +1,6 @@
 #include "screenplay_docx_importer.h"
 
-#include "screenplay_import_options.h"
-
+#include <business_layer/import/import_options.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/text/text_model_xml.h>
 #include <data_layer/storage/settings_storage.h>
@@ -31,7 +30,7 @@ ScreenplayDocxImporter::~ScreenplayDocxImporter() = default;
 
 
 QVector<AbstractScreenplayImporter::Screenplay> ScreenplayDocxImporter::importScreenplays(
-    const ScreenplayImportOptions& _options) const
+    const ImportOptions& _options) const
 {
     Screenplay screenplay;
     screenplay.name = QFileInfo(_options.filePath).completeBaseName();
@@ -116,8 +115,7 @@ void ScreenplayDocxImporter::writeReviewMarks(QXmlStreamWriter& _writer, QTextCu
 
 bool ScreenplayDocxImporter::shouldKeepSceneNumbers(const ImportOptions& _options) const
 {
-    const auto& options = static_cast<const ScreenplayImportOptions&>(_options);
-    return options.keepSceneNumbers;
+    return _options.keepSceneNumbers;
 }
 
 QString ScreenplayDocxImporter::characterName(const QString& _text) const

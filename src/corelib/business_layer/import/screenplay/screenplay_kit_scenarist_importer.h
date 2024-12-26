@@ -24,7 +24,7 @@ public:
     /**
      * @brief Сформировать xml-сценария во внутреннем формате
      */
-    QVector<Screenplay> importScreenplays(const ScreenplayImportOptions& _options) const override;
+    QVector<Screenplay> importScreenplays(const ImportOptions& _options) const override;
 
 private:
     class Implementation;

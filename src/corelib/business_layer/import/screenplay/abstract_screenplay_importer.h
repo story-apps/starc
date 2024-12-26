@@ -7,7 +7,7 @@
 
 namespace BusinessLayer {
 
-struct ScreenplayImportOptions;
+struct ImportOptions;
 
 /**
  * @brief Абстрактный класс для реализации импортера сценариев
@@ -34,8 +34,7 @@ public:
     /**
      * @brief Импорт сценариев из заданного документа
      */
-    virtual QVector<Screenplay> importScreenplays(
-        const ScreenplayImportOptions& _options) const = 0;
+    virtual QVector<Screenplay> importScreenplays(const ImportOptions& _options) const = 0;
 };
 
 } // namespace BusinessLayer

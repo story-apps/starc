@@ -1,7 +1,6 @@
 #include "screenplay_fountain_importer.h"
 
-#include "screenplay_import_options.h"
-
+#include <business_layer/import/import_options.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/templates/text_template.h>
 
@@ -43,7 +42,7 @@ ScreenplayFountainImporter::ScreenplayFountainImporter()
 ScreenplayFountainImporter::~ScreenplayFountainImporter() = default;
 
 QVector<AbstractScreenplayImporter::Screenplay> ScreenplayFountainImporter::importScreenplays(
-    const ScreenplayImportOptions& _options) const
+    const ImportOptions& _options) const
 {
     if (_options.importText == false) {
         return {};
