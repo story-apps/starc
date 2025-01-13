@@ -1281,6 +1281,8 @@ void ApplicationManager::Implementation::saveChanges()
         return;
     }
 
+    Log::info("Save changes triggered");
+
     //
     // Управляющие должны сохранить все изменения
     //
@@ -1370,6 +1372,8 @@ void ApplicationManager::Implementation::saveChanges()
             settingsValue(DataStorageLayer::kApplicationBackupsFolderKey).toString(),
             baseBackupName, settingsValue(DataStorageLayer::kApplicationBackupsQtyKey).toInt());
     }
+
+    Log::info("All changes saved");
 }
 
 void ApplicationManager::Implementation::saveIfNeeded(std::function<void()> _callback)
