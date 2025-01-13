@@ -268,18 +268,6 @@ void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader
         } while (!_contentReader.atEnd());
     }
 
-    if (currentTag == xml::kRevisionsTag) {
-        Q_ASSERT(false);
-        //        auto revisionNode = revisionsNode.firstChildElement();
-        //        while (!revisionNode.isNull()) {
-        //            revisions.append({{ revisionNode.attribute(xml::kFromAttribute).toInt(),
-        //                                revisionNode.attribute(xml::kLengthAttribute).toInt()},
-        //                               revisionNode.attribute(xml::kColorAttribute) });
-        //            //
-        //            revisionNode = revisionNode.nextSiblingElement();
-        //        }
-    }
-
     currentTag = q->readCustomContent(_contentReader);
 
     xml::readNextElement(_contentReader); // next

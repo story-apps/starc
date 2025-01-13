@@ -49,8 +49,6 @@ const QLatin1String kFormatsTag("fms");
 const QLatin1String kFormatTag("fm");
 const QLatin1String kResourceMarksTag("rss");
 const QLatin1String kResourceMarkTag("rs");
-const QLatin1String kRevisionsTag("revs");
-const QLatin1String kRevisionTag("rev");
 const QLatin1String kFromAttribute("from");
 const QLatin1String kLengthAttribute("length");
 const QLatin1String kColorAttribute("color");
