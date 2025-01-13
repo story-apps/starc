@@ -431,6 +431,20 @@ void ComicBookTextView::Implementation::updateCommentsToolbar(bool _force)
     const auto localCursorCenter
         = commentsToolbar->parentWidget()->mapFromGlobal(globalCursorCenter);
     //
+    // ... если курсор не виден на экране, то тулбар нужно скрыть
+    //
+    const bool isToolbarVisible
+        = localCursorCenter.y() >= 0 && localCursorCenter.y() < scalableWrapper->height();
+
+    //
+    // Определеим положение тулбара, с учётом края экрана
+    //
+    auto toolbarYPos = localCursorCenter.y() - commentsToolbar->width();
+    if (toolbarYPos + commentsToolbar->height() > scalableWrapper->height()) {
+        toolbarYPos = scalableWrapper->height() - commentsToolbar->height();
+    }
+
+    //
     // Если вьюпорт вмещается аккурат в видимую область, или не влезает,
     //
     if (textEdit->width() - textEdit->verticalScrollBar()->width()
@@ -443,7 +457,7 @@ void ComicBookTextView::Implementation::updateCommentsToolbar(bool _force)
             QPoint(q->isLeftToRight() ? (scalableWrapper->width() - commentsToolbar->width()
                                          + DesignSystem::layout().px(3))
                                       : (sidebarWidget->width() - DesignSystem::layout().px(3)),
-                   localCursorCenter.y() - commentsToolbar->width()),
+                   toolbarYPos),
             _force);
     }
     //
@@ -473,14 +487,17 @@ void ComicBookTextView::Implementation::updateCommentsToolbar(bool _force)
         //
         // ... и смещаем панель рецензирования к этой точке
         //
-        commentsToolbar->moveToolbar(QPoint(pos, localCursorCenter.y() - commentsToolbar->width()),
-                                     _force);
+        commentsToolbar->moveToolbar(QPoint(pos, toolbarYPos), _force);
     }
 
     //
     // Если панель ещё не была показана, отобразим её
     //
-    commentsToolbar->showToolbar();
+    if (isToolbarVisible) {
+        commentsToolbar->showToolbar();
+    } else {
+        commentsToolbar->hideToolbar();
+    }
 }
 
 void ComicBookTextView::Implementation::updateSideBarVisibility(QWidget* _container)

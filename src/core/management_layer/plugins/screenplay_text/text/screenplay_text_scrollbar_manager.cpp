@@ -211,10 +211,7 @@ void ScreenplayTextScrollBarManager::setScrollBarVisible(bool _visible, bool _an
     }
 }
 
-int ScreenplayTextScrollBarManager::scrollBarWidth() const
-{
-    return d->timeline->width();
-}
+
 
 bool ScreenplayTextScrollBarManager::eventFilter(QObject* _watched, QEvent* _event)
 {

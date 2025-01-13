@@ -211,6 +211,11 @@ void AudioplayTextScrollBarManager::setScrollBarVisible(bool _visible, bool _ani
     }
 }
 
+int AudioplayTextScrollBarManager::scrollBarHeight() const
+{
+    return d->timeline->height();
+}
+
 bool AudioplayTextScrollBarManager::eventFilter(QObject* _watched, QEvent* _event)
 {
     //
