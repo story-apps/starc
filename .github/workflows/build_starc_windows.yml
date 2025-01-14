@@ -94,7 +94,7 @@ jobs:
         shell: pwsh
         env:
           APPXMANIFEST_PATH: build\windows\msix\AppxManifest.xml
-          BUILD_VERSION: ${{ env.APP_VERSION }}.${{ env.DEV_BUILD }}
+          BUILD_VERSION: ${{ env.APP_VERSION }}.0
         run: |
           $xml = [xml](Get-Content $env:APPXMANIFEST_PATH)
           $xml.Package.Identity.Version = $env:BUILD_VERSION
@@ -233,7 +233,7 @@ jobs:
         shell: pwsh
         env:
           APPXMANIFEST_PATH: build\windows\msix\AppxManifest.xml
-          BUILD_VERSION: ${{ env.APP_VERSION }}.${{ env.DEV_BUILD }}
+          BUILD_VERSION: ${{ env.APP_VERSION }}.0
         run: |
           $xml = [xml](Get-Content $env:APPXMANIFEST_PATH)
           $xml.Package.Identity.Version = $env:BUILD_VERSION
