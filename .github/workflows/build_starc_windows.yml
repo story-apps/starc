@@ -97,6 +97,7 @@ jobs:
           BUILD_VERSION: ${{ env.APP_VERSION }}.0
         run: |
           $xml = [xml](Get-Content $env:APPXMANIFEST_PATH)
+          $xml.Package.Identity.ProcessorArchitecture = "x64"
           $xml.Package.Identity.Version = $env:BUILD_VERSION
           $xml.save($env:APPXMANIFEST_PATH)
 
@@ -236,6 +237,7 @@ jobs:
           BUILD_VERSION: ${{ env.APP_VERSION }}.0
         run: |
           $xml = [xml](Get-Content $env:APPXMANIFEST_PATH)
+          $xml.Package.Identity.ProcessorArchitecture = "x86"
           $xml.Package.Identity.Version = $env:BUILD_VERSION
           $xml.save($env:APPXMANIFEST_PATH)
 
