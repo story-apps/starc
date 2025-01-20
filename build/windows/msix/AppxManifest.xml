@@ -14,7 +14,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="starcapp.exe" EntryPoint="Windows.FullTrustApplication">
-      <uap:VisualElements DisplayName="Story Arhcitect (STARC)" Description="Reinventing the screenwriting software" BackgroundColor="transparent" Square150x150Logo="images\Square150x150Logo.png" Square44x44Logo="images\Square44x44Logo.png">
+      <uap:VisualElements DisplayName="Story Architect (STARC)" Description="Reinventing the screenwriting software" BackgroundColor="transparent" Square150x150Logo="images\Square150x150Logo.png" Square44x44Logo="images\Square44x44Logo.png">
         <uap:DefaultTile Wide310x150Logo="images\Wide310x150Logo.png" Square71x71Logo="images\SmallTile.png" Square310x310Logo="images\LargeTile.png" />
         <uap:SplashScreen Image="images\SplashScreen.png" />
       </uap:VisualElements>
