@@ -136,6 +136,8 @@ void SettingsManager::Implementation::loadApplicationSettings()
         settingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey).toBool());
     view->setApplicationUseTypewriterScrolling(
         settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
+    view->setApplicationCorrectDoubleCapitals(
+        settingsValue(DataStorageLayer::kApplicationCorrectDoubleCapitalsKey).toBool());
     view->setApplicationCapitalizeSinglaILetter(
         settingsValue(DataStorageLayer::kApplicationCapitalizeSingleILetterKey).toBool());
     view->setApplicationReplaceThreeDotsWithEllipsis(
@@ -1028,6 +1030,8 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             &SettingsManager::setApplicationFocusCurrentParagraph);
     connect(d->view, &Ui::SettingsView::applicationUseTypewriterScrollingChanged, this,
             &SettingsManager::setApplicationUseTypewriterScrolling);
+    connect(d->view, &Ui::SettingsView::applicationCorrectDoubleCapitalsChanged, this,
+            &SettingsManager::setApplicationCorrectDoubleCapitals);
     connect(d->view, &Ui::SettingsView::applicationCapitalizeSingleILetterChanged, this,
             &SettingsManager::setApplicationCapitalizeSingleILetter);
     connect(d->view, &Ui::SettingsView::applicationReplaceThreeDotsWithEllipsisChanged, this,
@@ -1971,6 +1975,17 @@ void SettingsManager::setApplicationUseTypewriterScrolling(bool _use)
     emit audioplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
     emit stageplayEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
     emit novelEditorChanged({ DataStorageLayer::kApplicationUseTypewriterScrollingKey });
+}
+
+void SettingsManager::setApplicationCorrectDoubleCapitals(bool _correct)
+{
+    setSettingsValue(DataStorageLayer::kApplicationCorrectDoubleCapitalsKey, _correct);
+    emit simpleTextEditorChanged({ DataStorageLayer::kApplicationCorrectDoubleCapitalsKey });
+    emit screenplayEditorChanged({ DataStorageLayer::kApplicationCorrectDoubleCapitalsKey });
+    emit comicBookEditorChanged({ DataStorageLayer::kApplicationCorrectDoubleCapitalsKey });
+    emit audioplayEditorChanged({ DataStorageLayer::kApplicationCorrectDoubleCapitalsKey });
+    emit stageplayEditorChanged({ DataStorageLayer::kApplicationCorrectDoubleCapitalsKey });
+    emit novelEditorChanged({ DataStorageLayer::kApplicationCorrectDoubleCapitalsKey });
 }
 
 void SettingsManager::setApplicationCapitalizeSingleILetter(bool _capitalize)

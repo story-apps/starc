@@ -79,6 +79,9 @@ const QString kApplicationFocusCurrentParagraphKey
 // включён ли режим печатной машинки для текстовых редакторов
 const QString kApplicationUseTypewriterScrollingKey
     = kApplicationGroupKey + "/use-typewriter-scrolling";
+// активна ли автозамена двух заглавных на одну
+const QString kApplicationCorrectDoubleCapitalsKey
+    = kApplicationGroupKey + "/correct-double-capitals";
 // активна ли автозамена i на I
 const QString kApplicationCapitalizeSingleILetterKey
     = kApplicationGroupKey + "/capitalize-single-i-letter";

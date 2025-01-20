@@ -319,6 +319,7 @@ public:
     CheckBox* focusCurrentParagraph = nullptr;
     CheckBox* useTypewriterScrolling = nullptr;
     Subtitle1Label* applicationTextEditingSubtitle = nullptr;
+    CheckBox* correctDoubleCapitals = nullptr;
     CheckBox* capitalizeSingleILetter = nullptr;
     CheckBox* replaceThreeDotsWithEllipsis = nullptr;
     CheckBox* useSmartQuotes = nullptr;
@@ -666,6 +667,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , focusCurrentParagraph(new CheckBox(applicationCard))
     , useTypewriterScrolling(new CheckBox(applicationCard))
     , applicationTextEditingSubtitle(new Subtitle1Label(applicationCard))
+    , correctDoubleCapitals(new CheckBox(applicationCard))
     , capitalizeSingleILetter(new CheckBox(applicationCard))
     , replaceThreeDotsWithEllipsis(new CheckBox(applicationCard))
     , useSmartQuotes(new CheckBox(applicationCard))
@@ -1022,6 +1024,7 @@ void SettingsView::Implementation::initApplicationCard()
     applicationCardLayout->addWidget(focusCurrentParagraph, itemIndex++, 0);
     applicationCardLayout->addWidget(highlightCurrentLine, itemIndex++, 0);
     applicationCardLayout->addWidget(applicationTextEditingSubtitle, itemIndex++, 0);
+    applicationCardLayout->addWidget(correctDoubleCapitals, itemIndex++, 0);
     applicationCardLayout->addWidget(capitalizeSingleILetter, itemIndex++, 0);
     applicationCardLayout->addWidget(replaceThreeDotsWithEllipsis, itemIndex++, 0);
     applicationCardLayout->addWidget(useSmartQuotes, itemIndex++, 0);
@@ -1802,6 +1805,8 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::applicationFocusCurrentParagraphChanged);
     connect(d->useTypewriterScrolling, &CheckBox::checkedChanged, this,
             &SettingsView::applicationUseTypewriterScrollingChanged);
+    connect(d->correctDoubleCapitals, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationCorrectDoubleCapitalsChanged);
     connect(d->capitalizeSingleILetter, &CheckBox::checkedChanged, this,
             &SettingsView::applicationCapitalizeSingleILetterChanged);
     connect(d->replaceThreeDotsWithEllipsis, &CheckBox::checkedChanged, this,
@@ -3225,6 +3230,11 @@ void SettingsView::setApplicationUseTypewriterScrolling(bool _use)
     d->useTypewriterScrolling->setChecked(_use);
 }
 
+void SettingsView::setApplicationCorrectDoubleCapitals(bool _correct)
+{
+    d->correctDoubleCapitals->setChecked(_correct);
+}
+
 void SettingsView::setApplicationCapitalizeSinglaILetter(bool _capitalize)
 {
     d->capitalizeSingleILetter->setChecked(_capitalize);
@@ -4159,6 +4169,7 @@ void SettingsView::updateTranslations()
     d->useTypewriterScrolling->setText(
         tr("Use typewriter scrolling (keeps line with the cursor on the screen center)"));
     d->applicationTextEditingSubtitle->setText(tr("Automatic text corrections"));
+    d->correctDoubleCapitals->setText(tr("Correct DOuble CApitals"));
     d->capitalizeSingleILetter->setText(tr("Capitalize single \"i\" letter"));
     d->replaceThreeDotsWithEllipsis->setText(tr("Replace three single dots with ellipsis"));
     d->useSmartQuotes->setText(tr("Replace vertical quotation marks to curly ones"));
@@ -4569,6 +4580,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->highlightCurrentLine,
              d->focusCurrentParagraph,
              d->useTypewriterScrolling,
+             d->correctDoubleCapitals,
              d->capitalizeSingleILetter,
              d->replaceThreeDotsWithEllipsis,
              d->useSmartQuotes,

@@ -109,6 +109,7 @@ SettingsStorage::Implementation::Implementation()
     defaultValues.insert(kApplicationHighlightCurrentLineKey, false);
     defaultValues.insert(kApplicationFocusCurrentParagraphKey, false);
     defaultValues.insert(kApplicationUseTypewriterScrollingKey, false);
+    defaultValues.insert(kApplicationCorrectDoubleCapitalsKey, true);
     defaultValues.insert(kApplicationCapitalizeSingleILetterKey, true);
     defaultValues.insert(kApplicationReplaceThreeDotsWithEllipsisKey, true);
     defaultValues.insert(kApplicationSmartQuotesKey, false);

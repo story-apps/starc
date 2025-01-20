@@ -58,6 +58,7 @@ public:
     void setApplicationHighlightCurrentLine(bool _highlight);
     void setApplicationFocusCurrentParagraph(bool _focus);
     void setApplicationUseTypewriterScrolling(bool _use);
+    void setApplicationCorrectDoubleCapitals(bool _correct);
     void setApplicationCapitalizeSinglaILetter(bool _capitalize);
     void setApplicationReplaceThreeDotsWithEllipsis(bool _replace);
     void setApplicationUseSmartQuotes(bool _use);
@@ -192,6 +193,7 @@ signals:
     void applicationHighlightCurentLineChanged(bool _highlight);
     void applicationFocusCurrentParagraphChanged(bool _focus);
     void applicationUseTypewriterScrollingChanged(bool _use);
+    void applicationCorrectDoubleCapitalsChanged(bool _correct);
     void applicationCapitalizeSingleILetterChanged(bool _capitalize);
     void applicationReplaceThreeDotsWithEllipsisChanged(bool _replace);
     void applicationUseSmartQuotesChanged(bool _use);

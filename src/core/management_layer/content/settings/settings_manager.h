@@ -125,6 +125,7 @@ private:
     void setApplicationHighlightCurrentLine(bool _highlight);
     void setApplicationFocusCurrentParagraph(bool _focus);
     void setApplicationUseTypewriterScrolling(bool _use);
+    void setApplicationCorrectDoubleCapitals(bool _correct);
     void setApplicationCapitalizeSingleILetter(bool _capitalize);
     void setApplicationReplaceThreeDotsWithEllipsis(bool _replace);
     void setApplicationUseSmartQuotes(bool _use);

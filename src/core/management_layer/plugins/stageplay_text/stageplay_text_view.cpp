@@ -1143,6 +1143,11 @@ void StageplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
             settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
     }
     if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationCorrectDoubleCapitalsKey)) {
+        d->textEdit->setCorrectDoubleCapitals(
+            settingsValue(DataStorageLayer::kApplicationCorrectDoubleCapitalsKey).toBool());
+    }
+    if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kApplicationCapitalizeSingleILetterKey)) {
         d->textEdit->setCapitalizeSingleILetter(
