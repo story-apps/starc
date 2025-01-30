@@ -20,6 +20,9 @@
 #undef PRINT_DOCUMENT_HISTORY
 #ifdef PRINT_DOCUMENT_HISTORY
 #include <business_layer/model/characters/character_model.h>
+#include <business_layer/model/comic_book/comic_book_dictionaries_model.h>
+#include <business_layer/model/comic_book/comic_book_information_model.h>
+#include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <data_layer/mapper/document_change_mapper.h>
@@ -2005,21 +2008,36 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     writingSessionManager->startSession(currentProject->uuid(), currentProject->name());
 
 #ifdef PRINT_DOCUMENT_HISTORY
-    const QUuid uuid("{c7d1aa50-2d01-4135-935c-c182eac65779}");
+    const QUuid uuid("{78e9a213-46e4-4529-9363-f8ac12308b75}");
     //
     // Character
     //
-    BusinessLayer::CharacterModel model;
-    DataStorageLayer::DocumentImageStorage documentImageStorage;
-    model.setImageWrapper(&documentImageStorage);
+    // BusinessLayer::CharacterModel model;
+    // DataStorageLayer::DocumentImageStorage documentImageStorage;
+    // model.setImageWrapper(&documentImageStorage);
+    // auto document = Domain::ObjectsBuilder::createDocument(
+    //     {}, {}, Domain::DocumentObjectType::Character, {}, {});
+
     //
-    // Screenplay
+    // Screenplay text
     //
     //    BusinessLayer::ScreenplayTextModel model;
     //    BusinessLayer::ScreenplayInformationModel informationModel;
     //    model.setInformationModel(&informationModel);
+    // auto document = Domain::ObjectsBuilder::createDocument(
+    // {}, {}, Domain::DocumentObjectType::ScreenplayText, {}, {});
+
+    //
+    // Comic book text
+    //
+    BusinessLayer::ComicBookTextModel model;
+    BusinessLayer::ComicBookInformationModel informationModel;
+    model.setInformationModel(&informationModel);
+    BusinessLayer::ComicBookDictionariesModel dictionariesModel;
+    model.setDictionariesModel(&dictionariesModel);
     auto document = Domain::ObjectsBuilder::createDocument(
-        {}, {}, Domain::DocumentObjectType::Character, {}, {});
+        {}, {}, Domain::DocumentObjectType::ComicBookText, {}, {});
+
     model.setDocument(document);
     const auto changes = DataMappingLayer::MapperFacade::documentChangeMapper()->findAll(uuid);
     for (int index = 0; index < changes.size(); ++index) {
