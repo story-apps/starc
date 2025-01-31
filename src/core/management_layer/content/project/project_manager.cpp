@@ -12,6 +12,7 @@
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/locations/location_model.h>
 #include <business_layer/model/locations/locations_model.h>
+#include <business_layer/model/presentation/presentation_model.h>
 #include <business_layer/model/project/project_information_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
@@ -49,6 +50,7 @@
 #include <ui/project/project_view.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <ui/widgets/dialog/dialog.h>
+#include <ui/widgets/dialog/standard_dialog.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <utils/logging.h>
 #include <utils/shugar.h>
@@ -876,7 +878,8 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
 
     connect(dialog, &Ui::CreateDocumentDialog::createPressed, navigator,
             [this, sourceType = _type, currentItemIndex, dialog](Domain::DocumentObjectType _type,
-                                                                 const QString& _name) {
+                                                                 const QString& _name,
+                                                                 const QString& _importFilePath) {
                 if (_type == Domain::DocumentObjectType::Character) {
                     auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
                         Domain::DocumentObjectType::Characters);
@@ -968,6 +971,26 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                 // Скрываем сам диалог
                 //
                 dialog->hideDialog();
+
+                //
+                // Если был задан файл, посылаем сигнал на импорт
+                //
+                if (!_importFilePath.isEmpty()) {
+                    const auto item = projectStructureModel->itemForIndex(addedItemIndex);
+                    switch (_type) {
+                    case Domain::DocumentObjectType::Presentation: {
+                        const auto model = modelsFacade.modelFor(item->uuid());
+                        const auto presentationModel
+                            = qobject_cast<BusinessLayer::PresentationModel*>(model);
+                        emit presentationModel->downloadPresentationRequested(_importFilePath);
+                        break;
+                    }
+                    default: {
+                        emit q->importFileRequested(_importFilePath, item->uuid(), _type);
+                        break;
+                    }
+                    }
+                }
             });
     connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog,
             &Ui::CreateDocumentDialog::deleteLater);
@@ -3364,6 +3387,12 @@ void ProjectManager::addDocument(const BusinessLayer::AbstractImporter::Document
     case DocumentObjectType::ImagesGallery: {
         item = createItem(_document.type,
                           !_document.name.isEmpty() ? _document.name : tr("Images gallery"));
+        break;
+    }
+
+    case DocumentObjectType::Presentation: {
+        item = createItem(_document.type,
+                          !_document.name.isEmpty() ? _document.name : tr("Presentation"));
         break;
     }
 
