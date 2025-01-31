@@ -41,6 +41,11 @@ public:
     void setNameError(const QString& _error);
 
     /**
+     * @brief Задать ошибку файл презентации
+     */
+    void setPresentationError(const QString& _error);
+
+    /**
      * @brief Установить возможность вставки элемента в родителя
      */
     void setInsertionParent(const QString& _parentName);
@@ -54,6 +59,11 @@ public:
      * @brief Желает ли пользователь вставлять элемент в заданного родителя
      */
     bool needInsertIntoParent() const;
+
+    /**
+     * @brief Путь к файлу для генерации презентации
+     */
+    QString presentationFilePath() const;
 
 signals:
     /**

@@ -13,9 +13,11 @@
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/names_generator.h>
 #include <utils/helpers/ui_helper.h>
 
+#include <QFileDialog>
 #include <QGridLayout>
 #include <QScrollArea>
 #include <QSettings>
@@ -47,6 +49,7 @@ public:
     H6Label* title = nullptr;
     Body1Label* documentInfo = nullptr;
     TextField* documentName = nullptr;
+    TextField* presentationFilePath = nullptr;
     bool insertIntoParentEnabled = false;
     CheckBox* makeEpisodic = nullptr;
     TextField* episodesAmount = nullptr;
@@ -70,6 +73,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     , documentName(new TextField(_parent))
     , makeEpisodic(new CheckBox(_parent))
     , episodesAmount(new TextField(_parent))
+    , presentationFilePath(new TextField(_parent))
     , insertIntoParent(new CheckBox(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
@@ -133,6 +137,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
         }
         layout->addWidget(makeOption(Domain::DocumentObjectType::MindMap));
         layout->addWidget(makeOption(Domain::DocumentObjectType::ImagesGallery));
+        layout->addWidget(makeOption(Domain::DocumentObjectType::Presentation));
         optionsLayout->addLayout(layout);
     }
 
@@ -146,6 +151,8 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     documentName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     episodesAmount->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     episodesAmount->setText("8");
+    presentationFilePath->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    presentationFilePath->setTrailingIcon(u8"\U000f0256");
 
     insertIntoParent->hide();
     makeEpisodic->hide();
@@ -172,6 +179,7 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
         { Domain::DocumentObjectType::Novel, tr("Add novel") },
         { Domain::DocumentObjectType::MindMap, tr("Add mind map") },
         { Domain::DocumentObjectType::ImagesGallery, tr("Add image gallery") },
+        { Domain::DocumentObjectType::Presentation, tr("Add presentation from PDF-file") },
     };
     const QHash<Domain::DocumentObjectType, QString> documenTypeToInfo = {
         { Domain::DocumentObjectType::Folder,
@@ -202,6 +210,9 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
           tr("Create a mind map to brainstorm ideas and plan your story development.") },
         { Domain::DocumentObjectType::ImagesGallery,
           tr("Create a moodboard with atmospheric images or photos.") },
+        { Domain::DocumentObjectType::Presentation,
+          tr("Upload a PDF document with images to visually convey the atmosphere and style of "
+             "your project.") },
     };
 
     title->setText(documenTypeToTitle.value(_type));
@@ -212,6 +223,12 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
         insertIntoParent->hide();
     } else {
         insertIntoParent->setVisible(insertIntoParentEnabled);
+    }
+
+    if (_type == Domain::DocumentObjectType::Presentation) {
+        presentationFilePath->setVisible(true);
+    } else {
+        presentationFilePath->hide();
     }
 
     if (_type == Domain::DocumentObjectType::Character) {
@@ -242,15 +259,16 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
     int row = 0;
-    contentsLayout()->addWidget(d->content, row, 0, 8, 1);
     contentsLayout()->addWidget(d->title, row++, 1, 1, 1);
     contentsLayout()->addWidget(d->documentInfo, row++, 1, 1, 1);
     contentsLayout()->addWidget(d->documentName, row++, 1, 1, 1);
     contentsLayout()->addWidget(d->makeEpisodic, row++, 1, 1, 1);
     contentsLayout()->addWidget(d->episodesAmount, row++, 1, 1, 1);
+    contentsLayout()->addWidget(d->presentationFilePath, row++, 1, 1, 1);
     contentsLayout()->addWidget(d->insertIntoParent, row++, 1, 1, 1);
     contentsLayout()->setRowStretch(row++, 1);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 1, 1, 1);
+    contentsLayout()->addWidget(d->content, 0, 0, row, 1);
     contentsLayout()->setColumnStretch(0, 2);
     contentsLayout()->setColumnStretch(1, 1);
 
@@ -287,6 +305,18 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
         const auto amount = d->episodesAmount->text().toInt(&ok);
         if (!ok || amount < 0) {
             d->episodesAmount->setError(tr("Should be a number"));
+        }
+    });
+    connect(d->presentationFilePath, &TextField::textChanged, this,
+            [this] { d->presentationFilePath->clearError(); });
+    connect(d->presentationFilePath, &TextField::trailingIconPressed, this, [this] {
+        const auto projectImportFolder
+            = settingsValue(DataStorageLayer::kProjectImportFolderKey).toString();
+        const auto filePath = QFileDialog::getOpenFileName(
+            this, tr("Choose the file to import"), projectImportFolder, DialogHelper::pdfFilter());
+        d->presentationFilePath->setText(filePath);
+        if (!filePath.isEmpty()) {
+            setSettingsValue(DataStorageLayer::kProjectImportFolderKey, filePath);
         }
     });
     connect(d->createButton, &Button::clicked, this, [this] {
@@ -341,6 +371,14 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
             return;
         }
 
+        // Презентацию нельзя создать без исходного файла
+        //
+        if (documentType == Domain::DocumentObjectType::Presentation
+            && d->presentationFilePath->text().isEmpty()) {
+            d->presentationFilePath->setError("The file path can't be empty");
+            return;
+        }
+
         emit createPressed(documentType, d->documentName->text());
     });
     connect(d->cancelButton, &Button::clicked, this, &CreateDocumentDialog::hideDialog);
@@ -390,6 +428,11 @@ void CreateDocumentDialog::setNameError(const QString& _error)
     d->documentName->setError(_error);
 }
 
+void CreateDocumentDialog::setPresentationError(const QString& _error)
+{
+    d->presentationFilePath->setError(_error);
+}
+
 void CreateDocumentDialog::setInsertionParent(const QString& _parentName)
 {
     if (_parentName.isEmpty()) {
@@ -412,6 +455,11 @@ int CreateDocumentDialog::episodesAmount() const
 bool CreateDocumentDialog::needInsertIntoParent() const
 {
     return d->insertIntoParent->isChecked();
+}
+
+QString CreateDocumentDialog::presentationFilePath() const
+{
+    return d->presentationFilePath->text();
 }
 
 QWidget* CreateDocumentDialog::focusedWidgetAfterShow() const
@@ -440,6 +488,7 @@ void CreateDocumentDialog::updateTranslations()
     d->documentName->setLabel(tr("Name"));
     d->makeEpisodic->setText(tr("Split to episodes"));
     d->episodesAmount->setLabel(tr("Episodes amount"));
+    d->presentationFilePath->setLabel(tr("File path"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(tr("Create"));
 }
@@ -478,8 +527,14 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
     d->title->setTextColor(Ui::DesignSystem::color().onBackground());
     d->title->setContentsMargins(DesignSystem::layout().px24(), DesignSystem::layout().px24(),
                                  DesignSystem::layout().px24(), DesignSystem::layout().px16());
-    d->documentName->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->documentName->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+
+    for (auto textField : std::vector<TextField*>{ d->documentName, d->presentationFilePath }) {
+        textField->setTextColor(Ui::DesignSystem::color().onBackground());
+        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+        textField->setCustomMargins({ DesignSystem::layout().px24(), DesignSystem::layout().px8(),
+                                      DesignSystem::layout().px24(),
+                                      DesignSystem::layout().px8() });
+    }
 
     auto documentInfoMargins = Ui::DesignSystem::label().margins().toMargins();
     documentInfoMargins.setTop(0);
