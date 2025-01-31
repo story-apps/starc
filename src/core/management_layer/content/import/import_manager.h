@@ -33,6 +33,12 @@ public:
     void importScreenplay(const QString& _filePath, bool _importDocuments = true);
     void importNovel(const QString& _filePath);
 
+    /**
+     * @brief Импортировать данные файла в заданный документ
+     */
+    void importToDocument(const QString& _filePath, const QUuid& _documentUuid,
+                          Domain::DocumentObjectType _type);
+
 signals:
     /**
      * @brief Персонаж загружен

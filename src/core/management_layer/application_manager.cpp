@@ -2840,6 +2840,8 @@ void ApplicationManager::initConnections()
             });
     connect(d->projectManager.data(), &ProjectManager::exportCurrentDocumentRequested, this,
             [this] { d->exportCurrentDocument(); });
+    connect(d->projectManager.data(), &ProjectManager::importFileRequested, d->importManager.data(),
+            &ImportManager::importToDocument);
 
     //
     // Менеджер импорта

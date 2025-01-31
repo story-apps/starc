@@ -328,6 +328,12 @@ signals:
     void generateImageRequested(const QString& _promptPrefix, const QString& _prompt,
                                 const QString& _promptSuffix);
 
+    /**
+     * @brief Запрос на импорт файла
+     */
+    void importFileRequested(const QString& _filePath, const QUuid& _documentUuid,
+                             Domain::DocumentObjectType _type);
+
 protected:
     /**
      * @brief Переопределяем для обработки события простоя пользователя
