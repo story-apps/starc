@@ -1903,6 +1903,16 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
             return {};
         }
 
+        //
+        // Пропускаем заголовок
+        //
+        if (_reader.name() == xml::kHeaderTag) {
+            do {
+                xml::readNextElement(_reader);
+            } while (_reader.name() != xml::kHeaderTag);
+            xml::readNextElement(_reader); // next after end of header
+        }
+
         QVector<TextModelItem*> items;
         while (!_reader.atEnd()) {
             const auto currentTag = _reader.name().toString();
