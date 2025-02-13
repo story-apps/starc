@@ -48,6 +48,8 @@ public:
     Body1Label* documentInfo = nullptr;
     TextField* documentName = nullptr;
     bool insertIntoParentEnabled = false;
+    CheckBox* makeEpisodic = nullptr;
+    TextField* episodesAmount = nullptr;
     CheckBox* insertIntoParent = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
@@ -66,6 +68,8 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     , title(new H6Label(_parent))
     , documentInfo(new Body1Label(_parent))
     , documentName(new TextField(_parent))
+    , makeEpisodic(new CheckBox(_parent))
+    , episodesAmount(new TextField(_parent))
     , insertIntoParent(new CheckBox(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
@@ -140,8 +144,12 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     UiHelper::setFocusPolicyRecursively(content, Qt::NoFocus);
 
     documentName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    episodesAmount->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    episodesAmount->setText("8");
 
     insertIntoParent->hide();
+    makeEpisodic->hide();
+    episodesAmount->hide();
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->addStretch();
@@ -211,6 +219,14 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
     } else {
         NamesGenerator::unbind(documentName);
     }
+
+    if (_type == Domain::DocumentObjectType::Screenplay) {
+        makeEpisodic->show();
+        episodesAmount->setVisible(makeEpisodic->isChecked());
+    } else {
+        makeEpisodic->hide();
+        episodesAmount->hide();
+    }
 }
 
 
@@ -225,13 +241,16 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
 
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
-    contentsLayout()->addWidget(d->content, 0, 0, 6, 1);
-    contentsLayout()->addWidget(d->title, 0, 1, 1, 1);
-    contentsLayout()->addWidget(d->documentInfo, 1, 1, 1, 1);
-    contentsLayout()->addWidget(d->documentName, 2, 1, 1, 1);
-    contentsLayout()->addWidget(d->insertIntoParent, 3, 1, 1, 1);
-    contentsLayout()->setRowStretch(4, 1);
-    contentsLayout()->addLayout(d->buttonsLayout, 5, 1, 1, 1);
+    int row = 0;
+    contentsLayout()->addWidget(d->content, row, 0, 8, 1);
+    contentsLayout()->addWidget(d->title, row++, 1, 1, 1);
+    contentsLayout()->addWidget(d->documentInfo, row++, 1, 1, 1);
+    contentsLayout()->addWidget(d->documentName, row++, 1, 1, 1);
+    contentsLayout()->addWidget(d->makeEpisodic, row++, 1, 1, 1);
+    contentsLayout()->addWidget(d->episodesAmount, row++, 1, 1, 1);
+    contentsLayout()->addWidget(d->insertIntoParent, row++, 1, 1, 1);
+    contentsLayout()->setRowStretch(row++, 1);
+    contentsLayout()->addLayout(d->buttonsLayout, row++, 1, 1, 1);
     contentsLayout()->setColumnStretch(0, 2);
     contentsLayout()->setColumnStretch(1, 1);
 
@@ -253,7 +272,23 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
         });
     }
     connect(d->documentName, &TextField::textChanged, this,
-            [this] { d->documentName->setError({}); });
+            [this] { d->documentName->clearError(); });
+    connect(d->makeEpisodic, &CheckBox::checkedChanged, this, [this](bool _checked) {
+        d->episodesAmount->setVisible(d->makeEpisodic->isVisible() && _checked);
+    });
+    connect(d->episodesAmount, &TextField::textChanged, this, [this] {
+        d->episodesAmount->clearError();
+
+        if (d->episodesAmount->text().isEmpty()) {
+            return;
+        }
+
+        bool ok = false;
+        const auto amount = d->episodesAmount->text().toInt(&ok);
+        if (!ok || amount < 0) {
+            d->episodesAmount->setError(tr("Should be a number"));
+        }
+    });
     connect(d->createButton, &Button::clicked, this, [this] {
         Domain::DocumentObjectType documentType = Domain::DocumentObjectType::Undefined;
         for (auto option : std::as_const(d->options)) {
@@ -276,9 +311,34 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
                 errorMessage = tr("The world should have a name");
             }
             if (!errorMessage.isEmpty()) {
+                d->documentName->setFocus();
                 d->documentName->setError(errorMessage);
                 return;
             }
+        }
+
+        //
+        // Если нужно, преобразуем тип в эпизодический
+        //
+        if (d->makeEpisodic->isVisibleTo(this) && d->makeEpisodic->isChecked()) {
+            switch (documentType) {
+            default: {
+                break;
+            }
+
+            case Domain::DocumentObjectType::Screenplay: {
+                documentType = Domain::DocumentObjectType::ScreenplaySeries;
+                break;
+            }
+            }
+        }
+
+        //
+        // Количество эпизодов должно быть задано корректно
+        //
+        if (d->episodesAmount->isVisibleTo(this) && !d->episodesAmount->error().isEmpty()) {
+            d->episodesAmount->setFocus();
+            return;
         }
 
         emit createPressed(documentType, d->documentName->text());
@@ -344,6 +404,11 @@ void CreateDocumentDialog::setInsertionParent(const QString& _parentName)
     d->insertIntoParent->show();
 }
 
+int CreateDocumentDialog::episodesAmount() const
+{
+    return d->episodesAmount->text().toInt();
+}
+
 bool CreateDocumentDialog::needInsertIntoParent() const
 {
     return d->insertIntoParent->isChecked();
@@ -373,6 +438,8 @@ void CreateDocumentDialog::updateTranslations()
         }
     }
     d->documentName->setLabel(tr("Name"));
+    d->makeEpisodic->setText(tr("Split to episodes"));
+    d->episodesAmount->setLabel(tr("Episodes amount"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(tr("Create"));
 }
@@ -419,6 +486,11 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
     d->documentInfo->setContentsMargins(documentInfoMargins);
     d->documentInfo->setTextColor(Ui::DesignSystem::color().onBackground());
     d->documentInfo->setBackgroundColor(Ui::DesignSystem::color().background());
+
+    d->makeEpisodic->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->makeEpisodic->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->episodesAmount->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->episodesAmount->setBackgroundColor(Ui::DesignSystem::color().onBackground());
 
     d->insertIntoParent->setTextColor(Ui::DesignSystem::color().onBackground());
     d->insertIntoParent->setBackgroundColor(Ui::DesignSystem::color().background());

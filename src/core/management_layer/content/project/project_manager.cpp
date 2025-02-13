@@ -924,8 +924,8 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                 //
                 // Определим индекс элемента для выделения
                 //
-                const auto addedItemIndex
-                    = projectStructureModel->addDocument(_type, _name, parentIndex);
+                const auto addedItemIndex = projectStructureModel->addDocument(
+                    _type, _name, parentIndex, {}, true, dialog->episodesAmount());
                 QModelIndex itemForSelectIndex = addedItemIndex;
                 //
                 // ... в зависимости от типа, выбираем потенциально желаемый к редактированию

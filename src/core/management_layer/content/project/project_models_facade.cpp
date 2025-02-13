@@ -30,6 +30,9 @@
 #include <business_layer/model/screenplay/screenplay_statistics_model.h>
 #include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/screenplay/screenplay_title_page_model.h>
+#include <business_layer/model/screenplay/series/screenplay_series_episodes_model.h>
+#include <business_layer/model/screenplay/series/screenplay_series_information_model.h>
+#include <business_layer/model/screenplay/series/screenplay_series_statistics_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
 #include <business_layer/model/stageplay/stageplay_information_model.h>
@@ -396,6 +399,49 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             statisticsModel->setScreenplayTextModel(screenplayModel);
 
             model = statisticsModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::ScreenplaySeries: {
+            auto seriesModel = new BusinessLayer::ScreenplaySeriesInformationModel;
+            connect(seriesModel,
+                    &BusinessLayer::ScreenplaySeriesInformationModel::titlePageVisibleChanged, this,
+                    [this, seriesModel](bool _visible) {
+                        emit screenplayTitlePageVisibilityChanged(seriesModel, _visible);
+                    });
+            connect(seriesModel,
+                    &BusinessLayer::ScreenplaySeriesInformationModel::synopsisVisibleChanged, this,
+                    [this, seriesModel](bool _visible) {
+                        emit screenplaySynopsisVisibilityChanged(seriesModel, _visible);
+                    });
+            connect(seriesModel,
+                    &BusinessLayer::ScreenplaySeriesInformationModel::treatmentVisibleChanged, this,
+                    [this, seriesModel](bool _visible) {
+                        emit screenplayTreatmentVisibilityChanged(seriesModel, _visible);
+                    });
+            connect(seriesModel,
+                    &BusinessLayer::ScreenplaySeriesInformationModel::screenplayTextVisibleChanged,
+                    this, [this, seriesModel](bool _visible) {
+                        emit screenplayTextVisibilityChanged(seriesModel, _visible);
+                    });
+            connect(seriesModel,
+                    &BusinessLayer::ScreenplaySeriesInformationModel::
+                        screenplayStatisticsVisibleChanged,
+                    this, [this, seriesModel](bool _visible) {
+                        emit screenplayStatisticsVisibilityChanged(seriesModel, _visible);
+                    });
+
+            model = seriesModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::ScreenplaySeriesEpisodes: {
+            model = new BusinessLayer::ScreenplaySeriesEpisodesModel;
+            break;
+        }
+
+        case Domain::DocumentObjectType::ScreenplaySeriesStatistics: {
+            model = new BusinessLayer::ScreenplaySeriesStatisticsModel;
             break;
         }
 

@@ -234,7 +234,7 @@ void StructureModel::setProjectName(const QString& _name)
 
 QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const QString& _name,
                                         const QModelIndex& _parent, const QByteArray& _content,
-                                        bool _visible)
+                                        bool _visible, int _episodesAmount)
 {
     //
     // ATTENTION: В ProjectManager::addDocument и ProjectManager::addScreenplay есть копипаста
@@ -280,6 +280,39 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         //
         insertItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")),
                    synopsisItem);
+        break;
+    }
+
+    case DocumentObjectType::ScreenplaySeries: {
+        auto seriesItem = createItem(DocumentObjectType::ScreenplaySeries,
+                                     !_name.isEmpty() ? _name : tr("Series"));
+        appendItem(seriesItem, parentItem);
+        auto episodesItem
+            = createItem(DocumentObjectType::ScreenplaySeriesEpisodes, tr("Episodes"));
+        appendItem(episodesItem, seriesItem);
+        appendItem(createItem(DocumentObjectType::ScreenplaySeriesStatistics, tr("Statistics")),
+                   seriesItem);
+
+        for (int episode = 0; episode < _episodesAmount; ++episode) {
+            auto episodeItem = createItem(DocumentObjectType::Screenplay,
+                                          tr("Episode") + QString(" %1").arg(episode + 1));
+            appendItem(episodeItem, episodesItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayTitlePage, tr("Title page")),
+                       episodeItem);
+            auto synopsisItem = createItem(DocumentObjectType::ScreenplaySynopsis, tr("Synopsis"));
+            appendItem(synopsisItem, episodeItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayText, tr("Screenplay")),
+                       episodeItem);
+            appendItem(createItem(DocumentObjectType::ScreenplayStatistics, tr("Statistics")),
+                       episodeItem);
+            //
+            // Вставляем тритмент после всех документов, т.к. он является алиасом к документу
+            // сценария и чтобы его сконструировать, нужны другие документы
+            //
+            insertItem(createItem(DocumentObjectType::ScreenplayTreatment, tr("Treatment")),
+                       synopsisItem);
+        }
+
         break;
     }
 
@@ -662,11 +695,6 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     //
     // Элемент можно перемещать и вставлять внутрь другие
     //
-    case Domain::DocumentObjectType::Screenplay:
-    case Domain::DocumentObjectType::ComicBook:
-    case Domain::DocumentObjectType::Audioplay:
-    case Domain::DocumentObjectType::Stageplay:
-    case Domain::DocumentObjectType::Novel:
     case Domain::DocumentObjectType::Characters:
     case Domain::DocumentObjectType::Character:
     case Domain::DocumentObjectType::Locations:
@@ -681,6 +709,7 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     // В элемент можно только вставлять другие
     //
     case Domain::DocumentObjectType::Project:
+    case Domain::DocumentObjectType::ScreenplaySeriesEpisodes:
     case Domain::DocumentObjectType::RecycleBin: {
         return defaultFlags | Qt::ItemIsDropEnabled;
     }
@@ -688,6 +717,12 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     //
     // Элемент можно только перемещать
     //
+    case Domain::DocumentObjectType::Screenplay:
+    case Domain::DocumentObjectType::ScreenplaySeries:
+    case Domain::DocumentObjectType::ComicBook:
+    case Domain::DocumentObjectType::Audioplay:
+    case Domain::DocumentObjectType::Stageplay:
+    case Domain::DocumentObjectType::Novel:
     case Domain::DocumentObjectType::SimpleText:
     case Domain::DocumentObjectType::MindMap:
     case Domain::DocumentObjectType::ImagesGallery: {
@@ -702,6 +737,11 @@ Qt::ItemFlags StructureModel::flags(const QModelIndex& _index) const
     case Domain::DocumentObjectType::ScreenplayTreatment:
     case Domain::DocumentObjectType::ScreenplayText:
     case Domain::DocumentObjectType::ScreenplayStatistics:
+    case Domain::DocumentObjectType::ScreenplaySeriesTitlePage:
+    case Domain::DocumentObjectType::ScreenplaySeriesSynopsis:
+    case Domain::DocumentObjectType::ScreenplaySeriesTreatment:
+    case Domain::DocumentObjectType::ScreenplaySeriesText:
+    case Domain::DocumentObjectType::ScreenplaySeriesStatistics:
     case Domain::DocumentObjectType::ComicBookTitlePage:
     case Domain::DocumentObjectType::ComicBookSynopsis:
     case Domain::DocumentObjectType::ComicBookText:
@@ -807,7 +847,12 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     bool hasLocation = false;
     bool hasWorlds = false;
     bool hasWorld = false;
+    bool onlyScreenplays = true;
     for (const auto item : std::as_const(d->lastMimeItems)) {
+        if (onlyScreenplays && item->type() != Domain::DocumentObjectType::Screenplay) {
+            onlyScreenplays = false;
+        }
+
         switch (item->type()) {
         case Domain::DocumentObjectType::Characters: {
             hasCharacters = true;
@@ -886,14 +931,10 @@ bool StructureModel::canDropMimeData(const QMimeData* _data, Qt::DropAction _act
     }
 
     //
-    // ... внутрь сценария ничего нельзя вложить
+    // ... внутрь сериала можно вставить только сценарии
     //
-    case Domain::DocumentObjectType::Screenplay:
-    case Domain::DocumentObjectType::ComicBook:
-    case Domain::DocumentObjectType::Audioplay:
-    case Domain::DocumentObjectType::Stageplay:
-    case Domain::DocumentObjectType::Novel: {
-        return false;
+    case Domain::DocumentObjectType::ScreenplaySeriesEpisodes: {
+        return onlyScreenplays;
     }
 
     //
