@@ -2781,6 +2781,32 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                                       _visible);
             });
     //
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplaySeriesTitlePageVisibilityChanged,
+            this, [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplaySeriesTitlePage,
+                                      _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplaySeriesSynopsisVisibilityChanged, this,
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplaySeriesSynopsis,
+                                      _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplaySeriesTreatmentVisibilityChanged,
+            this, [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplaySeriesTreatment,
+                                      _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplaySeriesTextVisibilityChanged, this,
+            [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(_model, Domain::DocumentObjectType::ScreenplaySeriesText,
+                                      _visible);
+            });
+    connect(&d->modelsFacade, &ProjectModelsFacade::screenplaySeriesStatisticsVisibilityChanged,
+            this, [this](BusinessLayer::AbstractModel* _model, bool _visible) {
+                d->setDocumentVisible(
+                    _model, Domain::DocumentObjectType::ScreenplaySeriesStatistics, _visible);
+            });
+    //
     connect(&d->modelsFacade, &ProjectModelsFacade::comicBookTitlePageVisibilityChanged, this,
             [this](BusinessLayer::AbstractModel* _model, bool _visible) {
                 d->setDocumentVisible(_model, Domain::DocumentObjectType::ComicBookTitlePage,

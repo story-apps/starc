@@ -20,6 +20,8 @@ SUBDIRS = \
     screenplay_text \
     screenplay_text_structure \
     screenplay_statistics_structure \
+    screenplay_series_information \
+    screenplay_series_parameters \
     simple_text \
     simple_text_structure \
     stageplay_information \

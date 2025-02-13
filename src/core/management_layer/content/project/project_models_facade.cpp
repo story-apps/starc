@@ -407,28 +407,28 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             connect(seriesModel,
                     &BusinessLayer::ScreenplaySeriesInformationModel::titlePageVisibleChanged, this,
                     [this, seriesModel](bool _visible) {
-                        emit screenplayTitlePageVisibilityChanged(seriesModel, _visible);
+                        emit screenplaySeriesTitlePageVisibilityChanged(seriesModel, _visible);
                     });
             connect(seriesModel,
                     &BusinessLayer::ScreenplaySeriesInformationModel::synopsisVisibleChanged, this,
                     [this, seriesModel](bool _visible) {
-                        emit screenplaySynopsisVisibilityChanged(seriesModel, _visible);
+                        emit screenplaySeriesSynopsisVisibilityChanged(seriesModel, _visible);
                     });
             connect(seriesModel,
                     &BusinessLayer::ScreenplaySeriesInformationModel::treatmentVisibleChanged, this,
                     [this, seriesModel](bool _visible) {
-                        emit screenplayTreatmentVisibilityChanged(seriesModel, _visible);
+                        emit screenplaySeriesTreatmentVisibilityChanged(seriesModel, _visible);
                     });
             connect(seriesModel,
                     &BusinessLayer::ScreenplaySeriesInformationModel::screenplayTextVisibleChanged,
                     this, [this, seriesModel](bool _visible) {
-                        emit screenplayTextVisibilityChanged(seriesModel, _visible);
+                        emit screenplaySeriesTextVisibilityChanged(seriesModel, _visible);
                     });
             connect(seriesModel,
                     &BusinessLayer::ScreenplaySeriesInformationModel::
                         screenplayStatisticsVisibleChanged,
                     this, [this, seriesModel](bool _visible) {
-                        emit screenplayStatisticsVisibilityChanged(seriesModel, _visible);
+                        emit screenplaySeriesStatisticsVisibilityChanged(seriesModel, _visible);
                     });
 
             model = seriesModel;
