@@ -436,12 +436,85 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
         }
 
         case Domain::DocumentObjectType::ScreenplaySeriesEpisodes: {
-            model = new BusinessLayer::ScreenplaySeriesEpisodesModel;
+            const auto episodesItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            if (episodesItem == nullptr) {
+                return nullptr;
+            }
+            Q_ASSERT(episodesItem->parent());
+
+            auto episodesModel = new BusinessLayer::ScreenplaySeriesEpisodesModel;
+            const auto parentUuid = episodesItem->parent()->uuid();
+
+            //
+            // Добавляем в модель эпизодов, модель информации о сериале
+            //
+            auto informationModel = qobject_cast<BusinessLayer::ScreenplaySeriesInformationModel*>(
+                modelFor(parentUuid));
+            Q_ASSERT(informationModel);
+            episodesModel->setInformationModel(informationModel);
+
+            //
+            // Мониторим список вложенных сценариев
+            //
+            auto updateEpisodes = [this, episodesModel, documentUuid = _document->uuid()] {
+                auto episodesItem = d->projectStructureModel->itemForUuid(documentUuid);
+                if (episodesItem == nullptr) {
+                    return;
+                }
+
+                QVector<BusinessLayer::ScreenplayTextModel*> episodes;
+                for (int childIndex = 0; childIndex < episodesItem->childCount(); ++childIndex) {
+                    const auto screenplayItem = episodesItem->childAt(childIndex);
+                    for (int childIndex = 0; childIndex < screenplayItem->childCount();
+                         ++childIndex) {
+                        const auto childItem = screenplayItem->childAt(childIndex);
+                        if (childItem->type() == Domain::DocumentObjectType::ScreenplayText) {
+                            const auto screenplayTextItemUuid = childItem->uuid();
+                            Q_ASSERT(!screenplayTextItemUuid.isNull());
+                            episodes.append(qobject_cast<BusinessLayer::ScreenplayTextModel*>(
+                                modelFor(screenplayTextItemUuid)));
+                            break;
+                        }
+                    }
+                }
+
+                episodesModel->setEpisodes(episodes);
+            };
+            updateEpisodes();
+            connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsInserted,
+                    episodesModel, updateEpisodes);
+            connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsMoved,
+                    episodesModel, updateEpisodes);
+            connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsRemoved,
+                    episodesModel, updateEpisodes);
+
+            model = episodesModel;
             break;
         }
 
         case Domain::DocumentObjectType::ScreenplaySeriesStatistics: {
-            model = new BusinessLayer::ScreenplaySeriesStatisticsModel;
+            const auto statisticsItem = d->projectStructureModel->itemForUuid(_document->uuid());
+            if (statisticsItem == nullptr) {
+                return nullptr;
+            }
+
+            auto statisticsModel = new BusinessLayer::ScreenplaySeriesStatisticsModel;
+            const auto seriesItem = statisticsItem->parent();
+            Q_ASSERT(seriesItem);
+            QUuid episodesItemUuid;
+            for (int childIndex = 0; childIndex < seriesItem->childCount(); ++childIndex) {
+                const auto childItem = seriesItem->childAt(childIndex);
+                if (childItem->type() == Domain::DocumentObjectType::ScreenplaySeriesEpisodes) {
+                    episodesItemUuid = childItem->uuid();
+                    break;
+                }
+            }
+            Q_ASSERT(!episodesItemUuid.isNull());
+            auto episodesModel = qobject_cast<BusinessLayer::ScreenplaySeriesEpisodesModel*>(
+                modelFor(episodesItemUuid));
+            statisticsModel->setEpisodesModel(episodesModel);
+
+            model = statisticsModel;
             break;
         }
 

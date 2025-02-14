@@ -76,3 +76,6 @@
 [submodule "src/core/management_layer/plugins/novel_timeline"]
     path = src/core/management_layer/plugins/novel_timeline
     url = git@github.com:story-apps/starc-novel-timeline-plugin.git
+[submodule "src/core/management_layer/plugins/screenplay_series_statistics"]
+    path = src/core/management_layer/plugins/screenplay_series_statistics
+    url = git@github.com:story-apps/starc-screenplay-series-statistics-plugin.git

@@ -1,9 +1,11 @@
-#include "screenplay_scene_report.h"
+#include "screenplay_series_scene_report.h"
 
 #include <3rd_party/qtxlsxwriter/xlsxdocument.h>
 #include <3rd_party/qtxlsxwriter/xlsxrichstring.h>
 #include <business_layer/document/screenplay/text/screenplay_text_document.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <business_layer/model/screenplay/series/screenplay_series_episodes_model.h>
+#include <business_layer/model/screenplay/series/screenplay_series_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
@@ -27,13 +29,13 @@
 
 namespace BusinessLayer {
 
-class ScreenplaySceneReport::Implementation
+class ScreenplaySeriesSceneReport::Implementation
 {
 public:
     /**
      * @brief Модель аудиопостановки
      */
-    QPointer<ScreenplayTextModel> screenplayModel;
+    QPointer<ScreenplaySeriesEpisodesModel> episodesModel;
 
     /**
      * @brief Модель сцен
@@ -55,21 +57,21 @@ public:
 // ****
 
 
-ScreenplaySceneReport::ScreenplaySceneReport()
+ScreenplaySeriesSceneReport::ScreenplaySeriesSceneReport()
     : d(new Implementation)
 {
 }
 
-ScreenplaySceneReport::~ScreenplaySceneReport() = default;
+ScreenplaySeriesSceneReport::~ScreenplaySeriesSceneReport() = default;
 
-void ScreenplaySceneReport::build(QAbstractItemModel* _model)
+void ScreenplaySeriesSceneReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {
         return;
     }
 
-    d->screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
-    if (d->screenplayModel == nullptr) {
+    d->episodesModel = qobject_cast<ScreenplaySeriesEpisodesModel*>(_model);
+    if (d->episodesModel == nullptr) {
         return;
     }
 
@@ -109,9 +111,14 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
     // Сформируем регулярное выражение для выуживания молчаливых персонажей
     //
     QString rxPattern;
-    auto charactersModel = d->screenplayModel->charactersList();
-    for (int index = 0; index < charactersModel->rowCount(); ++index) {
-        auto characterName = charactersModel->index(index, 0).data().toString();
+    QSet<QString> characterNames;
+    for (const auto episode : d->episodesModel->episodes()) {
+        auto charactersModel = episode->charactersList();
+        for (int index = 0; index < charactersModel->rowCount(); ++index) {
+            characterNames.insert(charactersModel->index(index, 0).data().toString());
+        }
+    }
+    for (const auto& characterName : std::as_const(characterNames)) {
         if (!rxPattern.isEmpty()) {
             rxPattern.append("|");
         }
@@ -126,130 +133,155 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
         QRegularExpression::CaseInsensitiveOption | QRegularExpression::UseUnicodePropertiesOption);
 
     //
-    // Подготовим текстовый документ, для определения страниц сцен
+    // Если в сериях одинаковые шаблоны, то добавляем автоматически номер эпизода
     //
-    const auto& screenplayTemplate
-        = TemplatesFacade::screenplayTemplate(d->screenplayModel->informationModel()->templateId());
-    PageTextEdit screenplayTextEdit;
-    screenplayTextEdit.setUsePageMode(true);
-    screenplayTextEdit.setPageSpacing(0);
-    screenplayTextEdit.setPageFormat(screenplayTemplate.pageSizeId());
-    screenplayTextEdit.setPageMarginsMm(screenplayTemplate.pageMargins());
-    ScreenplayTextDocument screenplayDocument;
-    screenplayTextEdit.setDocument(&screenplayDocument);
-    const bool kCanChangeModel = false;
-    screenplayDocument.setModel(d->screenplayModel, kCanChangeModel);
-    QTextCursor screenplayCursor(&screenplayDocument);
-    auto textItemPage = [&screenplayTextEdit, &screenplayDocument,
-                         &screenplayCursor](TextModelTextItem* _item) {
-        screenplayCursor.setPosition(
-            screenplayDocument.itemPosition(screenplayDocument.model()->indexForItem(_item), true));
-        return screenplayTextEdit.cursorPage(screenplayCursor);
-    };
+    bool needToAddEpisodeNumber = false;
+    QSet<QString> sceneNumbersTemplates;
+    for (const auto episode : d->episodesModel->episodes()) {
+        if (sceneNumbersTemplates.contains(episode->informationModel()->scenesNumbersTemplate())) {
+            needToAddEpisodeNumber = true;
+            break;
+        }
+
+        sceneNumbersTemplates.insert(episode->informationModel()->scenesNumbersTemplate());
+    }
 
     //
-    // Собираем статистику
+    // Собираем статистику со всех сценариев
     //
-    std::function<void(const TextModelItem*)> includeInReport;
-    includeInReport = [&includeInReport, &scenes, &lastScene, &characters, &rxCharacterFinder,
-                       textItemPage, invalidPage](const TextModelItem* _item) {
-        for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
-            auto childItem = _item->childAt(childIndex);
-            switch (childItem->type()) {
-            case TextModelItemType::Folder:
-            case TextModelItemType::Group: {
-                includeInReport(childItem);
-                break;
-            }
+    int episodeNumber = 1;
+    for (const auto episode : d->episodesModel->episodes()) {
+        const auto sceneNumberPrefix
+            = needToAddEpisodeNumber ? QString("%1.").arg(episodeNumber++) : "";
+        //
+        // Подготовим текстовый документ, для определения страниц сцен
+        //
+        const auto& screenplayTemplate
+            = TemplatesFacade::screenplayTemplate(episode->informationModel()->templateId());
+        PageTextEdit screenplayTextEdit;
+        screenplayTextEdit.setUsePageMode(true);
+        screenplayTextEdit.setPageSpacing(0);
+        screenplayTextEdit.setPageFormat(screenplayTemplate.pageSizeId());
+        screenplayTextEdit.setPageMarginsMm(screenplayTemplate.pageMargins());
+        ScreenplayTextDocument screenplayDocument;
+        screenplayTextEdit.setDocument(&screenplayDocument);
+        const bool kCanChangeModel = false;
+        screenplayDocument.setModel(episode, kCanChangeModel);
+        QTextCursor screenplayCursor(&screenplayDocument);
+        auto textItemPage = [&screenplayTextEdit, &screenplayDocument,
+                             &screenplayCursor](TextModelTextItem* _item) {
+            screenplayCursor.setPosition(screenplayDocument.itemPosition(
+                screenplayDocument.model()->indexForItem(_item), true));
+            return screenplayTextEdit.cursorPage(screenplayCursor);
+        };
 
-            case TextModelItemType::Text: {
-                auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
-                //
-                // ... стата по объектам
-                //
-                switch (textItem->paragraphType()) {
-                case TextParagraphType::SceneHeading: {
+        //
+        // Собираем статистику с конкретного сценария
+        //
+        std::function<void(const TextModelItem*)> includeInReport;
+        includeInReport = [&includeInReport, &scenes, &lastScene, &characters, &rxCharacterFinder,
+                           textItemPage, invalidPage,
+                           sceneNumberPrefix](const TextModelItem* _item) {
+            for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
+                auto childItem = _item->childAt(childIndex);
+                switch (childItem->type()) {
+                case TextModelItemType::Folder:
+                case TextModelItemType::Group: {
+                    includeInReport(childItem);
+                    break;
+                }
+
+                case TextModelItemType::Text: {
+                    auto textItem = static_cast<ScreenplayTextModelTextItem*>(childItem);
                     //
-                    // Началась новая сцена
+                    // ... стата по объектам
                     //
-                    if (lastScene.page != invalidPage) {
-                        scenes.append(lastScene);
-                        lastScene = SceneData();
-                    }
-
-                    const auto sceneItem
-                        = static_cast<ScreenplayTextModelSceneItem*>(textItem->parent());
-                    lastScene.name = sceneItem->heading();
-                    lastScene.number = sceneItem->number()->text;
-                    lastScene.duration = sceneItem->duration();
-                    lastScene.page = textItemPage(textItem);
-                    break;
-                }
-
-                case TextParagraphType::SceneCharacters: {
-                    const auto sceneCharacters
-                        = ScreenplaySceneCharactersParser::characters(textItem->text());
-                    for (const auto& character : sceneCharacters) {
-                        auto& characterData = lastScene.character(character);
-                        if (!characters.contains(character)) {
-                            characters.insert(character);
-                            characterData.isFirstAppearance = true;
+                    switch (textItem->paragraphType()) {
+                    case TextParagraphType::SceneHeading: {
+                        //
+                        // Началась новая сцена
+                        //
+                        if (lastScene.page != invalidPage) {
+                            scenes.append(lastScene);
+                            lastScene = SceneData();
                         }
-                    }
-                    break;
-                }
 
-                case TextParagraphType::Character: {
-                    if (!textItem->isCorrection()) {
-                        const auto character = ScreenplayCharacterParser::name(textItem->text());
-                        auto& characterData = lastScene.character(character);
-                        ++characterData.totalDialogues;
-                        if (!characters.contains(character)) {
-                            characters.insert(character);
-                            characterData.isFirstAppearance = true;
-                        }
-                    }
-                    break;
-                }
-
-                case TextParagraphType::Action: {
-                    if (rxCharacterFinder.pattern().isEmpty()) {
+                        const auto sceneItem
+                            = static_cast<ScreenplayTextModelSceneItem*>(textItem->parent());
+                        lastScene.name = sceneItem->heading();
+                        lastScene.number = sceneNumberPrefix + sceneItem->number()->text;
+                        lastScene.duration = sceneItem->duration();
+                        lastScene.page = textItemPage(textItem);
                         break;
                     }
 
-                    auto match = rxCharacterFinder.match(textItem->text());
-                    while (match.hasMatch()) {
-                        const QString character = TextHelper::smartToUpper(match.captured(2));
-                        auto& characterData = lastScene.character(character);
-                        if (!characters.contains(character)) {
-                            characters.insert(character);
-                            characterData.isFirstAppearance = true;
+                    case TextParagraphType::SceneCharacters: {
+                        const auto sceneCharacters
+                            = ScreenplaySceneCharactersParser::characters(textItem->text());
+                        for (const auto& character : sceneCharacters) {
+                            auto& characterData = lastScene.character(character);
+                            if (!characters.contains(character)) {
+                                characters.insert(character);
+                                characterData.isFirstAppearance = true;
+                            }
+                        }
+                        break;
+                    }
+
+                    case TextParagraphType::Character: {
+                        if (!textItem->isCorrection()) {
+                            const auto character
+                                = ScreenplayCharacterParser::name(textItem->text());
+                            auto& characterData = lastScene.character(character);
+                            ++characterData.totalDialogues;
+                            if (!characters.contains(character)) {
+                                characters.insert(character);
+                                characterData.isFirstAppearance = true;
+                            }
+                        }
+                        break;
+                    }
+
+                    case TextParagraphType::Action: {
+                        if (rxCharacterFinder.pattern().isEmpty()) {
+                            break;
                         }
 
-                        //
-                        // Ищем дальше
-                        //
-                        match = rxCharacterFinder.match(textItem->text(), match.capturedEnd());
+                        auto match = rxCharacterFinder.match(textItem->text());
+                        while (match.hasMatch()) {
+                            const QString character = TextHelper::smartToUpper(match.captured(2));
+                            auto& characterData = lastScene.character(character);
+                            if (!characters.contains(character)) {
+                                characters.insert(character);
+                                characterData.isFirstAppearance = true;
+                            }
+
+                            //
+                            // Ищем дальше
+                            //
+                            match = rxCharacterFinder.match(textItem->text(), match.capturedEnd());
+                        }
+                        break;
                     }
+
+                    default:
+                        break;
+                    }
+
                     break;
                 }
 
                 default:
                     break;
                 }
-
-                break;
             }
-
-            default:
-                break;
-            }
-        }
-    };
-    includeInReport(d->screenplayModel->itemForIndex({}));
+        };
+        includeInReport(episode->itemForIndex({}));
+    }
     if (lastScene.page != invalidPage) {
         scenes.append(lastScene);
     }
+
 
     //
     // Сортируем
@@ -366,21 +398,21 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
         Qt::DisplayRole);
 }
 
-void ScreenplaySceneReport::setParameters(bool _showCharacters, int _sortBy)
+void ScreenplaySeriesSceneReport::setParameters(bool _showCharacters, int _sortBy)
 {
     d->showCharacters = _showCharacters;
     d->sortBy = _sortBy;
 }
 
-QAbstractItemModel* ScreenplaySceneReport::sceneModel() const
+QAbstractItemModel* ScreenplaySeriesSceneReport::sceneModel() const
 {
     return d->sceneModel.data();
 }
 
-void ScreenplaySceneReport::saveToPdf(const QString& _fileName) const
+void ScreenplaySeriesSceneReport::saveToPdf(const QString& _fileName) const
 {
     const auto& exportTemplate
-        = TemplatesFacade::screenplayTemplate(d->screenplayModel->informationModel()->templateId());
+        = TemplatesFacade::screenplayTemplate(d->episodesModel->informationModel()->templateId());
 
     //
     // Настраиваем документ
@@ -408,7 +440,7 @@ void ScreenplaySceneReport::saveToPdf(const QString& _fileName) const
     titleFormat.setFont(titleFont);
     cursor.setCharFormat(titleFormat);
     cursor.insertText(QString("%1 - %2").arg(
-        d->screenplayModel->informationModel()->name(),
+        d->episodesModel->informationModel()->name(),
         QCoreApplication::translate("BusinessLayer::ScreenplaySceneReport", "Scene report")));
     cursor.insertBlock();
     cursor.insertBlock();
@@ -491,7 +523,7 @@ void ScreenplaySceneReport::saveToPdf(const QString& _fileName) const
     report.print(&printer);
 }
 
-void ScreenplaySceneReport::saveToXlsx(const QString& _fileName) const
+void ScreenplaySeriesSceneReport::saveToXlsx(const QString& _fileName) const
 {
     QXlsx::Document xlsx;
     QXlsx::Format headerFormat;

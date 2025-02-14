@@ -318,6 +318,7 @@ SOURCES += \
     business_layer/plots/audioplay/audioplay_structure_analysis_plot.cpp \
     business_layer/plots/screenplay/screenplay_characters_activity_plot.cpp \
     business_layer/plots/screenplay/screenplay_structure_analysis_plot.cpp \
+    business_layer/plots/screenplay/series/screenplay_series_characters_activity_plot.cpp \
     business_layer/reports/abstract_report.cpp \
     business_layer/reports/audioplay/audioplay_cast_report.cpp \
     business_layer/reports/audioplay/audioplay_dialogues_report.cpp \
@@ -333,6 +334,11 @@ SOURCES += \
     business_layer/reports/screenplay/screenplay_location_report.cpp \
     business_layer/reports/screenplay/screenplay_scene_report.cpp \
     business_layer/reports/screenplay/screenplay_summary_report.cpp \
+    business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp \
+    business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp \
+    business_layer/reports/screenplay/series/screenplay_series_location_report.cpp \
+    business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp \
+    business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp \
     business_layer/reports/stageplay/stageplay_summary_report.cpp \
     business_layer/templates/audioplay_template.cpp \
     business_layer/templates/comic_book_template.cpp \
@@ -681,6 +687,7 @@ HEADERS += \
     business_layer/plots/audioplay/audioplay_structure_analysis_plot.h \
     business_layer/plots/screenplay/screenplay_characters_activity_plot.h \
     business_layer/plots/screenplay/screenplay_structure_analysis_plot.h \
+    business_layer/plots/screenplay/series/screenplay_series_characters_activity_plot.h \
     business_layer/reports/abstract_report.h \
     business_layer/reports/audioplay/audioplay_cast_report.h \
     business_layer/reports/audioplay/audioplay_dialogues_report.h \
@@ -696,6 +703,11 @@ HEADERS += \
     business_layer/reports/screenplay/screenplay_location_report.h \
     business_layer/reports/screenplay/screenplay_scene_report.h \
     business_layer/reports/screenplay/screenplay_summary_report.h \
+    business_layer/reports/screenplay/series/screenplay_series_cast_report.h \
+    business_layer/reports/screenplay/series/screenplay_series_dialogues_report.h \
+    business_layer/reports/screenplay/series/screenplay_series_location_report.h \
+    business_layer/reports/screenplay/series/screenplay_series_scene_report.h \
+    business_layer/reports/screenplay/series/screenplay_series_summary_report.h \
     business_layer/reports/stageplay/stageplay_summary_report.h \
     business_layer/templates/audioplay_template.h \
     business_layer/templates/comic_book_template.h \

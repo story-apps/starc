@@ -5,6 +5,9 @@
 
 namespace BusinessLayer {
 
+class ScreenplaySeriesInformationModel;
+class ScreenplayTextModel;
+
 /**
  * @brief Модель статистики сериала
  */
@@ -15,6 +18,19 @@ class CORE_LIBRARY_EXPORT ScreenplaySeriesEpisodesModel : public AbstractModel
 public:
     explicit ScreenplaySeriesEpisodesModel(QObject* _parent = nullptr);
     ~ScreenplaySeriesEpisodesModel() override;
+
+    /**
+     * @brief Задать модель информации о сериале
+     */
+    void setInformationModel(ScreenplaySeriesInformationModel* _model);
+    ScreenplaySeriesInformationModel* informationModel() const;
+
+    /**
+     * @brief Список серий сериала
+     */
+    QVector<ScreenplayTextModel*> episodes() const;
+    void setEpisodes(const QVector<ScreenplayTextModel*>& _episodes);
+    Q_SIGNAL void episodesChanged(const QVector<ScreenplayTextModel*>& _episodes);
 
 protected:
     /**

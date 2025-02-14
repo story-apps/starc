@@ -22,6 +22,7 @@ SUBDIRS = \
     screenplay_statistics_structure \
     screenplay_series_information \
     screenplay_series_parameters \
+    screenplay_series_statistics_structure \
     simple_text \
     simple_text_structure \
     stageplay_information \
@@ -83,6 +84,10 @@ exists (screenplay_breakdown_structure/screenplay_breakdown_structure.pro) {
 }
 exists (screenplay_statistics/screenplay_statistics.pro) {
     SUBDIRS += screenplay_statistics
+}
+
+exists (screenplay_series_statistics/screenplay_series_statistics.pro) {
+    SUBDIRS += screenplay_series_statistics
 }
 
 exists (comic_book_statistics/comic_book_statistics.pro) {
