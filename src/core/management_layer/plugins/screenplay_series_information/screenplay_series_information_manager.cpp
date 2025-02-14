@@ -138,8 +138,7 @@ void ScreenplaySeriesInformationManager::Implementation::setModelForView(
                 &BusinessLayer::ScreenplaySeriesInformationModel::setTreatmentVisible);
         connect(_view, &Ui::ScreenplaySeriesInformationView::screenplayVisibleChanged, model,
                 &BusinessLayer::ScreenplaySeriesInformationModel::setScreenplayTextVisible);
-        connect(_view, &Ui::ScreenplaySeriesInformationView::statisticsVisibleChanged,
-                model,
+        connect(_view, &Ui::ScreenplaySeriesInformationView::statisticsVisibleChanged, model,
                 &BusinessLayer::ScreenplaySeriesInformationModel::setScreenplayStatisticsVisible);
     }
 }
