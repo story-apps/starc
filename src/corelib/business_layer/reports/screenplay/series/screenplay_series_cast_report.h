@@ -10,7 +10,7 @@ namespace BusinessLayer {
 /**
  * @brief Сводный отчёт по сериалу
  */
-class ScreenplaySeriesCastReport : public AbstractReport
+class CORE_LIBRARY_EXPORT ScreenplaySeriesCastReport : public AbstractReport
 {
 public:
     ScreenplaySeriesCastReport();
