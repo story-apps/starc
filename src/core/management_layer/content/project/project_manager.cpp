@@ -1217,8 +1217,8 @@ void ProjectManager::Implementation::removeDocuments(const QList<QModelIndex>& _
             documentsList += "\n" + item->name();
         }
 
-        question = tr("Do you really want to permanently remove following document?%1")
-                       .arg(documentsList);
+        question
+            = tr("Do you really want to permanently remove following documents?") + documentsList;
     } else {
         question = tr("Do you really want to permanently remove document: \"%1\"?")
                        .arg(itemsList.first()->name());
