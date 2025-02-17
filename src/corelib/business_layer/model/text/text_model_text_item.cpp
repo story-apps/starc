@@ -958,7 +958,9 @@ void TextModelTextItem::setFormats(const QVector<QTextLayout::FormatRange>& _for
             newFormat.font.size = MeasurementHelper::pxToPt(format.format.font().pixelSize());
         }
 
-        newFormats.append(newFormat);
+        if (newFormat.isValid()) {
+            newFormats.append(newFormat);
+        }
     }
 
     if (d->formats == newFormats) {
