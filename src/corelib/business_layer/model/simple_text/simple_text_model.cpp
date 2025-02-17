@@ -354,48 +354,6 @@ void SimpleTextModel::finalizeInitialization()
     endChangeRows();
 }
 
-QByteArray SimpleTextModel::documentHeader() const
-{
-    QByteArray xml;
-    xml += QString("<%1%2><![CDATA[%3]]></%1>\n")
-               .arg(kDocumentNameKey,
-                    d->color.isValid()
-                        ? QString(" %1=\"%2\"").arg(xml::kColorAttribute, d->color.name())
-                        : "",
-                    TextHelper::toHtmlEscaped(d->name))
-               .toUtf8();
-    return xml;
-}
-
-void SimpleTextModel::readDocumentHeader(QXmlStreamReader& _reader)
-{
-    //
-    // Заходим в моменте, когда ридер на тэге открывающем заголовок документа
-    //
-    Q_ASSERT(_reader.name() == xml::kHeaderTag);
-
-    auto currentTag = xml::readNextElement(_reader); // next
-    if (currentTag == kDocumentNameKey) {
-        if (_reader.attributes().hasAttribute(xml::kColorAttribute)) {
-            d->color = _reader.attributes().value(xml::kColorAttribute).toString();
-        }
-        d->name = TextHelper::fromHtmlEscaped(xml::readContent(_reader).toString());
-        currentTag = xml::readNextElement(_reader); // end
-    }
-
-    //
-    // Считываем закрывающий тэг заголовка перед выходом
-    //
-    while (currentTag != xml::kHeaderTag) {
-        currentTag = xml::readNextElement(_reader); // end of header
-    }
-
-    //
-    // Переходим к телу документа
-    //
-    xml::readNextElement(_reader); // next
-}
-
 ChangeCursor SimpleTextModel::applyPatch(const QByteArray& _patch)
 {
     const auto changeCursor = TextModel::applyPatch(_patch);

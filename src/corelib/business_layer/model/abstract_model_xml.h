@@ -14,7 +14,6 @@ namespace xml {
 const QString kDocumentTag = QLatin1String("document");
 const QString kMimeTypeAttribute = QLatin1String("mime-type");
 const QString kVersionAttribute = QLatin1String("version");
-const QString kHeaderTag = "header";
 
 //
 // Содержимое группирующих элементов

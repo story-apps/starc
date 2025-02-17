@@ -113,11 +113,6 @@ void TextModel::Implementation::buildModel(Domain::DocumentObject* _document)
             break;
         }
 
-        if (currentTag == xml::kHeaderTag) {
-            q->readDocumentHeader(contentReader);
-            continue;
-        }
-
         if (textFolderTypeFromString(currentTag) != TextFolderType::Undefined) {
             rootItem->appendItem(q->createFolderItem(contentReader));
         } else if (textGroupTypeFromString(currentTag) != TextGroupType::Undefined) {
@@ -143,7 +138,6 @@ QByteArray TextModel::Implementation::toXml(Domain::DocumentObject* _document) c
     xml::TextModelXmlWriter xml(addXmlHeader);
     xml += "<document mime-type=\"" + Domain::mimeTypeFor(_document->type())
         + "\" version=\"1.0\">\n";
-    xml += QString("<%1>%2</%1>\n").arg(xml::kHeaderTag, QString(q->documentHeader()));
     for (int childIndex = 0; childIndex < rootItem->childCount(); ++childIndex) {
         xml += rootItem->childAt(childIndex)->toXml();
     }
@@ -1903,16 +1897,6 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
             return {};
         }
 
-        //
-        // Пропускаем заголовок
-        //
-        if (_reader.name() == xml::kHeaderTag) {
-            do {
-                xml::readNextElement(_reader);
-            } while (_reader.name() != xml::kHeaderTag);
-            xml::readNextElement(_reader); // next after end of header
-        }
-
         QVector<TextModelItem*> items;
         while (!_reader.atEnd()) {
             const auto currentTag = _reader.name().toString();
@@ -2019,7 +2003,6 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
         QByteArray xml = "<?xml version=\"1.0\"?>\n";
         xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type())
             + "\" version=\"1.0\">\n";
-        xml += QString("<%1>%2</%1>\n").arg(xml::kHeaderTag, QString(documentHeader())).toUtf8();
         return xml.length();
     }();
     std::function<TextModelItem*(TextModelItem*)> findStartItem;
@@ -2627,22 +2610,6 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
 #endif
 
     return { lastChangedItem, lastChangedItemPosition };
-}
-
-QByteArray TextModel::documentHeader() const
-{
-    return {};
-}
-
-void TextModel::readDocumentHeader(QXmlStreamReader& _reader)
-{
-    //
-    // Заходим в моменте, когда ридер на тэге открывающем заголовок документа
-    //
-    Q_ASSERT(_reader.name() == xml::kHeaderTag);
-
-    xml::readNextElement(_reader); // end of header
-    xml::readNextElement(_reader); // next
 }
 
 } // namespace BusinessLayer
