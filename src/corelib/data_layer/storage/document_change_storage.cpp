@@ -104,6 +104,16 @@ QVector<Domain::DocumentChangeObject*> DocumentChangeStorage::unsyncedDocumentCh
 
     changes.append(
         DataMappingLayer::MapperFacade::documentChangeMapper()->findAllUnsynced(_documentUuid));
+
+    //
+    // Изменения должны следовать по дате создания, т.к. наложение последующих зависит от предыдущих
+    //
+    std::sort(
+        changes.begin(), changes.end(),
+        [](const Domain::DocumentChangeObject* _lhs, const Domain::DocumentChangeObject* _rhs) {
+            return _lhs->dateTime() < _rhs->dateTime();
+        });
+
     return changes;
 }
 
