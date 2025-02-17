@@ -2019,6 +2019,7 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
         QByteArray xml = "<?xml version=\"1.0\"?>\n";
         xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type())
             + "\" version=\"1.0\">\n";
+        xml += QString("<%1>%2</%1>\n").arg(xml::kHeaderTag, QString(documentHeader())).toUtf8();
         return xml.length();
     }();
     std::function<TextModelItem*(TextModelItem*)> findStartItem;
