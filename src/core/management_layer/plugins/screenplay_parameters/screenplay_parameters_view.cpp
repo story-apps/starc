@@ -238,6 +238,10 @@ ScreenplayParametersView::ScreenplayParametersView(QWidget* _parent)
             &ScreenplayParametersView::showDialoguesNumbersChanged);
 
     connect(d->overrideCommonSettings, &CheckBox::checkedChanged, this, [this](bool _checked) {
+        if (!d->overrideCommonSettings->isVisibleTo(this)) {
+            return;
+        }
+
         d->screenplayTemplate->setVisible(_checked);
         d->showSceneNumbers->setVisible(_checked);
         d->showSceneNumbersOnLeft->setVisible(_checked);
@@ -355,6 +359,11 @@ void ScreenplayParametersView::setScenesNumbersLocked(bool _locked)
         d->relockScenesNumbers->setVisible(_locked);
         d->unlockScenesNumbers->setVisible(_locked);
     }
+}
+
+void ScreenplayParametersView::setCanCommonSettingsBeOverridden(bool _can)
+{
+    d->overrideCommonSettings->setVisible(_can);
 }
 
 void ScreenplayParametersView::setOverrideCommonSettings(bool _override)

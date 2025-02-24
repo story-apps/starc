@@ -129,6 +129,7 @@ void ScreenplayParametersManager::Implementation::setModelForView(
         _view->setScenesNumbersTemplate(model->scenesNumbersTemplate());
         _view->setScenesNumberingStartAt(model->scenesNumberingStartAt());
         _view->setScenesNumbersLocked(model->isSceneNumbersLocked());
+        _view->setCanCommonSettingsBeOverridden(model->canCommonSettingsBeOverridden());
         _view->setOverrideCommonSettings(model->overrideCommonSettings());
         _view->setScreenplayTemplate(model->templateId());
         _view->setShowSceneNumbers(model->showSceneNumbers());
@@ -150,6 +151,9 @@ void ScreenplayParametersManager::Implementation::setModelForView(
                 _view, &Ui::ScreenplayParametersView::setScenesNumberingStartAt);
         connect(model, &BusinessLayer::ScreenplayInformationModel::isSceneNumbersLockedChanged,
                 _view, &Ui::ScreenplayParametersView::setScenesNumbersLocked);
+        connect(model,
+                &BusinessLayer::ScreenplayInformationModel::canCommonSettingsBeOverriddenChanged,
+                _view, &Ui::ScreenplayParametersView::setCanCommonSettingsBeOverridden);
         connect(model, &BusinessLayer::ScreenplayInformationModel::overrideCommonSettingsChanged,
                 _view, &Ui::ScreenplayParametersView::setOverrideCommonSettings);
         connect(model, &BusinessLayer::ScreenplayInformationModel::templateIdChanged, _view,

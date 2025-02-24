@@ -78,6 +78,10 @@ public:
     void setScenesNumbersLocked(bool _locked);
     Q_SIGNAL void isSceneNumbersLockedChanged(bool _locked);
 
+    bool canCommonSettingsBeOverridden() const;
+    void setCanCommonSettingsBeOverridden(bool _can);
+    Q_SIGNAL void canCommonSettingsBeOverriddenChanged(bool _can);
+
     bool overrideCommonSettings() const;
     void setOverrideCommonSettings(bool _override);
     Q_SIGNAL void overrideCommonSettingsChanged(bool _override);
