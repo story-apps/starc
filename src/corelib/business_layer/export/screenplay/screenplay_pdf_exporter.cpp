@@ -224,47 +224,100 @@ void ScreenplayPdfExporter::printBlockDecorations(
                        _blockRect.top() },
                      _blockRect.size());
         //
-        // ... префикс
+        // RTL
         //
-        if (_block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)) {
-            _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
+        if (_block.text().isRightToLeft()) {
+            //
+            // ... префикс
+            //
+            if (_block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)) {
+                _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
 
-            const auto prefix = _block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
-            auto prefixRect = _blockRect;
-            prefixRect.setWidth(TextHelper::fineTextWidthF(prefix, _painter->font()));
-            prefixRect.moveLeft(prefixRect.left() + _block.blockFormat().leftMargin()
-                                - prefixRect.width());
-            prefixRect.setHeight(_painter->fontMetrics().boundingRect(prefix).height());
-            _painter->drawText(prefixRect, Qt::AlignLeft | Qt::AlignBottom, prefix);
+                const auto prefix
+                    = _block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
+
+                //
+                // Почему-то если взять просто ширину последней строки текста, то получается
+                // слишком широко в некоторых случаях, так, что постфикс рисуется очень далеко
+                // от текста. Поэтому решил брать текст последней строки, добавлять к нему
+                // постфикс, считать их совместную ширину и брать её, как конечную точку
+                //
+                const auto lastLineText
+                    = TextHelper::lastLineText(_block.text(), _painter->font(), _blockRect.width());
+                const QPoint bottomRight = QPoint(
+                    _blockRect.left() + _block.blockFormat().leftMargin() + _blockRect.width()
+                        - TextHelper::fineTextWidthF(lastLineText, _painter->font()),
+                    correctedBlockRect.bottom());
+                const QPoint topLeft
+                    = QPoint(bottomRight.x() - TextHelper::fineTextWidthF(prefix, _painter->font()),
+                             correctedBlockRect.bottom()
+                                 - _painter->fontMetrics().boundingRect(prefix).height());
+                const QRect postfixRect(topLeft, bottomRight);
+                _painter->drawText(postfixRect, Qt::AlignLeft | Qt::AlignBottom, prefix);
+            }
+            //
+            // ... постфикс
+            //
+            if (_block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix)) {
+                _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
+
+                const auto postfix
+                    = _block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
+                auto rect = _blockRect;
+                rect.setWidth(TextHelper::fineTextWidthF(postfix, _painter->font()));
+                rect.moveLeft(rect.left() + _block.blockFormat().leftMargin() + _blockRect.width());
+                rect.setHeight(_painter->fontMetrics().boundingRect(postfix).height());
+                _painter->drawText(rect, Qt::AlignLeft | Qt::AlignBottom, postfix);
+            }
         }
         //
-        // ... постфикс
+        // LTR
         //
-        if (_block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix)) {
-            _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
-
-            const auto postfix
-                = _block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
-
+        else {
             //
-            // Почему-то если взять просто ширину последней строки текста, то получается
-            // слишком широко в некоторых случаях, так, что постфикс рисуется очень далеко
-            // от текста. Поэтому решил брать текст последней строки, добавлять к нему
-            // постфикс, считать их совместную ширину и брать её, как конечную точку
+            // ... префикс
             //
-            const auto lastLineText
-                = TextHelper::lastLineText(_block.text(), _painter->font(), _blockRect.width())
-                + postfix;
-            const QPoint bottomRight
-                = QPoint(_blockRect.left() + _block.blockFormat().leftMargin()
-                             + TextHelper::fineTextWidthF(lastLineText, _painter->font()),
-                         correctedBlockRect.bottom());
-            const QPoint topLeft
-                = QPoint(bottomRight.x() - TextHelper::fineTextWidthF(postfix, _painter->font()),
-                         correctedBlockRect.bottom()
-                             - _painter->fontMetrics().boundingRect(postfix).height());
-            const QRect postfixRect(topLeft, bottomRight);
-            _painter->drawText(postfixRect, Qt::AlignLeft | Qt::AlignBottom, postfix);
+            if (_block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)) {
+                _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
+
+                const auto prefix
+                    = _block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
+                auto prefixRect = _blockRect;
+                prefixRect.setWidth(TextHelper::fineTextWidthF(prefix, _painter->font()));
+                prefixRect.moveLeft(prefixRect.left() + _block.blockFormat().leftMargin()
+                                    - prefixRect.width());
+                prefixRect.setHeight(_painter->fontMetrics().boundingRect(prefix).height());
+                _painter->drawText(prefixRect, Qt::AlignLeft | Qt::AlignBottom, prefix);
+            }
+            //
+            // ... постфикс
+            //
+            if (_block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix)) {
+                _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
+
+                const auto postfix
+                    = _block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
+
+                //
+                // Почему-то если взять просто ширину последней строки текста, то получается
+                // слишком широко в некоторых случаях, так, что постфикс рисуется очень далеко
+                // от текста. Поэтому решил брать текст последней строки, добавлять к нему
+                // постфикс, считать их совместную ширину и брать её, как конечную точку
+                //
+                const auto lastLineText
+                    = TextHelper::lastLineText(_block.text(), _painter->font(), _blockRect.width())
+                    + postfix;
+                const QPoint bottomRight
+                    = QPoint(_blockRect.left() + _block.blockFormat().leftMargin()
+                                 + TextHelper::fineTextWidthF(lastLineText, _painter->font()),
+                             correctedBlockRect.bottom());
+                const QPoint topLeft = QPoint(
+                    bottomRight.x() - TextHelper::fineTextWidthF(postfix, _painter->font()),
+                    correctedBlockRect.bottom()
+                        - _painter->fontMetrics().boundingRect(postfix).height());
+                const QRect postfixRect(topLeft, bottomRight);
+                _painter->drawText(postfixRect, Qt::AlignLeft | Qt::AlignBottom, postfix);
+            }
         }
     }
 
