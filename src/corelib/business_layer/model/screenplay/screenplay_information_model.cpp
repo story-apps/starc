@@ -620,8 +620,13 @@ void ScreenplayInformationModel::initDocument()
     }
     d->isScenesNumbersLocked
         = documentNode.firstChildElement(kIsScenesNumberingLockedKey).text() == "true";
-    d->canCommonSettingsBeOverridden
-        = documentNode.firstChildElement(kCanOverrideSystemSettingsKey).text() == "true";
+    //
+    // TODO: выпилить в одной из будущих версий
+    //
+    if (!documentNode.firstChildElement(kCanOverrideSystemSettingsKey).isNull()) {
+        d->canCommonSettingsBeOverridden
+            = documentNode.firstChildElement(kCanOverrideSystemSettingsKey).text() == "true";
+    }
     d->overrideCommonSettings
         = documentNode.firstChildElement(kOverrideSystemSettingsKey).text() == "true";
     d->templateId = documentNode.firstChildElement(kTemplateIdKey).text();
