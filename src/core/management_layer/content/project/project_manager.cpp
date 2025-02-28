@@ -977,19 +977,7 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                 //
                 if (!_importFilePath.isEmpty()) {
                     const auto item = projectStructureModel->itemForIndex(addedItemIndex);
-                    switch (_type) {
-                    case Domain::DocumentObjectType::Presentation: {
-                        const auto model = modelsFacade.modelFor(item->uuid());
-                        const auto presentationModel
-                            = qobject_cast<BusinessLayer::PresentationModel*>(model);
-                        emit presentationModel->downloadPresentationRequested(_importFilePath);
-                        break;
-                    }
-                    default: {
-                        emit q->importFileRequested(_importFilePath, item->uuid(), _type);
-                        break;
-                    }
-                    }
+                    emit q->importFileRequested(_importFilePath, item->uuid(), _type);
                 }
             });
     connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog,
@@ -3417,7 +3405,7 @@ void ProjectManager::addDocument(const BusinessLayer::AbstractImporter::Document
     }
 }
 
-void ProjectManager::addSimpleText(const QString& _name, const QString& _text)
+void ProjectManager::saveSimpleText(const QString& _name, const QString& _text)
 {
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
@@ -3442,7 +3430,7 @@ void ProjectManager::addSimpleText(const QString& _name, const QString& _text)
     d->setCurrentItem(simpleTextItem);
 }
 
-void ProjectManager::addAudioplay(const QString& _name, const QString& _titlePage,
+void ProjectManager::saveAudioplay(const QString& _name, const QString& _titlePage,
                                   const QString& _text)
 {
     //
@@ -3479,7 +3467,7 @@ void ProjectManager::addAudioplay(const QString& _name, const QString& _titlePag
     d->setCurrentItem(audioplayItem);
 }
 
-void ProjectManager::addComicBook(const QString& _name, const QString& _titlePage,
+void ProjectManager::saveComicBook(const QString& _name, const QString& _titlePage,
                                   const QString& _text)
 {
     //
@@ -3516,7 +3504,7 @@ void ProjectManager::addComicBook(const QString& _name, const QString& _titlePag
     d->setCurrentItem(comicbookItem);
 }
 
-void ProjectManager::addNovel(const QString& _name, const QString& _text)
+void ProjectManager::saveNovel(const QString& _name, const QString& _text)
 {
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
@@ -3556,7 +3544,7 @@ void ProjectManager::addNovel(const QString& _name, const QString& _text)
     d->setCurrentItem(novelItem);
 }
 
-void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePage,
+void ProjectManager::saveScreenplay(const QString& _name, const QString& _titlePage,
                                    const QString& _synopsis, const QString& _treatment,
                                    const QString& _text)
 {
@@ -3601,7 +3589,7 @@ void ProjectManager::addScreenplay(const QString& _name, const QString& _titlePa
     d->setCurrentItem(screenplayItem);
 }
 
-void ProjectManager::addStageplay(const QString& _name, const QString& _titlePage,
+void ProjectManager::saveStageplay(const QString& _name, const QString& _titlePage,
                                   const QString& _text)
 {
     //
@@ -3636,6 +3624,51 @@ void ProjectManager::addStageplay(const QString& _name, const QString& _titlePag
     // Фокусируем добавленный документ
     //
     d->setCurrentItem(stageplayItem);
+}
+
+void ProjectManager::savePresentation(const QUuid& _documentUuid, const QString& _name,
+                                     const QString& _presentationFilePath)
+{
+    //
+    // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
+    //
+
+    using namespace Domain;
+
+    //
+    // Если нужно, то создаём новый документ в проекте
+    //
+    BusinessLayer::StructureModelItem* presentationItem = nullptr;
+    if (_documentUuid.isNull()) {
+        auto createItem = [](DocumentObjectType _type, const QString& _name) {
+            auto uuid = QUuid::createUuid();
+            const auto visible = true;
+            const auto readOnly = false;
+            return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly);
+        };
+
+        auto rootItem = d->projectStructureModel->itemForIndex({});
+        presentationItem = createItem(DocumentObjectType::Presentation, _name);
+        d->projectStructureModel->appendItem(presentationItem, rootItem);
+
+        //
+        // Фокусируем добавленный документ
+        //
+        d->setCurrentItem(presentationItem);
+    }
+    //
+    // Вытащим презентацию из структуры проекта
+    //
+    else {
+        presentationItem = d->projectStructureModel->itemForUuid(_documentUuid);
+    }
+
+    //
+    // Запускаем загрузку презентации
+    //
+    const auto model = d->modelsFacade.modelFor(presentationItem->uuid());
+    const auto presentationModel = qobject_cast<BusinessLayer::PresentationModel*>(model);
+    emit presentationModel->downloadPresentationRequested(_presentationFilePath);
 }
 
 QVector<QPair<QString, BusinessLayer::AbstractModel*>> ProjectManager::currentModelsForExport()

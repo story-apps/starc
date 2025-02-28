@@ -2855,17 +2855,19 @@ void ApplicationManager::initConnections()
                 d->projectManager->addDocument(_document);
             });
     connect(d->importManager.data(), &ImportManager::simpleTextImported, d->projectManager.data(),
-            &ProjectManager::addSimpleText);
+            &ProjectManager::saveSimpleText);
     connect(d->importManager.data(), &ImportManager::audioplayImported, d->projectManager.data(),
-            &ProjectManager::addAudioplay);
+            &ProjectManager::saveAudioplay);
     connect(d->importManager.data(), &ImportManager::comicbookImported, d->projectManager.data(),
-            &ProjectManager::addComicBook);
+            &ProjectManager::saveComicBook);
     connect(d->importManager.data(), &ImportManager::novelImported, d->projectManager.data(),
-            &ProjectManager::addNovel);
+            &ProjectManager::saveNovel);
     connect(d->importManager.data(), &ImportManager::screenplayImported, d->projectManager.data(),
-            &ProjectManager::addScreenplay);
+            &ProjectManager::saveScreenplay);
     connect(d->importManager.data(), &ImportManager::stageplayImported, d->projectManager.data(),
-            &ProjectManager::addStageplay);
+            &ProjectManager::saveStageplay);
+    connect(d->importManager.data(), &ImportManager::presentationImported, d->projectManager.data(),
+            &ProjectManager::savePresentation);
 
     //
     // Менеджер настроек

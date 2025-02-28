@@ -114,13 +114,14 @@ public:
     /**
      * @brief Добавить данные по документу
      */
-    void addSimpleText(const QString& _name, const QString& _text);
-    void addAudioplay(const QString& _name, const QString& _titlePage, const QString& _text);
-    void addComicBook(const QString& _name, const QString& _titlePage, const QString& _text);
-    void addNovel(const QString& _name, const QString& _text);
-    void addScreenplay(const QString& _name, const QString& _titlePage, const QString& _synopsis,
+    void saveSimpleText(const QString& _name, const QString& _text);
+    void saveAudioplay(const QString& _name, const QString& _titlePage, const QString& _text);
+    void saveComicBook(const QString& _name, const QString& _titlePage, const QString& _text);
+    void saveNovel(const QString& _name, const QString& _text);
+    void saveScreenplay(const QString& _name, const QString& _titlePage, const QString& _synopsis,
                        const QString& _treatment, const QString& _text);
-    void addStageplay(const QString& _name, const QString& _titlePage, const QString& _text);
+    void saveStageplay(const QString& _name, const QString& _titlePage, const QString& _text);
+    void savePresentation(const QUuid& _documentUuid, const QString& _name, const QString& _presentationFilePath);
 
     /**
      * @brief Версии модели документа для экспорта

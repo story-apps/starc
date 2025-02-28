@@ -66,6 +66,8 @@ signals:
                             const QString& _synopsis, const QString& _treatment,
                             const QString& _screenplay);
     void stageplayImported(const QString& _name, const QString& _titlePage, const QString& _text);
+    void presentationImported(const QUuid& _documentUuid, const QString& _name,
+                              const QString& _presentationFilePath);
 
 private:
     class Implementation;

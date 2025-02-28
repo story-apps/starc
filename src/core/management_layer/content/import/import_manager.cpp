@@ -378,6 +378,15 @@ void ImportManager::Implementation::importStageplay(const BusinessLayer::ImportO
 
 void ImportManager::Implementation::importPresentation(const BusinessLayer::ImportOptions& _options)
 {
+    //
+    // NOTE: Пока мы не умеем рендерить презентации локально, делаем вид, что мы это сделали, хотя
+    // по факту презентация будет рендериться в картинки на стороне нашего сервиса и вся магия по
+    // работе с ним находится внутри плагина презентаций
+    //
+    // Поэтому тут делаем вид, типа мы всё импортировали :)
+    //
+    emit q->presentationImported(
+        _options.documentUuid, QFileInfo(_options.filePath).completeBaseName(), _options.filePath);
 }
 
 
@@ -447,6 +456,14 @@ void ImportManager::importToDocument(const QString& _filePath, const QUuid& _doc
     // TODO: здесь будет магия импорта при создании документа
     //
     switch (_type) {
+    case Domain::DocumentObjectType::Presentation: {
+        BusinessLayer::ImportOptions options;
+        options.documentUuid = _documentUuid;
+        options.filePath = _filePath;
+        d->importPresentation(options);
+        break;
+    }
+
     default: {
         break;
     }

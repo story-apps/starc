@@ -13,6 +13,11 @@ namespace BusinessLayer {
  */
 struct CORE_LIBRARY_EXPORT ImportOptions {
     /**
+     * @brief Юид документа, в который производится импорт
+     */
+    QUuid documentUuid;
+
+    /**
      * @brief Путь файла для импорта
      */
     QString filePath;
