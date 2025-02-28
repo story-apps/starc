@@ -1059,7 +1059,7 @@ void SimpleTextEdit::insertFromMimeData(const QMimeData* _source)
         //       не воспринимался как титульная страница
         //
         BusinessLayer::SimpleTextMarkdownImporter markdownImporter;
-        textToInsert = markdownImporter.importDocument(text).text;
+        textToInsert = markdownImporter.importSimpleText(text).text;
     }
 
     //

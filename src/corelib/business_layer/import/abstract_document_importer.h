@@ -42,11 +42,11 @@ protected:
 
     /**
      * @brief Определить тип блока в текущей позиции курсора
-     *		  с указанием предыдущего типа и количества предшествующих пустых строк
+     *        с указанием предыдущего типа и количества предшествующих пустых строк
      */
-    TextParagraphType typeForTextCursor(const QTextCursor& _cursor,
-                                        TextParagraphType _lastBlockType, int _prevEmptyLines,
-                                        int _minLeftMargin) const;
+    virtual TextParagraphType typeForTextCursor(const QTextCursor& _cursor,
+                                                TextParagraphType _lastBlockType,
+                                                int _prevEmptyLines, int _minLeftMargin) const;
 
     /**
      * @brief Очистка блоков от мусора и их корректировки
@@ -71,12 +71,12 @@ protected:
     /**
      * @brief Получить имя персонажа
      */
-    virtual QString characterName(const QString& _text) const = 0;
+    virtual QString characterName(const QString& _text) const;
 
     /**
      * @brief Получить название локации
      */
-    virtual QString locationName(const QString& _text) const = 0;
+    virtual QString locationName(const QString& _text) const;
 };
 
 

@@ -38,24 +38,32 @@ QString settingsKey(const QString& _filePath, const QString& _parameter)
 
 const QVector<QPair<const Domain::DocumentObjectType, const QString>> kDocumentTypes{
     {
+        Domain::DocumentObjectType::SimpleText,
+        QApplication::translate("Ui::ImportDialog", "Simple text"),
+    },
+    {
         Domain::DocumentObjectType::Audioplay,
-        QApplication::translate("ImportDialog", "Audioplay"),
+        QApplication::translate("Ui::ImportDialog", "Audioplay"),
     },
     {
         Domain::DocumentObjectType::ComicBook,
-        QApplication::translate("ImportDialog", "Comic Book"),
+        QApplication::translate("Ui::ImportDialog", "Comic Book"),
     },
     {
         Domain::DocumentObjectType::Novel,
-        QApplication::translate("ImportDialog", "Novel"),
+        QApplication::translate("Ui::ImportDialog", "Novel"),
     },
     {
         Domain::DocumentObjectType::Screenplay,
-        QApplication::translate("ImportDialog", "Screenplay"),
+        QApplication::translate("Ui::ImportDialog", "Screenplay"),
     },
     {
         Domain::DocumentObjectType::Stageplay,
-        QApplication::translate("ImportDialog", "Stageplay"),
+        QApplication::translate("Ui::ImportDialog", "Stageplay"),
+    },
+    {
+        Domain::DocumentObjectType::Presentation,
+        QApplication::translate("Ui::ImportDialog", "Presentation"),
     },
 };
 
@@ -85,31 +93,42 @@ QVector<Domain::DocumentObjectType> importTypesForFile(const QString& _path)
         return filePath.endsWith(_extension);
     };
 
+    using namespace Domain;
+
     //
     // Бинарные форматы
     //
     if (fileIs(ExtensionHelper::msOfficeOpenXml()) || fileIs(ExtensionHelper::openDocumentXml())) {
-        return { Domain::DocumentObjectType::Screenplay };
+        return {
+            DocumentObjectType::SimpleText,
+            DocumentObjectType::Screenplay,
+        };
     } else if (fileIs(ExtensionHelper::pdf())) {
-        return { Domain::DocumentObjectType::Screenplay };
+        return {
+            DocumentObjectType::SimpleText,
+            DocumentObjectType::Screenplay,
+            DocumentObjectType::Presentation,
+        };
     }
     //
     // Текстовые форматы
     //
     else if (fileIs(ExtensionHelper::fountain())) {
         return {
-            Domain::DocumentObjectType::Audioplay,
-            Domain::DocumentObjectType::ComicBook,
-            Domain::DocumentObjectType::Screenplay,
-            Domain::DocumentObjectType::Stageplay,
+            DocumentObjectType::SimpleText, DocumentObjectType::Audioplay,
+            DocumentObjectType::ComicBook,  DocumentObjectType::Screenplay,
+            DocumentObjectType::Stageplay,
         };
     } else if (fileIs(ExtensionHelper::markdown())) {
-        return { Domain::DocumentObjectType::Novel };
+        return {
+            DocumentObjectType::SimpleText,
+            DocumentObjectType::Novel,
+        };
     } else if (fileIs(ExtensionHelper::plainText())) {
         return {
-            Domain::DocumentObjectType::Audioplay,  Domain::DocumentObjectType::ComicBook,
-            Domain::DocumentObjectType::Screenplay, Domain::DocumentObjectType::Stageplay,
-            Domain::DocumentObjectType::Novel,
+            DocumentObjectType::SimpleText, DocumentObjectType::Audioplay,
+            DocumentObjectType::ComicBook,  DocumentObjectType::Screenplay,
+            DocumentObjectType::Stageplay,  DocumentObjectType::Novel,
         };
     }
     //
@@ -118,9 +137,13 @@ QVector<Domain::DocumentObjectType> importTypesForFile(const QString& _path)
     else if (fileIs(ExtensionHelper::celtx()) || fileIs(ExtensionHelper::finalDraft())
              || fileIs(ExtensionHelper::finalDraftTemplate())
              || fileIs(ExtensionHelper::kitScenarist()) || fileIs(ExtensionHelper::trelby())) {
-        return { Domain::DocumentObjectType::Screenplay };
+        return {
+            DocumentObjectType::Screenplay,
+        };
     }
-    return { Domain::DocumentObjectType::Undefined };
+    return {
+        DocumentObjectType::Undefined,
+    };
 }
 
 } // namespace
@@ -326,6 +349,10 @@ void ImportDialog::Implementation::updateImportTextLabel()
         importText->setText(tr("Import novel text"));
         break;
     }
+    case Domain::DocumentObjectType::Presentation: {
+        importText->setText(tr("Import presentation"));
+        break;
+    }
     default: {
         importText->setText(tr("Import text"));
         break;
@@ -348,18 +375,12 @@ void ImportDialog::Implementation::updateParametersVisibility()
         isKeepSceneNumbersVisible = false;
         break;
     }
-    case Domain::DocumentObjectType::Novel: {
-        isImportCharactersVisible = false;
-        isImportLocationsVisible = false;
-        isImportResearchVisible = false;
-        isKeepSceneNumbersVisible = false;
-        break;
-    }
     case Domain::DocumentObjectType::Screenplay: {
         isKeepSceneNumbersVisible = importText->isChecked();
         break;
     }
     default: {
+        isImportCharactersVisible = false;
         isImportLocationsVisible = false;
         isImportResearchVisible = false;
         isKeepSceneNumbersVisible = false;

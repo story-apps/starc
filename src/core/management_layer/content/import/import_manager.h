@@ -58,6 +58,7 @@ signals:
     /**
      * @brief Документ загружен
      */
+    void simpleTextImported(const QString& _name, const QString& _text);
     void audioplayImported(const QString& _name, const QString& _titlePage, const QString& _text);
     void comicbookImported(const QString& _name, const QString& _titlePage, const QString& _text);
     void novelImported(const QString& _name, const QString& _screenplay);

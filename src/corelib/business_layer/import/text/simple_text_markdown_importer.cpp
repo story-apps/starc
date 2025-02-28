@@ -1,7 +1,6 @@
 #include "simple_text_markdown_importer.h"
 
-#include "simple_text_import_options.h"
-
+#include <business_layer/import/import_options.h>
 #include <business_layer/model/text/text_model_xml.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <domain/document_object.h>
@@ -10,10 +9,11 @@
 #include <QFileInfo>
 #include <QXmlStreamWriter>
 
+
 namespace BusinessLayer {
 
-AbstractSimpleTextImporter::Document SimpleTextMarkdownImporter::importDocument(
-    const SimpleTextImportOptions& _options) const
+AbstractSimpleTextImporter::SimpleText SimpleTextMarkdownImporter::importSimpleText(
+    const ImportOptions& _options) const
 {
     //
     // Открываем файл
@@ -26,7 +26,7 @@ AbstractSimpleTextImporter::Document SimpleTextMarkdownImporter::importDocument(
     //
     // Импортируем
     //
-    Document textDocument = importDocument(textFile.readAll());
+    SimpleText textDocument = importSimpleText(textFile.readAll());
     if (textDocument.name.isEmpty()) {
         textDocument.name = QFileInfo(_options.filePath).completeBaseName();
     }
@@ -34,14 +34,14 @@ AbstractSimpleTextImporter::Document SimpleTextMarkdownImporter::importDocument(
     return textDocument;
 }
 
-AbstractSimpleTextImporter::Document SimpleTextMarkdownImporter::importDocument(
+AbstractSimpleTextImporter::SimpleText SimpleTextMarkdownImporter::importSimpleText(
     const QString& _text) const
 {
     if (_text.simplified().isEmpty()) {
         return {};
     }
 
-    Document textDocument;
+    SimpleText textDocument;
 
     //
     // Читаем plain text

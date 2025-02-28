@@ -3417,6 +3417,31 @@ void ProjectManager::addDocument(const BusinessLayer::AbstractImporter::Document
     }
 }
 
+void ProjectManager::addSimpleText(const QString& _name, const QString& _text)
+{
+    //
+    // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
+    //
+
+    using namespace Domain;
+
+    auto createItem = [](DocumentObjectType _type, const QString& _name) {
+        auto uuid = QUuid::createUuid();
+        const auto visible = true;
+        const auto readOnly = false;
+        return new BusinessLayer::StructureModelItem(uuid, _type, _name, {}, visible, readOnly);
+    };
+
+    auto rootItem = d->projectStructureModel->itemForIndex({});
+    auto simpleTextItem = createItem(DocumentObjectType::SimpleText, _name);
+    d->projectStructureModel->appendItem(simpleTextItem, rootItem, _text.toUtf8());
+
+    //
+    // Фокусируем добавленный документ
+    //
+    d->setCurrentItem(simpleTextItem);
+}
+
 void ProjectManager::addAudioplay(const QString& _name, const QString& _titlePage,
                                   const QString& _text)
 {

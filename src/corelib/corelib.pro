@@ -230,7 +230,9 @@ SOURCES += \
     business_layer/import/screenplay/screenplay_pdf_importer.cpp \
     business_layer/import/screenplay/screenplay_trelby_importer.cpp \
     business_layer/import/stageplay/stageplay_fountain_importer.cpp \
+    business_layer/import/text/simple_text_docx_importer.cpp \
     business_layer/import/text/simple_text_markdown_importer.cpp \
+    business_layer/import/text/simple_text_pdf_importer.cpp \
     business_layer/model/abstract_model.cpp \
     business_layer/model/abstract_model_item.cpp \
     business_layer/model/abstract_model_xml.cpp \
@@ -595,8 +597,9 @@ HEADERS += \
     business_layer/import/stageplay/abstract_stageplay_importer.h \
     business_layer/import/stageplay/stageplay_fountain_importer.h \
     business_layer/import/text/abstract_simple_text_importer.h \
-    business_layer/import/text/simple_text_import_options.h \
+    business_layer/import/text/simple_text_docx_importer.h \
     business_layer/import/text/simple_text_markdown_importer.h \
+    business_layer/import/text/simple_text_pdf_importer.h \
     business_layer/model/abstract_image_wrapper.h \
     business_layer/model/abstract_model.h \
     business_layer/model/abstract_model_item.h \

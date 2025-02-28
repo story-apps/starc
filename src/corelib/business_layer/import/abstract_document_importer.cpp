@@ -472,6 +472,10 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
                                                               int _minLeftMargin) const
 {
     //
+    // TODO: вынести это в конкретные импортеры
+    //
+
+    //
     // Определим текст блока
     //
     const QString blockText = _cursor.block().text();
@@ -684,6 +688,20 @@ void AbstractDocumentImporter::writeReviewMarks(QXmlStreamWriter& _writer,
 {
     Q_UNUSED(_writer)
     Q_UNUSED(_cursor)
+}
+
+QString AbstractDocumentImporter::characterName(const QString& _text) const
+{
+    Q_UNUSED(_text)
+
+    return {};
+}
+
+QString AbstractDocumentImporter::locationName(const QString& _text) const
+{
+    Q_UNUSED(_text)
+
+    return {};
 }
 
 } // namespace BusinessLayer

@@ -7,7 +7,7 @@
 
 namespace BusinessLayer {
 
-struct SimpleTextImportOptions;
+struct ImportOptions;
 
 /**
  * @brief Базовый класс для реализации импортера документов
@@ -20,7 +20,7 @@ public:
     /**
      * @brief Вспомогательные структуры для хранения данных импортируемых документов
      */
-    struct Document {
+    struct SimpleText {
         QString name;
         QString text;
     };
@@ -28,7 +28,7 @@ public:
     /**
      * @brief Импорт сценариев из заданного документа
      */
-    virtual Document importDocument(const SimpleTextImportOptions& _options) const = 0;
+    virtual SimpleText importSimpleText(const ImportOptions& _options) const = 0;
 };
 
 } // namespace BusinessLayer

@@ -132,7 +132,7 @@ QString readLocation(const QString& _locationName, const QString& _kitLocationXm
 QString readPlainTextDocument(const QString& _sourceDocument)
 {
     const auto sourceDocumentPlainText = htmlToPlain(_sourceDocument);
-    const auto document = SimpleTextMarkdownImporter().importDocument(sourceDocumentPlainText);
+    const auto document = SimpleTextMarkdownImporter().importSimpleText(sourceDocumentPlainText);
     return document.text;
 }
 

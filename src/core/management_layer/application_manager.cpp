@@ -2854,6 +2854,8 @@ void ApplicationManager::initConnections()
             [this](const BusinessLayer::AbstractImporter::Document& _document) {
                 d->projectManager->addDocument(_document);
             });
+    connect(d->importManager.data(), &ImportManager::simpleTextImported, d->projectManager.data(),
+            &ProjectManager::addSimpleText);
     connect(d->importManager.data(), &ImportManager::audioplayImported, d->projectManager.data(),
             &ProjectManager::addAudioplay);
     connect(d->importManager.data(), &ImportManager::comicbookImported, d->projectManager.data(),

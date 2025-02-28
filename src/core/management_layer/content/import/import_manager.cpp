@@ -12,6 +12,9 @@
 #include <business_layer/import/screenplay/screenplay_pdf_importer.h>
 #include <business_layer/import/screenplay/screenplay_trelby_importer.h>
 #include <business_layer/import/stageplay/stageplay_fountain_importer.h>
+#include <business_layer/import/text/simple_text_docx_importer.h>
+#include <business_layer/import/text/simple_text_markdown_importer.h>
+#include <business_layer/import/text/simple_text_pdf_importer.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/design_system/design_system.h>
@@ -39,11 +42,13 @@ public:
     /**
      * @brief Импортировать данные документа из заданного файла
      */
+    void importSimpleText(const BusinessLayer::ImportOptions& _options);
     void importAudioplay(const BusinessLayer::ImportOptions& _options);
     void importComicBook(const BusinessLayer::ImportOptions& _options);
     void importNovel(const BusinessLayer::ImportOptions& _options);
     void importScreenplay(const BusinessLayer::ImportOptions& _options);
     void importStageplay(const BusinessLayer::ImportOptions& _options);
+    void importPresentation(const BusinessLayer::ImportOptions& _options);
 
     //
     // Данные
@@ -99,6 +104,10 @@ void ImportManager::Implementation::showImportDialogFor(const QStringList& _path
                 case Domain::DocumentObjectType::Undefined: {
                     break;
                 }
+                case Domain::DocumentObjectType::SimpleText: {
+                    importSimpleText(importOptions);
+                    break;
+                }
                 case Domain::DocumentObjectType::Audioplay: {
                     importAudioplay(importOptions);
                     break;
@@ -117,6 +126,10 @@ void ImportManager::Implementation::showImportDialogFor(const QStringList& _path
                 }
                 case Domain::DocumentObjectType::Stageplay: {
                     importStageplay(importOptions);
+                    break;
+                }
+                case Domain::DocumentObjectType::Presentation: {
+                    importPresentation(importOptions);
                     break;
                 }
                 }
@@ -156,6 +169,36 @@ void ImportManager::Implementation::showImportDialogFor(const QStringList& _path
     } else {
         importDialog->showDialog();
     }
+}
+
+void ImportManager::Implementation::importSimpleText(const BusinessLayer::ImportOptions& _options)
+{
+    //
+    // Определим нужный импортер
+    //
+    QScopedPointer<BusinessLayer::AbstractSimpleTextImporter> importer;
+    {
+        const auto importFilePath = _options.filePath.toLower();
+        if (importFilePath.endsWith(ExtensionHelper::msOfficeOpenXml())
+            || importFilePath.endsWith(ExtensionHelper::openDocumentXml())) {
+            importer.reset(new BusinessLayer::SimpleTextDocxImporter);
+        } else if (importFilePath.endsWith(ExtensionHelper::fountain())
+                   || importFilePath.endsWith(ExtensionHelper::markdown())
+                   || importFilePath.endsWith(ExtensionHelper::plainText())) {
+            importer.reset(new BusinessLayer::SimpleTextMarkdownImporter);
+        } else if (importFilePath.endsWith(ExtensionHelper::pdf())) {
+            importer.reset(new BusinessLayer::SimpleTextPdfImporter);
+        }
+    }
+
+    //
+    // Импортируем текстовый документ
+    //
+    const auto document = importer->importSimpleText(_options);
+    const auto documentName = !document.name.isEmpty()
+        ? document.name
+        : QFileInfo(_options.filePath).completeBaseName();
+    emit q->simpleTextImported(documentName, document.text);
 }
 
 void ImportManager::Implementation::importAudioplay(const BusinessLayer::ImportOptions& _options)
@@ -331,6 +374,10 @@ void ImportManager::Implementation::importStageplay(const BusinessLayer::ImportO
         ? stageplay.name
         : QFileInfo(_options.filePath).completeBaseName();
     emit q->stageplayImported(stageplayName, stageplay.titlePage, stageplay.text);
+}
+
+void ImportManager::Implementation::importPresentation(const BusinessLayer::ImportOptions& _options)
+{
 }
 
 

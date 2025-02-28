@@ -114,6 +114,7 @@ public:
     /**
      * @brief Добавить данные по документу
      */
+    void addSimpleText(const QString& _name, const QString& _text);
     void addAudioplay(const QString& _name, const QString& _titlePage, const QString& _text);
     void addComicBook(const QString& _name, const QString& _titlePage, const QString& _text);
     void addNovel(const QString& _name, const QString& _text);

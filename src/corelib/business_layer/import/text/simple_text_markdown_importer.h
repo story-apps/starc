@@ -16,8 +16,8 @@ public:
     /**
      * @brief Импорт докуметов (всех, кроме сценариев)
      */
-    Document importDocument(const SimpleTextImportOptions& _options) const override;
-    Document importDocument(const QString& _text) const;
+    SimpleText importSimpleText(const ImportOptions& _options) const override;
+    SimpleText importSimpleText(const QString& _text) const;
 };
 
 } // namespace BusinessLayer

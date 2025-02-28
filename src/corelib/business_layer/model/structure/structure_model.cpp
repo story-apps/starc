@@ -237,7 +237,7 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
                                         bool _visible, int _episodesAmount)
 {
     //
-    // ATTENTION: В ProjectManager::addDocument и ProjectManager::addScreenplay есть копипаста
+    // ATTENTION: В ProjectManager::addDocument и ProjectManager::add(something) есть копипаста
     // отсюда, быть внимательным при обновлении
     //
 
