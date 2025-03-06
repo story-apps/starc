@@ -98,30 +98,31 @@ public:
     /**
      * @brief Добавить персонажа
      */
-    void addCharacter(const QString& _name, const QString& _content);
+    void storeCharacter(const QString& _name, const QString& _content);
 
     /**
      * @brief Добавить локацию
      */
-    void addLocation(const QString& _name, const QString& _content);
+    void storeLocation(const QString& _name, const QString& _content);
 
     /**
      * @brief Добавить документ
      */
-    void addDocument(const BusinessLayer::AbstractImporter::Document& _document,
-                     BusinessLayer::StructureModelItem* _parentItem = nullptr);
+    void storeDocument(const BusinessLayer::AbstractImporter::Document& _document,
+                       BusinessLayer::StructureModelItem* _parentItem = nullptr);
 
     /**
      * @brief Добавить данные по документу
      */
-    void saveSimpleText(const QString& _name, const QString& _text);
-    void saveAudioplay(const QString& _name, const QString& _titlePage, const QString& _text);
-    void saveComicBook(const QString& _name, const QString& _titlePage, const QString& _text);
-    void saveNovel(const QString& _name, const QString& _text);
-    void saveScreenplay(const QString& _name, const QString& _titlePage, const QString& _synopsis,
-                       const QString& _treatment, const QString& _text);
-    void saveStageplay(const QString& _name, const QString& _titlePage, const QString& _text);
-    void savePresentation(const QUuid& _documentUuid, const QString& _name, const QString& _presentationFilePath);
+    void storeSimpleText(const QString& _name, const QString& _text);
+    void storeAudioplay(const QString& _name, const QString& _titlePage, const QString& _text);
+    void storeComicBook(const QString& _name, const QString& _titlePage, const QString& _text);
+    void storeNovel(const QString& _name, const QString& _text);
+    void storeScreenplay(const QString& _name, const QString& _titlePage, const QString& _synopsis,
+                         const QString& _treatment, const QString& _text);
+    void storeStageplay(const QString& _name, const QString& _titlePage, const QString& _text);
+    void storePresentation(const QUuid& _documentUuid, const QString& _name,
+                           const QString& _presentationFilePath);
 
     /**
      * @brief Версии модели документа для экспорта

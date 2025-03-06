@@ -2847,27 +2847,27 @@ void ApplicationManager::initConnections()
     // Менеджер импорта
     //
     connect(d->importManager.data(), &ImportManager::characterImported, d->projectManager.data(),
-            &ProjectManager::addCharacter);
+            &ProjectManager::storeCharacter);
     connect(d->importManager.data(), &ImportManager::locationImported, d->projectManager.data(),
-            &ProjectManager::addLocation);
+            &ProjectManager::storeLocation);
     connect(d->importManager.data(), &ImportManager::documentImported, d->projectManager.data(),
             [this](const BusinessLayer::AbstractImporter::Document& _document) {
-                d->projectManager->addDocument(_document);
+                d->projectManager->storeDocument(_document);
             });
     connect(d->importManager.data(), &ImportManager::simpleTextImported, d->projectManager.data(),
-            &ProjectManager::saveSimpleText);
+            &ProjectManager::storeSimpleText);
     connect(d->importManager.data(), &ImportManager::audioplayImported, d->projectManager.data(),
-            &ProjectManager::saveAudioplay);
+            &ProjectManager::storeAudioplay);
     connect(d->importManager.data(), &ImportManager::comicbookImported, d->projectManager.data(),
-            &ProjectManager::saveComicBook);
+            &ProjectManager::storeComicBook);
     connect(d->importManager.data(), &ImportManager::novelImported, d->projectManager.data(),
-            &ProjectManager::saveNovel);
+            &ProjectManager::storeNovel);
     connect(d->importManager.data(), &ImportManager::screenplayImported, d->projectManager.data(),
-            &ProjectManager::saveScreenplay);
+            &ProjectManager::storeScreenplay);
     connect(d->importManager.data(), &ImportManager::stageplayImported, d->projectManager.data(),
-            &ProjectManager::saveStageplay);
+            &ProjectManager::storeStageplay);
     connect(d->importManager.data(), &ImportManager::presentationImported, d->projectManager.data(),
-            &ProjectManager::savePresentation);
+            &ProjectManager::storePresentation);
 
     //
     // Менеджер настроек

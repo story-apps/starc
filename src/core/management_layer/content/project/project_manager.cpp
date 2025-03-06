@@ -3313,7 +3313,7 @@ void ProjectManager::saveChanges()
     DataStorageLayer::StorageFacade::documentChangeStorage()->store();
 }
 
-void ProjectManager::addCharacter(const QString& _name, const QString& _content)
+void ProjectManager::storeCharacter(const QString& _name, const QString& _content)
 {
     auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
         Domain::DocumentObjectType::Characters);
@@ -3326,7 +3326,7 @@ void ProjectManager::addCharacter(const QString& _name, const QString& _content)
     charactersModel->createCharacter(_name, _content.toUtf8());
 }
 
-void ProjectManager::addLocation(const QString& _name, const QString& _content)
+void ProjectManager::storeLocation(const QString& _name, const QString& _content)
 {
     auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
         Domain::DocumentObjectType::Locations);
@@ -3339,11 +3339,12 @@ void ProjectManager::addLocation(const QString& _name, const QString& _content)
     locationsModel->createLocation(_name, _content.toUtf8());
 }
 
-void ProjectManager::addDocument(const BusinessLayer::AbstractImporter::Document& _document,
-                                 BusinessLayer::StructureModelItem* _parentItem)
+void ProjectManager::storeDocument(const BusinessLayer::AbstractImporter::Document& _document,
+                                   BusinessLayer::StructureModelItem* _parentItem)
 {
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
+    // NOTE: тут только документы разработки, которые могут быть импортированы из других проектов
     //
 
     using namespace Domain;
@@ -3378,12 +3379,6 @@ void ProjectManager::addDocument(const BusinessLayer::AbstractImporter::Document
         break;
     }
 
-    case DocumentObjectType::Presentation: {
-        item = createItem(_document.type,
-                          !_document.name.isEmpty() ? _document.name : tr("Presentation"));
-        break;
-    }
-
     default: {
         Q_ASSERT(false);
         break;
@@ -3401,11 +3396,11 @@ void ProjectManager::addDocument(const BusinessLayer::AbstractImporter::Document
     // Добавляем вложенные документы, если таковые имеются
     //
     for (const auto& child : _document.children) {
-        addDocument(child, item);
+        storeDocument(child, item);
     }
 }
 
-void ProjectManager::saveSimpleText(const QString& _name, const QString& _text)
+void ProjectManager::storeSimpleText(const QString& _name, const QString& _text)
 {
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
@@ -3430,8 +3425,8 @@ void ProjectManager::saveSimpleText(const QString& _name, const QString& _text)
     d->setCurrentItem(simpleTextItem);
 }
 
-void ProjectManager::saveAudioplay(const QString& _name, const QString& _titlePage,
-                                  const QString& _text)
+void ProjectManager::storeAudioplay(const QString& _name, const QString& _titlePage,
+                                    const QString& _text)
 {
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
@@ -3467,8 +3462,8 @@ void ProjectManager::saveAudioplay(const QString& _name, const QString& _titlePa
     d->setCurrentItem(audioplayItem);
 }
 
-void ProjectManager::saveComicBook(const QString& _name, const QString& _titlePage,
-                                  const QString& _text)
+void ProjectManager::storeComicBook(const QString& _name, const QString& _titlePage,
+                                    const QString& _text)
 {
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
@@ -3504,7 +3499,7 @@ void ProjectManager::saveComicBook(const QString& _name, const QString& _titlePa
     d->setCurrentItem(comicbookItem);
 }
 
-void ProjectManager::saveNovel(const QString& _name, const QString& _text)
+void ProjectManager::storeNovel(const QString& _name, const QString& _text)
 {
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
@@ -3544,9 +3539,9 @@ void ProjectManager::saveNovel(const QString& _name, const QString& _text)
     d->setCurrentItem(novelItem);
 }
 
-void ProjectManager::saveScreenplay(const QString& _name, const QString& _titlePage,
-                                   const QString& _synopsis, const QString& _treatment,
-                                   const QString& _text)
+void ProjectManager::storeScreenplay(const QString& _name, const QString& _titlePage,
+                                     const QString& _synopsis, const QString& _treatment,
+                                     const QString& _text)
 {
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
@@ -3589,8 +3584,8 @@ void ProjectManager::saveScreenplay(const QString& _name, const QString& _titleP
     d->setCurrentItem(screenplayItem);
 }
 
-void ProjectManager::saveStageplay(const QString& _name, const QString& _titlePage,
-                                  const QString& _text)
+void ProjectManager::storeStageplay(const QString& _name, const QString& _titlePage,
+                                    const QString& _text)
 {
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
@@ -3626,8 +3621,8 @@ void ProjectManager::saveStageplay(const QString& _name, const QString& _titlePa
     d->setCurrentItem(stageplayItem);
 }
 
-void ProjectManager::savePresentation(const QUuid& _documentUuid, const QString& _name,
-                                     const QString& _presentationFilePath)
+void ProjectManager::storePresentation(const QUuid& _documentUuid, const QString& _name,
+                                       const QString& _presentationFilePath)
 {
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
