@@ -217,8 +217,12 @@ void MindMapModel::removeNode(const QUuid& _nodeUuid)
             continue;
         }
 
+        //
+        // Сохраним значение, т.к. после удаления ноды оно станет невалидным
+        //
+        const auto nodeUuid = _nodeUuid;
         d->nodes.removeAt(index);
-        emit nodeRemoved(_nodeUuid);
+        emit nodeRemoved(nodeUuid);
         break;
     }
 }
@@ -311,6 +315,12 @@ void MindMapModel::removeNodeConnection(const QUuid& _fromNodeUuid, const QUuid&
         return;
     }
 
+    //
+    // Сохраним значения, т.к. после удаления соединения они станут невалидными
+    //
+    const auto fromNodeUuid = _fromNodeUuid;
+    const auto toNodeUuid = _toNodeUuid;
+
     int fromNodeIndex = 0;
     for (; fromNodeIndex < d->nodes.size(); ++fromNodeIndex) {
         if (d->nodes[fromNodeIndex].uuid != _fromNodeUuid) {
@@ -354,7 +364,7 @@ void MindMapModel::removeNodeConnection(const QUuid& _fromNodeUuid, const QUuid&
     //
     // Уведомляем об обновлении ячеек после того, как соединения были удалены из обеих ячеек
     //
-    emit nodeConnectionRemoved(_fromNodeUuid, _toNodeUuid);
+    emit nodeConnectionRemoved(fromNodeUuid, toNodeUuid);
     emit nodeUpdated(d->nodes[fromNodeIndex]);
     emit nodeUpdated(d->nodes[toNodeIndex]);
 }
@@ -395,8 +405,12 @@ void MindMapModel::removeNodeGroup(const QUuid& _groupUuid)
             continue;
         }
 
+        //
+        // Сохраним значение, т.к. после удаления группы оно станет невалидным
+        //
+        const auto groupUuid = _groupUuid;
         d->nodeGroups.removeAt(index);
-        emit nodeGroupRemoved(_groupUuid);
+        emit nodeGroupRemoved(groupUuid);
         break;
     }
 }
@@ -565,6 +579,40 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
     };
     setName(load(kNameKey));
     setDescription(load(kDescriptionKey));
+
+    //
+    // Запомним порядок элементов в документе
+    //
+    QHash<QUuid, int> elementsPositions;
+    QHash<QUuid, QHash<QPair<QUuid, QUuid>, int>> nodeConnectionsPositions;
+    auto element = documentNode.firstChildElement();
+    int elementPosition = 0;
+    while (!element.isNull()) {
+        if (element.nodeName() == kNodeKey || element.nodeName() == kNodeGroupKey) {
+            QUuid uuid = QUuid::fromString(element.attribute(kUuidKey));
+            elementsPositions.insert(uuid, elementPosition);
+            ++elementPosition;
+
+            //
+            // ... для ячеек запомним порядок связей
+            //
+            if (element.nodeName() == kNodeKey) {
+                QHash<QPair<QUuid, QUuid>, int> connectionsPositions;
+                int connectionPosition = 0;
+                QDomElement connectionNode = element.firstChildElement(kNodeConnectionKey);
+                while (!connectionNode.isNull()) {
+                    auto fromUuid = QUuid::fromString(connectionNode.attribute(kFromUuidKey));
+                    auto toUuid = QUuid::fromString(connectionNode.attribute(kToUuidKey));
+                    connectionsPositions.insert({ fromUuid, toUuid }, connectionPosition);
+                    ++connectionPosition;
+                    connectionNode = connectionNode.nextSiblingElement(kNodeConnectionKey);
+                }
+                nodeConnectionsPositions.insert(uuid, connectionsPositions);
+            }
+        }
+        element = element.nextSiblingElement();
+    }
+
     //
     // Ячейки
     //
@@ -583,24 +631,44 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
         if (nodeNode.hasAttribute(kColorKey)) {
             node.color = nodeNode.attribute(kColorKey);
         }
-        newNodes.append(node);
 
+        //
+        // ... соединения ячейки
+        //
+        QDomElement connectionNode = nodeNode.firstChildElement(kNodeConnectionKey);
+        while (!connectionNode.isNull()) {
+            MindMapNodeConnection connection;
+            connection.fromNodeUuid = QUuid::fromString(connectionNode.attribute(kFromUuidKey));
+            connection.toNodeUuid = QUuid::fromString(connectionNode.attribute(kToUuidKey));
+            connection.name = TextHelper::fromHtmlEscaped(connectionNode.attribute(kNameKey));
+            connection.description
+                = TextHelper::fromHtmlEscaped(connectionNode.attribute(kDescriptionKey));
+            connection.lineType = connectionNode.attribute(kLineTypeKey).toInt();
+            if (connectionNode.hasAttribute(kColorKey)) {
+                connection.color = connectionNode.attribute(kColorKey).toInt();
+            }
+            node.connections.append(connection);
+            connectionNode = connectionNode.nextSiblingElement(kNodeConnectionKey);
+        }
+
+        newNodes.append(node);
         nodeNode = nodeNode.nextSiblingElement();
     }
+
     //
-    // ... корректируем текущие группы
+    // Корректируем текущие ячейки
     //
-    for (int nodeIndex = 0; nodeIndex < d->nodes.size(); ++nodeIndex) {
+    for (int nodeIndex = d->nodes.size() - 1; nodeIndex >= 0; --nodeIndex) {
         const auto& node = d->nodes.at(nodeIndex);
         //
-        // ... если такая группа осталось актуальной, то оставим её в списке текущих
+        // ... если такая ячейка осталась актуальной, то оставим её в списке текущих
         //     и удалим из списка новых
         //
         if (int nodeIndex = newNodes.indexOf(node); nodeIndex != -1) {
+            //
+            // ... при этом обновим список связей если необходимо
+            //
             auto newConnections = newNodes[nodeIndex].connections;
-            //
-            // При этом обновим список связей если необходимо
-            //
             for (int connectionIndex = 0; connectionIndex < node.connections.size();
                  ++connectionIndex) {
                 const auto& connection = node.connections[connectionIndex];
@@ -619,6 +687,9 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
                     --connectionIndex;
                 }
             }
+            //
+            // ... и добавим новые связи
+            //
             for (const auto& connection : std::as_const(newConnections)) {
                 addNodeConnection(connection);
             }
@@ -626,22 +697,30 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
             newNodes.removeAll(node);
         }
         //
-        // ... если такой группы нет в списке новых, то удалим её из списка текущих
+        // ... если такой ячейки нет в списке новых, то удалим её из списка текущих со всеми
+        //     соединениями
         //
         else {
+            for (int i = node.connections.size() - 1; i >= 0; --i) {
+                const auto& connection = node.connections[i];
+                removeNodeConnection(connection.fromNodeUuid, connection.toNodeUuid);
+            }
             removeNode(node.uuid);
             --nodeIndex;
         }
     }
     //
-    // ... добавляем новые ячейки
+    // Добавляем новые ячейки и отдельно - их соединения
     //
-    for (const auto& node : std::as_const(newNodes)) {
+    for (auto& node : newNodes) {
+        const auto newConnections = node.connections;
+        node.connections.clear();
         addNode(node);
-        for (const auto& connection : std::as_const(node.connections)) {
+        for (const auto& connection : std::as_const(newConnections)) {
             addNodeConnection(connection);
         }
     }
+
     //
     // Группы ячеек
     //
@@ -662,7 +741,7 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
         nodeGroupNode = nodeGroupNode.nextSiblingElement();
     }
     //
-    // ... корректируем текущие группы
+    // Корректируем текущие группы
     //
     for (int groupIndex = 0; groupIndex < d->nodeGroups.size(); ++groupIndex) {
         const auto& group = d->nodeGroups.at(groupIndex);
@@ -683,10 +762,39 @@ ChangeCursor MindMapModel::applyPatch(const QByteArray& _patch)
         }
     }
     //
-    // ... добавляем новые группы
+    // Добавляем новые группы
     //
     for (const auto& group : std::as_const(newNodeGroups)) {
         addNodeGroup(group);
+    }
+
+    //
+    // Сортируем ячейки
+    //
+    std::sort(d->nodes.begin(), d->nodes.end(),
+              [elementsPositions](const MindMapNode& _lhs, const MindMapNode& _rhs) {
+                  return elementsPositions[_lhs.uuid] < elementsPositions[_rhs.uuid];
+              });
+
+    //
+    // Сортируем группы
+    //
+    std::sort(d->nodeGroups.begin(), d->nodeGroups.end(),
+              [elementsPositions](const MindMapNodeGroup& _lhs, const MindMapNodeGroup& _rhs) {
+                  return elementsPositions[_lhs.uuid] < elementsPositions[_rhs.uuid];
+              });
+
+    //
+    // Сортируем соединения ячеек
+    //
+    for (auto& node : d->nodes) {
+        std::sort(node.connections.begin(), node.connections.end(),
+                  [node, &nodeConnectionsPositions](const MindMapNodeConnection& _lhs,
+                                                    const MindMapNodeConnection& _rhs) {
+                      const auto& connectionsPositions = nodeConnectionsPositions[node.uuid];
+                      return connectionsPositions[{ _lhs.fromNodeUuid, _lhs.toNodeUuid }]
+                          < connectionsPositions[{ _rhs.fromNodeUuid, _rhs.toNodeUuid }];
+                  });
     }
 
     return {};
