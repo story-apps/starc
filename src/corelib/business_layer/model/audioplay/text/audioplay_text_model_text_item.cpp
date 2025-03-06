@@ -62,7 +62,8 @@ void AudioplayTextModelTextItem::updateCounters(bool _force)
     // Считаем
     //
     const auto duration = AudioplayChronometer::duration(
-        paragraphType(), text(), audioplayModel->informationModel()->templateId());
+        paragraphType(), text(), audioplayModel->informationModel()->templateId(),
+        audioplayModel->informationModel()->chronometerOptions());
     const auto currentWordsCount = TextHelper::wordsCount(text());
     //
     const auto charactersCountFirst = text().length() - text().count(' ');

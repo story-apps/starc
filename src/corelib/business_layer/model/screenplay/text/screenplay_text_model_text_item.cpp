@@ -76,7 +76,8 @@ void ScreenplayTextModelTextItem::updateCounters(bool _force)
     const auto screenplayModel = qobject_cast<const ScreenplayTextModel*>(model());
     Q_ASSERT(screenplayModel);
     const auto duration = ScreenplayChronometer::duration(
-        paragraphType(), text(), screenplayModel->informationModel()->templateId());
+        paragraphType(), text(), screenplayModel->informationModel()->templateId(),
+        screenplayModel->informationModel()->chronometerOptions());
 
     //
     // Если не было изменений, то и ладно, выходим тогда

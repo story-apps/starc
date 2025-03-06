@@ -1,5 +1,6 @@
 #include "audioplay_information_model.h"
 
+#include <business_layer/chronometry/chronometer.h>
 #include <business_layer/model/abstract_image_wrapper.h>
 #include <business_layer/model/abstract_model_xml.h>
 #include <business_layer/templates/audioplay_template.h>
@@ -55,6 +56,7 @@ public:
     QString templateId;
     bool showBlockNumbers = false;
     bool continueBlockNumbers = false;
+    ChronometerOptions chronometerOptions;
 };
 
 
@@ -375,6 +377,30 @@ void AudioplayInformationModel::setContinueBlockNumbers(bool _continue)
 
     d->continueBlockNumbers = _continue;
     emit continueBlockNumbersChanged(d->continueBlockNumbers);
+}
+
+ChronometerOptions AudioplayInformationModel::chronometerOptions() const
+{
+    if (d->overrideCommonSettings) {
+        return d->chronometerOptions;
+    }
+
+    using namespace DataStorageLayer;
+    ChronometerOptions options;
+    options.type = ChronometerType::Words;
+    options.words.words = settingsValue(kComponentsAudioplayDurationByWordsWordsKey).toInt();
+    options.words.seconds = settingsValue(kComponentsAudioplayDurationByWordsDurationKey).toInt();
+    return options;
+}
+
+void AudioplayInformationModel::setChronometerOptions(const ChronometerOptions& _options)
+{
+    if (d->chronometerOptions == _options) {
+        return;
+    }
+
+    d->chronometerOptions = _options;
+    emit chronometerOptionsChanged(_options);
 }
 
 void AudioplayInformationModel::initDocument()

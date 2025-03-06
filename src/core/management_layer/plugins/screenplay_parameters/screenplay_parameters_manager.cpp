@@ -2,6 +2,7 @@
 
 #include "screenplay_parameters_view.h"
 
+#include <business_layer/chronometry/chronometer.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <ui/widgets/task_bar/task_bar.h>
 
@@ -136,6 +137,7 @@ void ScreenplayParametersManager::Implementation::setModelForView(
         _view->setShowSceneNumbersOnLeft(model->showSceneNumbersOnLeft());
         _view->setShowSceneNumbersOnRight(model->showSceneNumbersOnRight());
         _view->setShowDialoguesNumbers(model->showDialoguesNumbers());
+        _view->setChronometerOptions(model->chronometerOptions());
 
         connect(model, &BusinessLayer::ScreenplayInformationModel::headerChanged, _view,
                 &Ui::ScreenplayParametersView::setHeader);
@@ -166,6 +168,8 @@ void ScreenplayParametersManager::Implementation::setModelForView(
                 _view, &Ui::ScreenplayParametersView::setShowSceneNumbersOnRight);
         connect(model, &BusinessLayer::ScreenplayInformationModel::showDialoguesNumbersChanged,
                 _view, &Ui::ScreenplayParametersView::setShowDialoguesNumbers);
+        connect(model, &BusinessLayer::ScreenplayInformationModel::chronometerOptionsChanged, _view,
+                &Ui::ScreenplayParametersView::setChronometerOptions);
         //
         connect(_view, &Ui::ScreenplayParametersView::headerChanged, model,
                 &BusinessLayer::ScreenplayInformationModel::setHeader);
@@ -193,6 +197,8 @@ void ScreenplayParametersManager::Implementation::setModelForView(
                 &BusinessLayer::ScreenplayInformationModel::setShowSceneNumbersOnRight);
         connect(_view, &Ui::ScreenplayParametersView::showDialoguesNumbersChanged, model,
                 &BusinessLayer::ScreenplayInformationModel::setShowDialoguesNumbers);
+        connect(_view, &Ui::ScreenplayParametersView::chronometerOptionsChanged, model,
+                &BusinessLayer::ScreenplayInformationModel::setChronometerOptions);
     }
 }
 

@@ -5,6 +5,8 @@
 
 namespace BusinessLayer {
 
+struct ChronometerOptions;
+
 /**
  * @brief Модель информации о адиопостановке
  */
@@ -77,6 +79,10 @@ public:
     bool continueBlockNumbers() const;
     void setContinueBlockNumbers(bool _continue);
     Q_SIGNAL void continueBlockNumbersChanged(bool _continue);
+
+    ChronometerOptions chronometerOptions() const;
+    void setChronometerOptions(const ChronometerOptions& _options);
+    Q_SIGNAL void chronometerOptionsChanged(const ChronometerOptions& _options);
 
 protected:
     /**

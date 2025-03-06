@@ -1,5 +1,6 @@
 #include "audioplay_text_scrollbar_manager.h"
 
+#include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
 #include <ui/design_system/design_system.h>
 #include <utils/helpers/color_helper.h>
@@ -47,13 +48,13 @@ public:
     QTimer timelineHideTimer;
     QVariantAnimation timelineOpacityAnimation;
 
-    Debouncer itemsColorsUpdateDebouncer;
+    Debouncer timelineUpdateDebouncer;
 };
 
 AudioplayTextScrollBarManager::Implementation::Implementation(QAbstractScrollArea* _parent)
     : scrollbar(_parent->verticalScrollBar())
     , timeline(new AudioplayTextTimeline(_parent))
-    , itemsColorsUpdateDebouncer(180)
+    , timelineUpdateDebouncer(180)
 {
     timelineHideTimer.setSingleShot(true);
     timelineHideTimer.setInterval(2000);
@@ -124,7 +125,7 @@ AudioplayTextScrollBarManager::AudioplayTextScrollBarManager(QAbstractScrollArea
     });
     connect(&d->timelineOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this](const QVariant& _value) { d->timeline->setOpacity(_value.toReal()); });
-    connect(&d->itemsColorsUpdateDebouncer, &Debouncer::gotWork, this, [this] {
+    connect(&d->timelineUpdateDebouncer, &Debouncer::gotWork, this, [this] {
         if (d->model == nullptr) {
             return;
         }
@@ -176,19 +177,27 @@ void AudioplayTextScrollBarManager::setModel(BusinessLayer::AudioplayTextModel* 
     }
 
     if (d->model) {
-        d->model->disconnect(&d->itemsColorsUpdateDebouncer);
+        d->model->disconnect(&d->timelineUpdateDebouncer);
+        if (d->model->informationModel()) {
+            d->model->informationModel()->disconnect(&d->timelineUpdateDebouncer);
+        }
     }
 
     d->model = _model;
 
     if (d->model) {
-        connect(d->model, &QAbstractItemModel::rowsInserted, &d->itemsColorsUpdateDebouncer,
+        connect(d->model, &QAbstractItemModel::rowsInserted, &d->timelineUpdateDebouncer,
                 &Debouncer::orderWork);
-        connect(d->model, &QAbstractItemModel::rowsRemoved, &d->itemsColorsUpdateDebouncer,
+        connect(d->model, &QAbstractItemModel::rowsRemoved, &d->timelineUpdateDebouncer,
                 &Debouncer::orderWork);
-        connect(d->model, &QAbstractItemModel::dataChanged, &d->itemsColorsUpdateDebouncer,
+        connect(d->model, &QAbstractItemModel::dataChanged, &d->timelineUpdateDebouncer,
                 &Debouncer::orderWork);
-        d->itemsColorsUpdateDebouncer.orderWork();
+        if (d->model->informationModel()) {
+            connect(d->model->informationModel(),
+                    &BusinessLayer::AudioplayInformationModel::chronometerOptionsChanged,
+                    &d->timelineUpdateDebouncer, &Debouncer::orderWork);
+        }
+        d->timelineUpdateDebouncer.orderWork();
     } else {
         d->timeline->update();
     }

@@ -1,5 +1,6 @@
 #include "screenplay_information_model.h"
 
+#include <business_layer/chronometry/chronometer.h>
 #include <business_layer/model/abstract_image_wrapper.h>
 #include <business_layer/model/abstract_model_xml.h>
 #include <business_layer/templates/screenplay_template.h>
@@ -42,6 +43,7 @@ const QLatin1String kShowSceneNumbersKey("show_scenes_numbers");
 const QLatin1String kShowSceneNumbersOnLeftKey("show_scenes_numbers_on_left");
 const QLatin1String kShowScenesNumbersOnRightKey("show_scenes_numbers_on_right");
 const QLatin1String kShowDialoguesNumbersKey("show_dialogues_numbers");
+const QLatin1String kChronomertyOptionsKey("chronmetry_options");
 const QLatin1String kCharactersOrderKey("characters_order");
 const QLatin1String kLocationsOrderKey("locations_order");
 } // namespace
@@ -72,6 +74,8 @@ public:
     bool showSceneNumbersOnLeft = false;
     bool showSceneNumbersOnRight = false;
     bool showDialoguesNumbers = false;
+    ChronometerOptions chronometerOptions;
+
 
     QVector<QString> charactersOrder;
     QVector<QString> locationsOrder;
@@ -107,6 +111,7 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
             kShowSceneNumbersOnLeftKey,
             kShowScenesNumbersOnRightKey,
             kShowDialoguesNumbersKey,
+            kChronomertyOptionsKey,
             kCharactersOrderKey,
             kLocationsOrderKey,
         },
@@ -156,6 +161,8 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
     connect(this, &ScreenplayInformationModel::showSceneNumbersOnRightChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::showDialoguesNumbersChanged, this,
+            &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::chronometerOptionsChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::charactersOrderChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
@@ -433,18 +440,49 @@ void ScreenplayInformationModel::setOverrideCommonSettings(bool _override)
     //
     // При включении/выключении кастомных параметров, сбрасываем до стандартных
     //
+    using namespace DataStorageLayer;
     setTemplateId(TemplatesFacade::screenplayTemplate().id());
-    setShowSceneNumbers(
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey).toBool());
+    setShowSceneNumbers(settingsValue(kComponentsScreenplayEditorShowSceneNumbersKey).toBool());
     setShowSceneNumbersOnLeft(
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnLeftKey)
-            .toBool());
+        settingsValue(kComponentsScreenplayEditorShowSceneNumbersOnLeftKey).toBool());
     setShowSceneNumbersOnRight(
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersOnRightKey)
-            .toBool());
+        settingsValue(kComponentsScreenplayEditorShowSceneNumbersOnRightKey).toBool());
     setShowDialoguesNumbers(
-        settingsValue(DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)
-            .toBool());
+        settingsValue(kComponentsScreenplayEditorShowDialogueNumbersKey).toBool());
+    //
+    // ...  хронометраж
+    //
+    ChronometerOptions options;
+    options.type
+        = static_cast<ChronometerType>(settingsValue(kComponentsScreenplayDurationTypeKey).toInt());
+    options.page.seconds = settingsValue(kComponentsScreenplayDurationByPageDurationKey).toInt();
+    options.characters.characters
+        = settingsValue(kComponentsScreenplayDurationByCharactersCharactersKey).toInt();
+    options.characters.considerSpaces
+        = settingsValue(kComponentsScreenplayDurationByCharactersIncludeSpacesKey).toBool();
+    options.characters.seconds
+        = settingsValue(kComponentsScreenplayDurationByCharactersDurationKey).toInt();
+    options.sophocles.secsPerAction
+        = settingsValue(kComponentsScreenplayDurationConfigurableSecondsPerParagraphForActionKey)
+              .toDouble();
+    options.sophocles.secsPerEvery50Action
+        = settingsValue(kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey)
+              .toDouble();
+    options.sophocles.secsPerDialogue
+        = settingsValue(kComponentsScreenplayDurationConfigurableSecondsPerParagraphForDialogueKey)
+              .toDouble();
+    options.sophocles.secsPerEvery50Dialogue
+        = settingsValue(kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForDialogueKey)
+              .toDouble();
+    options.sophocles.secsPerSceneHeading
+        = settingsValue(
+              kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey)
+              .toDouble();
+    options.sophocles.secsPerEvery50SceneHeading
+        = settingsValue(
+              kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey)
+              .toDouble();
+    setChronometerOptions(options);
 }
 
 QString ScreenplayInformationModel::templateId() const
@@ -545,6 +583,78 @@ void ScreenplayInformationModel::setShowDialoguesNumbers(bool _show)
     emit showDialoguesNumbersChanged(d->showDialoguesNumbers);
 }
 
+ChronometerOptions ScreenplayInformationModel::chronometerOptions() const
+{
+    if (d->overrideCommonSettings) {
+        return d->chronometerOptions;
+    }
+
+    using namespace DataStorageLayer;
+    ChronometerOptions options;
+    options.type
+        = static_cast<ChronometerType>(settingsValue(kComponentsScreenplayDurationTypeKey).toInt());
+    switch (options.type) {
+    case ChronometerType::Page: {
+        options.page.seconds
+            = settingsValue(kComponentsScreenplayDurationByPageDurationKey).toInt();
+        break;
+    }
+
+    case ChronometerType::Characters: {
+        options.characters.characters
+            = settingsValue(kComponentsScreenplayDurationByCharactersCharactersKey).toInt();
+        options.characters.considerSpaces
+            = settingsValue(kComponentsScreenplayDurationByCharactersIncludeSpacesKey).toBool();
+        options.characters.seconds
+            = settingsValue(kComponentsScreenplayDurationByCharactersDurationKey).toInt();
+        break;
+    }
+
+    case ChronometerType::Sophocles: {
+        options.sophocles.secsPerAction
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerParagraphForActionKey)
+                  .toDouble();
+        options.sophocles.secsPerEvery50Action
+            = settingsValue(kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForActionKey)
+                  .toDouble();
+        options.sophocles.secsPerDialogue
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerParagraphForDialogueKey)
+                  .toDouble();
+        options.sophocles.secsPerEvery50Dialogue
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForDialogueKey)
+                  .toDouble();
+        options.sophocles.secsPerSceneHeading
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerParagraphForSceneHeadingKey)
+                  .toDouble();
+        options.sophocles.secsPerEvery50SceneHeading
+            = settingsValue(
+                  kComponentsScreenplayDurationConfigurableSecondsPerEvery50ForSceneHeadingKey)
+                  .toDouble();
+        break;
+    }
+    default: {
+        Q_ASSERT(false);
+        break;
+    }
+    }
+
+    return options;
+}
+
+void ScreenplayInformationModel::setChronometerOptions(const ChronometerOptions& _options)
+{
+    if (d->chronometerOptions == _options) {
+        return;
+    }
+
+    d->chronometerOptions = _options;
+    emit chronometerOptionsChanged(_options);
+}
+
 QVector<QString> ScreenplayInformationModel::charactersOrder() const
 {
     return d->charactersOrder;
@@ -637,6 +747,39 @@ void ScreenplayInformationModel::initDocument()
         = documentNode.firstChildElement(kShowScenesNumbersOnRightKey).text() == "true";
     d->showDialoguesNumbers
         = documentNode.firstChildElement(kShowDialoguesNumbersKey).text() == "true";
+    //
+    // TODO: выпилить в одной из будущих версий
+    //
+    if (const auto node = documentNode.firstChildElement(kChronomertyOptionsKey); !node.isNull()) {
+        d->chronometerOptions.type = static_cast<ChronometerType>(node.attribute("type").toInt());
+        switch (d->chronometerOptions.type) {
+        default:
+        case ChronometerType::Page: {
+            d->chronometerOptions.page.seconds = node.attribute("seconds").toInt();
+            break;
+        }
+
+        case ChronometerType::Characters: {
+            d->chronometerOptions.characters.seconds = node.attribute("characters").toInt();
+            d->chronometerOptions.characters.seconds = node.attribute("consider_spaces") == "true";
+            d->chronometerOptions.characters.seconds = node.attribute("seconds").toInt();
+            break;
+        }
+
+        case ChronometerType::Sophocles: {
+            d->chronometerOptions.sophocles.secsPerAction = node.attribute("spa").toDouble();
+            d->chronometerOptions.sophocles.secsPerEvery50Action
+                = node.attribute("sp50a").toDouble();
+            d->chronometerOptions.sophocles.secsPerDialogue = node.attribute("spd").toDouble();
+            d->chronometerOptions.sophocles.secsPerEvery50Dialogue
+                = node.attribute("sp50d").toDouble();
+            d->chronometerOptions.sophocles.secsPerSceneHeading = node.attribute("spsh").toDouble();
+            d->chronometerOptions.sophocles.secsPerEvery50SceneHeading
+                = node.attribute("sp50sh").toDouble();
+            break;
+        }
+        }
+    }
     d->charactersOrder
         = documentNode.firstChildElement(kCharactersOrderKey).text().split(",").toVector();
     d->locationsOrder
@@ -664,6 +807,41 @@ QByteArray ScreenplayInformationModel::toXml() const
     auto writeBoolTag = [&writeTag](const QString& _key, bool _value) {
         writeTag(_key, _value ? "true" : "false");
     };
+    auto writeChronometerOptions = [&xml](const QString& _key, const ChronometerOptions& _options) {
+        QString attributes;
+        switch (_options.type) {
+        default:
+        case ChronometerType::Page: {
+            attributes = QString("seconds=\"%1\"").arg(_options.page.seconds);
+            break;
+        }
+
+        case ChronometerType::Characters: {
+            attributes = QString("characters=\"%1\" consider_spaces=\"%2\" seconds=\"%3\"")
+                             .arg(_options.characters.characters)
+                             .arg(_options.characters.considerSpaces ? "true" : "false")
+                             .arg(_options.characters.seconds);
+            break;
+        }
+
+        case ChronometerType::Sophocles: {
+            attributes
+                = QString(
+                      "spa=\"%1\" sp50a=\"%2\" spd=\"%3\" sp50d=\"%4\" spsh=\"%5\" sp50sh=\"%6\"")
+                      .arg(_options.sophocles.secsPerAction)
+                      .arg(_options.sophocles.secsPerEvery50Action)
+                      .arg(_options.sophocles.secsPerDialogue)
+                      .arg(_options.sophocles.secsPerEvery50Dialogue)
+                      .arg(_options.sophocles.secsPerSceneHeading)
+                      .arg(_options.sophocles.secsPerEvery50SceneHeading);
+            break;
+        }
+        }
+
+        xml += QString("<%1 type=\"%2\" %3 />")
+                   .arg(_key, QString::number(static_cast<int>(_options.type)), attributes)
+                   .toUtf8();
+    };
     writeTag(kNameKey, d->name);
     writeTag(kTaglineKey, d->tagline);
     writeTag(kLoglineKey, d->logline);
@@ -686,6 +864,7 @@ QByteArray ScreenplayInformationModel::toXml() const
     writeBoolTag(kShowSceneNumbersOnLeftKey, d->showSceneNumbersOnLeft);
     writeBoolTag(kShowScenesNumbersOnRightKey, d->showSceneNumbersOnRight);
     writeBoolTag(kShowDialoguesNumbersKey, d->showDialoguesNumbers);
+    writeChronometerOptions(kChronomertyOptionsKey, d->chronometerOptions);
     writeTag(kCharactersOrderKey, d->charactersOrder.toList().join(','));
     writeTag(kLocationsOrderKey, d->locationsOrder.toList().join(','));
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
@@ -735,6 +914,41 @@ ChangeCursor ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
                   _setter(node.text().split(_separator).toVector());
               }
           };
+    auto setChronometerOptions
+        = [&documentNode](const QString& _key,
+                          std::function<void(const ChronometerOptions&)> _setter) {
+              const auto node = documentNode.firstChildElement(_key);
+              if (!node.isNull()) {
+                  ChronometerOptions options;
+                  options.type = static_cast<ChronometerType>(node.attribute("type").toInt());
+                  switch (options.type) {
+                  default:
+                  case ChronometerType::Page: {
+                      options.page.seconds = node.attribute("seconds").toInt();
+                      break;
+                  }
+
+                  case ChronometerType::Characters: {
+                      options.characters.seconds = node.attribute("characters").toInt();
+                      options.characters.seconds = node.attribute("consider_spaces") == "true";
+                      options.characters.seconds = node.attribute("seconds").toInt();
+                      break;
+                  }
+
+                  case ChronometerType::Sophocles: {
+                      options.sophocles.secsPerAction = node.attribute("spa").toDouble();
+                      options.sophocles.secsPerEvery50Action = node.attribute("sp50a").toDouble();
+                      options.sophocles.secsPerDialogue = node.attribute("spd").toDouble();
+                      options.sophocles.secsPerEvery50Dialogue = node.attribute("sp50d").toDouble();
+                      options.sophocles.secsPerSceneHeading = node.attribute("spsh").toDouble();
+                      options.sophocles.secsPerEvery50SceneHeading
+                          = node.attribute("sp50sh").toDouble();
+                      break;
+                  }
+                  }
+                  _setter(options);
+              }
+          };
     using M = ScreenplayInformationModel;
     const auto _1 = std::placeholders::_1;
     setText(kNameKey, std::bind(&M::setName, this, _1));
@@ -761,6 +975,7 @@ ChangeCursor ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
     setBool(kShowSceneNumbersOnLeftKey, std::bind(&M::setShowSceneNumbersOnLeft, this, _1));
     setBool(kShowScenesNumbersOnRightKey, std::bind(&M::setShowSceneNumbersOnRight, this, _1));
     setBool(kShowDialoguesNumbersKey, std::bind(&M::setShowDialoguesNumbers, this, _1));
+    setChronometerOptions(kChronomertyOptionsKey, std::bind(&M::setChronometerOptions, this, _1));
     setVector(kCharactersOrderKey, std::bind(&M::setCharactersOrder, this, _1), ',');
     setVector(kLocationsOrderKey, std::bind(&M::setLocationsOrder, this, _1), ',');
 

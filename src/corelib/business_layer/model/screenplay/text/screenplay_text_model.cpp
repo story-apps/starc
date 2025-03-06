@@ -216,6 +216,8 @@ void ScreenplayTextModel::setInformationModel(ScreenplayInformationModel* _model
                 this, &ScreenplayTextModel::updateNumbering);
         connect(d->informationModel, &ScreenplayInformationModel::isSceneNumbersLockedChanged, this,
                 &ScreenplayTextModel::setScenesNumbersLocked);
+        connect(d->informationModel, &ScreenplayInformationModel::chronometerOptionsChanged, this,
+                &ScreenplayTextModel::recalculateCounters);
     }
 }
 
