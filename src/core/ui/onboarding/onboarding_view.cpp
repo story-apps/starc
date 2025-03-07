@@ -99,40 +99,41 @@ void OnboardingView::Implementation::initLanguagePage()
         languageButtons.append(languageButton);
         return languageButton;
     };
-    auto arabicLanguage = initLanguageButton("اَلْعَرَبِيَّةُ", QLocale::Arabic, 87);
-    auto azerbaijaniLanguage = initLanguageButton("Azərbaycan", QLocale::Azerbaijani, 90);
-    auto belarusianLanguage = initLanguageButton("Беларуский", QLocale::Belarusian, 51);
-    auto catalanLanguage = initLanguageButton("Català", QLocale::Catalan, 78);
-    auto chineseLanguage = initLanguageButton("汉语", QLocale::Chinese, 97);
-    auto croatianLanguage = initLanguageButton("Hrvatski", QLocale::Croatian, 54);
-    auto danishLanguage = initLanguageButton("Dansk", QLocale::Danish, 85);
-    auto dutchLanguage = initLanguageButton("Nederlands", QLocale::Dutch, 100);
+    auto arabicLanguage = initLanguageButton("اَلْعَرَبِيَّةُ", QLocale::Arabic, 78);
+    auto azerbaijaniLanguage = initLanguageButton("Azərbaycan", QLocale::Azerbaijani, 77);
+    auto belarusianLanguage = initLanguageButton("Беларуский", QLocale::Belarusian, 43);
+    auto catalanLanguage = initLanguageButton("Català", QLocale::Catalan, 68);
+    auto chineseLanguage = initLanguageButton("汉语", QLocale::Chinese, 84);
+    auto croatianLanguage = initLanguageButton("Hrvatski", QLocale::Croatian, 45);
+    auto danishLanguage = initLanguageButton("Dansk", QLocale::Danish, 74);
+    auto dutchLanguage = initLanguageButton("Nederlands", QLocale::Dutch, 93);
     auto englishLanguage = initLanguageButton("English", QLocale::English, 100);
-    auto esperantoLanguage = initLanguageButton("Esperanto", QLocale::Esperanto, 10);
-    auto frenchLanguage = initLanguageButton("Français", QLocale::French, 75);
-    auto galicianLanguage = initLanguageButton("Galego", QLocale::Galician, 55);
-    auto germanLanguage = initLanguageButton("Deutsch", QLocale::German, 100);
-    auto hebrewLanguage = initLanguageButton("עִבְרִית", QLocale::Hebrew, 88);
-    auto hindiLanguage = initLanguageButton("हिन्दी", QLocale::Hindi, 29);
-    auto hungarianLanguage = initLanguageButton("Magyar", QLocale::Hungarian, 29);
-    auto indonesianLanguage = initLanguageButton("Indonesian", QLocale::Indonesian, 8);
-    auto italianLanguage = initLanguageButton("Italiano", QLocale::Italian, 49);
-    auto koreanLanguage = initLanguageButton("한국어", QLocale::Korean, 60);
-    auto persianLanguage = initLanguageButton("فارسی", QLocale::Persian, 62);
-    auto polishLanguage = initLanguageButton("Polski", QLocale::Polish, 42);
+    auto esperantoLanguage = initLanguageButton("Esperanto", QLocale::Esperanto, 7);
+    auto frenchLanguage = initLanguageButton("Français", QLocale::French, 72);
+    auto galicianLanguage = initLanguageButton("Galego", QLocale::Galician, 50);
+    auto germanLanguage = initLanguageButton("Deutsch", QLocale::German, 94);
+    auto hebrewLanguage = initLanguageButton("עִבְרִית", QLocale::Hebrew, 75);
+    auto hindiLanguage = initLanguageButton("हिन्दी", QLocale::Hindi, 26);
+    auto hungarianLanguage = initLanguageButton("Magyar", QLocale::Hungarian, 28);
+    auto indonesianLanguage = initLanguageButton("Indonesian", QLocale::Indonesian, 99);
+    auto italianLanguage = initLanguageButton("Italiano", QLocale::Italian, 42);
+    auto koreanLanguage = initLanguageButton("한국어", QLocale::Korean, 50);
+    auto persianLanguage = initLanguageButton("فارسی", QLocale::Persian, 52);
+    auto polishLanguage = initLanguageButton("Polski", QLocale::Polish, 97);
     auto portugueseLanguage = initLanguageButton(
-        "Português", static_cast<QLocale::Language>(QLocale::LastLanguage + 1), 10);
+        "Português", static_cast<QLocale::Language>(QLocale::LastLanguage + 1), 9);
     auto portugueseBrazilLanguage
-        = initLanguageButton("Português Brasileiro", QLocale::Portuguese, 79);
-    auto romanianLanguage = initLanguageButton("Română", QLocale::Romanian, 50);
+        = initLanguageButton("Português Brasileiro", QLocale::Portuguese, 100);
+    auto romanianLanguage = initLanguageButton("Română", QLocale::Romanian, 42);
     auto russianLanguage = initLanguageButton("Русский", QLocale::Russian, 100);
     auto slovenianLanguage = initLanguageButton("Slovenski", QLocale::Slovenian, 100);
-    auto spanishLanguage = initLanguageButton("Español", QLocale::Spanish, 71);
-    auto tagalogLanguage = initLanguageButton("Tagalog", QLocale::Filipino, 16);
-    auto tamilLanguage = initLanguageButton("தமிழ்", QLocale::Tamil, 37);
+    auto spanishLanguage = initLanguageButton("Español", QLocale::Spanish, 95);
+    auto swedishLanguage = initLanguageButton("Svenska", QLocale::Spanish, 31);
+    auto tagalogLanguage = initLanguageButton("Tagalog", QLocale::Filipino, 13);
+    auto tamilLanguage = initLanguageButton("தமிழ்", QLocale::Tamil, 33);
     auto teluguLanguage = initLanguageButton("తెలుగు", QLocale::Telugu, 99);
-    auto turkishLanguage = initLanguageButton("Türkçe", QLocale::Turkish, 95);
-    auto ukrainianLanguage = initLanguageButton("Українська", QLocale::Ukrainian, 100);
+    auto turkishLanguage = initLanguageButton("Türkçe", QLocale::Turkish, 88);
+    auto ukrainianLanguage = initLanguageButton("Українська", QLocale::Ukrainian, 96);
     //
     // Если мы умеем в язык системы, то оставляем выбранным его
     //
@@ -169,17 +170,39 @@ void OnboardingView::Implementation::initLanguagePage()
         }
     };
     buildFocusChain({
-        azerbaijaniLanguage, belarusianLanguage, catalanLanguage,
-        danishLanguage,      germanLanguage,     englishLanguage,
-        spanishLanguage,     esperantoLanguage,  frenchLanguage,
-        galicianLanguage,    croatianLanguage,   indonesianLanguage,
-        italianLanguage,     hungarianLanguage,  dutchLanguage,
-        polishLanguage,      portugueseLanguage, portugueseBrazilLanguage,
-        romanianLanguage,    russianLanguage,    slovenianLanguage,
-        tagalogLanguage,     turkishLanguage,    ukrainianLanguage,
-        arabicLanguage,      chineseLanguage,    hebrewLanguage,
-        hindiLanguage,       persianLanguage,    tamilLanguage,
-        teluguLanguage,      koreanLanguage,
+        azerbaijaniLanguage,
+        belarusianLanguage,
+        catalanLanguage,
+        danishLanguage,
+        germanLanguage,
+        englishLanguage,
+        spanishLanguage,
+        swedishLanguage,
+        esperantoLanguage,
+        frenchLanguage,
+        galicianLanguage,
+        croatianLanguage,
+        indonesianLanguage,
+        italianLanguage,
+        hungarianLanguage,
+        dutchLanguage,
+        polishLanguage,
+        portugueseLanguage,
+        portugueseBrazilLanguage,
+        romanianLanguage,
+        russianLanguage,
+        slovenianLanguage,
+        tagalogLanguage,
+        turkishLanguage,
+        ukrainianLanguage,
+        arabicLanguage,
+        chineseLanguage,
+        hebrewLanguage,
+        hindiLanguage,
+        persianLanguage,
+        tamilLanguage,
+        teluguLanguage,
+        koreanLanguage,
     });
 
     languageTranslationProgressLink = new Body1LinkLabel(languagePage);
@@ -211,8 +234,9 @@ void OnboardingView::Implementation::initLanguagePage()
     languagePageLayout->addWidget(germanLanguage, row++, 0);
     languagePageLayout->addWidget(englishLanguage, row++, 0);
     languagePageLayout->addWidget(spanishLanguage, row++, 0);
-    languagePageLayout->addWidget(esperantoLanguage, row++, 0);
+    languagePageLayout->addWidget(swedishLanguage, row++, 0);
     int rowForSecondColumn = 1;
+    languagePageLayout->addWidget(esperantoLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(frenchLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(galicianLanguage, rowForSecondColumn++, 1);
     languagePageLayout->addWidget(croatianLanguage, rowForSecondColumn++, 1);

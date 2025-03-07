@@ -119,7 +119,7 @@ TextModelTextItem::Implementation::Implementation(TextModelTextItem* _q)
 void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader)
 {
     paragraphType = textParagraphTypeFromString(_contentReader.name().toString());
-    Q_ASSERT(paragraphType != TextParagraphType::Undefined);
+    // Q_ASSERT(paragraphType != TextParagraphType::Undefined);
 
     auto currentTag = xml::readNextElement(_contentReader);
 

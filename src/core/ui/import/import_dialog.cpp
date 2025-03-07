@@ -714,7 +714,8 @@ void ImportDialog::updateTranslations()
         setTitle(QString("%1 \"%2\"").arg(tr("Import data from the file"), fileInfo.fileName()));
     }
 
-    d->filesCountTitle->setText(QString(tr("Importing files (%n)", 0, d->importFilePaths.count())));
+    d->filesCountTitle->setText(tr("Importing files")
+                                + QString(" (%1)").arg(d->importFilePaths.size()));
     d->documentsTitle->setText(tr("Documents"));
     d->importCharacters->setText(tr("Import characters"));
     d->importLocations->setText(tr("Import locations"));
