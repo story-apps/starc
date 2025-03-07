@@ -894,9 +894,8 @@ bool BaseTextEdit::updateEnteredText(const QKeyEvent* _event)
             //
             // Сделаем предпоследнюю букву строчной
             //
-            QString correctedText = right3Characters;
-            correctedText[correctedText.length() - 2]
-                = correctedText[correctedText.length() - 2].toLower();
+            QString correctedText = right3Characters.mid(1);
+            correctedText[0] = TextHelper::smartToLower(correctedText[0]);
 
             //
             // Стираем предыдущий введённый текст

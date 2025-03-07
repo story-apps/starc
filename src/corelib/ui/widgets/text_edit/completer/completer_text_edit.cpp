@@ -185,6 +185,7 @@ void CompleterTextEdit::applyCompletion(const QModelIndex& _completionIndex)
     // Определяем позицию вставки текста дополнения и помещаем туда курсор редактора
     //
     QTextCursor cursor = textCursor();
+    const auto charFormat = cursor.charFormat();
     if (!completionPrefix.isEmpty()) {
         cursor.movePosition(QTextCursor::EndOfBlock);
         while (!cursor.atBlockStart()
@@ -199,7 +200,7 @@ void CompleterTextEdit::applyCompletion(const QModelIndex& _completionIndex)
     //
     // Собственно дополняем текст
     //
-    cursor.insertText(completion);
+    cursor.insertText(completion, charFormat);
 
     //
     // Уведомим об успешном дополнении

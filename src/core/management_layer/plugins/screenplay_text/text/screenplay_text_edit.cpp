@@ -217,14 +217,15 @@ void ScreenplayTextEdit::Implementation::updateReviewMark(QKeyEvent* _event, int
         //
         // То автоматически добавим редакторскую заметку
         //
-        const auto lastCursor = q->textCursor();
-        auto cursor = lastCursor;
+        auto cursor = q->textCursor();
+        const auto lastCursorPosition = cursor.position();
         cursor.setPosition(_from);
         cursor.setPosition(_to, QTextCursor::KeepAnchor);
         q->setTextCursor(cursor);
         q->addReviewMark(autoReviewMode.textColor, autoReviewMode.backgroundColor, {},
                          autoReviewMode.isRevision);
-        q->setTextCursor(lastCursor);
+        cursor.setPosition(lastCursorPosition);
+        q->setTextCursor(cursor);
     }
 }
 
