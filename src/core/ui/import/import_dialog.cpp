@@ -105,9 +105,8 @@ QVector<Domain::DocumentObjectType> importTypesForFile(const QString& _path)
         };
     } else if (fileIs(ExtensionHelper::pdf())) {
         return {
-            DocumentObjectType::SimpleText,
-            DocumentObjectType::Screenplay,
-            DocumentObjectType::Presentation,
+            DocumentObjectType::SimpleText, DocumentObjectType::Screenplay,
+            // DocumentObjectType::Presentation,
         };
     }
     //

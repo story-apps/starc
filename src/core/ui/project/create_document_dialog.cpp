@@ -137,7 +137,7 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
         }
         layout->addWidget(makeOption(Domain::DocumentObjectType::MindMap));
         layout->addWidget(makeOption(Domain::DocumentObjectType::ImagesGallery));
-        layout->addWidget(makeOption(Domain::DocumentObjectType::Presentation));
+        // layout->addWidget(makeOption(Domain::DocumentObjectType::Presentation));
         optionsLayout->addLayout(layout);
     }
 
@@ -237,13 +237,13 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
         NamesGenerator::unbind(documentName);
     }
 
-    if (_type == Domain::DocumentObjectType::Screenplay) {
-        makeEpisodic->show();
-        episodesAmount->setVisible(makeEpisodic->isChecked());
-    } else {
-        makeEpisodic->hide();
-        episodesAmount->hide();
-    }
+    // if (_type == Domain::DocumentObjectType::Screenplay) {
+    //     makeEpisodic->show();
+    //     episodesAmount->setVisible(makeEpisodic->isChecked());
+    // } else {
+    //     makeEpisodic->hide();
+    //     episodesAmount->hide();
+    // }
 }
 
 
