@@ -154,6 +154,11 @@ public:
     Implementation(const QStringList& _importFilePaths, ImportDialog* _parent);
 
     /**
+     * @brief Обновить ширину диалога
+     */
+    void updateDialogWidth();
+
+    /**
      * @brief Текущие опции импорта
      */
     BusinessLayer::ImportOptions currentOptions() const;
@@ -290,6 +295,14 @@ ImportDialog::Implementation::Implementation(const QStringList& _importFilePaths
 
         filesOptions[path] = options;
     }
+}
+
+void ImportDialog::Implementation::updateDialogWidth()
+{
+    q->setContentFixedWidth(
+        filesOptions.size() > 1
+            ? std::max(q->topLevelWidget()->width() * 0.5, DesignSystem::dialog().maximumWidth())
+            : DesignSystem::dialog().maximumWidth());
 }
 
 BusinessLayer::ImportOptions ImportDialog::Implementation::currentOptions() const
@@ -749,6 +762,8 @@ void ImportDialog::updateTranslations()
 void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
+
+    d->updateDialogWidth();
 
     auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
     titleMargins.setTop(Ui::DesignSystem::layout().px8());
