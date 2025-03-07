@@ -20,6 +20,7 @@ const QLatin1String kAgeKey("age");
 const QLatin1String kGenderKey("gender");
 const QLatin1String kOneSentenceDescriptionKey("one_sentence_description");
 const QLatin1String kLongDescriptionKey("long_description");
+const QLatin1String kDreamcastKey("dreamcast");
 const QLatin1String kMainPhotoKey("main_photo");
 const QLatin1String kPhotosKey("photos");
 const QLatin1String kPhotoKey("photo");
@@ -109,6 +110,7 @@ public:
     int gender = 3;
     QString oneSentenceDescription;
     QString longDescription;
+    QString dreamcast;
     QVector<Domain::DocumentImage> photos;
     QVector<CharacterRelation> relations;
 
@@ -231,6 +233,7 @@ CharacterModel::CharacterModel(QObject* _parent)
             kGenderKey,
             kOneSentenceDescriptionKey,
             kLongDescriptionKey,
+            kDreamcastKey,
             kMainPhotoKey,
             kRelationsKey,
             kRelationKey,
@@ -247,6 +250,7 @@ CharacterModel::CharacterModel(QObject* _parent)
             &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::longDescriptionChanged, this,
             &CharacterModel::updateDocumentContent);
+    connect(this, &CharacterModel::dreamcastChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::mainPhotoChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::photosChanged, this, &CharacterModel::updateDocumentContent);
     connect(this, &CharacterModel::relationAdded, this, &CharacterModel::updateDocumentContent);
@@ -476,6 +480,21 @@ void CharacterModel::setLongDescription(const QString& _text)
 
     d->longDescription = _text;
     emit longDescriptionChanged(d->longDescription);
+}
+
+QString CharacterModel::dreamcast() const
+{
+    return d->dreamcast;
+}
+
+void CharacterModel::setDreamcast(const QString& _text)
+{
+    if (d->dreamcast == _text) {
+        return;
+    }
+
+    d->dreamcast = _text;
+    emit dreamcastChanged(d->dreamcast);
 }
 
 Domain::DocumentImage CharacterModel::mainPhoto() const
@@ -1516,6 +1535,7 @@ void CharacterModel::initDocument()
     }
     d->oneSentenceDescription = load(kOneSentenceDescriptionKey);
     d->longDescription = load(kLongDescriptionKey);
+    d->dreamcast = load(kDreamcastKey);
     //
     // TODO: выпилить старый метод на считываниме главного изображения в версии 0.4.0
     //
@@ -1654,6 +1674,7 @@ QByteArray CharacterModel::toXml() const
     save(kGenderKey, QString::number(d->gender));
     save(kOneSentenceDescriptionKey, d->oneSentenceDescription);
     save(kLongDescriptionKey, d->longDescription);
+    save(kDreamcastKey, d->dreamcast);
     if (!d->photos.isEmpty()) {
         xml += QString("<%1>\n").arg(kPhotosKey).toUtf8();
         for (const auto& photo : std::as_const(d->photos)) {
@@ -1780,6 +1801,7 @@ ChangeCursor CharacterModel::applyPatch(const QByteArray& _patch)
     }
     setOneSentenceDescription(load(kOneSentenceDescriptionKey));
     setLongDescription(load(kLongDescriptionKey));
+    setDreamcast(load(kDreamcastKey));
     //
     // Считываем фотографии
     //

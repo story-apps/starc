@@ -94,6 +94,10 @@ public:
     void setLongDescription(const QString& _text);
     Q_SIGNAL void longDescriptionChanged(const QString& _text);
 
+    QString dreamcast() const;
+    void setDreamcast(const QString& _text);
+    Q_SIGNAL void dreamcastChanged(const QString& _text);
+
     Domain::DocumentImage mainPhoto() const;
     void setMainPhoto(const QPixmap& _photo);
     Q_SIGNAL void mainPhotoChanged(const Domain::DocumentImage& _photo);
