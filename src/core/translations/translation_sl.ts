@@ -2415,7 +2415,7 @@
     <message>
         <location filename="../../corelib/business_layer/model/structure/structure_model.cpp" line="456"/>
         <source>Presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Predstavitev</translation>
     </message>
 </context>
 <context>
@@ -3715,12 +3715,15 @@
 
 The following files will not be imported:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Uvoz iz datotek DOC ni podprt. Datoteko shranite v zapisu DOCX in ponovite postopek uvoza.
+
+Naslednje datoteke ne bodo uvožene:
+</translation>
     </message>
     <message>
         <location filename="../management_layer/content/import/import_manager.cpp" line="414"/>
         <source>Choose files to import</source>
-        <translation type="unfinished"></translation>
+        <translation>Izberite datoteke za uvoz</translation>
     </message>
 </context>
 <context>
@@ -3988,17 +3991,17 @@ If you want to continue editing novel text, switch to the corresponding module v
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="187"/>
         <source>Processing presentation for document &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Obdelovanje predstavitve za dokument »%1«</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="230"/>
         <source>File loading error</source>
-        <translation type="unfinished"></translation>
+        <translation>Napaka pri nalaganju datoteke</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="232"/>
         <source>Please check internet connection and firewall/anitivirus settings, and try to send the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Preverite internetno povezavo in nastavitve požarnega zidu/protivirusne zaščite ter poskusite znova poslati datoteko.</translation>
     </message>
 </context>
 <context>
@@ -5611,7 +5614,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="723"/>
         <source>Presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Predstavitev</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins_builder.cpp" line="539"/>
@@ -9767,7 +9770,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2220"/>
         <source>Dreamcast</source>
-        <translation type="unfinished"></translation>
+        <translation>Dreamcast</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2222"/>
@@ -11614,7 +11617,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="182"/>
         <source>Add presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj predstavitev</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="186"/>
@@ -11679,7 +11682,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="214"/>
         <source>Create a presentation document to store valuable outside content with your project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustvarite dokument predstavitve, v katerem shranite dragocene zunanje vsebine s svojim projektom.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="307"/>
@@ -11709,17 +11712,17 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="378"/>
         <source>Please, select file for importing</source>
-        <translation type="unfinished"></translation>
+        <translation>Izberite datoteko za uvoz</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="390"/>
         <source>The file doesn&apos;t exist</source>
-        <translation type="unfinished"></translation>
+        <translation>Datoteka ne obstaja</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="397"/>
         <source>Can&apos;t read data from the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Podatkov iz datoteke ni možno prebrati</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="465"/>
@@ -11843,7 +11846,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/project/create_document_dialog_option.cpp" line="239"/>
         <source>Presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Predstavitev</translation>
     </message>
 </context>
 <context>
@@ -12214,122 +12217,122 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ImportDialog</name>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="357"/>
+        <location filename="../ui/import/import_dialog.cpp" line="368"/>
         <source>Import script text</source>
         <translation>Uvozi besedilo scenarija</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="361"/>
+        <location filename="../ui/import/import_dialog.cpp" line="372"/>
         <source>Import novel text</source>
         <translation>Uvozi besedilo romana</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="365"/>
+        <location filename="../ui/import/import_dialog.cpp" line="376"/>
         <source>Import presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Uvozi predstavitev</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="369"/>
+        <location filename="../ui/import/import_dialog.cpp" line="380"/>
         <source>Import text</source>
         <translation>Uvozi besedilo</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="711"/>
+        <location filename="../ui/import/import_dialog.cpp" line="722"/>
         <source>Import data from files</source>
-        <translation type="unfinished"></translation>
+        <translation>Uvozi podatke iz datotek</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="714"/>
+        <location filename="../ui/import/import_dialog.cpp" line="725"/>
         <source>Import data from the file</source>
         <translation>Uvozi podatke iz datoteke</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="719"/>
+        <location filename="../ui/import/import_dialog.cpp" line="730"/>
         <source>Documents</source>
         <translation>Dokumenti</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="720"/>
+        <location filename="../ui/import/import_dialog.cpp" line="731"/>
         <source>Import characters</source>
         <translation>Uvozi like</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="721"/>
+        <location filename="../ui/import/import_dialog.cpp" line="732"/>
         <source>Import locations</source>
         <translation>Uvozi prizorišča</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="722"/>
+        <location filename="../ui/import/import_dialog.cpp" line="733"/>
         <source>Import research</source>
         <translation>Uvozi raziskavo</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="723"/>
+        <location filename="../ui/import/import_dialog.cpp" line="734"/>
         <source>Text</source>
         <translation>Besedilo</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="46"/>
+        <location filename="../ui/import/import_dialog.cpp" line="48"/>
         <source>Audioplay</source>
         <translation>Radijska igra</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="42"/>
+        <location filename="../ui/import/import_dialog.cpp" line="44"/>
         <source>Simple text</source>
         <translation>Enostavno besedilo</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="50"/>
+        <location filename="../ui/import/import_dialog.cpp" line="52"/>
         <source>Comic Book</source>
         <translation>Strip</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="54"/>
+        <location filename="../ui/import/import_dialog.cpp" line="56"/>
         <source>Novel</source>
         <translation>Roman</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="58"/>
+        <location filename="../ui/import/import_dialog.cpp" line="60"/>
         <source>Screenplay</source>
         <translation>Scenarij</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="62"/>
+        <location filename="../ui/import/import_dialog.cpp" line="64"/>
         <source>Stageplay</source>
         <translation>Dramsko besedilo</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="66"/>
+        <location filename="../ui/import/import_dialog.cpp" line="68"/>
         <source>Presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Predstavitev</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="717"/>
+        <location filename="../ui/import/import_dialog.cpp" line="728"/>
         <source>Importing files</source>
-        <translation type="unfinished"></translation>
+        <translation>Uvažanje datotek</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="727"/>
+        <location filename="../ui/import/import_dialog.cpp" line="738"/>
         <source>Same options for all</source>
-        <translation type="unfinished"></translation>
+        <translation>Enake možnosti za vse</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="737"/>
+        <location filename="../ui/import/import_dialog.cpp" line="748"/>
         <source>Import to</source>
         <translation>Uvozi v</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="725"/>
+        <location filename="../ui/import/import_dialog.cpp" line="736"/>
         <source>Keep scene numbers</source>
         <translation>Ohrani številke prizorov</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="728"/>
+        <location filename="../ui/import/import_dialog.cpp" line="739"/>
         <source>Import</source>
         <translation>Uvozi</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="729"/>
+        <location filename="../ui/import/import_dialog.cpp" line="740"/>
         <source>Cancel</source>
         <translation>Prekliči</translation>
     </message>
@@ -13230,7 +13233,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/menu_view.cpp" line="550"/>
         <source>Import documents...</source>
-        <translation type="unfinished"></translation>
+        <translation>Uvozi dokumente ...</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="551"/>
@@ -14788,47 +14791,47 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
         <translation>Prevod za jezik %1% je pripravljen. Izvedite, kako ga lahko izboljšate.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="412"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="436"/>
         <source>Choose preferred language</source>
         <translation>Izberite želeni jezik</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="414"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Ne najdete želenega jezika? Preberite si, kako ga lahko dodate sami.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="415"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
         <source>Continue</source>
         <translation>Nadaljuj</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="416"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
         <source>Skip initial setup</source>
         <translation>Preskoči otvoritvene nastavitve</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="418"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="442"/>
         <source>Choose application theme</source>
         <translation>Izberite temo programa</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="419"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="443"/>
         <source>Setup size of the user interface elements</source>
         <translation>Velikost elementov uporabniškega vmesnika</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="420"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="444"/>
         <source>small</source>
         <translation>majhna</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="421"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="445"/>
         <source>big</source>
         <translation>velika</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="422"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="446"/>
         <source>Start writing</source>
         <translation>Začnite pisati</translation>
     </message>
@@ -14843,12 +14846,12 @@ Razpravljajte o vsem s sočlani skupnosti scenaristov in piscev, delite svoje na
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_sidebar.cpp" line="91"/>
         <source>Presentation name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ime predstavitve</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_sidebar.cpp" line="92"/>
         <source>Presentation description</source>
-        <translation type="unfinished"></translation>
+        <translation>Opis predstavitve</translation>
     </message>
 </context>
 <context>

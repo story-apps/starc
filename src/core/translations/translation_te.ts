@@ -12164,122 +12164,122 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ImportDialog</name>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="357"/>
+        <location filename="../ui/import/import_dialog.cpp" line="368"/>
         <source>Import script text</source>
         <translation>స్క్రిప్ట్ వచనాన్ని దిగుమతి చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="361"/>
+        <location filename="../ui/import/import_dialog.cpp" line="372"/>
         <source>Import novel text</source>
         <translation>నవల వచనాన్ని దిగుమతి చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="365"/>
+        <location filename="../ui/import/import_dialog.cpp" line="376"/>
         <source>Import presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="369"/>
+        <location filename="../ui/import/import_dialog.cpp" line="380"/>
         <source>Import text</source>
         <translation>వచనాన్ని దిగుమతి చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="711"/>
+        <location filename="../ui/import/import_dialog.cpp" line="722"/>
         <source>Import data from files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="714"/>
+        <location filename="../ui/import/import_dialog.cpp" line="725"/>
         <source>Import data from the file</source>
         <translation>ఫైల్ నుండి డేటాను ఇంపోర్ట్  చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="719"/>
+        <location filename="../ui/import/import_dialog.cpp" line="730"/>
         <source>Documents</source>
         <translation>డాక్యుమెంట్స్ </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="720"/>
+        <location filename="../ui/import/import_dialog.cpp" line="731"/>
         <source>Import characters</source>
         <translation>క్యారెక్టర్స్ ఇంపోర్ట్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="721"/>
+        <location filename="../ui/import/import_dialog.cpp" line="732"/>
         <source>Import locations</source>
         <translation>లొకేషన్స్ ఇంపోర్ట్ చెయ్యండి </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="722"/>
+        <location filename="../ui/import/import_dialog.cpp" line="733"/>
         <source>Import research</source>
         <translation>దిగుమతి పరిశోధన</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="723"/>
+        <location filename="../ui/import/import_dialog.cpp" line="734"/>
         <source>Text</source>
         <translation>టెక్స్ట్ </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="46"/>
+        <location filename="../ui/import/import_dialog.cpp" line="48"/>
         <source>Audioplay</source>
         <translation>ఆడియో ప్లే </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="42"/>
+        <location filename="../ui/import/import_dialog.cpp" line="44"/>
         <source>Simple text</source>
         <translation>సింపుల్ టెక్ట్స్ </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="50"/>
+        <location filename="../ui/import/import_dialog.cpp" line="52"/>
         <source>Comic Book</source>
         <translation>కామిక్ బుక్ </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="54"/>
+        <location filename="../ui/import/import_dialog.cpp" line="56"/>
         <source>Novel</source>
         <translation>నవల</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="58"/>
+        <location filename="../ui/import/import_dialog.cpp" line="60"/>
         <source>Screenplay</source>
         <translation>స్క్రీన్ ప్లే </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="62"/>
+        <location filename="../ui/import/import_dialog.cpp" line="64"/>
         <source>Stageplay</source>
         <translation>స్టేజ్ ప్లే </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="66"/>
+        <location filename="../ui/import/import_dialog.cpp" line="68"/>
         <source>Presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="717"/>
+        <location filename="../ui/import/import_dialog.cpp" line="728"/>
         <source>Importing files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="727"/>
+        <location filename="../ui/import/import_dialog.cpp" line="738"/>
         <source>Same options for all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="737"/>
+        <location filename="../ui/import/import_dialog.cpp" line="748"/>
         <source>Import to</source>
         <translation>కు దిగుమతి చేయండి</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="725"/>
+        <location filename="../ui/import/import_dialog.cpp" line="736"/>
         <source>Keep scene numbers</source>
         <translation>సీన్ నంబర్స్ ఉంచండి </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="728"/>
+        <location filename="../ui/import/import_dialog.cpp" line="739"/>
         <source>Import</source>
         <translation>ఇంపోర్ట్ </translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="729"/>
+        <location filename="../ui/import/import_dialog.cpp" line="740"/>
         <source>Cancel</source>
         <translation>క్యాన్సిల్ </translation>
     </message>
@@ -14724,47 +14724,47 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation>%1%కి అనువాదం సిద్ధంగా ఉంది. మీరు దీన్ని ఎలా మెరుగుపరచవచ్చో తెలుసుకోండి.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="412"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="436"/>
         <source>Choose preferred language</source>
         <translation>ఇష్టపడే భాషను ఎంచుకోండి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="414"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>మీరు ఇష్టపడే భాష కనుగొనలేదా? దీన్ని మీరే ఎలా జోడించవచ్చో చదవండి.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="415"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
         <source>Continue</source>
         <translation>కొనసాగించు</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="416"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
         <source>Skip initial setup</source>
         <translation>ప్రారంభ సెటప్‌ను దాటవేయి</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="418"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="442"/>
         <source>Choose application theme</source>
         <translation>Choose application theme</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="419"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="443"/>
         <source>Setup size of the user interface elements</source>
         <translation>వినియోగదారు ఇంటర్‌ఫేస్ మూలకాల యొక్క సెటప్ పరిమాణం</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="420"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="444"/>
         <source>small</source>
         <translation>చిన్నది</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="421"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="445"/>
         <source>big</source>
         <translation>పెద్దది </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="422"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="446"/>
         <source>Start writing</source>
         <translation>రాయడం ప్రారంభించండి</translation>
     </message>

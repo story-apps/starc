@@ -12164,122 +12164,122 @@ Als u de scenariotekst wilt blĳven bewerken, schakel dan over naar de bĳbehore
 <context>
     <name>Ui::ImportDialog</name>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="357"/>
+        <location filename="../ui/import/import_dialog.cpp" line="368"/>
         <source>Import script text</source>
         <translation>Scripttekst importeren</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="361"/>
+        <location filename="../ui/import/import_dialog.cpp" line="372"/>
         <source>Import novel text</source>
         <translation>Romantekst importeren</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="365"/>
+        <location filename="../ui/import/import_dialog.cpp" line="376"/>
         <source>Import presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="369"/>
+        <location filename="../ui/import/import_dialog.cpp" line="380"/>
         <source>Import text</source>
         <translation>Tekst importeren</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="711"/>
+        <location filename="../ui/import/import_dialog.cpp" line="722"/>
         <source>Import data from files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="714"/>
+        <location filename="../ui/import/import_dialog.cpp" line="725"/>
         <source>Import data from the file</source>
         <translation>Gegevens importeren uit bestand</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="719"/>
+        <location filename="../ui/import/import_dialog.cpp" line="730"/>
         <source>Documents</source>
         <translation>Documenten</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="720"/>
+        <location filename="../ui/import/import_dialog.cpp" line="731"/>
         <source>Import characters</source>
         <translation>Personages importeren</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="721"/>
+        <location filename="../ui/import/import_dialog.cpp" line="732"/>
         <source>Import locations</source>
         <translation>Locaties importeren</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="722"/>
+        <location filename="../ui/import/import_dialog.cpp" line="733"/>
         <source>Import research</source>
         <translation>Onderzoek importeren</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="723"/>
+        <location filename="../ui/import/import_dialog.cpp" line="734"/>
         <source>Text</source>
         <translation>Tekst</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="46"/>
+        <location filename="../ui/import/import_dialog.cpp" line="48"/>
         <source>Audioplay</source>
         <translation>Hoorspel</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="42"/>
+        <location filename="../ui/import/import_dialog.cpp" line="44"/>
         <source>Simple text</source>
         <translation>Eenvoudige tekst</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="50"/>
+        <location filename="../ui/import/import_dialog.cpp" line="52"/>
         <source>Comic Book</source>
         <translation>Stripboek</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="54"/>
+        <location filename="../ui/import/import_dialog.cpp" line="56"/>
         <source>Novel</source>
         <translation>Roman</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="58"/>
+        <location filename="../ui/import/import_dialog.cpp" line="60"/>
         <source>Screenplay</source>
         <translation>Scenario</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="62"/>
+        <location filename="../ui/import/import_dialog.cpp" line="64"/>
         <source>Stageplay</source>
         <translation>Toneelstuk</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="66"/>
+        <location filename="../ui/import/import_dialog.cpp" line="68"/>
         <source>Presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="717"/>
+        <location filename="../ui/import/import_dialog.cpp" line="728"/>
         <source>Importing files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="727"/>
+        <location filename="../ui/import/import_dialog.cpp" line="738"/>
         <source>Same options for all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="737"/>
+        <location filename="../ui/import/import_dialog.cpp" line="748"/>
         <source>Import to</source>
         <translation>Importeren naar</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="725"/>
+        <location filename="../ui/import/import_dialog.cpp" line="736"/>
         <source>Keep scene numbers</source>
         <translation>Scènenummers behouden</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="728"/>
+        <location filename="../ui/import/import_dialog.cpp" line="739"/>
         <source>Import</source>
         <translation>Importeren</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="729"/>
+        <location filename="../ui/import/import_dialog.cpp" line="740"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
@@ -14724,47 +14724,47 @@ Bespreek alles wat u maar wilt met andere schrijvers, deel uw voortgang en praat
         <translation>Deze vertaling is %1% afgerond. Help ons met het verbeteren ervan.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="412"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="436"/>
         <source>Choose preferred language</source>
         <translation>Kies uw voorkeurstaal</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="414"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Kunt u uw taal niet vinden? Lees hoe u kunt helpen met vertalen.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="415"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
         <source>Continue</source>
         <translation>Doorgaan</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="416"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
         <source>Skip initial setup</source>
         <translation>Instelhulp overslaan</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="418"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="442"/>
         <source>Choose application theme</source>
         <translation>Kies een thema</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="419"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="443"/>
         <source>Setup size of the user interface elements</source>
         <translation>Stel de grootte van vensterelementen in</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="420"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="444"/>
         <source>small</source>
         <translation>klein</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="421"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="445"/>
         <source>big</source>
         <translation>groot</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="422"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="446"/>
         <source>Start writing</source>
         <translation>Beginnen met schrijven</translation>
     </message>

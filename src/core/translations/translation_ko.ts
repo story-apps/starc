@@ -12117,122 +12117,122 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ImportDialog</name>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="357"/>
+        <location filename="../ui/import/import_dialog.cpp" line="368"/>
         <source>Import script text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="361"/>
+        <location filename="../ui/import/import_dialog.cpp" line="372"/>
         <source>Import novel text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="365"/>
+        <location filename="../ui/import/import_dialog.cpp" line="376"/>
         <source>Import presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="369"/>
+        <location filename="../ui/import/import_dialog.cpp" line="380"/>
         <source>Import text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="711"/>
+        <location filename="../ui/import/import_dialog.cpp" line="722"/>
         <source>Import data from files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="714"/>
+        <location filename="../ui/import/import_dialog.cpp" line="725"/>
         <source>Import data from the file</source>
         <translation>파일로 부터 데이터 가져오기</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="719"/>
+        <location filename="../ui/import/import_dialog.cpp" line="730"/>
         <source>Documents</source>
         <translation>문서</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="720"/>
+        <location filename="../ui/import/import_dialog.cpp" line="731"/>
         <source>Import characters</source>
         <translation>인물 가져오기</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="721"/>
+        <location filename="../ui/import/import_dialog.cpp" line="732"/>
         <source>Import locations</source>
         <translation>장소 가져오기</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="722"/>
+        <location filename="../ui/import/import_dialog.cpp" line="733"/>
         <source>Import research</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="723"/>
+        <location filename="../ui/import/import_dialog.cpp" line="734"/>
         <source>Text</source>
         <translation>본문</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="46"/>
+        <location filename="../ui/import/import_dialog.cpp" line="48"/>
         <source>Audioplay</source>
         <translation>오디오극</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="42"/>
+        <location filename="../ui/import/import_dialog.cpp" line="44"/>
         <source>Simple text</source>
         <translation>간단한 텍스트</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="50"/>
+        <location filename="../ui/import/import_dialog.cpp" line="52"/>
         <source>Comic Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="54"/>
+        <location filename="../ui/import/import_dialog.cpp" line="56"/>
         <source>Novel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="58"/>
+        <location filename="../ui/import/import_dialog.cpp" line="60"/>
         <source>Screenplay</source>
         <translation>시나리오</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="62"/>
+        <location filename="../ui/import/import_dialog.cpp" line="64"/>
         <source>Stageplay</source>
         <translation>무대 연기</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="66"/>
+        <location filename="../ui/import/import_dialog.cpp" line="68"/>
         <source>Presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="717"/>
+        <location filename="../ui/import/import_dialog.cpp" line="728"/>
         <source>Importing files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="727"/>
+        <location filename="../ui/import/import_dialog.cpp" line="738"/>
         <source>Same options for all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="737"/>
+        <location filename="../ui/import/import_dialog.cpp" line="748"/>
         <source>Import to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="725"/>
+        <location filename="../ui/import/import_dialog.cpp" line="736"/>
         <source>Keep scene numbers</source>
         <translation>씬 넘버 유지</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="728"/>
+        <location filename="../ui/import/import_dialog.cpp" line="739"/>
         <source>Import</source>
         <translation>가져오기</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="729"/>
+        <location filename="../ui/import/import_dialog.cpp" line="740"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
@@ -14657,47 +14657,47 @@ Discuss everything with fellow community of writers, share your work in progress
         <translation>번역이 %1% 준비되었습니다. 개선할 수 있는 방법을 알고 있습니다.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="412"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="436"/>
         <source>Choose preferred language</source>
         <translation>선호하는 언어 선택</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="414"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>선호하는 언어를 찾을 수 없습니까? 어떻게 스스로 언어를 추가할 수 있는지 읽어보십시오.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="415"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
         <source>Continue</source>
         <translation>계속</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="416"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
         <source>Skip initial setup</source>
         <translation>초기 설정 건너뛰기</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="418"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="442"/>
         <source>Choose application theme</source>
         <translation>앱 테마 선택</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="419"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="443"/>
         <source>Setup size of the user interface elements</source>
         <translation>사용자 인터페이스 요소 크기 설정</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="420"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="444"/>
         <source>small</source>
         <translation>작은</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="421"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="445"/>
         <source>big</source>
         <translation>큰</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="422"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="446"/>
         <source>Start writing</source>
         <translation>쓰기 시작</translation>
     </message>

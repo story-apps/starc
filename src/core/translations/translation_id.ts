@@ -3701,12 +3701,15 @@ Harap tutup dan coba kembali membuat proyek baru.</translation>
 
 The following files will not be imported:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Mengimpor dari file DOC tidak didukung. Kamu perlu menyimpan file dalam format DOCX dan mengulangi impor.
+
+File-file berikut ini tidak akan diimpor:
+</translation>
     </message>
     <message>
         <location filename="../management_layer/content/import/import_manager.cpp" line="414"/>
         <source>Choose files to import</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih file-file untuk diimpor</translation>
     </message>
 </context>
 <context>
@@ -3974,17 +3977,17 @@ Jika kamu ingin melanjutkan pengeditan teks novel, pindahkan ke modul yang sesua
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="187"/>
         <source>Processing presentation for document &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Memproses presentasi untuk dokumen &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="230"/>
         <source>File loading error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan memuat file</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="232"/>
         <source>Please check internet connection and firewall/anitivirus settings, and try to send the file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tolong cek koneksi internet dan pengaturan firewall/antivirus, dan coba kirim ulang file-nya.</translation>
     </message>
 </context>
 <context>
@@ -9724,7 +9727,7 @@ Jika kamu ingin melanjutkan pengeditan teks skenario film, pindahkan ke modul ya
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2220"/>
         <source>Dreamcast</source>
-        <translation type="unfinished"></translation>
+        <translation>Dreamcast</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2222"/>
@@ -11544,7 +11547,7 @@ Jika kamu ingin melanjutkan pengeditan teks skenario film, pindahkan ke modul ya
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="182"/>
         <source>Add presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambahkan presentasi</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="186"/>
@@ -11609,7 +11612,7 @@ Jika kamu ingin melanjutkan pengeditan teks skenario film, pindahkan ke modul ya
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="214"/>
         <source>Create a presentation document to store valuable outside content with your project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Buatlah dokumen presentasi untuk menyimpan konten berharga dari luar yang terkait dengan proyekmu.</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="307"/>
@@ -11639,17 +11642,17 @@ Jika kamu ingin melanjutkan pengeditan teks skenario film, pindahkan ke modul ya
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="378"/>
         <source>Please, select file for importing</source>
-        <translation type="unfinished"></translation>
+        <translation>Tolong pilih file untuk diimpor</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="390"/>
         <source>The file doesn&apos;t exist</source>
-        <translation type="unfinished"></translation>
+        <translation>File tersebut tidak ada</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="397"/>
         <source>Can&apos;t read data from the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membaca data dari file tersebut</translation>
     </message>
     <message>
         <location filename="../ui/project/create_document_dialog.cpp" line="465"/>
@@ -12141,122 +12144,122 @@ Jika kamu ingin melanjutkan pengeditan teks skenario film, pindahkan ke modul ya
 <context>
     <name>Ui::ImportDialog</name>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="357"/>
+        <location filename="../ui/import/import_dialog.cpp" line="368"/>
         <source>Import script text</source>
         <translation>Impor teks skrip</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="361"/>
+        <location filename="../ui/import/import_dialog.cpp" line="372"/>
         <source>Import novel text</source>
         <translation>Impor teks novel</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="365"/>
+        <location filename="../ui/import/import_dialog.cpp" line="376"/>
         <source>Import presentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Impor presentasi</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="369"/>
+        <location filename="../ui/import/import_dialog.cpp" line="380"/>
         <source>Import text</source>
         <translation>Impor teks</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="711"/>
+        <location filename="../ui/import/import_dialog.cpp" line="722"/>
         <source>Import data from files</source>
-        <translation type="unfinished"></translation>
+        <translation>Impor data dari file-file</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="714"/>
+        <location filename="../ui/import/import_dialog.cpp" line="725"/>
         <source>Import data from the file</source>
         <translation>Impor data dari file</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="719"/>
+        <location filename="../ui/import/import_dialog.cpp" line="730"/>
         <source>Documents</source>
         <translation>Dokumen</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="720"/>
+        <location filename="../ui/import/import_dialog.cpp" line="731"/>
         <source>Import characters</source>
         <translation>Impor tokoh</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="721"/>
+        <location filename="../ui/import/import_dialog.cpp" line="732"/>
         <source>Import locations</source>
         <translation>Impor lokasi</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="722"/>
+        <location filename="../ui/import/import_dialog.cpp" line="733"/>
         <source>Import research</source>
         <translation>Impor penelitian</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="723"/>
+        <location filename="../ui/import/import_dialog.cpp" line="734"/>
         <source>Text</source>
         <translation>Teks</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="46"/>
+        <location filename="../ui/import/import_dialog.cpp" line="48"/>
         <source>Audioplay</source>
         <translation>Pemutaran audio</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="42"/>
+        <location filename="../ui/import/import_dialog.cpp" line="44"/>
         <source>Simple text</source>
         <translation>Teks simple</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="50"/>
+        <location filename="../ui/import/import_dialog.cpp" line="52"/>
         <source>Comic Book</source>
         <translation>Buku Komik</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="54"/>
+        <location filename="../ui/import/import_dialog.cpp" line="56"/>
         <source>Novel</source>
         <translation>Novel</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="58"/>
+        <location filename="../ui/import/import_dialog.cpp" line="60"/>
         <source>Screenplay</source>
         <translation>Skenario</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="62"/>
+        <location filename="../ui/import/import_dialog.cpp" line="64"/>
         <source>Stageplay</source>
         <translation>Skenario panggung</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="66"/>
+        <location filename="../ui/import/import_dialog.cpp" line="68"/>
         <source>Presentation</source>
         <translation>Presentasi</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="717"/>
+        <location filename="../ui/import/import_dialog.cpp" line="728"/>
         <source>Importing files</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengimpor file-file</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="727"/>
+        <location filename="../ui/import/import_dialog.cpp" line="738"/>
         <source>Same options for all</source>
-        <translation type="unfinished"></translation>
+        <translation>Pengaturan yang sama untuk semuanya</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="737"/>
+        <location filename="../ui/import/import_dialog.cpp" line="748"/>
         <source>Import to</source>
         <translation>Impor ke</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="725"/>
+        <location filename="../ui/import/import_dialog.cpp" line="736"/>
         <source>Keep scene numbers</source>
         <translation>Pertahankan nomor adegan</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="728"/>
+        <location filename="../ui/import/import_dialog.cpp" line="739"/>
         <source>Import</source>
         <translation>Impor</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="729"/>
+        <location filename="../ui/import/import_dialog.cpp" line="740"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
@@ -13157,7 +13160,7 @@ Jika kamu ingin melanjutkan pengeditan teks skenario film, pindahkan ke modul ya
     <message>
         <location filename="../ui/menu_view.cpp" line="550"/>
         <source>Import documents...</source>
-        <translation type="unfinished"></translation>
+        <translation>Impor dokumen-dokumen</translation>
     </message>
     <message>
         <location filename="../ui/menu_view.cpp" line="551"/>
@@ -14694,47 +14697,47 @@ Diskusikan segala hal dengan komunitas penulis lainnya, bagikan proyek Anda yang
         <translation>Terjemahan siap untuk %1%. Ketahui bagaimana Anda dapat meningkatkannya. </translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="412"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="436"/>
         <source>Choose preferred language</source>
         <translation>Pilih bahasa yang diinginkan</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="414"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="438"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Tidak menemukan bahasa yang Anda inginkan? Baca bagaimana Anda dapat menambahkannya sendiri.</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="415"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="439"/>
         <source>Continue</source>
         <translation>Lanjutan</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="416"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="440"/>
         <source>Skip initial setup</source>
         <translation>Lewati pengaturan awal</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="418"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="442"/>
         <source>Choose application theme</source>
         <translation>Memilih tema aplikasi</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="419"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="443"/>
         <source>Setup size of the user interface elements</source>
         <translation>Ukuran pengaturan elemen antarmuka pengguna</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="420"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="444"/>
         <source>small</source>
         <translation>kecil</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="421"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="445"/>
         <source>big</source>
         <translation>besar</translation>
     </message>
     <message>
-        <location filename="../ui/onboarding/onboarding_view.cpp" line="422"/>
+        <location filename="../ui/onboarding/onboarding_view.cpp" line="446"/>
         <source>Start writing</source>
         <translation>Mulai menulis</translation>
     </message>
@@ -14749,12 +14752,12 @@ Diskusikan segala hal dengan komunitas penulis lainnya, bagikan proyek Anda yang
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_sidebar.cpp" line="91"/>
         <source>Presentation name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nama presentasi</translation>
     </message>
     <message>
         <location filename="../management_layer/plugins/presentation/presentation_sidebar.cpp" line="92"/>
         <source>Presentation description</source>
-        <translation type="unfinished"></translation>
+        <translation>Deskripsi presentasi</translation>
     </message>
 </context>
 <context>
