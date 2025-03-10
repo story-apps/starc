@@ -36,40 +36,43 @@ QString settingsKey(const QString& _filePath, const QString& _parameter)
     return QString("%1/%2/%3").arg(kGroupKey, _filePath, _parameter);
 }
 
-const QVector<QPair<const Domain::DocumentObjectType, const QString>> kDocumentTypes{
-    {
-        Domain::DocumentObjectType::SimpleText,
-        QApplication::translate("Ui::ImportDialog", "Simple text"),
-    },
-    {
-        Domain::DocumentObjectType::Audioplay,
-        QApplication::translate("Ui::ImportDialog", "Audioplay"),
-    },
-    {
-        Domain::DocumentObjectType::ComicBook,
-        QApplication::translate("Ui::ImportDialog", "Comic Book"),
-    },
-    {
-        Domain::DocumentObjectType::Novel,
-        QApplication::translate("Ui::ImportDialog", "Novel"),
-    },
-    {
-        Domain::DocumentObjectType::Screenplay,
-        QApplication::translate("Ui::ImportDialog", "Screenplay"),
-    },
-    {
-        Domain::DocumentObjectType::Stageplay,
-        QApplication::translate("Ui::ImportDialog", "Stageplay"),
-    },
-    {
-        Domain::DocumentObjectType::Presentation,
-        QApplication::translate("Ui::ImportDialog", "Presentation"),
-    },
-};
+const QVector<QPair<const Domain::DocumentObjectType, const QString>> kDocumentTypes()
+{
+    return {
+        {
+            Domain::DocumentObjectType::SimpleText,
+            QApplication::translate("Ui::ImportDialog", "Simple text"),
+        },
+        {
+            Domain::DocumentObjectType::Audioplay,
+            QApplication::translate("Ui::ImportDialog", "Audioplay"),
+        },
+        {
+            Domain::DocumentObjectType::ComicBook,
+            QApplication::translate("Ui::ImportDialog", "Comic Book"),
+        },
+        {
+            Domain::DocumentObjectType::Novel,
+            QApplication::translate("Ui::ImportDialog", "Novel"),
+        },
+        {
+            Domain::DocumentObjectType::Screenplay,
+            QApplication::translate("Ui::ImportDialog", "Screenplay"),
+        },
+        {
+            Domain::DocumentObjectType::Stageplay,
+            QApplication::translate("Ui::ImportDialog", "Stageplay"),
+        },
+        {
+            Domain::DocumentObjectType::Presentation,
+            QApplication::translate("Ui::ImportDialog", "Presentation"),
+        },
+    };
+}
 
 QString typeToString(const Domain::DocumentObjectType& _type)
 {
-    for (const auto& type : kDocumentTypes) {
+    for (const auto& type : kDocumentTypes()) {
         if (type.first == _type) {
             return type.second;
         }
@@ -79,7 +82,7 @@ QString typeToString(const Domain::DocumentObjectType& _type)
 
 Domain::DocumentObjectType stringToType(const QString& _type)
 {
-    for (const auto& type : kDocumentTypes) {
+    for (const auto& type : kDocumentTypes()) {
         if (type.second == _type) {
             return type.first;
         }
@@ -279,9 +282,17 @@ ImportDialog::Implementation::Implementation(const QStringList& _importFilePaths
     for (const auto& path : _importFilePaths) {
         BusinessLayer::ImportOptions options;
 
-        const auto defaultType = typeToString(Domain::DocumentObjectType::Screenplay);
-        options.documentType = stringToType(
-            settings.value(settingsKey(path, kDocumentType), defaultType).toString());
+        const auto documentTypeValue = settings.value(settingsKey(path, kDocumentType));
+        if (!documentTypeValue.isNull()) {
+            bool ok = false;
+            const auto documentType
+                = static_cast<Domain::DocumentObjectType>(documentTypeValue.toInt(&ok));
+            if (ok && documentType != Domain::DocumentObjectType::Undefined) {
+                options.documentType = documentType;
+            }
+        } else {
+            options.documentType = importTypesForFile(path).constFirst();
+        }
         options.filePath = path;
         options.importCharacters
             = settings.value(settingsKey(path, kImportCharacters), true).toBool();
@@ -443,7 +454,7 @@ void ImportDialog::Implementation::saveSetting()
     QSettings settings;
     for (const auto& fileOptions : filesOptions) {
         settings.setValue(settingsKey(fileOptions.filePath, kDocumentType),
-                          typeToString(fileOptions.documentType));
+                          static_cast<int>(fileOptions.documentType));
         settings.setValue(settingsKey(fileOptions.filePath, kImportCharacters),
                           fileOptions.importCharacters);
         settings.setValue(settingsKey(fileOptions.filePath, kImportLocations),
