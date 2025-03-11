@@ -3921,7 +3921,8 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
             //
             // Если было много изменений, то создаём версию документа с конфликтом
             //
-            if (unsyncedChanges.size() > 4) {
+            if (documentType != Domain::DocumentObjectType::Structure
+                && unsyncedChanges.size() > 4) {
                 const auto item = d->projectStructureModel->itemForIndex(
                     d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex()));
                 Q_ASSERT(item);
