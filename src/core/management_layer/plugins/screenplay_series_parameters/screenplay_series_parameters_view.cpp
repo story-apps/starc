@@ -110,7 +110,7 @@ ScreenplaySeriesParametersView::Implementation::Implementation(QWidget* _parent)
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(seriesInfo);
-    layout->addStretch();
+    layout->addStretch(1);
     contentWidget->setLayout(layout);
 }
 
@@ -347,9 +347,6 @@ void ScreenplaySeriesParametersView::designSystemChangeEvent(DesignSystemChangeE
         checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
         checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    auto titleMargins = Ui::DesignSystem::label().margins();
-    titleMargins.setTop(0.0);
-    titleMargins.setBottom(0.0);
 
     d->infoLayout->setSpacing(static_cast<int>(Ui::DesignSystem::compactLayout().px16()));
     d->infoLayout->setContentsMargins(0, static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
