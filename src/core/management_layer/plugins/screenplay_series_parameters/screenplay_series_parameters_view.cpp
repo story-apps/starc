@@ -650,7 +650,7 @@ void ScreenplaySeriesParametersView::updateTranslations()
     d->printHeaderOnTitlePage->setText(tr("Print header on title page"));
     d->footer->setLabel(tr("Footer"));
     d->printFooterOnTitlePage->setText(tr("Print footer on title page"));
-    d->overrideCommonSettings->setText(tr("Override common settings for this screenplay"));
+    d->overrideCommonSettings->setText(tr("Override common settings for this series"));
     d->screenplayTemplate->setLabel(tr("Template"));
     d->showSceneNumbers->setText(tr("Print scenes numbers"));
     d->showSceneNumbersOnLeft->setText(tr("on the left"));
