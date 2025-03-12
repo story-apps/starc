@@ -4,6 +4,8 @@
 #include "../text/screenplay_text_model.h"
 #include "screenplay_series_information_model.h"
 
+#include <business_layer/chronometry/chronometer.h>
+
 
 namespace BusinessLayer {
 
@@ -43,6 +45,7 @@ void ScreenplaySeriesEpisodesModel::Implementation::updateEpisodesSettings()
         episodeInformationModel->setShowSceneNumbersOnRight(
             informationModel->showSceneNumbersOnRight());
         episodeInformationModel->setShowDialoguesNumbers(informationModel->showDialoguesNumbers());
+        episodeInformationModel->setChronometerOptions(informationModel->chronometerOptions());
     }
 }
 
@@ -85,6 +88,8 @@ void ScreenplaySeriesEpisodesModel::setInformationModel(ScreenplaySeriesInformat
                 &ScreenplaySeriesInformationModel::showSceneNumbersOnRightChanged, this,
                 [this] { d->updateEpisodesSettings(); });
         connect(d->informationModel, &ScreenplaySeriesInformationModel::showDialoguesNumbersChanged,
+                this, [this] { d->updateEpisodesSettings(); });
+        connect(d->informationModel, &ScreenplaySeriesInformationModel::chronometerOptionsChanged,
                 this, [this] { d->updateEpisodesSettings(); });
     }
 }

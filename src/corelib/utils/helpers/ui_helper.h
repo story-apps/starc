@@ -4,6 +4,7 @@
 
 #include <corelib_global.h>
 
+class QHBoxLayout;
 class QScrollArea;
 class QWidget;
 class SpellCheckTextEdit;
@@ -12,6 +13,11 @@ class SpellCheckTextEdit;
 class CORE_LIBRARY_EXPORT UiHelper
 {
 public:
+    /**
+     * @brief Создать и подготовить лейаут
+     */
+    static QHBoxLayout* makeHBoxLayout();
+
     /**
      * @brief Настроить проверку орфографии для редактора текста
      */

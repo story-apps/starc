@@ -5,6 +5,8 @@
 
 namespace BusinessLayer {
 
+struct ChronometerOptions;
+
 /**
  * @brief Модель информации о сценарии сериала
  */
@@ -89,6 +91,10 @@ public:
     bool showDialoguesNumbers() const;
     void setShowDialoguesNumbers(bool _show);
     Q_SIGNAL void showDialoguesNumbersChanged(bool _show);
+
+    ChronometerOptions chronometerOptions() const;
+    void setChronometerOptions(const ChronometerOptions& _options);
+    Q_SIGNAL void chronometerOptionsChanged(const ChronometerOptions& _options);
 
     /**
      * @brief Список персонажей отсортированных в порядке важном для разбивки этого сценария

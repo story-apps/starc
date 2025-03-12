@@ -299,7 +299,7 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
     layout->setContentsMargins({});
     layout->setSpacing(0);
     layout->addWidget(screenplayInfo);
-    layout->addStretch();
+    layout->addStretch(1);
     contentWidget->setLayout(layout);
 }
 

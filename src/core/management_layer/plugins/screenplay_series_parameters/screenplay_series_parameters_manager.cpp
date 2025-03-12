@@ -2,6 +2,7 @@
 
 #include "screenplay_series_parameters_view.h"
 
+#include <business_layer/chronometry/chronometer.h>
 #include <business_layer/model/screenplay/series/screenplay_series_information_model.h>
 
 
@@ -113,6 +114,7 @@ void ScreenplaySeriesParametersManager::Implementation::setModelForView(
         _view->setShowSceneNumbersOnLeft(model->showSceneNumbersOnLeft());
         _view->setShowSceneNumbersOnRight(model->showSceneNumbersOnRight());
         _view->setShowDialoguesNumbers(model->showDialoguesNumbers());
+        _view->setChronometerOptions(model->chronometerOptions());
 
         connect(model, &BusinessLayer::ScreenplaySeriesInformationModel::headerChanged, _view,
                 &Ui::ScreenplaySeriesParametersView::setHeader);
@@ -140,6 +142,8 @@ void ScreenplaySeriesParametersManager::Implementation::setModelForView(
         connect(model,
                 &BusinessLayer::ScreenplaySeriesInformationModel::showDialoguesNumbersChanged,
                 _view, &Ui::ScreenplaySeriesParametersView::setShowDialoguesNumbers);
+        connect(model, &BusinessLayer::ScreenplaySeriesInformationModel::chronometerOptionsChanged,
+                _view, &Ui::ScreenplaySeriesParametersView::setChronometerOptions);
         //
         connect(_view, &Ui::ScreenplaySeriesParametersView::headerChanged, model,
                 &BusinessLayer::ScreenplaySeriesInformationModel::setHeader);
@@ -161,6 +165,8 @@ void ScreenplaySeriesParametersManager::Implementation::setModelForView(
                 &BusinessLayer::ScreenplaySeriesInformationModel::setShowSceneNumbersOnRight);
         connect(_view, &Ui::ScreenplaySeriesParametersView::showDialoguesNumbersChanged, model,
                 &BusinessLayer::ScreenplaySeriesInformationModel::setShowDialoguesNumbers);
+        connect(_view, &Ui::ScreenplaySeriesParametersView::chronometerOptionsChanged, model,
+                &BusinessLayer::ScreenplaySeriesInformationModel::setChronometerOptions);
     }
 }
 

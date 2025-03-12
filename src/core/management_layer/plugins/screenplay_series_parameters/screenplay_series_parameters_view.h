@@ -4,6 +4,10 @@
 #include <ui/widgets/widget/widget.h>
 
 
+namespace BusinessLayer {
+struct ChronometerOptions;
+}
+
 namespace Ui {
 
 class ScreenplaySeriesParametersView : public Widget, public IDocumentView
@@ -51,6 +55,9 @@ public:
 
     void setShowDialoguesNumbers(bool _show);
     Q_SIGNAL void showDialoguesNumbersChanged(bool _show);
+
+    void setChronometerOptions(const BusinessLayer::ChronometerOptions& _options);
+    Q_SIGNAL void chronometerOptionsChanged(const BusinessLayer::ChronometerOptions& _options);
 
 protected:
     /**
