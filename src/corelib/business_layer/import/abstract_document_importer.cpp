@@ -540,11 +540,14 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
             //
             // Персонаж
             // 1. В верхнем регистре
+            // 2. Предыдущий блок - не персонаж
+            // 3. Есть отступ сверху
             //
             else if ((textIsUppercase
                       || blockTextWithoutParentheses
                           == TextHelper::smartToUpper(blockTextWithoutParentheses))
-                     && _lastBlockType != TextParagraphType::Character) {
+                     && _lastBlockType != TextParagraphType::Character
+                     && blockFormat.topMargin() != 0) {
                 blockType = TextParagraphType::Character;
             }
             //
