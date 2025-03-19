@@ -507,6 +507,8 @@ ImportDialog::ImportDialog(const QStringList& _importFilePaths, QWidget* _parent
     // Правая сторона
     //
     QVBoxLayout* rightLayout = new QVBoxLayout;
+    rightLayout->setContentsMargins({});
+    rightLayout->setSpacing(0);
     rightLayout->addWidget(d->documentType);
     rightLayout->addWidget(d->documentsTitle);
     rightLayout->addWidget(d->importCharacters);
@@ -777,18 +779,18 @@ void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     d->updateDialogWidth();
 
-    auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
-    titleMargins.setTop(Ui::DesignSystem::layout().px8());
-    titleMargins.setBottom(0);
-
     d->tree->setBackgroundColor(DesignSystem::color().primary());
     d->tree->setTextColor(DesignSystem::color().onPrimary());
 
+    auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
+    titleMargins.setTop(Ui::DesignSystem::layout().px16());
+    titleMargins.setBottom(Ui::DesignSystem::layout().px4());
     d->filesCountTitle->setContentsMargins(titleMargins);
     d->filesCountTitle->setBackgroundColor(Ui::DesignSystem::color().background());
     d->filesCountTitle->setTextColor(Ui::DesignSystem::color().onBackground());
 
     d->optionsWidget->setBackgroundColor(DesignSystem::color().background());
+    d->optionsWidget->layout()->setContentsMargins(0, Ui::DesignSystem::layout().px(32), 0, 0);
 
     for (auto label : { d->documentsTitle, d->textTitle }) {
         label->setContentsMargins(titleMargins);
@@ -829,7 +831,6 @@ void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
     }
 
-    contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
     d->bottomLayout->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
                   Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16())
