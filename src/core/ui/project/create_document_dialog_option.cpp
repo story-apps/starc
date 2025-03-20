@@ -19,6 +19,7 @@ public:
 
 
     bool isChecked = false;
+    bool isBlocked = false;
     Domain::DocumentObjectType documentType;
     QString documentName;
 
@@ -75,6 +76,22 @@ void CreateDocumentDialogOption::setChecked(bool _checked)
     emit checkedChanged(d->isChecked);
 }
 
+bool CreateDocumentDialogOption::isBlocked() const
+{
+    return d->isBlocked;
+}
+
+void CreateDocumentDialogOption::setBlocked(bool _blocked)
+{
+    if (d->isBlocked == _blocked) {
+        return;
+    }
+
+    d->isBlocked = _blocked;
+    update();
+    emit blockedChanged(d->isBlocked);
+}
+
 QSize CreateDocumentDialogOption::sizeHint() const
 {
     return QSize(
@@ -107,6 +124,19 @@ void CreateDocumentDialogOption::paintEvent(QPaintEvent* _event)
                                   : backgroundColor());
     painter.drawRoundedRect(contentsRect(), Ui::DesignSystem::card().borderRadius(),
                             Ui::DesignSystem::card().borderRadius());
+
+    //
+    // Замок
+    //
+    if (d->isBlocked) {
+        const auto iconSize = DesignSystem::layout().px16();
+        const QRectF iconRect(contentsRect().right() - DesignSystem::layout().px12() - iconSize,
+                              contentsRect().top() + DesignSystem::layout().px12(), iconSize,
+                              iconSize);
+        painter.setPen(DesignSystem::color().accent());
+        painter.setFont(Ui::DesignSystem::font().iconsSmall());
+        painter.drawText(iconRect, Qt::AlignHCenter | Qt::AlignBottom, u8"\U000F033E");
+    }
 
     //
     // Иконка

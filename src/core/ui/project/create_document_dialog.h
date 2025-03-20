@@ -31,6 +31,11 @@ public:
     void saveSelectedType();
 
     /**
+     * @brief Задать список документов недоступных для создания
+     */
+    void setBlockedDocumentTypes(const QVector<Domain::DocumentObjectType>& _blockedDocumentTypes);
+
+    /**
      * @brief Выбрать документ заданного типа
      */
     void setDocumentType(Domain::DocumentObjectType _type);
@@ -62,8 +67,13 @@ public:
 
 signals:
     /**
-     * @brief Пользователь хочет создать документ заданного типа с заданным именем (опционально: из
-     * заданного файла)
+     * @brief Пользователь нажал кнопку обновить до ПРО
+     */
+    void upgradeToProPressed();
+
+    /**
+     * @brief Пользователь хочет создать документ заданного типа с заданным именем
+     *        (опционально: из заданного файла)
      */
     void createPressed(Domain::DocumentObjectType _type, const QString& _name,
                        const QString& _filePath);

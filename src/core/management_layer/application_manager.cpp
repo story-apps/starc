@@ -411,6 +411,10 @@ ApplicationManager::Implementation::Implementation(ApplicationManager* _q)
     menuView->setImportShortcut(shortcutsManager->importShortcut());
     menuView->setCurrentDocumentExportShortcut(shortcutsManager->currentDocumentExportShortcut());
 
+#ifdef CLOUD_SERVICE_MANAGER
+    projectManager->setBlockedDocumentTypes(cloudServiceManager->blockedDocumentTypes());
+#endif
+
     settingsManager->setThemeSetupView(applicationView->themeSetupView());
 
 #ifdef Q_OS_MACOS
@@ -3111,6 +3115,8 @@ void ApplicationManager::initConnections()
                          ? Domain::SubscriptionType::Undefined
                          : _accountInfo.subscriptions.constLast().type));
                 d->projectManager->checkAvailabilityToEdit();
+                d->projectManager->setBlockedDocumentTypes(
+                    d->cloudServiceManager->blockedDocumentTypes());
                 d->projectManager->setAvailableCredits(_accountInfo.credits);
             });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::giftSent, d->accountManager.data(),

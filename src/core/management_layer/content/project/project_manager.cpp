@@ -353,6 +353,11 @@ public:
     QShortcut* splitScreenShortcut = nullptr;
 
     /**
+     * @brief Диалог добавления нового документа
+     */
+    QPointer<Ui::CreateDocumentDialog> createDocumentDialog;
+
+    /**
      * @brief Модели списка документов
      */
     BusinessLayer::StructureModel* projectStructureModel = nullptr;
@@ -407,6 +412,11 @@ public:
      * @brief Список документов и разрешения на работу с ними
      */
     QHash<QUuid, DocumentEditingMode> editingPermissions;
+
+    /**
+     * @brief Список типов документов заблокированных для добавления
+     */
+    QVector<Domain::DocumentObjectType> blockedDocumentTypes;
 
     /**
      * @brief Список документов и таймеров для полной синхронизации
@@ -856,30 +866,37 @@ DocumentEditingMode ProjectManager::Implementation::documentEditingMode(
 
 void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _type)
 {
+    if (!createDocumentDialog.isNull()) {
+        return;
+    }
+
     const auto currentItemIndex
         = projectStructureProxyModel->mapToSource(navigator->currentIndex());
     const auto currentItem = projectStructureModel->itemForIndex(currentItemIndex);
 
-    auto dialog = new Ui::CreateDocumentDialog(topLevelWidget);
+    createDocumentDialog = new Ui::CreateDocumentDialog(topLevelWidget);
+    createDocumentDialog->setBlockedDocumentTypes(blockedDocumentTypes);
     if (currentItem->type() == Domain::DocumentObjectType::Folder) {
-        dialog->setInsertionParent(currentItem->name());
+        createDocumentDialog->setInsertionParent(currentItem->name());
     }
     if (_type != Domain::DocumentObjectType::Undefined) {
-        dialog->setDocumentType(_type);
+        createDocumentDialog->setDocumentType(_type);
     } else if (currentItem->type() == Domain::DocumentObjectType::Characters) {
-        dialog->setDocumentType(Domain::DocumentObjectType::Character);
+        createDocumentDialog->setDocumentType(Domain::DocumentObjectType::Character);
     } else if (currentItem->type() == Domain::DocumentObjectType::Locations) {
-        dialog->setDocumentType(Domain::DocumentObjectType::Location);
+        createDocumentDialog->setDocumentType(Domain::DocumentObjectType::Location);
     } else if (currentItem->type() == Domain::DocumentObjectType::Worlds) {
-        dialog->setDocumentType(Domain::DocumentObjectType::World);
+        createDocumentDialog->setDocumentType(Domain::DocumentObjectType::World);
     } else {
-        dialog->setDocumentType(dialog->lastSelectedType());
+        createDocumentDialog->setDocumentType(createDocumentDialog->lastSelectedType());
     }
 
-    connect(dialog, &Ui::CreateDocumentDialog::createPressed, navigator,
-            [this, sourceType = _type, currentItemIndex, dialog](Domain::DocumentObjectType _type,
-                                                                 const QString& _name,
-                                                                 const QString& _importFilePath) {
+    connect(createDocumentDialog, &Ui::CreateDocumentDialog::upgradeToProPressed, q,
+            &ProjectManager::upgradeToProRequested);
+    connect(createDocumentDialog, &Ui::CreateDocumentDialog::createPressed, navigator,
+            [this, sourceType = _type, currentItemIndex](Domain::DocumentObjectType _type,
+                                                         const QString& _name,
+                                                         const QString& _importFilePath) {
                 if (_type == Domain::DocumentObjectType::Character) {
                     auto document = DataStorageLayer::StorageFacade::documentStorage()->document(
                         Domain::DocumentObjectType::Characters);
@@ -887,7 +904,8 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                     auto charactersModel = qobject_cast<BusinessLayer::CharactersModel*>(model);
                     Q_ASSERT(charactersModel);
                     if (charactersModel->exists(_name)) {
-                        dialog->setNameError(tr("Character with this name already exists"));
+                        createDocumentDialog->setNameError(
+                            tr("Character with this name already exists"));
                         return;
                     }
                 } else if (_type == Domain::DocumentObjectType::Location) {
@@ -897,7 +915,8 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                     auto locationsModel = qobject_cast<BusinessLayer::LocationsModel*>(model);
                     Q_ASSERT(locationsModel);
                     if (locationsModel->exists(_name)) {
-                        dialog->setNameError(tr("Location with this name already exists"));
+                        createDocumentDialog->setNameError(
+                            tr("Location with this name already exists"));
                         return;
                     }
                 } else if (_type == Domain::DocumentObjectType::World) {
@@ -907,7 +926,8 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                     auto worldsModel = qobject_cast<BusinessLayer::WorldsModel*>(model);
                     Q_ASSERT(worldsModel);
                     if (worldsModel->exists(_name)) {
-                        dialog->setNameError(tr("World with this name already exists"));
+                        createDocumentDialog->setNameError(
+                            tr("World with this name already exists"));
                         return;
                     }
                 }
@@ -915,8 +935,9 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                 //
                 // Определим индекс родительского элемента, ищем именно папку
                 //
-                auto parentIndex
-                    = dialog->needInsertIntoParent() ? currentItemIndex : currentItemIndex.parent();
+                auto parentIndex = createDocumentDialog->needInsertIntoParent()
+                    ? currentItemIndex
+                    : currentItemIndex.parent();
                 auto parentItem = projectStructureModel->itemForIndex(parentIndex);
                 while (parentIndex.isValid() && parentItem != nullptr
                        && parentItem->type() != Domain::DocumentObjectType::Folder) {
@@ -928,7 +949,7 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                 // Определим индекс элемента для выделения
                 //
                 const auto addedItemIndex = projectStructureModel->addDocument(
-                    _type, _name, parentIndex, {}, true, dialog->episodesAmount());
+                    _type, _name, parentIndex, {}, true, createDocumentDialog->episodesAmount());
                 QModelIndex itemForSelectIndex = addedItemIndex;
                 //
                 // ... в зависимости от типа, выбираем потенциально желаемый к редактированию
@@ -964,13 +985,13 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                 // переиспользовать его при следующем вызове диалога добавления документа
                 //
                 if (sourceType == Domain::DocumentObjectType::Undefined) {
-                    dialog->saveSelectedType();
+                    createDocumentDialog->saveSelectedType();
                 }
 
                 //
                 // Скрываем сам диалог
                 //
-                dialog->hideDialog();
+                createDocumentDialog->hideDialog();
 
                 //
                 // Если был задан файл, посылаем сигнал на импорт
@@ -980,10 +1001,10 @@ void ProjectManager::Implementation::addDocument(Domain::DocumentObjectType _typ
                     emit q->importFileRequested(_importFilePath, item->uuid(), _type);
                 }
             });
-    connect(dialog, &Ui::CreateDocumentDialog::disappeared, dialog,
+    connect(createDocumentDialog, &Ui::CreateDocumentDialog::disappeared, createDocumentDialog,
             &Ui::CreateDocumentDialog::deleteLater);
 
-    dialog->showDialog();
+    createDocumentDialog->showDialog();
 }
 
 void ProjectManager::Implementation::addDocumentToContainer(
@@ -4344,6 +4365,19 @@ void ProjectManager::clearCursors()
 {
     d->collaboratorsToolBar->setCollaborators({});
     d->collaboratorsCursors.clear();
+}
+
+void ProjectManager::setBlockedDocumentTypes(const QVector<Domain::DocumentObjectType>& _types)
+{
+    if (d->blockedDocumentTypes == _types) {
+        return;
+    }
+
+    d->blockedDocumentTypes = _types;
+
+    if (!d->createDocumentDialog.isNull()) {
+        d->createDocumentDialog->setBlockedDocumentTypes(d->blockedDocumentTypes);
+    }
 }
 
 void ProjectManager::setAvailableCredits(int _credits)

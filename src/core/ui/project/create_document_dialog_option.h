@@ -25,11 +25,13 @@ public:
 
     bool isChecked() const;
     void setChecked(bool _checked);
+    Q_SIGNAL void checkedChanged(bool _checked);
+
+    bool isBlocked() const;
+    void setBlocked(bool _blocked);
+    Q_SIGNAL void blockedChanged(bool _blocked);
 
     QSize sizeHint() const override;
-
-signals:
-    void checkedChanged(bool _checked);
 
 protected:
     void paintEvent(QPaintEvent* _event) override;

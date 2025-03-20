@@ -13,6 +13,7 @@
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/names_generator.h>
 #include <utils/helpers/ui_helper.h>
@@ -34,7 +35,7 @@ class CreateDocumentDialog::Implementation
 public:
     explicit Implementation(QWidget* _parent);
 
-    void updateDocumentInfo(Domain::DocumentObjectType _type);
+    void updateDocumentInfo(Domain::DocumentObjectType _type, bool _isBlocked);
 
 
     QScrollArea* content = nullptr;
@@ -54,6 +55,10 @@ public:
     TextField* episodesAmount = nullptr;
     TextField* importFilePath = nullptr;
     CheckBox* insertIntoParent = nullptr;
+
+    Body1Label* blockedFeatureContainer = nullptr;
+    Body1Label* blockedFeatureLabel = nullptr;
+    Button* upgradeToProButton = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
     Button* cancelButton = nullptr;
@@ -75,6 +80,9 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     , episodesAmount(new TextField(_parent))
     , importFilePath(new TextField(_parent))
     , insertIntoParent(new CheckBox(_parent))
+    , blockedFeatureContainer(new Body1Label(_parent))
+    , blockedFeatureLabel(new Body1Label(_parent))
+    , upgradeToProButton(new Button(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
     , createButton(new Button(_parent))
@@ -158,13 +166,21 @@ CreateDocumentDialog::Implementation::Implementation(QWidget* _parent)
     makeEpisodic->hide();
     episodesAmount->hide();
 
+    auto blockedFeaturesLayout = new QVBoxLayout;
+    blockedFeaturesLayout->setContentsMargins({});
+    blockedFeaturesLayout->setSpacing(0);
+    blockedFeaturesLayout->addWidget(blockedFeatureLabel);
+    blockedFeaturesLayout->addWidget(upgradeToProButton, 0, Qt::AlignRight);
+    blockedFeatureContainer->setLayout(blockedFeaturesLayout);
+
     buttonsLayout->setContentsMargins({});
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(cancelButton);
     buttonsLayout->addWidget(createButton);
 }
 
-void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentObjectType _type)
+void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentObjectType _type,
+                                                              bool _isBlocked)
 {
     const QHash<Domain::DocumentObjectType, QString> documenTypeToTitle = {
         { Domain::DocumentObjectType::Folder, tr("Add folder") },
@@ -244,6 +260,20 @@ void CreateDocumentDialog::Implementation::updateDocumentInfo(Domain::DocumentOb
         makeEpisodic->hide();
         episodesAmount->hide();
     }
+
+    if (_isBlocked) {
+        documentName->hide();
+        importFilePath->hide();
+        insertIntoParent->hide();
+        blockedFeatureContainer->show();
+        createButton->setEnabled(false);
+        upgradeToProButton->setFocus();
+    } else {
+        documentName->show();
+        blockedFeatureContainer->hide();
+        createButton->setEnabled(true);
+        documentName->setFocus();
+    }
 }
 
 
@@ -266,6 +296,7 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
     contentsLayout()->addWidget(d->episodesAmount, row++, 1, 1, 1);
     contentsLayout()->addWidget(d->importFilePath, row++, 1, 1, 1);
     contentsLayout()->addWidget(d->insertIntoParent, row++, 1, 1, 1);
+    contentsLayout()->addWidget(d->blockedFeatureContainer, row++, 1, 1, 1);
     contentsLayout()->setRowStretch(row++, 1);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 1, 1, 1);
     contentsLayout()->addWidget(d->content, 0, 0, row, 1);
@@ -285,7 +316,7 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
                     continue;
                 }
 
-                d->updateDocumentInfo(option->documentType());
+                d->updateDocumentInfo(option->documentType(), option->isBlocked());
             }
         });
     }
@@ -318,6 +349,8 @@ CreateDocumentDialog::CreateDocumentDialog(QWidget* _parent)
             setSettingsValue(DataStorageLayer::kProjectImportFolderKey, filePath);
         }
     });
+    connect(d->upgradeToProButton, &Button::clicked, this,
+            &CreateDocumentDialog::upgradeToProPressed);
     connect(d->createButton, &Button::clicked, this, [this] {
         Domain::DocumentObjectType documentType = Domain::DocumentObjectType::Undefined;
         for (auto option : std::as_const(d->options)) {
@@ -427,6 +460,21 @@ void CreateDocumentDialog::saveSelectedType()
     QSettings().setValue(kLastSelectedType, static_cast<int>(documentType));
 }
 
+void CreateDocumentDialog::setBlockedDocumentTypes(
+    const QVector<Domain::DocumentObjectType>& _blockedDocumentTypes)
+{
+    for (auto option : std::as_const(d->options)) {
+        option->setBlocked(_blockedDocumentTypes.contains(option->documentType()));
+    }
+
+    for (auto option : std::as_const(d->options)) {
+        if (option->isChecked()) {
+            d->updateDocumentInfo(option->documentType(), option->isBlocked());
+            break;
+        }
+    }
+}
+
 void CreateDocumentDialog::setDocumentType(Domain::DocumentObjectType _type)
 {
     for (auto option : std::as_const(d->options)) {
@@ -496,7 +544,7 @@ void CreateDocumentDialog::updateTranslations()
     d->title->setText(tr("Add document"));
     for (auto option : std::as_const(d->options)) {
         if (option->isChecked()) {
-            d->updateDocumentInfo(option->documentType());
+            d->updateDocumentInfo(option->documentType(), option->isBlocked());
             break;
         }
     }
@@ -505,6 +553,9 @@ void CreateDocumentDialog::updateTranslations()
     d->episodesAmount->setLabel(tr("Episodes amount"));
     d->importFilePath->setLabel(tr("Choose file for importing"));
     d->importFilePath->setTrailingIconToolTip(tr("Choose file for importing"));
+    d->blockedFeatureLabel->setText(
+        tr("Document can be created only with a PRO or CLOUD version of the app."));
+    d->upgradeToProButton->setText(tr("Upgrade to PRO"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(tr("Create"));
 }
@@ -513,8 +564,8 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    contentsLayout()->setColumnMinimumWidth(1, Ui::DesignSystem::layout().px(299));
-    setContentFixedWidth(Ui::DesignSystem::layout().px(898));
+    contentsLayout()->setColumnMinimumWidth(1, DesignSystem::layout().px(299));
+    setContentFixedWidth(DesignSystem::layout().px(898));
 
     d->optionsContainer->setBackgroundColor(DesignSystem::color().surface());
     d->content->setFixedHeight(DesignSystem::layout().px(556));
@@ -538,41 +589,60 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
                                    DesignSystem::layout().px8(), DesignSystem::layout().px8());
     }
 
-    d->title->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->title->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->title->setBackgroundColor(DesignSystem::color().background());
+    d->title->setTextColor(DesignSystem::color().onBackground());
     d->title->setContentsMargins(DesignSystem::layout().px24(), DesignSystem::layout().px24(),
                                  DesignSystem::layout().px24(), DesignSystem::layout().px16());
 
     for (auto textField : std::vector<TextField*>{ d->documentName, d->importFilePath }) {
-        textField->setTextColor(Ui::DesignSystem::color().onBackground());
-        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+        textField->setTextColor(DesignSystem::color().onBackground());
+        textField->setBackgroundColor(DesignSystem::color().onBackground());
         textField->setCustomMargins(
             { DesignSystem::layout().px24(), DesignSystem::compactLayout().px8(),
               DesignSystem::layout().px24(), DesignSystem::compactLayout().px8() });
     }
 
-    auto documentInfoMargins = Ui::DesignSystem::label().margins().toMargins();
+    auto documentInfoMargins = DesignSystem::label().margins().toMargins();
     documentInfoMargins.setTop(0);
     d->documentInfo->setContentsMargins(documentInfoMargins);
-    d->documentInfo->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->documentInfo->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->documentInfo->setTextColor(DesignSystem::color().onBackground());
+    d->documentInfo->setBackgroundColor(DesignSystem::color().background());
 
-    d->makeEpisodic->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->makeEpisodic->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->episodesAmount->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->episodesAmount->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+    d->makeEpisodic->setTextColor(DesignSystem::color().onBackground());
+    d->makeEpisodic->setBackgroundColor(DesignSystem::color().background());
+    d->episodesAmount->setTextColor(DesignSystem::color().onBackground());
+    d->episodesAmount->setBackgroundColor(DesignSystem::color().onBackground());
 
-    d->insertIntoParent->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->insertIntoParent->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->insertIntoParent->setTextColor(DesignSystem::color().onBackground());
+    d->insertIntoParent->setBackgroundColor(DesignSystem::color().background());
 
-    for (auto button : { d->cancelButton, d->createButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
+    d->blockedFeatureContainer->setContentsMargins(DesignSystem::layout().px24(),
+                                                   DesignSystem::compactLayout().px8(),
+                                                   DesignSystem::layout().px24(), 0);
+    d->blockedFeatureContainer->setBorderRadius(DesignSystem::textField().borderRadius());
+    d->blockedFeatureContainer->setBackgroundColor(
+        ColorHelper::transparent(DesignSystem::color().onBackground(),
+                                 DesignSystem::textField().backgroundActiveColorOpacity()));
+    d->blockedFeatureContainer->layout()->setContentsMargins(
+        DesignSystem::layout().px16(), DesignSystem::layout().px16(), DesignSystem::layout().px8(),
+        DesignSystem::layout().px8());
+    d->blockedFeatureLabel->setContentsMargins(0, 0, DesignSystem::layout().px8(),
+                                               DesignSystem::layout().px24());
+    d->blockedFeatureLabel->setBackgroundColor(Qt::transparent);
+    d->blockedFeatureLabel->setTextColor(DesignSystem::color().onBackground());
+
+    for (auto button : {
+             d->upgradeToProButton,
+             d->cancelButton,
+             d->createButton,
+         }) {
+        button->setBackgroundColor(DesignSystem::color().accent());
+        button->setTextColor(DesignSystem::color().accent());
     }
 
     d->buttonsLayout->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16())
+        QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+                  DesignSystem::layout().px16(), DesignSystem::layout().px16())
             .toMargins());
 }
 

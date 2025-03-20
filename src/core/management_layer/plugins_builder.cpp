@@ -1077,7 +1077,7 @@ void PluginsBuilder::setAvailableCredits(int _credits) const
 
     d->availableCredits = _credits;
     for (auto plugin : std::as_const(d->plugins)) {
-        plugin->setAvailableCredits(_credits);
+        plugin->setAvailableCredits(d->availableCredits);
     }
 }
 

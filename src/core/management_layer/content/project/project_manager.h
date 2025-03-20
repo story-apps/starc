@@ -198,6 +198,11 @@ public:
     void clearCursors();
 
     /**
+     * @brief Задать список заблокированных для добавления типов документов
+     */
+    void setBlockedDocumentTypes(const QVector<Domain::DocumentObjectType>& _types);
+
+    /**
      * @brief Задать кол-во кредитов доступных для использования с ИИ инструментами
      */
     void setAvailableCredits(int _credits);
