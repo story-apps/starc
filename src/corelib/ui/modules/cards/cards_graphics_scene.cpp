@@ -142,6 +142,9 @@ void CardsGraphicsScene::fitToContents()
 
     if (newSceneRect != sceneRect()) {
         setSceneRect(newSceneRect);
+        for (auto view : views()) {
+            view->setSceneRect(newSceneRect);
+        }
     }
 }
 

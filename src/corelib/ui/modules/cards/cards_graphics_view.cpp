@@ -2284,6 +2284,7 @@ void CardsGraphicsView::setModel(QAbstractItemModel* _model)
                     const auto heightDelta = widthDelta;
                     newSceneRect.adjust(-widthDelta, -heightDelta, widthDelta, heightDelta);
                     d->scene->setSceneRect(newSceneRect);
+                    setSceneRect(newSceneRect);
                 },
                 Qt::QueuedConnection);
         }
