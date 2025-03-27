@@ -337,6 +337,11 @@ signals:
                                 const QString& _promptSuffix);
 
     /**
+     * @brief Запрос на импорт файлов
+     */
+    void importRequested(const QVector<QString>& _files);
+
+    /**
      * @brief Запрос на импорт файла
      */
     void importFileRequested(const QString& _filePath, const QUuid& _documentUuid,

@@ -26,6 +26,7 @@
 #include <utils/logging.h>
 
 #include <QFileDialog>
+#include <QSet>
 
 namespace ManagementLayer {
 
@@ -74,19 +75,60 @@ void ImportManager::Implementation::showImportDialogFor(const QStringList& _path
     // не теряли свои файлы
     //
     QStringList docFiles;
+    QStringList otherFiles;
     QStringList filesToImport;
+    const QSet<QString> supportedFileTypes = {
+        ExtensionHelper::kitScenarist(),
+        ExtensionHelper::finalDraft(),
+        ExtensionHelper::finalDraftTemplate(),
+        ExtensionHelper::trelby(),
+        ExtensionHelper::msOfficeOpenXml(),
+        ExtensionHelper::openDocumentXml(),
+        ExtensionHelper::fountain(),
+        ExtensionHelper::celtx(),
+        ExtensionHelper::markdown(),
+        ExtensionHelper::plainText(),
+        ExtensionHelper::pdf(),
+    };
     for (const auto& path : _paths) {
-        if (path.toLower().endsWith(ExtensionHelper::msOfficeBinary())) {
+        const auto fileExtension = path.split('.').constLast().toLower();
+        if (fileExtension == ExtensionHelper::msOfficeBinary()) {
             docFiles.append(path);
-        } else {
+        } else if (supportedFileTypes.contains(fileExtension)) {
             filesToImport.append(path);
+        } else {
+            otherFiles.append(path);
         }
     }
 
-    if (!docFiles.isEmpty() && filesToImport.isEmpty()) {
-        StandardDialog::information(topLevelWidget, tr("File format not supported"),
-                                    tr("Importing from DOC files is not supported. You need to "
-                                       "save the file in DOCX format and repeat the import."));
+    //
+    // Покажем сообщение об ошибке импорта, если не было ни одного поддерживаемого файла
+    //
+    if (filesToImport.isEmpty()) {
+        QString errorMessage;
+        if (!docFiles.isEmpty()) {
+            errorMessage.append(tr("Importing from DOC files is not supported. You need to save "
+                                   "the file in DOCX format and repeat the import."));
+        }
+        if (!otherFiles.isEmpty()) {
+            QString unsupporterExtensions;
+            for (const auto& path : std::as_const(otherFiles)) {
+                if (const auto fileExtension = path.split('.').constLast().toLower();
+                    !unsupporterExtensions.contains(fileExtension)) {
+                    if (!unsupporterExtensions.isEmpty()) {
+                        unsupporterExtensions.append(", ");
+                    }
+                    unsupporterExtensions.append(fileExtension);
+                }
+            }
+
+            if (!errorMessage.isEmpty()) {
+                errorMessage.append("\n\n");
+            }
+            errorMessage.append(tr("Importing from %1 files is not supported.")
+                                    .arg(unsupporterExtensions.toUpper()));
+        }
+        StandardDialog::information(topLevelWidget, tr("File format not supported"), errorMessage);
         return;
     }
 
@@ -146,27 +188,61 @@ void ImportManager::Implementation::showImportDialogFor(const QStringList& _path
     //
     // Прежде чем показать диалог импорта, выведем предупреждение, если нужно
     //
-    if (!docFiles.isEmpty() && !filesToImport.isEmpty()) {
-        QString filesList;
-        for (const auto& file : docFiles) {
-            QFileInfo fileInfo(file);
-            filesList += fileInfo.fileName() + "\n";
+    if ((!docFiles.isEmpty() || !otherFiles.isEmpty()) && !filesToImport.isEmpty()) {
+        QString errorMessage;
+        auto filesList = [](const QStringList& _files) {
+            QString filesList;
+            for (const auto& file : _files) {
+                QFileInfo fileInfo(file);
+                filesList += fileInfo.fileName() + "\n";
+            }
+            return filesList;
+        };
+        if (!docFiles.isEmpty()) {
+            errorMessage.append(tr("Importing from DOC files is not supported. You need to "
+                                   "save the file in DOCX format and repeat the import.\n\nThe "
+                                   "following files will not be imported:\n")
+                                + filesList(docFiles));
         }
-        QString title("File format not supported");
-        QString text(tr("Importing from DOC files is not supported. You need to "
-                        "save the file in DOCX format and repeat the import.\n\nThe "
-                        "following files will not be imported:\n")
-                     + filesList);
+        if (!otherFiles.isEmpty()) {
+            QString unsupporterExtensions;
+            for (const auto& path : std::as_const(otherFiles)) {
+                if (const auto fileExtension = path.split('.').constLast().toLower();
+                    !unsupporterExtensions.contains(fileExtension)) {
+                    if (!unsupporterExtensions.isEmpty()) {
+                        unsupporterExtensions.append(", ");
+                    }
+                    unsupporterExtensions.append(fileExtension);
+                }
+            }
+
+            if (!errorMessage.isEmpty()) {
+                errorMessage.append("\n\n");
+            }
+            errorMessage.append(
+                tr("Importing from %1 files is not supported.\n\nThe following files "
+                   "will not be imported:\n")
+                    .arg(unsupporterExtensions.toUpper())
+                + filesList(otherFiles));
+        }
         auto dialog = new Dialog(topLevelWidget);
         dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
-        dialog->showDialog(title, text,
+        dialog->showDialog(tr("File format not supported"), errorMessage,
                            { { 0, StandardDialog::generateOkTerm(), Dialog::RejectButton } });
+        //
+        // После того, как сообщение о проблемах импорта будет закрыто, запускаем импорт файлов,
+        // которые поддерживаются приложением
+        //
         QObject::connect(dialog, &Dialog::finished, dialog, [this, dialog]() {
             dialog->hideDialog();
             importDialog->showDialog();
         });
         QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
-    } else {
+    }
+    //
+    // А если все файлы могут быть импортированы, то сразу перейдём к процессу импорта
+    //
+    else {
         importDialog->showDialog();
     }
 }
@@ -401,31 +477,34 @@ ImportManager::ImportManager(QObject* _parent, QWidget* _parentWidget)
 
 ImportManager::~ImportManager() = default;
 
-void ImportManager::import()
+void ImportManager::import(const QVector<QString>& _files)
 {
     Log::info("Importing started");
 
-    //
-    // Предоставим пользователю возможность выбрать файл, который он хочет импортировать
-    //
-    const auto projectImportFolder
-        = settingsValue(DataStorageLayer::kProjectImportFolderKey).toString();
-    const auto importFilePaths
-        = QFileDialog::getOpenFileNames(d->topLevelWidget, tr("Choose files to import"),
-                                        projectImportFolder, DialogHelper::filtersForImport());
+    QStringList importFilePaths(_files.begin(), _files.end());
+
     if (importFilePaths.isEmpty()) {
-        return;
+        //
+        // Предоставим пользователю возможность выбрать файл, который он хочет импортировать
+        //
+        const auto projectImportFolder
+            = settingsValue(DataStorageLayer::kProjectImportFolderKey).toString();
+        const auto importFilePaths
+            = QFileDialog::getOpenFileNames(d->topLevelWidget, tr("Choose files to import"),
+                                            projectImportFolder, DialogHelper::filtersForImport());
+        if (importFilePaths.isEmpty()) {
+            return;
+        }
+
+        //
+        // Если файлы были выбраны обновим папку, откуда в следующий раз он предположительно опять
+        // будет импортировать проекты
+        //
+        setSettingsValue(DataStorageLayer::kProjectImportFolderKey, importFilePaths.last());
     }
 
     //
-    // Если файлы были выбраны
-    //
-    // ... обновим папку, откуда в следующий раз он предположительно опять будет импортировать
-    // проекты
-    //
-    setSettingsValue(DataStorageLayer::kProjectImportFolderKey, importFilePaths.last());
-    //
-    // ... и переходим к подготовке импорта
+    // Переходим к подготовке импорта
     //
     d->showImportDialogFor(importFilePaths);
 }

@@ -522,7 +522,6 @@ void ImagesList::paintEvent(QPaintEvent* _event)
         painter.drawText(cardRect, Qt::AlignCenter, u8"\U000F01DA");
         //
         painter.setOpacity(1.0);
-        return;
     }
 }
 

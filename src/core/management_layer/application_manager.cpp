@@ -2844,6 +2844,8 @@ void ApplicationManager::initConnections()
             });
     connect(d->projectManager.data(), &ProjectManager::exportCurrentDocumentRequested, this,
             [this] { d->exportCurrentDocument(); });
+    connect(d->projectManager.data(), &ProjectManager::importRequested, d->importManager.data(),
+            &ImportManager::import);
     connect(d->projectManager.data(), &ProjectManager::importFileRequested, d->importManager.data(),
             &ImportManager::importToDocument);
 

@@ -14,11 +14,13 @@
 
 #include <QAction>
 #include <QContextMenuEvent>
+#include <QMimeData>
 #include <QScrollBar>
 #include <QShortcut>
 #include <QToolTip>
 #include <QUuid>
 #include <QVBoxLayout>
+
 
 namespace Ui {
 
@@ -35,7 +37,15 @@ public:
 
     ProjectNavigator* q = nullptr;
 
+    /**
+     * @brief Возможно ли редактирование
+     */
     bool isReadOnly = false;
+
+    /**
+     * @brief Находится ли виджет в режиме затаскивания файлов
+     */
+    bool isDragActive = false;
 
     Widget* navigatorPage = nullptr;
     Tree* tree = nullptr;
@@ -95,6 +105,7 @@ ProjectNavigator::ProjectNavigator(QWidget* _parent)
     : StackWidget(_parent)
     , d(new Implementation(this))
 {
+    setAcceptDrops(true);
     setAnimationType(AnimationType::Slide);
 
     d->tree->installEventFilter(this);
@@ -269,6 +280,80 @@ void ProjectNavigator::collapseAll()
 QList<QModelIndex> ProjectNavigator::selectedIndexes() const
 {
     return d->tree->selectedIndexes();
+}
+
+void ProjectNavigator::dragEnterEvent(QDragEnterEvent* _event)
+{
+    if (d->isReadOnly) {
+        _event->ignore();
+        return;
+    }
+
+    _event->acceptProposedAction();
+
+    d->isDragActive = true;
+}
+
+void ProjectNavigator::dragMoveEvent(QDragMoveEvent* _event)
+{
+    if (d->isReadOnly) {
+        _event->ignore();
+        return;
+    }
+
+    _event->acceptProposedAction();
+}
+
+void ProjectNavigator::dragLeaveEvent(QDragLeaveEvent* _event)
+{
+    if (d->isReadOnly) {
+        _event->ignore();
+        return;
+    }
+
+    _event->accept();
+    d->isDragActive = false;
+}
+
+void ProjectNavigator::dropEvent(QDropEvent* _event)
+{
+    if (d->isReadOnly) {
+        _event->ignore();
+        return;
+    }
+
+    QVector<QString> droppedFiles;
+    const QMimeData* mimeData = _event->mimeData();
+    //
+    // Смотрим список ссылок
+    //
+    if (mimeData->hasUrls()) {
+        const auto urls = mimeData->urls();
+        for (const auto& url : urls) {
+            //
+            // Оставляем только локальные файлы
+            //
+            if (url.isLocalFile()) {
+                droppedFiles.append(url.toLocalFile());
+            }
+        }
+    }
+
+    //
+    // Удалим все пустые строки
+    //
+    droppedFiles.removeAll({});
+    droppedFiles.removeAll("");
+    //
+    // ... и если, что-то удалось подгрузить, уведомляем клиентов
+    //
+    if (!droppedFiles.isEmpty()) {
+        emit importRequested(droppedFiles);
+    }
+
+    _event->acceptProposedAction();
+
+    d->isDragActive = false;
 }
 
 bool ProjectNavigator::eventFilter(QObject* _watched, QEvent* _event)

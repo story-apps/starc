@@ -1889,6 +1889,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             [this] { d->addDocument(); });
     connect(d->navigator, &Ui::ProjectNavigator::emptyRecycleBinClicked, this,
             [this] { d->emptyRecycleBin(); });
+    connect(d->navigator, &Ui::ProjectNavigator::importRequested, this,
+            &ProjectManager::importRequested);
 
     //
     // Разделение экрана на две панели

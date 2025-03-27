@@ -128,7 +128,22 @@ signals:
      */
     void emptyRecycleBinClicked();
 
+    /**
+     * @brief Пользователь хочет импортировать заданные файлы
+     */
+    void importRequested(const QVector<QString>& _files);
+
 protected:
+    /**
+     * @brief Переопределяются для возможности затаскивания файлов
+     */
+    /** @{ */
+    void dragEnterEvent(QDragEnterEvent* _event) override;
+    void dragMoveEvent(QDragMoveEvent* _event) override;
+    void dragLeaveEvent(QDragLeaveEvent* _event) override;
+    void dropEvent(QDropEvent* _event) override;
+    /** @} */
+
     /**
      * @brief Отлавливаем события отображения тултипа для дерева документов
      */

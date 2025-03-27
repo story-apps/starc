@@ -25,7 +25,7 @@ public:
     /**
      * @brief Запустить процесс импорта данных
      */
-    void import();
+    void import(const QVector<QString>& _files = {});
 
     /**
      * @brief Импортировать все возможные данные из указанного файла
