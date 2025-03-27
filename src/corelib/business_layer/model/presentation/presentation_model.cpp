@@ -92,6 +92,20 @@ void PresentationModel::setImages(const QVector<QPixmap>& _images)
     emit imagesIsSet(d->images);
 }
 
+void PresentationModel::initImageWrapper()
+{
+    connect(imageWrapper(), &AbstractImageWrapper::imageUpdated, this,
+            [this](const QUuid& _uuid, const QPixmap& _image) {
+                for (auto& image : d->images) {
+                    if (image.uuid == _uuid) {
+                        image.image = _image;
+                        emit imagesIsSet(d->images);
+                        break;
+                    }
+                }
+            });
+}
+
 void PresentationModel::initDocument()
 {
     if (document() == nullptr) {
