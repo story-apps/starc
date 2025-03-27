@@ -3684,6 +3684,17 @@ void ProjectManager::storePresentation(const QUuid& _documentUuid, const QString
     //
     const auto model = d->modelsFacade.modelFor(presentationItem->uuid());
     const auto presentationModel = qobject_cast<BusinessLayer::PresentationModel*>(model);
+    //
+    // ... но предварительно убедимся, что модель подключена к менеджеру презентаций
+    //
+    {
+        const auto documentMimeType = Domain::mimeTypeFor(presentationItem->type());
+        const auto editorsInfo
+            = d->pluginsBuilder.editorsInfoFor(documentMimeType, d->isProjectRemote);
+        d->pluginsBuilder.initPlugin(editorsInfo.constFirst().mimeType);
+        auto plugin = d->pluginsBuilder.plugin(editorsInfo.constFirst().mimeType);
+        plugin->configureModelProcessing(presentationModel);
+    }
     emit presentationModel->downloadPresentationRequested(_presentationFilePath);
 }
 

@@ -339,6 +339,11 @@ class PluginsBuilder::Implementation
 {
 public:
     /**
+     * @brief Инициировать плагин заданного типа
+     */
+    bool initPlugin(const QString& _mimeType);
+
+    /**
      * @brief Активировать плагин заданного типа указанной моделью
      */
     Ui::IDocumentView* activatePlugin(const QString& _mimeType,
@@ -365,74 +370,86 @@ public:
     int availableCredits = 0;
 };
 
+bool PluginsBuilder::Implementation::initPlugin(const QString& _mimeType)
+{
+    if (plugins.contains(_mimeType)) {
+        return true;
+    }
+
+    //
+    // Смотрим папку с данными приложения на компе
+    // NOTE: В Debug-режим работает с папкой сборки приложения
+    //
+    // TODO: Когда дорастём включить этот функционал, плюс продумать, как быть в режиме
+    // разработки
+    //
+    const QString pluginsDirName = "plugins";
+    QDir pluginsDir(
+        //#ifndef QT_NO_DEBUG
+        QApplication::applicationDirPath()
+        //#else
+        //                    QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+        //#endif
+    );
+
+#if defined(Q_OS_MAC)
+    pluginsDir.cdUp();
+#endif
+
+    //
+    // Если папки с плагинами нет, идём лесом
+    //
+    if (!pluginsDir.cd(pluginsDirName)) {
+        return false;
+    }
+
+    //
+    // Подгружаем плагин
+    //
+    const QString extensionFilter =
+#ifdef Q_OS_WIN
+        ".dll";
+#elif defined(Q_OS_LINUX)
+        ".so";
+#elif defined(Q_OS_MAC)
+        ".dylib";
+#else
+        "";
+#endif
+    const QStringList libCorePluginEntries
+        = pluginsDir.entryList({ kMimeToPlugin.value(_mimeType) + extensionFilter }, QDir::Files);
+    if (libCorePluginEntries.isEmpty()) {
+        qCritical() << "Plugin isn't found for mime-type:" << _mimeType;
+        return false;
+    }
+    if (libCorePluginEntries.size() > 1) {
+        qCritical() << "Found more than 1 plugins for mime-type:" << _mimeType;
+        return false;
+    }
+
+    const auto pluginPath = libCorePluginEntries.first();
+    QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(pluginPath));
+    QObject* pluginObject = pluginLoader.instance();
+    if (pluginObject == nullptr) {
+        qDebug() << pluginLoader.errorString();
+    }
+
+    auto plugin = qobject_cast<ManagementLayer::IDocumentManager*>(pluginObject);
+    plugin->setAvailableCredits(availableCredits);
+    plugins.insert(_mimeType, plugin);
+
+    return true;
+}
+
 Ui::IDocumentView* PluginsBuilder::Implementation::activatePlugin(
     const QString& _mimeType, BusinessLayer::AbstractModel* _model, ViewType _type)
 {
     //
-    // Если плагин ещё не был загружен, загружаем его
+    // Инициилизируем плагин
     //
-    if (!plugins.contains(_mimeType)) {
-        //
-        // Смотрим папку с данными приложения на компе
-        // NOTE: В Debug-режим работает с папкой сборки приложения
-        //
-        // TODO: Когда дорастём включить этот функционал, плюс продумать, как быть в режиме
-        // разработки
-        //
-        const QString pluginsDirName = "plugins";
-        QDir pluginsDir(
-            //#ifndef QT_NO_DEBUG
-            QApplication::applicationDirPath()
-            //#else
-            //                    QStandardPaths::writableLocation(QStandardPaths::DataLocation)
-            //#endif
-        );
-
-#if defined(Q_OS_MAC)
-        pluginsDir.cdUp();
-#endif
-
-        //
-        // Если папки с плагинами нет, идём лесом
-        //
-        if (!pluginsDir.cd(pluginsDirName)) {
-            return nullptr;
-        }
-
-        //
-        // Подгружаем плагин
-        //
-        const QString extensionFilter =
-#ifdef Q_OS_WIN
-            ".dll";
-#elif defined(Q_OS_LINUX)
-            ".so";
-#elif defined(Q_OS_MAC)
-            ".dylib";
-#else
-            "";
-#endif
-        const QStringList libCorePluginEntries = pluginsDir.entryList(
-            { kMimeToPlugin.value(_mimeType) + extensionFilter }, QDir::Files);
-        if (libCorePluginEntries.isEmpty()) {
-            qCritical() << "Plugin isn't found for mime-type:" << _mimeType;
-            return nullptr;
-        }
-        if (libCorePluginEntries.size() > 1) {
-            qCritical() << "Found more than 1 plugins for mime-type:" << _mimeType;
-            return nullptr;
-        }
-
-        const auto pluginPath = libCorePluginEntries.first();
-        QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(pluginPath));
-        QObject* pluginObject = pluginLoader.instance();
-        if (pluginObject == nullptr) {
-            qDebug() << pluginLoader.errorString();
-        }
-
-        auto plugin = qobject_cast<ManagementLayer::IDocumentManager*>(pluginObject);
-        plugin->setAvailableCredits(availableCredits);
-        plugins.insert(_mimeType, plugin);
+    const auto isPluginInitialized = initPlugin(_mimeType);
+    if (!isPluginInitialized) {
+        return nullptr;
     }
 
     //
@@ -487,6 +504,11 @@ PluginsBuilder::PluginsBuilder()
 }
 
 PluginsBuilder::~PluginsBuilder() = default;
+
+bool PluginsBuilder::initPlugin(const QString& _mimeType) const
+{
+    return d->initPlugin(_mimeType);
+}
 
 IDocumentManager* PluginsBuilder::plugin(const QString& _mimeType) const
 {

@@ -33,6 +33,11 @@ public:
     ~PluginsBuilder();
 
     /**
+     * @brief Инициировать плагин для документов заданного типа
+     */
+    bool initPlugin(const QString& _mimeType) const;
+
+    /**
      * @brief Получить менеджер документа заданного типа
      */
     IDocumentManager* plugin(const QString& _mimeType) const;

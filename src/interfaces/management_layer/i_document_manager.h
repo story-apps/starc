@@ -52,6 +52,13 @@ public:
     }
 
     /**
+     * @brief Добавить модель в плагин для необходимой внутренней обработки
+     */
+    virtual void configureModelProcessing(BusinessLayer::AbstractModel*)
+    {
+    }
+
+    /**
      * @brief Представление документа для основного окна приложения
      */
     virtual Ui::IDocumentView* view() = 0;
