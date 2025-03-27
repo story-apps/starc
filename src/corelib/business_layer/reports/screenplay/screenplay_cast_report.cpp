@@ -277,6 +277,12 @@ void ScreenplayCastReport::build(QAbstractItemModel* _model)
     switch (d->sortBy) {
     default:
     case 0: {
+        std::sort(charactersSorted.begin(), charactersSorted.end(),
+                  [charactersOrder](const QPair<QString, CharacterData>& _lhs,
+                                    const QPair<QString, CharacterData>& _rhs) {
+                      return charactersOrder.indexOf(_lhs.first)
+                          < charactersOrder.indexOf(_rhs.first);
+                  });
         break;
     }
 
