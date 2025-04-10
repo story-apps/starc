@@ -25,8 +25,9 @@
 
 
 namespace {
+const QSizeF kCoverSize(5.4, 8);
 const QString kImagesPathKey = QLatin1String("widgets/image-files-path");
-}
+} // namespace
 
 class ImageCard::Implementation
 {
@@ -163,7 +164,7 @@ void ImageCard::Implementation::cropImage(const QPixmap& _image)
 {
     auto dlg = new ImageCroppingDialog(q->window());
     dlg->setImage(_image);
-    dlg->setImageProportion(q->size());
+    dlg->setImageProportion(kCoverSize);
     dlg->setImageProportionFixed(true);
     dlg->setImageCroppingText(imageCroppingText);
     connect(dlg, &ImageCroppingDialog::disappeared, dlg, &ImageCroppingDialog::deleteLater);
