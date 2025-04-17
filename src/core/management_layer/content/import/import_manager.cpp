@@ -489,7 +489,7 @@ void ImportManager::import(const QVector<QString>& _files)
         //
         const auto projectImportFolder
             = settingsValue(DataStorageLayer::kProjectImportFolderKey).toString();
-        const auto importFilePaths
+        importFilePaths
             = QFileDialog::getOpenFileNames(d->topLevelWidget, tr("Choose files to import"),
                                             projectImportFolder, DialogHelper::filtersForImport());
         if (importFilePaths.isEmpty()) {
