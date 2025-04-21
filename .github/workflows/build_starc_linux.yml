@@ -53,7 +53,7 @@ jobs:
         shell: bash
         run: |
           sudo apt update
-          sudo apt install libgstreamer-plugins-base1.0-0 cmake make pkg-config libx11-dev xcb libx11-xcb-dev libxkbcommon-x11-0 libxkbcommon-dev libgtk-3-dev sassc
+          sudo apt install libgstreamer-plugins-base1.0-0 cmake make pkg-config libx11-dev xcb libx11-xcb-dev libxkbcommon-x11-0 libxkbcommon-dev libgtk-3-dev sassc libfuse2
 
       - name: Install Adwaita-qt
         run: |
