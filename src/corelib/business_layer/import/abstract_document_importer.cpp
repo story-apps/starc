@@ -28,12 +28,22 @@ const QRegularExpression kPlaceContainsChecker(
  * @brief Регулярное выражение для определения строки, начинающейся с номера
  */
 const QRegularExpression kStartFromNumberChecker(
-    "^([\\d]{1,}[\\d\\S]{0,})([.]|[-])(([\\d\\S]{1,})([.]|)|) ");
+    "^([\\d]{1,}[\\d\\S]{0,})([.]|[-]|)(([\\d\\S]{1,})([.]|)|) [^\\d]");
+
+/**
+ * @brief Регулярное выражение для определения служебных блоков на разрывах страниц
+ */
+const QRegularExpression kMoreChecker("^[(](MORE|ДАЛЬШЕ)[)]");
+
+/**
+ * @brief Регулярное выражение для определения номера страницы
+ */
+const QRegularExpression kPageNumberChecker("^([\\d]{1,})([.]|)$");
 
 /**
  * @brief Регулярное выражение для определения блока "Титр" по наличию ключевых слов
  */
-const QRegularExpression kTitleChecker("(^|[^\\S])(TITLE|ТИТР)([:] )");
+const QRegularExpression kTitleChecker("(^|[^\\S])(SUPER TITLE|TITLE|ТИТР)([:] )");
 
 /**
  * @brief Регулярное выражение для определения текста в скобках
@@ -229,7 +239,11 @@ AbstractImporter::Documents AbstractDocumentImporter::importDocuments(
                 paragraphText = TextHelper::smartToUpper(paragraphText);
                 const auto match = kStartFromNumberChecker.match(paragraphText);
                 if (match.hasMatch()) {
-                    paragraphText = paragraphText.mid(match.capturedEnd());
+                    //
+                    // ... вычитаем единицу, т.к. регулярка залезает на один символ в текст, чтобы
+                    //     удостовериться, что там идёт именно текст, а не цыфры
+                    //
+                    paragraphText = paragraphText.mid(match.capturedEnd() - 1);
                 }
             }
 
@@ -340,9 +354,18 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
         cursor.movePosition(QTextCursor::EndOfBlock);
 
         //
+        // Если в блоке номер страницы, или служебный блок на разрыве страниц
+        //
+        const auto blockText = cursor.block().text().simplified();
+        if (blockText.contains(kPageNumberChecker) || blockText.contains(kMoreChecker)) {
+            //
+            // ... то просто пропускаем его
+            //
+        }
+        //
         // Если в блоке есть текст
         //
-        if (!cursor.block().text().simplified().isEmpty()) {
+        else if (!blockText.isEmpty()) {
             //
             // ... определяем тип
             //
@@ -354,12 +377,14 @@ QString AbstractDocumentImporter::parseDocument(const ImportOptions& _options,
             //
             QString sceneNumber;
             if (blockType == TextParagraphType::SceneHeading) {
-                const auto match
-                    = kStartFromNumberChecker.match(cursor.block().text().simplified());
+                const auto match = kStartFromNumberChecker.match(blockText);
                 if (match.hasMatch()) {
                     cursor.movePosition(QTextCursor::StartOfBlock);
+                    //
+                    // ... вычитаем единицу, т.к. регулярка залезает на один символ в текст
+                    //
                     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor,
-                                        match.capturedEnd());
+                                        match.capturedEnd() - 1);
                     if (cursor.hasSelection()) {
                         if (shouldKeepSceneNumbers(_options)) {
                             sceneNumber = cursor.selectedText().trimmed();
@@ -517,11 +542,10 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
             || blockTextUppercase.contains(kStartFromNumberChecker)) {
             blockType = TextParagraphType::SceneHeading;
         }
-
         //
         // Блоки текста посередине
         //
-        if (isCentered) {
+        else if (isCentered) {
             //
             // Переход
             // 1. в верхнем регистре
@@ -586,13 +610,13 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
                     blockType = TextParagraphType::SceneCharacters;
                 }
                 //
-                // Заголовок сцены
+                // Кадр
                 // 1. в верхнем регистре
                 // 2. не имеет отступов
                 // 3. выровнен по левому краю
                 //
                 else if (blockFormat.alignment().testFlag(Qt::AlignLeft) && !isCentered) {
-                    blockType = TextParagraphType::SceneHeading;
+                    blockType = TextParagraphType::Shot;
                 }
                 //
                 // Переход
