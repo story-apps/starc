@@ -15,6 +15,7 @@
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QBoxLayout>
 #include <QScrollArea>
@@ -135,7 +136,10 @@ public:
     QHBoxLayout* summarizeButtonsLayout = nullptr;
 
     Page* translatePage = nullptr;
+    RadioButton* translateFreeText = nullptr;
     TextField* translateSourceText = nullptr;
+    RadioButton* translateDocument = nullptr;
+    Body1Label* translateDocumentHintLabel = nullptr;
     ComboBox* translateLanguage = nullptr;
     TextField* translateResultText = nullptr;
     Button* translateInsertButton = nullptr;
@@ -249,7 +253,10 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     , summarizeButtonsLayout(new QHBoxLayout)
     //
     , translatePage(new Page(pages))
+    , translateFreeText(new RadioButton(translatePage))
     , translateSourceText(new TextField(translatePage))
+    , translateDocument(new RadioButton(translatePage))
+    , translateDocumentHintLabel(new Body1Label(translatePage))
     , translateLanguage(new ComboBox(translatePage))
     , translateResultText(new TextField(translatePage))
     , translateInsertButton(new Button(translatePage))
@@ -475,8 +482,14 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     }
 
     {
+        auto translateModeGroup = new RadioButtonGroup(translatePage);
+        translateModeGroup->add(translateFreeText);
+        translateModeGroup->add(translateDocument);
+
+        translateFreeText->setChecked(true);
         translateSourceText->setEnterMakesNewLine(true);
         translateSourceText->setWordCount("0/1000");
+        translateDocumentHintLabel->hide();
         translateLanguage->setPopupMaxItems(10);
         translateResultText->setEnterMakesNewLine(true);
         translateResultText->hide();
@@ -489,21 +502,30 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
 
 
         auto layout = translatePage->contentsLayout;
-        layout->addWidget(translateSourceText);
         layout->addWidget(translateLanguage);
+        {
+            auto typeLayout = UiHelper::makeHBoxLayout();
+            typeLayout->addWidget(translateFreeText);
+            typeLayout->addWidget(translateDocument);
+            typeLayout->addStretch();
+            layout->addLayout(typeLayout);
+        }
+        layout->addWidget(translateSourceText);
+        layout->addWidget(translateDocumentHintLabel);
         layout->addWidget(translateResultText);
         layout->addLayout(translateButtonsLayout);
         layout->addStretch();
     }
 
     {
-        generateSynopsisResultText->setEnterMakesNewLine(true);
-        generateSynopsisResultText->hide();
-        generateSynopsisLengthShort->setChecked(true);
         auto lengthButtonsGroup = new RadioButtonGroup(generateSynopsisPage);
         lengthButtonsGroup->add(generateSynopsisLengthShort);
         lengthButtonsGroup->add(generateSynopsisLengthMedium);
         lengthButtonsGroup->add(generateSynopsisLengthDefault);
+
+        generateSynopsisResultText->setEnterMakesNewLine(true);
+        generateSynopsisResultText->hide();
+        generateSynopsisLengthShort->setChecked(true);
         generateSynopsisButtonsLayout->setContentsMargins({});
         generateSynopsisButtonsLayout->setSpacing(0);
         generateSynopsisButtonsLayout->addStretch();
@@ -548,13 +570,14 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
     }
 
     {
-        generateTextPromptText->setEnterMakesNewLine(true);
-        generateTextPromptText->setWordCount("0/1000");
-        generateTextInsertAtCursor->setChecked(true);
         auto insertButtonsGroup = new RadioButtonGroup(generateTextPage);
         insertButtonsGroup->add(generateTextInsertAtBegin);
         insertButtonsGroup->add(generateTextInsertAtCursor);
         insertButtonsGroup->add(generateTextInsertAtEnd);
+
+        generateTextPromptText->setEnterMakesNewLine(true);
+        generateTextPromptText->setWordCount("0/1000");
+        generateTextInsertAtCursor->setChecked(true);
         generateTextButtonsLayout->setContentsMargins({});
         generateTextButtonsLayout->setSpacing(0);
         generateTextButtonsLayout->addStretch();
@@ -685,8 +708,12 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
         d->translateResultText->hide();
         d->translateInsertButton->hide();
         d->pages->setCurrentWidget(d->translatePage);
-        QTimer::singleShot(d->pages->animationDuration(), d->translateSourceText,
-                           qOverload<>(&TextField::setFocus));
+        QTimer::singleShot(d->pages->animationDuration(), d->translateLanguage,
+                           qOverload<>(&QWidget::setFocus));
+    });
+    connect(d->translateFreeText, &RadioButton::checkedChanged, this, [this] {
+        d->translateSourceText->setVisible(d->translateFreeText->isChecked());
+        d->translateDocumentHintLabel->setVisible(d->translateDocument->isChecked());
     });
     connect(d->openGenerateSynopsisButton, &Button::clicked, this, [this] {
         d->generateSynopsisResultText->hide();
@@ -843,8 +870,14 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
                 updateResultWordCounter(textField);
             });
     connect(d->translateButton, &Button::clicked, this, [this] {
-        emit translateRequested(d->translateSourceText->text(),
-                                d->translateLanguage->currentIndex().data(Qt::UserRole).toString());
+        if (d->translateFreeText->isChecked()) {
+            emit translateRequested(
+                d->translateSourceText->text(),
+                d->translateLanguage->currentIndex().data(Qt::UserRole).toString());
+        } else {
+            emit translateDocumentRequested(
+                d->translateLanguage->currentIndex().data(Qt::UserRole).toString());
+        }
     });
     connect(d->translateInsertButton, &Button::clicked, this,
             [this] { emit insertTextRequested(d->translateResultText->text()); });
@@ -962,6 +995,11 @@ void AiAssistantView::setNovelGenerationAvaiable(bool _available)
 void AiAssistantView::setScriptGenerationAvaiable(bool _available)
 {
     d->openGenerateScriptButton->setVisible(_available);
+}
+
+void AiAssistantView::setTranslationDocumentOption(const QString& _hint)
+{
+    d->translateDocumentHintLabel->setText(_hint);
 }
 
 void AiAssistantView::setGenerationSynopsisOptions(const QString& _hint)
@@ -1149,7 +1187,9 @@ void AiAssistantView::updateTranslations()
     d->summarizeButton->setText(tr("Summarize"));
     d->summarizeInsertButton->setText(tr("Insert"));
     d->translatePage->titleLabel->setText(tr("Translate"));
+    d->translateFreeText->setText(tr("Translate text"));
     d->translateSourceText->setLabel(tr("Text to translate"));
+    d->translateDocument->setText(tr("entire document"));
     d->translateLanguage->setLabel(tr("Translate to"));
     {
         const QHash<QString, QString> languagesToCodes = {
@@ -1459,6 +1499,9 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     for (auto widget : std::list<Widget*>{
+             d->translateFreeText,
+             d->translateDocument,
+             d->translateDocumentHintLabel,
              d->generateSynopsisHintLabel,
              d->generateSynopsisLenghtLabel,
              d->generateSynopsisLengthShort,
@@ -1484,6 +1527,7 @@ void AiAssistantView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         widget->setTextColor(DesignSystem::color().onPrimary());
     }
     for (auto label : {
+             d->translateDocumentHintLabel,
              d->generateSynopsisHintLabel,
              d->generateNovelHintLabel,
              d->generateScriptHintLabel,

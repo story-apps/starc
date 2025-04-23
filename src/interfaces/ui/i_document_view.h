@@ -108,6 +108,9 @@ public:
     virtual void setTranslatedText(const QString& _text)
     {
     }
+    virtual void setTranslatedDocument(const QVector<QString>& _text)
+    {
+    }
     virtual void setGeneratedSynopsis(const QString& _text)
     {
     }

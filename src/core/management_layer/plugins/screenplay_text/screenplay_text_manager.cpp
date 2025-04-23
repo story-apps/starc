@@ -5,6 +5,7 @@
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_scene_item.h>
+#include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/text_template.h>
 #include <data_layer/storage/settings_storage.h>
@@ -206,6 +207,59 @@ Ui::ScreenplayTextView* ScreenplayTextManager::Implementation::createView(
             &ScreenplayTextManager::summarizeTextRequested);
     connect(view, &Ui::ScreenplayTextView::translateTextRequested, q,
             &ScreenplayTextManager::translateTextRequested);
+    connect(view, &Ui::ScreenplayTextView::translateDocumentRequested, q,
+            [this, view](const QString& _languageCode) {
+                const auto model = modelForView(view);
+                QVector<QString> scenes;
+                QString scene;
+                std::function<void(const QModelIndex&)> findGroups;
+                findGroups = [&findGroups, model, &scenes,
+                              &scene](const QModelIndex& _parentItemIndex) {
+                    for (int row = 0; row < model->rowCount(_parentItemIndex); ++row) {
+                        const auto itemIndex = model->index(row, 0, _parentItemIndex);
+                        const auto item = model->itemForIndex(itemIndex);
+                        switch (item->type()) {
+                        case BusinessLayer::TextModelItemType::Folder: {
+                            findGroups(itemIndex);
+                            break;
+                        }
+
+                        case BusinessLayer::TextModelItemType::Group: {
+                            if (!scene.isEmpty()) {
+                                scenes.append(scene);
+                                scene.clear();
+                            }
+
+                            findGroups(itemIndex);
+                            break;
+                        }
+
+                        case BusinessLayer::TextModelItemType::Text: {
+                            const auto textItem
+                                = static_cast<const BusinessLayer::ScreenplayTextModelTextItem*>(
+                                    item);
+                            if (!textItem->text().isEmpty()) {
+                                if (!scene.isEmpty()) {
+                                    scene.append("\n");
+                                }
+                                scene.append(textItem->text());
+                            }
+                            break;
+                        }
+
+                        default: {
+                            break;
+                        }
+                        }
+                    }
+                };
+                findGroups({});
+                if (!scene.isEmpty()) {
+                    scenes.append(scene);
+                }
+                emit q->translateDocumentRequested(scenes, _languageCode,
+                                                   Domain::DocumentObjectType::ScreenplayText);
+            });
     connect(
         view, &Ui::ScreenplayTextView::generateSynopsisRequested, q,
         [this, view](int _maxWordsPerScene) {

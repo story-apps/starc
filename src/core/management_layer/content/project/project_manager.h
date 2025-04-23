@@ -216,6 +216,7 @@ public:
     void setInsertedText(const QString& _text);
     void setSummarizeedText(const QString& _text);
     void setTranslatedText(const QString& _text);
+    void setTranslatedDocument(const QVector<QString>& _text);
     void setGeneratedSynopsis(const QString& _text);
     void setGeneratedText(const QString& _text);
     void setGeneratedImage(const QPixmap& _image);
@@ -327,6 +328,8 @@ signals:
     void insertTextRequested(const QString& _after, const QString& _before);
     void summarizeTextRequested(const QString& _sourceText);
     void translateTextRequested(const QString& _text, const QString& _languageCode);
+    void translateDocumentRequested(const QVector<QString>& _text, const QString& _languageCode,
+                                    Domain::DocumentObjectType _type);
     void generateSynopsisRequested(const QVector<QString>& _scenes, int _maxWordsPerScene,
                                    int _wordsRequired);
     void generateNovelRequested(const QVector<QString>& _scenes, int _wordsRequired);

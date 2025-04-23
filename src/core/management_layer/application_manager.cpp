@@ -3545,6 +3545,8 @@ void ApplicationManager::initConnections()
             d->cloudServiceManager.data(), &CloudServiceManager::aiSummarizeText);
     connect(d->projectManager.data(), &ProjectManager::translateTextRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiTranslateText);
+    connect(d->projectManager.data(), &ProjectManager::translateDocumentRequested,
+            d->cloudServiceManager.data(), &CloudServiceManager::aiTranslateDocument);
     connect(d->projectManager.data(), &ProjectManager::generateSynopsisRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiGenerateSynopsis);
     connect(d->projectManager.data(), &ProjectManager::generateNovelRequested,
@@ -3567,6 +3569,8 @@ void ApplicationManager::initConnections()
             d->projectManager.data(), &ProjectManager::setSummarizeedText);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textTranslated,
             d->projectManager.data(), &ProjectManager::setTranslatedText);
+    connect(d->cloudServiceManager.data(), &CloudServiceManager::documentTranslated,
+            d->projectManager.data(), &ProjectManager::setTranslatedDocument);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::synopsisGenerated,
             d->projectManager.data(), &ProjectManager::setGeneratedSynopsis);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::novelGenerated, this,

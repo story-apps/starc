@@ -62,6 +62,11 @@ public:
     void setScriptGenerationAvaiable(bool _available);
 
     /**
+     * @brief Задать подсказку о переводе документа
+     */
+    void setTranslationDocumentOption(const QString& _hint);
+
+    /**
      * @brief Задать подсказку для генерации синопсиса
      */
     void setGenerationSynopsisOptions(const QString& _hint);
@@ -142,6 +147,7 @@ signals:
      * @brief Пользователь хочет перевести текст на заданный язык
      */
     void translateRequested(const QString& _text, const QString& _language);
+    void translateDocumentRequested(const QString& _language);
 
     /**
      * @brief Пользователь хочет сгенерировать синопсис

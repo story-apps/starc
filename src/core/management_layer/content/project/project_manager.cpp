@@ -4446,6 +4446,14 @@ void ProjectManager::setTranslatedText(const QString& _text)
     }
 }
 
+void ProjectManager::setTranslatedDocument(const QVector<QString>& _text)
+{
+    auto view = d->activeDocumentView();
+    if (view != nullptr) {
+        view->setTranslatedDocument(_text);
+    }
+}
+
 void ProjectManager::setGeneratedSynopsis(const QString& _text)
 {
     auto view = d->activeDocumentView();
@@ -4831,6 +4839,17 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             != invalidSignalIndex) {
             connect(documentManager, SIGNAL(translateTextRequested(QString, QString)), this,
                     SIGNAL(translateTextRequested(QString, QString)), Qt::UniqueConnection);
+        }
+        if (documentManager->metaObject()->indexOfSignal(
+                "translateDocumentRequested(QVector<QString>,QString,Domain::DocumentObjectType)")
+            != invalidSignalIndex) {
+            connect(documentManager,
+                    SIGNAL(translateDocumentRequested(QVector<QString>, QString,
+                                                      Domain::DocumentObjectType)),
+                    this,
+                    SIGNAL(translateDocumentRequested(QVector<QString>, QString,
+                                                      Domain::DocumentObjectType)),
+                    Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal(
                 "generateSynopsisRequested(QVector<QString>,int,int)")

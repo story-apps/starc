@@ -1346,6 +1346,8 @@ ScreenplayTextView::ScreenplayTextView(QWidget* _parent)
             &ScreenplayTextView::summarizeTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
             &ScreenplayTextView::translateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::translateDocumentRequested, this,
+            &ScreenplayTextView::translateDocumentRequested);
     connect(d->aiAssistantView, &AiAssistantView::generateSynopsisRequested, this,
             &ScreenplayTextView::generateSynopsisRequested);
     connect(d->aiAssistantView, &AiAssistantView::generateNovelRequested, this,
@@ -1513,6 +1515,68 @@ void ScreenplayTextView::setSummarizedText(const QString& _text)
 void ScreenplayTextView::setTranslatedText(const QString& _text)
 {
     d->aiAssistantView->setTransateResult(_text);
+}
+
+void ScreenplayTextView::setTranslatedDocument(const QVector<QString>& _text)
+{
+    auto lines = _text;
+    std::function<void(const QModelIndex&)> updateLines;
+    updateLines = [this, &updateLines, &lines](const QModelIndex& _parentItemIndex) {
+        for (int row = 0; row < d->model->rowCount(_parentItemIndex); ++row) {
+            const auto itemIndex = d->model->index(row, 0, _parentItemIndex);
+            const auto item = d->model->itemForIndex(itemIndex);
+            switch (item->type()) {
+            case BusinessLayer::TextModelItemType::Folder: {
+                updateLines(itemIndex);
+                break;
+            }
+
+            case BusinessLayer::TextModelItemType::Group: {
+                updateLines(itemIndex);
+                break;
+            }
+
+            case BusinessLayer::TextModelItemType::Text: {
+                auto textItem = static_cast<BusinessLayer::ScreenplayTextModelTextItem*>(item);
+                if (!textItem->text().isEmpty()) {
+                    textItem->setText(lines.takeFirst());
+                    d->model->updateItem(textItem);
+                }
+                break;
+            }
+
+            default: {
+                break;
+            }
+            }
+        }
+    };
+    updateLines({});
+
+    // const QLatin1String textTranslatingTaskKey("text-translating-task");
+    // TaskBar::addTask(textTranslatingTaskKey);
+    // TaskBar::setTaskTitle(textTranslatingTaskKey, tr("Applying translation"));
+
+    // //
+    // // Заменяем текст сценария на перевод
+    // //
+    // auto cursor = d->textEdit->textCursor();
+    // cursor.movePosition(QTextCursor::Start);
+    // int updatedParagraphs = 0;
+    // for (const auto& line : _text) {
+    //     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    //     cursor.insertText(line);
+    //     cursor.movePosition(QTextCursor::NextCharacter);
+    //     ++updatedParagraphs;
+
+    //     if (updatedParagraphs % 30 == 0) {
+    //         TaskBar::setTaskProgress(textTranslatingTaskKey,
+    //                                  updatedParagraphs * 100 / static_cast<qreal>(_text.size()));
+    //         QCoreApplication::processEvents();
+    //     }
+    // }
+
+    // TaskBar::finishTask(textTranslatingTaskKey);
 }
 
 void ScreenplayTextView::setGeneratedSynopsis(const QString& _text)
@@ -1839,9 +1903,11 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
                 });
 
         //
-        // Обновляем стоимость генерации синопсиса при изменении модели
+        // Обновляем стоимость генерации при изменении модели
         //
         auto updateGenerationPrice = [this] {
+            d->aiAssistantView->setTranslationDocumentOption(
+                tr("Document translation will take %n word(s)", 0, d->model->wordsCount()));
             d->aiAssistantView->setGenerationSynopsisOptions(
                 tr("Synopsis generation will take %n word(s)", 0, d->model->wordsCount()));
             d->aiAssistantView->setGenerationNovelOptions(
