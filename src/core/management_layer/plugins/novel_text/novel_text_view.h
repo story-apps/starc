@@ -39,6 +39,7 @@ public:
     void setInsertedText(const QString& _text) override;
     void setSummarizedText(const QString& _text) override;
     void setTranslatedText(const QString& _text) override;
+    void setTranslatedDocument(const QVector<QString>& _text) override;
     void setGeneratedText(const QString& _text) override;
     /** @} */
 
@@ -118,6 +119,7 @@ signals:
     void insertTextRequested(const QString& _after, const QString& _before);
     void summarizeTextRequested(const QString& _text);
     void translateTextRequested(const QString& _text, const QString& _languageCode);
+    void translateDocumentRequested(const QString& _languageCode);
     void generateScriptRequested();
     void generateTextRequested(const QString& _text);
 

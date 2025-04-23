@@ -162,6 +162,58 @@ Ui::StageplayTextView* StageplayTextManager::Implementation::createView(
             &StageplayTextManager::summarizeTextRequested);
     connect(view, &Ui::StageplayTextView::translateTextRequested, q,
             &StageplayTextManager::translateTextRequested);
+    connect(view, &Ui::StageplayTextView::translateDocumentRequested, q,
+            [this, view](const QString& _languageCode) {
+                const auto model = modelForView(view);
+                QVector<QString> scenes;
+                QString scene;
+                std::function<void(const QModelIndex&)> findGroups;
+                findGroups
+                    = [&findGroups, model, &scenes, &scene](const QModelIndex& _parentItemIndex) {
+                          for (int row = 0; row < model->rowCount(_parentItemIndex); ++row) {
+                              const auto itemIndex = model->index(row, 0, _parentItemIndex);
+                              const auto item = model->itemForIndex(itemIndex);
+                              switch (item->type()) {
+                              case BusinessLayer::TextModelItemType::Folder: {
+                                  findGroups(itemIndex);
+                                  break;
+                              }
+
+                              case BusinessLayer::TextModelItemType::Group: {
+                                  if (!scene.isEmpty()) {
+                                      scenes.append(scene);
+                                      scene.clear();
+                                  }
+
+                                  findGroups(itemIndex);
+                                  break;
+                              }
+
+                              case BusinessLayer::TextModelItemType::Text: {
+                                  const auto textItem
+                                      = static_cast<const BusinessLayer::TextModelTextItem*>(item);
+                                  if (!textItem->text().isEmpty()) {
+                                      if (!scene.isEmpty()) {
+                                          scene.append("\n");
+                                      }
+                                      scene.append(textItem->text());
+                                  }
+                                  break;
+                              }
+
+                              default: {
+                                  break;
+                              }
+                              }
+                          }
+                      };
+                findGroups({});
+                if (!scene.isEmpty()) {
+                    scenes.append(scene);
+                }
+                emit q->translateDocumentRequested(scenes, _languageCode,
+                                                   Domain::DocumentObjectType::StageplayText);
+            });
     connect(view, &Ui::StageplayTextView::generateTextRequested, q, [this](const QString& _text) {
         emit q->generateTextRequested({}, _text, ". Write result in fountain format.");
     });

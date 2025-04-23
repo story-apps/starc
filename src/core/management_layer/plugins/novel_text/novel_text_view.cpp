@@ -1273,6 +1273,8 @@ NovelTextView::NovelTextView(QWidget* _parent)
             &NovelTextView::summarizeTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
             &NovelTextView::translateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::translateDocumentRequested, this,
+            &NovelTextView::translateDocumentRequested);
     connect(d->aiAssistantView, &AiAssistantView::generateScriptRequested, this,
             &NovelTextView::generateScriptRequested);
     connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
@@ -1419,6 +1421,44 @@ void NovelTextView::setSummarizedText(const QString& _text)
 void NovelTextView::setTranslatedText(const QString& _text)
 {
     d->aiAssistantView->setTransateResult(_text);
+}
+
+void NovelTextView::setTranslatedDocument(const QVector<QString>& _text)
+{
+    auto lines = _text;
+    std::function<void(const QModelIndex&)> updateLines;
+    updateLines = [this, &updateLines, &lines](const QModelIndex& _parentItemIndex) {
+        for (int row = 0; row < d->model->rowCount(_parentItemIndex); ++row) {
+            const auto itemIndex = d->model->index(row, 0, _parentItemIndex);
+            const auto item = d->model->itemForIndex(itemIndex);
+            switch (item->type()) {
+            case BusinessLayer::TextModelItemType::Folder: {
+                updateLines(itemIndex);
+                break;
+            }
+
+            case BusinessLayer::TextModelItemType::Group: {
+                updateLines(itemIndex);
+                break;
+            }
+
+            case BusinessLayer::TextModelItemType::Text: {
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+                if (!textItem->text().isEmpty()) {
+                    textItem->setText(lines.takeFirst());
+                    textItem->setFormats({});
+                    d->model->updateItem(textItem);
+                }
+                break;
+            }
+
+            default: {
+                break;
+            }
+            }
+        }
+    };
+    updateLines({});
 }
 
 void NovelTextView::setGeneratedText(const QString& _text)
@@ -1651,9 +1691,11 @@ void NovelTextView::setModel(BusinessLayer::NovelTextModel* _model)
                 });
 
         //
-        // Обновляем стоимость генерации сценария при изменении модели
+        // Обновляем стоимость генерации при изменении модели
         //
         auto updateGenerationPrice = [this] {
+            d->aiAssistantView->setTranslationDocumentOption(
+                tr("Document translation will take %n word(s)", 0, d->model->wordsCount()));
             d->aiAssistantView->setGenerationScriptOptions(
                 tr("Script generation will take %n word(s)", 0, d->model->wordsCount()));
         };

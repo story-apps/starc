@@ -502,7 +502,6 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
 
 
         auto layout = translatePage->contentsLayout;
-        layout->addWidget(translateLanguage);
         {
             auto typeLayout = UiHelper::makeHBoxLayout();
             typeLayout->addWidget(translateFreeText);
@@ -512,6 +511,7 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         }
         layout->addWidget(translateSourceText);
         layout->addWidget(translateDocumentHintLabel);
+        layout->addWidget(translateLanguage);
         layout->addWidget(translateResultText);
         layout->addLayout(translateButtonsLayout);
         layout->addStretch();
@@ -708,7 +708,7 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
         d->translateResultText->hide();
         d->translateInsertButton->hide();
         d->pages->setCurrentWidget(d->translatePage);
-        QTimer::singleShot(d->pages->animationDuration(), d->translateLanguage,
+        QTimer::singleShot(d->pages->animationDuration(), d->translateSourceText,
                            qOverload<>(&QWidget::setFocus));
     });
     connect(d->translateFreeText, &RadioButton::checkedChanged, this, [this] {
@@ -982,6 +982,14 @@ void AiAssistantView::setInsertionAvailable(bool _available)
     }
 }
 
+void AiAssistantView::setDocumentTranslationAvailable(bool _available)
+{
+    d->translateFreeText->setChecked(true);
+    d->translateFreeText->setVisible(_available);
+    d->translateDocument->setVisible(_available);
+    d->translateDocumentHintLabel->setVisible(_available);
+}
+
 void AiAssistantView::setSynopsisGenerationAvaiable(bool _available)
 {
     d->openGenerateSynopsisButton->setVisible(_available);
@@ -1187,7 +1195,7 @@ void AiAssistantView::updateTranslations()
     d->summarizeButton->setText(tr("Summarize"));
     d->summarizeInsertButton->setText(tr("Insert"));
     d->translatePage->titleLabel->setText(tr("Translate"));
-    d->translateFreeText->setText(tr("Translate text"));
+    d->translateFreeText->setText(tr("Text"));
     d->translateSourceText->setLabel(tr("Text to translate"));
     d->translateDocument->setText(tr("entire document"));
     d->translateLanguage->setLabel(tr("Translate to"));

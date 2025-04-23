@@ -47,6 +47,11 @@ public:
     void setInsertionAvailable(bool _available);
 
     /**
+     * @brief Задать возможность перевода документа целиком
+     */
+    void setDocumentTranslationAvailable(bool _available);
+
+    /**
      * @brief Настроить доступность возможности генерации синопсиса
      */
     void setSynopsisGenerationAvaiable(bool _available);

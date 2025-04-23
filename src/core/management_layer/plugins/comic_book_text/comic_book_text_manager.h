@@ -6,6 +6,10 @@
 
 #include <QObject>
 
+namespace Domain {
+enum class DocumentObjectType;
+}
+
 
 namespace ManagementLayer {
 
@@ -55,6 +59,8 @@ signals:
     void insertTextRequested(const QString& _after, const QString& _before);
     void summarizeTextRequested(const QString& _text);
     void translateTextRequested(const QString& _text, const QString& _languageCode);
+    void translateDocumentRequested(const QVector<QString>& _texts, const QString& _languageCode,
+                                    Domain::DocumentObjectType _type);
     void generateTextRequested(const QString& _promptPrefix, const QString& _prompt,
                                const QString& _promptSuffix);
 

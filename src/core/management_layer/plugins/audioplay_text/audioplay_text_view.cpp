@@ -9,6 +9,7 @@
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/audioplay/audioplay_information_model.h>
 #include <business_layer/model/audioplay/text/audioplay_text_model.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/audioplay_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -751,6 +752,8 @@ AudioplayTextView::AudioplayTextView(QWidget* _parent)
             &AudioplayTextView::summarizeTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
             &AudioplayTextView::translateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::translateDocumentRequested, this,
+            &AudioplayTextView::translateDocumentRequested);
     connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
             &AudioplayTextView::generateTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
@@ -1008,6 +1011,44 @@ void AudioplayTextView::setSummarizedText(const QString& _text)
 void AudioplayTextView::setTranslatedText(const QString& _text)
 {
     d->aiAssistantView->setTransateResult(_text);
+}
+
+void AudioplayTextView::setTranslatedDocument(const QVector<QString>& _text)
+{
+    auto lines = _text;
+    std::function<void(const QModelIndex&)> updateLines;
+    updateLines = [this, &updateLines, &lines](const QModelIndex& _parentItemIndex) {
+        for (int row = 0; row < d->model->rowCount(_parentItemIndex); ++row) {
+            const auto itemIndex = d->model->index(row, 0, _parentItemIndex);
+            const auto item = d->model->itemForIndex(itemIndex);
+            switch (item->type()) {
+            case BusinessLayer::TextModelItemType::Folder: {
+                updateLines(itemIndex);
+                break;
+            }
+
+            case BusinessLayer::TextModelItemType::Group: {
+                updateLines(itemIndex);
+                break;
+            }
+
+            case BusinessLayer::TextModelItemType::Text: {
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+                if (!textItem->text().isEmpty()) {
+                    textItem->setText(lines.takeFirst());
+                    textItem->setFormats({});
+                    d->model->updateItem(textItem);
+                }
+                break;
+            }
+
+            default: {
+                break;
+            }
+            }
+        }
+    };
+    updateLines({});
 }
 
 void AudioplayTextView::setGeneratedText(const QString& _text)
@@ -1281,6 +1322,24 @@ void AudioplayTextView::setModel(BusinessLayer::AudioplayTextModel* _model)
         connect(d->model->informationModel(),
                 &BusinessLayer::AudioplayInformationModel::continueBlockNumbersChanged, this,
                 [this] { d->reconfigureBlockNumbersVisibility(); });
+
+        //
+        // Обновляем стоимость генерации при изменении модели
+        //
+        auto updateGenerationPrice = [this] {
+            d->aiAssistantView->setTranslationDocumentOption(
+                tr("Document translation will take %n word(s)", 0, d->model->wordsCount()));
+        };
+        connect(d->model, &BusinessLayer::AudioplayTextModel::modelReset, this,
+                updateGenerationPrice);
+        connect(d->model, &BusinessLayer::AudioplayTextModel::dataChanged, this,
+                updateGenerationPrice);
+        connect(d->model, &BusinessLayer::AudioplayTextModel::rowsInserted, this,
+                updateGenerationPrice);
+        connect(d->model, &BusinessLayer::AudioplayTextModel::rowsMoved, this,
+                updateGenerationPrice);
+        connect(d->model, &BusinessLayer::AudioplayTextModel::rowsRemoved, this,
+                updateGenerationPrice);
 
         //
         // Перед началом сброса документа запоминаем текущую позицию курсора

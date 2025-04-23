@@ -1540,6 +1540,7 @@ void ScreenplayTextView::setTranslatedDocument(const QVector<QString>& _text)
                 auto textItem = static_cast<BusinessLayer::ScreenplayTextModelTextItem*>(item);
                 if (!textItem->text().isEmpty()) {
                     textItem->setText(lines.takeFirst());
+                    textItem->setFormats({});
                     d->model->updateItem(textItem);
                 }
                 break;
@@ -1552,31 +1553,6 @@ void ScreenplayTextView::setTranslatedDocument(const QVector<QString>& _text)
         }
     };
     updateLines({});
-
-    // const QLatin1String textTranslatingTaskKey("text-translating-task");
-    // TaskBar::addTask(textTranslatingTaskKey);
-    // TaskBar::setTaskTitle(textTranslatingTaskKey, tr("Applying translation"));
-
-    // //
-    // // Заменяем текст сценария на перевод
-    // //
-    // auto cursor = d->textEdit->textCursor();
-    // cursor.movePosition(QTextCursor::Start);
-    // int updatedParagraphs = 0;
-    // for (const auto& line : _text) {
-    //     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    //     cursor.insertText(line);
-    //     cursor.movePosition(QTextCursor::NextCharacter);
-    //     ++updatedParagraphs;
-
-    //     if (updatedParagraphs % 30 == 0) {
-    //         TaskBar::setTaskProgress(textTranslatingTaskKey,
-    //                                  updatedParagraphs * 100 / static_cast<qreal>(_text.size()));
-    //         QCoreApplication::processEvents();
-    //     }
-    // }
-
-    // TaskBar::finishTask(textTranslatingTaskKey);
 }
 
 void ScreenplayTextView::setGeneratedSynopsis(const QString& _text)

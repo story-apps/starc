@@ -7,6 +7,7 @@
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <data_layer/storage/settings_storage.h>
@@ -713,6 +714,8 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
             &SimpleTextView::summarizeTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::translateRequested, this,
             &SimpleTextView::translateTextRequested);
+    connect(d->aiAssistantView, &AiAssistantView::translateDocumentRequested, this,
+            &SimpleTextView::translateDocumentRequested);
     connect(d->aiAssistantView, &AiAssistantView::generateTextRequested, this,
             &SimpleTextView::generateTextRequested);
     connect(d->aiAssistantView, &AiAssistantView::insertTextRequested, this,
@@ -969,6 +972,44 @@ void SimpleTextView::setTranslatedText(const QString& _text)
     d->aiAssistantView->setTransateResult(_text);
 }
 
+void SimpleTextView::setTranslatedDocument(const QVector<QString>& _text)
+{
+    auto lines = _text;
+    std::function<void(const QModelIndex&)> updateLines;
+    updateLines = [this, &updateLines, &lines](const QModelIndex& _parentItemIndex) {
+        for (int row = 0; row < d->model->rowCount(_parentItemIndex); ++row) {
+            const auto itemIndex = d->model->index(row, 0, _parentItemIndex);
+            const auto item = d->model->itemForIndex(itemIndex);
+            switch (item->type()) {
+            case BusinessLayer::TextModelItemType::Folder: {
+                updateLines(itemIndex);
+                break;
+            }
+
+            case BusinessLayer::TextModelItemType::Group: {
+                updateLines(itemIndex);
+                break;
+            }
+
+            case BusinessLayer::TextModelItemType::Text: {
+                auto textItem = static_cast<BusinessLayer::TextModelTextItem*>(item);
+                if (!textItem->text().isEmpty()) {
+                    textItem->setText(lines.takeFirst());
+                    textItem->setFormats({});
+                    d->model->updateItem(textItem);
+                }
+                break;
+            }
+
+            default: {
+                break;
+            }
+            }
+        }
+    };
+    updateLines({});
+}
+
 void SimpleTextView::setGeneratedText(const QString& _text)
 {
     const QLatin1String textWritingTaskKey("text-writing-task");
@@ -1185,6 +1226,22 @@ void SimpleTextView::setModel(BusinessLayer::SimpleTextModel* _model)
     if (d->model) {
         const bool reinitModel = true;
         d->reconfigureTemplate(!reinitModel);
+
+        //
+        // Обновляем стоимость генерации при изменении модели
+        //
+        auto updateGenerationPrice = [this] {
+            d->aiAssistantView->setTranslationDocumentOption(
+                tr("Document translation will take %n word(s)", 0, d->model->wordsCount()));
+        };
+        connect(d->model, &BusinessLayer::SimpleTextModel::modelReset, this, updateGenerationPrice);
+        connect(d->model, &BusinessLayer::SimpleTextModel::dataChanged, this,
+                updateGenerationPrice);
+        connect(d->model, &BusinessLayer::SimpleTextModel::rowsInserted, this,
+                updateGenerationPrice);
+        connect(d->model, &BusinessLayer::SimpleTextModel::rowsMoved, this, updateGenerationPrice);
+        connect(d->model, &BusinessLayer::SimpleTextModel::rowsRemoved, this,
+                updateGenerationPrice);
 
         //
         // Перед началом сброса документа запоминаем текущую позицию курсора

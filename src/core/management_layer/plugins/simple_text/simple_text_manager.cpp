@@ -160,6 +160,58 @@ Ui::SimpleTextView* SimpleTextManager::Implementation::createView(
             &SimpleTextManager::summarizeTextRequested);
     connect(view, &Ui::SimpleTextView::translateTextRequested, q,
             &SimpleTextManager::translateTextRequested);
+    connect(view, &Ui::SimpleTextView::translateDocumentRequested, q,
+            [this, view](const QString& _languageCode) {
+                const auto model = modelForView(view);
+                QVector<QString> groups;
+                QString group;
+                std::function<void(const QModelIndex&)> findGroups;
+                findGroups
+                    = [&findGroups, model, &groups, &group](const QModelIndex& _parentItemIndex) {
+                          for (int row = 0; row < model->rowCount(_parentItemIndex); ++row) {
+                              const auto itemIndex = model->index(row, 0, _parentItemIndex);
+                              const auto item = model->itemForIndex(itemIndex);
+                              switch (item->type()) {
+                              case BusinessLayer::TextModelItemType::Folder: {
+                                  findGroups(itemIndex);
+                                  break;
+                              }
+
+                              case BusinessLayer::TextModelItemType::Group: {
+                                  if (!group.isEmpty()) {
+                                      groups.append(group);
+                                      group.clear();
+                                  }
+
+                                  findGroups(itemIndex);
+                                  break;
+                              }
+
+                              case BusinessLayer::TextModelItemType::Text: {
+                                  const auto textItem
+                                      = static_cast<const BusinessLayer::TextModelTextItem*>(item);
+                                  if (!textItem->text().isEmpty()) {
+                                      if (!group.isEmpty()) {
+                                          group.append("\n");
+                                      }
+                                      group.append(textItem->text());
+                                  }
+                                  break;
+                              }
+
+                              default: {
+                                  break;
+                              }
+                              }
+                          }
+                      };
+                findGroups({});
+                if (!group.isEmpty()) {
+                    groups.append(group);
+                }
+                emit q->translateDocumentRequested(groups, _languageCode,
+                                                   Domain::DocumentObjectType::SimpleText);
+            });
     connect(view, &Ui::SimpleTextView::generateTextRequested, q,
             [this](const QString& _text) { emit q->generateTextRequested({}, _text, {}); });
     connect(view, &Ui::SimpleTextView::buyCreditsRequested, q,
