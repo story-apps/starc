@@ -154,6 +154,48 @@ bool DocumentStorage::removeDocument(Domain::DocumentObject* _document)
     return DataMappingLayer::MapperFacade::documentMapper()->remove(_document);
 }
 
+QUuid DocumentStorage::loadDocumentsAsync(const QVector<QUuid>& _documentUuids)
+{
+    return DataMappingLayer::MapperFacade::documentMapper()->findAsync(_documentUuids);
+}
+
+QUuid DocumentStorage::saveDocumentAsync(Domain::DocumentObject* _document)
+{
+    QUuid queryUuid;
+    if (d->notSavedDocuments.contains(_document->uuid())) {
+        queryUuid = DataMappingLayer::MapperFacade::documentMapper()->insertAsync(_document);
+        d->notSavedDocuments.remove(_document->uuid());
+    } else {
+        queryUuid = DataMappingLayer::MapperFacade::documentMapper()->updateAsync(_document);
+    }
+    return queryUuid;
+}
+
+QUuid DocumentStorage::saveDocumentAsync(const QUuid& _documentUuid)
+{
+    auto documentToSave = document(_documentUuid);
+    if (documentToSave == nullptr) {
+        return QUuid();
+    }
+    return saveDocumentAsync(documentToSave);
+}
+
+QUuid DocumentStorage::removeDocumentAsync(Domain::DocumentObject* _document)
+{
+    if (_document == nullptr) {
+        return QUuid();
+    }
+
+    if (d->notSavedDocuments.contains(_document->uuid())) {
+        d->notSavedDocuments.remove(_document->uuid());
+        delete _document;
+        _document = nullptr;
+        return QUuid();
+    } else {
+        return DataMappingLayer::MapperFacade::documentMapper()->removeAsync(_document);
+    }
+}
+
 void DocumentStorage::clear()
 {
     qDeleteAll(d->notSavedDocuments);
@@ -161,9 +203,20 @@ void DocumentStorage::clear()
     DataMappingLayer::MapperFacade::documentMapper()->clear();
 }
 
-DocumentStorage::DocumentStorage()
-    : d(new Implementation)
+DocumentStorage::DocumentStorage(QObject* _parent)
+    : QObject(_parent)
+    , d(new Implementation)
 {
+    connect(DataMappingLayer::MapperFacade::documentMapper(),
+            &DataMappingLayer::AbstractMapper::objectsFound, this,
+            [this](const QUuid& _queryUuid, const QVector<Domain::DomainObject*>& _objects) {
+                QVector<Domain::DocumentObject*> documents;
+                for (const auto& object : _objects) {
+                    const auto document = static_cast<Domain::DocumentObject*>(object);
+                    documents.append(document);
+                }
+                emit documentsLoaded(_queryUuid, documents);
+            });
 }
 
 } // namespace DataStorageLayer

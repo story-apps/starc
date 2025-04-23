@@ -1,6 +1,6 @@
 #include "document_change_mapper.h"
 
-#include <data_layer/database.h>
+#include <data_layer/database_manager.h>
 #include <domain/document_change_object.h>
 #include <domain/objects_builder.h>
 
@@ -22,6 +22,27 @@ const QString kDateTimeFormat = "yyyy-MM-dd hh:mm:ss:zzz";
 QString uuidFilter(const QUuid& _uuid)
 {
     return QString(" WHERE uuid = '%1' ").arg(_uuid.toString());
+}
+QString uuidsFilter(const QVector<QUuid>& _uuids)
+{
+    if (_uuids.isEmpty()) {
+        return " WHERE 1 = 0 ";
+    }
+
+    QStringList uuidsList;
+    QStringList caseStatements;
+    int order = 0;
+
+    for (const auto& uuid : _uuids) {
+        QString uuidStr = "'" + uuid.toString() + "'";
+        uuidsList.append(uuidStr);
+        caseStatements.append(QString("WHEN uuid = %1 THEN %2").arg(uuidStr).arg(order));
+        ++order;
+    }
+
+    return QString(" WHERE uuid IN (%1) ORDER BY CASE %2 END")
+        .arg(uuidsList.join(", "))
+        .arg(caseStatements.join(" "));
 }
 QString documentFilter(const QUuid& _documentUuid)
 {
@@ -54,7 +75,7 @@ QString unsyncedFilter()
 
 bool DataMappingLayer::DocumentChangeMapper::isEmpty()
 {
-    QSqlQuery query = DatabaseLayer::Database::query();
+    QSqlQuery query = DatabaseLayer::DatabaseManager::query();
     query.prepare(QString("SELECT COUNT(*) FROM %1").arg(kTableName));
 
     executeSql(query);
@@ -150,10 +171,30 @@ bool DocumentChangeMapper::remove(DocumentChangeObject* _object)
 
 void DocumentChangeMapper::removeAll()
 {
-    QSqlQuery query = DatabaseLayer::Database::query();
+    QSqlQuery query = DatabaseLayer::DatabaseManager::query();
     query.prepare(QString("DELETE FROM %1").arg(kTableName));
 
     executeSql(query);
+}
+
+QUuid DocumentChangeMapper::findAsync(const QVector<QUuid>& _documentUuids)
+{
+    return abstractFindAsync(uuidsFilter(_documentUuids));
+}
+
+QUuid DocumentChangeMapper::insertAsync(DocumentChangeObject* _object)
+{
+    return abstractInsertAsync(_object);
+}
+
+QUuid DocumentChangeMapper::updateAsync(DocumentChangeObject* _object)
+{
+    return abstractUpdateAsync(_object);
+}
+
+QUuid DocumentChangeMapper::removeAsync(Domain::DocumentChangeObject* _object)
+{
+    return abstractDeleteAsync(_object);
 }
 
 QString DocumentChangeMapper::findStatement(const Domain::Identifier& _id) const

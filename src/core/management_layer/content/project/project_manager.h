@@ -94,6 +94,7 @@ public:
      * @brief Сохранить изменения проекта
      */
     void saveChanges();
+    void saveChangesAsync();
 
     /**
      * @brief Добавить персонажа

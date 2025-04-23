@@ -60,9 +60,14 @@ public:
     QVector<Domain::DocumentChangeObject*> unsyncedDocumentChanges(const QUuid& _documentUuid);
 
     /**
-     * @brief Сохранить несохранённые изменения сценарии
+     * @brief Сохранить несохранённые изменения сценариев
      */
     void store();
+
+    /**
+     * @brief Сохранить несохранённые изменения сценариев асинхронно
+     */
+    void storeAsync();
 
     /**
      * @brief Удалить все изменения

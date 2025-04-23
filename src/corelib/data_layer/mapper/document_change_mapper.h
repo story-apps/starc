@@ -29,6 +29,11 @@ public:
     bool remove(Domain::DocumentChangeObject* _object);
     void removeAll();
 
+    QUuid findAsync(const QVector<QUuid>& _documentUuids);
+    QUuid insertAsync(Domain::DocumentChangeObject* _object);
+    QUuid updateAsync(Domain::DocumentChangeObject* _object);
+    QUuid removeAsync(Domain::DocumentChangeObject* _object);
+
 protected:
     QString findStatement(const Domain::Identifier& _id) const override;
     QString findAllStatement() const override;

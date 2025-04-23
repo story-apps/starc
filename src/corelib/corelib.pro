@@ -358,6 +358,8 @@ SOURCES += \
     business_layer/templates/templates_facade.cpp \
     business_layer/templates/text_template.cpp \
     data_layer/database.cpp \
+    data_layer/database_manager.cpp \
+    data_layer/database_worker.cpp \
     data_layer/mapper/abstract_mapper.cpp \
     data_layer/mapper/document_change_mapper.cpp \
     data_layer/mapper/document_mapper.cpp \
@@ -738,11 +740,14 @@ HEADERS += \
     business_layer/templates/text_template.h \
     corelib_global.h \
     data_layer/database.h \
+    data_layer/database_manager.h \
+    data_layer/database_worker.h \
     data_layer/mapper/abstract_mapper.h \
     data_layer/mapper/document_change_mapper.h \
     data_layer/mapper/document_mapper.h \
     data_layer/mapper/mapper_facade.h \
     data_layer/mapper/settings_mapper.h \
+    data_layer/query.h \
     data_layer/storage/document_change_storage.h \
     data_layer/storage/document_image_storage.h \
     data_layer/storage/document_raw_data_storage.h \

@@ -179,4 +179,18 @@ void DocumentRawDataStorage::saveChanges()
     }
 }
 
+void DocumentRawDataStorage::saveChangesAsync()
+{
+    for (auto documentIter = d->newDocuments.begin(); documentIter != d->newDocuments.end();
+         ++documentIter) {
+        StorageFacade::documentStorage()->saveDocumentAsync(documentIter.key());
+    }
+    d->newDocuments.clear();
+
+    while (!d->documentsToRemove.isEmpty()) {
+        StorageFacade::documentStorage()->removeDocumentAsync(
+            StorageFacade::documentStorage()->document(d->documentsToRemove.takeFirst()));
+    }
+}
+
 } // namespace DataStorageLayer

@@ -219,4 +219,20 @@ void DocumentImageStorage::saveChanges()
     }
 }
 
+void DocumentImageStorage::saveChangesAsync()
+{
+    //
+    // Сохраняем изображения, хранящиеся в памяти
+    //
+    for (auto imageIter = d->newImages.begin(); imageIter != d->newImages.end(); ++imageIter) {
+        StorageFacade::documentStorage()->saveDocumentAsync(imageIter.key());
+    }
+    d->newImages.clear();
+
+    while (!d->imagesToRemove.isEmpty()) {
+        StorageFacade::documentStorage()->removeDocumentAsync(
+            StorageFacade::documentStorage()->document(d->imagesToRemove.takeFirst()));
+    }
+}
+
 } // namespace DataStorageLayer
