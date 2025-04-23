@@ -141,6 +141,11 @@ QSqlQuery Database::query()
     return QSqlQuery(instanse());
 }
 
+QSqlQuery Database::query(const QString& _connection)
+{
+    return QSqlQuery(instanse(_connection));
+}
+
 void Database::transaction()
 {
     //
@@ -187,6 +192,19 @@ QSqlDatabase Database::instanse()
         open(database, s_connectionName, s_databaseName);
     } else {
         database = QSqlDatabase::database(s_connectionName);
+    }
+
+    return database;
+}
+
+QSqlDatabase Database::instanse(const QString& _connection)
+{
+    QSqlDatabase database;
+
+    if (!QSqlDatabase::contains(_connection)) {
+        open(database, _connection, s_databaseName);
+    } else {
+        database = QSqlDatabase::database(_connection);
     }
 
     return database;
