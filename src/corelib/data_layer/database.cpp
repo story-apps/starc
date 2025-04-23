@@ -136,9 +136,9 @@ QString Database::currentFile()
     return instanse().databaseName();
 }
 
-QSqlQuery Database::query()
+QSqlQuery Database::query(const QString& _connection)
 {
-    return QSqlQuery(instanse());
+    return QSqlQuery(instanse(_connection));
 }
 
 void Database::transaction()
@@ -179,14 +179,15 @@ void Database::vacuum()
 
 // ****
 
-QSqlDatabase Database::instanse()
+QSqlDatabase Database::instanse(const QString& _connection)
 {
     QSqlDatabase database;
 
-    if (!QSqlDatabase::contains(s_connectionName)) {
-        open(database, s_connectionName, s_databaseName);
+    const QString connection = _connection.isEmpty() ? s_connectionName : _connection;
+    if (!QSqlDatabase::contains(connection)) {
+        open(database, connection, s_databaseName);
     } else {
-        database = QSqlDatabase::database(s_connectionName);
+        database = QSqlDatabase::database(connection);
     }
 
     return database;

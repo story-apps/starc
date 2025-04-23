@@ -1,6 +1,6 @@
 #include "abstract_mapper.h"
 
-#include <data_layer/database.h>
+#include <data_layer/database_manager.h>
 #include <domain/domain_object.h>
 
 #include <QDebug>
@@ -10,9 +10,9 @@
 #include <QSqlRecord>
 #include <QVariant>
 
-using DatabaseLayer::Database;
 using Domain::DomainObject;
 using Domain::Identifier;
+using ManagementLayer::DatabaseManager;
 
 
 namespace DataMappingLayer {
@@ -41,7 +41,7 @@ DomainObject* AbstractMapper::abstractFind(const Identifier& _id)
 
 QVector<Domain::DomainObject*> AbstractMapper::abstractFind(const QString& _filter)
 {
-    QSqlQuery query = Database::query();
+    QSqlQuery query = DatabaseManager::query();
     query.prepare(findAllStatement() + _filter);
     query.exec();
     QVector<Domain::DomainObject*> result;
@@ -74,7 +74,7 @@ void AbstractMapper::abstractInsert(DomainObject* _object)
     //
     // Сформируем запрос на добавление данных в базу
     //
-    QSqlQuery insertQuery = Database::query();
+    QSqlQuery insertQuery = DatabaseManager::query();
     insertQuery.prepare(insertQueryString);
     for (const QVariant& value : std::as_const(insertValues)) {
         insertQuery.addBindValue(value);
@@ -109,7 +109,7 @@ bool AbstractMapper::abstractUpdate(DomainObject* _object)
     //
     // Сформируем запрос на обновление данных в базе
     //
-    QSqlQuery updateQuery = Database::query();
+    QSqlQuery updateQuery = DatabaseManager::query();
     updateQuery.prepare(updateQueryString);
     for (const QVariant& value : std::as_const(updateValues)) {
         updateQuery.addBindValue(value);
@@ -136,7 +136,7 @@ void AbstractMapper::abstractDelete(DomainObject* _object)
     //
     // Сформируем запрос на удаление данных из базы
     //
-    QSqlQuery deleteQuery = Database::query();
+    QSqlQuery deleteQuery = DatabaseManager::query();
     deleteQuery.prepare(deleteQueryString);
     for (const QVariant& value : std::as_const(deleteValues)) {
         deleteQuery.addBindValue(value);
@@ -166,7 +166,7 @@ bool AbstractMapper::executeSql(QSqlQuery& _sqlQuery)
     //
     // Если запрос завершился с ошибкой, выводим отладочную информацию
     //
-    Database::setLastError(_sqlQuery.lastError().text());
+    DatabaseManager::setLastError(_sqlQuery.lastError().text());
 
     qDebug() << _sqlQuery.lastError();
     qDebug() << _sqlQuery.lastQuery();
@@ -177,7 +177,7 @@ bool AbstractMapper::executeSql(QSqlQuery& _sqlQuery)
 
 DomainObject* AbstractMapper::loadObjectFromDatabase(const Identifier& _id)
 {
-    QSqlQuery query = Database::query();
+    QSqlQuery query = DatabaseManager::query();
     query.prepare(findStatement(_id));
     query.exec();
     query.next();
@@ -192,7 +192,7 @@ Identifier AbstractMapper::findNextIdentifier()
         //
         // Если нет ещё последнего индекса по таблице, загрузим его
         //
-        QSqlQuery query = Database::query();
+        QSqlQuery query = DatabaseManager::query();
         query.prepare(findLastOneStatement());
         query.exec();
         query.next();

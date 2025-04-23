@@ -1,10 +1,10 @@
 #pragma once
 
+#include <QString>
 #include <QtGlobal>
 
 #include <corelib_global.h>
 
-class QString;
 class QSqlQuery;
 class QSqlDatabase;
 
@@ -52,7 +52,7 @@ public:
     /**
      * @brief Получить объект для выполнения запросов в БД
      */
-    static QSqlQuery query();
+    static QSqlQuery query(const QString& _connection = QString());
 
     /**
      * @brief Запустить транзакцию, если ещё не запущена
@@ -90,7 +90,7 @@ private:
     /**
      * @brief Получить объект текущей базы данных
      */
-    static QSqlDatabase instanse();
+    static QSqlDatabase instanse(const QString& _connection = QString());
 
     /**
      * @brief Открыть соединение с базой данных
