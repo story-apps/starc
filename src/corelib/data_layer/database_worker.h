@@ -13,7 +13,7 @@ public:
     explicit DatabaseWorker(QObject* _parent = nullptr);
 
 public slots:
-    void executeQuery(const QString& _query);
+    void executeQuery(const QString& _queryString, const QVariantList& _bindValues);
 
 signals:
     void queryExecuted(const QVector<QVariantList>& _results);

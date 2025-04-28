@@ -56,10 +56,16 @@ public:
     void updateDocumentUuid(const QUuid& _old, const QUuid& _new);
 
     /**
-     * @brief Обновить документ
+     * @brief Обновить документ синхронно
      */
     void saveDocument(Domain::DocumentObject* _document);
     void saveDocument(const QUuid& _documentUuid);
+
+    /**
+     * @brief Обновить документ асинхронно
+     */
+    void saveDocumentAsync(Domain::DocumentObject* _document);
+    void saveDocumentAsync(const QUuid& _documentUuid);
 
     /**
      * @brief Удалить документ

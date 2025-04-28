@@ -11,11 +11,51 @@ namespace DataStorageLayer {
 class DocumentStorage::Implementation
 {
 public:
+    explicit Implementation(DocumentStorage* _q);
+
+    /**
+     * @brief Обновить документ
+     */
+    void saveDocument(Domain::DocumentObject* _document, bool doAsync);
+    void saveDocument(const QUuid& _documentUuid, bool doAsync);
+
+
+    DocumentStorage* q = nullptr;
+
     /**
      * @brief Созданные, но не сохранённые документы
      */
     QHash<QUuid, Domain::DocumentObject*> notSavedDocuments;
 };
+
+DocumentStorage::Implementation::Implementation(DocumentStorage* _q)
+    : q(_q)
+{
+}
+
+void DocumentStorage::Implementation::saveDocument(Domain::DocumentObject* _document, bool doAsync)
+{
+    if (notSavedDocuments.contains(_document->uuid())) {
+        if (doAsync) {
+            DataMappingLayer::MapperFacade::documentMapper()->insertAsync(_document);
+        } else {
+            DataMappingLayer::MapperFacade::documentMapper()->insert(_document);
+        }
+        notSavedDocuments.remove(_document->uuid());
+    } else {
+        DataMappingLayer::MapperFacade::documentMapper()->update(_document);
+    }
+}
+
+void DocumentStorage::Implementation::saveDocument(const QUuid& _documentUuid, bool doAsync)
+{
+    auto documentToSave = q->document(_documentUuid);
+    if (documentToSave == nullptr) {
+        return;
+    }
+
+    saveDocument(documentToSave, doAsync);
+}
 
 
 // ****
@@ -109,22 +149,26 @@ void DocumentStorage::updateDocumentUuid(const QUuid& _old, const QUuid& _new)
 
 void DocumentStorage::saveDocument(Domain::DocumentObject* _document)
 {
-    if (d->notSavedDocuments.contains(_document->uuid())) {
-        DataMappingLayer::MapperFacade::documentMapper()->insert(_document);
-        d->notSavedDocuments.remove(_document->uuid());
-    } else {
-        DataMappingLayer::MapperFacade::documentMapper()->update(_document);
-    }
+    const bool doAsync = false;
+    d->saveDocument(_document, doAsync);
 }
 
 void DocumentStorage::saveDocument(const QUuid& _documentUuid)
 {
-    auto documentToSave = document(_documentUuid);
-    if (documentToSave == nullptr) {
-        return;
-    }
+    const bool doAsync = false;
+    d->saveDocument(_documentUuid, doAsync);
+}
 
-    saveDocument(documentToSave);
+void DocumentStorage::saveDocumentAsync(Domain::DocumentObject* _document)
+{
+    const bool doAsync = true;
+    d->saveDocument(_document, doAsync);
+}
+
+void DocumentStorage::saveDocumentAsync(const QUuid& _documentUuid)
+{
+    const bool doAsync = true;
+    d->saveDocument(_documentUuid, doAsync);
 }
 
 void DocumentStorage::removeDocument(Domain::DocumentObject* _document)
@@ -150,7 +194,7 @@ void DocumentStorage::clear()
 }
 
 DocumentStorage::DocumentStorage()
-    : d(new Implementation)
+    : d(new Implementation(this))
 {
 }
 

@@ -1,6 +1,6 @@
 #include "document_change_mapper.h"
 
-#include <data_layer/database.h>
+#include <data_layer/database_manager.h>
 #include <domain/document_change_object.h>
 #include <domain/objects_builder.h>
 
@@ -54,7 +54,7 @@ QString unsyncedFilter()
 
 bool DataMappingLayer::DocumentChangeMapper::isEmpty()
 {
-    QSqlQuery query = DatabaseLayer::Database::query();
+    QSqlQuery query = ManagementLayer::DatabaseManager::query();
     query.prepare(QString("SELECT COUNT(*) FROM %1").arg(kTableName));
 
     executeSql(query);
@@ -138,6 +138,11 @@ void DocumentChangeMapper::insert(DocumentChangeObject* _object)
     abstractInsert(_object);
 }
 
+void DocumentChangeMapper::insertAsync(DocumentChangeObject* _object)
+{
+    abstractInsertAsync(_object);
+}
+
 bool DocumentChangeMapper::update(DocumentChangeObject* _object)
 {
     return abstractUpdate(_object);
@@ -150,7 +155,7 @@ void DocumentChangeMapper::remove(DocumentChangeObject* _object)
 
 void DocumentChangeMapper::removeAll()
 {
-    QSqlQuery query = DatabaseLayer::Database::query();
+    QSqlQuery query = ManagementLayer::DatabaseManager::query();
     query.prepare(QString("DELETE FROM %1").arg(kTableName));
 
     executeSql(query);

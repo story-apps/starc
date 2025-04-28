@@ -22,7 +22,7 @@ public:
 
     DatabaseLayer::DatabaseWorker* worker = nullptr;
     QThread thread;
-    QQueue<QString> queryQueue;
+    QQueue<QPair<QString, QVariantList>> queryQueue;
     QMutex requestQueueMutex;
     bool isProcessing = false;
 };
@@ -49,14 +49,14 @@ DatabaseManager& DatabaseManager::instance()
     return instance;
 }
 
-void DatabaseManager::enqueueQuery(const QString& _sqlQuery)
+void DatabaseManager::enqueueQuery(const QString& _query, const QVariantList& _bindValues)
 {
     QMutexLocker locker(&d->requestQueueMutex);
-    d->queryQueue.enqueue(_sqlQuery);
+    d->queryQueue.enqueue({ _query, _bindValues });
 
     if (!d->isProcessing) {
         d->isProcessing = true;
-        emit executeQuery(d->queryQueue.head());
+        emit executeQuery(d->queryQueue.head().first, d->queryQueue.head().second);
     }
 }
 
@@ -100,9 +100,9 @@ QString DatabaseManager::currentFile()
     return DatabaseLayer::Database::currentFile();
 }
 
-QSqlQuery DatabaseManager::query(const QString& _connection)
+QSqlQuery DatabaseManager::query()
 {
-    return DatabaseLayer::Database::query(_connection);
+    return DatabaseLayer::Database::query();
 }
 
 void DatabaseManager::transaction()
@@ -125,7 +125,7 @@ DatabaseManager::DatabaseManager(QObject* _parent)
     , d(new Implementation)
 {
     if (!d->worker) {
-        d->worker = new DatabaseLayer::DatabaseWorker;
+        d->worker = new DatabaseLayer::DatabaseWorker(this);
         d->worker->moveToThread(&d->thread);
 
         connect(this, &DatabaseManager::executeQuery, d->worker,
@@ -153,7 +153,7 @@ void DatabaseManager::onQueryExecuted(const QVector<QVariantList>& _results)
     // Отправляем на исполнение следующий или помечаем, что обработка завершена
     //
     if (!d->queryQueue.isEmpty()) {
-        emit executeQuery(d->queryQueue.head());
+        emit executeQuery(d->queryQueue.head().first, d->queryQueue.head().second);
     } else {
         d->isProcessing = false;
     }

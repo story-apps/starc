@@ -1,6 +1,5 @@
 #include "document_mapper.h"
 
-#include <data_layer/database.h>
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
 
@@ -85,6 +84,11 @@ QVector<Domain::DocumentObject*> DocumentMapper::findAll()
 void DocumentMapper::insert(DocumentObject* _object)
 {
     abstractInsert(_object);
+}
+
+void DocumentMapper::insertAsync(DocumentObject* _object)
+{
+    abstractInsertAsync(_object);
 }
 
 bool DocumentMapper::update(DocumentObject* _object)

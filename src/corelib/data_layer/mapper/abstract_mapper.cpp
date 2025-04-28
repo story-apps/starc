@@ -175,6 +175,30 @@ bool AbstractMapper::executeSql(QSqlQuery& _sqlQuery)
     return false;
 }
 
+void AbstractMapper::abstractInsertAsync(Domain::DomainObject* _object)
+{
+    //
+    // Установим идентификатор для нового объекта
+    //
+    _object->setId(findNextIdentifier());
+
+    //
+    // Добавим вновь созданный объект в список загруженных объектов
+    //
+    m_loadedObjectsMap.emplace(_object->id(), _object);
+
+    //
+    // Получим данные для формирования запроса на их добавление
+    //
+    QVariantList insertValues;
+    QString insertQueryString = insertStatement(_object, insertValues);
+
+    //
+    // Отправим запрос на исполнение
+    //
+    DatabaseManager::instance().enqueueQuery(insertQueryString, insertValues);
+}
+
 DomainObject* AbstractMapper::loadObjectFromDatabase(const Identifier& _id)
 {
     QSqlQuery query = DatabaseManager::query();

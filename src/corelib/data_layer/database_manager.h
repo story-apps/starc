@@ -22,7 +22,7 @@ public:
      * @brief Интерфейс для асинхронной работы
      */
     /** @{ */
-    void enqueueQuery(const QString& _sqlQuery);
+    void enqueueQuery(const QString& _query, const QVariantList& _bindValues);
     /** @} */
 
     /**
@@ -37,7 +37,7 @@ public:
     static void setCurrentFile(const QString& _databaseFileName);
     static void closeCurrentFile();
     static QString currentFile();
-    static QSqlQuery query(const QString& _connection = QString());
+    static QSqlQuery query();
     static void transaction();
     static void commit();
     static void vacuum();
@@ -51,7 +51,7 @@ private slots:
     void onQueryFailed(const QString& _error);
 
 signals:
-    void executeQuery(const QString& _sqlQuery);
+    void executeQuery(const QString& _query, const QVariantList& _bindValues);
     void queryResult(const QVector<QVariantList>& _results);
     void queryFailed(const QString& _error);
 

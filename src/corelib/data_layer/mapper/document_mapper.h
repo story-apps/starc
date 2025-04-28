@@ -23,6 +23,7 @@ public:
     QVector<Domain::DocumentObject*> findAll();
 
     void insert(Domain::DocumentObject* _object);
+    void insertAsync(Domain::DocumentObject* _object);
     bool update(Domain::DocumentObject* _object);
     void remove(Domain::DocumentObject* _object);
 
