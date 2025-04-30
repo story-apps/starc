@@ -199,6 +199,27 @@ void AbstractMapper::abstractInsertAsync(Domain::DomainObject* _object)
     DatabaseManager::instance().enqueueQuery(insertQueryString, insertValues);
 }
 
+void AbstractMapper::abstractFindAsync(const QString& _filter)
+{
+    //
+    // Отправим запрос на исполнение
+    //
+    DatabaseManager::instance().enqueueQuery(findAllStatement() + _filter, {});
+}
+
+AbstractMapper::AbstractMapper(QObject* _parent)
+    : QObject(_parent)
+{
+    connect(&DatabaseManager::instance(), &DatabaseManager::queryResult, this,
+            [this](const QVector<QVariantList>& _records) {
+                QVector<Domain::DomainObject*> objects;
+                for (const auto& record : _records) {
+                    objects.append(load(record));
+                }
+                emit objectsFound(objects);
+            });
+}
+
 DomainObject* AbstractMapper::loadObjectFromDatabase(const Identifier& _id)
 {
     QSqlQuery query = DatabaseManager::query();
@@ -238,6 +259,38 @@ Identifier AbstractMapper::findNextIdentifier()
 DomainObject* AbstractMapper::load(const QSqlRecord& _record)
 {
     const int idValue = _record.value("id").toInt();
+    if (idValue == 0) {
+        return nullptr;
+    }
+
+    Identifier id(idValue);
+    DomainObject* result = nullptr;
+    //
+    // Если объект загружен, используем указатель на него
+    //
+    const auto iter = m_loadedObjectsMap.find(id);
+    if (iter != m_loadedObjectsMap.cend()) {
+        result = iter->second;
+        //
+        // ... если данные не были изменены, обновляем объект
+        //
+        if (result->isChangesStored()) {
+            doLoad(result, _record);
+        }
+    }
+    //
+    // В противном случае создаём новый объект и сохраняем указатель на него
+    //
+    else {
+        result = doLoad(id, _record);
+        m_loadedObjectsMap.emplace(id, result);
+    }
+    return result;
+}
+
+Domain::DomainObject* AbstractMapper::load(const QVariantList& _record)
+{
+    const int idValue = _record[0].toInt();
     if (idValue == 0) {
         return nullptr;
     }

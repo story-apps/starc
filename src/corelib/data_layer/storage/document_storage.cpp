@@ -125,6 +125,11 @@ QVector<Domain::DocumentObject*> DocumentStorage::documents()
     return documents;
 }
 
+void DocumentStorage::loadDocumentsAsync(const QVector<QUuid>& _uuids)
+{
+    DataMappingLayer::MapperFacade::documentMapper()->findAsync(_uuids);
+}
+
 Domain::DocumentObject* DocumentStorage::createDocument(const QUuid& _uuid,
                                                         Domain::DocumentObjectType _type)
 {
@@ -193,9 +198,20 @@ void DocumentStorage::clear()
     DataMappingLayer::MapperFacade::documentMapper()->clear();
 }
 
-DocumentStorage::DocumentStorage()
-    : d(new Implementation(this))
+DocumentStorage::DocumentStorage(QObject* _parent)
+    : QObject(_parent)
+    , d(new Implementation(this))
 {
+    connect(DataMappingLayer::MapperFacade::documentMapper(),
+            &DataMappingLayer::AbstractMapper::objectsFound, this,
+            [this](const QVector<Domain::DomainObject*>& _objects) {
+                QVector<Domain::DocumentObject*> documents;
+                for (const auto& object : _objects) {
+                    const auto document = static_cast<Domain::DocumentObject*>(object);
+                    documents.append(document);
+                }
+                emit documentsLoaded(documents);
+            });
 }
 
 } // namespace DataStorageLayer

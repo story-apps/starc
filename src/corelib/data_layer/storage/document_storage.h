@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QObject>
 #include <QScopedPointer>
 #include <QtContainerFwd>
 
@@ -19,13 +20,15 @@ namespace DataStorageLayer {
 /**
  * @brief Хранилище документов
  */
-class CORE_LIBRARY_EXPORT DocumentStorage
+class CORE_LIBRARY_EXPORT DocumentStorage : public QObject
 {
+    Q_OBJECT
+
 public:
     ~DocumentStorage();
 
     /**
-     * @brief Получить документ по uuid'у
+     * @brief Получить документ по uuid'у синхронно
      */
     Domain::DocumentObject* document(const QUuid& _uuid);
 
@@ -44,6 +47,12 @@ public:
      * @brief Получить все документы проекта
      */
     QVector<Domain::DocumentObject*> documents();
+
+    /**
+     * @brief Получить документы по uuid'у асинхронно
+     */
+    void loadDocumentsAsync(const QVector<QUuid>& _uuids);
+    Q_SIGNAL void documentsLoaded(QVector<Domain::DocumentObject*> _documents);
 
     /**
      * @brief Сохранить документ
@@ -78,7 +87,7 @@ public:
     void clear();
 
 private:
-    DocumentStorage();
+    DocumentStorage(QObject* _parent = nullptr);
     friend class StorageFacade;
 
     class Implementation;

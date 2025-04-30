@@ -27,6 +27,7 @@ public:
      *        - если нигде нет, то запросить у внешнего сервиса
      */
     QPixmap load(const QUuid& _uuid) const override;
+    void loadAsync(const QVector<QUuid>& _uuids) const override;
 
     /**
      * @brief Сохранить новое изображение

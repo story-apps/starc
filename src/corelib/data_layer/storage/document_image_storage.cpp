@@ -82,6 +82,36 @@ DocumentImageStorage::DocumentImageStorage(QObject* _parent)
     : AbstractImageWrapper(_parent)
     , d(new Implementation(this))
 {
+    connect(StorageFacade::documentStorage(), &DocumentStorage::documentsLoaded, this,
+            [this](QVector<Domain::DocumentObject*> _documents) {
+                QVector<QPixmap*> images;
+                for (const auto& imageDocument : _documents) {
+                    //
+                    // ... подписываемся на обновления изображения (и загружаем, если не был ещё
+                    // загружен из облака)
+                    //
+                    d->notifyImageRequested(imageDocument->uuid());
+                    //
+                    // ... если изображения пока нет в базе, то поставим в кэш заглушку для него
+                    //
+                    if (imageDocument == nullptr) {
+                        d->cachedImages.insert(imageDocument->uuid(), {});
+                        images.append({});
+                    } else {
+                        Q_ASSERT(imageDocument->type() == Domain::DocumentObjectType::ImageData);
+
+                        //
+                        // NOTE: тут грузим вручную, а не через Imagehelper т.к. в кэш нужен именно
+                        // указатель
+                        //
+                        QPixmap* image = new QPixmap;
+                        image->loadFromData(imageDocument->content());
+                        d->cachedImages.insert(imageDocument->uuid(), image);
+                        images.append(image);
+                    }
+                }
+                emit imagesLoaded(images);
+            });
 }
 
 DocumentImageStorage::~DocumentImageStorage() = default;
@@ -129,6 +159,11 @@ QPixmap DocumentImageStorage::load(const QUuid& _uuid) const
     image->loadFromData(imageDocument->content());
     d->cachedImages.insert(_uuid, image);
     return *image;
+}
+
+void DocumentImageStorage::loadAsync(const QVector<QUuid>& _uuids) const
+{
+    StorageFacade::documentStorage()->loadDocumentsAsync(_uuids);
 }
 
 QUuid DocumentImageStorage::save(const QPixmap& _image)

@@ -15,12 +15,16 @@ namespace DataMappingLayer {
  */
 class DocumentMapper : public AbstractMapper
 {
+    Q_OBJECT
+
 public:
     Domain::DocumentObject* find(const Domain::Identifier& _id);
     Domain::DocumentObject* find(const QUuid& _uuid);
     Domain::DocumentObject* findFirst(Domain::DocumentObjectType _type);
     QVector<Domain::DocumentObject*> findAll(Domain::DocumentObjectType _type);
     QVector<Domain::DocumentObject*> findAll();
+    void findAsync(const QVector<QUuid>& _uuids);
+    Q_SIGNAL void documentsFound(QVector<Domain::DocumentObject*>);
 
     void insert(Domain::DocumentObject* _object);
     void insertAsync(Domain::DocumentObject* _object);
@@ -40,10 +44,12 @@ protected:
 
 protected:
     Domain::DomainObject* doLoad(const Domain::Identifier& _id, const QSqlRecord& _record) override;
+    Domain::DomainObject* doLoad(const Domain::Identifier& _id, const QVariantList& _record) override;
     void doLoad(Domain::DomainObject* _object, const QSqlRecord& _record) override;
+    void doLoad(Domain::DomainObject* _object, const QVariantList& _record) override;
 
 private:
-    DocumentMapper() = default;
+    DocumentMapper(QObject* _parent = nullptr);
     friend class MapperFacade;
 };
 

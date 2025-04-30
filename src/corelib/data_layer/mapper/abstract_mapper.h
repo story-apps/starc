@@ -17,10 +17,14 @@ namespace DataMappingLayer {
 /**
  * @brief The AbstractMapper class
  */
-class AbstractMapper
+class AbstractMapper : public QObject
 {
+    Q_OBJECT
+
 public:
     virtual ~AbstractMapper() = default;
+
+    Q_SIGNAL void objectsFound(QVector<Domain::DomainObject*> _objects);
 
     /**
      * @brief Очистить все загруженные ранее данные
@@ -41,11 +45,14 @@ protected:
      */
     virtual Domain::DomainObject* doLoad(const Domain::Identifier& _id, const QSqlRecord& _record)
         = 0;
+    virtual Domain::DomainObject* doLoad(const Domain::Identifier& _id, const QVariantList& _record)
+        = 0;
 
     /**
      * @brief Обновить параметры заданного объекта из sql-записи
      */
     virtual void doLoad(Domain::DomainObject* _object, const QSqlRecord& _record) = 0;
+    virtual void doLoad(Domain::DomainObject* _object, const QVariantList& _record) = 0;
 
 protected:
     /**
@@ -68,13 +75,14 @@ protected:
      */
     /** @{ */
     void abstractInsertAsync(Domain::DomainObject* _object);
+    void abstractFindAsync(const QString& _filter);
     /** @} */
 
 protected:
     /**
      * @brief Скрываем конструктор от публичного доступа
      */
-    AbstractMapper() = default;
+    AbstractMapper(QObject* _parent = nullptr);
 
 private:
     /**
@@ -91,6 +99,7 @@ private:
      * @brief Загрузить или обновить объект из записи в БД
      */
     Domain::DomainObject* load(const QSqlRecord& _record);
+    Domain::DomainObject* load(const QVariantList& _record);
 
 private:
     /**
