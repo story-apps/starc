@@ -118,13 +118,17 @@ QSize CheckBox::minimumSizeHint() const
 
 QSize CheckBox::sizeHint() const
 {
+    QMarginsF margins = contentsMargins();
+    if (margins.isNull()) {
+        margins = Ui::DesignSystem::checkBox().margins();
+    }
+
     return QSize(
-        static_cast<int>(Ui::DesignSystem::checkBox().margins().left()
-                         + Ui::DesignSystem::checkBox().iconSize().width()
+        static_cast<int>(margins.left() + Ui::DesignSystem::checkBox().iconSize().width()
                          + Ui::DesignSystem::checkBox().spacing()
                          + TextHelper::fineTextWidthF(d->text, Ui::DesignSystem::font().subtitle1())
-                         + Ui::DesignSystem::checkBox().margins().right()),
-        static_cast<int>(Ui::DesignSystem::checkBox().height()));
+                         + margins.right()),
+        static_cast<int>(margins.top() + Ui::DesignSystem::checkBox().height() + margins.bottom()));
 }
 
 void CheckBox::paintEvent(QPaintEvent* _event)
@@ -140,7 +144,7 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     //
     // Позиционируем рисовальщика
     //
-    painter.translate(contentsRect().topLeft());
+    painter.translate(rect().topLeft());
 
     //
     // Настраиваем размещение текста для разных языков
@@ -148,26 +152,28 @@ void CheckBox::paintEvent(QPaintEvent* _event)
     qreal textRectX = 0;
     QRectF iconRect;
     QRectF textRect;
+    QMarginsF margins = contentsMargins();
+    if (margins.isNull()) {
+        margins = Ui::DesignSystem::checkBox().margins();
+    }
 
     if (isLeftToRight()) {
-        iconRect.setRect(Ui::DesignSystem::checkBox().margins().left(),
-                         Ui::DesignSystem::checkBox().margins().top(),
+        iconRect.setRect(margins.left(), margins.top(),
                          Ui::DesignSystem::checkBox().iconSize().width(),
                          Ui::DesignSystem::checkBox().iconSize().height());
 
         textRectX = iconRect.right() + Ui::DesignSystem::checkBox().spacing();
-        textRect.setRect(textRectX, 0, width() - textRectX, sizeHint().height());
+        textRect.setRect(textRectX, margins.top(), width() - textRectX,
+                         Ui::DesignSystem::checkBox().height());
     } else {
-        const auto textWidth = width() - Ui::DesignSystem::checkBox().margins().left()
-            - Ui::DesignSystem::checkBox().spacing()
-            - Ui::DesignSystem::checkBox().iconSize().width()
-            - Ui::DesignSystem::checkBox().margins().right();
+        const auto textWidth = width() - margins.left() - Ui::DesignSystem::checkBox().spacing()
+            - Ui::DesignSystem::checkBox().iconSize().width() - margins.right();
 
-        textRectX = Ui::DesignSystem::checkBox().margins().left();
-        textRect.setRect(textRectX, 0, textWidth, sizeHint().height());
+        textRectX = margins.left();
+        textRect.setRect(textRectX, margins.top(), textWidth,
+                         Ui::DesignSystem::checkBox().height());
         iconRect.setRect(textRectX + textWidth + Ui::DesignSystem::checkBox().spacing(),
-                         Ui::DesignSystem::checkBox().margins().top(),
-                         Ui::DesignSystem::checkBox().iconSize().width(),
+                         margins.top(), Ui::DesignSystem::checkBox().iconSize().width(),
                          Ui::DesignSystem::checkBox().iconSize().height());
     }
 

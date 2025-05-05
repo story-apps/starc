@@ -1102,7 +1102,7 @@ class DesignSystem::CheckBox::Implementation
 public:
     explicit Implementation(qreal _scaleFactor, int _density);
 
-    qreal height = 48.0;
+    qreal height = 22.0;
     QMarginsF margins = { 24.0, 13.0, 24.0, 13.0 };
     QSizeF iconSize = { 22.0, 22.0 };
     qreal spacing = 16.0;
