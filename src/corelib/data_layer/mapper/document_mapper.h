@@ -23,7 +23,7 @@ public:
     Domain::DocumentObject* findFirst(Domain::DocumentObjectType _type);
     QVector<Domain::DocumentObject*> findAll(Domain::DocumentObjectType _type);
     QVector<Domain::DocumentObject*> findAll();
-    void findAsync(const QVector<QUuid>& _uuids);
+    void findAsync(const QUuid& _queryUuid, const QVector<QUuid>& _documentUuids);
     Q_SIGNAL void documentsFound(QVector<Domain::DocumentObject*>);
 
     void insert(Domain::DocumentObject* _object);

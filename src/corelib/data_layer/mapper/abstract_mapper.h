@@ -24,8 +24,6 @@ class AbstractMapper : public QObject
 public:
     virtual ~AbstractMapper() = default;
 
-    Q_SIGNAL void objectsFound(QVector<Domain::DomainObject*> _objects);
-
     /**
      * @brief Очистить все загруженные ранее данные
      */
@@ -75,7 +73,9 @@ protected:
      */
     /** @{ */
     void abstractInsertAsync(Domain::DomainObject* _object);
-    void abstractFindAsync(const QString& _filter);
+    void abstractFindAsync(const QUuid& _queryUuid, const QString& _filter);
+public:
+    Q_SIGNAL void objectsFound(const QUuid& _queryUuid, QVector<Domain::DomainObject*> _objects);
     /** @} */
 
 protected:

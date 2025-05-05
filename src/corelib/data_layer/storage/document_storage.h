@@ -51,8 +51,9 @@ public:
     /**
      * @brief Получить документы по uuid'у асинхронно
      */
-    void loadDocumentsAsync(const QVector<QUuid>& _uuids);
-    Q_SIGNAL void documentsLoaded(QVector<Domain::DocumentObject*> _documents);
+    void loadDocumentsAsync(const QUuid& _queryUuid, const QVector<QUuid>& _documentUuids);
+    Q_SIGNAL void documentsLoaded(const QUuid& _queryUuid,
+                                  QVector<Domain::DocumentObject*> _documents);
 
     /**
      * @brief Сохранить документ

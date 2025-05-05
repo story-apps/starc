@@ -24,7 +24,7 @@ public:
      * @brief Получить изображение по заданному индентификатору
      */
     virtual QPixmap load(const QUuid& _uuid) const = 0;
-    virtual void loadAsync(const QVector<QUuid>& _uuids) const = 0;
+    virtual void loadAsync(const QUuid& _queryUuid, const QVector<QUuid>& _imageUuids) const = 0;
 
     /**
      * @brief Установить изображение
@@ -66,7 +66,7 @@ signals:
     /**
      * @brief Изображения загружены из БД
      */
-    void imagesLoaded(const QVector<QPixmap*>& _images);
+    void imagesLoaded(const QUuid& _queryUuid, const QVector<QPixmap*>& _images);
 };
 
 } // namespace BusinessLayer

@@ -97,9 +97,9 @@ QVector<Domain::DocumentObject*> DocumentMapper::findAll()
     return documentObjects;
 }
 
-void DocumentMapper::findAsync(const QVector<QUuid>& _uuids)
+void DocumentMapper::findAsync(const QUuid& _queryUuid, const QVector<QUuid>& _documentUuids)
 {
-    abstractFindAsync(uuidsFilter(_uuids));
+    abstractFindAsync(_queryUuid, uuidsFilter(_documentUuids));
 }
 
 void DocumentMapper::insert(DocumentObject* _object)

@@ -23,7 +23,8 @@ DatabaseWorker::DatabaseWorker(QObject* parent)
 {
 }
 
-void DatabaseWorker::executeQuery(const QString& _queryString, const QVariantList& _bindValues)
+void DatabaseWorker::executeQuery(const QUuid& _queryUuid, const QString& _queryString,
+                                  const QVariantList& _bindValues)
 {
     QSqlQuery query = Database::query(s_connectionName);
     query.prepare(_queryString);
@@ -37,7 +38,7 @@ void DatabaseWorker::executeQuery(const QString& _queryString, const QVariantLis
         qDebug() << query.lastQuery();
         qDebug() << query.boundValues();
 
-        emit queryFailed(query.lastError().text());
+        emit queryFailed(_queryUuid, query.lastError().text());
         return;
     }
 
@@ -50,7 +51,7 @@ void DatabaseWorker::executeQuery(const QString& _queryString, const QVariantLis
         results.append(row);
     }
 
-    emit queryExecuted(results);
+    emit queryExecuted(_queryUuid, results);
 }
 
 } // namespace DatabaseLayer

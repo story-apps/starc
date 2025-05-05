@@ -7,6 +7,7 @@
 #include <QQueue>
 #include <QSqlQuery>
 #include <QThread>
+#include <QUuid>
 
 
 namespace ManagementLayer {
@@ -22,7 +23,12 @@ public:
 
     DatabaseLayer::DatabaseWorker* worker = nullptr;
     QThread thread;
-    QQueue<QPair<QString, QVariantList>> queryQueue;
+    struct QueryInQueue {
+        QUuid uuid;
+        QString query;
+        QVariantList bindValues;
+    };
+    QQueue<QueryInQueue> queryQueue;
     QMutex requestQueueMutex;
     bool isProcessing = false;
 };
@@ -49,14 +55,16 @@ DatabaseManager& DatabaseManager::instance()
     return instance;
 }
 
-void DatabaseManager::enqueueQuery(const QString& _query, const QVariantList& _bindValues)
+void DatabaseManager::enqueueQuery(const QUuid& _queryUuid, const QString& _query,
+                                   const QVariantList& _bindValues)
 {
     QMutexLocker locker(&d->requestQueueMutex);
-    d->queryQueue.enqueue({ _query, _bindValues });
+    d->queryQueue.enqueue({ _queryUuid, _query, _bindValues });
 
     if (!d->isProcessing) {
         d->isProcessing = true;
-        emit executeQuery(d->queryQueue.head().first, d->queryQueue.head().second);
+        emit executeQuery(d->queryQueue.head().uuid, d->queryQueue.head().query,
+                          d->queryQueue.head().bindValues);
     }
 }
 
@@ -138,9 +146,10 @@ DatabaseManager::DatabaseManager(QObject* _parent)
     }
 }
 
-void DatabaseManager::onQueryExecuted(const QVector<QVariantList>& _results)
+void DatabaseManager::onQueryExecuted(const QUuid& _queryUuid,
+                                      const QVector<QVariantList>& _results)
 {
-    emit queryResult(_results);
+    emit queryResult(_queryUuid, _results);
 
     QMutexLocker locker(&d->requestQueueMutex);
     //
@@ -150,18 +159,19 @@ void DatabaseManager::onQueryExecuted(const QVector<QVariantList>& _results)
         d->queryQueue.dequeue();
     }
     //
-    // Отправляем на исполнение следующий или помечаем, что обработка завершена
+    // Отправляем на исполнение следующий запрос или помечаем, что обработка завершена
     //
     if (!d->queryQueue.isEmpty()) {
-        emit executeQuery(d->queryQueue.head().first, d->queryQueue.head().second);
+        emit executeQuery(d->queryQueue.head().uuid, d->queryQueue.head().query,
+                          d->queryQueue.head().bindValues);
     } else {
         d->isProcessing = false;
     }
 }
 
-void DatabaseManager::onQueryFailed(const QString& _error)
+void DatabaseManager::onQueryFailed(const QUuid& _queryUuid, const QString& _error)
 {
-    emit queryFailed(_error);
+    emit queryFailed(_queryUuid, _error);
 }
 
 

@@ -22,7 +22,7 @@ public:
      * @brief Интерфейс для асинхронной работы
      */
     /** @{ */
-    void enqueueQuery(const QString& _query, const QVariantList& _bindValues);
+    void enqueueQuery(const QUuid& _queryUuid, const QString& _query, const QVariantList& _bindValues);
     /** @} */
 
     /**
@@ -47,13 +47,14 @@ private:
     explicit DatabaseManager(QObject* _parent = nullptr);
 
 private slots:
-    void onQueryExecuted(const QVector<QVariantList>& _results);
-    void onQueryFailed(const QString& _error);
+    void onQueryExecuted(const QUuid& _queryUuid, const QVector<QVariantList>& _results);
+    void onQueryFailed(const QUuid& _queryUuid, const QString& _error);
 
 signals:
-    void executeQuery(const QString& _query, const QVariantList& _bindValues);
-    void queryResult(const QVector<QVariantList>& _results);
-    void queryFailed(const QString& _error);
+    void executeQuery(const QUuid& _queryUuid, const QString& _query,
+                      const QVariantList& _bindValues);
+    void queryResult(const QUuid& _queryUuid, const QVector<QVariantList>& _results);
+    void queryFailed(const QUuid& _queryUuid, const QString& _error);
 
 private:
     class Implementation;

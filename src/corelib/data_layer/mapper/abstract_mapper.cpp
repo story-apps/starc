@@ -8,6 +8,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QUuid>
 #include <QVariant>
 
 using Domain::DomainObject;
@@ -196,27 +197,27 @@ void AbstractMapper::abstractInsertAsync(Domain::DomainObject* _object)
     //
     // Отправим запрос на исполнение
     //
-    DatabaseManager::instance().enqueueQuery(insertQueryString, insertValues);
+    DatabaseManager::instance().enqueueQuery({}, insertQueryString, insertValues);
 }
 
-void AbstractMapper::abstractFindAsync(const QString& _filter)
+void AbstractMapper::abstractFindAsync(const QUuid& _queryUuid, const QString& _filter)
 {
     //
     // Отправим запрос на исполнение
     //
-    DatabaseManager::instance().enqueueQuery(findAllStatement() + _filter, {});
+    DatabaseManager::instance().enqueueQuery(_queryUuid, findAllStatement() + _filter, {});
 }
 
 AbstractMapper::AbstractMapper(QObject* _parent)
     : QObject(_parent)
 {
     connect(&DatabaseManager::instance(), &DatabaseManager::queryResult, this,
-            [this](const QVector<QVariantList>& _records) {
+            [this](const QUuid& _queryUuid, const QVector<QVariantList>& _records) {
                 QVector<Domain::DomainObject*> objects;
                 for (const auto& record : _records) {
                     objects.append(load(record));
                 }
-                emit objectsFound(objects);
+                emit objectsFound(_queryUuid, objects);
             });
 }
 

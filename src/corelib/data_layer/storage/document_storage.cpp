@@ -125,9 +125,10 @@ QVector<Domain::DocumentObject*> DocumentStorage::documents()
     return documents;
 }
 
-void DocumentStorage::loadDocumentsAsync(const QVector<QUuid>& _uuids)
+void DocumentStorage::loadDocumentsAsync(const QUuid& _queryUuid,
+                                         const QVector<QUuid>& _documentUuids)
 {
-    DataMappingLayer::MapperFacade::documentMapper()->findAsync(_uuids);
+    DataMappingLayer::MapperFacade::documentMapper()->findAsync(_queryUuid, _documentUuids);
 }
 
 Domain::DocumentObject* DocumentStorage::createDocument(const QUuid& _uuid,
@@ -204,13 +205,13 @@ DocumentStorage::DocumentStorage(QObject* _parent)
 {
     connect(DataMappingLayer::MapperFacade::documentMapper(),
             &DataMappingLayer::AbstractMapper::objectsFound, this,
-            [this](const QVector<Domain::DomainObject*>& _objects) {
+            [this](const QUuid& _queryUuid, const QVector<Domain::DomainObject*>& _objects) {
                 QVector<Domain::DocumentObject*> documents;
                 for (const auto& object : _objects) {
                     const auto document = static_cast<Domain::DocumentObject*>(object);
                     documents.append(document);
                 }
-                emit documentsLoaded(documents);
+                emit documentsLoaded(_queryUuid, documents);
             });
 }
 

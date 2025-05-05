@@ -83,7 +83,7 @@ DocumentImageStorage::DocumentImageStorage(QObject* _parent)
     , d(new Implementation(this))
 {
     connect(StorageFacade::documentStorage(), &DocumentStorage::documentsLoaded, this,
-            [this](QVector<Domain::DocumentObject*> _documents) {
+            [this](const QUuid& _queryUuid, QVector<Domain::DocumentObject*> _documents) {
                 QVector<QPixmap*> images;
                 for (const auto& imageDocument : _documents) {
                     //
@@ -110,7 +110,7 @@ DocumentImageStorage::DocumentImageStorage(QObject* _parent)
                         images.append(image);
                     }
                 }
-                emit imagesLoaded(images);
+                emit imagesLoaded(_queryUuid, images);
             });
 }
 
@@ -161,9 +161,10 @@ QPixmap DocumentImageStorage::load(const QUuid& _uuid) const
     return *image;
 }
 
-void DocumentImageStorage::loadAsync(const QVector<QUuid>& _uuids) const
+void DocumentImageStorage::loadAsync(const QUuid& _queryUuid,
+                                     const QVector<QUuid>& _imageUuids) const
 {
-    StorageFacade::documentStorage()->loadDocumentsAsync(_uuids);
+    StorageFacade::documentStorage()->loadDocumentsAsync(_queryUuid, _imageUuids);
 }
 
 QUuid DocumentImageStorage::save(const QPixmap& _image)
