@@ -25,7 +25,6 @@ public:
     QVector<QUuid> unsyncedDocuments();
 
     void insert(Domain::DocumentChangeObject* _object);
-    void insertAsync(Domain::DocumentChangeObject* _object);
     bool update(Domain::DocumentChangeObject* _object);
     void remove(Domain::DocumentChangeObject* _object);
     void removeAll();

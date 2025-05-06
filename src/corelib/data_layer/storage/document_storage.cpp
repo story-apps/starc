@@ -11,52 +11,14 @@ namespace DataStorageLayer {
 class DocumentStorage::Implementation
 {
 public:
-    explicit Implementation(DocumentStorage* _q);
+    explicit Implementation() = default;
 
-    /**
-     * @brief Обновить документ
-     */
-    void saveDocument(Domain::DocumentObject* _document, bool doAsync);
-    void saveDocument(const QUuid& _documentUuid, bool doAsync);
-
-
-    DocumentStorage* q = nullptr;
 
     /**
      * @brief Созданные, но не сохранённые документы
      */
     QHash<QUuid, Domain::DocumentObject*> notSavedDocuments;
 };
-
-DocumentStorage::Implementation::Implementation(DocumentStorage* _q)
-    : q(_q)
-{
-}
-
-void DocumentStorage::Implementation::saveDocument(Domain::DocumentObject* _document, bool doAsync)
-{
-    if (notSavedDocuments.contains(_document->uuid())) {
-        if (doAsync) {
-            DataMappingLayer::MapperFacade::documentMapper()->insertAsync(_document);
-        } else {
-            DataMappingLayer::MapperFacade::documentMapper()->insert(_document);
-        }
-        notSavedDocuments.remove(_document->uuid());
-    } else {
-        DataMappingLayer::MapperFacade::documentMapper()->update(_document);
-    }
-}
-
-void DocumentStorage::Implementation::saveDocument(const QUuid& _documentUuid, bool doAsync)
-{
-    auto documentToSave = q->document(_documentUuid);
-    if (documentToSave == nullptr) {
-        return;
-    }
-
-    saveDocument(documentToSave, doAsync);
-}
-
 
 // ****
 
@@ -155,26 +117,40 @@ void DocumentStorage::updateDocumentUuid(const QUuid& _old, const QUuid& _new)
 
 void DocumentStorage::saveDocument(Domain::DocumentObject* _document)
 {
-    const bool doAsync = false;
-    d->saveDocument(_document, doAsync);
+    if (d->notSavedDocuments.contains(_document->uuid())) {
+        DataMappingLayer::MapperFacade::documentMapper()->insert(_document);
+        d->notSavedDocuments.remove(_document->uuid());
+    } else {
+        DataMappingLayer::MapperFacade::documentMapper()->update(_document);
+    }
 }
 
 void DocumentStorage::saveDocument(const QUuid& _documentUuid)
 {
-    const bool doAsync = false;
-    d->saveDocument(_documentUuid, doAsync);
+    auto documentToSave = document(_documentUuid);
+    if (documentToSave == nullptr) {
+        return;
+    }
+    saveDocument(documentToSave);
 }
 
-void DocumentStorage::saveDocumentAsync(Domain::DocumentObject* _document)
+void DocumentStorage::saveDocumentAsync(const QUuid& _queryUuid, Domain::DocumentObject* _document)
 {
-    const bool doAsync = true;
-    d->saveDocument(_document, doAsync);
+    if (d->notSavedDocuments.contains(_document->uuid())) {
+        DataMappingLayer::MapperFacade::documentMapper()->insertAsync(_queryUuid, _document);
+        d->notSavedDocuments.remove(_document->uuid());
+    } else {
+        DataMappingLayer::MapperFacade::documentMapper()->updateAsync(_queryUuid, _document);
+    }
 }
 
-void DocumentStorage::saveDocumentAsync(const QUuid& _documentUuid)
+void DocumentStorage::saveDocumentAsync(const QUuid& _queryUuid, const QUuid& _documentUuid)
 {
-    const bool doAsync = true;
-    d->saveDocument(_documentUuid, doAsync);
+    auto documentToSave = document(_documentUuid);
+    if (documentToSave == nullptr) {
+        return;
+    }
+    saveDocumentAsync(_queryUuid, documentToSave);
 }
 
 void DocumentStorage::removeDocument(Domain::DocumentObject* _document)
@@ -192,6 +168,22 @@ void DocumentStorage::removeDocument(Domain::DocumentObject* _document)
     }
 }
 
+void DocumentStorage::removeDocumentAsync(const QUuid& _queryUuid,
+                                          Domain::DocumentObject* _document)
+{
+    if (_document == nullptr) {
+        return;
+    }
+
+    if (d->notSavedDocuments.contains(_document->uuid())) {
+        d->notSavedDocuments.remove(_document->uuid());
+        delete _document;
+        _document = nullptr;
+    } else {
+        DataMappingLayer::MapperFacade::documentMapper()->removeAsync(_queryUuid, _document);
+    }
+}
+
 void DocumentStorage::clear()
 {
     qDeleteAll(d->notSavedDocuments);
@@ -201,7 +193,7 @@ void DocumentStorage::clear()
 
 DocumentStorage::DocumentStorage(QObject* _parent)
     : QObject(_parent)
-    , d(new Implementation(this))
+    , d(new Implementation())
 {
     connect(DataMappingLayer::MapperFacade::documentMapper(),
             &DataMappingLayer::AbstractMapper::objectsFound, this,

@@ -2,7 +2,7 @@
 
 #include <domain/identifier.h>
 
-#include <QMap>
+#include <QUuid>
 
 namespace Domain {
 class DomainObject;
@@ -72,10 +72,13 @@ protected:
      * @brief Методы для асинхронной работы
      */
     /** @{ */
-    void abstractInsertAsync(Domain::DomainObject* _object);
+    void abstractInsertAsync(const QUuid& _queryUuid, Domain::DomainObject* _object);
+    void abstractUpdateAsync(const QUuid& _queryUuid, Domain::DomainObject* _object);
     void abstractFindAsync(const QUuid& _queryUuid, const QString& _filter);
+    void abstractDeleteAsync(const QUuid& _queryUuid, Domain::DomainObject* _object);
 public:
     Q_SIGNAL void objectsFound(const QUuid& _queryUuid, QVector<Domain::DomainObject*> _objects);
+    Q_SIGNAL void queryFailed(const QUuid& _queryUuid, const QString& _error);
     /** @} */
 
 protected:
@@ -111,6 +114,26 @@ private:
      * @brief Загруженные объекты из базы данных
      */
     std::map<Domain::Identifier, Domain::DomainObject*> m_loadedObjectsMap;
+
+    /**
+     * @brief Типы запросов
+     */
+    enum class QueryType {
+        Insert,
+        Update,
+        Find,
+        Delete,
+    };
+
+    /**
+     * @brief Запросы к БД, отправленные на исполнение в отдельном потоке
+     */
+    std::map<QUuid, QueryType> m_sentQueries;
+
+    /**
+     * @brief Объекты, обрабатываемые в отдельном потоке
+     */
+    std::map<QUuid, Domain::DomainObject*> m_processingObjects;
 };
 
 } // namespace DataMappingLayer

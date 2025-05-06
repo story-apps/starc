@@ -176,7 +176,7 @@ bool AbstractMapper::executeSql(QSqlQuery& _sqlQuery)
     return false;
 }
 
-void AbstractMapper::abstractInsertAsync(Domain::DomainObject* _object)
+void AbstractMapper::abstractInsertAsync(const QUuid& _queryUuid, Domain::DomainObject* _object)
 {
     //
     // Установим идентификатор для нового объекта
@@ -197,7 +197,48 @@ void AbstractMapper::abstractInsertAsync(Domain::DomainObject* _object)
     //
     // Отправим запрос на исполнение
     //
-    DatabaseManager::instance().enqueueQuery({}, insertQueryString, insertValues);
+    DatabaseManager::instance().enqueueQuery(_queryUuid, insertQueryString, insertValues);
+
+    //
+    // Запомним тип запроса
+    //
+    m_sentQueries.emplace(_queryUuid, QueryType::Insert);
+}
+
+void AbstractMapper::abstractUpdateAsync(const QUuid& _queryUuid, Domain::DomainObject* _object)
+{
+    //
+    // Обновления не было
+    //
+    if (_object->isChangesStored()) {
+        return;
+    }
+
+    //
+    // т.к. в m_loadedObjectsMap хранится список указателей, то после обновления элементов
+    // обновлять элемент непосредственно в списке не нужно
+    //
+
+    //
+    // Получим данные для формирования запроса на их обновление
+    //
+    QVariantList updateValues;
+    const QString updateQueryString = updateStatement(_object, updateValues);
+
+    //
+    // Отправим запрос на исполнение
+    //
+    DatabaseManager::instance().enqueueQuery(_queryUuid, updateQueryString, updateValues);
+
+    //
+    // Запомним тип запроса
+    //
+    m_sentQueries.emplace(_queryUuid, QueryType::Update);
+
+    //
+    // Запомним объект, который обновляем
+    //
+    m_processingObjects.emplace(_queryUuid, _object);
 }
 
 void AbstractMapper::abstractFindAsync(const QUuid& _queryUuid, const QString& _filter)
@@ -206,6 +247,37 @@ void AbstractMapper::abstractFindAsync(const QUuid& _queryUuid, const QString& _
     // Отправим запрос на исполнение
     //
     DatabaseManager::instance().enqueueQuery(_queryUuid, findAllStatement() + _filter, {});
+
+    //
+    // Запомним тип запроса
+    //
+    m_sentQueries.emplace(_queryUuid, QueryType::Find);
+}
+
+void AbstractMapper::abstractDeleteAsync(const QUuid& _queryUuid, Domain::DomainObject* _object)
+{
+    //
+    // Получим данные для формирования запроса на их удаление
+    //
+    QVariantList deleteValues;
+    QString deleteQueryString = deleteStatement(_object, deleteValues);
+
+    //
+    // Отправим запрос на исполнение
+    //
+    DatabaseManager::instance().enqueueQuery(_queryUuid, deleteQueryString, deleteValues);
+
+    //
+    // Запомним тип запроса
+    //
+    m_sentQueries.emplace(_queryUuid, QueryType::Delete);
+
+    //
+    // Запомним объект, который удаляем
+    //
+    m_processingObjects.emplace(_queryUuid, _object);
+
+    _object = nullptr;
 }
 
 AbstractMapper::AbstractMapper(QObject* _parent)
@@ -213,11 +285,60 @@ AbstractMapper::AbstractMapper(QObject* _parent)
 {
     connect(&DatabaseManager::instance(), &DatabaseManager::queryResult, this,
             [this](const QUuid& _queryUuid, const QVector<QVariantList>& _records) {
-                QVector<Domain::DomainObject*> objects;
-                for (const auto& record : _records) {
-                    objects.append(load(record));
+                const auto query = m_sentQueries.find(_queryUuid);
+                if (query != m_sentQueries.cend()) {
+                    const auto queryType = query->second;
+                    m_sentQueries.erase(query);
+
+                    switch (queryType) {
+                    case QueryType::Find: {
+                        QVector<Domain::DomainObject*> objects;
+                        for (const auto& record : _records) {
+                            objects.append(load(record));
+                        }
+                        emit objectsFound(_queryUuid, objects);
+                        break;
+                    }
+                    case QueryType::Update: {
+                        const auto updatingObject = m_processingObjects.find(_queryUuid);
+                        if (updatingObject != m_processingObjects.cend())  {
+                            updatingObject->second->markChangesStored();
+                            m_processingObjects.erase(updatingObject);
+                        }
+                        break;
+                    }
+                    case QueryType::Delete: {
+                        const auto deletingObject = m_processingObjects.find(_queryUuid);
+                        if (deletingObject != m_processingObjects.cend())  {
+                            m_loadedObjectsMap.erase(deletingObject->second->id());
+                            delete deletingObject->second;
+                            m_processingObjects.erase(deletingObject);
+                        }
+                        break;
+                    }
+                    case QueryType::Insert: {
+                        break;
+                    }
+                    }
                 }
-                emit objectsFound(_queryUuid, objects);
+            });
+    connect(&DatabaseManager::instance(), &DatabaseManager::queryFailed, this,
+            [this](const QUuid& _queryUuid, const QString& _error) {
+                const auto query = m_sentQueries.find(_queryUuid);
+                //
+                // Удалим запрос из списка отправленных
+                //
+                if (query != m_sentQueries.cend()) {
+                    const auto processingObject = m_processingObjects.find(_queryUuid);
+                    //
+                    // ... и удалим объект из списка обрабатываемых
+                    //
+                    if (processingObject != m_processingObjects.cend())  {
+                        m_processingObjects.erase(processingObject);
+                    }
+                    m_sentQueries.erase(query);
+                    emit queryFailed(_queryUuid, _error);
+                }
             });
 }
 

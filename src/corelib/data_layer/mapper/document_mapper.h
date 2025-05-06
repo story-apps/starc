@@ -23,13 +23,16 @@ public:
     Domain::DocumentObject* findFirst(Domain::DocumentObjectType _type);
     QVector<Domain::DocumentObject*> findAll(Domain::DocumentObjectType _type);
     QVector<Domain::DocumentObject*> findAll();
-    void findAsync(const QUuid& _queryUuid, const QVector<QUuid>& _documentUuids);
-    Q_SIGNAL void documentsFound(QVector<Domain::DocumentObject*>);
 
     void insert(Domain::DocumentObject* _object);
-    void insertAsync(Domain::DocumentObject* _object);
     bool update(Domain::DocumentObject* _object);
     void remove(Domain::DocumentObject* _object);
+
+    void findAsync(const QUuid& _queryUuid, const QVector<QUuid>& _documentUuids);
+    Q_SIGNAL void documentsFound(QVector<Domain::DocumentObject*>);
+    void insertAsync(const QUuid& _queryUuid, Domain::DocumentObject* _object);
+    void updateAsync(const QUuid& _queryUuid, Domain::DocumentObject* _object);
+    void removeAsync(const QUuid& _queryUuid, Domain::DocumentObject* _object);
 
 protected:
     QString findStatement(const Domain::Identifier& _id) const override;

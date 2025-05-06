@@ -61,7 +61,7 @@ void DocumentImageStorage::Implementation::saveChanges(bool doAsync)
 {
     for (auto imageIter = newImages.begin(); imageIter != newImages.end(); ++imageIter) {
         if (doAsync) {
-            StorageFacade::documentStorage()->saveDocumentAsync(imageIter.key());
+            StorageFacade::documentStorage()->saveDocumentAsync({}, imageIter.key());
         } else {
             StorageFacade::documentStorage()->saveDocument(imageIter.key());
         }
@@ -260,14 +260,28 @@ void DocumentImageStorage::clear()
 
 void DocumentImageStorage::saveChanges()
 {
-    const bool doAsync = false;
-    d->saveChanges(doAsync);
+    for (auto imageIter = d->newImages.begin(); imageIter != d->newImages.end(); ++imageIter) {
+        StorageFacade::documentStorage()->saveDocument(imageIter.key());
+    }
+    d->newImages.clear();
+
+    while (!d->imagesToRemove.isEmpty()) {
+        StorageFacade::documentStorage()->removeDocument(
+            StorageFacade::documentStorage()->document(d->imagesToRemove.takeFirst()));
+    }
 }
 
 void DocumentImageStorage::saveChangesAsync()
 {
-    const bool doAsync = true;
-    d->saveChanges(doAsync);
+    for (auto imageIter = d->newImages.begin(); imageIter != d->newImages.end(); ++imageIter) {
+        StorageFacade::documentStorage()->saveDocumentAsync({}, imageIter.key());
+    }
+    d->newImages.clear();
+
+    while (!d->imagesToRemove.isEmpty()) {
+        StorageFacade::documentStorage()->removeDocumentAsync({},
+            StorageFacade::documentStorage()->document(d->imagesToRemove.takeFirst()));
+    }
 }
 
 } // namespace DataStorageLayer

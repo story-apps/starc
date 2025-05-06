@@ -97,19 +97,9 @@ QVector<Domain::DocumentObject*> DocumentMapper::findAll()
     return documentObjects;
 }
 
-void DocumentMapper::findAsync(const QUuid& _queryUuid, const QVector<QUuid>& _documentUuids)
-{
-    abstractFindAsync(_queryUuid, uuidsFilter(_documentUuids));
-}
-
 void DocumentMapper::insert(DocumentObject* _object)
 {
     abstractInsert(_object);
-}
-
-void DocumentMapper::insertAsync(DocumentObject* _object)
-{
-    abstractInsertAsync(_object);
 }
 
 bool DocumentMapper::update(DocumentObject* _object)
@@ -120,6 +110,26 @@ bool DocumentMapper::update(DocumentObject* _object)
 void DocumentMapper::remove(DocumentObject* _object)
 {
     abstractDelete(_object);
+}
+
+void DocumentMapper::findAsync(const QUuid& _queryUuid, const QVector<QUuid>& _documentUuids)
+{
+    abstractFindAsync(_queryUuid, uuidsFilter(_documentUuids));
+}
+
+void DocumentMapper::insertAsync(const QUuid& _queryUuid, DocumentObject* _object)
+{
+    abstractInsertAsync(_queryUuid, _object);
+}
+
+void DocumentMapper::updateAsync(const QUuid& _queryUuid, DocumentObject* _object)
+{
+    abstractUpdateAsync(_queryUuid, _object);
+}
+
+void DocumentMapper::removeAsync(const QUuid& _queryUuid, Domain::DocumentObject* _object)
+{
+    abstractDeleteAsync(_queryUuid, _object);
 }
 
 QString DocumentMapper::findStatement(const Identifier& _id) const

@@ -74,13 +74,18 @@ public:
     /**
      * @brief Обновить документ асинхронно
      */
-    void saveDocumentAsync(Domain::DocumentObject* _document);
-    void saveDocumentAsync(const QUuid& _documentUuid);
+    void saveDocumentAsync(const QUuid& _queryUuid, Domain::DocumentObject* _document);
+    void saveDocumentAsync(const QUuid& _queryUuid, const QUuid& _documentUuid);
 
     /**
      * @brief Удалить документ
      */
     void removeDocument(Domain::DocumentObject* _document);
+
+    /**
+     * @brief Удалить документ асинхронно
+     */
+    void removeDocumentAsync(const QUuid& _queryUuid, Domain::DocumentObject* _document);
 
     /**
      * @brief Очистить хранилище

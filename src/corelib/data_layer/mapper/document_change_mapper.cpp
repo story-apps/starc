@@ -138,11 +138,6 @@ void DocumentChangeMapper::insert(DocumentChangeObject* _object)
     abstractInsert(_object);
 }
 
-void DocumentChangeMapper::insertAsync(DocumentChangeObject* _object)
-{
-    abstractInsertAsync(_object);
-}
-
 bool DocumentChangeMapper::update(DocumentChangeObject* _object)
 {
     return abstractUpdate(_object);
