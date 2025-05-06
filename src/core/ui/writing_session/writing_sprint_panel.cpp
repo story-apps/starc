@@ -3,6 +3,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/card/card_popup.h>
+#include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/text_field/text_field.h>
@@ -15,6 +16,7 @@
 #include <QPainter>
 #include <QResizeEvent>
 #include <QSettings>
+#include <QSoundEffect>
 #include <QTimer>
 #include <QVariantAnimation>
 
@@ -23,7 +25,8 @@ namespace Ui {
 
 namespace {
 const QString kSprintDurationKey = QLatin1String("widgets/writing-sprint-panel/duration");
-}
+const QString kPlaySoundKey = QLatin1String("widgets/writing-sprint-panel/play-sound");
+} // namespace
 
 class WritingSprintPanel::Implementation
 {
@@ -82,9 +85,10 @@ public:
      * @brief Параметры спринта
      */
     CardPopup* sprintOptions = nullptr;
-    QHBoxLayout* sprintOptionsLayout = nullptr;
+    QVBoxLayout* sprintOptionsLayout = nullptr;
     TextField* sprintTime = nullptr;
     Button* sprintAction = nullptr;
+    CheckBox* playSound = nullptr;
     /**
      * @brief Поздравительная часть
      */
@@ -99,9 +103,10 @@ public:
 WritingSprintPanel::Implementation::Implementation(WritingSprintPanel* _q)
     : q(_q)
     , sprintOptions(new CardPopup(_q))
-    , sprintOptionsLayout(new QHBoxLayout)
+    , sprintOptionsLayout(new QVBoxLayout)
     , sprintTime(new TextField(sprintOptions))
     , sprintAction(new Button(sprintOptions))
+    , playSound(new CheckBox(sprintOptions))
     , sprintResultsLayout(new QVBoxLayout)
     , shareResults(new IconButton(sprintOptions))
     , sprintResultTitle(new H6Label(sprintOptions))
@@ -118,6 +123,7 @@ WritingSprintPanel::Implementation::Implementation(WritingSprintPanel* _q)
 
     QSettings settings;
     sprintTime->setText(settings.value(kSprintDurationKey, "25").toString());
+    playSound->setChecked(settings.value(kPlaySoundKey, false).toBool());
 
     sprintAction->setIcon(u8"\U000F040A");
     sprintAction->setFlat(true);
@@ -128,8 +134,16 @@ WritingSprintPanel::Implementation::Implementation(WritingSprintPanel* _q)
 
     sprintOptionsLayout->setContentsMargins({});
     sprintOptionsLayout->setSpacing(0);
-    sprintOptionsLayout->addWidget(sprintTime);
-    sprintOptionsLayout->addWidget(sprintAction);
+    {
+        auto layout = new QHBoxLayout;
+        layout->setSpacing(0);
+        layout->setContentsMargins({});
+        layout->addWidget(sprintTime, 1);
+        layout->addWidget(sprintAction);
+        sprintOptionsLayout->addLayout(layout);
+    }
+    sprintOptionsLayout->addWidget(playSound);
+    //
     sprintResultsLayout->setContentsMargins({});
     sprintResultsLayout->setSpacing(0);
     sprintResultsLayout->addLayout(sprintOptionsLayout);
@@ -183,12 +197,12 @@ void WritingSprintPanel::Implementation::updateSprintAction()
 {
     if (isSprintActive()) {
         sprintAction->setIcon(u8"\U000F04DB");
-        sprintAction->setBackgroundColor(Ui::DesignSystem::color().error());
-        sprintAction->setTextColor(Ui::DesignSystem::color().onError());
+        sprintAction->setBackgroundColor(DesignSystem::color().error());
+        sprintAction->setTextColor(DesignSystem::color().onError());
     } else {
         sprintAction->setIcon(u8"\U000F040A");
-        sprintAction->setBackgroundColor(Ui::DesignSystem::color().accent());
-        sprintAction->setTextColor(Ui::DesignSystem::color().onAccent());
+        sprintAction->setBackgroundColor(DesignSystem::color().accent());
+        sprintAction->setTextColor(DesignSystem::color().onAccent());
     }
 }
 
@@ -228,10 +242,20 @@ WritingSprintPanel::WritingSprintPanel(QWidget* _parent)
         d->status = tr("Sprint finished!");
         d->updateSprintAction();
 
-        WAF::Animation::circleFillIn(
-            topLevelWidget(), mapToGlobal(rect().topRight()),
-            ColorHelper::transparent(Ui::DesignSystem::color().accent(),
-                                     Ui::DesignSystem::disabledTextOpacity()));
+        WAF::Animation::circleFillIn(topLevelWidget(), mapToGlobal(rect().topRight()),
+                                     ColorHelper::transparent(DesignSystem::color().accent(),
+                                                              DesignSystem::disabledTextOpacity()));
+
+        if (d->playSound->isChecked()) {
+            auto sound = new QSoundEffect(this);
+            sound->setSource(QUrl::fromLocalFile(":/audio/sprint_ends"));
+            connect(sound, &QSoundEffect::playingChanged, this, [sound] {
+                if (!sound->isPlaying()) {
+                    sound->deleteLater();
+                }
+            });
+            sound->play();
+        }
 
         emit sprintFinished();
     });
@@ -262,6 +286,7 @@ WritingSprintPanel::WritingSprintPanel(QWidget* _parent)
 
             QSettings settings;
             settings.setValue(kSprintDurationKey, d->sprintTime->text().toInt());
+            settings.setValue(kPlaySoundKey, d->playSound->isChecked());
 
             //
             // После того, как скроются параметры спринта
@@ -286,6 +311,7 @@ WritingSprintPanel::WritingSprintPanel(QWidget* _parent)
     connect(d->restartSprint, &Button::clicked, this, [this] {
         d->sprintTime->show();
         d->sprintAction->show();
+        d->playSound->show();
         d->shareResults->hide();
         d->sprintResultTitle->hide();
         d->sprintResultWords->hide();
@@ -312,6 +338,7 @@ void WritingSprintPanel::showPanel()
 
     d->sprintTime->show();
     d->sprintAction->show();
+    d->playSound->show();
     d->shareResults->hide();
     d->sprintResultTitle->hide();
     d->sprintResultWords->hide();
@@ -337,6 +364,7 @@ void WritingSprintPanel::setResult(int _words)
 
     d->sprintTime->hide();
     d->sprintAction->hide();
+    d->playSound->hide();
     d->shareResults->show();
     d->sprintResultTitle->show();
     d->sprintResultWords->show();
@@ -370,12 +398,12 @@ void WritingSprintPanel::paintEvent(QPaintEvent* _event)
     // Заливаем фон
     //
     painter.fillRect(rect(), Qt::transparent);
-    const auto backgroundRect = rect().adjusted(0, 0, 0, -Ui::DesignSystem::layout().px(6));
+    const auto backgroundRect = rect().adjusted(0, 0, 0, -DesignSystem::layout().px(6));
     painter.fillRect(backgroundRect,
-                     ColorHelper::transparent(Ui::DesignSystem::color().accent(),
+                     ColorHelper::transparent(DesignSystem::color().accent(),
                                               d->isSprintFinished()
-                                                  ? Ui::DesignSystem::inactiveTextOpacity()
-                                                  : Ui::DesignSystem::hoverBackgroundOpacity()));
+                                                  ? DesignSystem::inactiveTextOpacity()
+                                                  : DesignSystem::hoverBackgroundOpacity()));
 
     //
     // Заполненная полоса прогресса
@@ -383,8 +411,8 @@ void WritingSprintPanel::paintEvent(QPaintEvent* _event)
     auto completedRect = backgroundRect;
     completedRect.setWidth(completedRect.width() * d->sprintDuration.currentValue().toDouble());
     painter.fillRect(completedRect,
-                     ColorHelper::transparent(Ui::DesignSystem::color().accent(),
-                                              Ui::DesignSystem::inactiveTextOpacity()));
+                     ColorHelper::transparent(DesignSystem::color().accent(),
+                                              DesignSystem::inactiveTextOpacity()));
 
     //
     // Если панель в состоянии открытой
@@ -396,27 +424,26 @@ void WritingSprintPanel::paintEvent(QPaintEvent* _event)
         //
         // Рисуем текстовку и кнопку закрытия
         //
-        const QRectF closeIconRect(0, 0, Ui::DesignSystem::layout().px48(),
-                                   backgroundRect.height());
+        const QRectF closeIconRect(0, 0, DesignSystem::layout().px48(), backgroundRect.height());
         //
         // ... над полупрозрачной областью
         //
         painter.setClipRect(backgroundRect.adjusted(completedRect.width(), 0, 0, 0));
-        painter.setPen(Ui::DesignSystem::color().onSurface());
-        painter.setFont(Ui::DesignSystem::font().iconsSmall());
+        painter.setPen(DesignSystem::color().onSurface());
+        painter.setFont(DesignSystem::font().iconsSmall());
         painter.drawText(closeIconRect, Qt::AlignCenter, u8"\U000F0156");
         //
-        painter.setFont(Ui::DesignSystem::font().subtitle2());
+        painter.setFont(DesignSystem::font().subtitle2());
         painter.drawText(backgroundRect, Qt::AlignCenter, d->status);
         //
         // ... над залитой областью
         //
         painter.setClipRect(completedRect);
-        painter.setPen(Ui::DesignSystem::color().onAccent());
-        painter.setFont(Ui::DesignSystem::font().iconsSmall());
+        painter.setPen(DesignSystem::color().onAccent());
+        painter.setFont(DesignSystem::font().iconsSmall());
         painter.drawText(closeIconRect, Qt::AlignCenter, u8"\U000F0156");
         //
-        painter.setFont(Ui::DesignSystem::font().subtitle2());
+        painter.setFont(DesignSystem::font().subtitle2());
         painter.drawText(backgroundRect, Qt::AlignCenter, d->status);
     }
 }
@@ -446,7 +473,7 @@ void WritingSprintPanel::mousePressEvent(QMouseEvent* _event)
     //
     // Пользователь хочет закрыть панель
     //
-    if (0 <= _event->pos().x() && _event->pos().x() <= Ui::DesignSystem::layout().px48()) {
+    if (0 <= _event->pos().x() && _event->pos().x() <= DesignSystem::layout().px48()) {
         d->sprintDuration.stop();
         d->sprintDuration.setCurrentTime(0);
         d->status.clear();
@@ -466,6 +493,7 @@ void WritingSprintPanel::updateTranslations()
 {
     d->sprintTime->setLabel(tr("Sprint duration"));
     d->sprintTime->setSuffix(tr("min"));
+    d->playSound->setText(tr("Play sound at end"));
     d->sprintResultTitle->setText(tr("Great job"));
     d->sprintResultSubtitle->setText(tr("words written"));
     d->restartSprint->setText(tr("Restart sprint"));
@@ -475,32 +503,39 @@ void WritingSprintPanel::designSystemChangeEvent(DesignSystemChangeEvent* _event
 {
     Widget::designSystemChangeEvent(_event);
 
-    d->heightAnimation.setStartValue(Ui::DesignSystem::layout().px12());
-    d->heightAnimation.setEndValue(Ui::DesignSystem::layout().px(30));
+    d->heightAnimation.setStartValue(DesignSystem::layout().px12());
+    d->heightAnimation.setEndValue(DesignSystem::layout().px(30));
 
-    d->sprintOptions->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->sprintTime->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-    d->sprintTime->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->sprintTime->setCustomMargins({ 0, 0, Ui::DesignSystem::layout().px16(), 0 });
-    d->sprintAction->setBackgroundColor(Ui::DesignSystem::color().accent());
-    d->sprintAction->setTextColor(Ui::DesignSystem::color().background());
+    d->sprintOptions->setBackgroundColor(DesignSystem::color().background());
+    d->sprintTime->setBackgroundColor(DesignSystem::color().onBackground());
+    d->sprintTime->setTextColor(DesignSystem::color().onBackground());
+    d->sprintTime->setCustomMargins(
+        { DesignSystem::layout().px12(), 0, DesignSystem::layout().px16(), 0 });
+    d->sprintAction->setBackgroundColor(DesignSystem::color().accent());
+    d->sprintAction->setTextColor(DesignSystem::color().background());
+    d->playSound->setBackgroundColor(DesignSystem::color().background());
+    d->playSound->setTextColor(DesignSystem::color().onBackground());
+    d->playSound->setContentsMargins(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+                                     0, DesignSystem::layout().px12());
 
     d->sprintResultsLayout->setContentsMargins(
-        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16(),
-        Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16());
+        DesignSystem::layout().px4(), DesignSystem::layout().px16(), DesignSystem::layout().px16(),
+        DesignSystem::layout().px4());
 
-    d->shareResults->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->shareResults->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->sprintResultTitle->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->sprintResultTitle->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->sprintResultTitle->setContentsMargins(0, Ui::DesignSystem::layout().px12(), 0, 0);
-    d->sprintResultWords->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->sprintResultWords->setTextColor(Ui::DesignSystem::color().accent());
-    d->sprintResultSubtitle->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->sprintResultSubtitle->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->sprintResultSubtitle->setContentsMargins(0, 0, 0, Ui::DesignSystem::layout().px48());
-    d->restartSprint->setBackgroundColor(Ui::DesignSystem::color().accent());
-    d->restartSprint->setTextColor(Ui::DesignSystem::color().onAccent());
+    d->shareResults->setBackgroundColor(DesignSystem::color().background());
+    d->shareResults->setTextColor(DesignSystem::color().onBackground());
+    d->sprintResultTitle->setBackgroundColor(DesignSystem::color().background());
+    d->sprintResultTitle->setTextColor(DesignSystem::color().onBackground());
+    d->sprintResultTitle->setContentsMargins(0, DesignSystem::layout().px12(), 0, 0);
+    d->sprintResultWords->setBackgroundColor(DesignSystem::color().background());
+    d->sprintResultWords->setTextColor(DesignSystem::color().accent());
+    d->sprintResultSubtitle->setBackgroundColor(DesignSystem::color().background());
+    d->sprintResultSubtitle->setTextColor(DesignSystem::color().onBackground());
+    d->sprintResultSubtitle->setContentsMargins(0, 0, 0, DesignSystem::layout().px48());
+    d->restartSprint->setBackgroundColor(DesignSystem::color().accent());
+    d->restartSprint->setTextColor(DesignSystem::color().onAccent());
+    d->restartSprint->setContentsMargins(DesignSystem::layout().px12(), 0, 0,
+                                         DesignSystem::layout().px12());
 }
 
 } // namespace Ui
