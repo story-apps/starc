@@ -29,11 +29,21 @@ QString uuidsFilter(const QVector<QUuid>& _uuids)
     if (_uuids.isEmpty()) {
         return " WHERE 1 = 0 ";
     }
-    QStringList  uuidsList;
+
+    QStringList uuidsList;
+    QStringList caseStatements;
+    int order = 0;
+
     for (const auto& uuid : _uuids) {
-        uuidsList.append("'" + uuid.toString() + "'");
+        QString uuidStr = "'" + uuid.toString() + "'";
+        uuidsList.append(uuidStr);
+        caseStatements.append(QString("WHEN uuid = %1 THEN %2").arg(uuidStr).arg(order));
+        ++order;
     }
-    return QString(" WHERE uuid IN (%1) ").arg(uuidsList.join(", "));
+
+    return QString(" WHERE uuid IN (%1) ORDER BY CASE %2 END")
+        .arg(uuidsList.join(", "))
+        .arg(caseStatements.join(" "));
 }
 
 QString typeFilter(Domain::DocumentObjectType _type)
