@@ -133,7 +133,7 @@ DatabaseManager::DatabaseManager(QObject* _parent)
     , d(new Implementation)
 {
     if (!d->worker) {
-        d->worker = new DatabaseLayer::DatabaseWorker(this);
+        d->worker = new DatabaseLayer::DatabaseWorker();
         d->worker->moveToThread(&d->thread);
 
         connect(this, &DatabaseManager::executeQuery, d->worker,
@@ -142,6 +142,7 @@ DatabaseManager::DatabaseManager(QObject* _parent)
                 &DatabaseManager::onQueryExecuted, Qt::QueuedConnection);
         connect(d->worker, &DatabaseLayer::DatabaseWorker::queryFailed, this,
                 &DatabaseManager::onQueryFailed, Qt::QueuedConnection);
+        connect(&d->thread, &QThread::finished, d->worker, &QObject::deleteLater);
         d->thread.start();
     }
 }
