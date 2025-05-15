@@ -87,6 +87,11 @@ public:
     static QChar smartToLower(const QChar& _char);
 
     /**
+     * @brief Убрать все "пустые" символы строки
+     */
+    static QString simplified(const QString& _text);
+
+    /**
      * @brief Оформить текст как предложение (первая заглавная, остальные строчные)
      */
     static QString toSentenceCase(const QString& _text, bool _capitalizeEveryWord = false,

@@ -111,11 +111,11 @@ AbstractNovelImporter::Document NovelMarkdownImporter::novelText(const QString& 
 
     const QStringList paragraphs = QString(_text).remove('\r').split('\n');
     for (const auto& paragraph : paragraphs) {
-        if (paragraph.simplified().isEmpty()) {
+        auto paragraphText = TextHelper::simplified(paragraph);
+        if (paragraphText.isEmpty()) {
             continue;
         }
 
-        auto paragraphText = paragraph;
 
         //
         // Собираем типы выделения текста

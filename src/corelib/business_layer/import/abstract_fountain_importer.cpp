@@ -573,12 +573,12 @@ AbstractScreenplayImporter::Documents AbstractFountainImporter::importDocuments(
     std::set<QString> characterNames;
     std::set<QString> locationNames;
     for (int i = 0; i != paragraphsCount; ++i) {
-        if (paragraphs[i].isEmpty()) {
+        auto paragraphText = TextHelper::simplified(paragraphs[i]);
+        if (paragraphText.isEmpty()) {
             continue;
         }
 
         blockType = TextParagraphType::Undefined;
-        QString paragraphText;
 
         switch (paragraphs[i][0].toLatin1()) {
         case '.': {
@@ -744,7 +744,9 @@ QString AbstractFountainImporter::documentText(const QString& _text, bool _keepS
     QVector<QString> paragraphs;
     bool isTitle = false;
     bool isFirstLine = true;
-    for (const auto& str : QString(_text).remove('\r').split("\n")) {
+    for (const auto& paragraph : QString(_text).remove('\r').split("\n")) {
+        const auto paragraphText = TextHelper::simplified(paragraph);
+
         //
         // Если первая строка содержит один из ключей титульной страницы, то в начале идет титульная
         // страница, которую мы обрабатываем не здесь
@@ -752,7 +754,7 @@ QString AbstractFountainImporter::documentText(const QString& _text, bool _keepS
         if (isFirstLine) {
             isFirstLine = false;
             for (const auto& titleKey : titleKeysDictionary().keys()) {
-                if (str.startsWith(titleKey + ":")) {
+                if (paragraph.startsWith(titleKey + ":")) {
                     isTitle = true;
                     break;
                 }
@@ -763,18 +765,18 @@ QString AbstractFountainImporter::documentText(const QString& _text, bool _keepS
             //
             // Титульная страница заканчивается пустой строкой
             //
-            if (str.simplified().isEmpty()) {
+            if (paragraphText.isEmpty()) {
                 isTitle = false;
             }
         } else {
-            if (str == kDoubleWhitespace) {
+            if (paragraph == kDoubleWhitespace) {
                 //
                 // Если строка состоит из 2 пробелов, то это нужно сохранить
                 // Используется для многострочных диалогов с пустыми строками
                 //
                 paragraphs.push_back(kDoubleWhitespace);
             } else {
-                paragraphs.push_back(str.simplified());
+                paragraphs.push_back(paragraphText);
             }
         }
     }

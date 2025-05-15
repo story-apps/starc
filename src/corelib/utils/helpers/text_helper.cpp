@@ -409,6 +409,16 @@ QChar TextHelper::smartToLower(const QChar& _char)
     return _char.toLower();
 }
 
+QString TextHelper::simplified(const QString& _text)
+{
+    auto result = _text.simplified();
+    //
+    // Убираем zero-width no-break пробел, также известный как BOM-метка
+    //
+    result.remove(65279);
+    return result;
+}
+
 QString TextHelper::toSentenceCase(const QString& _text, bool _capitalizeEveryWord,
                                    bool _capitalizeEverySentence)
 {
