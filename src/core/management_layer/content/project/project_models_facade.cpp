@@ -521,7 +521,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 };
                 updateEpisodes();
                 connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsInserted,
-                        episodesModel, updateEpisodes);
+                        episodesModel, updateEpisodes, Qt::QueuedConnection);
                 connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsMoved,
                         episodesModel, updateEpisodes);
                 connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsRemoved,
