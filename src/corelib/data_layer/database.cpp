@@ -17,6 +17,11 @@ namespace {
 static QString s_connectionName = "local_database";
 
 /**
+ * @brief Открытые соединения с базой данных
+ */
+static QStringList s_connections;
+
+/**
  * @brief Плагин используемый для работы с базой
  */
 static QString s_sqlDriver = "QSQLITE";
@@ -126,8 +131,10 @@ void Database::setCurrentFile(const QString& _databaseFileName)
 
 void Database::closeCurrentFile()
 {
-    if (QSqlDatabase::contains(s_connectionName)) {
-        QSqlDatabase::removeDatabase(s_connectionName);
+    for (const auto& connection : s_connections) {
+        if (QSqlDatabase::contains(connection)) {
+            QSqlDatabase::removeDatabase(connection);
+        }
     }
 }
 
@@ -201,6 +208,8 @@ void Database::open(QSqlDatabase& _database, const QString& _connectionName,
     _database = QSqlDatabase::addDatabase(s_sqlDriver, _connectionName);
     _database.setDatabaseName(_databaseName);
     _database.open();
+
+    s_connections.append(_connectionName);
 
     Database::States states = checkState(_database);
 
