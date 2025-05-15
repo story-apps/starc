@@ -478,9 +478,10 @@ void StageplayTextCorrector::Implementation::correctPageBreaks(int _position)
     //
     {
         //
-        // ... для сравнения, используем минимальный запас в 10 процентов
+        // ... для сравнения, используем минимальный запас в 10 процентов + 200 дополнительных
+        //     абзацев для обработки переносов, если некоторые абзацы длинее одной страницы
         //
-        const int blocksCount = document()->blockCount() * 1.1;
+        const int blocksCount = document()->blockCount() * 1.1 + 200;
         if (blockItems.size() <= blocksCount) {
             blockItems.resize(blocksCount * 2);
         }
@@ -624,6 +625,12 @@ void StageplayTextCorrector::Implementation::correctPageBreaks(int _position)
             ? blockLineHeight * blockLineCount + blockFormat.bottomMargin()
             : blockLineHeight * blockLineCount + blockFormat.topMargin()
                 + blockFormat.bottomMargin();
+        //
+        // ... если блок настолько огромный, что не влезает на три страницы, то прерываем обработку
+        //
+        if (blockHeight > pageHeight * 3) {
+            return;
+        }
         //
         // ... и высоту одной строки следующего
         //
