@@ -704,6 +704,14 @@ void DocxReader::readText()
     } while (!m_xml.isEndElement() || m_xml.qualifiedName() != QLatin1String("w:t"));
 
     if (!text.isEmpty()) {
+        //
+        // NOTE: Почему-то при вставке текста в документ, даже если стиль содержит указание, что все
+        //       символы должны быть в верхнем регистре, текст вставляется в документ всё равно в
+        //       нижнем регистре, поэтому тут делаем это вручную
+        //
+        if (m_current_style.char_format.fontCapitalization() == QFont::AllUppercase) {
+            text = text.toUpper();
+        }
         m_cursor.insertText(text, m_current_style.char_format);
     }
 }

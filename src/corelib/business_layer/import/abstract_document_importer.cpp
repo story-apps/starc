@@ -519,6 +519,7 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
     // ... стили блока
     const QTextBlockFormat blockFormat = _cursor.blockFormat();
     const QTextCharFormat charFormat = _cursor.charFormat();
+    const QTextBlockFormat prevBlockFormat = _cursor.block().previous().blockFormat();
     // ... текст в верхнем регистре (FIXME: такие строки, как "Я.")
     bool textIsUppercase = charFormat.fontCapitalization() == QFont::AllUppercase
         || blockText == TextHelper::smartToUpper(blockText);
@@ -565,13 +566,14 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
             // Персонаж
             // 1. В верхнем регистре
             // 2. Предыдущий блок - не персонаж
-            // 3. Есть отступ сверху
+            // 3. Есть отступ сверху, или есть отступ снизу у предыдущего
             //
             else if ((textIsUppercase
                       || blockTextWithoutParentheses
                           == TextHelper::smartToUpper(blockTextWithoutParentheses))
                      && _lastBlockType != TextParagraphType::Character
-                     && blockFormat.topMargin() != 0) {
+                     && (_prevEmptyLines > 0 || blockFormat.topMargin() > 0
+                         || prevBlockFormat.bottomMargin() > 0)) {
                 blockType = TextParagraphType::Character;
             }
             //
@@ -606,7 +608,8 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
                 //
                 if ((_lastBlockType == TextParagraphType::SceneHeading
                      || _lastBlockType == TextParagraphType::SceneCharacters)
-                    && _prevEmptyLines == 0 && blockFormat.topMargin() == 0) {
+                    && _prevEmptyLines == 0 && blockFormat.topMargin() == 0
+                    && prevBlockFormat.bottomMargin() == 0) {
                     blockType = TextParagraphType::SceneCharacters;
                 }
                 //
