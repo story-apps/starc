@@ -51,11 +51,12 @@ QMarginsF exportTemplatePageMargins(const ScreenplayExportOptions& _exportOption
 void writeLine(QXmlStreamWriter& _writer, const QTextBlock& _block,
                const ScreenplayExportOptions& _exportOptions)
 {
-    QString paragraphType;
+    QString paragraphTypeName;
     QString sceneNumber;
-    switch (TextBlockStyle::forBlock(_block)) {
+    const auto paragraphType = TextBlockStyle::forBlock(_block);
+    switch (paragraphType) {
     case TextParagraphType::SceneHeading: {
-        paragraphType = "Scene Heading";
+        paragraphTypeName = "Scene Heading";
 
         //
         // ... если надо, то выводим номера сцен
@@ -76,47 +77,47 @@ void writeLine(QXmlStreamWriter& _writer, const QTextBlock& _block,
     }
 
     case TextParagraphType::Action: {
-        paragraphType = "Action";
+        paragraphTypeName = "Action";
         break;
     }
 
     case TextParagraphType::Character: {
-        paragraphType = "Character";
+        paragraphTypeName = "Character";
         break;
     }
 
     case TextParagraphType::Parenthetical: {
-        paragraphType = "Parenthetical";
+        paragraphTypeName = "Parenthetical";
         break;
     }
 
     case TextParagraphType::Dialogue: {
-        paragraphType = "Dialogue";
+        paragraphTypeName = "Dialogue";
         break;
     }
 
     case TextParagraphType::Transition: {
-        paragraphType = "Transition";
+        paragraphTypeName = "Transition";
         break;
     }
 
     case TextParagraphType::Shot: {
-        paragraphType = "Shot";
+        paragraphTypeName = "Shot";
         break;
     }
 
     case TextParagraphType::SceneCharacters: {
-        paragraphType = "Cast List";
+        paragraphTypeName = "Cast List";
         break;
     }
 
     case TextParagraphType::Lyrics: {
-        paragraphType = "Lyrics";
+        paragraphTypeName = "Lyrics";
         break;
     }
 
     default: {
-        paragraphType = "General";
+        paragraphTypeName = "General";
         break;
     }
     }
@@ -125,13 +126,13 @@ void writeLine(QXmlStreamWriter& _writer, const QTextBlock& _block,
     if (!sceneNumber.isEmpty()) {
         _writer.writeAttribute("Number", sceneNumber);
     }
-    _writer.writeAttribute("Type", paragraphType);
+    _writer.writeAttribute("Type", paragraphTypeName);
     _writer.writeAttribute(
         "Alignment",
         _block.blockFormat().alignment().testFlag(Qt::AlignLeft)
             ? "Left"
             : (_block.blockFormat().alignment().testFlag(Qt::AlignHCenter) ? "Center" : "Right"));
-    if (paragraphType == "General") {
+    if (paragraphTypeName == "General") {
         _writer.writeAttribute(
             "LeftIndent",
             QString::number(MeasurementHelper::pxToInch(_block.blockFormat().leftMargin())));
@@ -176,7 +177,15 @@ void writeLine(QXmlStreamWriter& _writer, const QTextBlock& _block,
         //
         // Пишем текст
         //
+        if (formatRange == formatRanges.constFirst()
+            && paragraphType == TextParagraphType::Parenthetical) {
+            _writer.writeCharacters("(");
+        }
         _writer.writeCharacters(_block.text().mid(formatRange.start, formatRange.length));
+        if (formatRange == formatRanges.constLast()
+            && paragraphType == TextParagraphType::Parenthetical) {
+            _writer.writeCharacters(")");
+        }
         //
         _writer.writeEndElement();
     }
