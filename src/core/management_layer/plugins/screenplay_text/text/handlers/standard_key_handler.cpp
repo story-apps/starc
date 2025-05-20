@@ -344,7 +344,7 @@ void StandardKeyHandler::removeCharacters(bool _backward)
         //     то идём назад до конца первого видимого блока
         //
         if (!cursor.atStart() && cursor.positionInBlock() == 0 && _backward
-            && !cursor.block().previous().isVisible()) {
+            && !cursor.block().previous().isVisible() && !cursor.block().text().isEmpty()) {
             do {
                 cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -356,7 +356,8 @@ void StandardKeyHandler::removeCharacters(bool _backward)
         //     идёт невидимый блок, то идём вперёд до начала первого видимого блока
         //
         else if (!cursor.atEnd() && cursor.positionInBlock() == cursor.block().text().length()
-                 && !_backward && !cursor.block().next().isVisible()) {
+                 && !_backward && !cursor.block().next().isVisible()
+                 && !cursor.block().text().isEmpty()) {
             do {
                 cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
