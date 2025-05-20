@@ -177,7 +177,7 @@ void SubscriptionWidget::updateTranslations()
 {
     d->trialInfo->setText(tr("30 days for free"));
     d->tryButton->setText(tr("Try for free"));
-    d->buyButton->setText(tr("Renew"));
+    d->buyButton->setText(tr("Activate"));
     d->buyLifetimeButton->setText(tr("Buy lifetime"));
     d->giftButton->setText(tr("Buy as a gift"));
 }

@@ -135,7 +135,7 @@ void SubscriptionView::Implementation::setupView()
 
     titleLabel->setText(title);
     bodyLabel->setText(body);
-    renewButton->setText(tr("Renew"));
+    renewButton->setText(tr("Activate"));
     renewButton->setVisible(isButtonVisible);
 }
 

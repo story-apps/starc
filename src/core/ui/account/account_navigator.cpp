@@ -781,11 +781,11 @@ void AccountNavigator::updateTranslations()
     d->proTitle->setText(tr("PRO version"));
     d->updateProSubtitleLabel();
     d->tryProButton->setText(tr("Try for free"));
-    d->renewProSubscriptionButton->setText(tr("Renew"));
+    d->renewProSubscriptionButton->setText(tr("Activate"));
     d->cloudTitle->setText(tr("CLOUD version"));
     d->updateCloudSubtitleLabel();
     d->tryCloudButton->setText(tr("Try for free"));
-    d->renewCloudSubscriptionButton->setText(tr("Renew"));
+    d->renewCloudSubscriptionButton->setText(tr("Activate"));
     d->studioTitle->setText(tr("STUDIO version"));
     d->updateStudioSubtitleLabel();
     d->creditsTitle->setText(tr("Credits for Ai tools"));
