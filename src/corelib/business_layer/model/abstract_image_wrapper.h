@@ -4,6 +4,9 @@
 
 #include <corelib_global.h>
 
+namespace TempImagesLayer {
+struct TempImageFile;
+}
 
 namespace BusinessLayer {
 
@@ -38,6 +41,11 @@ public:
     virtual void save(const QUuid& _uuid, const QByteArray& _imageData) = 0;
 
     /**
+     * @brief Сохранить изображения из zip-архива во временные файлы
+     */
+    virtual void storeToTempAsync(const QByteArray& _zipArchive) = 0;
+
+    /**
      * @brief Удалить заданное изображение
      */
     virtual void remove(const QUuid& _uuid) = 0;
@@ -67,6 +75,11 @@ signals:
      * @brief Изображения загружены из БД
      */
     void imagesLoaded(const QUuid& _queryUuid, const QVector<QPixmap*>& _images);
+
+    /**
+     * @brief Изображения размещены во временных файлах
+     */
+    void tempFilesStored(const QVector<TempImagesLayer::TempImageFile>& _tempFiles);
 };
 
 } // namespace BusinessLayer

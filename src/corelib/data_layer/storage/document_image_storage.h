@@ -41,6 +41,11 @@ public:
     void save(const QUuid& _uuid, const QByteArray& _imageData) override;
 
     /**
+     * @brief Сохранить изображения из zip-архива во временные файлы асинхроноо
+     */
+    void storeToTempAsync(const QByteArray& _zipArchive) override;
+
+    /**
      * @brief Удалить заданное изображение
      */
     void remove(const QUuid& _uuid) override;
