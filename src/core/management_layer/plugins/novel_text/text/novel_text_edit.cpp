@@ -1620,6 +1620,7 @@ ContextMenu* NovelTextEdit::createContextMenu(const QPoint& _position, QWidget* 
     connect(showBookmarks, &QAction::triggered, this, &NovelTextEdit::showBookmarksRequested);
 
     auto actions = menu->actions().toVector();
+    actions.first()->setSeparator(true);
     actions.prepend(bookmarkAction);
     menu->setActions(actions);
 

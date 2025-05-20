@@ -409,13 +409,33 @@ QChar TextHelper::smartToLower(const QChar& _char)
     return _char.toLower();
 }
 
-QString TextHelper::simplified(const QString& _text)
+QString TextHelper::simplified(const QString& _text, bool _keepLineBreaks)
 {
-    auto result = _text.simplified();
+    QString result = _text;
     //
     // Убираем zero-width no-break пробел, также известный как BOM-метка
     //
     result.remove(65279);
+    //
+    // Убираем управляющие символы табуляции
+    //
+    result.remove('\0');
+    result.remove('\a');
+    result.remove('\b');
+    result.remove('\v');
+    result.remove('\f');
+    result.remove('\r');
+
+    //
+    // Убираем оставшийся whitespace в зависимости от необходимости сохранять переносы строк
+    //
+    if (_keepLineBreaks) {
+        result = result.replace('\t', ' ');
+        result = result.replace("  ", " ");
+    } else {
+        result = result.simplified();
+    }
+
     return result;
 }
 

@@ -1746,6 +1746,7 @@ ContextMenu* ScreenplayTextEdit::createContextMenu(const QPoint& _position, QWid
     // Располагаем работу со вкладками на самом верху меню
     //
     auto actions = menu->actions().toVector();
+    actions.first()->setSeparator(true);
     actions.prepend(bookmarkAction);
     //
     // ... а разделение абзаца вверху опций форматирования

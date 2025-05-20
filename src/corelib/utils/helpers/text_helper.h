@@ -89,7 +89,7 @@ public:
     /**
      * @brief Убрать все "пустые" символы строки
      */
-    static QString simplified(const QString& _text);
+    static QString simplified(const QString& _text, bool _keepLineBreaks = false);
 
     /**
      * @brief Оформить текст как предложение (первая заглавная, остальные строчные)

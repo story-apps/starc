@@ -404,6 +404,8 @@ TextField::TextField(QWidget* _parent)
     setAttribute(Qt::WA_Hover);
     setAddSpaceToBottom(false);
     setCompleterActive(false);
+    setFormattigAvailable(false);
+    setPasteAsPlainTextAvailable(false);
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

@@ -7,6 +7,7 @@
 
 #include <QAction>
 #include <QApplication>
+#include <QClipboard>
 #include <QDateTime>
 #include <QKeyEvent>
 #include <QLocale>
@@ -137,15 +138,17 @@ bool canShowCursor(const QTextCursor& _cursor)
 class BaseTextEdit::Implementation
 {
 public:
+    Implementation(BaseTextEdit* _q);
+
     /**
      * @brief Перенастроить редактор в соответствии с актуальной дизайн системой
      */
-    void reconfigure(BaseTextEdit* _textEdit);
+    void reconfigure();
 
     /**
      * @brief Выделить блок при тройном клике
      */
-    bool selectBlockOnTripleClick(QMouseEvent* _event, BaseTextEdit* _textEdit);
+    bool selectBlockOnTripleClick(QMouseEvent* _event);
 
     /**
      * @brief Обновить форматирование в блоке
@@ -154,6 +157,13 @@ public:
         BaseTextEdit* _textEdit,
         std::function<QTextCharFormat(const QTextCharFormat&)> _updateFormat);
 
+    /**
+     * @brief Всвтаить текст из буфера обмена, как простой
+     */
+    void pasteAsPlainTextFromClipboard();
+
+
+    BaseTextEdit* q = nullptr;
 
     bool capitalizeWords = true;
     bool correctDoubleCapitals = true;
@@ -162,6 +172,8 @@ public:
     bool smartQuotes = false;
     bool replaceTwoDashes = false;
     bool avoidMultipleSpaces = false;
+    bool pasteAsPlainTextAvailable = true;
+    bool formattingAvailable = true;
 
     /**
      * @brief Количеств
@@ -174,13 +186,17 @@ public:
     qint64 lastMouseClickTime = 0;
 };
 
-void BaseTextEdit::Implementation::reconfigure(BaseTextEdit* _textEdit)
+BaseTextEdit::Implementation::Implementation(BaseTextEdit* _q)
+    : q(_q)
 {
-    _textEdit->setCursorWidth(Ui::DesignSystem::layout().px2());
 }
 
-bool BaseTextEdit::Implementation::selectBlockOnTripleClick(QMouseEvent* _event,
-                                                            BaseTextEdit* _textEdit)
+void BaseTextEdit::Implementation::reconfigure()
+{
+    q->setCursorWidth(Ui::DesignSystem::layout().px2());
+}
+
+bool BaseTextEdit::Implementation::selectBlockOnTripleClick(QMouseEvent* _event)
 {
     if (_event->button() != Qt::LeftButton) {
         return false;
@@ -200,10 +216,10 @@ bool BaseTextEdit::Implementation::selectBlockOnTripleClick(QMouseEvent* _event,
     //
     if (mouseClicks > 2) {
         mouseClicks = 0;
-        QTextCursor cursor = _textEdit->textCursor();
+        QTextCursor cursor = q->textCursor();
         cursor.movePosition(QTextCursor::StartOfBlock);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        _textEdit->setTextCursor(cursor);
+        q->setTextCursor(cursor);
         _event->accept();
         return true;
     }
@@ -231,15 +247,23 @@ void BaseTextEdit::Implementation::updateSelectionFormatting(
     TextHelper::updateSelectionFormatting(cursor, _updateFormat);
 }
 
+void BaseTextEdit::Implementation::pasteAsPlainTextFromClipboard()
+{
+    const auto keepLineBreaks = true;
+    const auto textToInsert
+        = TextHelper::simplified(QGuiApplication::clipboard()->text(), keepLineBreaks);
+    q->insertPlainText(textToInsert);
+}
+
 
 // ****
 
 
 BaseTextEdit::BaseTextEdit(QWidget* _parent)
     : CompleterTextEdit(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
-    d->reconfigure(this);
+    d->reconfigure();
 }
 
 BaseTextEdit::~BaseTextEdit() = default;
@@ -277,6 +301,16 @@ void BaseTextEdit::setReplaceTwoDashes(bool _replace)
 void BaseTextEdit::setAvoidMultipleSpaces(bool _avoid)
 {
     d->avoidMultipleSpaces = _avoid;
+}
+
+void BaseTextEdit::setPasteAsPlainTextAvailable(bool _available)
+{
+    d->pasteAsPlainTextAvailable = _available;
+}
+
+void BaseTextEdit::setFormattigAvailable(bool _available)
+{
+    d->formattingAvailable = _available;
 }
 
 void BaseTextEdit::setTextBold(bool _bold)
@@ -433,83 +467,115 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
         return menu;
     }
 
-    auto formattingAction = new QAction;
-    formattingAction->setSeparator(true);
-    formattingAction->setText(tr("Formatting"));
-    formattingAction->setIconText(u8"\U000F0284");
-    {
-        auto boldAction = new QAction(formattingAction);
-        boldAction->setText(tr("Bold"));
-        boldAction->setWhatsThis(
-            QKeySequence(QKeySequence::Bold).toString(QKeySequence::NativeText));
-        connect(boldAction, &QAction::triggered, this, &BaseTextEdit::invertTextBold);
-        //
-        auto italicAction = new QAction(formattingAction);
-        italicAction->setText(tr("Italic"));
-        italicAction->setWhatsThis(
-            QKeySequence(QKeySequence::Italic).toString(QKeySequence::NativeText));
-        connect(italicAction, &QAction::triggered, this, &BaseTextEdit::invertTextItalic);
-        //
-        auto underlineAction = new QAction(formattingAction);
-        underlineAction->setText(tr("Underline"));
-        underlineAction->setWhatsThis(
-            QKeySequence(QKeySequence::Underline).toString(QKeySequence::NativeText));
-        connect(underlineAction, &QAction::triggered, this, &BaseTextEdit::invertTextUnderline);
-        //
-        auto strikethroughAction = new QAction(formattingAction);
-        strikethroughAction->setText(tr("Strikethrough"));
-        strikethroughAction->setWhatsThis(
-            QKeySequence("Shift+Ctrl+X").toString(QKeySequence::NativeText));
-        connect(strikethroughAction, &QAction::triggered, this,
-                &BaseTextEdit::invertTextStrikethrough);
+    //
+    // Базовые опции контекстного меню
+    //
+    auto actions = menu->actions().toVector();
 
-        auto alignLeftAction = new QAction(formattingAction);
-        alignLeftAction->setSeparator(true);
-        alignLeftAction->setText(tr("Align left"));
-        alignLeftAction->setWhatsThis(QKeySequence("Ctrl+L").toString(QKeySequence::NativeText));
-        connect(alignLeftAction, &QAction::triggered, this,
-                [this] { setTextAlignment(Qt::AlignLeft); });
-        //
-        auto alignCenterAction = new QAction(formattingAction);
-        alignCenterAction->setText(tr("Align center"));
-        alignCenterAction->setWhatsThis(QKeySequence("Ctrl+E").toString(QKeySequence::NativeText));
-        connect(alignCenterAction, &QAction::triggered, this,
-                [this] { setTextAlignment(Qt::AlignHCenter); });
-        //
-        auto alignRightAction = new QAction(formattingAction);
-        alignRightAction->setText(tr("Align right"));
-        alignRightAction->setWhatsThis(QKeySequence("Ctrl+R").toString(QKeySequence::NativeText));
-        connect(alignRightAction, &QAction::triggered, this,
-                [this] { setTextAlignment(Qt::AlignRight); });
-        //
-        auto alignJustifyAction = new QAction(formattingAction);
-        alignJustifyAction->setText(tr("Align justify"));
-        alignJustifyAction->setWhatsThis(QKeySequence("Ctrl+J").toString(QKeySequence::NativeText));
-        connect(alignJustifyAction, &QAction::triggered, this,
-                [this] { setTextAlignment(Qt::AlignJustify); });
+    if (d->formattingAvailable) {
+        auto formattingAction = new QAction;
+        formattingAction->setSeparator(true);
+        formattingAction->setText(tr("Formatting"));
+        formattingAction->setIconText(u8"\U000F0284");
+        {
+            auto boldAction = new QAction(formattingAction);
+            boldAction->setText(tr("Bold"));
+            boldAction->setWhatsThis(
+                QKeySequence(QKeySequence::Bold).toString(QKeySequence::NativeText));
+            connect(boldAction, &QAction::triggered, this, &BaseTextEdit::invertTextBold);
+            //
+            auto italicAction = new QAction(formattingAction);
+            italicAction->setText(tr("Italic"));
+            italicAction->setWhatsThis(
+                QKeySequence(QKeySequence::Italic).toString(QKeySequence::NativeText));
+            connect(italicAction, &QAction::triggered, this, &BaseTextEdit::invertTextItalic);
+            //
+            auto underlineAction = new QAction(formattingAction);
+            underlineAction->setText(tr("Underline"));
+            underlineAction->setWhatsThis(
+                QKeySequence(QKeySequence::Underline).toString(QKeySequence::NativeText));
+            connect(underlineAction, &QAction::triggered, this, &BaseTextEdit::invertTextUnderline);
+            //
+            auto strikethroughAction = new QAction(formattingAction);
+            strikethroughAction->setText(tr("Strikethrough"));
+            strikethroughAction->setWhatsThis(
+                QKeySequence("Shift+Ctrl+X").toString(QKeySequence::NativeText));
+            connect(strikethroughAction, &QAction::triggered, this,
+                    &BaseTextEdit::invertTextStrikethrough);
 
-        auto uppercaseAction = new QAction(formattingAction);
-        uppercaseAction->setSeparator(true);
-        uppercaseAction->setText(tr("Make uppercase"));
-        uppercaseAction->setWhatsThis(
-            QKeySequence("Ctrl+Shift+Up").toString(QKeySequence::NativeText));
-        connect(uppercaseAction, &QAction::triggered, this, [this] { changeTextCase(true); });
+            auto alignLeftAction = new QAction(formattingAction);
+            alignLeftAction->setSeparator(true);
+            alignLeftAction->setText(tr("Align left"));
+            alignLeftAction->setWhatsThis(
+                QKeySequence("Ctrl+L").toString(QKeySequence::NativeText));
+            connect(alignLeftAction, &QAction::triggered, this,
+                    [this] { setTextAlignment(Qt::AlignLeft); });
+            //
+            auto alignCenterAction = new QAction(formattingAction);
+            alignCenterAction->setText(tr("Align center"));
+            alignCenterAction->setWhatsThis(
+                QKeySequence("Ctrl+E").toString(QKeySequence::NativeText));
+            connect(alignCenterAction, &QAction::triggered, this,
+                    [this] { setTextAlignment(Qt::AlignHCenter); });
+            //
+            auto alignRightAction = new QAction(formattingAction);
+            alignRightAction->setText(tr("Align right"));
+            alignRightAction->setWhatsThis(
+                QKeySequence("Ctrl+R").toString(QKeySequence::NativeText));
+            connect(alignRightAction, &QAction::triggered, this,
+                    [this] { setTextAlignment(Qt::AlignRight); });
+            //
+            auto alignJustifyAction = new QAction(formattingAction);
+            alignJustifyAction->setText(tr("Align justify"));
+            alignJustifyAction->setWhatsThis(
+                QKeySequence("Ctrl+J").toString(QKeySequence::NativeText));
+            connect(alignJustifyAction, &QAction::triggered, this,
+                    [this] { setTextAlignment(Qt::AlignJustify); });
+
+            auto uppercaseAction = new QAction(formattingAction);
+            uppercaseAction->setSeparator(true);
+            uppercaseAction->setText(tr("Make uppercase"));
+            uppercaseAction->setWhatsThis(
+                QKeySequence("Ctrl+Shift+Up").toString(QKeySequence::NativeText));
+            connect(uppercaseAction, &QAction::triggered, this, [this] { changeTextCase(true); });
+            //
+            auto lowercaseAction = new QAction(formattingAction);
+            lowercaseAction->setText(tr("Make lowercase"));
+            lowercaseAction->setWhatsThis(
+                QKeySequence("Ctrl+Shift+Down").toString(QKeySequence::NativeText));
+            connect(lowercaseAction, &QAction::triggered, this, [this] { changeTextCase(false); });
+        }
+
         //
-        auto lowercaseAction = new QAction(formattingAction);
-        lowercaseAction->setText(tr("Make lowercase"));
-        lowercaseAction->setWhatsThis(
-            QKeySequence("Ctrl+Shift+Down").toString(QKeySequence::NativeText));
-        connect(lowercaseAction, &QAction::triggered, this, [this] { changeTextCase(false); });
+        // Показываем меню форматирования после базовых действий, и перед "выделить всё"
+        //
+        actions.insert(actions.size() - 1, formattingAction);
     }
 
     //
-    // Показываем меню форматирования после базовых действий, и перед "выделить всё"
+    // Добавляем возможность вставить текст из буфера обмена, как просто текст
     //
-    auto actions = menu->actions().toVector();
-    actions.first()->setSeparator(true);
-    actions.insert(actions.size() - 1, formattingAction);
-    menu->setActions(actions);
+    if (d->pasteAsPlainTextAvailable && !QGuiApplication::clipboard()->text().isEmpty()) {
+        auto pasteAsPlainTextAction = new QAction(menu);
+        pasteAsPlainTextAction->setIconText(u8"\U000f68c0");
+        pasteAsPlainTextAction->setText(tr("Paste as plain text"));
+        pasteAsPlainTextAction->setWhatsThis(
+            QKeySequence("Ctrl+Shift+V").toString(QKeySequence::NativeText));
+        connect(pasteAsPlainTextAction, &QAction::triggered, this,
+                [this] { d->pasteAsPlainTextFromClipboard(); });
+        //
+        // ... вставляем его после стандартной вставки
+        //
+        for (const auto action : actions) {
+            if (action->whatsThis()
+                == QKeySequence(QKeySequence::Paste).toString(QKeySequence::NativeText)) {
+                actions.insert(actions.indexOf(action) + 1, pasteAsPlainTextAction);
+                break;
+            }
+        }
+    }
 
+    menu->setActions(actions);
     return menu;
 }
 
@@ -517,7 +583,7 @@ bool BaseTextEdit::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {
     case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent): {
-        d->reconfigure(this);
+        d->reconfigure();
         updateGeometry();
         update();
         return true;
@@ -531,7 +597,7 @@ bool BaseTextEdit::event(QEvent* _event)
 
 void BaseTextEdit::mousePressEvent(QMouseEvent* _event)
 {
-    const auto isHandled = d->selectBlockOnTripleClick(_event, this);
+    const auto isHandled = d->selectBlockOnTripleClick(_event);
     if (isHandled) {
         return;
     }
@@ -541,7 +607,7 @@ void BaseTextEdit::mousePressEvent(QMouseEvent* _event)
 
 void BaseTextEdit::mouseDoubleClickEvent(QMouseEvent* _event)
 {
-    const auto isHandled = d->selectBlockOnTripleClick(_event, this);
+    const auto isHandled = d->selectBlockOnTripleClick(_event);
     if (isHandled) {
         return;
     }
@@ -746,6 +812,14 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         }
         setTextCursor(cursor);
         cut();
+    }
+    //
+    // ... вставить текст как простой
+    //
+    else if (d->pasteAsPlainTextAvailable && _event->key() == Qt::Key_V
+             && _event->modifiers().testFlag(Qt::ShiftModifier)
+             && _event->modifiers().testFlag(Qt::ControlModifier)) {
+        d->pasteAsPlainTextFromClipboard();
     }
 #ifdef Q_OS_MAC
     //

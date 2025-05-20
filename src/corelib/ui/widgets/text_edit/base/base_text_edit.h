@@ -47,6 +47,16 @@ public:
     void setAvoidMultipleSpaces(bool _avoid);
 
     /**
+     * @brief Установить доступность возможности вставки из буфера обмена, как простого текста
+     */
+    void setPasteAsPlainTextAvailable(bool _available);
+
+    /**
+     * @brief Установить доступность пунктов меню форматирования текста
+     */
+    void setFormattigAvailable(bool _available);
+
+    /**
      * @brief Настроить форматирование выделенного текста
      */
     /** @{ */
