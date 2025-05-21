@@ -16,6 +16,7 @@
 #include <business_layer/model/novel/novel_dictionaries_model.h>
 #include <business_layer/model/novel/novel_information_model.h>
 #include <business_layer/model/novel/text/novel_text_block_parser.h>
+#include <business_layer/model/novel/text/novel_text_mime_handler.h>
 #include <business_layer/model/novel/text/novel_text_model.h>
 #include <business_layer/model/novel/text/novel_text_model_text_item.h>
 #include <business_layer/model/text/text_model_group_item.h>
@@ -1772,6 +1773,11 @@ void NovelTextEdit::insertFromMimeData(const QMimeData* _source)
         BusinessLayer::NovelMarkdownImporter markdownImporter;
         textToInsert = markdownImporter.novelText("\n" + text).text;
     }
+
+    //
+    // Преобразовываем все биты в текстовые блоки (если там только биты)
+    //
+    textToInsert = BusinessLayer::NovelTextMimeHandler::convertBeatsToTextBlocks(textToInsert);
 
     //
     // Собственно вставка данных

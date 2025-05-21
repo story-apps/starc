@@ -22,6 +22,11 @@ public:
      * @brief Преобразовать все текстовые блоки в биты
      */
     static QString convertTextBlocksToBeats(const QString& _mime);
+
+    /**
+     * @brief Преобразовать все биты в текстовые блоки
+     */
+    static QString convertBeatsToTextBlocks(const QString& _mime);
 };
 
 } // namespace BusinessLayer

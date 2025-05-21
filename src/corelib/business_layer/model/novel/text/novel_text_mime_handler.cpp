@@ -2,6 +2,7 @@
 
 #include <business_layer/templates/novel_template.h>
 
+#include <QRegularExpression>
 #include <QUuid>
 
 
@@ -240,6 +241,15 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
         }
     }
 
+    return correctedMime;
+}
+
+QString NovelTextMimeHandler::convertBeatsToTextBlocks(const QString& _mime)
+{
+    QString correctedMime = _mime;
+    correctedMime.remove(QRegularExpression("<beat uuid=(*.)><content>"));
+    correctedMime.remove("</content></beat>");
+    correctedMime.replace("beat_heading", "text");
     return correctedMime;
 }
 

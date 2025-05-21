@@ -14,6 +14,7 @@
 #include <business_layer/model/screenplay/screenplay_dictionaries_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
+#include <business_layer/model/screenplay/text/screenplay_text_mime_handler.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model_text_item.h>
 #include <business_layer/model/text/text_model_group_item.h>
@@ -1911,6 +1912,11 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
         BusinessLayer::ScreenplayFountainImporter fountainImporter;
         textToInsert = fountainImporter.screenplayText("\n" + text).text;
     }
+
+    //
+    // Преобразовываем все биты в текстовые блоки (если там только биты)
+    //
+    textToInsert = BusinessLayer::ScreenplayTextMimeHandler::convertBeatsToTextBlocks(textToInsert);
 
     //
     // Собственно вставка данных

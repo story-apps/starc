@@ -2,6 +2,7 @@
 
 #include <business_layer/templates/screenplay_template.h>
 
+#include <QRegularExpression>
 #include <QUuid>
 
 
@@ -250,6 +251,15 @@ QString ScreenplayTextMimeHandler::convertTextBlocksToBeats(const QString& _mime
         }
     }
 
+    return correctedMime;
+}
+
+QString ScreenplayTextMimeHandler::convertBeatsToTextBlocks(const QString& _mime)
+{
+    QString correctedMime = _mime;
+    correctedMime.remove(QRegularExpression("<beat uuid=(*.)><content>"));
+    correctedMime.remove("</content></beat>");
+    correctedMime.replace("beat_heading", "action");
     return correctedMime;
 }
 
