@@ -419,12 +419,12 @@ QString TextHelper::simplified(const QString& _text, bool _keepLineBreaks)
     //
     // Убираем управляющие символы табуляции
     //
-    result.remove('\0');
-    result.remove('\a');
-    result.remove('\b');
-    result.remove('\v');
-    result.remove('\f');
-    result.remove('\r');
+    result.remove(QChar('\0'));
+    result.remove(QChar('\a'));
+    result.remove(QChar('\b'));
+    result.remove(QChar('\v'));
+    result.remove(QChar('\f'));
+    result.remove(QChar('\r'));
 
     //
     // Убираем оставшийся whitespace в зависимости от необходимости сохранять переносы строк
