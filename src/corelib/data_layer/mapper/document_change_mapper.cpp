@@ -263,8 +263,7 @@ Domain::DomainObject* DocumentChangeMapper::doLoad(const Domain::Identifier& _id
     const auto uuid = QUuid::fromString(_record[2].toString());
     const auto undoPatch = qUncompress(_record[3].toByteArray());
     const auto redoPatch = qUncompress(_record[4].toByteArray());
-    const auto dateTime
-        = QDateTime::fromString(_record[5].toString(), kDateTimeFormat);
+    const auto dateTime = QDateTime::fromString(_record[5].toString(), kDateTimeFormat);
     const auto userName = _record[6].toString();
     const auto userEmail = _record[7].toString();
     const auto isSynced = _record[8].toBool();
@@ -325,8 +324,7 @@ void DocumentChangeMapper::doLoad(Domain::DomainObject* _object, const QVariantL
     const auto redoPatch = qUncompress(_record[4].toByteArray());
     documentChangeObject->setRedoPatch(redoPatch);
 
-    const auto dateTime
-        = QDateTime::fromString(_record[5].toString(), kDateTimeFormat);
+    const auto dateTime = QDateTime::fromString(_record[5].toString(), kDateTimeFormat);
     documentChangeObject->setDateTime(dateTime);
 
     const auto userName = _record[6].toString();

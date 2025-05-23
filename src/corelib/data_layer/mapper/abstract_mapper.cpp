@@ -301,7 +301,7 @@ AbstractMapper::AbstractMapper(QObject* _parent)
                     }
                     case QueryType::Update: {
                         const auto updatingObject = m_processingObjects.find(_queryUuid);
-                        if (updatingObject != m_processingObjects.cend())  {
+                        if (updatingObject != m_processingObjects.cend()) {
                             updatingObject->second->markChangesStored();
                             m_processingObjects.erase(updatingObject);
                         }
@@ -309,7 +309,7 @@ AbstractMapper::AbstractMapper(QObject* _parent)
                     }
                     case QueryType::Delete: {
                         const auto deletingObject = m_processingObjects.find(_queryUuid);
-                        if (deletingObject != m_processingObjects.cend())  {
+                        if (deletingObject != m_processingObjects.cend()) {
                             m_loadedObjectsMap.erase(deletingObject->second->id());
                             delete deletingObject->second;
                             m_processingObjects.erase(deletingObject);
@@ -333,7 +333,7 @@ AbstractMapper::AbstractMapper(QObject* _parent)
                     //
                     // ... и удалим объект из списка обрабатываемых
                     //
-                    if (processingObject != m_processingObjects.cend())  {
+                    if (processingObject != m_processingObjects.cend()) {
                         m_processingObjects.erase(processingObject);
                     }
                     m_sentQueries.erase(query);

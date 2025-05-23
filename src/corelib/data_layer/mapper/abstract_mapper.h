@@ -76,6 +76,7 @@ protected:
     void abstractUpdateAsync(const QUuid& _queryUuid, Domain::DomainObject* _object);
     void abstractFindAsync(const QUuid& _queryUuid, const QString& _filter);
     void abstractDeleteAsync(const QUuid& _queryUuid, Domain::DomainObject* _object);
+
 public:
     Q_SIGNAL void objectsFound(const QUuid& _queryUuid, QVector<Domain::DomainObject*> _objects);
     Q_SIGNAL void queryFailed(const QUuid& _queryUuid, const QString& _error);

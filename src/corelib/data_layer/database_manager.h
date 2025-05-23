@@ -22,7 +22,8 @@ public:
      * @brief Интерфейс для асинхронной работы
      */
     /** @{ */
-    void enqueueQuery(const QUuid& _queryUuid, const QString& _query, const QVariantList& _bindValues);
+    void enqueueQuery(const QUuid& _queryUuid, const QString& _query,
+                      const QVariantList& _bindValues);
     /** @} */
 
     /**

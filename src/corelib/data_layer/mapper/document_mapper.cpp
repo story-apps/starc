@@ -230,8 +230,7 @@ DomainObject* DocumentMapper::doLoad(const Identifier& _id, const QVariantList& 
     const auto uuid = QUuid::fromString(_record[1].toString());
     const auto type = static_cast<DocumentObjectType>(_record[2].toInt());
     const auto content = _record[3].toByteArray();
-    const auto syncedAt
-        = QDateTime::fromString(_record[4].toString(), kDateTimeFormat);
+    const auto syncedAt = QDateTime::fromString(_record[4].toString(), kDateTimeFormat);
 
     return Domain::ObjectsBuilder::createDocument(_id, uuid, type, content, syncedAt);
 }
@@ -273,8 +272,7 @@ void DocumentMapper::doLoad(DomainObject* _object, const QVariantList& _record)
     const auto content = _record[3].toByteArray();
     documentObject->setContent(content);
 
-    const auto syncedAt
-        = QDateTime::fromString(_record[4].toString(), kDateTimeFormat);
+    const auto syncedAt = QDateTime::fromString(_record[4].toString(), kDateTimeFormat);
     documentObject->setSyncedAt(syncedAt);
 }
 
