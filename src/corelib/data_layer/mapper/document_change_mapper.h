@@ -42,7 +42,10 @@ protected:
 
 protected:
     Domain::DomainObject* doLoad(const Domain::Identifier& _id, const QSqlRecord& _record) override;
+    Domain::DomainObject* doLoad(const Domain::Identifier& _id,
+                                 const QVariantList& _record) override;
     void doLoad(Domain::DomainObject* _object, const QSqlRecord& _record) override;
+    void doLoad(Domain::DomainObject* _object, const QVariantList& _record) override;
 
 private:
     DocumentChangeMapper() = default;

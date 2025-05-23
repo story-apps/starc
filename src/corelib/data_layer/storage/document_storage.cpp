@@ -11,12 +11,14 @@ namespace DataStorageLayer {
 class DocumentStorage::Implementation
 {
 public:
+    explicit Implementation() = default;
+
+
     /**
      * @brief Созданные, но не сохранённые документы
      */
     QHash<QUuid, Domain::DocumentObject*> notSavedDocuments;
 };
-
 
 // ****
 
@@ -85,6 +87,12 @@ QVector<Domain::DocumentObject*> DocumentStorage::documents()
     return documents;
 }
 
+void DocumentStorage::loadDocumentsAsync(const QUuid& _queryUuid,
+                                         const QVector<QUuid>& _documentUuids)
+{
+    DataMappingLayer::MapperFacade::documentMapper()->findAsync(_queryUuid, _documentUuids);
+}
+
 Domain::DocumentObject* DocumentStorage::createDocument(const QUuid& _uuid,
                                                         Domain::DocumentObjectType _type)
 {
@@ -123,8 +131,26 @@ void DocumentStorage::saveDocument(const QUuid& _documentUuid)
     if (documentToSave == nullptr) {
         return;
     }
-
     saveDocument(documentToSave);
+}
+
+void DocumentStorage::saveDocumentAsync(const QUuid& _queryUuid, Domain::DocumentObject* _document)
+{
+    if (d->notSavedDocuments.contains(_document->uuid())) {
+        DataMappingLayer::MapperFacade::documentMapper()->insertAsync(_queryUuid, _document);
+        d->notSavedDocuments.remove(_document->uuid());
+    } else {
+        DataMappingLayer::MapperFacade::documentMapper()->updateAsync(_queryUuid, _document);
+    }
+}
+
+void DocumentStorage::saveDocumentAsync(const QUuid& _queryUuid, const QUuid& _documentUuid)
+{
+    auto documentToSave = document(_documentUuid);
+    if (documentToSave == nullptr) {
+        return;
+    }
+    saveDocumentAsync(_queryUuid, documentToSave);
 }
 
 void DocumentStorage::removeDocument(Domain::DocumentObject* _document)
@@ -142,6 +168,22 @@ void DocumentStorage::removeDocument(Domain::DocumentObject* _document)
     }
 }
 
+void DocumentStorage::removeDocumentAsync(const QUuid& _queryUuid,
+                                          Domain::DocumentObject* _document)
+{
+    if (_document == nullptr) {
+        return;
+    }
+
+    if (d->notSavedDocuments.contains(_document->uuid())) {
+        d->notSavedDocuments.remove(_document->uuid());
+        delete _document;
+        _document = nullptr;
+    } else {
+        DataMappingLayer::MapperFacade::documentMapper()->removeAsync(_queryUuid, _document);
+    }
+}
+
 void DocumentStorage::clear()
 {
     qDeleteAll(d->notSavedDocuments);
@@ -149,9 +191,20 @@ void DocumentStorage::clear()
     DataMappingLayer::MapperFacade::documentMapper()->clear();
 }
 
-DocumentStorage::DocumentStorage()
-    : d(new Implementation)
+DocumentStorage::DocumentStorage(QObject* _parent)
+    : QObject(_parent)
+    , d(new Implementation())
 {
+    connect(DataMappingLayer::MapperFacade::documentMapper(),
+            &DataMappingLayer::AbstractMapper::objectsFound, this,
+            [this](const QUuid& _queryUuid, const QVector<Domain::DomainObject*>& _objects) {
+                QVector<Domain::DocumentObject*> documents;
+                for (const auto& object : _objects) {
+                    const auto document = static_cast<Domain::DocumentObject*>(object);
+                    documents.append(document);
+                }
+                emit documentsLoaded(_queryUuid, documents);
+            });
 }
 
 } // namespace DataStorageLayer

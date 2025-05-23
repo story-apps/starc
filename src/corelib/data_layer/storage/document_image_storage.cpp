@@ -2,6 +2,8 @@
 
 #include <data_layer/storage/document_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <data_layer/temp_image_file.h>
+#include <data_layer/temp_images_manager.h>
 #include <domain/document_object.h>
 #include <utils/helpers/image_helper.h>
 
@@ -22,6 +24,11 @@ public:
      */
     void notifyImageRequested(const QUuid& _uuid) const;
 
+    /**
+     * @brief Сохранить все новые изображения, ещё не сохранённые в базу данных
+     */
+    void saveChanges(bool doAsync);
+
 
     DocumentImageStorage* q = nullptr;
 
@@ -39,10 +46,21 @@ public:
      * @brief Список изображений на удаление
      */
     QList<QUuid> imagesToRemove;
+
+    /**
+     * @brief Менеджер изображений, сохраненных во временные файлы
+     */
+    ManagementLayer::TempImagesManager* tempImagesManager = nullptr;
+
+    /**
+     * @brief Список новых изображений, сохраненных во временные файлы
+     */
+    QHash<QUuid, TempImagesLayer::TempImageFile> imagesInTempFiles;
 };
 
 DocumentImageStorage::Implementation::Implementation(DocumentImageStorage* _q)
     : q(_q)
+    , tempImagesManager(new ManagementLayer::TempImagesManager(_q))
 {
 }
 
@@ -50,6 +68,23 @@ void DocumentImageStorage::Implementation::notifyImageRequested(const QUuid& _uu
 {
     QMetaObject::invokeMethod(
         q, [this, _uuid] { emit q->imageRequested(_uuid); }, Qt::QueuedConnection);
+}
+
+void DocumentImageStorage::Implementation::saveChanges(bool doAsync)
+{
+    for (auto imageIter = newImages.begin(); imageIter != newImages.end(); ++imageIter) {
+        if (doAsync) {
+            StorageFacade::documentStorage()->saveDocumentAsync({}, imageIter.key());
+        } else {
+            StorageFacade::documentStorage()->saveDocument(imageIter.key());
+        }
+    }
+    newImages.clear();
+
+    while (!imagesToRemove.isEmpty()) {
+        StorageFacade::documentStorage()->removeDocument(
+            StorageFacade::documentStorage()->document(imagesToRemove.takeFirst()));
+    }
 }
 
 
@@ -60,6 +95,53 @@ DocumentImageStorage::DocumentImageStorage(QObject* _parent)
     : AbstractImageWrapper(_parent)
     , d(new Implementation(this))
 {
+    connect(StorageFacade::documentStorage(), &DocumentStorage::documentsLoaded, this,
+            [this](const QUuid& _queryUuid, QVector<Domain::DocumentObject*> _documents) {
+                QVector<QPixmap*> images;
+                for (const auto& imageDocument : _documents) {
+                    //
+                    // ... подписываемся на обновления изображения (и загружаем, если не был ещё
+                    // загружен из облака)
+                    //
+                    d->notifyImageRequested(imageDocument->uuid());
+                    //
+                    // ... если изображения пока нет в базе, то поставим в кэш заглушку для него
+                    //
+                    if (imageDocument == nullptr) {
+                        d->cachedImages.insert(imageDocument->uuid(), {});
+                        images.append({});
+                    } else {
+                        Q_ASSERT(imageDocument->type() == Domain::DocumentObjectType::ImageData);
+
+                        //
+                        // NOTE: тут грузим вручную, а не через Imagehelper т.к. в кэш нужен именно
+                        // указатель
+                        //
+                        QPixmap* image = new QPixmap;
+                        image->loadFromData(imageDocument->content());
+                        d->cachedImages.insert(imageDocument->uuid(), image);
+                        images.append(image);
+                    }
+                }
+                emit imagesLoaded(_queryUuid, images);
+            });
+    connect(d->tempImagesManager, &ManagementLayer::TempImagesManager::imagesLoaded, this,
+            [this](const QUuid& _queryUuid, const QVector<QByteArray>& _images) {
+                QVector<QPixmap*> images;
+                for (const auto& imageData : _images) {
+                    QPixmap* image = new QPixmap;
+                    image->loadFromData(imageData);
+                    images.append(image);
+                }
+                emit imagesLoaded(_queryUuid, images);
+            });
+    connect(d->tempImagesManager, &ManagementLayer::TempImagesManager::filesStored, this,
+            [this](const QVector<TempImagesLayer::TempImageFile>& _tempFiles) {
+                for (const auto& file : _tempFiles) {
+                    d->imagesInTempFiles.insert(file.uuid, file);
+                }
+                emit tempFilesStored(_tempFiles);
+            });
 }
 
 DocumentImageStorage::~DocumentImageStorage() = default;
@@ -107,6 +189,31 @@ QPixmap DocumentImageStorage::load(const QUuid& _uuid) const
     image->loadFromData(imageDocument->content());
     d->cachedImages.insert(_uuid, image);
     return *image;
+}
+
+void DocumentImageStorage::loadAsync(const QUuid& _queryUuid,
+                                     const QVector<QUuid>& _imageUuids) const
+{
+    QVector<TempImagesLayer::TempImageFile> filesToLoad;
+    for (const auto& uuid : _imageUuids) {
+        //
+        // Сперва ищем во временных файлах
+        //
+        const auto it = d->imagesInTempFiles.find(uuid);
+        if (it != d->imagesInTempFiles.end()) {
+            filesToLoad.append(it.value());
+        } else {
+            //
+            // Если хотя бы одного файла нет — грузим из БД
+            //
+            StorageFacade::documentStorage()->loadDocumentsAsync(_queryUuid, _imageUuids);
+            return;
+        }
+    }
+    //
+    // Если все изображения во временных файлах, грузим из них
+    //
+    d->tempImagesManager->loadAsync(_queryUuid, filesToLoad);
 }
 
 QUuid DocumentImageStorage::save(const QPixmap& _image)
@@ -177,6 +284,11 @@ void DocumentImageStorage::save(const QUuid& _uuid, const QByteArray& _imageData
     emit imageUpdated(_uuid, image);
 }
 
+void DocumentImageStorage::storeToTempAsync(const QByteArray& _zipArchive)
+{
+    d->tempImagesManager->storeAsync(_zipArchive);
+}
+
 void DocumentImageStorage::remove(const QUuid& _uuid)
 {
     //
@@ -202,14 +314,61 @@ void DocumentImageStorage::clear()
 
 void DocumentImageStorage::saveChanges()
 {
+    //
+    // Сохраняем изображения, хранящиеся в памяти
+    //
     for (auto imageIter = d->newImages.begin(); imageIter != d->newImages.end(); ++imageIter) {
         StorageFacade::documentStorage()->saveDocument(imageIter.key());
     }
     d->newImages.clear();
 
+    //
+    // Сохраняем изображения, хранящиеся во временных файлах
+    //
+    for (const auto& tempFile : d->imagesInTempFiles) {
+        auto document = StorageFacade::documentStorage()->createDocument(
+            tempFile.uuid, Domain::DocumentObjectType::ImageData);
+        if (tempFile.tempFile->open()) {
+            document->setContent(tempFile.tempFile->readAll());
+            tempFile.tempFile->close();
+        }
+        StorageFacade::documentStorage()->saveDocument(document);
+    }
+    d->imagesInTempFiles.clear();
+
     while (!d->imagesToRemove.isEmpty()) {
         StorageFacade::documentStorage()->removeDocument(
             StorageFacade::documentStorage()->document(d->imagesToRemove.takeFirst()));
+    }
+}
+
+void DocumentImageStorage::saveChangesAsync()
+{
+    //
+    // Сохраняем изображения, хранящиеся в памяти
+    //
+    for (auto imageIter = d->newImages.begin(); imageIter != d->newImages.end(); ++imageIter) {
+        StorageFacade::documentStorage()->saveDocumentAsync({}, imageIter.key());
+    }
+    d->newImages.clear();
+
+    //
+    // Сохраняем изображения, хранящиеся во временных файлах
+    //
+    for (const auto& tempFile : d->imagesInTempFiles) {
+        auto document = StorageFacade::documentStorage()->createDocument(
+            tempFile.uuid, Domain::DocumentObjectType::ImageData);
+        if (tempFile.tempFile->open()) {
+            document->setContent(tempFile.tempFile->readAll());
+            tempFile.tempFile->close();
+        }
+        StorageFacade::documentStorage()->saveDocumentAsync({}, document);
+    }
+    d->imagesInTempFiles.clear();
+
+    while (!d->imagesToRemove.isEmpty()) {
+        StorageFacade::documentStorage()->removeDocumentAsync(
+            {}, StorageFacade::documentStorage()->document(d->imagesToRemove.takeFirst()));
     }
 }
 
