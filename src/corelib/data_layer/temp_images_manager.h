@@ -2,8 +2,8 @@
 
 #include "temp_image_file.h"
 
-#include <QObject>
 #include <QImage>
+#include <QObject>
 
 #include <corelib_global.h>
 

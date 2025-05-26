@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QObject>
 #include <QImage>
+#include <QObject>
 
 #include <corelib_global.h>
 

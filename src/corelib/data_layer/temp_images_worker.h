@@ -2,9 +2,9 @@
 
 #include "temp_image_file.h"
 
+#include <QImage>
 #include <QObject>
 #include <QTemporaryDir>
-#include <QImage>
 
 namespace TempImagesLayer {
 
