@@ -97,43 +97,27 @@ DocumentImageStorage::DocumentImageStorage(QObject* _parent)
 {
     connect(StorageFacade::documentStorage(), &DocumentStorage::documentsLoaded, this,
             [this](const QUuid& _queryUuid, QVector<Domain::DocumentObject*> _documents) {
-                QVector<QPixmap*> images;
+                QVector<QImage> images;
                 for (const auto& imageDocument : _documents) {
                     //
                     // ... подписываемся на обновления изображения (и загружаем, если не был ещё
                     // загружен из облака)
                     //
                     d->notifyImageRequested(imageDocument->uuid());
-                    //
-                    // ... если изображения пока нет в базе, то поставим в кэш заглушку для него
-                    //
                     if (imageDocument == nullptr) {
-                        d->cachedImages.insert(imageDocument->uuid(), {});
-                        images.append({});
+                        images.append(QImage());
                     } else {
                         Q_ASSERT(imageDocument->type() == Domain::DocumentObjectType::ImageData);
-
-                        //
-                        // NOTE: тут грузим вручную, а не через Imagehelper т.к. в кэш нужен именно
-                        // указатель
-                        //
-                        QPixmap* image = new QPixmap;
-                        image->loadFromData(imageDocument->content());
-                        d->cachedImages.insert(imageDocument->uuid(), image);
+                        QImage image;
+                        image.loadFromData(imageDocument->content());
                         images.append(image);
                     }
                 }
                 emit imagesLoaded(_queryUuid, images);
             });
     connect(d->tempImagesManager, &ManagementLayer::TempImagesManager::imagesLoaded, this,
-            [this](const QUuid& _queryUuid, const QVector<QByteArray>& _images) {
-                QVector<QPixmap*> images;
-                for (const auto& imageData : _images) {
-                    QPixmap* image = new QPixmap;
-                    image->loadFromData(imageData);
-                    images.append(image);
-                }
-                emit imagesLoaded(_queryUuid, images);
+            [this](const QUuid& _queryUuid, const QVector<QImage>& _images) {
+                emit imagesLoaded(_queryUuid, _images);
             });
     connect(d->tempImagesManager, &ManagementLayer::TempImagesManager::filesStored, this,
             [this](const QVector<TempImagesLayer::TempImageFile>& _tempFiles) {

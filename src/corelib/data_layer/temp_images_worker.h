@@ -4,6 +4,7 @@
 
 #include <QObject>
 #include <QTemporaryDir>
+#include <QImage>
 
 namespace TempImagesLayer {
 
@@ -20,7 +21,7 @@ public slots:
 
 signals:
     void filesStored(const QVector<TempImageFile>& _tempFiles);
-    void imagesLoaded(const QUuid& _queryUuid, const QVector<QByteArray>& _images);
+    void imagesLoaded(const QUuid& _queryUuid, const QVector<QImage>& _images);
 
 private:
     static QTemporaryDir m_tempImagesDir;

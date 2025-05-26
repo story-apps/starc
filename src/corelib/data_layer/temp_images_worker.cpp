@@ -87,10 +87,12 @@ void TempImagesWorker::storeToTempFiles(const QByteArray& _zipArchive)
 void TempImagesWorker::loadFromTempFiles(const QUuid& _queryUuid,
                                          const QVector<TempImageFile>& _tempFiles)
 {
-    QVector<QByteArray> images;
+    QVector<QImage> images;
     for (const auto& file : _tempFiles) {
         if (file.tempFile.data()->open()) {
-            images.append(file.tempFile.data()->readAll());
+            QImage image;
+            image.loadFromData(file.tempFile.data()->readAll());
+            images.append(image);
             file.tempFile.data()->close();
         }
     }

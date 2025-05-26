@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QImage>
 
 #include <corelib_global.h>
 
@@ -74,7 +75,7 @@ signals:
     /**
      * @brief Изображения загружены из БД
      */
-    void imagesLoaded(const QUuid& _queryUuid, const QVector<QPixmap*>& _images);
+    void imagesLoaded(const QUuid& _queryUuid, const QVector<QImage>& _images);
 
     /**
      * @brief Изображения размещены во временных файлах

@@ -3,6 +3,7 @@
 #include "temp_image_file.h"
 
 #include <QObject>
+#include <QImage>
 
 #include <corelib_global.h>
 
@@ -32,7 +33,7 @@ signals:
     void filesStored(const QVector<TempImagesLayer::TempImageFile>& _tempFiles);
     void loadFromTempFilesAsync(const QUuid& _queryUuid,
                                 const QVector<TempImagesLayer::TempImageFile>& _tempFiles);
-    void imagesLoaded(const QUuid& _queryUuid, const QVector<QByteArray>& _images);
+    void imagesLoaded(const QUuid& _queryUuid, const QVector<QImage>& _images);
 
 private:
     class Implementation;
