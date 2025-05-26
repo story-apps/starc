@@ -24,11 +24,6 @@ public:
      */
     void notifyImageRequested(const QUuid& _uuid) const;
 
-    /**
-     * @brief Сохранить все новые изображения, ещё не сохранённые в базу данных
-     */
-    void saveChanges(bool doAsync);
-
 
     DocumentImageStorage* q = nullptr;
 
@@ -68,23 +63,6 @@ void DocumentImageStorage::Implementation::notifyImageRequested(const QUuid& _uu
 {
     QMetaObject::invokeMethod(
         q, [this, _uuid] { emit q->imageRequested(_uuid); }, Qt::QueuedConnection);
-}
-
-void DocumentImageStorage::Implementation::saveChanges(bool doAsync)
-{
-    for (auto imageIter = newImages.begin(); imageIter != newImages.end(); ++imageIter) {
-        if (doAsync) {
-            StorageFacade::documentStorage()->saveDocumentAsync({}, imageIter.key());
-        } else {
-            StorageFacade::documentStorage()->saveDocument(imageIter.key());
-        }
-    }
-    newImages.clear();
-
-    while (!imagesToRemove.isEmpty()) {
-        StorageFacade::documentStorage()->removeDocument(
-            StorageFacade::documentStorage()->document(imagesToRemove.takeFirst()));
-    }
 }
 
 
