@@ -77,7 +77,8 @@ signals:
     /**
      * @brief Текст был дополнен
      */
-    void completed(const QModelIndex& _completionIndex);
+    void completed(const QModelIndex& _completionIndex, int _completionStartPosition,
+                   int _completionEndPosition);
 
 private:
     class Implementation;

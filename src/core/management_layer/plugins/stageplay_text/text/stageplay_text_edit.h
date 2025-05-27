@@ -115,14 +115,15 @@ public:
      * @brief Добавить редакторскую заметку для текущего выделения
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                       const QString& _comment, bool _isRevision);
+                       const QString& _comment, bool _isRevision, bool _isAddition,
+                       bool _isRemoval);
 
     /**
      * @brief Настроить автоматический режим добавления редакторских заметок
      */
     void setAutoReviewModeEnabled(bool _enabled);
     void setAutoReviewMode(const QColor& _textColor, const QColor& _backgroundColor,
-                           bool _isRevision);
+                           bool _isRevision, bool _isTrackChanges);
 
     /**
      * @brief Задать курсоры соавторов

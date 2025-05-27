@@ -101,6 +101,16 @@ signals:
     void commentAddRequested(const QColor& _color);
 
     /**
+     * @brief Пользователь хочет добавить пометку добавленного текста
+     */
+    void changeAdditionAddRequested(const QColor& _color);
+
+    /**
+     * @brief Пользователь хочет добавить пометку удалённого текста
+     */
+    void changeRemovalAddRequested(const QColor& _color);
+
+    /**
      * @brief Пользователь хочет добавить пометку ревизии
      */
     void revisionMarkAddRequested(const QColor& _color);

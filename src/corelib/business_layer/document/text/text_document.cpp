@@ -14,6 +14,7 @@
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/shugar.h>
 #include <utils/tools/debouncer.h>
@@ -1943,15 +1944,18 @@ int TextDocument::mergeParagraph(const TextCursor& _cursor)
 }
 
 void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                                 const QString& _comment, bool _isRevision,
-                                 const TextCursor& _cursor)
+                                 const QString& _comment, bool _isRevision, bool _isAddition,
+                                 bool _isRemoval, const TextCursor& _cursor)
 {
-    TextModelTextItem::ReviewMark reviewMark;
+    TextModelTextItem::ReviewMark newReviewMark;
     if (_textColor.isValid()) {
-        reviewMark.textColor = _textColor;
+        newReviewMark.textColor = _textColor;
     }
     if (_backgroundColor.isValid()) {
-        reviewMark.backgroundColor = _backgroundColor;
+        newReviewMark.backgroundColor = _backgroundColor;
+        if (!_textColor.isValid()) {
+            newReviewMark.textColor = ColorHelper::contrasted(_backgroundColor);
+        }
     }
 
     //
@@ -1986,8 +1990,11 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
             //
             // Если нашли редакторскую заметку с которой пересекается добавляемая
             //
-            if (mark.textColor == _textColor && mark.backgroundColor == _backgroundColor
+            if (mark.textColor == newReviewMark.textColor
+                && mark.backgroundColor == newReviewMark.backgroundColor
                 && mark.comments.constFirst().isRevision == _isRevision
+                && mark.comments.constFirst().isAddition == _isAddition
+                && mark.comments.constFirst().isRemoval == _isRemoval
                 && mark.comments.constFirst().author
                     == DataStorageLayer::StorageFacade::settingsStorage()->accountName()
                 && mark.comments.constFirst().authorEmail
@@ -2003,11 +2010,6 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
                 d->model->updateItem(textItem);
                 return;
             }
-
-            //
-            // Если формат не совпал, то выходим и будем добавлять новую заметку
-            //
-            break;
         }
     }
     once;
@@ -2016,12 +2018,13 @@ void TextDocument::addReviewMark(const QColor& _textColor, const QColor& _backgr
     // Добавляем новую редакторскую заметку
     //
     const bool isEdited = false;
-    reviewMark.comments.append({ DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
-                                 DataStorageLayer::StorageFacade::settingsStorage()->accountEmail(),
-                                 QDateTime::currentDateTime().toString(Qt::ISODate), _comment,
-                                 isEdited, _isRevision });
+    newReviewMark.comments.append(
+        { DataStorageLayer::StorageFacade::settingsStorage()->accountName(),
+          DataStorageLayer::StorageFacade::settingsStorage()->accountEmail(),
+          QDateTime::currentDateTime().toString(Qt::ISODate), _comment, isEdited, _isRevision,
+          _isAddition, _isRemoval });
     auto cursor = _cursor;
-    cursor.mergeCharFormat(reviewMark.charFormat());
+    cursor.mergeCharFormat(newReviewMark.charFormat());
 }
 
 void TextDocument::addResourceMark(const QUuid& _resourceUuid, const TextCursor& _cursor)

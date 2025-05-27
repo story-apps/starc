@@ -61,7 +61,8 @@ public:
     QAction* reviewTextColorAction = nullptr;
     QAction* reviewTextBackgroundColorAction = nullptr;
     QAction* reviewCommentAction = nullptr;
-    QAction* changesTextBackgroundColorAction = nullptr;
+    QAction* changesMarkAddedAction = nullptr;
+    QAction* changesMarkRemovedAction = nullptr;
     QAction* revisionMarkAction = nullptr;
     QAction* colorSeparatorAction = nullptr;
     QAction* colorAction = nullptr;
@@ -88,7 +89,8 @@ CommentsToolbar::Implementation::Implementation(CommentsToolbar* _q)
     , reviewTextColorAction(new QAction)
     , reviewTextBackgroundColorAction(new QAction)
     , reviewCommentAction(new QAction)
-    , changesTextBackgroundColorAction(new QAction)
+    , changesMarkAddedAction(new QAction)
+    , changesMarkRemovedAction(new QAction)
     , revisionMarkAction(new QAction)
     , colorSeparatorAction(new QAction)
     , colorAction(new QAction)
@@ -122,7 +124,8 @@ void CommentsToolbar::Implementation::updateActions()
         reviewTextColorAction->setVisible(true);
         reviewTextBackgroundColorAction->setVisible(true);
         reviewCommentAction->setVisible(true);
-        changesTextBackgroundColorAction->setVisible(false);
+        changesMarkAddedAction->setVisible(false);
+        changesMarkRemovedAction->setVisible(false);
         revisionMarkAction->setVisible(false);
         markAsDoneAction->setVisible(isEditCommentVisible);
         removeAction->setVisible(isEditCommentVisible);
@@ -133,7 +136,8 @@ void CommentsToolbar::Implementation::updateActions()
         reviewTextColorAction->setVisible(false);
         reviewTextBackgroundColorAction->setVisible(false);
         reviewCommentAction->setVisible(false);
-        changesTextBackgroundColorAction->setVisible(true);
+        changesMarkAddedAction->setVisible(true);
+        changesMarkRemovedAction->setVisible(true);
         revisionMarkAction->setVisible(false);
         markAsDoneAction->setVisible(isEditCommentVisible);
         removeAction->setVisible(isEditCommentVisible);
@@ -144,7 +148,8 @@ void CommentsToolbar::Implementation::updateActions()
         reviewTextColorAction->setVisible(false);
         reviewTextBackgroundColorAction->setVisible(false);
         reviewCommentAction->setVisible(false);
-        changesTextBackgroundColorAction->setVisible(false);
+        changesMarkAddedAction->setVisible(false);
+        changesMarkRemovedAction->setVisible(false);
         revisionMarkAction->setVisible(true);
         markAsDoneAction->setVisible(false);
         removeAction->setVisible(isEditCommentVisible);
@@ -271,9 +276,11 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
     d->reviewCommentAction->setShortcut(QKeySequence("Ctrl+Shift+C"));
     addAction(d->reviewCommentAction);
 
-    d->changesTextBackgroundColorAction->setIconText(u8"\U000f0266");
-    d->changesTextBackgroundColorAction->setShortcut(QKeySequence("Ctrl+Shift+H"));
-    addAction(d->changesTextBackgroundColorAction);
+    d->changesMarkAddedAction->setIconText(u8"\U000F0412");
+    addAction(d->changesMarkAddedAction);
+
+    d->changesMarkRemovedAction->setIconText(u8"\U000F0413");
+    addAction(d->changesMarkRemovedAction);
 
     d->revisionMarkAction->setIconText(u8"\U000F0382");
     d->revisionMarkAction->setShortcut(QKeySequence("Ctrl+Shift+R"));
@@ -337,8 +344,10 @@ CommentsToolbar::CommentsToolbar(QWidget* _parent)
             [this] { emit textBackgoundColorChangeRequested(color()); });
     connect(d->reviewCommentAction, &QAction::triggered, this,
             [this] { emit commentAddRequested(color()); });
-    connect(d->changesTextBackgroundColorAction, &QAction::triggered, this,
-            [this] { emit textBackgoundColorChangeRequested(color()); });
+    connect(d->changesMarkAddedAction, &QAction::triggered, this,
+            [this] { emit changeAdditionAddRequested(color()); });
+    connect(d->changesMarkRemovedAction, &QAction::triggered, this,
+            [this] { emit changeRemovalAddRequested(ColorHelper::removedTextBackgroundColor()); });
     connect(d->revisionMarkAction, &QAction::triggered, this,
             [this] { emit revisionMarkAddRequested(color()); });
     connect(d->markAsDoneAction, &QAction::toggled, this, &CommentsToolbar::markAsDoneRequested);
@@ -398,7 +407,8 @@ void CommentsToolbar::setAddingAvailable(bool _available)
              d->reviewTextColorAction,
              d->reviewTextBackgroundColorAction,
              d->reviewCommentAction,
-             d->changesTextBackgroundColorAction,
+             d->changesMarkAddedAction,
+             d->changesMarkRemovedAction,
              d->revisionMarkAction,
          }) {
         action->setEnabled(_available);
@@ -538,11 +548,8 @@ void CommentsToolbar::updateTranslations()
         + QString(" (%1)").arg(
             d->reviewCommentAction->shortcut().toString(QKeySequence::NativeText))
         + addingActionNote);
-    d->changesTextBackgroundColorAction->setToolTip(
-        tr("Change text highlight color")
-        + QString(" (%1)").arg(
-            d->changesTextBackgroundColorAction->shortcut().toString(QKeySequence::NativeText))
-        + addingActionNote);
+    d->changesMarkAddedAction->setToolTip(tr("Mark added") + addingActionNote);
+    d->changesMarkRemovedAction->setToolTip(tr("Mark removed") + addingActionNote);
     d->revisionMarkAction->setToolTip(
         tr("Mark revisited")
         + QString(" (%1)").arg(d->revisionMarkAction->shortcut().toString(QKeySequence::NativeText))

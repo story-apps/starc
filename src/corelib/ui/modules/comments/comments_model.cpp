@@ -77,6 +77,11 @@ public:
         bool isValid() const;
 
         /**
+         * @brief Текст, к которому относится заметка
+         */
+        QString sourceText() const;
+
+        /**
          * @brief Сравнить две обёртки между собой
          */
         bool operator==(const ReviewMarkWrapper& _other) const;
@@ -652,6 +657,26 @@ bool CommentsModel::Implementation::ReviewMarkWrapper::isValid() const
     return !reviewMark.comments.isEmpty();
 }
 
+QString CommentsModel::Implementation::ReviewMarkWrapper::sourceText() const
+{
+    if (items.isEmpty()) {
+        return {};
+    }
+
+    if (items.size() == 1) {
+        return items.constFirst()->text().mid(fromInFirstItem, toInLastItem - fromInFirstItem);
+    }
+
+    QString result = items.constFirst()->text().mid(fromInFirstItem);
+    for (int itemIndex = 1; itemIndex < items.size() - 1; ++itemIndex) {
+        result.append("\n");
+        result.append(items.at(itemIndex)->text());
+    }
+    result.append("\n");
+    result.append(items.constLast()->text().mid(0, toInLastItem));
+    return result;
+}
+
 bool CommentsModel::Implementation::ReviewMarkWrapper::operator==(
     const CommentsModel::Implementation::ReviewMarkWrapper& _other) const
 {
@@ -1041,6 +1066,10 @@ QVariant CommentsModel::data(const QModelIndex& _index, int _role) const
         return reviewMarkWrapper.reviewMark.comments.constFirst().date;
     }
 
+    case ReviewMarkSourceTextRole: {
+        return reviewMarkWrapper.sourceText();
+    }
+
     case ReviewMarkCommentRole: {
         return reviewMarkWrapper.reviewMark.comments.constFirst().text;
     }
@@ -1059,6 +1088,14 @@ QVariant CommentsModel::data(const QModelIndex& _index, int _role) const
 
     case ReviewMarkIsRevisionRole: {
         return reviewMarkWrapper.reviewMark.comments.constFirst().isRevision;
+    }
+
+    case ReviewMarkIsAdditionRole: {
+        return reviewMarkWrapper.reviewMark.comments.constFirst().isAddition;
+    }
+
+    case ReviewMarkIsRemovalRole: {
+        return reviewMarkWrapper.reviewMark.comments.constFirst().isRemoval;
     }
 
     case ReviewMarkIsDoneRole: {

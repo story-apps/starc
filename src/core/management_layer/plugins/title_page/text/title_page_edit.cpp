@@ -511,14 +511,16 @@ int TitlePageEdit::positionForModelIndex(const QModelIndex& _index)
 }
 
 void TitlePageEdit::addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                                  const QString& _comment, bool _isRevision)
+                                  const QString& _comment, bool _isRevision, bool _isAddition,
+                                  bool _isRemoval)
 {
     QTextCursor cursor(textCursor());
     if (!cursor.hasSelection()) {
         return;
     }
 
-    d->document.addReviewMark(_textColor, _backgroundColor, _comment, _isRevision, cursor);
+    d->document.addReviewMark(_textColor, _backgroundColor, _comment, _isRevision, _isAddition,
+                              _isRemoval, cursor);
 }
 
 void TitlePageEdit::keyPressEvent(QKeyEvent* _event)

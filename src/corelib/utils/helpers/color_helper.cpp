@@ -10,6 +10,12 @@ const QVector<QColor> kRevisionColors = {
 };
 }
 
+
+QColor ColorHelper::removedTextBackgroundColor()
+{
+    return "#b00020";
+}
+
 QColor ColorHelper::transparent(const QColor& _color, qreal _alphaF)
 {
     if (qFuzzyCompare(_alphaF, 1.0)) {

@@ -178,41 +178,73 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
     const auto date = _index.data(CommentsModel::ReviewMarkCreationDateRole).toDateTime();
     auto dateText = _painter->fontMetrics().elidedText(date.toString("HH:mm d MMM"), Qt::ElideRight,
                                                        static_cast<int>(dateRect.width()));
-    if (_index.data(CommentsModel::ReviewMarkIsEditedRole).toBool()) {
+    const auto isEdited = _index.data(CommentsModel::ReviewMarkIsEditedRole).toBool();
+    const auto isAddition = _index.data(CommentsModel::ReviewMarkIsAdditionRole).toBool();
+    const auto isRemoval = _index.data(CommentsModel::ReviewMarkIsRemovalRole).toBool();
+    if (isAddition) {
+        dateText.append(QString(" (%1)").arg(tr("added")));
+    } else if (isRemoval) {
+        dateText.append(QString(" (%1)").arg(tr("removed")));
+    } else if (isEdited) {
         dateText.append(QString(" (%1)").arg(tr("edited")));
     }
     _painter->drawText(dateRect, Qt::AlignLeft | Qt::AlignTop, dateText);
 
     //
-    // ... комментарий
+    // ... добавление или удаление
     //
-    const auto comment = _index.data(CommentsModel::ReviewMarkCommentRole).toString();
     QRectF commentRect;
-    if (m_isSingleCommentMode || !done) {
-        const auto commentWidth = backgroundRectRight - colorRect.width()
-            - DesignSystem::layout().px16() - DesignSystem::treeOneLineItem().margins().right();
-        if (!comment.isEmpty()) {
-            commentRect = QRectF(
-                QPointF(isLeftToRight ? avatarRect.left()
-                                      : (backgroundRect.left()
-                                         + DesignSystem::treeOneLineItem().margins().left()),
-                        avatarRect.bottom() + DesignSystem::compactLayout().px8()),
-                QSizeF(commentWidth,
-                       TextHelper::heightForWidth(comment, DesignSystem::font().body2(),
-                                                  commentWidth)));
-            _painter->setFont(DesignSystem::font().body2());
-            _painter->setPen(textColor);
-            QTextOption commentTextOption;
-            commentTextOption.setAlignment(isLeftToRight ? Qt::AlignLeft : Qt::AlignRight);
-            commentTextOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
-            _painter->drawText(commentRect, comment, commentTextOption);
-        } else {
-            commentRect = QRectF(QPointF(isLeftToRight
-                                             ? avatarRect.left()
-                                             : (backgroundRect.left()
-                                                + DesignSystem::treeOneLineItem().margins().left()),
-                                         avatarRect.bottom() + DesignSystem::compactLayout().px8()),
-                                 QSizeF(commentWidth, 0));
+    const auto commentWidth = backgroundRectRight - colorRect.width()
+        - DesignSystem::layout().px16() - DesignSystem::treeOneLineItem().margins().right();
+    if (isAddition || isRemoval) {
+        const auto sourceText = _index.data(CommentsModel::ReviewMarkSourceTextRole).toString();
+        commentRect
+            = QRectF(QPointF(isLeftToRight ? avatarRect.left()
+                                           : (backgroundRect.left()
+                                              + DesignSystem::treeOneLineItem().margins().left()),
+                             avatarRect.bottom() + DesignSystem::compactLayout().px8()),
+                     QSizeF(commentWidth,
+                            TextHelper::heightForWidth(sourceText, DesignSystem::font().body2(),
+                                                       commentWidth)));
+        _painter->setFont(DesignSystem::font().body2());
+        _painter->setPen(textColor);
+        QTextOption commentTextOption;
+        commentTextOption.setAlignment(isLeftToRight ? Qt::AlignLeft : Qt::AlignRight);
+        commentTextOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+        _painter->drawText(commentRect, sourceText, commentTextOption);
+    }
+    //
+    // ... или комментарий
+    //
+    else {
+        //
+        // ... если нужно отображать только комментарий, или заметка не решена
+        //
+        if (m_isSingleCommentMode || !done) {
+            const auto comment = _index.data(CommentsModel::ReviewMarkCommentRole).toString();
+            if (!comment.isEmpty()) {
+                commentRect = QRectF(
+                    QPointF(isLeftToRight ? avatarRect.left()
+                                          : (backgroundRect.left()
+                                             + DesignSystem::treeOneLineItem().margins().left()),
+                            avatarRect.bottom() + DesignSystem::compactLayout().px8()),
+                    QSizeF(commentWidth,
+                           TextHelper::heightForWidth(comment, DesignSystem::font().body2(),
+                                                      commentWidth)));
+                _painter->setFont(DesignSystem::font().body2());
+                _painter->setPen(textColor);
+                QTextOption commentTextOption;
+                commentTextOption.setAlignment(isLeftToRight ? Qt::AlignLeft : Qt::AlignRight);
+                commentTextOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+                _painter->drawText(commentRect, comment, commentTextOption);
+            } else {
+                commentRect = QRectF(
+                    QPointF(isLeftToRight ? avatarRect.left()
+                                          : (backgroundRect.left()
+                                             + DesignSystem::treeOneLineItem().margins().left()),
+                            avatarRect.bottom() + DesignSystem::compactLayout().px8()),
+                    QSizeF(commentWidth, 0));
+            }
         }
     }
 
@@ -384,6 +416,9 @@ QSize CommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
     // Считаем высоту
     //
     const auto isDone = _index.data(CommentsModel::ReviewMarkIsDoneRole).toBool();
+    const auto isAddition = _index.data(CommentsModel::ReviewMarkIsAdditionRole).toBool();
+    const auto isRemoval = _index.data(CommentsModel::ReviewMarkIsRemovalRole).toBool();
+    const auto sourceText = _index.data(CommentsModel::ReviewMarkSourceTextRole).toString();
     const auto comment = _index.data(CommentsModel::ReviewMarkCommentRole).toString();
     const auto comments
         = _index.data(CommentsModel::ReviewMarkRepliesRole)
@@ -398,15 +433,24 @@ QSize CommentDelegate::sizeHint(const QStyleOptionViewItem& _option,
     //
     // ... высота без комментария
     //
-    if ((!m_isSingleCommentMode && (isDone || (comment.isEmpty() && comments.size() == 1)))
-        || (m_isSingleCommentMode && comment.isEmpty())) {
+    if ((!m_isSingleCommentMode
+         && (isDone || (!isAddition && !isRemoval && comment.isEmpty() && comments.size() == 1)))
+        || (m_isSingleCommentMode && !isAddition && !isRemoval && comment.isEmpty())) {
         return { width, headerHeight };
     }
     //
     // ... полная высота
     //
     int height = headerHeight;
-    if (!comment.isEmpty()) {
+    if (isAddition || isRemoval) {
+        //
+        // ... ширина - ширина области цвета - левый отступ (фиксированный) - правое поле
+        //
+        const auto commentWidth = width - DesignSystem::layout().px4()
+            - DesignSystem::layout().px16() - DesignSystem::treeOneLineItem().margins().right();
+        height += DesignSystem::compactLayout().px8()
+            + TextHelper::heightForWidth(sourceText, DesignSystem::font().body2(), commentWidth);
+    } else if (!comment.isEmpty()) {
         //
         // ... ширина - ширина области цвета - левый отступ (фиксированный) - правое поле
         //

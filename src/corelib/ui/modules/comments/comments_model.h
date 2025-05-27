@@ -26,10 +26,13 @@ public:
         ReviewMarkAuthorNameRole = Qt::UserRole + 1,
         ReviewMarkAuthorEmailRole,
         ReviewMarkCreationDateRole,
+        ReviewMarkSourceTextRole,
         ReviewMarkCommentRole,
         ReviewMarkIsEditedRole,
         ReviewMarkColorRole,
         ReviewMarkIsRevisionRole,
+        ReviewMarkIsAdditionRole,
+        ReviewMarkIsRemovalRole,
         ReviewMarkIsDoneRole,
         ReviewMarkRepliesRole
     };

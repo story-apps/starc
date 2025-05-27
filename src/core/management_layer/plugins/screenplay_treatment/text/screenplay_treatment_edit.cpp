@@ -92,6 +92,7 @@ public:
         QColor textColor;
         QColor backgroundColor;
         bool isRevision = false;
+        bool isTrackChanges = false;
     } autoReviewMode;
 
     QVector<Domain::CursorInfo> collaboratorsCursorInfo;
@@ -187,7 +188,10 @@ void ScreenplayTreatmentEdit::Implementation::updateReviewMark(QKeyEvent* _event
     // ... или вставляется из буфера обмена
     // ... и позиция курсора изменилась после обработки события
     //
-    if (((_event->modifiers().testFlag(Qt::NoModifier) && !_event->text().isEmpty())
+    if ((_event == nullptr
+         || ((_event->modifiers().testFlag(Qt::NoModifier)
+              || _event->modifiers().testFlag(Qt::ShiftModifier))
+             && !_event->text().isEmpty())
          || _event == QKeySequence::Paste)
         && _from < _to) {
         //
@@ -199,7 +203,7 @@ void ScreenplayTreatmentEdit::Implementation::updateReviewMark(QKeyEvent* _event
         cursor.setPosition(_to, QTextCursor::KeepAnchor);
         q->setTextCursor(cursor);
         q->addReviewMark(autoReviewMode.textColor, autoReviewMode.backgroundColor, {},
-                         autoReviewMode.isRevision);
+                         autoReviewMode.isRevision, autoReviewMode.isTrackChanges, false);
         q->setTextCursor(lastCursor);
     }
 }
@@ -237,6 +241,11 @@ ScreenplayTreatmentEdit::ScreenplayTreatmentEdit(QWidget* _parent)
                 updateCursors(d->collaboratorsCursorInfo);
 
                 d->collaboratorCursorInfoUpdateDebouncer.abortWork();
+            });
+    connect(this, &ScreenplayTreatmentEdit::completed, this,
+            [this](const QModelIndex& _index, int _from, int _to) {
+                Q_UNUSED(_index)
+                d->updateReviewMark(nullptr, _from, _to);
             });
 }
 
@@ -549,14 +558,15 @@ int ScreenplayTreatmentEdit::positionForModelIndex(const QModelIndex& _index)
 
 void ScreenplayTreatmentEdit::addReviewMark(const QColor& _textColor,
                                             const QColor& _backgroundColor, const QString& _comment,
-                                            bool _isRevision)
+                                            bool _isRevision, bool _isAddition, bool _isRemoval)
 {
     BusinessLayer::TextCursor cursor(textCursor());
     if (!cursor.hasSelection()) {
         return;
     }
 
-    d->document.addReviewMark(_textColor, _backgroundColor, _comment, _isRevision, cursor);
+    d->document.addReviewMark(_textColor, _backgroundColor, _comment, _isRevision, _isAddition,
+                              _isRemoval, cursor);
 }
 
 void ScreenplayTreatmentEdit::setAutoReviewModeEnabled(bool _enabled)
@@ -565,12 +575,14 @@ void ScreenplayTreatmentEdit::setAutoReviewModeEnabled(bool _enabled)
 }
 
 void ScreenplayTreatmentEdit::setAutoReviewMode(const QColor& _textColor,
-                                                const QColor& _backgroundColor, bool _isRevision)
+                                                const QColor& _backgroundColor, bool _isRevision,
+                                                bool _isTrackChanges)
 {
     d->autoReviewMode.textColor
         = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
     d->autoReviewMode.backgroundColor = _backgroundColor;
     d->autoReviewMode.isRevision = _isRevision;
+    d->autoReviewMode.isTrackChanges = _isTrackChanges;
 }
 
 void ScreenplayTreatmentEdit::setCursors(const QVector<Domain::CursorInfo>& _cursors)
@@ -584,6 +596,35 @@ void ScreenplayTreatmentEdit::keyPressEvent(QKeyEvent* _event)
     if (isReadOnly()) {
         ScriptTextEdit::keyPressEvent(_event);
         return;
+    }
+
+    //
+    // Если активен режим отслеживания изменений, то обработаем случаи удаления текста,
+    // чтобы вместо удаления, текст лишь помечался удалённым
+    //
+    if (BusinessLayer::TextCursor cursor = textCursor(); d->autoReviewMode.isEnabled
+        && d->autoReviewMode.isTrackChanges
+        && (_event->key() == Qt::Key_Delete || _event->key() == Qt::Key_Backspace
+            || (!_event->text().isEmpty() && cursor.hasSelection()))) {
+        if ((_event->key() == Qt::Key_Delete || _event->key() == Qt::Key_Backspace)
+            && !cursor.hasSelection()) {
+            cursor.movePosition(_event->key() == Qt::Key_Delete ? QTextCursor::NextCharacter
+                                                                : QTextCursor::PreviousCharacter,
+                                QTextCursor::KeepAnchor, 1);
+            setTextCursor(cursor);
+        }
+        addReviewMark({}, ColorHelper::removedTextBackgroundColor(), {}, false, false, true);
+        cursor.setPosition(_event->key() == Qt::Key_Backspace ? cursor.selectionInterval().from
+                                                              : cursor.selectionInterval().to);
+        setTextCursor(cursor);
+
+        //
+        // ... если это было удаление, то прекращаем дальнейшую обработку
+        //
+        if (_event->key() == Qt::Key_Delete || _event->key() == Qt::Key_Backspace) {
+            _event->accept();
+            return;
+        }
     }
 
     //

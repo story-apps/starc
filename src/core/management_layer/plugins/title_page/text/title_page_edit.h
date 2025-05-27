@@ -84,7 +84,8 @@ public:
      * @brief Добавить редакторскую заметку для текущего выделения
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                       const QString& _comment, bool _isRevision);
+                       const QString& _comment, bool _isRevision, bool _isAddition,
+                       bool _isRemoval);
 
 signals:
     /**

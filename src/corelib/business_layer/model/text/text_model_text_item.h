@@ -57,6 +57,8 @@ public:
         QString text;
         bool isEdited = false;
         bool isRevision = false;
+        bool isAddition = false;
+        bool isRemoval = false;
 
         bool operator==(const ReviewComment& _other) const;
 

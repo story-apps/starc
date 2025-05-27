@@ -138,7 +138,8 @@ public:
      * @brief Добавить редакторскую заметку для текущего выделения
      */
     void addReviewMark(const QColor& _textColor, const QColor& _backgroundColor,
-                       const QString& _comment, bool _isRevision);
+                       const QString& _comment, bool _isRevision, bool _isAddition,
+                       bool _isRemoval);
 
 
     ScreenplayTreatmentView* q = nullptr;
@@ -447,12 +448,12 @@ void ScreenplayTreatmentView::Implementation::updateTextEditAutoReviewMode()
     }
     case Ui::CommentsToolbar::CommentsType::Changes: {
         textEdit->setAutoReviewModeEnabled(toolbar->isCommentsModeEnabled() && true);
-        textEdit->setAutoReviewMode({}, commentsToolbar->color(), false);
+        textEdit->setAutoReviewMode({}, commentsToolbar->color(), false, true);
         break;
     }
     case Ui::CommentsToolbar::CommentsType::Revision: {
         textEdit->setAutoReviewModeEnabled(toolbar->isCommentsModeEnabled() && true);
-        textEdit->setAutoReviewMode(commentsToolbar->color(), {}, true);
+        textEdit->setAutoReviewMode(commentsToolbar->color(), {}, true, false);
         break;
     }
     }
@@ -644,14 +645,16 @@ void ScreenplayTreatmentView::Implementation::showParametersFor(BusinessLayer::T
 void ScreenplayTreatmentView::Implementation::addReviewMark(const QColor& _textColor,
                                                             const QColor& _backgroundColor,
                                                             const QString& _comment,
-                                                            bool _isRevision)
+                                                            bool _isRevision, bool _isAddition,
+                                                            bool _isRemoval)
 {
     //
     // Добавим заметку
     //
     const auto textColor
         = _textColor.isValid() ? _textColor : ColorHelper::contrasted(_backgroundColor);
-    textEdit->addReviewMark(textColor, _backgroundColor, _comment, _isRevision);
+    textEdit->addReviewMark(textColor, _backgroundColor, _comment, _isRevision, _isAddition,
+                            _isRemoval);
 
     //
     // Снимем выделение, чтобы пользователь получил обратную связь от приложения, что выделение
@@ -766,10 +769,12 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
             [this] { d->updateTextEditAutoReviewMode(); });
     connect(d->commentsToolbar, &CommentsToolbar::colorChanged, this,
             [this] { d->updateTextEditAutoReviewMode(); });
-    connect(d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,
-            [this](const QColor& _color) { d->addReviewMark(_color, {}, {}, false); });
-    connect(d->commentsToolbar, &CommentsToolbar::textBackgoundColorChangeRequested, this,
-            [this](const QColor& _color) { d->addReviewMark({}, _color, {}, false); });
+    connect(
+        d->commentsToolbar, &CommentsToolbar::textColorChangeRequested, this,
+        [this](const QColor& _color) { d->addReviewMark(_color, {}, {}, false, false, false); });
+    connect(
+        d->commentsToolbar, &CommentsToolbar::textBackgoundColorChangeRequested, this,
+        [this](const QColor& _color) { d->addReviewMark({}, _color, {}, false, false, false); });
     connect(d->commentsToolbar, &CommentsToolbar::commentAddRequested, this,
             [this](const QColor& _color) {
                 d->sidebarTabs->setCurrentTab(kCommentsTabIndex);
@@ -780,8 +785,12 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
                             d->textEdit->cursorRect().topLeft()))
                         .y());
             });
+    connect(d->commentsToolbar, &CommentsToolbar::changeAdditionAddRequested, this,
+            [this](const QColor& _color) { d->addReviewMark({}, _color, {}, false, true, false); });
+    connect(d->commentsToolbar, &CommentsToolbar::changeRemovalAddRequested, this,
+            [this](const QColor& _color) { d->addReviewMark({}, _color, {}, false, false, true); });
     connect(d->commentsToolbar, &CommentsToolbar::revisionMarkAddRequested, this,
-            [this](const QColor& _color) { d->addReviewMark(_color, {}, {}, true); });
+            [this](const QColor& _color) { d->addReviewMark(_color, {}, {}, true, false, false); });
     connect(d->commentsToolbar, &CommentsToolbar::markAsDoneRequested, this, [this](bool _checked) {
         QSignalBlocker blocker(d->commentsView);
         if (_checked) {
@@ -1220,7 +1229,7 @@ ScreenplayTreatmentView::ScreenplayTreatmentView(QWidget* _parent)
     //
     connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
             [this](const QColor& _color, const QString& _comment) {
-                d->addReviewMark({}, _color, _comment, false);
+                d->addReviewMark({}, _color, _comment, false, false, false);
             });
     connect(d->commentsView, &CommentsView::changeReviewMarkRequested, this,
             [this](const QModelIndex& _index, const QString& _comment) {

@@ -11,6 +11,11 @@ class CORE_LIBRARY_EXPORT ColorHelper
 {
 public:
     /**
+     * @brief Цвет фона удалённого текста
+     */
+    static QColor removedTextBackgroundColor();
+
+    /**
      * @brief Получить полупрозрачный цвет
      */
     static QColor transparent(const QColor& _color, qreal _alphaF);

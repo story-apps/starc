@@ -200,12 +200,14 @@ void CompleterTextEdit::applyCompletion(const QModelIndex& _completionIndex)
     //
     // Собственно дополняем текст
     //
+    const int completionStartPosition = cursor.position();
     cursor.insertText(completion, charFormat);
+    const int completionEndPosition = cursor.position();
 
     //
     // Уведомим об успешном дополнении
     //
-    emit completed(sourceCompletionIndex);
+    emit completed(sourceCompletionIndex, completionStartPosition, completionEndPosition);
 }
 
 void CompleterTextEdit::closeCompleter()
