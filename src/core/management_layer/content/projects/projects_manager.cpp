@@ -1164,7 +1164,7 @@ void ProjectsManager::setCurrentProject(const QString& _path, const QString& _re
     // Делаем проект текущим и загружаем из него БД
     // или создаём, если ранее его не существовало
     //
-    ManagementLayer::DatabaseManager::setCurrentFile(projectRealPath);
+    DatabaseLayer::DatabaseManager::setCurrentFile(projectRealPath);
 
     //
     // Определим, находится ли устанавливаемый проект уже в списке, или это новый
@@ -1344,7 +1344,7 @@ void ProjectsManager::closeCurrentProject()
     //
     // Закрываем сам файл с базой данных
     //
-    ManagementLayer::DatabaseManager::closeCurrentFile();
+    DatabaseLayer::DatabaseManager::closeCurrentFile();
 
     //
     // Очищаем хранилища

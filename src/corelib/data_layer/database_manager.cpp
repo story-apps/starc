@@ -10,16 +10,19 @@
 #include <QUuid>
 
 
-namespace ManagementLayer {
+namespace DatabaseLayer {
 
 
 class DatabaseManager::Implementation
 {
 public:
-    explicit Implementation();
+    explicit Implementation(DatabaseManager* _q);
     ~Implementation();
 
     void executeNextQuery();
+
+
+    DatabaseManager* q = nullptr;
 
     DatabaseLayer::DatabaseWorker* worker = nullptr;
     QThread thread;
@@ -29,18 +32,81 @@ public:
         QVariantList bindValues;
     };
     QQueue<QueryInQueue> queryQueue;
-    QMutex requestQueueMutex;
+    QMutex queryQueueMutex;
     bool isProcessing = false;
 };
 
-DatabaseManager::Implementation::Implementation()
+DatabaseManager::Implementation::Implementation(DatabaseManager* _q)
+    : q(_q)
 {
+    worker = new DatabaseLayer::DatabaseWorker();
+    worker->moveToThread(&thread);
+
+    connect(q, &DatabaseManager::queryRequested, worker,
+            &DatabaseLayer::DatabaseWorker::executeQuery, Qt::QueuedConnection);
+    connect(
+        worker, &DatabaseLayer::DatabaseWorker::queryExecuted, q,
+        [this](const QUuid& _queryUuid, const QVector<QSqlRecord>& _results) {
+            QMutexLocker locker(&queryQueueMutex);
+            //
+            // Удаляем текущий запрос
+            //
+            if (!queryQueue.isEmpty()) {
+                queryQueue.dequeue();
+            }
+
+            //
+            // Уведомляем о том, что он исполнен
+            //
+            emit q->queryFinished(_queryUuid, _results);
+
+            //
+            // Отправляем на исполнение следующий запрос или помечаем, что обработка завершена
+            //
+            if (!queryQueue.isEmpty()) {
+                emit q->queryRequested(queryQueue.head().uuid, queryQueue.head().query,
+                                       queryQueue.head().bindValues);
+            } else {
+                isProcessing = false;
+            }
+        },
+        Qt::QueuedConnection);
+    connect(
+        worker, &DatabaseLayer::DatabaseWorker::queryFailed, q,
+        [this](const QUuid& _queryUuid, const QString& _error) {
+            QMutexLocker locker(&queryQueueMutex);
+            //
+            // Удаляем текущий запрос
+            //
+            if (!queryQueue.isEmpty()) {
+                queryQueue.dequeue();
+            }
+
+            //
+            // Уведомляем об ошибке
+            //
+            emit q->queryFailed(_queryUuid, _error);
+
+            //
+            // Отправляем на исполнение следующий запрос или помечаем, что обработка завершена
+            //
+            if (!queryQueue.isEmpty()) {
+                emit q->queryRequested(queryQueue.head().uuid, queryQueue.head().query,
+                                       queryQueue.head().bindValues);
+            } else {
+                isProcessing = false;
+            }
+        },
+        Qt::QueuedConnection);
+    connect(&thread, &QThread::finished, worker, &QObject::deleteLater);
 }
 
 DatabaseManager::Implementation::~Implementation()
 {
-    thread.quit();
-    thread.wait();
+    if (thread.isRunning()) {
+        thread.quit();
+        thread.wait();
+    }
 }
 
 
@@ -55,17 +121,24 @@ DatabaseManager& DatabaseManager::instance()
     return instance;
 }
 
-void DatabaseManager::enqueueQuery(const QUuid& _queryUuid, const QString& _query,
-                                   const QVariantList& _bindValues)
+QUuid DatabaseManager::enqueueQuery(const QString& _query, const QVariantList& _bindValues)
 {
-    QMutexLocker locker(&d->requestQueueMutex);
-    d->queryQueue.enqueue({ _queryUuid, _query, _bindValues });
+    if (!d->thread.isRunning()) {
+        d->thread.start();
+    }
+
+    QMutexLocker locker(&d->queryQueueMutex);
+
+    QUuid queryUuid = QUuid::createUuid();
+    d->queryQueue.enqueue({ queryUuid, _query, _bindValues });
 
     if (!d->isProcessing) {
         d->isProcessing = true;
-        emit executeQuery(d->queryQueue.head().uuid, d->queryQueue.head().query,
-                          d->queryQueue.head().bindValues);
+        emit queryRequested(d->queryQueue.head().uuid, d->queryQueue.head().query,
+                            d->queryQueue.head().bindValues);
     }
+
+    return queryUuid;
 }
 
 bool DatabaseManager::canOpenFile(const QString& _databaseFileName)
@@ -130,50 +203,8 @@ void DatabaseManager::vacuum()
 
 DatabaseManager::DatabaseManager(QObject* _parent)
     : QObject{ _parent }
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
-    if (!d->worker) {
-        d->worker = new DatabaseLayer::DatabaseWorker();
-        d->worker->moveToThread(&d->thread);
-
-        connect(this, &DatabaseManager::executeQuery, d->worker,
-                &DatabaseLayer::DatabaseWorker::executeQuery, Qt::QueuedConnection);
-        connect(d->worker, &DatabaseLayer::DatabaseWorker::queryExecuted, this,
-                &DatabaseManager::onQueryExecuted, Qt::QueuedConnection);
-        connect(d->worker, &DatabaseLayer::DatabaseWorker::queryFailed, this,
-                &DatabaseManager::onQueryFailed, Qt::QueuedConnection);
-        connect(&d->thread, &QThread::finished, d->worker, &QObject::deleteLater);
-        d->thread.start();
-    }
 }
 
-void DatabaseManager::onQueryExecuted(const QUuid& _queryUuid,
-                                      const QVector<QVariantList>& _results)
-{
-    emit queryResult(_queryUuid, _results);
-
-    QMutexLocker locker(&d->requestQueueMutex);
-    //
-    // Удаляем текущий запрос
-    //
-    if (!d->queryQueue.isEmpty()) {
-        d->queryQueue.dequeue();
-    }
-    //
-    // Отправляем на исполнение следующий запрос или помечаем, что обработка завершена
-    //
-    if (!d->queryQueue.isEmpty()) {
-        emit executeQuery(d->queryQueue.head().uuid, d->queryQueue.head().query,
-                          d->queryQueue.head().bindValues);
-    } else {
-        d->isProcessing = false;
-    }
-}
-
-void DatabaseManager::onQueryFailed(const QUuid& _queryUuid, const QString& _error)
-{
-    emit queryFailed(_queryUuid, _error);
-}
-
-
-} // namespace ManagementLayer
+} // namespace DatabaseLayer

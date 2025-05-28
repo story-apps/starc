@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-#include <QVariant>
+#include <QSqlRecord>
 
 
 namespace DatabaseLayer {
@@ -17,7 +17,7 @@ public slots:
                       const QVariantList& _bindValues);
 
 signals:
-    void queryExecuted(const QUuid& _queryUuid, const QVector<QVariantList>& _results);
+    void queryExecuted(const QUuid& _queryUuid, const QVector<QSqlRecord>& _results);
     void queryFailed(const QUuid& _queryUuid, const QString& _error);
 };
 

@@ -5,8 +5,6 @@
 #include <QDebug>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QSqlRecord>
-#include <QVariant>
 
 namespace DatabaseLayer {
 
@@ -21,6 +19,9 @@ static QString s_connectionName = "thread_local_database";
 DatabaseWorker::DatabaseWorker(QObject* parent)
     : QObject{ parent }
 {
+    if (QMetaType::type("QVector<QSqlRecord>") == QMetaType::UnknownType) {
+        qRegisterMetaType<QVector<QSqlRecord>>("QVector<QSqlRecord>");
+    }
 }
 
 void DatabaseWorker::executeQuery(const QUuid& _queryUuid, const QString& _queryString,
@@ -42,13 +43,9 @@ void DatabaseWorker::executeQuery(const QUuid& _queryUuid, const QString& _query
         return;
     }
 
-    QVector<QVariantList> results;
+    QVector<QSqlRecord> results;
     while (query.next()) {
-        QVariantList row;
-        for (int i = 0; i < query.record().count(); ++i) {
-            row.append(query.value(i));
-        }
-        results.append(row);
+        results.append(query.record());
     }
 
     emit queryExecuted(_queryUuid, results);

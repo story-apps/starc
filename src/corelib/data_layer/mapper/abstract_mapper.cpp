@@ -11,9 +11,9 @@
 #include <QUuid>
 #include <QVariant>
 
+using DatabaseLayer::DatabaseManager;
 using Domain::DomainObject;
 using Domain::Identifier;
-using ManagementLayer::DatabaseManager;
 
 
 namespace DataMappingLayer {
@@ -176,7 +176,7 @@ bool AbstractMapper::executeSql(QSqlQuery& _sqlQuery)
     return false;
 }
 
-void AbstractMapper::abstractInsertAsync(const QUuid& _queryUuid, Domain::DomainObject* _object)
+QUuid AbstractMapper::abstractInsertAsync(Domain::DomainObject* _object)
 {
     //
     // Установим идентификатор для нового объекта
@@ -197,21 +197,24 @@ void AbstractMapper::abstractInsertAsync(const QUuid& _queryUuid, Domain::Domain
     //
     // Отправим запрос на исполнение
     //
-    DatabaseManager::instance().enqueueQuery(_queryUuid, insertQueryString, insertValues);
+    const auto queryUuid
+        = DatabaseManager::instance().enqueueQuery(insertQueryString, insertValues);
 
     //
     // Запомним тип запроса
     //
-    m_sentQueries.emplace(_queryUuid, QueryType::Insert);
+    m_sentQueries.emplace(queryUuid, QueryType::Insert);
+
+    return queryUuid;
 }
 
-void AbstractMapper::abstractUpdateAsync(const QUuid& _queryUuid, Domain::DomainObject* _object)
+QUuid AbstractMapper::abstractUpdateAsync(Domain::DomainObject* _object)
 {
     //
     // Обновления не было
     //
     if (_object->isChangesStored()) {
-        return;
+        return QUuid();
     }
 
     //
@@ -228,33 +231,39 @@ void AbstractMapper::abstractUpdateAsync(const QUuid& _queryUuid, Domain::Domain
     //
     // Отправим запрос на исполнение
     //
-    DatabaseManager::instance().enqueueQuery(_queryUuid, updateQueryString, updateValues);
+    const auto queryUuid
+        = DatabaseManager::instance().enqueueQuery(updateQueryString, updateValues);
 
     //
     // Запомним тип запроса
     //
-    m_sentQueries.emplace(_queryUuid, QueryType::Update);
+    m_sentQueries.emplace(queryUuid, QueryType::Update);
 
     //
     // Запомним объект, который обновляем
     //
-    m_processingObjects.emplace(_queryUuid, _object);
+    m_processingObjects.emplace(queryUuid, _object);
+
+    return queryUuid;
 }
 
-void AbstractMapper::abstractFindAsync(const QUuid& _queryUuid, const QString& _filter)
+QUuid AbstractMapper::abstractFindAsync(const QString& _filter)
 {
     //
     // Отправим запрос на исполнение
     //
-    DatabaseManager::instance().enqueueQuery(_queryUuid, findAllStatement() + _filter, {});
+    const auto queryUuid
+        = DatabaseManager::instance().enqueueQuery(findAllStatement() + _filter, {});
 
     //
     // Запомним тип запроса
     //
-    m_sentQueries.emplace(_queryUuid, QueryType::Find);
+    m_sentQueries.emplace(queryUuid, QueryType::Find);
+
+    return queryUuid;
 }
 
-void AbstractMapper::abstractDeleteAsync(const QUuid& _queryUuid, Domain::DomainObject* _object)
+QUuid AbstractMapper::abstractDeleteAsync(Domain::DomainObject* _object)
 {
     //
     // Получим данные для формирования запроса на их удаление
@@ -265,26 +274,29 @@ void AbstractMapper::abstractDeleteAsync(const QUuid& _queryUuid, Domain::Domain
     //
     // Отправим запрос на исполнение
     //
-    DatabaseManager::instance().enqueueQuery(_queryUuid, deleteQueryString, deleteValues);
+    const auto queryUuid
+        = DatabaseManager::instance().enqueueQuery(deleteQueryString, deleteValues);
 
     //
     // Запомним тип запроса
     //
-    m_sentQueries.emplace(_queryUuid, QueryType::Delete);
+    m_sentQueries.emplace(queryUuid, QueryType::Delete);
 
     //
     // Запомним объект, который удаляем
     //
-    m_processingObjects.emplace(_queryUuid, _object);
+    m_processingObjects.emplace(queryUuid, _object);
 
     _object = nullptr;
+
+    return queryUuid;
 }
 
 AbstractMapper::AbstractMapper(QObject* _parent)
     : QObject(_parent)
 {
-    connect(&DatabaseManager::instance(), &DatabaseManager::queryResult, this,
-            [this](const QUuid& _queryUuid, const QVector<QVariantList>& _records) {
+    connect(&DatabaseManager::instance(), &DatabaseManager::queryFinished, this,
+            [this](const QUuid& _queryUuid, const QVector<QSqlRecord>& _records) {
                 const auto query = m_sentQueries.find(_queryUuid);
                 if (query != m_sentQueries.cend()) {
                     const auto queryType = query->second;
@@ -381,38 +393,6 @@ Identifier AbstractMapper::findNextIdentifier()
 DomainObject* AbstractMapper::load(const QSqlRecord& _record)
 {
     const int idValue = _record.value("id").toInt();
-    if (idValue == 0) {
-        return nullptr;
-    }
-
-    Identifier id(idValue);
-    DomainObject* result = nullptr;
-    //
-    // Если объект загружен, используем указатель на него
-    //
-    const auto iter = m_loadedObjectsMap.find(id);
-    if (iter != m_loadedObjectsMap.cend()) {
-        result = iter->second;
-        //
-        // ... если данные не были изменены, обновляем объект
-        //
-        if (result->isChangesStored()) {
-            doLoad(result, _record);
-        }
-    }
-    //
-    // В противном случае создаём новый объект и сохраняем указатель на него
-    //
-    else {
-        result = doLoad(id, _record);
-        m_loadedObjectsMap.emplace(id, result);
-    }
-    return result;
-}
-
-Domain::DomainObject* AbstractMapper::load(const QVariantList& _record)
-{
-    const int idValue = _record[0].toInt();
     if (idValue == 0) {
         return nullptr;
     }

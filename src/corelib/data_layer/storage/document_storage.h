@@ -49,9 +49,10 @@ public:
     QVector<Domain::DocumentObject*> documents();
 
     /**
-     * @brief Получить документы по uuid'у асинхронно
+     * @brief Получить документы по гуиду асинхронно
+     * @return Гуид запроса
      */
-    void loadDocumentsAsync(const QUuid& _queryUuid, const QVector<QUuid>& _documentUuids);
+    QUuid loadDocumentsAsync(const QVector<QUuid>& _documentUuids);
     Q_SIGNAL void documentsLoaded(const QUuid& _queryUuid,
                                   QVector<Domain::DocumentObject*> _documents);
 
@@ -73,9 +74,10 @@ public:
 
     /**
      * @brief Обновить документ асинхронно
+     * @return Гуид запроса
      */
-    void saveDocumentAsync(const QUuid& _queryUuid, Domain::DocumentObject* _document);
-    void saveDocumentAsync(const QUuid& _queryUuid, const QUuid& _documentUuid);
+    QUuid saveDocumentAsync(Domain::DocumentObject* _document);
+    QUuid saveDocumentAsync(const QUuid& _documentUuid);
 
     /**
      * @brief Удалить документ
@@ -84,8 +86,9 @@ public:
 
     /**
      * @brief Удалить документ асинхронно
+     * @return Гуид запроса
      */
-    void removeDocumentAsync(const QUuid& _queryUuid, Domain::DocumentObject* _document);
+    QUuid removeDocumentAsync(Domain::DocumentObject* _document);
 
     /**
      * @brief Очистить хранилище

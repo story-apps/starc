@@ -43,8 +43,6 @@ protected:
      */
     virtual Domain::DomainObject* doLoad(const Domain::Identifier& _id, const QSqlRecord& _record)
         = 0;
-    virtual Domain::DomainObject* doLoad(const Domain::Identifier& _id, const QVariantList& _record)
-        = 0;
 
     /**
      * @brief Обновить параметры заданного объекта из sql-записи
@@ -70,12 +68,13 @@ protected:
 
     /**
      * @brief Методы для асинхронной работы
+     * @return Гуид запроса
      */
     /** @{ */
-    void abstractInsertAsync(const QUuid& _queryUuid, Domain::DomainObject* _object);
-    void abstractUpdateAsync(const QUuid& _queryUuid, Domain::DomainObject* _object);
-    void abstractFindAsync(const QUuid& _queryUuid, const QString& _filter);
-    void abstractDeleteAsync(const QUuid& _queryUuid, Domain::DomainObject* _object);
+    QUuid abstractInsertAsync(Domain::DomainObject* _object);
+    QUuid abstractUpdateAsync(Domain::DomainObject* _object);
+    QUuid abstractFindAsync(const QString& _filter);
+    QUuid abstractDeleteAsync(Domain::DomainObject* _object);
 
 public:
     Q_SIGNAL void objectsFound(const QUuid& _queryUuid, QVector<Domain::DomainObject*> _objects);
@@ -103,7 +102,6 @@ private:
      * @brief Загрузить или обновить объект из записи в БД
      */
     Domain::DomainObject* load(const QSqlRecord& _record);
-    Domain::DomainObject* load(const QVariantList& _record);
 
 private:
     /**

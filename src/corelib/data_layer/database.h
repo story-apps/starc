@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QString>
-#include <QtGlobal>
 
 #include <corelib_global.h>
 

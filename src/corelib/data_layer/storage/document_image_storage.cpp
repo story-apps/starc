@@ -97,13 +97,14 @@ DocumentImageStorage::DocumentImageStorage(QObject* _parent)
             [this](const QUuid& _queryUuid, const QVector<QImage>& _images) {
                 emit imagesLoaded(_queryUuid, _images);
             });
-    connect(d->tempImagesManager, &ManagementLayer::TempImagesManager::filesStored, this,
-            [this](const QVector<TempImagesLayer::TempImageFile>& _tempFiles) {
-                for (const auto& file : _tempFiles) {
-                    d->imagesInTempFiles.insert(file.uuid, file);
-                }
-                emit tempFilesStored(_tempFiles);
-            });
+    connect(
+        d->tempImagesManager, &ManagementLayer::TempImagesManager::filesStored, this,
+        [this](const QUuid& _queryUuid, const QVector<TempImagesLayer::TempImageFile>& _tempFiles) {
+            for (const auto& file : _tempFiles) {
+                d->imagesInTempFiles.insert(file.uuid, file);
+            }
+            emit tempFilesStored(_queryUuid, _tempFiles);
+        });
 }
 
 DocumentImageStorage::~DocumentImageStorage() = default;
@@ -153,8 +154,7 @@ QPixmap DocumentImageStorage::load(const QUuid& _uuid) const
     return *image;
 }
 
-void DocumentImageStorage::loadAsync(const QUuid& _queryUuid,
-                                     const QVector<QUuid>& _imageUuids) const
+QUuid DocumentImageStorage::loadAsync(const QVector<QUuid>& _imageUuids) const
 {
     QVector<TempImagesLayer::TempImageFile> filesToLoad;
     for (const auto& uuid : _imageUuids) {
@@ -168,14 +168,13 @@ void DocumentImageStorage::loadAsync(const QUuid& _queryUuid,
             //
             // Если хотя бы одного файла нет — грузим из БД
             //
-            StorageFacade::documentStorage()->loadDocumentsAsync(_queryUuid, _imageUuids);
-            return;
+            return StorageFacade::documentStorage()->loadDocumentsAsync(_imageUuids);
         }
     }
     //
     // Если все изображения во временных файлах, грузим из них
     //
-    d->tempImagesManager->loadAsync(_queryUuid, filesToLoad);
+    return d->tempImagesManager->loadAsync(filesToLoad);
 }
 
 QUuid DocumentImageStorage::save(const QPixmap& _image)
@@ -246,9 +245,9 @@ void DocumentImageStorage::save(const QUuid& _uuid, const QByteArray& _imageData
     emit imageUpdated(_uuid, image);
 }
 
-void DocumentImageStorage::storeToTempAsync(const QByteArray& _zipArchive)
+QUuid DocumentImageStorage::storeToTempAsync(const QByteArray& _zipArchive)
 {
-    d->tempImagesManager->storeAsync(_zipArchive);
+    return d->tempImagesManager->storeAsync(_zipArchive);
 }
 
 void DocumentImageStorage::remove(const QUuid& _uuid)
@@ -310,7 +309,7 @@ void DocumentImageStorage::saveChangesAsync()
     // Сохраняем изображения, хранящиеся в памяти
     //
     for (auto imageIter = d->newImages.begin(); imageIter != d->newImages.end(); ++imageIter) {
-        StorageFacade::documentStorage()->saveDocumentAsync({}, imageIter.key());
+        StorageFacade::documentStorage()->saveDocumentAsync(imageIter.key());
     }
     d->newImages.clear();
 
@@ -324,13 +323,13 @@ void DocumentImageStorage::saveChangesAsync()
             document->setContent(tempFile.tempFile->readAll());
             tempFile.tempFile->close();
         }
-        StorageFacade::documentStorage()->saveDocumentAsync({}, document);
+        StorageFacade::documentStorage()->saveDocumentAsync(document);
     }
     d->imagesInTempFiles.clear();
 
     while (!d->imagesToRemove.isEmpty()) {
         StorageFacade::documentStorage()->removeDocumentAsync(
-            {}, StorageFacade::documentStorage()->document(d->imagesToRemove.takeFirst()));
+            StorageFacade::documentStorage()->document(d->imagesToRemove.takeFirst()));
     }
 }
 

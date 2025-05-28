@@ -122,24 +122,24 @@ void DocumentMapper::remove(DocumentObject* _object)
     abstractDelete(_object);
 }
 
-void DocumentMapper::findAsync(const QUuid& _queryUuid, const QVector<QUuid>& _documentUuids)
+QUuid DocumentMapper::findAsync(const QVector<QUuid>& _documentUuids)
 {
-    abstractFindAsync(_queryUuid, uuidsFilter(_documentUuids));
+    return abstractFindAsync(uuidsFilter(_documentUuids));
 }
 
-void DocumentMapper::insertAsync(const QUuid& _queryUuid, DocumentObject* _object)
+QUuid DocumentMapper::insertAsync(DocumentObject* _object)
 {
-    abstractInsertAsync(_queryUuid, _object);
+    return abstractInsertAsync(_object);
 }
 
-void DocumentMapper::updateAsync(const QUuid& _queryUuid, DocumentObject* _object)
+QUuid DocumentMapper::updateAsync(DocumentObject* _object)
 {
-    abstractUpdateAsync(_queryUuid, _object);
+    return abstractUpdateAsync(_object);
 }
 
-void DocumentMapper::removeAsync(const QUuid& _queryUuid, Domain::DocumentObject* _object)
+QUuid DocumentMapper::removeAsync(Domain::DocumentObject* _object)
 {
-    abstractDeleteAsync(_queryUuid, _object);
+    return abstractDeleteAsync(_object);
 }
 
 QString DocumentMapper::findStatement(const Identifier& _id) const
@@ -221,16 +221,6 @@ DomainObject* DocumentMapper::doLoad(const Identifier& _id, const QSqlRecord& _r
     const auto content = _record.value("content").toByteArray();
     const auto syncedAt
         = QDateTime::fromString(_record.value("synced_at").toString(), kDateTimeFormat);
-
-    return Domain::ObjectsBuilder::createDocument(_id, uuid, type, content, syncedAt);
-}
-
-DomainObject* DocumentMapper::doLoad(const Identifier& _id, const QVariantList& _record)
-{
-    const auto uuid = QUuid::fromString(_record[1].toString());
-    const auto type = static_cast<DocumentObjectType>(_record[2].toInt());
-    const auto content = _record[3].toByteArray();
-    const auto syncedAt = QDateTime::fromString(_record[4].toString(), kDateTimeFormat);
 
     return Domain::ObjectsBuilder::createDocument(_id, uuid, type, content, syncedAt);
 }

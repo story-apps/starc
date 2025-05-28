@@ -1,14 +1,15 @@
 #pragma once
 
 #include <QObject>
-#include <QVariant>
+#include <QVariantList>
+#include <QtSql/QSqlRecord>
 
 #include <corelib_global.h>
 
 
 class QSqlQuery;
 
-namespace ManagementLayer {
+namespace DatabaseLayer {
 
 class CORE_LIBRARY_EXPORT DatabaseManager : public QObject
 {
@@ -22,8 +23,7 @@ public:
      * @brief Интерфейс для асинхронной работы
      */
     /** @{ */
-    void enqueueQuery(const QUuid& _queryUuid, const QString& _query,
-                      const QVariantList& _bindValues);
+    QUuid enqueueQuery(const QString& _query, const QVariantList& _bindValues);
     /** @} */
 
     /**
@@ -44,22 +44,18 @@ public:
     static void vacuum();
     /** @} */
 
+signals:
+    void queryRequested(const QUuid& _queryUuid, const QString& _query,
+                        const QVariantList& _bindValues);
+    void queryFinished(const QUuid& _queryUuid, const QVector<QSqlRecord>& _results);
+    void queryFailed(const QUuid& _queryUuid, const QString& _error);
+
 private:
     explicit DatabaseManager(QObject* _parent = nullptr);
-
-private slots:
-    void onQueryExecuted(const QUuid& _queryUuid, const QVector<QVariantList>& _results);
-    void onQueryFailed(const QUuid& _queryUuid, const QString& _error);
-
-signals:
-    void executeQuery(const QUuid& _queryUuid, const QString& _query,
-                      const QVariantList& _bindValues);
-    void queryResult(const QUuid& _queryUuid, const QVector<QVariantList>& _results);
-    void queryFailed(const QUuid& _queryUuid, const QString& _error);
 
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
 };
 
-} // namespace ManagementLayer
+} // namespace DatabaseLayer

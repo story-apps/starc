@@ -17,7 +17,7 @@ TempImagesWorker::TempImagesWorker(QObject* _parent)
     }
 }
 
-void TempImagesWorker::storeToTempFiles(const QByteArray& _zipArchive)
+void TempImagesWorker::storeToTempFiles(const QUuid& _queryUuid, const QByteArray& _zipArchive)
 {
     QVector<TempImageFile> tempFilesInfo;
 
@@ -81,7 +81,7 @@ void TempImagesWorker::storeToTempFiles(const QByteArray& _zipArchive)
         }
         buffer.close();
     }
-    emit filesStored(tempFilesInfo);
+    emit filesStored(_queryUuid, tempFilesInfo);
 }
 
 void TempImagesWorker::loadFromTempFiles(const QUuid& _queryUuid,

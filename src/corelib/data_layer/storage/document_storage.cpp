@@ -87,10 +87,9 @@ QVector<Domain::DocumentObject*> DocumentStorage::documents()
     return documents;
 }
 
-void DocumentStorage::loadDocumentsAsync(const QUuid& _queryUuid,
-                                         const QVector<QUuid>& _documentUuids)
+QUuid DocumentStorage::loadDocumentsAsync(const QVector<QUuid>& _documentUuids)
 {
-    DataMappingLayer::MapperFacade::documentMapper()->findAsync(_queryUuid, _documentUuids);
+    return DataMappingLayer::MapperFacade::documentMapper()->findAsync(_documentUuids);
 }
 
 Domain::DocumentObject* DocumentStorage::createDocument(const QUuid& _uuid,
@@ -134,23 +133,25 @@ void DocumentStorage::saveDocument(const QUuid& _documentUuid)
     saveDocument(documentToSave);
 }
 
-void DocumentStorage::saveDocumentAsync(const QUuid& _queryUuid, Domain::DocumentObject* _document)
+QUuid DocumentStorage::saveDocumentAsync(Domain::DocumentObject* _document)
 {
+    QUuid queryUuid;
     if (d->notSavedDocuments.contains(_document->uuid())) {
-        DataMappingLayer::MapperFacade::documentMapper()->insertAsync(_queryUuid, _document);
+        queryUuid = DataMappingLayer::MapperFacade::documentMapper()->insertAsync(_document);
         d->notSavedDocuments.remove(_document->uuid());
     } else {
-        DataMappingLayer::MapperFacade::documentMapper()->updateAsync(_queryUuid, _document);
+        queryUuid = DataMappingLayer::MapperFacade::documentMapper()->updateAsync(_document);
     }
+    return queryUuid;
 }
 
-void DocumentStorage::saveDocumentAsync(const QUuid& _queryUuid, const QUuid& _documentUuid)
+QUuid DocumentStorage::saveDocumentAsync(const QUuid& _documentUuid)
 {
     auto documentToSave = document(_documentUuid);
     if (documentToSave == nullptr) {
-        return;
+        return QUuid();
     }
-    saveDocumentAsync(_queryUuid, documentToSave);
+    return saveDocumentAsync(documentToSave);
 }
 
 void DocumentStorage::removeDocument(Domain::DocumentObject* _document)
@@ -168,19 +169,19 @@ void DocumentStorage::removeDocument(Domain::DocumentObject* _document)
     }
 }
 
-void DocumentStorage::removeDocumentAsync(const QUuid& _queryUuid,
-                                          Domain::DocumentObject* _document)
+QUuid DocumentStorage::removeDocumentAsync(Domain::DocumentObject* _document)
 {
     if (_document == nullptr) {
-        return;
+        return QUuid();
     }
 
     if (d->notSavedDocuments.contains(_document->uuid())) {
         d->notSavedDocuments.remove(_document->uuid());
         delete _document;
         _document = nullptr;
+        return QUuid();
     } else {
-        DataMappingLayer::MapperFacade::documentMapper()->removeAsync(_queryUuid, _document);
+        return DataMappingLayer::MapperFacade::documentMapper()->removeAsync(_document);
     }
 }
 

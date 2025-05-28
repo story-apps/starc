@@ -108,7 +108,7 @@ bool isTextItem(BusinessLayer::StructureModelItem* _item)
  */
 QString projectSettingsKey(const QString& _key)
 {
-    return ManagementLayer::DatabaseManager::currentFile() + "/" + _key;
+    return DatabaseLayer::DatabaseManager::currentFile() + "/" + _key;
 }
 
 /**

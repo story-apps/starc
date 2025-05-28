@@ -1293,20 +1293,20 @@ void ApplicationManager::Implementation::saveChanges()
     //
     // Управляющие должны сохранить все изменения
     //
-    ManagementLayer::DatabaseManager::transaction();
+    DatabaseLayer::DatabaseManager::transaction();
     projectsManager->saveChanges();
     projectManager->saveChanges();
-    ManagementLayer::DatabaseManager::commit();
+    DatabaseLayer::DatabaseManager::commit();
 
     //
     // Если произошла ошибка сохранения, то делаем дополнительные проверки и работаем с
     // пользователем
     //
-    if (ManagementLayer::DatabaseManager::hasError()) {
+    if (DatabaseLayer::DatabaseManager::hasError()) {
         //
         // Если файл, в который мы пробуем сохранять изменения существует
         //
-        if (QFile::exists(ManagementLayer::DatabaseManager::currentFile())) {
+        if (QFile::exists(DatabaseLayer::DatabaseManager::currentFile())) {
             //
             // ... то у нас случилась какая-то внутренняя ошибка базы данных
             //
@@ -1314,7 +1314,7 @@ void ApplicationManager::Implementation::saveChanges()
                 applicationView, tr("Saving error"),
                 tr("Changes can't be written. There is an internal database error: \"%1\" "
                    "Please check, if your file exists and if you have permission to write.")
-                    .arg(ManagementLayer::DatabaseManager::lastError()));
+                    .arg(DatabaseLayer::DatabaseManager::lastError()));
 
             //
             // TODO: пока хер знает, как реагировать на данную проблему...
@@ -1333,7 +1333,7 @@ void ApplicationManager::Implementation::saveChanges()
                 applicationView, tr("Saving error"),
                 tr("Changes can't be written because the story located at \"%1\" doesn't exist. "
                    "Please move the file back and retry saving.")
-                    .arg(ManagementLayer::DatabaseManager::currentFile()));
+                    .arg(DatabaseLayer::DatabaseManager::currentFile()));
         }
         return;
     }

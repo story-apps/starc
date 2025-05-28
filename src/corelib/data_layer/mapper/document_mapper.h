@@ -28,11 +28,10 @@ public:
     bool update(Domain::DocumentObject* _object);
     void remove(Domain::DocumentObject* _object);
 
-    void findAsync(const QUuid& _queryUuid, const QVector<QUuid>& _documentUuids);
-    Q_SIGNAL void documentsFound(QVector<Domain::DocumentObject*>);
-    void insertAsync(const QUuid& _queryUuid, Domain::DocumentObject* _object);
-    void updateAsync(const QUuid& _queryUuid, Domain::DocumentObject* _object);
-    void removeAsync(const QUuid& _queryUuid, Domain::DocumentObject* _object);
+    QUuid findAsync(const QVector<QUuid>& _documentUuids);
+    QUuid insertAsync(Domain::DocumentObject* _object);
+    QUuid updateAsync(Domain::DocumentObject* _object);
+    QUuid removeAsync(Domain::DocumentObject* _object);
 
 protected:
     QString findStatement(const Domain::Identifier& _id) const override;
@@ -47,8 +46,6 @@ protected:
 
 protected:
     Domain::DomainObject* doLoad(const Domain::Identifier& _id, const QSqlRecord& _record) override;
-    Domain::DomainObject* doLoad(const Domain::Identifier& _id,
-                                 const QVariantList& _record) override;
     void doLoad(Domain::DomainObject* _object, const QSqlRecord& _record) override;
     void doLoad(Domain::DomainObject* _object, const QVariantList& _record) override;
 

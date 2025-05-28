@@ -36,12 +36,12 @@ TempImagesManager::TempImagesManager(QObject* _parent)
     d->worker = new TempImagesLayer::TempImagesWorker();
     d->worker->moveToThread(&d->thread);
 
-    connect(this, &TempImagesManager::storeToTempFilesAsync, d->worker,
+    connect(this, &TempImagesManager::requestedToStore, d->worker,
             &TempImagesLayer::TempImagesWorker::storeToTempFiles, Qt::QueuedConnection);
     connect(d->worker, &TempImagesLayer::TempImagesWorker::filesStored, this,
             &TempImagesManager::filesStored, Qt::QueuedConnection);
 
-    connect(this, &TempImagesManager::loadFromTempFilesAsync, d->worker,
+    connect(this, &TempImagesManager::requestedToLoad, d->worker,
             &TempImagesLayer::TempImagesWorker::loadFromTempFiles, Qt::QueuedConnection);
     connect(d->worker, &TempImagesLayer::TempImagesWorker::imagesLoaded, this,
             &TempImagesManager::imagesLoaded, Qt::QueuedConnection);
@@ -53,15 +53,18 @@ TempImagesManager::TempImagesManager(QObject* _parent)
 
 TempImagesManager::~TempImagesManager() = default;
 
-void TempImagesManager::storeAsync(const QByteArray& _zipArchive)
+QUuid TempImagesManager::storeAsync(const QByteArray& _zipArchive)
 {
-    emit storeToTempFilesAsync(_zipArchive);
+    const auto queryUuid = QUuid::createUuid();
+    emit requestedToStore(queryUuid, _zipArchive);
+    return queryUuid;
 }
 
-void TempImagesManager::loadAsync(const QUuid& _queryUuid,
-                                  const QVector<TempImagesLayer::TempImageFile>& _tempFiles)
+QUuid TempImagesManager::loadAsync(const QVector<TempImagesLayer::TempImageFile>& _tempFiles)
 {
-    emit loadFromTempFilesAsync(_queryUuid, _tempFiles);
+    const auto queryUuid = QUuid::createUuid();
+    emit requestedToLoad(queryUuid, _tempFiles);
+    return queryUuid;
 }
 
 } // namespace ManagementLayer

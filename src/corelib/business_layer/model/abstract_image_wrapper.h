@@ -28,7 +28,12 @@ public:
      * @brief Получить изображение по заданному индентификатору
      */
     virtual QPixmap load(const QUuid& _uuid) const = 0;
-    virtual void loadAsync(const QUuid& _queryUuid, const QVector<QUuid>& _imageUuids) const = 0;
+
+    /**
+     * @brief Получить изображение по заданному индентификатору асинхронно
+     * @return Гуид запроса
+     */
+    virtual QUuid loadAsync(const QVector<QUuid>& _imageUuids) const = 0;
 
     /**
      * @brief Установить изображение
@@ -43,8 +48,9 @@ public:
 
     /**
      * @brief Сохранить изображения из zip-архива во временные файлы
+     * @return Гуид запроса
      */
-    virtual void storeToTempAsync(const QByteArray& _zipArchive) = 0;
+    virtual QUuid storeToTempAsync(const QByteArray& _zipArchive) = 0;
 
     /**
      * @brief Удалить заданное изображение
@@ -80,7 +86,8 @@ signals:
     /**
      * @brief Изображения размещены во временных файлах
      */
-    void tempFilesStored(const QVector<TempImagesLayer::TempImageFile>& _tempFiles);
+    void tempFilesStored(const QUuid& _queryUuid,
+                         const QVector<TempImagesLayer::TempImageFile>& _tempFiles);
 };
 
 } // namespace BusinessLayer

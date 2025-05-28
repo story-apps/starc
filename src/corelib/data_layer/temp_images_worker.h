@@ -16,11 +16,11 @@ public:
     explicit TempImagesWorker(QObject* _parent = nullptr);
 
 public slots:
-    void storeToTempFiles(const QByteArray& _zipArchive);
+    void storeToTempFiles(const QUuid& _queryUuid, const QByteArray& _zipArchive);
     void loadFromTempFiles(const QUuid& _queryUuid, const QVector<TempImageFile>& _imageUuids);
 
 signals:
-    void filesStored(const QVector<TempImageFile>& _tempFiles);
+    void filesStored(const QUuid& _queryUuid, const QVector<TempImageFile>& _tempFiles);
     void imagesLoaded(const QUuid& _queryUuid, const QVector<QImage>& _images);
 
 private:

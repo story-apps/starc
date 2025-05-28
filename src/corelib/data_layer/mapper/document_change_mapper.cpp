@@ -54,7 +54,7 @@ QString unsyncedFilter()
 
 bool DataMappingLayer::DocumentChangeMapper::isEmpty()
 {
-    QSqlQuery query = ManagementLayer::DatabaseManager::query();
+    QSqlQuery query = DatabaseLayer::DatabaseManager::query();
     query.prepare(QString("SELECT COUNT(*) FROM %1").arg(kTableName));
 
     executeSql(query);
@@ -150,7 +150,7 @@ void DocumentChangeMapper::remove(DocumentChangeObject* _object)
 
 void DocumentChangeMapper::removeAll()
 {
-    QSqlQuery query = ManagementLayer::DatabaseManager::query();
+    QSqlQuery query = DatabaseLayer::DatabaseManager::query();
     query.prepare(QString("DELETE FROM %1").arg(kTableName));
 
     executeSql(query);
@@ -251,22 +251,6 @@ Domain::DomainObject* DocumentChangeMapper::doLoad(const Domain::Identifier& _id
     const auto userName = _record.value("user_name").toString();
     const auto userEmail = _record.value("user_email").toString();
     const auto isSynced = _record.value("is_synced").toBool();
-
-    return Domain::ObjectsBuilder::createDocumentChange(
-        _id, documentUuid, uuid, undoPatch, redoPatch, dateTime, userName, userEmail, isSynced);
-}
-
-Domain::DomainObject* DocumentChangeMapper::doLoad(const Domain::Identifier& _id,
-                                                   const QVariantList& _record)
-{
-    const auto documentUuid = QUuid::fromString(_record[1].toString());
-    const auto uuid = QUuid::fromString(_record[2].toString());
-    const auto undoPatch = qUncompress(_record[3].toByteArray());
-    const auto redoPatch = qUncompress(_record[4].toByteArray());
-    const auto dateTime = QDateTime::fromString(_record[5].toString(), kDateTimeFormat);
-    const auto userName = _record[6].toString();
-    const auto userEmail = _record[7].toString();
-    const auto isSynced = _record[8].toBool();
 
     return Domain::ObjectsBuilder::createDocumentChange(
         _id, documentUuid, uuid, undoPatch, redoPatch, dateTime, userName, userEmail, isSynced);

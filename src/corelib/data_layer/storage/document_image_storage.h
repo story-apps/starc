@@ -27,7 +27,12 @@ public:
      *        - если нигде нет, то запросить у внешнего сервиса
      */
     QPixmap load(const QUuid& _uuid) const override;
-    void loadAsync(const QUuid& _queryUuid, const QVector<QUuid>& _imageUuids) const override;
+
+    /**
+     * @brief Получить изображения с заданными гуидами асинхронно
+     * @return Гуид запроса
+     */
+    QUuid loadAsync(const QVector<QUuid>& _imageUuids) const override;
 
     /**
      * @brief Сохранить новое изображение
@@ -41,9 +46,10 @@ public:
     void save(const QUuid& _uuid, const QByteArray& _imageData) override;
 
     /**
-     * @brief Сохранить изображения из zip-архива во временные файлы асинхроноо
+     * @brief Сохранить изображения из zip-архива во временные файлы асинхроно
+     * @return Гуид запроса
      */
-    void storeToTempAsync(const QByteArray& _zipArchive) override;
+    QUuid storeToTempAsync(const QByteArray& _zipArchive) override;
 
     /**
      * @brief Удалить заданное изображение

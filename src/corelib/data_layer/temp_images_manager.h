@@ -19,20 +19,22 @@ public:
 
     /**
      * @brief Асинхронно разместить содержимое zip-архива во временных файлах
+     * @return Гуид запроса
      */
-    void storeAsync(const QByteArray& _zipArchive);
+    QUuid storeAsync(const QByteArray& _zipArchive);
 
     /**
      * @brief Асинхронно загрузить изображения из файлов
+     * @return Гуид запроса
      */
-    void loadAsync(const QUuid& _queryUuid,
-                   const QVector<TempImagesLayer::TempImageFile>& _tempFiles);
+    QUuid loadAsync(const QVector<TempImagesLayer::TempImageFile>& _tempFiles);
 
 signals:
-    void storeToTempFilesAsync(const QByteArray& _zipArchive);
-    void filesStored(const QVector<TempImagesLayer::TempImageFile>& _tempFiles);
-    void loadFromTempFilesAsync(const QUuid& _queryUuid,
-                                const QVector<TempImagesLayer::TempImageFile>& _tempFiles);
+    void requestedToStore(const QUuid& _queryUuid, const QByteArray& _zipArchive);
+    void filesStored(const QUuid& _queryUuid,
+                     const QVector<TempImagesLayer::TempImageFile>& _tempFiles);
+    void requestedToLoad(const QUuid& _queryUuid,
+                         const QVector<TempImagesLayer::TempImageFile>& _tempFiles);
     void imagesLoaded(const QUuid& _queryUuid, const QVector<QImage>& _images);
 
 private:
