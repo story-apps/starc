@@ -352,6 +352,8 @@ SOURCES += \
     business_layer/templates/templates_facade.cpp \
     business_layer/templates/text_template.cpp \
     data_layer/database.cpp \
+    data_layer/database_manager.cpp \
+    data_layer/database_worker.cpp \
     data_layer/mapper/abstract_mapper.cpp \
     data_layer/mapper/document_change_mapper.cpp \
     data_layer/mapper/document_mapper.cpp \
@@ -362,6 +364,8 @@ SOURCES += \
     data_layer/storage/document_storage.cpp \
     data_layer/storage/settings_storage.cpp \
     data_layer/storage/storage_facade.cpp \
+    data_layer/temp_images_manager.cpp \
+    data_layer/temp_images_worker.cpp \
     domain/document_change_object.cpp \
     domain/document_object.cpp \
     domain/domain_object.cpp \
@@ -723,6 +727,8 @@ HEADERS += \
     business_layer/templates/text_template.h \
     corelib_global.h \
     data_layer/database.h \
+    data_layer/database_manager.h \
+    data_layer/database_worker.h \
     data_layer/mapper/abstract_mapper.h \
     data_layer/mapper/document_change_mapper.h \
     data_layer/mapper/document_mapper.h \
@@ -733,6 +739,9 @@ HEADERS += \
     data_layer/storage/document_storage.h \
     data_layer/storage/settings_storage.h \
     data_layer/storage/storage_facade.h \
+    data_layer/temp_image_file.h \
+    data_layer/temp_images_manager.h \
+    data_layer/temp_images_worker.h \
     domain/document_change_object.h \
     domain/document_object.h \
     domain/domain_object.h \

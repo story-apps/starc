@@ -1,6 +1,6 @@
 #include "document_change_mapper.h"
 
-#include <data_layer/database.h>
+#include <data_layer/database_manager.h>
 #include <domain/document_change_object.h>
 #include <domain/objects_builder.h>
 
@@ -54,7 +54,7 @@ QString unsyncedFilter()
 
 bool DataMappingLayer::DocumentChangeMapper::isEmpty()
 {
-    QSqlQuery query = DatabaseLayer::Database::query();
+    QSqlQuery query = DatabaseLayer::DatabaseManager::query();
     query.prepare(QString("SELECT COUNT(*) FROM %1").arg(kTableName));
 
     executeSql(query);
@@ -150,7 +150,7 @@ void DocumentChangeMapper::remove(DocumentChangeObject* _object)
 
 void DocumentChangeMapper::removeAll()
 {
-    QSqlQuery query = DatabaseLayer::Database::query();
+    QSqlQuery query = DatabaseLayer::DatabaseManager::query();
     query.prepare(QString("DELETE FROM %1").arg(kTableName));
 
     executeSql(query);
@@ -286,6 +286,38 @@ void DocumentChangeMapper::doLoad(Domain::DomainObject* _object, const QSqlRecor
     documentChangeObject->setUserEmail(userEmail);
 
     const auto isSynced = _record.value("is_synced").toBool();
+    documentChangeObject->setSynced(isSynced);
+}
+
+void DocumentChangeMapper::doLoad(Domain::DomainObject* _object, const QVariantList& _record)
+{
+    auto documentChangeObject = static_cast<DocumentChangeObject*>(_object);
+    if (documentChangeObject == nullptr) {
+        return;
+    }
+
+    const auto documentUuid = QUuid::fromString(_record[1].toString());
+    documentChangeObject->setDocumentUuid(documentUuid);
+
+    const auto uuid = QUuid::fromString(_record[2].toString());
+    documentChangeObject->setUuid(uuid);
+
+    const auto undoPatch = qUncompress(_record[3].toByteArray());
+    documentChangeObject->setUndoPatch(undoPatch);
+
+    const auto redoPatch = qUncompress(_record[4].toByteArray());
+    documentChangeObject->setRedoPatch(redoPatch);
+
+    const auto dateTime = QDateTime::fromString(_record[5].toString(), kDateTimeFormat);
+    documentChangeObject->setDateTime(dateTime);
+
+    const auto userName = _record[6].toString();
+    documentChangeObject->setUserName(userName);
+
+    const auto userEmail = _record[7].toString();
+    documentChangeObject->setUserEmail(userEmail);
+
+    const auto isSynced = _record[8].toBool();
     documentChangeObject->setSynced(isSynced);
 }
 

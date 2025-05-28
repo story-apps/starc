@@ -2,7 +2,7 @@
 
 #include <domain/identifier.h>
 
-#include <QMap>
+#include <QUuid>
 
 namespace Domain {
 class DomainObject;
@@ -17,8 +17,10 @@ namespace DataMappingLayer {
 /**
  * @brief The AbstractMapper class
  */
-class AbstractMapper
+class AbstractMapper : public QObject
 {
+    Q_OBJECT
+
 public:
     virtual ~AbstractMapper() = default;
 
@@ -46,24 +48,44 @@ protected:
      * @brief Обновить параметры заданного объекта из sql-записи
      */
     virtual void doLoad(Domain::DomainObject* _object, const QSqlRecord& _record) = 0;
+    virtual void doLoad(Domain::DomainObject* _object, const QVariantList& _record) = 0;
 
 protected:
+    /**
+     * @brief Методы для синхронной работы
+     */
+    /** @{ */
     Domain::DomainObject* abstractFind(const Domain::Identifier& _id);
     QVector<Domain::DomainObject*> abstractFind(const QString& _filter);
     void abstractInsert(Domain::DomainObject* _object);
     bool abstractUpdate(Domain::DomainObject* _object);
     void abstractDelete(Domain::DomainObject* _object);
-
     /**
      * @brief Выполнить запрос
      */
     bool executeSql(QSqlQuery& _sqlQuery);
+    /** @} */
+
+    /**
+     * @brief Методы для асинхронной работы
+     * @return Гуид запроса
+     */
+    /** @{ */
+    QUuid abstractInsertAsync(Domain::DomainObject* _object);
+    QUuid abstractUpdateAsync(Domain::DomainObject* _object);
+    QUuid abstractFindAsync(const QString& _filter);
+    QUuid abstractDeleteAsync(Domain::DomainObject* _object);
+
+public:
+    Q_SIGNAL void objectsFound(const QUuid& _queryUuid, QVector<Domain::DomainObject*> _objects);
+    Q_SIGNAL void queryFailed(const QUuid& _queryUuid, const QString& _error);
+    /** @} */
 
 protected:
     /**
      * @brief Скрываем конструктор от публичного доступа
      */
-    AbstractMapper() = default;
+    AbstractMapper(QObject* _parent = nullptr);
 
 private:
     /**
@@ -91,6 +113,26 @@ private:
      * @brief Загруженные объекты из базы данных
      */
     std::map<Domain::Identifier, Domain::DomainObject*> m_loadedObjectsMap;
+
+    /**
+     * @brief Типы запросов
+     */
+    enum class QueryType {
+        Insert,
+        Update,
+        Find,
+        Delete,
+    };
+
+    /**
+     * @brief Запросы к БД, отправленные на исполнение в отдельном потоке
+     */
+    std::map<QUuid, QueryType> m_sentQueries;
+
+    /**
+     * @brief Объекты, обрабатываемые в отдельном потоке
+     */
+    std::map<QUuid, Domain::DomainObject*> m_processingObjects;
 };
 
 } // namespace DataMappingLayer
