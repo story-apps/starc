@@ -89,24 +89,41 @@ void CommentsView::Implementation::updateCommentsViewContextMenu(const QModelInd
     // Настраиваем контекстное меню для одного элемента
     //
     if (_indexes.size() == 1) {
-        auto edit = new QAction(tr("Edit"));
-        edit->setIconText(u8"\U000F03EB");
-        connect(edit, &QAction::triggered, q,
-                [this] { editComment(commentsView->selectedIndexes().constFirst()); });
-        menuActions.append(edit);
+        const auto isRevision = _indexes.constFirst()
+                                    .data(BusinessLayer::CommentsModel::ReviewMarkIsRevisionRole)
+                                    .toBool();
+        const auto isChange = _indexes.constFirst()
+                                  .data(BusinessLayer::CommentsModel::ReviewMarkIsAdditionRole)
+                                  .toBool()
+            || _indexes.constFirst()
+                   .data(BusinessLayer::CommentsModel::ReviewMarkIsRemovalRole)
+                   .toBool();
+
+        //
+        // Редактировать можно только редакторские заметки
+        //
+        if (!isRevision && !isChange) {
+            auto edit = new QAction(tr("Edit"));
+            edit->setIconText(u8"\U000F03EB");
+            connect(edit, &QAction::triggered, q,
+                    [this] { editComment(commentsView->selectedIndexes().constFirst()); });
+            menuActions.append(edit);
+        }
+
+        //
+        // Обсудить можно всё
+        //
         auto discuss = new QAction(tr("Discuss"));
         discuss->setIconText(u8"\U000F0860");
         connect(discuss, &QAction::triggered, q, [this] {
             q->showCommentRepliesView(commentsView->selectedIndexes().constFirst());
         });
         menuActions.append(discuss);
+
         //
-        // ... отметить как выполненное можно только редакторскую заметку, но не ривизию
+        // Отметить как выполненное можно только редакторскую заметку
         //
-        if (_indexes.constFirst()
-                .data(BusinessLayer::CommentsModel::ReviewMarkIsRevisionRole)
-                .toBool()
-            == false) {
+        if (!isRevision && !isChange) {
             if (_indexes.constFirst()
                     .data(BusinessLayer::CommentsModel::ReviewMarkIsDoneRole)
                     .toBool()) {
@@ -123,33 +140,96 @@ void CommentsView::Implementation::updateCommentsViewContextMenu(const QModelInd
                 menuActions.append(markAsDone);
             }
         }
-        auto remove = new QAction(tr("Remove"));
-        remove->setIconText(u8"\U000F01B4");
-        connect(remove, &QAction::triggered, q,
-                [this] { emit q->removeRequested(commentsView->selectedIndexes()); });
-        menuActions.append(remove);
+
+        //
+        // Принять можно только изменение
+        //
+        if (isChange) {
+            auto applyChange = new QAction(tr("Apply change"));
+            applyChange->setIconText(u8"\U000F012C");
+            connect(applyChange, &QAction::triggered, q,
+                    [this] { emit q->applyChangeRequested(commentsView->selectedIndexes()); });
+            menuActions.append(applyChange);
+
+            auto cancelChange = new QAction(tr("Cancel change"));
+            cancelChange->setIconText(u8"\U000F0156");
+            connect(cancelChange, &QAction::triggered, q,
+                    [this] { emit q->cancelChangeRequested(commentsView->selectedIndexes()); });
+            menuActions.append(cancelChange);
+        }
+
+        //
+        // Удалить можно редакторскую заметку и ревизию
+        //
+        if (!isChange) {
+            auto remove = new QAction(tr("Remove"));
+            remove->setIconText(u8"\U000F01B4");
+            connect(remove, &QAction::triggered, q,
+                    [this] { emit q->removeRequested(commentsView->selectedIndexes()); });
+            menuActions.append(remove);
+        }
     }
     //
     // Настраиваем контекстное меню для нескольких выделенных элементов
     //
     else {
-        auto markAsDone = new QAction(tr("Mark selected notes as done"));
-        markAsDone->setIconText(u8"\U000F0139");
-        connect(markAsDone, &QAction::triggered, q,
-                [this] { emit q->markAsDoneRequested(commentsView->selectedIndexes()); });
-        menuActions.append(markAsDone);
+        bool hasReviewMarks = false;
+        bool hasRevisions = false;
+        bool hasChanges = false;
+        for (const auto& index : _indexes) {
+            if (index.data(BusinessLayer::CommentsModel::ReviewMarkIsRevisionRole).toBool()) {
+                hasRevisions = true;
+            } else if (index.data(BusinessLayer::CommentsModel::ReviewMarkIsAdditionRole).toBool()
+                       || index.data(BusinessLayer::CommentsModel::ReviewMarkIsRemovalRole)
+                              .toBool()) {
+                hasChanges = true;
+            } else {
+                hasReviewMarks = true;
+            }
+        }
+
         //
-        auto markAsUndone = new QAction(tr("Mark selected notes as undone"));
-        markAsUndone->setIconText(u8"\U000F0137");
-        connect(markAsUndone, &QAction::triggered, q,
-                [this] { emit q->markAsUndoneRequested(commentsView->selectedIndexes()); });
-        menuActions.append(markAsUndone);
+        // Если есть только редакторские заметки, то их можно пометить выполненными
         //
-        auto remove = new QAction(tr("Remove selected notes"));
-        remove->setIconText(u8"\U000F01B4");
-        connect(remove, &QAction::triggered, q,
-                [this] { emit q->removeRequested(commentsView->selectedIndexes()); });
-        menuActions.append(remove);
+        if (hasReviewMarks && !hasRevisions && !hasChanges) {
+            auto markAsDone = new QAction(tr("Mark selected notes as done"));
+            markAsDone->setIconText(u8"\U000F0139");
+            connect(markAsDone, &QAction::triggered, q,
+                    [this] { emit q->markAsDoneRequested(commentsView->selectedIndexes()); });
+            menuActions.append(markAsDone);
+            //
+            auto markAsUndone = new QAction(tr("Mark selected notes as undone"));
+            markAsUndone->setIconText(u8"\U000F0137");
+            connect(markAsUndone, &QAction::triggered, q,
+                    [this] { emit q->markAsUndoneRequested(commentsView->selectedIndexes()); });
+            menuActions.append(markAsUndone);
+        }
+        //
+        // Если есть только изменения, то их можно применить
+        //
+        if (!hasReviewMarks && !hasRevisions && hasChanges) {
+            auto applyChanges = new QAction(tr("Apply changes"));
+            applyChanges->setIconText(u8"\U000F012D");
+            connect(applyChanges, &QAction::triggered, q,
+                    [this] { emit q->applyChangeRequested(commentsView->selectedIndexes()); });
+            menuActions.append(applyChanges);
+            //
+            auto cancelChanges = new QAction(tr("Cancel changes"));
+            cancelChanges->setIconText(u8"\U000F0156");
+            connect(cancelChanges, &QAction::triggered, q,
+                    [this] { emit q->cancelChangeRequested(commentsView->selectedIndexes()); });
+            menuActions.append(cancelChanges);
+        }
+        //
+        // Если есть редакторские заметки или ревизии, то их можно удалить
+        //
+        if ((hasReviewMarks || hasRevisions) && !hasChanges) {
+            auto remove = new QAction(tr("Remove selected notes"));
+            remove->setIconText(u8"\U000F01B4");
+            connect(remove, &QAction::triggered, q,
+                    [this] { emit q->removeRequested(commentsView->selectedIndexes()); });
+            menuActions.append(remove);
+        }
     }
 
     contextMenu->setActions(menuActions);

@@ -867,10 +867,17 @@ void TextModelTextItem::setText(const QString& _text)
     markChanged();
 }
 
-void TextModelTextItem::removeText(int _from)
+void TextModelTextItem::removeText(int _from, int _length)
 {
     if (_from >= d->text.length()) {
         return;
+    }
+
+    //
+    // Если не задана длина, то удаляем до конца
+    //
+    if (_length == -1) {
+        _length = d->text.length() - _from;
     }
 
     //
@@ -878,57 +885,171 @@ void TextModelTextItem::removeText(int _from)
     //
     // ... текст
     //
-    d->text = d->text.left(_from);
+    d->text = d->text.remove(_from, _length);
     //
     // ... форматирование
     //
     for (int index = 0; index < d->formats.size(); ++index) {
         auto& format = d->formats[index];
+        //
+        // ... формат до удаления
+        //
         if (format.end() < _from) {
             continue;
         }
-
+        //
+        // ... конец формата попадает в удаление
+        //
         if (format.from < _from) {
-            format.length = _from - format.from;
+            //
+            // ... отрезается весь конец формата
+            //
+            if (format.end() <= _from + _length) {
+                format.length = _from - format.from;
+            }
+            //
+            // ... отрезается часть внутри формата
+            //
+            else {
+                format.length -= _length;
+            }
             continue;
         }
-
-        d->formats.remove(index);
-        --index;
+        //
+        // ... начало формата попадает в удаление
+        //
+        if (format.from < _from + _length) {
+            //
+            // ... отрезается весь формат
+            //
+            if (format.end() <= _from + _length) {
+                d->formats.remove(index);
+                --index;
+                continue;
+            }
+            //
+            // ... отрезается начало формата
+            //
+            else {
+                const auto formatEnd = format.end();
+                format.from = _from;
+                format.length = formatEnd - _from - _length;
+            }
+        }
+        //
+        // ... формат находится за удалением
+        //
+        format.from -= _length;
     }
     //
     // ... редакторские заметки
     //
     for (int index = 0; index < d->reviewMarks.size(); ++index) {
         auto& reviewMark = d->reviewMarks[index];
+        //
+        // ... формат до удаления
+        //
         if (reviewMark.end() < _from) {
             continue;
         }
-
+        //
+        // ... конец формата попадает в удаление
+        //
         if (reviewMark.from < _from) {
-            reviewMark.length = _from - reviewMark.from;
+            //
+            // ... отрезается весь конец формата
+            //
+            if (reviewMark.end() <= _from + _length) {
+                reviewMark.length = _from - reviewMark.from;
+            }
+            //
+            // ... отрезается часть внутри формата
+            //
+            else {
+                reviewMark.length -= _length;
+            }
             continue;
         }
-
-        d->reviewMarks.remove(index);
-        --index;
+        //
+        // ... начало формата попадает в удаление
+        //
+        if (reviewMark.from < _from + _length) {
+            //
+            // ... отрезается весь формат
+            //
+            if (reviewMark.end() <= _from + _length) {
+                d->reviewMarks.remove(index);
+                --index;
+                continue;
+            }
+            //
+            // ... отрезается начало формата
+            //
+            else {
+                const auto formatEnd = reviewMark.end();
+                reviewMark.from = _from;
+                reviewMark.length = formatEnd - _from - _length;
+            }
+        }
+        //
+        // ... формат находится за удалением
+        //
+        reviewMark.from -= _length;
     }
     //
     // ... ресурсы
     //
     for (int index = 0; index < d->resourceMarks.size(); ++index) {
-        auto& format = d->resourceMarks[index];
-        if (format.end() < _from) {
+        auto& resourceMark = d->resourceMarks[index];
+        //
+        // ... формат до удаления
+        //
+        if (resourceMark.end() < _from) {
             continue;
         }
-
-        if (format.from < _from) {
-            format.length = _from - format.from;
+        //
+        // ... конец формата попадает в удаление
+        //
+        if (resourceMark.from < _from) {
+            //
+            // ... отрезается весь конец формата
+            //
+            if (resourceMark.end() <= _from + _length) {
+                resourceMark.length = _from - resourceMark.from;
+            }
+            //
+            // ... отрезается часть внутри формата
+            //
+            else {
+                resourceMark.length -= _length;
+            }
             continue;
         }
-
-        d->resourceMarks.remove(index);
-        --index;
+        //
+        // ... начало формата попадает в удаление
+        //
+        if (resourceMark.from < _from + _length) {
+            //
+            // ... отрезается весь формат
+            //
+            if (resourceMark.end() <= _from + _length) {
+                d->resourceMarks.remove(index);
+                --index;
+                continue;
+            }
+            //
+            // ... отрезается начало формата
+            //
+            else {
+                const auto formatEnd = resourceMark.end();
+                resourceMark.from = _from;
+                resourceMark.length = formatEnd - _from - _length;
+            }
+        }
+        //
+        // ... формат находится за удалением
+        //
+        resourceMark.from -= _length;
     }
 
     d->updateXml();

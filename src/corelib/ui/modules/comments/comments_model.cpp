@@ -910,6 +910,17 @@ QModelIndex CommentsModel::mapFromModel(const QModelIndex& _index, int _position
     return {};
 }
 
+bool CommentsModel::isChange(const QModelIndex& _index) const
+{
+    if (d->reviewMarks.size() <= _index.row()) {
+        return false;
+    }
+
+    const auto& reviewMarkComment
+        = d->reviewMarks.at(_index.row()).reviewMark.comments.constFirst();
+    return reviewMarkComment.isAddition || reviewMarkComment.isRemoval;
+}
+
 void CommentsModel::setComment(const QModelIndex& _index, const QString& _comment)
 {
     auto reviewMarkWrapper = d->reviewMarks.at(_index.row());
@@ -956,6 +967,148 @@ void CommentsModel::markAsUndone(const QModelIndexList& _indexes)
             }
             textItem->setReviewMarks(updatedReviewMarks);
             d->model->updateItem(textItem);
+        }
+    }
+}
+
+void CommentsModel::applyChanges(const QModelIndexList& _indexes)
+{
+    //
+    // Сортируем список индексов, т.к. они будут удаляться в процессе применения
+    //
+    auto sortedIndexes = _indexes;
+    std::sort(
+        sortedIndexes.begin(), sortedIndexes.end(),
+        [](const QModelIndex& _lhs, const QModelIndex& _rhs) { return _lhs.row() > _rhs.row(); });
+
+    //
+    // Применяем каждое изменение
+    //
+    for (const auto& index : sortedIndexes) {
+        //
+        // Создаём копию, чтобы при обновлении модели документа не сломался объект обёртки
+        //
+        auto reviewMarkWrapper = d->reviewMarks.at(index.row());
+        const auto& reviewMarkComment = reviewMarkWrapper.reviewMark.comments.constFirst();
+        //
+        // Для добавления, просто удаляем заметку, оставляя текст
+        //
+        if (reviewMarkComment.isAddition) {
+            remove({ index });
+        }
+        //
+        // Для удаления, удаляем весь текст связанный с ним
+        //
+        else if (reviewMarkComment.isRemoval) {
+            //
+            // ... если затрагивает всего один элемент, то лишь удалим текст внутри
+            //
+            if (reviewMarkWrapper.items.size() == 1) {
+                auto item = reviewMarkWrapper.items.takeFirst();
+                if (reviewMarkWrapper.fromInFirstItem == 0
+                    && reviewMarkWrapper.toInLastItem == item->text().length()) {
+                    d->model->removeItem(item);
+                } else {
+                    item->removeText(reviewMarkWrapper.fromInFirstItem,
+                                     reviewMarkWrapper.toInLastItem
+                                         - reviewMarkWrapper.fromInFirstItem);
+                    d->model->updateItem(item);
+                }
+            }
+            //
+            // ... в противном случае, корректируем модель
+            //
+            else {
+                bool isLastItemRemoved = false;
+                while (!reviewMarkWrapper.items.isEmpty()) {
+                    auto item = reviewMarkWrapper.items.takeLast();
+                    if (!isLastItemRemoved) {
+                        isLastItemRemoved = true;
+                        if (item->text().length() == reviewMarkWrapper.toInLastItem) {
+                            d->model->removeItem(item);
+                        } else {
+                            item->removeText(0, reviewMarkWrapper.toInLastItem);
+                            d->model->updateItem(item);
+                        }
+                    } else if (reviewMarkWrapper.items.isEmpty()) {
+                        item->removeText(reviewMarkWrapper.fromInFirstItem);
+                        d->model->updateItem(item);
+                    } else {
+                        d->model->removeItem(item);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void CommentsModel::cancelChanges(const QModelIndexList& _indexes)
+{
+    //
+    // Сортируем список индексов, т.к. они будут удаляться в процессе отмены
+    //
+    auto sortedIndexes = _indexes;
+    std::sort(
+        sortedIndexes.begin(), sortedIndexes.end(),
+        [](const QModelIndex& _lhs, const QModelIndex& _rhs) { return _lhs.row() > _rhs.row(); });
+
+    //
+    // Отменяем каждое изменение
+    //
+    for (const auto& index : sortedIndexes) {
+        //
+        // Создаём копию, чтобы при обновлении модели документа не сломался объект обёртки
+        //
+        auto reviewMarkWrapper = d->reviewMarks.at(index.row());
+        const auto& reviewMarkComment = reviewMarkWrapper.reviewMark.comments.constFirst();
+        //
+        // Для добавления, удаляем весь текст связанный с ним
+        //
+        if (reviewMarkComment.isAddition) {
+            //
+            // ... если затрагивает всего один элемент, то лишь удалим текст внутри
+            //
+            if (reviewMarkWrapper.items.size() == 1) {
+                auto item = reviewMarkWrapper.items.takeFirst();
+                if (reviewMarkWrapper.fromInFirstItem == 0
+                    && reviewMarkWrapper.toInLastItem == item->text().length()) {
+                    d->model->removeItem(item);
+                } else {
+                    item->removeText(reviewMarkWrapper.fromInFirstItem,
+                                     reviewMarkWrapper.toInLastItem
+                                         - reviewMarkWrapper.fromInFirstItem);
+                    d->model->updateItem(item);
+                }
+            }
+            //
+            // ... в противном случае, корректируем модель
+            //
+            else {
+                bool isLastItemRemoved = false;
+                while (!reviewMarkWrapper.items.isEmpty()) {
+                    auto item = reviewMarkWrapper.items.takeLast();
+                    if (!isLastItemRemoved) {
+                        isLastItemRemoved = true;
+                        if (item->text().length() == reviewMarkWrapper.toInLastItem) {
+                            d->model->removeItem(item);
+                        } else {
+                            item->removeText(0, reviewMarkWrapper.toInLastItem);
+                            d->model->updateItem(item);
+                        }
+                    } else if (reviewMarkWrapper.items.isEmpty()) {
+                        item->removeText(reviewMarkWrapper.fromInFirstItem);
+                        d->model->updateItem(item);
+                    } else {
+                        d->model->removeItem(item);
+                    }
+                }
+            }
+        }
+        //
+        // Для удаления, просто удаляем заметку, оставляя текст
+        //
+        else if (reviewMarkComment.isRemoval) {
+            remove({ index });
         }
     }
 }

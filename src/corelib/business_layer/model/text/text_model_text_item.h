@@ -174,7 +174,7 @@ public:
      * @brief Удалить текст, начиная с заданной позиции, при этом корректируется и остальной контент
      *        блока
      */
-    void removeText(int _from);
+    void removeText(int _from, int _length = -1);
 
     /**
      * @brief Форматирование в блоке

@@ -55,9 +55,9 @@ public:
     void setAddingAvailable(bool _available);
 
     /**
-     * @brief Установить решённость текущего комментария
+     * @brief Установить состояние текущего комментария
      */
-    void setCurrentCommentIsDone(bool _isDone);
+    void setCurrentCommentState(bool _isDone, bool _isChange, bool _isRevision);
 
     /**
      * @brief Отобразить тулбар
@@ -126,6 +126,9 @@ signals:
     void removeRequested();
 
 protected:
+    /**
+     * @brief Скрыть панель типов при потере фокуса и нажатии эксейп в моменте, когда она открыта
+     */
     bool eventFilter(QObject* _watched, QEvent* _event) override;
 
     /**

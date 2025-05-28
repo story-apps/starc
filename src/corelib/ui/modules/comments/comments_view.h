@@ -90,6 +90,16 @@ signals:
     void markAsUndoneRequested(const QModelIndexList& _indexes);
 
     /**
+     * @brief Пользователь хочет применить выбранные изменения
+     */
+    void applyChangeRequested(const QModelIndexList& _indexes);
+
+    /**
+     * @brief Пользователь хочет отменить выбранные изменения
+     */
+    void cancelChangeRequested(const QModelIndexList& _indexes);
+
+    /**
      * @brief Пользователь хочет удалить выбранные заметки
      */
     void removeRequested(const QModelIndexList& _indexes);

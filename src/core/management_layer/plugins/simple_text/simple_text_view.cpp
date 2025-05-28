@@ -389,11 +389,13 @@ void SimpleTextView::Implementation::updateCommentsToolbar(bool _force)
     //
     if (!textEdit->textCursor().hasSelection() && commentsView->currentIndex().isValid()) {
         commentsToolbar->setMode(CommentsToolbar::Mode::EditReview);
-        commentsToolbar->setCurrentCommentIsDone(
-            commentsModel
-                ->data(commentsView->currentIndex(),
-                       BusinessLayer::CommentsModel::ReviewMarkIsDoneRole)
-                .toBool());
+        const auto currentIndex = commentsView->currentIndex();
+        commentsToolbar->setCurrentCommentState(
+            currentIndex.data(BusinessLayer::CommentsModel::ReviewMarkIsDoneRole).toBool(),
+            currentIndex.data(BusinessLayer::CommentsModel::ReviewMarkIsAdditionRole).toBool()
+                || currentIndex.data(BusinessLayer::CommentsModel::ReviewMarkIsRemovalRole)
+                       .toBool(),
+            currentIndex.data(BusinessLayer::CommentsModel::ReviewMarkIsRevisionRole).toBool());
     } else {
         commentsToolbar->setMode(CommentsToolbar::Mode::AddReview);
     }
@@ -645,16 +647,26 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
             [this](const QColor& _color) { d->addReviewMark(_color, {}, {}, true, false, false); });
     connect(d->commentsToolbar, &CommentsToolbar::markAsDoneRequested, this, [this](bool _checked) {
         QSignalBlocker blocker(d->commentsView);
-        if (_checked) {
-            d->commentsModel->markAsDone({ d->commentsView->currentIndex() });
+        const auto commentIndex = d->commentsView->currentIndex();
+        if (d->commentsModel->isChange(commentIndex)) {
+            d->commentsModel->applyChanges({ commentIndex });
         } else {
-            d->commentsModel->markAsUndone({ d->commentsView->currentIndex() });
+            if (_checked) {
+                d->commentsModel->markAsDone({ commentIndex });
+            } else {
+                d->commentsModel->markAsUndone({ commentIndex });
+            }
         }
     });
     connect(d->commentsToolbar, &CommentsToolbar::removeRequested, this, [this] {
         QSignalBlocker blocker(d->commentsView);
-        d->commentsModel->remove({ d->commentsView->currentIndex() });
-        d->commentsToolbar->hideToolbar();
+        const auto commentIndex = d->commentsView->currentIndex();
+        if (d->commentsModel->isChange(commentIndex)) {
+            d->commentsModel->cancelChanges({ commentIndex });
+        } else {
+            d->commentsModel->remove({ d->commentsView->currentIndex() });
+        }
+        d->commentsToolbar->setMode(CommentsToolbar::Mode::AddReview);
     });
     connect(d->commentsView, &CommentsView::addReviewMarkRequested, this,
             [this](const QColor& _color, const QString& _comment) {
@@ -704,6 +716,16 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
             [this](const QModelIndexList& _indexes) {
                 QSignalBlocker blocker(d->commentsView);
                 d->commentsModel->markAsUndone(_indexes);
+            });
+    connect(d->commentsView, &CommentsView::applyChangeRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->applyChanges(_indexes);
+            });
+    connect(d->commentsView, &CommentsView::cancelChangeRequested, this,
+            [this](const QModelIndexList& _indexes) {
+                QSignalBlocker blocker(d->commentsView);
+                d->commentsModel->cancelChanges(_indexes);
             });
     connect(d->commentsView, &CommentsView::removeRequested, this,
             [this](const QModelIndexList& _indexes) {
@@ -834,8 +856,7 @@ SimpleTextView::SimpleTextView(QWidget* _parent)
     };
     connect(d->textEdit, &SimpleTextEdit::paragraphTypeChanged, this, handleCursorPositionChanged);
     connect(d->textEdit, &SimpleTextEdit::cursorPositionChanged, this, handleCursorPositionChanged);
-    connect(d->textEdit, &SimpleTextEdit::selectionChanged, this,
-            [this] { d->updateCommentsToolbar(); });
+    connect(d->textEdit, &SimpleTextEdit::selectionChanged, this, handleCursorPositionChanged);
     connect(d->textEdit, &SimpleTextEdit::addBookmarkRequested, this, [this] {
         //
         // Если список закладок показан, добавляем новую через него

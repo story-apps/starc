@@ -185,7 +185,7 @@ void CommentDelegate::paint(QPainter* _painter, const QStyleOptionViewItem& _opt
         dateText.append(QString(" (%1)").arg(tr("added")));
     } else if (isRemoval) {
         dateText.append(QString(" (%1)").arg(tr("removed")));
-    } else if (isEdited) {
+    } else if (isEdited && !revision) {
         dateText.append(QString(" (%1)").arg(tr("edited")));
     }
     _painter->drawText(dateRect, Qt::AlignLeft | Qt::AlignTop, dateText);

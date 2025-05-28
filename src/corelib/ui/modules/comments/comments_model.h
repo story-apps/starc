@@ -68,6 +68,11 @@ public:
     QModelIndex mapFromModel(const QModelIndex& _index, int _positionInBlock);
 
     /**
+     * @brief Является ли элемент в заданном индексе добавлением, или удалением
+     */
+    bool isChange(const QModelIndex& _index) const;
+
+    /**
      * @brief Задать текст комментария с заданным индексом
      */
     void setComment(const QModelIndex& _index, const QString& _comment);
@@ -81,6 +86,16 @@ public:
      * @brief Пометить заданные элементы невыполнеными
      */
     void markAsUndone(const QModelIndexList& _indexes);
+
+    /**
+     * @brief Применить изменение
+     */
+    void applyChanges(const QModelIndexList& _indexes);
+
+    /**
+     * @brief Отменить изменение
+     */
+    void cancelChanges(const QModelIndexList& _index);
 
     /**
      * @brief Добавить комментарий к редакторской заметке

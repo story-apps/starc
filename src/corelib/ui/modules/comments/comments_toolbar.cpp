@@ -51,6 +51,11 @@ public:
 
     CommentsType type = CommentsType::Review;
     Mode mode = Mode::AddReview;
+    struct {
+        bool isDone = false;
+        bool isChange = false;
+        bool isRevision = false;
+    } currentState;
 
     QAction* typeAction = nullptr;
     FloatingToolBar* typeToolbar = nullptr;
@@ -127,8 +132,6 @@ void CommentsToolbar::Implementation::updateActions()
         changesMarkAddedAction->setVisible(false);
         changesMarkRemovedAction->setVisible(false);
         revisionMarkAction->setVisible(false);
-        markAsDoneAction->setVisible(isEditCommentVisible);
-        removeAction->setVisible(isEditCommentVisible);
         break;
     }
 
@@ -139,8 +142,6 @@ void CommentsToolbar::Implementation::updateActions()
         changesMarkAddedAction->setVisible(true);
         changesMarkRemovedAction->setVisible(true);
         revisionMarkAction->setVisible(false);
-        markAsDoneAction->setVisible(isEditCommentVisible);
-        removeAction->setVisible(isEditCommentVisible);
         break;
     }
 
@@ -151,13 +152,18 @@ void CommentsToolbar::Implementation::updateActions()
         changesMarkAddedAction->setVisible(false);
         changesMarkRemovedAction->setVisible(false);
         revisionMarkAction->setVisible(true);
-        markAsDoneAction->setVisible(false);
-        removeAction->setVisible(isEditCommentVisible);
         break;
     }
     }
 
     markAsDoneSeparatorAction->setVisible(isEditCommentVisible);
+
+    //
+    // Настроим иконки и видимость кнопок редактирования в соответствии с текущим состоянием
+    //
+    markAsDoneAction->setVisible(isEditCommentVisible && !currentState.isRevision);
+    removeAction->setIconText(currentState.isChange ? u8"\U000F0156" : u8"\U000F01B4");
+    removeAction->setVisible(isEditCommentVisible);
 
     //
     // Настроим палитру и выберем цвет
@@ -417,10 +423,15 @@ void CommentsToolbar::setAddingAvailable(bool _available)
     updateTranslations();
 }
 
-void CommentsToolbar::setCurrentCommentIsDone(bool _isDone)
+void CommentsToolbar::setCurrentCommentState(bool _isDone, bool _isChange, bool _isRevision)
 {
+    d->currentState = { _isDone, _isChange, _isRevision };
+
     QSignalBlocker signalBlocker(d->markAsDoneAction);
-    d->markAsDoneAction->setChecked(_isDone);
+    d->markAsDoneAction->setChecked(d->currentState.isDone);
+
+    d->updateActions();
+    updateTranslations();
 }
 
 void CommentsToolbar::showToolbar()
@@ -556,8 +567,10 @@ void CommentsToolbar::updateTranslations()
         + addingActionNote);
     //: This allow user to choose color for the review mode actions like text higlight or comments
     d->colorAction->setToolTip(tr("Choose color for the action"));
-    d->markAsDoneAction->setToolTip(tr("Mark as done"));
-    d->removeAction->setToolTip(tr("Remove selected mark"));
+    d->markAsDoneAction->setToolTip(d->currentState.isChange ? tr("Apply change")
+                                                             : tr("Mark as done"));
+    d->removeAction->setToolTip(d->currentState.isChange ? tr("Cancel change")
+                                                         : tr("Remove selected mark"));
 }
 
 void CommentsToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
