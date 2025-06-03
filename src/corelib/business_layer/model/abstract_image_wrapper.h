@@ -1,9 +1,13 @@
 #pragma once
 
+#include <QImage>
 #include <QObject>
 
 #include <corelib_global.h>
 
+namespace TempImagesLayer {
+struct TempImageFile;
+}
 
 namespace BusinessLayer {
 
@@ -26,6 +30,12 @@ public:
     virtual QPixmap load(const QUuid& _uuid) const = 0;
 
     /**
+     * @brief Получить изображение по заданному индентификатору асинхронно
+     * @return Гуид запроса
+     */
+    virtual QUuid loadAsync(const QVector<QUuid>& _imageUuids) const = 0;
+
+    /**
      * @brief Установить изображение
      */
     virtual QUuid save(const QPixmap& _image) = 0;
@@ -35,6 +45,12 @@ public:
      */
     virtual void save(const QUuid& _uuid, const QPixmap& _image) = 0;
     virtual void save(const QUuid& _uuid, const QByteArray& _imageData) = 0;
+
+    /**
+     * @brief Сохранить изображения из zip-архива во временные файлы
+     * @return Гуид запроса
+     */
+    virtual QUuid storeToTempAsync(const QByteArray& _zipArchive) = 0;
 
     /**
      * @brief Удалить заданное изображение
@@ -61,6 +77,17 @@ signals:
      * @brief Изображение было удалено
      */
     void imageRemoved(const QUuid& _uuid);
+
+    /**
+     * @brief Изображения загружены из БД
+     */
+    void imagesLoaded(const QUuid& _queryUuid, const QVector<QImage>& _images);
+
+    /**
+     * @brief Изображения размещены во временных файлах
+     */
+    void tempFilesStored(const QUuid& _queryUuid,
+                         const QVector<TempImagesLayer::TempImageFile>& _tempFiles);
 };
 
 } // namespace BusinessLayer

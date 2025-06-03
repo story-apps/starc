@@ -17,6 +17,11 @@ namespace {
 static QString s_connectionName = "local_database";
 
 /**
+ * @brief Открытые соединения с базой данных
+ */
+static QStringList s_connections;
+
+/**
  * @brief Плагин используемый для работы с базой
  */
 static QString s_sqlDriver = "QSQLITE";
@@ -126,8 +131,10 @@ void Database::setCurrentFile(const QString& _databaseFileName)
 
 void Database::closeCurrentFile()
 {
-    if (QSqlDatabase::contains(s_connectionName)) {
-        QSqlDatabase::removeDatabase(s_connectionName);
+    for (const auto& connection : s_connections) {
+        if (QSqlDatabase::contains(connection)) {
+            QSqlDatabase::removeDatabase(connection);
+        }
     }
 }
 
@@ -136,9 +143,9 @@ QString Database::currentFile()
     return instanse().databaseName();
 }
 
-QSqlQuery Database::query()
+QSqlQuery Database::query(const QString& _connection)
 {
-    return QSqlQuery(instanse());
+    return QSqlQuery(instanse(_connection));
 }
 
 void Database::transaction()
@@ -179,14 +186,15 @@ void Database::vacuum()
 
 // ****
 
-QSqlDatabase Database::instanse()
+QSqlDatabase Database::instanse(const QString& _connection)
 {
     QSqlDatabase database;
 
-    if (!QSqlDatabase::contains(s_connectionName)) {
-        open(database, s_connectionName, s_databaseName);
+    const QString connection = _connection.isEmpty() ? s_connectionName : _connection;
+    if (!QSqlDatabase::contains(connection)) {
+        open(database, connection, s_databaseName);
     } else {
-        database = QSqlDatabase::database(s_connectionName);
+        database = QSqlDatabase::database(connection);
     }
 
     return database;
@@ -200,6 +208,8 @@ void Database::open(QSqlDatabase& _database, const QString& _connectionName,
     _database = QSqlDatabase::addDatabase(s_sqlDriver, _connectionName);
     _database.setDatabaseName(_databaseName);
     _database.open();
+
+    s_connections.append(_connectionName);
 
     Database::States states = checkState(_database);
 

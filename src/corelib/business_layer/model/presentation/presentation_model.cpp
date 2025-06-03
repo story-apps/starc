@@ -1,11 +1,11 @@
 #include "presentation_model.h"
 
 #include <business_layer/model/abstract_image_wrapper.h>
+#include <data_layer/temp_image_file.h>
 #include <domain/document_object.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QDomDocument>
-#include <QPixmap>
 
 namespace BusinessLayer {
 
@@ -13,8 +13,10 @@ namespace {
 const QLatin1String kDocumentKey("document");
 const QLatin1String kNameKey("name");
 const QLatin1String kDescriptionKey("description");
-const QLatin1String kImageKey("image");
 const QLatin1String kImagesKey("images");
+const QLatin1String kImageKey("image");
+const QLatin1String kImageWidthKey("width");
+const QLatin1String kImageHeightKey("height");
 } // namespace
 
 
@@ -23,16 +25,33 @@ class PresentationModel::Implementation
 public:
     QString name;
     QString description;
-    QVector<Domain::DocumentImage> images;
+
+    QVector<QSize> imageSizes;
+    QVector<QUuid> imageUuids;
+
+    //
+    // Последний запрос на загрузку изображений (uuid самого запроса и соответсвтующие ему uuid'ы
+    // изображений)
+    //
+    struct {
+        QUuid queryUuid;
+        QVector<QUuid> imageUuids;
+    } lastQueryToLoad;
+
+    //
+    // Uuid запроса на размещение изображений во временные файлы
+    //
+    QUuid queryToStore;
 };
 
 PresentationModel::PresentationModel(QObject* _parent)
     : AbstractModel({}, _parent)
     , d(new Implementation)
 {
-    connect(this, &PresentationModel::imagesIsSet, this, &PresentationModel::updateDocumentContent);
     connect(this, &PresentationModel::nameChanged, this, &PresentationModel::updateDocumentContent);
     connect(this, &PresentationModel::descriptionChanged, this,
+            &PresentationModel::updateDocumentContent);
+    connect(this, &PresentationModel::imagesChanged, this,
             &PresentationModel::updateDocumentContent);
 }
 
@@ -69,41 +88,75 @@ void PresentationModel::setDescription(const QString& _description)
     emit descriptionChanged(d->description);
 }
 
-QVector<Domain::DocumentImage> PresentationModel::images() const
+QVector<QUuid> PresentationModel::imageUuids() const
 {
-    return d->images;
+    return d->imageUuids;
 }
 
-void PresentationModel::setImages(const QVector<QPixmap>& _images)
+QVector<QSize> PresentationModel::imageSizes() const
 {
-    if (_images.isEmpty()) {
-        return;
-    }
+    return d->imageSizes;
+}
 
-    for (const auto& image : std::as_const(d->images)) {
-        imageWrapper()->remove(image.uuid);
-    }
-    d->images.clear();
+QUuid PresentationModel::loadImagesAsync(const QVector<QUuid>& _imageUuids)
+{
+    const auto queryUuid = imageWrapper()->loadAsync(_imageUuids);
+    d->lastQueryToLoad = { queryUuid, _imageUuids };
+    return queryUuid;
+}
 
-    for (const auto& image : _images) {
-        d->images.append({ imageWrapper()->save(image), image });
-    }
-
-    emit imagesIsSet(d->images);
+void PresentationModel::storeToTempFiles(const QByteArray& _zipArchive)
+{
+    d->queryToStore = imageWrapper()->storeToTempAsync(_zipArchive);
 }
 
 void PresentationModel::initImageWrapper()
 {
     connect(imageWrapper(), &AbstractImageWrapper::imageUpdated, this,
-            [this](const QUuid& _uuid, const QPixmap& _image) {
-                for (auto& image : d->images) {
-                    if (image.uuid == _uuid) {
-                        image.image = _image;
-                        emit imagesIsSet(d->images);
-                        break;
+            &PresentationModel::imageUpdated);
+    connect(imageWrapper(), &AbstractImageWrapper::imagesLoaded, this,
+            [this](const QUuid& _queryUuid, const QVector<QImage>& _images) {
+                //
+                // Обрабатываем только последний запрос
+                //
+                if (d->lastQueryToLoad.queryUuid != _queryUuid) {
+                    return;
+                }
+
+                if (_images.size() == d->lastQueryToLoad.imageUuids.size()) {
+                    //
+                    // Объединяем изображения с их uuid'ами
+                    //
+                    QVector<QPair<QUuid, QImage>> loadedImages;
+                    for (int i = 0; i < _images.size(); ++i) {
+                        loadedImages.append({ d->lastQueryToLoad.imageUuids[i], _images[i] });
                     }
+                    emit imagesLoaded(_queryUuid, loadedImages);
+                } else {
+                    Q_ASSERT(false);
+                    emit imagesLoadingFailed();
                 }
             });
+    connect(
+        imageWrapper(), &AbstractImageWrapper::tempFilesStored, this,
+        [this](const QUuid& _queryUuid, const QVector<TempImagesLayer::TempImageFile>& _tempFiles) {
+            if (d->queryToStore != _queryUuid) {
+                return;
+            }
+
+            //
+            // Устанавливаем в модель размеры изображений и их uuid'ы
+            //
+            d->imageUuids.clear();
+            d->imageSizes.clear();
+            for (const auto& file : _tempFiles) {
+                d->imageSizes.append(file.imageSize);
+                d->imageUuids.append(file.uuid);
+            }
+
+            emit imagesChanged();
+            emit tempFilesStored();
+        });
 }
 
 void PresentationModel::initDocument()
@@ -126,9 +179,14 @@ void PresentationModel::initDocument()
         while (!imageNode.isNull()) {
             const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(imageNode.text()));
             if (!uuid.isNull()) {
-                d->images.append({ uuid, imageWrapper()->load(uuid) });
+                QSize size;
+                size.setWidth(imageNode.attribute(kImageWidthKey, "0").toInt());
+                size.setHeight(imageNode.attribute(kImageHeightKey, "0").toInt());
+                d->imageSizes.append(size);
+                d->imageUuids.append(uuid);
+            } else {
+                Q_ASSERT(false);
             }
-
             imageNode = imageNode.nextSiblingElement();
         }
     }
@@ -156,16 +214,23 @@ QByteArray PresentationModel::toXml() const
     };
     save(kNameKey, d->name);
     save(kDescriptionKey, d->description);
-    if (!d->images.isEmpty()) {
-        xml += QString("<%1>\n").arg(kImagesKey).toUtf8();
-        for (const auto& image : std::as_const(d->images)) {
-            xml += QString("<%1><![CDATA[%2]]></%1>\n")
-                       .arg(kImageKey, TextHelper::toHtmlEscaped(image.uuid.toString()))
-                       .toUtf8();
+    if (!d->imageSizes.isEmpty() || !d->imageUuids.isEmpty()) {
+        if (d->imageUuids.size() == d->imageSizes.size()) {
+            xml += QString("<%1>\n").arg(kImagesKey).toUtf8();
+            for (int i = 0; i < d->imageSizes.size(); ++i) {
+                xml += QString("<%1 %2=\"%3\" %4=\"%5\"><![CDATA[%6]]></%1>\n")
+                           .arg(kImageKey, kImageWidthKey,
+                                QString::number(d->imageSizes[i].width()), kImageHeightKey,
+                                QString::number(d->imageSizes[i].height()),
+                                TextHelper::toHtmlEscaped(d->imageUuids[i].toString()))
+                           .toUtf8();
+            }
+            xml += QString("</%1>\n").arg(kImagesKey).toUtf8();
+        } else {
+            Q_ASSERT(false);
         }
-        xml += QString("</%1>\n").arg(kImagesKey).toUtf8();
     }
-    xml += QString("</%1>").arg(kDocumentKey).toUtf8();
+    xml += QString("</%1>\n").arg(kDocumentKey).toUtf8();
     return xml;
 }
 
