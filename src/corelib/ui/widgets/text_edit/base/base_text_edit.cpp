@@ -184,6 +184,13 @@ public:
      * @brief Время последнего клика мышки, мс
      */
     qint64 lastMouseClickTime = 0;
+
+#ifdef Q_OS_MAC
+    /**
+     * @brief Время нажатия последнего пробела
+     */
+    qint64 lastSpaceWasPressed = 0;
+#endif
 };
 
 BaseTextEdit::Implementation::Implementation(BaseTextEdit* _q)
@@ -849,6 +856,35 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
         auto cursor = textCursor();
         cursor.movePosition(QTextCursor::EndOfLine);
         setTextCursor(cursor);
+    }
+    //
+    // Двойной пробел добавляет точку
+    //
+    else if (_event->key() == Qt::Key_Space) {
+        const auto spacePressedAt = QDateTime::currentMSecsSinceEpoch();
+        //
+        // Выделяем два последних символа и проверяем, что первый из них буква или число,
+        // второй пробел, а ещё нужно, чтобы предыдущее нажатие пробела было совсем недавно
+        //
+        auto cursor = textCursor();
+        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 2);
+        if (cursor.hasSelection() && cursor.selectedText().size() == 2
+            && cursor.selectedText().at(0).isLetterOrNumber()
+            && cursor.selectedText().at(1).isSpace()
+            && spacePressedAt - d->lastSpaceWasPressed
+                <= QApplication::styleHints()->mouseDoubleClickInterval()) {
+            d->lastSpaceWasPressed = 0;
+            cursor.clearSelection();
+            cursor.movePosition(QTextCursor::NextCharacter);
+            cursor.insertText(".");
+        }
+        //
+        // В противном случае лишь запоминаем время, когда был нажат пробел в очередной раз
+        //
+        else {
+            d->lastSpaceWasPressed = spacePressedAt;
+            isEventHandled = false;
+        }
     }
 #endif
     //
