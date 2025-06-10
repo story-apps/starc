@@ -18,6 +18,7 @@
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/shugar.h>
 #include <utils/tools/debouncer.h>
 
 #include <QAction>
@@ -427,30 +428,83 @@ void SimpleTextEdit::keyPressEvent(QKeyEvent* _event)
     // Если активен режим отслеживания изменений, то обработаем случаи удаления текста,
     // чтобы вместо удаления, текст лишь помечался удалённым
     //
-    if (BusinessLayer::TextCursor cursor = textCursor(); d->autoReviewMode.isEnabled
-        && d->autoReviewMode.isTrackChanges
-        && (_event->key() == Qt::Key_Delete || _event->key() == Qt::Key_Backspace
-            || (!_event->text().isEmpty() && cursor.hasSelection()))) {
-        if ((_event->key() == Qt::Key_Delete || _event->key() == Qt::Key_Backspace)
-            && !cursor.hasSelection()) {
-            cursor.movePosition(_event->key() == Qt::Key_Delete ? QTextCursor::NextCharacter
-                                                                : QTextCursor::PreviousCharacter,
-                                QTextCursor::KeepAnchor, 1);
-            setTextCursor(cursor);
-        }
-        addReviewMark({}, ColorHelper::removedTextBackgroundColor(), {}, false, false, true);
-        cursor.setPosition(_event->key() == Qt::Key_Backspace ? cursor.selectionInterval().from
-                                                              : cursor.selectionInterval().to);
-        setTextCursor(cursor);
+    do {
+        if (BusinessLayer::TextCursor cursor = textCursor(); d->autoReviewMode.isEnabled
+            && d->autoReviewMode.isTrackChanges
+            && (_event->key() == Qt::Key_Delete || _event->key() == Qt::Key_Backspace
+                || (!_event->text().isEmpty() && cursor.hasSelection()))) {
+            //
+            // ... если был удалён один символ, выделим его
+            //
+            if ((_event->key() == Qt::Key_Delete || _event->key() == Qt::Key_Backspace)
+                && !cursor.hasSelection()) {
+                cursor.movePosition(_event->key() == Qt::Key_Delete
+                                        ? QTextCursor::NextCharacter
+                                        : QTextCursor::PreviousCharacter,
+                                    QTextCursor::KeepAnchor, 1);
+                setTextCursor(cursor);
+            }
 
-        //
-        // ... если это было удаление, то прекращаем дальнейшую обработку
-        //
-        if (_event->key() == Qt::Key_Delete || _event->key() == Qt::Key_Backspace) {
-            _event->accept();
-            return;
+            //
+            // ... если в выделении находится добавленный текст в режиме отслеживания изменений,
+            //     то удалим его нормальным способом, а не будем помечать, как удалённый
+            //
+            const auto selectionInterval = cursor.selectionInterval();
+            auto block = cursor.block();
+            bool isAdditionSelected = true;
+            while (isAdditionSelected && block.isValid()
+                   && block.position() <= selectionInterval.to) {
+                const auto blockTextFormats = block.textFormats();
+                for (const auto& textFormat : blockTextFormats) {
+                    //
+                    // Пропускаем форматы до выделения
+                    //
+                    if (textFormat.start + textFormat.length
+                        <= selectionInterval.from - block.position()) {
+                        continue;
+                    }
+                    //
+                    // Игнорируем форматы после выделения
+                    //
+                    if (textFormat.start >= selectionInterval.to - block.position()) {
+                        break;
+                    }
+
+                    //
+                    // Если это не добавление, то прерываем поиск
+                    //
+                    if (textFormat.format.property(TextBlockStyle::PropertyCommentsIsAddition)
+                        != QStringList{ "true" }) {
+                        isAdditionSelected = false;
+                        break;
+                    }
+                }
+
+                block = block.next();
+            }
+            if (isAdditionSelected) {
+                break;
+            }
+
+            //
+            // ... если же в выделении был обычный текст, то добавляем ему соответствующую разметку
+            //
+            addReviewMark({}, ColorHelper::removedTextBackgroundColor(), {}, false, false, true);
+            cursor.setPosition(_event->key() == Qt::Key_Backspace ? cursor.selectionInterval().from
+                                                                  : cursor.selectionInterval().to);
+            setTextCursor(cursor);
+
+            //
+            // ... если это было удаление, то прекращаем дальнейшую обработку
+            //
+            if (_event->key() == Qt::Key_Delete || _event->key() == Qt::Key_Backspace) {
+                _event->accept();
+                return;
+            }
         }
     }
+    once;
+
 
     //
     // Подготовим событие к обработке
