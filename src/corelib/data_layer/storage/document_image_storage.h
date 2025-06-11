@@ -29,6 +29,12 @@ public:
     QPixmap load(const QUuid& _uuid) const override;
 
     /**
+     * @brief Получить изображения с заданными гуидами асинхронно
+     * @return Гуид запроса
+     */
+    QUuid loadAsync(const QVector<QUuid>& _imageUuids) const override;
+
+    /**
      * @brief Сохранить новое изображение
      */
     QUuid save(const QPixmap& _image) override;
@@ -38,6 +44,12 @@ public:
      */
     void save(const QUuid& _uuid, const QPixmap& _image) override;
     void save(const QUuid& _uuid, const QByteArray& _imageData) override;
+
+    /**
+     * @brief Сохранить изображения из zip-архива во временные файлы асинхроно
+     * @return Гуид запроса
+     */
+    QUuid storeToTempAsync(const QByteArray& _zipArchive) override;
 
     /**
      * @brief Удалить заданное изображение
@@ -50,9 +62,14 @@ public:
     void clear();
 
     /**
-     * @brief Сохранить все новые изображения, ещё не сохранённые в базу данных
+     * @brief Сохранить все новые изображения, ещё не сохранённые в базу данных, синхронно
      */
     void saveChanges();
+
+    /**
+     * @brief Сохранить все новые изображения, ещё не сохранённые в базу данных, асинхронно
+     */
+    void saveChangesAsync();
 
 private:
     class Implementation;

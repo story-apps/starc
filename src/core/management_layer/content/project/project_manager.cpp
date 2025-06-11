@@ -25,7 +25,7 @@
 #include <business_layer/model/worlds/world_model.h>
 #include <business_layer/model/worlds/worlds_model.h>
 #include <business_layer/templates/text_template.h>
-#include <data_layer/database.h>
+#include <data_layer/database_manager.h>
 #include <data_layer/storage/document_change_storage.h>
 #include <data_layer/storage/document_image_storage.h>
 #include <data_layer/storage/document_storage.h>
@@ -108,7 +108,7 @@ bool isTextItem(BusinessLayer::StructureModelItem* _item)
  */
 QString projectSettingsKey(const QString& _key)
 {
-    return DatabaseLayer::Database::currentFile() + "/" + _key;
+    return DatabaseLayer::DatabaseManager::currentFile() + "/" + _key;
 }
 
 /**

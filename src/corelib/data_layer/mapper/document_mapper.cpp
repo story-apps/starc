@@ -1,6 +1,5 @@
 #include "document_mapper.h"
 
-#include <data_layer/database.h>
 #include <domain/document_object.h>
 #include <domain/objects_builder.h>
 
@@ -15,17 +14,43 @@ using Domain::Identifier;
 namespace DataMappingLayer {
 
 namespace {
+
 const QString kColumns = " id, uuid, type, content, synced_at ";
 const QString kTableName = " documents ";
 const QString kDateTimeFormat = "yyyy-MM-dd hh:mm:ss:zzz";
+
 QString uuidFilter(const QUuid& _uuid)
 {
     return QString(" WHERE uuid = '%1' ").arg(_uuid.toString());
 }
+
+QString uuidsFilter(const QVector<QUuid>& _uuids)
+{
+    if (_uuids.isEmpty()) {
+        return " WHERE 1 = 0 ";
+    }
+
+    QStringList uuidsList;
+    QStringList caseStatements;
+    int order = 0;
+
+    for (const auto& uuid : _uuids) {
+        QString uuidStr = "'" + uuid.toString() + "'";
+        uuidsList.append(uuidStr);
+        caseStatements.append(QString("WHEN uuid = %1 THEN %2").arg(uuidStr).arg(order));
+        ++order;
+    }
+
+    return QString(" WHERE uuid IN (%1) ORDER BY CASE %2 END")
+        .arg(uuidsList.join(", "))
+        .arg(caseStatements.join(" "));
+}
+
 QString typeFilter(Domain::DocumentObjectType _type)
 {
     return QString(" WHERE type = %1 ").arg(static_cast<int>(_type));
 }
+
 } // namespace
 
 
@@ -95,6 +120,26 @@ bool DocumentMapper::update(DocumentObject* _object)
 void DocumentMapper::remove(DocumentObject* _object)
 {
     abstractDelete(_object);
+}
+
+QUuid DocumentMapper::findAsync(const QVector<QUuid>& _documentUuids)
+{
+    return abstractFindAsync(uuidsFilter(_documentUuids));
+}
+
+QUuid DocumentMapper::insertAsync(DocumentObject* _object)
+{
+    return abstractInsertAsync(_object);
+}
+
+QUuid DocumentMapper::updateAsync(DocumentObject* _object)
+{
+    return abstractUpdateAsync(_object);
+}
+
+QUuid DocumentMapper::removeAsync(Domain::DocumentObject* _object)
+{
+    return abstractDeleteAsync(_object);
 }
 
 QString DocumentMapper::findStatement(const Identifier& _id) const
@@ -199,6 +244,31 @@ void DocumentMapper::doLoad(DomainObject* _object, const QSqlRecord& _record)
     const auto syncedAt
         = QDateTime::fromString(_record.value("synced_at").toString(), kDateTimeFormat);
     documentObject->setSyncedAt(syncedAt);
+}
+
+void DocumentMapper::doLoad(DomainObject* _object, const QVariantList& _record)
+{
+    auto documentObject = static_cast<DocumentObject*>(_object);
+    if (documentObject == nullptr) {
+        return;
+    }
+
+    const auto uuid = QUuid::fromString(_record[1].toString());
+    documentObject->setUuid(uuid);
+
+    const DocumentObjectType type = static_cast<DocumentObjectType>(_record[2].toInt());
+    documentObject->setType(type);
+
+    const auto content = _record[3].toByteArray();
+    documentObject->setContent(content);
+
+    const auto syncedAt = QDateTime::fromString(_record[4].toString(), kDateTimeFormat);
+    documentObject->setSyncedAt(syncedAt);
+}
+
+DocumentMapper::DocumentMapper(QObject* _parent)
+    : AbstractMapper(_parent)
+{
 }
 
 } // namespace DataMappingLayer
