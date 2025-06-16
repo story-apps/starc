@@ -414,3 +414,8 @@ QPixmap ImageHelper::rotateImage(const QPixmap& _image, bool _left)
 
     return rotatedImage;
 }
+
+QSize ImageHelper::maxSize()
+{
+    return QSize(kImageMaxWidth, kImageMaxHeight);
+}

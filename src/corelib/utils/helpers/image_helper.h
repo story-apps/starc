@@ -86,4 +86,9 @@ public:
      * @brief Повернуть изображение
      */
     static QPixmap rotateImage(const QPixmap& _image, bool _left);
+
+    /**
+     * @brief Максимальный размер
+     */
+    static QSize maxSize();
 };
