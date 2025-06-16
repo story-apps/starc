@@ -58,19 +58,23 @@ class ProjectModelsFacade::Implementation
 {
 public:
     explicit Implementation(BusinessLayer::StructureModel* _projectStructureModel,
-                            BusinessLayer::AbstractImageWrapper* _imageWrapper);
+                            BusinessLayer::AbstractImageWrapper* _imageWrapper,
+                            BusinessLayer::AbstractRawDataWrapper* _rawDataWrapper);
 
 
     BusinessLayer::StructureModel* projectStructureModel = nullptr;
     BusinessLayer::AbstractImageWrapper* imageWrapper = nullptr;
+    BusinessLayer::AbstractRawDataWrapper* rawDataWrapper = nullptr;
     QHash<Domain::DocumentObject*, BusinessLayer::AbstractModel*> documentsToModels;
 };
 
 ProjectModelsFacade::Implementation::Implementation(
     BusinessLayer::StructureModel* _projectStructureModel,
-    BusinessLayer::AbstractImageWrapper* _imageWrapper)
+    BusinessLayer::AbstractImageWrapper* _imageWrapper,
+    BusinessLayer::AbstractRawDataWrapper* _rawDataWrapper)
     : projectStructureModel(_projectStructureModel)
     , imageWrapper(_imageWrapper)
+    , rawDataWrapper(_rawDataWrapper)
 {
 }
 
@@ -80,9 +84,10 @@ ProjectModelsFacade::Implementation::Implementation(
 
 ProjectModelsFacade::ProjectModelsFacade(BusinessLayer::StructureModel* _projectStructureModel,
                                          BusinessLayer::AbstractImageWrapper* _imageWrapper,
+                                         BusinessLayer::AbstractRawDataWrapper* _rawDataWrapper,
                                          QObject* _parent)
     : QObject(_parent)
-    , d(new Implementation(_projectStructureModel, _imageWrapper))
+    , d(new Implementation(_projectStructureModel, _imageWrapper, _rawDataWrapper))
 {
 }
 
@@ -1386,6 +1391,7 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
             Q_ASSERT(model);
 
             model->setImageWrapper(d->imageWrapper);
+            model->setRawDataWrapper(d->rawDataWrapper);
 
             //
             // Если документ не является алиасом, то загрузим из него модели и соединим модель со

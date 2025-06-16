@@ -4,7 +4,7 @@ TEMPLATE = lib
 CONFIG += c++1z
 CONFIG += force_debug_info
 CONFIG += separate_debug_info
-QT += widgets widgets-private sql xml network
+QT += widgets widgets-private sql xml network concurrent
 greaterThan(QT_MAJOR_VERSION, 5) {
     QT += core5compat
 }
@@ -359,6 +359,7 @@ SOURCES += \
     data_layer/mapper/settings_mapper.cpp \
     data_layer/storage/document_change_storage.cpp \
     data_layer/storage/document_image_storage.cpp \
+    data_layer/storage/document_raw_data_storage.cpp \
     data_layer/storage/document_storage.cpp \
     data_layer/storage/settings_storage.cpp \
     data_layer/storage/storage_facade.cpp \
@@ -604,6 +605,7 @@ HEADERS += \
     business_layer/model/abstract_model.h \
     business_layer/model/abstract_model_item.h \
     business_layer/model/abstract_model_xml.h \
+    business_layer/model/abstract_raw_data_wrapper.h \
     business_layer/model/audioplay/audioplay_information_model.h \
     business_layer/model/audioplay/audioplay_statistics_model.h \
     business_layer/model/audioplay/audioplay_synopsis_model.h \
@@ -730,6 +732,7 @@ HEADERS += \
     data_layer/mapper/settings_mapper.h \
     data_layer/storage/document_change_storage.h \
     data_layer/storage/document_image_storage.h \
+    data_layer/storage/document_raw_data_storage.h \
     data_layer/storage/document_storage.h \
     data_layer/storage/settings_storage.h \
     data_layer/storage/storage_facade.h \

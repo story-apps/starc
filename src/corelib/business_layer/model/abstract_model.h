@@ -14,6 +14,7 @@ class DocumentObject;
 namespace BusinessLayer {
 
 class AbstractImageWrapper;
+class AbstractRawDataWrapper;
 class AbstractModelItem;
 
 struct ChangeCursor {
@@ -65,7 +66,12 @@ public:
     /**
      * @brief Установить загрузчик изображений
      */
-    void setImageWrapper(AbstractImageWrapper* _image);
+    void setImageWrapper(AbstractImageWrapper* _imageWrapper);
+
+    /**
+     * @brief Установить загрузчик сырых данных
+     */
+    void setRawDataWrapper(AbstractRawDataWrapper* _wrapper);
 
     /**
      * @brief Очистить все загруженные данные
@@ -196,6 +202,11 @@ protected:
     virtual void initImageWrapper();
 
     /**
+     * @brief Настроить хранилище сырых данных
+     */
+    virtual void initRawDataWrapper();
+
+    /**
      * @brief Настроить документ
      */
     virtual void initDocument() = 0;
@@ -220,6 +231,11 @@ protected:
      * @brief Получить обёртку для работы с изображениями
      */
     AbstractImageWrapper* imageWrapper() const;
+
+    /**
+     * @brief Получить обёртку для работы с сырыми данными
+     */
+    AbstractRawDataWrapper* rawDataWrapper() const;
 
     /**
      * @brief Получить управляющего процессом применения изменений

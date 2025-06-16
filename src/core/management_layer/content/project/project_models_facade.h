@@ -5,6 +5,7 @@
 
 namespace BusinessLayer {
 class AbstractImageWrapper;
+class AbstractRawDataWrapper;
 class AbstractModel;
 class StructureModel;
 } // namespace BusinessLayer
@@ -27,6 +28,7 @@ class ProjectModelsFacade : public QObject
 public:
     explicit ProjectModelsFacade(BusinessLayer::StructureModel* _projectStructureModel,
                                  BusinessLayer::AbstractImageWrapper* _imageWrapper,
+                                 BusinessLayer::AbstractRawDataWrapper* _rawDataWrapper,
                                  QObject* _parent = nullptr);
     ~ProjectModelsFacade() override;
 

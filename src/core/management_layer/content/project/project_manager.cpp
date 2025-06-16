@@ -28,6 +28,7 @@
 #include <data_layer/database.h>
 #include <data_layer/storage/document_change_storage.h>
 #include <data_layer/storage/document_image_storage.h>
+#include <data_layer/storage/document_raw_data_storage.h>
 #include <data_layer/storage/document_storage.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -369,6 +370,11 @@ public:
     DataStorageLayer::DocumentImageStorage documentImageStorage;
 
     /**
+     * @brief Хранилище сырых данных проекта
+     */
+    DataStorageLayer::DocumentRawDataStorage documentRawDataStorage;
+
+    /**
      * @brief Фасад доступа к моделям проекта
      */
     ProjectModelsFacade modelsFacade;
@@ -465,7 +471,7 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
     , splitScreenShortcut(new QShortcut(_parent))
     , projectStructureModel(new BusinessLayer::StructureModel(navigator))
     , projectStructureProxyModel(new BusinessLayer::StructureProxyModel(projectStructureModel))
-    , modelsFacade(projectStructureModel, &documentImageStorage)
+    , modelsFacade(projectStructureModel, &documentImageStorage, &documentRawDataStorage)
     , pluginsBuilder(_pluginsBuilder)
     , collaboratorsUpdateDebouncer(kCollaboratorsUpdateTimeoutMs)
 {
@@ -1398,6 +1404,12 @@ void ProjectManager::Implementation::removeDocumentImpl(BusinessLayer::Structure
             for (const auto& item : world->magicTypes()) {
                 documentsToRemove.append(item.photo.uuid);
             }
+            break;
+        }
+
+        case Domain::DocumentObjectType::Presentation: {
+            auto presentation = static_cast<BusinessLayer::PresentationModel*>(model);
+            documentsToRemove.append(presentation->imagesArchiveUuid());
             break;
         }
 
@@ -3293,6 +3305,11 @@ void ProjectManager::closeCurrentProject(const QString& _path)
     d->documentImageStorage.clear();
 
     //
+    // Сбрасываем помеченные на удаление и загруженные сырые данные
+    //
+    d->documentRawDataStorage.clear();
+
+    //
     // Сбрасываем название последнего открытого проекта
     //
     d->projectStructureModel->setProjectName({});
@@ -3329,6 +3346,11 @@ void ProjectManager::saveChanges()
     // Сохраняем изображения
     //
     d->documentImageStorage.saveChanges();
+
+    //
+    // Сохраняем сырые данные
+    //
+    d->documentRawDataStorage.saveChanges();
 
     //
     // Сохраняем все изменения документов
