@@ -2,9 +2,7 @@
 
 #include "../abstract_model.h"
 
-namespace Domain {
-struct DocumentImage;
-}
+#include <QPixmap>
 
 namespace BusinessLayer {
 
@@ -27,10 +25,31 @@ public:
     void setDescription(const QString& _description);
     Q_SIGNAL void descriptionChanged(const QString& _description);
 
-    QVector<Domain::DocumentImage> images() const;
-    void setImages(const QVector<QPixmap>& _images);
-    Q_SIGNAL void imagesIsSet(const QVector<Domain::DocumentImage>& _images);
+    /**
+     * @brief Размеры изображений
+     */
+    QVector<QSize> imageSizes() const;
 
+    /**
+     * @brief Uuid документа zip-архива с изображениями
+     */
+    QUuid imagesArchiveUuid() const;
+
+    /**
+     * @brief Установить контент презентации (zip-врхив с изображениями и размеры этих изображений)
+     */
+    void setContent(const QByteArray& _imagesArchive, const QVector<QSize>& _sizes);
+
+    /**
+     * @brief Загрузить изображения из zip-архива
+     */
+    QUuid loadImages(int _from, int _amount);
+    Q_SIGNAL void imagesLoaded(const QUuid& _queryUuid, const QVector<QPixmap>& _images);
+    Q_SIGNAL void imagesLoadingFailed(const QUuid& _queryUuid);
+
+    /**
+     * @brief Запрос на загрузку презентации
+     */
     Q_SIGNAL void downloadPresentationRequested(const QString& _filePath);
 
 protected:
@@ -38,7 +57,6 @@ protected:
      * @brief Реализация модели для работы с документами
      */
     /** @{ */
-    void initImageWrapper() override;
     void initDocument() override;
     void clearDocument() override;
     QByteArray toXml() const override;

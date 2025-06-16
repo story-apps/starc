@@ -32,7 +32,12 @@ public:
     /**
      * @brief Загрузчик фотографий
      */
-    AbstractImageWrapper* image = nullptr;
+    AbstractImageWrapper* imageWrapper = nullptr;
+
+    /**
+     * @brief Загрузчик сырых данный
+     */
+    AbstractRawDataWrapper* rawDataWrapper = nullptr;
 
     /**
      * @brief Контроллер для формирования патчей изменений документа
@@ -141,12 +146,21 @@ void AbstractModel::setDocumentColor(const QColor& _color)
     Q_UNUSED(_color)
 }
 
-void AbstractModel::setImageWrapper(AbstractImageWrapper* _image)
+void AbstractModel::setImageWrapper(AbstractImageWrapper* _imageWrapper)
 {
-    d->image = _image;
+    d->imageWrapper = _imageWrapper;
 
-    if (d->image != nullptr) {
+    if (d->imageWrapper != nullptr) {
         initImageWrapper();
+    }
+}
+
+void AbstractModel::setRawDataWrapper(AbstractRawDataWrapper* _wrapper)
+{
+    d->rawDataWrapper = _wrapper;
+
+    if (d->rawDataWrapper != nullptr) {
+        initRawDataWrapper();
     }
 }
 
@@ -406,6 +420,10 @@ void AbstractModel::initImageWrapper()
 {
 }
 
+void AbstractModel::initRawDataWrapper()
+{
+}
+
 ChangeCursor AbstractModel::applyPatch(const QByteArray& _patch)
 {
     const auto newContent = d->dmpController.applyPatch(toXml(), _patch);
@@ -419,8 +437,14 @@ ChangeCursor AbstractModel::applyPatch(const QByteArray& _patch)
 
 AbstractImageWrapper* AbstractModel::imageWrapper() const
 {
-    Q_ASSERT(d->image);
-    return d->image;
+    Q_ASSERT(d->imageWrapper);
+    return d->imageWrapper;
+}
+
+AbstractRawDataWrapper* AbstractModel::rawDataWrapper() const
+{
+    Q_ASSERT(d->rawDataWrapper);
+    return d->rawDataWrapper;
 }
 
 const DiffMatchPatchController& AbstractModel::dmpController() const
