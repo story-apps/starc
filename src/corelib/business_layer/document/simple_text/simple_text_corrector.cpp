@@ -662,9 +662,19 @@ void SimpleTextCorrector::Implementation::correctPageBreaks(int _position)
             : blockLineHeight * blockLineCount + blockFormat.topMargin()
                 + blockFormat.bottomMargin();
         //
-        // ... если блок настолько огромный, что не влезает на три страницы, то прерываем обработку
+        // ... прерываем обработку в случае
+        //     - если блок ну ни как не должен быть больше одной страницы размером
+        //     - если блок настолько огромный, что не влезает на три страницы
         //
-        if (blockHeight > pageHeight * 3) {
+        const QSet<TextParagraphType> blockWhichCantBeWiderThenPage = {
+            TextParagraphType::ChapterHeading1, TextParagraphType::ChapterHeading2,
+            TextParagraphType::ChapterHeading3, TextParagraphType::ChapterHeading4,
+            TextParagraphType::ChapterHeading5, TextParagraphType::ChapterHeading6,
+            TextParagraphType::SequenceFooter,
+
+        };
+        if ((blockHeight >= pageHeight && blockWhichCantBeWiderThenPage.contains(blockType))
+            || blockHeight >= pageHeight * 3) {
             return;
         }
         //
