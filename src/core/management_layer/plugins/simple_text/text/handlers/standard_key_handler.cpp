@@ -4,11 +4,13 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/document/text/text_document.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
 #include <QKeyEvent>
+#include <QModelIndex>
 #include <QTextBlock>
 
 using BusinessLayer::TextBlockStyle;
@@ -323,15 +325,33 @@ void StandardKeyHandler::handleOther(QKeyEvent*)
 void StandardKeyHandler::removeCharacters(bool _backward)
 {
     BusinessLayer::TextCursor cursor = editor()->textCursor();
-    if (cursor.hasSelection()) {
-        cursor.removeSelectedText();
-    } else {
-        if (_backward) {
-            cursor.deletePreviousChar();
-        } else {
-            cursor.deleteChar();
+
+    //
+    // Если нет выделения, то обработаем крайние случаи с удалением по краям блоков
+    //
+    if (!cursor.hasSelection()) {
+        //
+        // ... если пользователь нажимает Backspace в начале блока, перед которым идёт невидимый
+        //     (это значит, что включён режим изоляции и мы находимся на краю изолированного
+        //     элемента), просто завершаем работу
+        //
+        if (!cursor.atStart() && cursor.positionInBlock() == 0 && _backward
+            && !cursor.block().previous().isVisible() && !cursor.block().text().isEmpty()) {
+            return;
+        }
+        //
+        // ... если пользователь нажал Delete в конце абзаца и при этом после текущего абзаца идёт
+        //     невидимый блок (это значит, что включён режим изоляции и мы находимся на краю
+        //     изолированного элемента), просто завершаем работу
+        //
+        else if (!cursor.atEnd() && cursor.positionInBlock() == cursor.block().text().length()
+                 && !_backward && !cursor.block().next().isVisible()
+                 && !cursor.block().text().isEmpty()) {
+            return;
         }
     }
+
+    cursor.removeCharacters(_backward, editor());
 }
 
 } // namespace KeyProcessingLayer
