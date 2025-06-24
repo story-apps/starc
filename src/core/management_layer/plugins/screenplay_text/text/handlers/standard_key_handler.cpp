@@ -4,11 +4,13 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/document/text/text_document.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 
 #include <QKeyEvent>
+#include <QModelIndex>
 #include <QTextBlock>
 
 using BusinessLayer::TextBlockStyle;
@@ -340,28 +342,66 @@ void StandardKeyHandler::removeCharacters(bool _backward)
     //
     if (!cursor.hasSelection()) {
         //
-        // ... если пользователь нажимает Backspace в начале блока, перед котором идёт невидимый,
-        //     то идём назад до конца первого видимого блока
+        // Включен ли режим изоляции
+        //
+        const auto isIsolationModeOn = [this] {
+            const auto textDocument
+                = static_cast<BusinessLayer::TextDocument*>(editor()->document());
+            if (!textDocument) {
+                return false;
+            }
+            return textDocument->visibleTopLeveLItem().isValid();
+        };
+
+        //
+        // ... если пользователь нажимает Backspace в начале блока, перед которым идёт невидимый
         //
         if (!cursor.atStart() && cursor.positionInBlock() == 0 && _backward
             && !cursor.block().previous().isVisible() && !cursor.block().text().isEmpty()) {
+            //
+            // ... идём назад до конца первого видимого блока
+            //
             do {
                 cursor.movePosition(QTextCursor::PreviousBlock, QTextCursor::KeepAnchor);
-                cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             } while (!cursor.block().isVisible() && !cursor.atStart());
+            //
+            // ... если мы в режиме изоляции и перед курсором нет видимых блоков, значит мы на краю
+            // изолированного блока - в этом случае ничего не делаем
+            //
+            if (isIsolationModeOn() && cursor.atStart()) {
+                return;
+            }
+            //
+            // ... вернем курсор в конец видимого блока, чтобы не удалять его
+            //
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             editor()->setTextCursorForced(cursor);
         }
         //
         // ... если пользователь нажал Delete в конце абзаца и при этом после текущего абзаца
-        //     идёт невидимый блок, то идём вперёд до начала первого видимого блока
+        //     идёт невидимый блок
         //
         else if (!cursor.atEnd() && cursor.positionInBlock() == cursor.block().text().length()
                  && !_backward && !cursor.block().next().isVisible()
                  && !cursor.block().text().isEmpty()) {
+            //
+            // ... идём вперёд до начала первого видимого блока
+            //
             do {
                 cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
                 cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             } while (!cursor.block().isVisible() && !cursor.atEnd());
+            //
+            // ... если мы в режиме изоляции и после курсора нет видимых блоков, значит мы на краю
+            // изолированного блока - в этом случае ничего не делаем
+            //
+            if (isIsolationModeOn() && cursor.atEnd()) {
+                return;
+            }
+            //
+            // ... вернем курсор в начало видимого блока, чтобы не удалять его
+            //
+            cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
             editor()->setTextCursorForced(cursor);
         }
     }
