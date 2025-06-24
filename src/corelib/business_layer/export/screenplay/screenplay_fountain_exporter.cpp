@@ -190,12 +190,11 @@ bool ScreenplayFountainExporter::processBlock(QString& _paragraph, const QTextBl
 
     case TextParagraphType::Action: {
         //
-        // Корректируем регистр, чтобы не было верхнего регистра
+        // Если действие в верхнем регистре, поставим перед ним "!"
         //
-        const auto capitalizeEveryWord = false;
-        const auto capitalizeEverySentense = true;
-        _paragraph
-            = TextHelper::toSentenceCase(_paragraph, capitalizeEveryWord, capitalizeEverySentense);
+        if (TextHelper::isUppercase(_paragraph)) {
+            _paragraph.prepend("!");
+        }
         return true;
     }
 

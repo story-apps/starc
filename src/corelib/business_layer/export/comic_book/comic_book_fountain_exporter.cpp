@@ -74,12 +74,11 @@ bool ComicBookFountainExporter::processBlock(QString& _paragraph, const QTextBlo
 
     case TextParagraphType::Description: {
         //
-        // Корректируем регистр, чтобы не было верхнего регистра
+        // Если описание в верхнем регистре, поставим перед ним "!"
         //
-        const auto capitalizeEveryWord = false;
-        const auto capitalizeEverySentense = true;
-        _paragraph
-            = TextHelper::toSentenceCase(_paragraph, capitalizeEveryWord, capitalizeEverySentense);
+        if (TextHelper::isUppercase(_paragraph)) {
+            _paragraph.prepend("!");
+        }
         return true;
     }
 
