@@ -2736,12 +2736,23 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                     Q_ASSERT(previousItemParent);
 
                     //
-                    // Если элемент вставляется после другого элемента того же уровня, или после
-                    // окончания папки, то вставляем его на том же уровне, что и предыдущий
+                    // Если элемент вставляется после другого элемента того же уровня
                     //
-                    if (previousItemParent->subtype() == parentItem->subtype()
-                        || previousItemIsFolderFooter) {
-                        d->model->insertItem(parentItem, previousItemParent);
+                    if (previousItemParent->subtype() == parentItem->subtype()) {
+                        //
+                        // ... если папка вставляется в папку, и при этом не после её закрывающего
+                        //     элемента, то она может быть вложена
+                        //
+                        if (isFolder(parentItem) && isFolder(previousItemParent)
+                            && !previousItemIsFolderFooter) {
+                            d->model->insertItem(parentItem, previousTextItem);
+                        }
+                        //
+                        // ... в противном случае, вставляем на том же уровне, что и предыдущий
+                        //
+                        else {
+                            d->model->insertItem(parentItem, previousItemParent);
+                        }
                     }
                     //
                     // Если вставляется папка на уровне группы, то вставим в родителя более высокого
