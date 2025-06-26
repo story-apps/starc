@@ -338,6 +338,34 @@ void StandardKeyHandler::handleOther(QKeyEvent*)
 void StandardKeyHandler::removeCharacters(bool _backward)
 {
     BusinessLayer::TextCursor cursor = editor()->textCursor();
+
+    //
+    // TODO: не удалять невидимые блоки внутри выделения
+    //
+
+    //
+    // Если нет выделения, то обработаем крайние случаи с удалением по краям блоков
+    //
+    if (!cursor.hasSelection()) {
+        //
+        // ... если пользователь нажимает Backspace в начале блока, перед котором идёт невидимый,
+        //     то ничего не делаем
+        //
+        if (!cursor.atStart() && cursor.positionInBlock() == 0 && _backward
+            && !cursor.block().previous().isVisible() && !cursor.block().text().isEmpty()) {
+            return;
+        }
+        //
+        // ... если пользователь нажал Delete в конце абзаца и при этом после текущего абзаца
+        //     идёт невидимый блок, то ничего не делаем
+        //
+        else if (!cursor.atEnd() && cursor.positionInBlock() == cursor.block().text().length()
+                 && !_backward && !cursor.block().next().isVisible()
+                 && !cursor.block().text().isEmpty()) {
+            return;
+        }
+    }
+
     cursor.removeCharacters(_backward, editor());
 }
 
