@@ -137,6 +137,46 @@ TextModelItem* TextDocument::Implementation::itemFor(const TextCursor& _cursor) 
 void TextDocument::Implementation::correctPositionsToItems(
     std::map<int, TextModelItem*>::iterator _from, int _distance)
 {
+    //
+    // В режиме отладки на Windows тут происходит инвалидация итератора, когда обновляем элементы за
+    // один цикл. Спишем это на баг компилятора и будем обновлять элементы более безопасно.
+    //
+#if defined(Q_OS_WIN) && defined(QT_DEBUG)
+
+    if (_from == positionsToItems.end()) {
+        return;
+    }
+
+    //
+    // Собираем элементы, которые нужно обновить
+    //
+    std::vector<std::pair<int, TextModelItem*>> updates;
+    if (_distance > 0) {
+        for (auto iter = positionsToItems.rbegin(); iter != std::make_reverse_iterator(_from);
+             ++iter) {
+            updates.emplace_back(iter->first + _distance, iter->second);
+        }
+    } else if (_distance < 0) {
+        for (auto iter = _from; iter != positionsToItems.end(); ++iter) {
+            updates.emplace_back(iter->first + _distance, iter->second);
+        }
+    }
+
+    //
+    // Удаляем старые ключи
+    //
+    for (const auto& [newKey, _] : updates) {
+        const auto oldKey = newKey - _distance;
+        positionsToItems.erase(oldKey);
+    }
+
+    //
+    // Вставляем обновлённые элементы
+    //
+    for (const auto& [newKey, value] : updates) {
+        positionsToItems.emplace(newKey, value);
+    }
+#else
     if (_from == positionsToItems.end()) {
         return;
     }
@@ -158,6 +198,7 @@ void TextDocument::Implementation::correctPositionsToItems(
             iter = positionsToItems.insert(std::move(itemToUpdate)).position;
         }
     }
+#endif
 }
 
 void TextDocument::Implementation::correctPositionsToItems(int _fromPosition, int _distance)
