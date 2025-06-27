@@ -141,22 +141,34 @@ void TextDocument::Implementation::correctPositionsToItems(
         return;
     }
 
+    //
+    // Собираем элементы, которые нужно обновить
+    //
+    std::vector<std::pair<int, TextModelItem*>> updates;
     if (_distance > 0) {
-        auto reversed = [](std::map<int, TextModelItem*>::iterator iter) {
-            return std::prev(std::make_reverse_iterator(iter));
-        };
         for (auto iter = positionsToItems.rbegin(); iter != std::make_reverse_iterator(_from);
              ++iter) {
-            auto itemToUpdate = positionsToItems.extract(iter->first);
-            itemToUpdate.key() = itemToUpdate.key() + _distance;
-            iter = reversed(positionsToItems.insert(std::move(itemToUpdate)).position);
+            updates.emplace_back(iter->first + _distance, iter->second);
         }
     } else if (_distance < 0) {
         for (auto iter = _from; iter != positionsToItems.end(); ++iter) {
-            auto itemToUpdate = positionsToItems.extract(iter->first);
-            itemToUpdate.key() = itemToUpdate.key() + _distance;
-            iter = positionsToItems.insert(std::move(itemToUpdate)).position;
+            updates.emplace_back(iter->first + _distance, iter->second);
         }
+    }
+
+    //
+    // Удаляем старые ключи
+    //
+    for (const auto& [newKey, _] : updates) {
+        const auto oldKey = newKey - _distance;
+        positionsToItems.erase(oldKey);
+    }
+
+    //
+    // Вставляем обновлённые элементы
+    //
+    for (const auto& [newKey, value] : updates) {
+        positionsToItems.emplace(newKey, value);
     }
 }
 
