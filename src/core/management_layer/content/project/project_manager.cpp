@@ -2449,7 +2449,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             [this](BusinessLayer::AbstractModel* _model) {
                 auto item = d->projectStructureModel->itemForUuid(_model->document()->uuid());
                 auto index = d->projectStructureModel->indexForItem(item);
-                d->removeDocuments({ index });
+                d->removeDocuments({ d->projectStructureProxyModel->mapFromSource(index) });
             });
     connect(&d->modelsFacade, &ProjectModelsFacade::projectNameChanged, this,
             &ProjectManager::projectNameChanged);
