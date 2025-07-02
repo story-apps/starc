@@ -1709,51 +1709,42 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     UiHelper::initSpellingFor(d->textEdit);
 
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
+    auto contains = [_changedSettingsKeys](const QString& _key) {
+        return _changedSettingsKeys.contains(_key);
+    };
+    auto toBool = [](const QString& _key) { return settingsValue(_key).toBool(); };
+
+    using namespace DataStorageLayer;
+
+    if (_changedSettingsKeys.isEmpty() || contains(kComponentsScreenplayEditorDefaultTemplateKey)) {
         d->reconfigureTemplate();
     }
 
     if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorShowSceneNumbersKey)) {
+        || contains(kComponentsScreenplayEditorShowSceneNumbersKey)) {
         d->reconfigureSceneNumbersVisibility();
     }
     if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorShowDialogueNumbersKey)) {
+        || contains(kComponentsScreenplayEditorShowDialogueNumbersKey)) {
         d->reconfigureDialoguesNumbersVisibility();
     }
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)) {
+    if (_changedSettingsKeys.isEmpty() || contains(kComponentsScreenplayEditorContinueDialogueKey)
+        || contains(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)) {
         d->textEdit->setCorrectionOptions(
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorContinueDialogueKey)
-                .toBool(),
-            settingsValue(DataStorageLayer::kComponentsScreenplayEditorCorrectTextOnPageBreaksKey)
-                .toBool());
+            toBool(kComponentsScreenplayEditorContinueDialogueKey),
+            toBool(kComponentsScreenplayEditorCorrectTextOnPageBreaksKey));
     }
     if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey)) {
+        || contains(kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey)) {
         d->textEdit->setShowSuggestionsInEmptyBlocks(
-            settingsValue(DataStorageLayer::
-                              kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey)
-                .toBool());
+            toBool(kComponentsScreenplayEditorShowCharacterSuggestionsInEmptyBlockKey));
     }
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsScreenplayEditorShortcutsKey)) {
+    if (_changedSettingsKeys.isEmpty() || contains(kComponentsScreenplayEditorShortcutsKey)) {
         d->shortcutsManager.reconfigure();
     }
 
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationShowDocumentsPagesKey)) {
-        const auto usePageMode
-            = settingsValue(DataStorageLayer::kApplicationShowDocumentsPagesKey).toBool();
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationShowDocumentsPagesKey)) {
+        const auto usePageMode = toBool(kApplicationShowDocumentsPagesKey);
         d->textEdit->setUsePageMode(usePageMode);
         if (usePageMode) {
             d->textEdit->reinit();
@@ -1761,53 +1752,32 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
             d->updateTextEditPageMargins();
         }
     }
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationHighlightCurrentLineKey)) {
-        d->textEdit->setHighlightCurrentLine(
-            settingsValue(DataStorageLayer::kApplicationHighlightCurrentLineKey).toBool());
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationHighlightCurrentLineKey)) {
+        d->textEdit->setHighlightCurrentLine(toBool(kApplicationHighlightCurrentLineKey));
     }
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationFocusCurrentParagraphKey)) {
-        d->textEdit->setFocusCurrentParagraph(
-            settingsValue(DataStorageLayer::kApplicationFocusCurrentParagraphKey).toBool());
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationFocusCurrentParagraphKey)) {
+        d->textEdit->setFocusCurrentParagraph(toBool(kApplicationFocusCurrentParagraphKey));
     }
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationUseTypewriterScrollingKey)) {
-        d->textEdit->setUseTypewriterScrolling(
-            settingsValue(DataStorageLayer::kApplicationUseTypewriterScrollingKey).toBool());
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationUseTypewriterScrollingKey)) {
+        d->textEdit->setUseTypewriterScrolling(toBool(kApplicationUseTypewriterScrollingKey));
     }
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationCorrectDoubleCapitalsKey)) {
-        d->textEdit->setCorrectDoubleCapitals(
-            settingsValue(DataStorageLayer::kApplicationCorrectDoubleCapitalsKey).toBool());
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationCorrectDoubleCapitalsKey)) {
+        d->textEdit->setCorrectDoubleCapitals(toBool(kApplicationCorrectDoubleCapitalsKey));
     }
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kApplicationCapitalizeSingleILetterKey)) {
-        d->textEdit->setCapitalizeSingleILetter(
-            settingsValue(DataStorageLayer::kApplicationCapitalizeSingleILetterKey).toBool());
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationCapitalizeSingleILetterKey)) {
+        d->textEdit->setCapitalizeSingleILetter(toBool(kApplicationCapitalizeSingleILetterKey));
     }
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey)) {
-        d->textEdit->setReplaceThreeDots(
-            settingsValue(DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey).toBool());
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationReplaceThreeDotsWithEllipsisKey)) {
+        d->textEdit->setReplaceThreeDots(toBool(kApplicationReplaceThreeDotsWithEllipsisKey));
     }
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationSmartQuotesKey)) {
-        d->textEdit->setUseSmartQuotes(
-            settingsValue(DataStorageLayer::kApplicationSmartQuotesKey).toBool());
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationSmartQuotesKey)) {
+        d->textEdit->setUseSmartQuotes(toBool(kApplicationSmartQuotesKey));
     }
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey)) {
-        d->textEdit->setReplaceTwoDashes(
-            settingsValue(DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey).toBool());
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationReplaceTwoDashesWithEmDashKey)) {
+        d->textEdit->setReplaceTwoDashes(toBool(kApplicationReplaceTwoDashesWithEmDashKey));
     }
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationAvoidMultipleSpacesKey)) {
-        d->textEdit->setAvoidMultipleSpaces(
-            settingsValue(DataStorageLayer::kApplicationAvoidMultipleSpacesKey).toBool());
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationAvoidMultipleSpacesKey)) {
+        d->textEdit->setAvoidMultipleSpaces(toBool(kApplicationAvoidMultipleSpacesKey));
     }
 }
 
