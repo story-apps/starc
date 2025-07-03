@@ -31,6 +31,43 @@ using BusinessLayer::TextParagraphType;
 
 namespace BusinessLayer {
 
+namespace {
+
+/**
+ * @brief Найти предыдущий элемент, который можно изолировать
+ */
+TextModelItem* previousVisibleItem(TextModelItem* _item)
+{
+    if (!_item || !_item->hasParent()) {
+        return nullptr;
+    }
+    TextModelItem* parent = _item->parent();
+    int currentRow = parent->rowOfChild(_item);
+    //
+    // Проверяем предыдущие элементы на том же уровне
+    //
+    if (currentRow > 0) {
+        for (int i = currentRow - 1; i >= 0; --i) {
+            const auto previousSiblingItem = parent->childAt(i);
+            if (previousSiblingItem
+                && (previousSiblingItem->type() == TextModelItemType::Folder
+                    || previousSiblingItem->type() == TextModelItemType::Group)) {
+                return previousSiblingItem;
+            }
+        }
+    }
+    //
+    // Проверяем родителя
+    //
+    if ((parent->type() == TextModelItemType::Folder
+         || parent->type() == TextModelItemType::Group)) {
+        return parent;
+    }
+    return previousVisibleItem(parent);
+}
+
+} // namespace
+
 enum class DocumentState { Undefined, Loading, Changing, Correcting, Ready };
 
 
@@ -1076,10 +1113,12 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
             }
 
             //
-            // Если удаляется изолированный элемент, то сбросим изоляцию
+            // Если удаляется изолированный элемент, то перенесем изоляцию на предыдущий
             //
             if (d->corrector != nullptr && d->corrector->visibleTopLevelItem() == item) {
-                d->corrector->setVisibleTopLevelItem(nullptr);
+                const auto newVisibleItem
+                    = previousVisibleItem(d->corrector->visibleTopLevelItem());
+                d->corrector->setVisibleTopLevelItem(newVisibleItem);
             }
 
             const QModelIndex toIndex = d->model->index(_to, 0, _parent);
@@ -2293,11 +2332,16 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             }
 
             //
-            // ... если в данный момент изолирован один из удаляемых элементов, снимем изоляцию
+            // ... если в данный момент изолирован один из удаляемых элементов, перенесем изоляцию
+            // на предыдущий
             //
             if (d->corrector != nullptr
                 && itemsToDeleteGroup.contains(d->corrector->visibleTopLevelItem())) {
-                d->corrector->setVisibleTopLevelItem(nullptr);
+                auto newVisibleItem = previousVisibleItem(d->corrector->visibleTopLevelItem());
+                while (newVisibleItem && itemsToDeleteGroup.contains(newVisibleItem)) {
+                    newVisibleItem = previousVisibleItem(newVisibleItem);
+                }
+                d->corrector->setVisibleTopLevelItem(newVisibleItem);
             }
 
             //
@@ -2382,10 +2426,11 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
             //
             auto itemParent = item->parent();
             //
-            // ... если удаляется изолированный элемент, то сбросим изоляцию
+            // ... если удаляется изолированный элемент, то перенесем изоляцию на предыдущий
             //
             if (d->corrector != nullptr && d->corrector->visibleTopLevelItem() == item) {
-                d->corrector->setVisibleTopLevelItem(nullptr);
+                const auto newVisibleItem = previousVisibleItem(item);
+                d->corrector->setVisibleTopLevelItem(newVisibleItem);
             }
             d->model->removeItem(item);
 
@@ -2508,10 +2553,11 @@ void TextDocument::updateModelOnContentChange(int _position, int _charsRemoved, 
                 }
 
                 //
-                // Если удаляется изолированный элемент, то сбросим изоляцию
+                // Если удаляется изолированный элемент, то перенесем изоляцию на предыдущий
                 //
                 if (d->corrector != nullptr && d->corrector->visibleTopLevelItem() == itemParent) {
-                    d->corrector->setVisibleTopLevelItem(nullptr);
+                    const auto newVisibleItem = previousVisibleItem(itemParent);
+                    d->corrector->setVisibleTopLevelItem(newVisibleItem);
                 }
 
                 //
