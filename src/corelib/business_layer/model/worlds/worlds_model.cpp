@@ -163,6 +163,15 @@ WorldModel* WorldsModel::world(const QString& _name) const
     return nullptr;
 }
 
+WorldModel* WorldsModel::world(int _row) const
+{
+    if (0 <= _row && _row < d->worldModels.size()) {
+        return d->worldModels.at(_row);
+    }
+
+    return nullptr;
+}
+
 QVector<WorldModel*> WorldsModel::worlds(const QString& _name) const
 {
     QVector<WorldModel*> worlds;

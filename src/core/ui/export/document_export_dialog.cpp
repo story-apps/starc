@@ -65,11 +65,9 @@ DocumentExportDialog::DocumentExportDialog(const QVector<BusinessLayer::ExportFi
 DocumentExportDialog::~DocumentExportDialog()
 {
     QSettings settings;
-    settings.setValue(settingsKey(kIncludeMainPhotoKey),
-                      d->includeMainPhoto->isVisible() && d->includeMainPhoto->isChecked());
+    settings.setValue(settingsKey(kIncludeMainPhotoKey), d->includeMainPhoto->isChecked());
     settings.setValue(settingsKey(kIncludeAdditionalPhototsKey),
-                      d->includeAdditionalPhotos->isVisible()
-                          && d->includeAdditionalPhotos->isChecked());
+                      d->includeAdditionalPhotos->isChecked());
 }
 
 BusinessLayer::DocumentExportOptions& DocumentExportDialog::exportOptions() const

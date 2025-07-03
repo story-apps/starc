@@ -72,6 +72,11 @@ public:
     WorldModel* world(const QString& _name) const;
 
     /**
+     * @brief Получить модель локации по её индексу
+     */
+    WorldModel* world(int _row) const;
+
+    /**
      * @brief Получить все модели миров с заданным именем
      */
     QVector<WorldModel*> worlds(const QString& _name) const;

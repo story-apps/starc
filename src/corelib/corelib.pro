@@ -216,6 +216,12 @@ SOURCES += \
     business_layer/export/stageplay/stageplay_exporter.cpp \
     business_layer/export/stageplay/stageplay_fountain_exporter.cpp \
     business_layer/export/stageplay/stageplay_pdf_exporter.cpp \
+    business_layer/export/worlds/world_docx_exporter.cpp \
+    business_layer/export/worlds/world_exporter.cpp \
+    business_layer/export/worlds/world_pdf_exporter.cpp \
+    business_layer/export/worlds/worlds_docx_exporter.cpp \
+    business_layer/export/worlds/worlds_exporter.cpp \
+    business_layer/export/worlds/worlds_pdf_exporter.cpp \
     business_layer/import/abstract_document_importer.cpp \
     business_layer/import/abstract_fountain_importer.cpp \
     business_layer/import/abstract_markdown_importer.cpp \
@@ -575,6 +581,13 @@ HEADERS += \
     business_layer/export/stageplay/stageplay_exporter.h \
     business_layer/export/stageplay/stageplay_fountain_exporter.h \
     business_layer/export/stageplay/stageplay_pdf_exporter.h \
+    business_layer/export/worlds/world_docx_exporter.h \
+    business_layer/export/worlds/world_export_options.h \
+    business_layer/export/worlds/world_exporter.h \
+    business_layer/export/worlds/world_pdf_exporter.h \
+    business_layer/export/worlds/worlds_docx_exporter.h \
+    business_layer/export/worlds/worlds_exporter.h \
+    business_layer/export/worlds/worlds_pdf_exporter.h \
     business_layer/import/abstract_document_importer.h \
     business_layer/import/abstract_fountain_importer.h \
     business_layer/import/abstract_importer.h \

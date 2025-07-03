@@ -249,6 +249,11 @@ void DocumentsExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _ev
     }
 }
 
+void DocumentsExportDialog::hideStoryRole()
+{
+    d->includeStoryRole->hide();
+}
+
 void DocumentsExportDialog::updateParametersVisibility() const
 {
     auto isPhotoVisible = true;

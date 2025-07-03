@@ -9,7 +9,7 @@ TEMPLATE = lib
 CONFIG += plugin c++1z
 CONFIG += force_debug_info
 CONFIG += separate_debug_info
-QT += concurrent widgets multimedia network sql
+QT += concurrent widgets multimedia network sql xml
 
 TARGET = coreplugin
 
@@ -100,6 +100,8 @@ SOURCES += \
     ui/export/script_export_dialog.cpp \
     ui/export/simple_text_export_dialog.cpp \
     ui/export/stageplay_export_dialog.cpp \
+    ui/export/world_export_dialog.cpp \
+    ui/export/worlds_export_dialog.cpp \
     ui/import/import_dialog.cpp \
     ui/import/import_file_delegate.cpp \
     ui/menu_view.cpp \
@@ -196,6 +198,8 @@ HEADERS += \
     ui/export/script_export_dialog.h \
     ui/export/simple_text_export_dialog.h \
     ui/export/stageplay_export_dialog.h \
+    ui/export/world_export_dialog.h \
+    ui/export/worlds_export_dialog.h \
     ui/import/import_dialog.h \
     ui/import/import_file_delegate.h \
     ui/menu_view.h \

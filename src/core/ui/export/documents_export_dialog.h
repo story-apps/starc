@@ -44,6 +44,11 @@ protected:
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override;
 
     /**
+     * @brief Скрыть поле роли в истории
+     */
+    void hideStoryRole();
+
+    /**
      * @brief Обновить видимость параметров
      */
     void updateParametersVisibility() const override;
