@@ -25,6 +25,7 @@ enum class DocumentObjectType {
     //
 
     ImageData = 101,
+    BinaryData = 102,
 
     //
     // Собственно данные
