@@ -72,6 +72,11 @@ ComicBookSummaryReport::ComicBookSummaryReport()
 
 ComicBookSummaryReport::~ComicBookSummaryReport() = default;
 
+bool ComicBookSummaryReport::isValid() const
+{
+    return d->wordsCount > 0;
+}
+
 void ComicBookSummaryReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {

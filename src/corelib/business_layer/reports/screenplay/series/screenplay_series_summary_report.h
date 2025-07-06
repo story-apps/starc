@@ -19,6 +19,11 @@ public:
     ~ScreenplaySeriesSummaryReport() override;
 
     /**
+     * @brief Валиден ли отчёт
+     */
+    bool isValid() const override;
+
+    /**
      * @brief Сформировать отчёт из модели
      */
     void build(QAbstractItemModel* _model) override;

@@ -59,6 +59,11 @@ AudioplayDialoguesReport::AudioplayDialoguesReport()
 
 AudioplayDialoguesReport::~AudioplayDialoguesReport() = default;
 
+bool AudioplayDialoguesReport::isValid() const
+{
+    return d->dialoguesModel->rowCount() > 0;
+}
+
 void AudioplayDialoguesReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {

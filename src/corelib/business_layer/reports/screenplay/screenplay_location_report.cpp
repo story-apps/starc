@@ -61,6 +61,11 @@ ScreenplayLocationReport::ScreenplayLocationReport()
 
 ScreenplayLocationReport::~ScreenplayLocationReport() = default;
 
+bool ScreenplayLocationReport::isValid() const
+{
+    return d->locationModel->rowCount() > 0;
+}
+
 void ScreenplayLocationReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {
@@ -70,6 +75,15 @@ void ScreenplayLocationReport::build(QAbstractItemModel* _model)
     d->screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
     if (d->screenplayModel == nullptr) {
         return;
+    }
+
+    //
+    // Подготовим модель к наполнению
+    //
+    if (d->locationModel.isNull()) {
+        d->locationModel.reset(new QStandardItemModel);
+    } else {
+        d->locationModel->clear();
     }
 
     //
@@ -216,6 +230,13 @@ void ScreenplayLocationReport::build(QAbstractItemModel* _model)
     }
 
     //
+    // Прерываем выполнение, если в сценарии нет сцен
+    //
+    if (locations.isEmpty() || (locations.size() == 1 && locations.begin()->name.isEmpty())) {
+        return;
+    }
+
+    //
     // Сортируем локации
     //
     QVector<QPair<QString, LocationData>> locationsSorted;
@@ -287,11 +308,6 @@ void ScreenplayLocationReport::build(QAbstractItemModel* _model)
     //
     // ... наполняем таблицу
     //
-    if (d->locationModel.isNull()) {
-        d->locationModel.reset(new QStandardItemModel);
-    } else {
-        d->locationModel->clear();
-    }
     const auto titleBackgroundColor = d->extendedView
         ? QVariant::fromValue(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
                                                        Ui::DesignSystem::elevationEndOpacity()))

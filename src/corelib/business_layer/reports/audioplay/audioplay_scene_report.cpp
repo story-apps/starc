@@ -61,6 +61,11 @@ AudioplaySceneReport::AudioplaySceneReport()
 
 AudioplaySceneReport::~AudioplaySceneReport() = default;
 
+bool AudioplaySceneReport::isValid() const
+{
+    return d->sceneModel->rowCount() > 0;
+}
+
 void AudioplaySceneReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {
@@ -70,6 +75,15 @@ void AudioplaySceneReport::build(QAbstractItemModel* _model)
     d->audioplayModel = qobject_cast<AudioplayTextModel*>(_model);
     if (d->audioplayModel == nullptr) {
         return;
+    }
+
+    //
+    // Подготовим модель к наполнению
+    //
+    if (d->sceneModel.isNull()) {
+        d->sceneModel.reset(new QStandardItemModel);
+    } else {
+        d->sceneModel->clear();
     }
 
     //
@@ -238,6 +252,13 @@ void AudioplaySceneReport::build(QAbstractItemModel* _model)
     }
 
     //
+    // Прерываем выполнение, если в сценарии нет сцен
+    //
+    if (scenes.isEmpty() || (scenes.size() == 1 && scenes.constFirst().name.isEmpty())) {
+        return;
+    }
+
+    //
     // Сортируем
     //
     switch (d->sortBy) {
@@ -296,11 +317,6 @@ void AudioplaySceneReport::build(QAbstractItemModel* _model)
     //
     // ... наполняем таблицу
     //
-    if (d->sceneModel.isNull()) {
-        d->sceneModel.reset(new QStandardItemModel);
-    } else {
-        d->sceneModel->clear();
-    }
     const auto titleBackgroundColor = d->showCharacters
         ? QVariant::fromValue(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
                                                        Ui::DesignSystem::elevationEndOpacity()))

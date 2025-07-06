@@ -60,6 +60,11 @@ AudioplayLocationReport::AudioplayLocationReport()
 
 AudioplayLocationReport::~AudioplayLocationReport() = default;
 
+bool AudioplayLocationReport::isValid() const
+{
+    return d->locationModel->rowCount() > 0;
+}
+
 void AudioplayLocationReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {
@@ -69,6 +74,15 @@ void AudioplayLocationReport::build(QAbstractItemModel* _model)
     d->audioplayModel = qobject_cast<AudioplayTextModel*>(_model);
     if (d->audioplayModel == nullptr) {
         return;
+    }
+
+    //
+    // Подготовим модель к наполнению
+    //
+    if (d->locationModel.isNull()) {
+        d->locationModel.reset(new QStandardItemModel);
+    } else {
+        d->locationModel->clear();
     }
 
     //
@@ -215,6 +229,13 @@ void AudioplayLocationReport::build(QAbstractItemModel* _model)
     }
 
     //
+    // Прерываем выполнение, если в сценарии нет сцен
+    //
+    if (locations.isEmpty() || (locations.size() == 1 && locations.begin()->name.isEmpty())) {
+        return;
+    }
+
+    //
     // Сортируем локации
     //
     QVector<QPair<QString, LocationData>> locationsSorted;
@@ -286,11 +307,6 @@ void AudioplayLocationReport::build(QAbstractItemModel* _model)
     //
     // ... наполняем таблицу
     //
-    if (d->locationModel.isNull()) {
-        d->locationModel.reset(new QStandardItemModel);
-    } else {
-        d->locationModel->clear();
-    }
     const auto titleBackgroundColor = d->extendedView
         ? QVariant::fromValue(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
                                                        Ui::DesignSystem::elevationEndOpacity()))

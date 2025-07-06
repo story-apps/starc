@@ -53,6 +53,11 @@ ScreenplaySummaryReport::ScreenplaySummaryReport()
 
 ScreenplaySummaryReport::~ScreenplaySummaryReport() = default;
 
+bool ScreenplaySummaryReport::isValid() const
+{
+    return d->wordsCount > 0;
+}
+
 void ScreenplaySummaryReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {

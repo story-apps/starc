@@ -62,6 +62,11 @@ ScreenplaySceneReport::ScreenplaySceneReport()
 
 ScreenplaySceneReport::~ScreenplaySceneReport() = default;
 
+bool ScreenplaySceneReport::isValid() const
+{
+    return d->sceneModel->rowCount() > 0;
+}
+
 void ScreenplaySceneReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {
@@ -71,6 +76,15 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
     d->screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
     if (d->screenplayModel == nullptr) {
         return;
+    }
+
+    //
+    // Подготовим модель к наполнению
+    //
+    if (d->sceneModel.isNull()) {
+        d->sceneModel.reset(new QStandardItemModel);
+    } else {
+        d->sceneModel->clear();
     }
 
     //
@@ -252,6 +266,13 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
     }
 
     //
+    // Прерываем выполнение, если в сценарии нет сцен
+    //
+    if (scenes.isEmpty() || (scenes.size() == 1 && scenes.constFirst().name.isEmpty())) {
+        return;
+    }
+
+    //
     // Сортируем
     //
     switch (d->sortBy) {
@@ -310,11 +331,6 @@ void ScreenplaySceneReport::build(QAbstractItemModel* _model)
     //
     // ... наполняем таблицу
     //
-    if (d->sceneModel.isNull()) {
-        d->sceneModel.reset(new QStandardItemModel);
-    } else {
-        d->sceneModel->clear();
-    }
     const auto titleBackgroundColor = d->showCharacters
         ? QVariant::fromValue(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
                                                        Ui::DesignSystem::elevationEndOpacity()))

@@ -51,6 +51,11 @@ AudioplayCastReport::AudioplayCastReport()
 
 AudioplayCastReport::~AudioplayCastReport() = default;
 
+bool AudioplayCastReport::isValid() const
+{
+    return d->castModel->rowCount() > 0;
+}
+
 void AudioplayCastReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {

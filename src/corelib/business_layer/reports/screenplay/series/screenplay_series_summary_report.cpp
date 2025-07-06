@@ -56,6 +56,11 @@ ScreenplaySeriesSummaryReport::ScreenplaySeriesSummaryReport()
 
 ScreenplaySeriesSummaryReport::~ScreenplaySeriesSummaryReport() = default;
 
+bool ScreenplaySeriesSummaryReport::isValid() const
+{
+    return d->wordsCount > 0;
+}
+
 void ScreenplaySeriesSummaryReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {

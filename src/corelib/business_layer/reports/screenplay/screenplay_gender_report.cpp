@@ -50,6 +50,11 @@ ScreenplayGenderReport::ScreenplayGenderReport()
 
 ScreenplayGenderReport::~ScreenplayGenderReport() = default;
 
+bool ScreenplayGenderReport::isValid() const
+{
+    return d->charactersInfoModel->rowCount() > 0;
+}
+
 void ScreenplayGenderReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {
@@ -59,6 +64,25 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     d->screenplayModel = qobject_cast<ScreenplayTextModel*>(_model);
     if (d->screenplayModel == nullptr) {
         return;
+    }
+
+    //
+    // Подготовим модели к наполнению
+    //
+    if (d->scenesInfoModel.isNull()) {
+        d->scenesInfoModel.reset(new QStandardItemModel);
+    } else {
+        d->scenesInfoModel->clear();
+    }
+    if (d->dialoguesInfoModel.isNull()) {
+        d->dialoguesInfoModel.reset(new QStandardItemModel);
+    } else {
+        d->dialoguesInfoModel->clear();
+    }
+    if (d->charactersInfoModel.isNull()) {
+        d->charactersInfoModel.reset(new QStandardItemModel);
+    } else {
+        d->charactersInfoModel->clear();
     }
 
     //
@@ -281,6 +305,13 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     }
 
     //
+    // Прерываем выполнение, если в сценарии нет сцен
+    //
+    if (male.isEmpty() && female.isEmpty() && other.isEmpty() && undefined.isEmpty()) {
+        return;
+    }
+
+    //
     // Формируем отчёт
     //
     auto createModelItem = [](const QString& _text) {
@@ -307,7 +338,7 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
         genderName->setData(ColorHelper::forNumber(_index++), Qt::DecorationPropertyRole);
 
         _model->appendRow({ genderName, createModelItem(QString::number(_count)),
-                            createPercentModelItem(_count * 100.0 / _total) });
+                            createPercentModelItem(_total > 0 ? (_count * 100.0 / _total) : 0) });
     };
     auto makeHeader = [](QStandardItemModel* _model) {
         _model->setHeaderData(
@@ -334,14 +365,6 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     // ... сцены
     //
     {
-        //
-        // Формируем таблицу
-        //
-        if (d->scenesInfoModel.isNull()) {
-            d->scenesInfoModel.reset(new QStandardItemModel);
-        } else {
-            d->scenesInfoModel->clear();
-        }
         makeRow(0, scenes.male, totalScenes, d->scenesInfoModel.data());
         makeRow(1, scenes.female, totalScenes, d->scenesInfoModel.data());
         makeRow(2, scenes.other, totalScenes, d->scenesInfoModel.data());
@@ -353,15 +376,6 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     // ... диалоги
     //
     {
-        //
-        // Формируем таблицу
-        //
-        if (d->dialoguesInfoModel.isNull()) {
-            d->dialoguesInfoModel.reset(new QStandardItemModel);
-        } else {
-            d->dialoguesInfoModel->clear();
-        }
-        //
         const auto totalDialogues
             = dialogues.male + dialogues.female + dialogues.other + dialogues.undefined;
         makeRow(0, dialogues.male, totalDialogues, d->dialoguesInfoModel.data());
@@ -374,15 +388,6 @@ void ScreenplayGenderReport::build(QAbstractItemModel* _model)
     // ... персонажи
     //
     {
-        //
-        // Формируем таблицу
-        //
-        if (d->charactersInfoModel.isNull()) {
-            d->charactersInfoModel.reset(new QStandardItemModel);
-        } else {
-            d->charactersInfoModel->clear();
-        }
-        //
         const auto totalCharacters = male.size() + female.size() + other.size() + undefined.size();
         makeRow(0, male.size(), totalCharacters, d->charactersInfoModel.data());
         makeRow(1, female.size(), totalCharacters, d->charactersInfoModel.data());

@@ -62,6 +62,11 @@ ScreenplaySeriesLocationReport::ScreenplaySeriesLocationReport()
 
 ScreenplaySeriesLocationReport::~ScreenplaySeriesLocationReport() = default;
 
+bool ScreenplaySeriesLocationReport::isValid() const
+{
+    return d->locationModel->rowCount() > 0;
+}
+
 void ScreenplaySeriesLocationReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {
@@ -71,6 +76,15 @@ void ScreenplaySeriesLocationReport::build(QAbstractItemModel* _model)
     d->episodesModel = qobject_cast<ScreenplaySeriesEpisodesModel*>(_model);
     if (d->episodesModel == nullptr) {
         return;
+    }
+
+    //
+    // Подготовим модель к наполнению
+    //
+    if (d->locationModel.isNull()) {
+        d->locationModel.reset(new QStandardItemModel);
+    } else {
+        d->locationModel->clear();
     }
 
     //
@@ -240,6 +254,16 @@ void ScreenplaySeriesLocationReport::build(QAbstractItemModel* _model)
     }
 
     //
+    // Прерываем выполнение, если в сценариях нет сцен
+    //
+    if (locations.isEmpty()
+        || std::count_if(locations.begin(), locations.end(),
+                         [](const LocationData& _location) { return _location.name.isEmpty(); })
+            == locations.size()) {
+        return;
+    }
+
+    //
     // Сортируем локации
     //
     QVector<QPair<QString, LocationData>> locationsSorted;
@@ -311,11 +335,6 @@ void ScreenplaySeriesLocationReport::build(QAbstractItemModel* _model)
     //
     // ... наполняем таблицу
     //
-    if (d->locationModel.isNull()) {
-        d->locationModel.reset(new QStandardItemModel);
-    } else {
-        d->locationModel->clear();
-    }
     const auto titleBackgroundColor = d->extendedView
         ? QVariant::fromValue(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
                                                        Ui::DesignSystem::elevationEndOpacity()))

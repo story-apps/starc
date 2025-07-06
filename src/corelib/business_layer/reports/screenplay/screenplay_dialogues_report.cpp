@@ -59,6 +59,11 @@ ScreenplayDialoguesReport::ScreenplayDialoguesReport()
 
 ScreenplayDialoguesReport::~ScreenplayDialoguesReport() = default;
 
+bool ScreenplayDialoguesReport::isValid() const
+{
+    return d->dialoguesModel->rowCount() > 0;
+}
+
 void ScreenplayDialoguesReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {

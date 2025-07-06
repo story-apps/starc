@@ -15,6 +15,14 @@ public:
     virtual ~AbstractReport() = default;
 
     /**
+     * @brief Валиден ли отчёт
+     */
+    virtual bool isValid() const
+    {
+        return false;
+    }
+
+    /**
      * @brief Сформировать отчёт из заданной модели
      */
     virtual void build(QAbstractItemModel* _model) = 0;

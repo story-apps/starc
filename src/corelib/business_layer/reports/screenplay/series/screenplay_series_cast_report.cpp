@@ -62,6 +62,11 @@ ScreenplaySeriesCastReport::ScreenplaySeriesCastReport()
 
 ScreenplaySeriesCastReport::~ScreenplaySeriesCastReport() = default;
 
+bool ScreenplaySeriesCastReport::isValid() const
+{
+    return d->castModel->rowCount() > 0;
+}
+
 void ScreenplaySeriesCastReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {

@@ -49,6 +49,11 @@ AudioplaySummaryReport::AudioplaySummaryReport()
 
 AudioplaySummaryReport::~AudioplaySummaryReport() = default;
 
+bool AudioplaySummaryReport::isValid() const
+{
+    return d->wordsCount > 0;
+}
+
 void AudioplaySummaryReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {

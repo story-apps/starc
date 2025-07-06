@@ -64,6 +64,11 @@ ScreenplaySeriesSceneReport::ScreenplaySeriesSceneReport()
 
 ScreenplaySeriesSceneReport::~ScreenplaySeriesSceneReport() = default;
 
+bool ScreenplaySeriesSceneReport::isValid() const
+{
+    return d->sceneModel->rowCount() > 0;
+}
+
 void ScreenplaySeriesSceneReport::build(QAbstractItemModel* _model)
 {
     if (_model == nullptr) {
@@ -73,6 +78,15 @@ void ScreenplaySeriesSceneReport::build(QAbstractItemModel* _model)
     d->episodesModel = qobject_cast<ScreenplaySeriesEpisodesModel*>(_model);
     if (d->episodesModel == nullptr) {
         return;
+    }
+
+    //
+    // Подготовим модель к наполнению
+    //
+    if (d->sceneModel.isNull()) {
+        d->sceneModel.reset(new QStandardItemModel);
+    } else {
+        d->sceneModel->clear();
     }
 
     //
@@ -282,6 +296,15 @@ void ScreenplaySeriesSceneReport::build(QAbstractItemModel* _model)
         scenes.append(lastScene);
     }
 
+    //
+    // Прерываем выполнение, если в сценариях нет сцен
+    //
+    if (scenes.isEmpty()
+        || std::count_if(scenes.begin(), scenes.end(),
+                         [](const SceneData& _scene) { return _scene.name.isEmpty(); })
+            == scenes.size()) {
+        return;
+    }
 
     //
     // Сортируем
@@ -342,11 +365,6 @@ void ScreenplaySeriesSceneReport::build(QAbstractItemModel* _model)
     //
     // ... наполняем таблицу
     //
-    if (d->sceneModel.isNull()) {
-        d->sceneModel.reset(new QStandardItemModel);
-    } else {
-        d->sceneModel->clear();
-    }
     const auto titleBackgroundColor = d->showCharacters
         ? QVariant::fromValue(ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
                                                        Ui::DesignSystem::elevationEndOpacity()))
