@@ -198,6 +198,7 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
 void CardItemParametersView::Implementation::initCardBeats()
 {
     for (auto cardBeat : std::as_const(beats)) {
+        cardBeat->setEnabled(title->isEnabled());
         cardBeat->setLabelVisible(false);
         cardBeat->setLabel({});
         cardBeat->setHelper({});
