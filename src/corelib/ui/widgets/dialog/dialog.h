@@ -14,6 +14,7 @@ public:
     enum ButtonType {
         NormalButton,
         AcceptButton,
+        AcceptCriticalButton,
         RejectButton,
     };
 

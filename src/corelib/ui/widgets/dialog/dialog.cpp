@@ -3,8 +3,13 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
+#include <utils/helpers/color_helper.h>
 
 #include <QHBoxLayout>
+
+namespace {
+const char* kButtonRole = "button-role";
+}
 
 
 class Dialog::Implementation
@@ -61,6 +66,7 @@ void Dialog::showDialog(const QString& _title, const QString& _supportingText,
     for (const auto& buttonInfo : _buttons) {
         auto button = new Button(this);
         button->setText(buttonInfo.text);
+        button->setProperty(kButtonRole, buttonInfo.type);
         d->buttons.append(button);
         if (_placeButtonsSideBySide) {
             d->buttonsSideBySideLayout->addWidget(button);
@@ -68,7 +74,8 @@ void Dialog::showDialog(const QString& _title, const QString& _supportingText,
             d->buttonsStackedLayout->addWidget(button, 0, Qt::AlignRight);
         }
         connect(button, &Button::clicked, this, [this, buttonInfo] { emit finished(buttonInfo); });
-        if (buttonInfo.type == Dialog::AcceptButton) {
+        if (buttonInfo.type == Dialog::AcceptButton
+            || buttonInfo.type == Dialog::AcceptCriticalButton) {
             setAcceptButton(button);
         } else if (buttonInfo.type == Dialog::RejectButton) {
             setRejectButton(button);
@@ -107,7 +114,24 @@ void Dialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     for (auto button : std::as_const(d->buttons)) {
         button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
+
+        QColor textColor;
+        switch (button->property(kButtonRole).toInt()) {
+        case AcceptButton: {
+            textColor = Ui::DesignSystem::color().accent();
+            break;
+        }
+        case AcceptCriticalButton: {
+            textColor = Ui::DesignSystem::color().error();
+            break;
+        }
+        default: {
+            textColor = ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
+                                                 Ui::DesignSystem::inactiveTextOpacity());
+            break;
+        }
+        }
+        button->setTextColor(textColor);
     }
 
     d->buttonsSideBySideLayout->setContentsMargins(

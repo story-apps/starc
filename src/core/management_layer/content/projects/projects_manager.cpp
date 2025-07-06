@@ -228,9 +228,11 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                     constexpr int cancelButtonId = 0;
                     constexpr int hideButtonId = 1;
                     dialog->showDialog(
-                        {}, tr("Do you really want to remove this project from the computer?"),
+                        {},
+                        tr("Do you really want to remove this project from the computer?\nThis "
+                           "action can't be canceled."),
                         { { cancelButtonId, tr("No"), Dialog::RejectButton },
-                          { hideButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
+                          { hideButtonId, tr("Yes, remove"), Dialog::AcceptCriticalButton } });
                     connect(dialog, &Dialog::finished, this,
                             [this, _project, cancelButtonId,
                              dialog](const Dialog::ButtonInfo& _buttonInfo) {
@@ -329,9 +331,12 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
                         constexpr int cancelButtonId = 0;
                         constexpr int removeButtonId = 1;
                         dialog->showDialog(
-                            {}, tr("Do you really want to remove this project?"),
+                            {},
+                            tr("Do you really want to remove this project?\nThis action can't be "
+                               "canceled."),
                             { { cancelButtonId, tr("No"), Dialog::RejectButton },
-                              { removeButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
+                              { removeButtonId, tr("Yes, remove"),
+                                Dialog::AcceptCriticalButton } });
                         connect(dialog, &Dialog::finished, this,
                                 [this, _project, cancelButtonId,
                                  dialog](const Dialog::ButtonInfo& _buttonInfo) {
