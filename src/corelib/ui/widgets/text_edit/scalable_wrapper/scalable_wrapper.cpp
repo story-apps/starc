@@ -258,7 +258,7 @@ void ScalableWrapper::wheelEvent(QWheelEvent* _event)
     if (_event->modifiers() & Qt::ControlModifier) {
         if (_event->angleDelta().y() != 0) {
 #ifdef Q_OS_MAC
-            const qreal angleDivider = 2.;
+            const qreal angleDivider = 20.;
 #else
             const qreal angleDivider = 120.;
 #endif

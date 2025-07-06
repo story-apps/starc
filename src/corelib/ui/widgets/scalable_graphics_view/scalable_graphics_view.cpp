@@ -266,21 +266,22 @@ void ScalableGraphicsView::showEvent(QShowEvent* _event)
 
 void ScalableGraphicsView::wheelEvent(QWheelEvent* _event)
 {
-#ifdef Q_OS_MAC
-    const qreal ANGLE_DIVIDER = 2.;
-#else
-    const qreal ANGLE_DIVIDER = 120.;
-#endif
     //
     // Собственно масштабирование
     //
     if (_event->modifiers() & Qt::ControlModifier) {
         if (_event->angleDelta().y() != 0) {
+#ifdef Q_OS_MAC
+            const qreal angleDivider = 20.;
+#else
+            const qreal angleDivider = 120.;
+#endif
+
             //
             // zoomRange > 0 - масштаб увеличивается
             // zoomRange < 0 - масштаб уменьшается
             //
-            const qreal zoom = _event->angleDelta().y() / ANGLE_DIVIDER;
+            const qreal zoom = _event->angleDelta().y() / angleDivider;
             if (zoom > 0) {
                 zoomIn();
             } else if (zoom < 0) {
