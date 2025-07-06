@@ -297,8 +297,8 @@ void AudioplayTextEditToolbar::updateTranslations()
     d->aiAssistantAction->setToolTip(d->aiAssistantAction->isChecked() ? tr("Disable AI assistant")
                                                                        : tr("Enable AI assistant"));
     d->isolationAction->setToolTip(d->isolationAction->isChecked()
-                                       ? tr("Disable structure items isolation mode")
-                                       : tr("Enable structure items isolation mode"));
+                                       ? tr("Show full text")
+                                       : tr("Show only current scene text"));
 }
 
 void AudioplayTextEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
