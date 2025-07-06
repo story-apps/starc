@@ -619,7 +619,7 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
             // Для текстовых документов можно создать версию
             //
             if (isTextItem(currentItem)) {
-                auto createNewVersion = new QAction(tr("Create new draft"));
+                auto createNewVersion = new QAction(tr("Create draft"));
                 createNewVersion->setSeparator(!menuActions.isEmpty());
                 createNewVersion->setIconText(u8"\U000F00FB");
                 createNewVersion->setEnabled(enabled);
@@ -2382,7 +2382,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                     QVector<QAction*> menuActions;
                     auto createNewVersionAction = new QAction;
                     createNewVersionAction->setIconText(u8"\U000F00FB");
-                    createNewVersionAction->setText(tr("Create new draft"));
+                    createNewVersionAction->setText(tr("Create draft"));
                     createNewVersionAction->setEnabled(enabled);
                     connect(createNewVersionAction, &QAction::triggered, this,
                             [this, currentItemIndex] { d->createNewVersion(currentItemIndex); });

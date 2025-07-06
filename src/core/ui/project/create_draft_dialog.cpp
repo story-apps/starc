@@ -5,6 +5,7 @@
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/combo_box/combo_box.h>
+#include <ui/widgets/label/label.h>
 #include <ui/widgets/text_field/text_field.h>
 
 #include <QBoxLayout>
@@ -31,6 +32,7 @@ public:
     explicit Implementation(QWidget* _parent);
 
 
+    Body1Label* draftHint = nullptr;
     TextField* versionName = nullptr;
     ColorPickerPopup* versionColorPopup = nullptr;
     ComboBox* sourceVersion = nullptr;
@@ -45,7 +47,8 @@ public:
 };
 
 CreateDraftDialog::Implementation::Implementation(QWidget* _parent)
-    : versionName(new TextField(_parent))
+    : draftHint(new Body1Label(_parent))
+    , versionName(new TextField(_parent))
     , versionColorPopup(new ColorPickerPopup(_parent))
     , sourceVersion(new ComboBox(_parent))
     , sourceVersionModel(new QStringListModel(sourceVersion))
@@ -83,6 +86,7 @@ CreateDraftDialog::CreateDraftDialog(QWidget* _parent)
     contentsLayout()->setContentsMargins({});
     contentsLayout()->setSpacing(0);
     int row = 0;
+    contentsLayout()->addWidget(d->draftHint, row++, 0);
     contentsLayout()->addWidget(d->versionName, row++, 0);
     contentsLayout()->addWidget(d->sourceVersion, row++, 0);
     contentsLayout()->addWidget(d->lockEditingVersion, row++, 0);
@@ -137,10 +141,11 @@ QWidget* CreateDraftDialog::lastFocusableWidget() const
 
 void CreateDraftDialog::updateTranslations()
 {
-    setTitle(d->state == AddNew ? tr("Create new document draft") : tr("Edit document draft"));
+    setTitle(d->state == AddNew ? tr("Create document draft") : tr("Edit document draft"));
 
+    d->draftHint->setText(tr("Store actual draft as a separate document to keep your progress."));
     d->versionName->setLabel(tr("Draft name"));
-    d->sourceVersion->setLabel(tr("New draft based on"));
+    d->sourceVersion->setLabel(tr("Based on"));
     d->lockEditingVersion->setText(tr("Lock draft text editing"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(d->state == AddNew ? tr("Create") : tr("Save"));
@@ -150,27 +155,31 @@ void CreateDraftDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    d->versionName->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->versionName->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-    d->versionColorPopup->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->versionColorPopup->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->sourceVersion->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->sourceVersion->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-    d->sourceVersion->setPopupBackgroundColor(Ui::DesignSystem::color().background());
-    d->sourceVersion->setCustomMargins({ Ui::DesignSystem::layout().px24(),
-                                         Ui::DesignSystem::layout().px12(),
-                                         Ui::DesignSystem::layout().px24(), 0.0 });
-    d->lockEditingVersion->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->lockEditingVersion->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->draftHint->setContentsMargins(DesignSystem::layout().px24(), 0,
+                                     DesignSystem::layout().px16(), DesignSystem::layout().px24());
+    d->draftHint->setBackgroundColor(DesignSystem::color().background());
+    d->draftHint->setTextColor(DesignSystem::color().onBackground());
+    d->versionName->setTextColor(DesignSystem::color().onBackground());
+    d->versionName->setBackgroundColor(DesignSystem::color().onBackground());
+    d->versionColorPopup->setBackgroundColor(DesignSystem::color().background());
+    d->versionColorPopup->setTextColor(DesignSystem::color().onBackground());
+    d->sourceVersion->setTextColor(DesignSystem::color().onBackground());
+    d->sourceVersion->setBackgroundColor(DesignSystem::color().onBackground());
+    d->sourceVersion->setPopupBackgroundColor(DesignSystem::color().background());
+    d->sourceVersion->setCustomMargins({ DesignSystem::layout().px24(),
+                                         DesignSystem::layout().px12(),
+                                         DesignSystem::layout().px24(), 0.0 });
+    d->lockEditingVersion->setTextColor(DesignSystem::color().onBackground());
+    d->lockEditingVersion->setBackgroundColor(DesignSystem::color().background());
 
     for (auto button : { d->cancelButton, d->createButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
+        button->setBackgroundColor(DesignSystem::color().accent());
+        button->setTextColor(DesignSystem::color().accent());
     }
 
     d->buttonsLayout->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16())
+        QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+                  DesignSystem::layout().px16(), DesignSystem::layout().px16())
             .toMargins());
 }
 
