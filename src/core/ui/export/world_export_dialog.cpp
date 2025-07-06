@@ -126,7 +126,7 @@ void WorldExportDialog::updateTranslations()
 {
     DocumentExportDialog::updateTranslations();
 
-    setTitle(tr("Export World"));
+    setTitle(tr("Export world"));
 
     d->includeWorldDescriptionInfo->setText(tr("Include world description info"));
     d->includeNatureInfo->setText(tr("Include nature info"));
