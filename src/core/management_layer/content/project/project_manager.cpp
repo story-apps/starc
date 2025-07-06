@@ -3121,6 +3121,7 @@ void ProjectManager::reconfigureNovelNavigator()
 void ProjectManager::checkAvailabilityToEdit()
 {
     d->pluginsBuilder.checkAvailabilityToEdit(d->isProjectInTeam);
+    d->updateViewsEditingMode();
 }
 
 void ProjectManager::loadCurrentProject(BusinessLayer::ProjectsModelProjectItem* _project)
