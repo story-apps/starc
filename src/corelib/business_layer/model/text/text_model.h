@@ -143,6 +143,11 @@ public:
      */
     QByteArray contentHash() const;
 
+    /**
+     * @brief Сравнить модель с заданной и отобразить все изменения
+     */
+    void compareWith(const QByteArray& _modelContent);
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

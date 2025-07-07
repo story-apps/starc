@@ -52,6 +52,7 @@
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
 #include <ui/widgets/splitter/splitter.h>
+#include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/logging.h>
 #include <utils/shugar.h>
 #include <utils/tools/debouncer.h>
@@ -59,6 +60,8 @@
 #include <QAction>
 #include <QApplication>
 #include <QDateTime>
+#include <QDomDocument>
+#include <QDomNode>
 #include <QHBoxLayout>
 #include <QSet>
 #include <QShortcut>
@@ -252,6 +255,11 @@ public:
      * @brief Найти все локации
      */
     void findAllLocations();
+
+    /**
+     * @brief Сравнить документы с заданными индексами
+     */
+    void compareDocuments(const QModelIndex& _lhs, const QModelIndex& _rhs);
 
     /**
      * @brief Очистить корзину
@@ -714,6 +722,33 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
                     });
                     menuActions.append(shareAccess);
                 }
+            }
+        }
+        //
+        // Если выделены два элемента
+        //
+        else if (selectedIndexes.size() == 2) {
+            const auto firstItemIndex
+                = projectStructureProxyModel->mapToSource(selectedIndexes.constFirst());
+            const auto firstItem = projectStructureModel->itemForIndex(firstItemIndex);
+            const auto secondItemIndex
+                = projectStructureProxyModel->mapToSource(selectedIndexes.constLast());
+            const auto secondItem = projectStructureModel->itemForIndex(secondItemIndex);
+            //
+            // ... и они одного типа и оба текстовые
+            //
+            if (firstItem->type() == secondItem->type() && isTextItem(firstItem)) {
+                auto compareDocuments = new QAction(tr("Compare documents"));
+                compareDocuments->setSeparator(!menuActions.isEmpty());
+                compareDocuments->setIconText(u8"\U000F08AA");
+                compareDocuments->setEnabled(enabled);
+                connect(compareDocuments, &QAction::triggered, q,
+                        [this, firstItemIndex, secondItemIndex] {
+                            QTimer::singleShot(1000, q, [this, firstItemIndex, secondItemIndex] {
+                                this->compareDocuments(firstItemIndex, secondItemIndex);
+                            });
+                        });
+                menuActions.append(compareDocuments);
             }
         }
         //
@@ -1703,6 +1738,42 @@ void ProjectManager::Implementation::findAllLocations()
             }
         });
     QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
+}
+
+void ProjectManager::Implementation::compareDocuments(const QModelIndex& _lhs,
+                                                      const QModelIndex& _rhs)
+{
+
+    //
+    // Сформировать xml документа, который будет включать дифф между заданными документами
+    //
+    const auto lhsItem = projectStructureModel->itemForIndex(_lhs);
+    const auto lhsModel = modelsFacade.modelFor(lhsItem->uuid());
+    const auto lhsXml = lhsModel->document()->content();
+    //
+    const auto rhsItem = projectStructureModel->itemForIndex(_rhs);
+    const auto rhsModel = modelsFacade.modelFor(rhsItem->uuid());
+    const auto rhsXml = rhsModel->document()->content();
+
+    //
+    // Создать новую версию и поместить туда xml исходной модели
+    //
+    projectStructureModel->addItemVersion(rhsItem, "Versions diff", "#ff00aa", true, lhsXml);
+    view.active->setDocumentDraft(rhsItem->versions());
+
+    //
+    // Сформировать диф с заданной моделью
+    //
+    const auto comparisonItem = rhsItem->versions().constLast();
+    auto comparisonModel = modelsFacade.modelFor(comparisonItem->uuid());
+    auto comparisonTextModel = qobject_cast<BusinessLayer::TextModel*>(comparisonModel);
+    Q_ASSERT(comparisonTextModel);
+    comparisonTextModel->compareWith(rhsXml);
+
+    //
+    // Открыть получившуюся версию в режиме отображения дифа
+    //
+    view.active->setCurrentDraft(rhsItem->versions().size() - 1);
 }
 
 void ProjectManager::Implementation::emptyRecycleBin()

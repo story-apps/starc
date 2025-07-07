@@ -37,6 +37,7 @@ public:
         int from = 0;
     };
     QPair<Change, Change> changedXml(const QString& _xml, const QString& _patch) const;
+    QVector<QPair<Change, Change>> changedXmlList(const QString& _xml, const QString& _patch) const;
 
     /**
      * @brief Получить финальную позицию изменения в изменённом тексте
