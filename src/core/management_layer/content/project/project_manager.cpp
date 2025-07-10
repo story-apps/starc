@@ -491,7 +491,7 @@ ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _par
     splitScreenAction->setIconText(u8"\U000F10E7");
     splitScreenAction->setWhatsThis(QKeySequence("F2").toString(QKeySequence::NativeText));
     updateOptionsText();
-    toolBar->setOptions({ splitScreenAction }, AppBarOptionsLevel::App);
+    toolBar->setOptions({ splitScreenAction }, AppBarOptionsLevel::View);
     splitScreenShortcut->setKey(QKeySequence("F2"));
     splitScreenShortcut->setContext(Qt::ApplicationShortcut);
 }
@@ -4769,12 +4769,6 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     d->pluginsBuilder.syncModelAndBindEditors(viewMimeType, d->view.activeModel, isPrimaryView);
 
     //
-    // Устанавливаем опции редактора
-    //
-    Log::debug("Activate plugin view options");
-    d->toolBar->setOptions(view->options(), AppBarOptionsLevel::View);
-
-    //
     // Настроим уведомления редактора
     //
     if (auto viewWidget = view->asQWidget(); viewWidget != nullptr) {
@@ -5008,8 +5002,6 @@ void ProjectManager::activateView(const QModelIndex& _itemIndex, const QString& 
     if (view == nullptr) {
         return;
     }
-
-    d->toolBar->setOptions(view->options(), AppBarOptionsLevel::View);
 }
 
 void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType)

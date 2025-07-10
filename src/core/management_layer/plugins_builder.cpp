@@ -725,7 +725,7 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                   QApplication::translate("ProjectPluginsBuilder", "World information") } } },
             //
             { "application/x-starc/document/folder",
-              { { kSimpleTextEditorMime,
+              { { kSimpleTextFolderEditorMime,
                   QApplication::translate("ProjectPluginsBuilder", "Folder text") } } },
             { "application/x-starc/document/text",
               { { kSimpleTextEditorMime,

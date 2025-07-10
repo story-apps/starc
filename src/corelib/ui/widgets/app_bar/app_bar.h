@@ -8,9 +8,9 @@
  */
 enum class AppBarOptionsLevel {
     //
-    // Уровень приложения
+    // Уровень модулей
     //
-    App,
+    Modules,
     //
     // Уровень навигатора
     //
@@ -36,6 +36,11 @@ public:
      * @brief Задать видимость красной точки для действия
      */
     void setBadgeVisible(QAction* _action, bool _visible);
+
+    /**
+     * @brief Получить список опций заданного уровня
+     */
+    QVector<QAction*> options(AppBarOptionsLevel _level) const;
 
     /**
      * @brief Задать действия для опций тулбара на заданном уровне

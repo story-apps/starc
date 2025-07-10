@@ -28,6 +28,11 @@ void ProjectToolBar::clearViews()
         action->deleteLater();
     }
 
+    //
+    // Очистим опции модулей
+    //
+    clearOptions(AppBarOptionsLevel::Modules);
+
     update();
 }
 
@@ -43,6 +48,50 @@ void ProjectToolBar::addView(const QString& _mimeType, const QString& _icon,
     addAction(viewAction);
     connect(viewAction, &QAction::toggled, this,
             [this, _mimeType] { emit viewPressed(_mimeType); });
+
+    QAction* viewOptionAction = new QAction(this);
+    viewOptionAction->setIconText(_icon);
+    viewOptionAction->setText(_tooltip);
+    viewOptionAction->setCheckable(true);
+    viewOptionAction->setChecked(_isActive);
+    viewOptionAction->setData(_mimeType);
+    connect(viewOptionAction, &QAction::toggled, viewAction,
+            [this, viewAction, viewOptionAction](bool _isChecked) {
+                //
+                // Если пользователь нажимает на кнопку текущего активного модуля
+                //
+                const auto modulesOptions = options(AppBarOptionsLevel::Modules);
+                if (!_isChecked
+                    && std::count_if(modulesOptions.begin(), modulesOptions.end(),
+                                     [](const QAction* _option) { return _option->isChecked(); })
+                        == 0) {
+                    //
+                    // ... не даём ему выключиться
+                    //
+                    viewOptionAction->setChecked(true);
+                    return;
+                }
+
+                viewAction->setChecked(_isChecked);
+                if (!_isChecked) {
+                    return;
+                }
+
+                for (auto action : modulesOptions) {
+                    if (action->isCheckable() && action != viewOptionAction) {
+                        action->setChecked(false);
+                    }
+                }
+
+                update();
+            });
+    connect(viewAction, &QAction::toggled, viewOptionAction, [viewOptionAction](bool _isChecked) {
+        QSignalBlocker signalBlocker(viewOptionAction);
+        viewOptionAction->setChecked(_isChecked);
+    });
+    auto modulesOptions = options(AppBarOptionsLevel::Modules);
+    modulesOptions.append(viewOptionAction);
+    setOptions(modulesOptions, AppBarOptionsLevel::Modules);
 
     update();
 }
@@ -75,10 +124,25 @@ void ProjectToolBar::setCurrentViewMimeType(const QString& _mimeType)
             action->setChecked(false);
         }
     }
+    for (auto action : options(AppBarOptionsLevel::Modules)) {
+        QSignalBlocker signalBlocker(action);
+
+        if (action->data().toString() == _mimeType) {
+            if (action->isChecked()) {
+                continue;
+            }
+
+            action->setChecked(true);
+        } else {
+            action->setChecked(false);
+        }
+    }
 }
 
 void ProjectToolBar::updateTranslations()
 {
+    AppBar::updateTranslations();
+
     actions().at(0)->setToolTip(tr("Show main menu"));
 }
 

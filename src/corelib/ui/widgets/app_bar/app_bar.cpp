@@ -29,7 +29,7 @@ public:
     /**
      * @brief Получить пункт меню по координате
      */
-    QAction* pressedAction(const QPoint& _coordinate, const QList<QAction*>& _actions) const;
+    QAction* mapToAction(const QPoint& _coordinate) const;
 
     /**
      * @brief Получить список опций заданного типа
@@ -74,7 +74,7 @@ AppBar::Implementation::Implementation(AppBar* _q)
     : q(_q)
     , optionsAction(new QAction(_q))
 {
-    optionsAction->setIconText(u8"\U000F01D9");
+    optionsAction->setText(u8"\U000F01D9");
 
     decorationRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
     decorationRadiusAnimation.setDuration(160);
@@ -92,21 +92,38 @@ void AppBar::Implementation::animateClick()
     decorationOpacityAnimation.start();
 }
 
-QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate,
-                                               const QList<QAction*>& _actions) const
+QAction* AppBar::Implementation::mapToAction(const QPoint& _coordinate) const
 {
-    qreal actionLeft = q->isLeftToRight()
-        ? Ui::DesignSystem::appBar().margins().left()
-            - (Ui::DesignSystem::appBar().iconsSpacing() / 2.0)
-        : q->width() - (Ui::DesignSystem::appBar().iconsSpacing() / 2.0)
-            - Ui::DesignSystem::appBar().iconSize().width()
-            - Ui::DesignSystem::appBar().margins().left();
     //
     // Берём увеличенный регион для удобства клика в области кнопки
     //
     const qreal actionWidth
         = Ui::DesignSystem::appBar().iconSize().width() + Ui::DesignSystem::appBar().iconsSpacing();
-    for (QAction* action : _actions) {
+
+    //
+    // Кнопка опций приоритетна
+    //
+    qreal actionLeft = 0;
+    if (hasOptions()) {
+        actionLeft = q->isLeftToRight()
+            ? (q->width() - Ui::DesignSystem::appBar().iconSize().width()
+               - Ui::DesignSystem::appBar().margins().right())
+            : Ui::DesignSystem::appBar().margins().left();
+        const qreal actionRight = actionLeft + actionWidth;
+        if (actionLeft < _coordinate.x() && _coordinate.x() < actionRight) {
+            return optionsAction;
+        }
+    }
+
+    //
+    // Ищем среди остальных действий
+    //
+    actionLeft = q->isLeftToRight() ? Ui::DesignSystem::appBar().margins().left()
+            - (Ui::DesignSystem::appBar().iconsSpacing() / 2.0)
+                                    : q->width() - (Ui::DesignSystem::appBar().iconsSpacing() / 2.0)
+            - Ui::DesignSystem::appBar().iconSize().width()
+            - Ui::DesignSystem::appBar().margins().left();
+    for (QAction* action : q->actions()) {
         if (!action->isVisible()) {
             continue;
         }
@@ -120,24 +137,13 @@ QAction* AppBar::Implementation::pressedAction(const QPoint& _coordinate,
         actionLeft = q->isLeftToRight() ? actionRight : actionLeft - actionWidth;
     }
 
-    if (hasOptions()) {
-        actionLeft = q->isLeftToRight()
-            ? (q->width() - Ui::DesignSystem::appBar().iconSize().width()
-               - Ui::DesignSystem::appBar().margins().right())
-            : Ui::DesignSystem::appBar().margins().left();
-        const qreal actionRight = actionLeft + actionWidth;
-        if (actionLeft < _coordinate.x() && _coordinate.x() < actionRight) {
-            return optionsAction;
-        }
-    }
-
     return nullptr;
 }
 
 QVector<QAction*>& AppBar::Implementation::options(AppBarOptionsLevel _level)
 {
     switch (_level) {
-    case AppBarOptionsLevel::App: {
+    case AppBarOptionsLevel::Modules: {
         return appOptions;
     }
 
@@ -212,6 +218,11 @@ void AppBar::setBadgeVisible(QAction* _action, bool _visible)
     update();
 }
 
+QVector<QAction*> AppBar::options(AppBarOptionsLevel _level) const
+{
+    return d->options(_level);
+}
+
 void AppBar::setOptions(const QVector<QAction*>& _options, AppBarOptionsLevel _level)
 {
     if (d->options(_level) == _options) {
@@ -256,8 +267,8 @@ bool AppBar::event(QEvent* _event)
 {
     if (_event->type() == QEvent::ToolTip) {
         QHelpEvent* event = static_cast<QHelpEvent*>(_event);
-        QAction* action = d->pressedAction(event->pos(), actions());
-        if (action != nullptr && action->toolTip() != action->iconText()) {
+        QAction* action = d->mapToAction(event->pos());
+        if (action != nullptr && !action->toolTip().isEmpty()) {
             QToolTip::showText(event->globalPos(), action->toolTip());
         } else {
             QToolTip::hideText();
@@ -323,6 +334,10 @@ void AppBar::paintEvent(QPaintEvent* _event)
             painter.setOpacity(1.0);
         }
     };
+    const auto lastActionX = isLeftToRight()
+        ? (width() - Ui::DesignSystem::appBar().iconSize().width()
+           - Ui::DesignSystem::appBar().margins().right())
+        : Ui::DesignSystem::appBar().margins().left();
     for (const QAction* action : actions()) {
         if (!action->isVisible()) {
             continue;
@@ -332,6 +347,14 @@ void AppBar::paintEvent(QPaintEvent* _event)
 
         actionX += (isLeftToRight() ? 1 : -1)
             * (actionSize.width() + Ui::DesignSystem::appBar().iconsSpacing());
+
+        //
+        // ... если следующая иконка не влезает, то прерываем отрисовку
+        //
+        if (isLeftToRight() ? actionX + actionSize.width() > lastActionX
+                            : actionX < lastActionX + actionSize.width()) {
+            break;
+        }
     }
 
     //
@@ -347,7 +370,7 @@ void AppBar::paintEvent(QPaintEvent* _event)
 
 void AppBar::mousePressEvent(QMouseEvent* _event)
 {
-    QAction* pressedAction = d->pressedAction(_event->pos(), actions());
+    QAction* pressedAction = d->mapToAction(_event->pos());
     if (pressedAction == nullptr) {
         return;
     }
@@ -362,7 +385,7 @@ void AppBar::mousePressEvent(QMouseEvent* _event)
 
 void AppBar::mouseReleaseEvent(QMouseEvent* _event)
 {
-    QAction* pressedAction = d->pressedAction(_event->pos(), actions());
+    QAction* pressedAction = d->mapToAction(_event->pos());
     if (pressedAction == nullptr) {
         return;
     }
