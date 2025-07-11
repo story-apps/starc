@@ -213,6 +213,9 @@ AudioplayTextView::Implementation::Implementation(AudioplayTextView* _q)
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
+    toolbar->setOptions({
+        showBookmarksAction,
+    });
 
     commentsToolbar->hide();
 
@@ -253,7 +256,6 @@ AudioplayTextView::Implementation::Implementation(AudioplayTextView* _q)
 
     showBookmarksAction->setCheckable(true);
     showBookmarksAction->setIconText(u8"\U000F0E16");
-    showBookmarksAction->setSeparator(true);
 }
 
 void AudioplayTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
@@ -971,13 +973,6 @@ void AudioplayTextView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
     d->audioplayTextScrollbarManager->setScrollBarVisible(!_isFullScreen);
-}
-
-QVector<QAction*> AudioplayTextView::options() const
-{
-    return {
-        d->showBookmarksAction,
-    };
 }
 
 void AudioplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)

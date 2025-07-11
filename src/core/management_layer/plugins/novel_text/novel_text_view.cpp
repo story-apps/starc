@@ -228,6 +228,10 @@ NovelTextView::Implementation::Implementation(NovelTextView* _q)
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
+    toolbar->setOptions({
+        showSceneParametersAction,
+        showBookmarksAction,
+    });
 
     commentsToolbar->hide();
 
@@ -278,7 +282,6 @@ NovelTextView::Implementation::Implementation(NovelTextView* _q)
 
     showSceneParametersAction->setCheckable(true);
     showSceneParametersAction->setIconText(u8"\U000F1A7D");
-    showSceneParametersAction->setSeparator(true);
     showBookmarksAction->setCheckable(true);
     showBookmarksAction->setIconText(u8"\U000F0E16");
 }
@@ -1379,14 +1382,6 @@ QWidget* NovelTextView::asQWidget()
 void NovelTextView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
-}
-
-QVector<QAction*> NovelTextView::options() const
-{
-    return {
-        d->showSceneParametersAction,
-        d->showBookmarksAction,
-    };
 }
 
 void NovelTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)

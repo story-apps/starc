@@ -207,6 +207,9 @@ SimpleTextView::Implementation::Implementation(SimpleTextView* _q)
     , cursorChangeNotificationsDebounser(500)
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
+    toolbar->setOptions({
+        showBookmarksAction,
+    });
 
     commentsToolbar->hide();
 
@@ -245,7 +248,6 @@ SimpleTextView::Implementation::Implementation(SimpleTextView* _q)
 
     showBookmarksAction->setCheckable(true);
     showBookmarksAction->setIconText(u8"\U000F0E16");
-    showBookmarksAction->setSeparator(true);
 }
 
 void SimpleTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
@@ -930,13 +932,6 @@ QWidget* SimpleTextView::asQWidget()
 void SimpleTextView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
-}
-
-QVector<QAction*> SimpleTextView::options() const
-{
-    return {
-        d->showBookmarksAction,
-    };
 }
 
 void SimpleTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)

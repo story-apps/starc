@@ -238,6 +238,11 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
+    toolbar->setOptions({
+        showSceneParametersAction,
+        showBookmarksAction,
+        showDictionariesAction,
+    });
 
     commentsToolbar->hide();
 
@@ -291,7 +296,6 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
 
     showSceneParametersAction->setCheckable(true);
     showSceneParametersAction->setIconText(u8"\U000F1A7D");
-    showSceneParametersAction->setSeparator(true);
     showBookmarksAction->setCheckable(true);
     showBookmarksAction->setIconText(u8"\U000F0E16");
     showDictionariesAction->setCheckable(true);
@@ -1466,15 +1470,6 @@ void ScreenplayTextView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
     d->screenplayTextScrollbarManager->setScrollBarVisible(!_isFullScreen);
-}
-
-QVector<QAction*> ScreenplayTextView::options() const
-{
-    return {
-        d->showSceneParametersAction,
-        d->showBookmarksAction,
-        d->showDictionariesAction,
-    };
 }
 
 void ScreenplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)

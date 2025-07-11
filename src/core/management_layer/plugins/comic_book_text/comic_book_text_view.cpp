@@ -211,6 +211,9 @@ ComicBookTextView::Implementation::Implementation(ComicBookTextView* _q)
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
+    toolbar->setOptions({
+        showBookmarksAction,
+    });
 
     commentsToolbar->hide();
 
@@ -249,7 +252,6 @@ ComicBookTextView::Implementation::Implementation(ComicBookTextView* _q)
 
     showBookmarksAction->setCheckable(true);
     showBookmarksAction->setIconText(u8"\U000F0E16");
-    showBookmarksAction->setSeparator(true);
 }
 
 void ComicBookTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
@@ -959,13 +961,6 @@ QWidget* ComicBookTextView::asQWidget()
 void ComicBookTextView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
-}
-
-QVector<QAction*> ComicBookTextView::options() const
-{
-    return {
-        d->showBookmarksAction,
-    };
 }
 
 void ComicBookTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)

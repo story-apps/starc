@@ -2,6 +2,7 @@
 
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/card/card_popup_with_tree.h>
+#include <ui/widgets/context_menu/context_menu.h>
 
 #include <QAbstractItemModel>
 #include <QAction>
@@ -29,6 +30,8 @@ public:
     QAction* commentsAction = nullptr;
     QAction* aiAssistantAction = nullptr;
     QAction* isolationAction = nullptr;
+    QAction* optionsAction = nullptr;
+    QVector<QAction*> options;
 
     CardPopupWithTree* popup = nullptr;
 };
@@ -42,6 +45,7 @@ NovelOutlineEditToolbar::Implementation::Implementation(QWidget* _parent)
     , commentsAction(new QAction)
     , aiAssistantAction(new QAction(_parent))
     , isolationAction(new QAction(_parent))
+    , optionsAction(new QAction(_parent))
     , popup(new CardPopupWithTree(_parent))
 {
 }
@@ -137,6 +141,28 @@ NovelOutlineEditToolbar::NovelOutlineEditToolbar(QWidget* _parent)
             &NovelOutlineEditToolbar::updateTranslations);
     connect(d->isolationAction, &QAction::toggled, this,
             &NovelOutlineEditToolbar::itemIsolationEnabledChanged);
+
+    d->optionsAction->setIconText(u8"\U000F01D9");
+    addAction(d->optionsAction);
+    connect(d->optionsAction, &QAction::triggered, this, [this] {
+        if (d->options.isEmpty()) {
+            return;
+        }
+
+        //
+        // Настроим меню опций
+        //
+        auto menu = new ContextMenu(this);
+        menu->setBackgroundColor(Ui::DesignSystem::color().background());
+        menu->setTextColor(Ui::DesignSystem::color().onBackground());
+        menu->setActions(d->options);
+        connect(menu, &ContextMenu::disappeared, menu, &ContextMenu::deleteLater);
+
+        //
+        // Покажем меню
+        //
+        menu->showContextMenu(QCursor::pos());
+    });
 
     connect(d->popup, &CardPopupWithTree::currentIndexChanged, this,
             [this](const QModelIndex& _index) { emit paragraphTypeChanged(_index); });
@@ -269,6 +295,11 @@ void NovelOutlineEditToolbar::setItemIsolationEnabled(bool _enabled)
     d->isolationAction->setChecked(_enabled);
 }
 
+void NovelOutlineEditToolbar::setOptions(const QVector<QAction*>& _options)
+{
+    d->options = _options;
+}
+
 bool NovelOutlineEditToolbar::canAnimateHoverOut() const
 {
     return !d->popup->isVisible();
@@ -299,6 +330,7 @@ void NovelOutlineEditToolbar::updateTranslations()
     d->isolationAction->setToolTip(d->isolationAction->isChecked()
                                        ? tr("Show full text")
                                        : tr("Show only current chapter text"));
+    d->optionsAction->setToolTip(tr("Additional options"));
 }
 
 void NovelOutlineEditToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)

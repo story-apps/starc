@@ -224,6 +224,10 @@ NovelOutlineView::Implementation::Implementation(NovelOutlineView* _q)
     , cursorChangeNotificationsDebounser(500)
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
+    toolbar->setOptions({
+        showSceneParametersAction,
+        showBookmarksAction,
+    });
 
     commentsToolbar->hide();
 
@@ -269,7 +273,6 @@ NovelOutlineView::Implementation::Implementation(NovelOutlineView* _q)
 
     showSceneParametersAction->setCheckable(true);
     showSceneParametersAction->setIconText(u8"\U000F1A7D");
-    showSceneParametersAction->setSeparator(true);
     showBookmarksAction->setCheckable(true);
     showBookmarksAction->setIconText(u8"\U000F0E16");
 }
@@ -1356,14 +1359,6 @@ QWidget* NovelOutlineView::asQWidget()
 void NovelOutlineView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
-}
-
-QVector<QAction*> NovelOutlineView::options() const
-{
-    return {
-        d->showSceneParametersAction,
-        d->showBookmarksAction,
-    };
 }
 
 void NovelOutlineView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)

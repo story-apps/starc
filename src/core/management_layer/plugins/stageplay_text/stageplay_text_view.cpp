@@ -210,6 +210,9 @@ StageplayTextView::Implementation::Implementation(StageplayTextView* _q)
 
 {
     toolbar->setParagraphTypesModel(paragraphTypesModel);
+    toolbar->setOptions({
+        showBookmarksAction,
+    });
 
     commentsToolbar->hide();
 
@@ -248,7 +251,6 @@ StageplayTextView::Implementation::Implementation(StageplayTextView* _q)
 
     showBookmarksAction->setCheckable(true);
     showBookmarksAction->setIconText(u8"\U000F0E16");
-    showBookmarksAction->setSeparator(true);
 }
 
 void StageplayTextView::Implementation::reconfigureTemplate(bool _withModelReinitialization)
@@ -945,13 +947,6 @@ QWidget* StageplayTextView::asQWidget()
 void StageplayTextView::toggleFullScreen(bool _isFullScreen)
 {
     d->toolbar->setVisible(!_isFullScreen);
-}
-
-QVector<QAction*> StageplayTextView::options() const
-{
-    return {
-        d->showBookmarksAction,
-    };
 }
 
 void StageplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)

@@ -67,6 +67,11 @@ public:
     bool isItemIsolationEnabled() const;
     void setItemIsolationEnabled(bool _enabled);
 
+    /**
+     * @brief Задать список дополнительных опций
+     */
+    void setOptions(const QVector<QAction*>& _options);
+
 signals:
     void undoPressed();
     void redoPressed();
