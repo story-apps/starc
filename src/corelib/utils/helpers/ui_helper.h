@@ -4,6 +4,7 @@
 
 #include <corelib_global.h>
 
+class Button;
 class QHBoxLayout;
 class QScrollArea;
 class QWidget;
@@ -13,6 +14,19 @@ class SpellCheckTextEdit;
 class CORE_LIBRARY_EXPORT UiHelper
 {
 public:
+    /**
+     * @brief Роли кнопок
+     */
+    enum ButtonRole {
+        DialogDefault,
+        DialogAccept,
+        DialogCritical,
+    };
+    /**
+     * @brief Настроить цвет кнопки в зависимости от её роли
+     */
+    static void initColorsFor(Button* _button, ButtonRole _role);
+
     /**
      * @brief Создать и подготовить лейаут
      */

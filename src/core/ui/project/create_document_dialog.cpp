@@ -639,6 +639,9 @@ void CreateDocumentDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
         button->setBackgroundColor(DesignSystem::color().accent());
         button->setTextColor(DesignSystem::color().accent());
     }
+    UiHelper::initColorsFor(d->upgradeToProButton, UiHelper::DialogAccept);
+    UiHelper::initColorsFor(d->createButton, UiHelper::DialogAccept);
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
 
     d->buttonsLayout->setContentsMargins(
         QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),

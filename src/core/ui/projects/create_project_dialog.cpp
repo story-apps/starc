@@ -16,6 +16,7 @@
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/dialog_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QFileDialog>
 #include <QGridLayout>
@@ -508,10 +509,9 @@ void CreateProjectDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
     d->cloudProjectCreationActionNote->setContentsMargins(
         QMarginsF(0, 0.0, DesignSystem::layout().px24(), DesignSystem::layout().px12())
             .toMargins());
-    for (auto button : { d->cancelButton, d->createButton }) {
-        button->setBackgroundColor(DesignSystem::color().accent());
-        button->setTextColor(DesignSystem::color().accent());
-    }
+
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->createButton, UiHelper::DialogAccept);
 
     d->buttonsLayout->setContentsMargins(
         QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),

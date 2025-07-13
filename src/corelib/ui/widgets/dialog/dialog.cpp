@@ -3,7 +3,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
-#include <utils/helpers/color_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QHBoxLayout>
 
@@ -113,25 +113,21 @@ void Dialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->supportingText->setTextColor(Ui::DesignSystem::color().onBackground());
 
     for (auto button : std::as_const(d->buttons)) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-
-        QColor textColor;
+        UiHelper::ButtonRole buttonRole = UiHelper::DialogDefault;
         switch (button->property(kButtonRole).toInt()) {
         case AcceptButton: {
-            textColor = Ui::DesignSystem::color().accent();
+            buttonRole = UiHelper::DialogAccept;
             break;
         }
         case AcceptCriticalButton: {
-            textColor = Ui::DesignSystem::color().error();
+            buttonRole = UiHelper::DialogCritical;
             break;
         }
         default: {
-            textColor = ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
-                                                 Ui::DesignSystem::inactiveTextOpacity());
             break;
         }
         }
-        button->setTextColor(textColor);
+        UiHelper::initColorsFor(button, buttonRole);
     }
 
     d->buttonsSideBySideLayout->setContentsMargins(

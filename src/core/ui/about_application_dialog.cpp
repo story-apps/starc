@@ -7,6 +7,7 @@
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/label/link_label.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QBoxLayout>
 #include <QCoreApplication>
@@ -181,7 +182,7 @@ void AboutApplicationDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
+    auto labelMargins = DesignSystem::label().margins().toMargins();
     labelMargins.setTop(0);
     for (auto label : std::vector<Widget*>{
              d->versionLabel,
@@ -194,12 +195,12 @@ void AboutApplicationDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
              d->descriptionLabel1,
              d->descriptionLabel2,
          }) {
-        label->setBackgroundColor(Ui::DesignSystem::color().background());
-        label->setTextColor(Ui::DesignSystem::color().onBackground());
+        label->setBackgroundColor(DesignSystem::color().background());
+        label->setTextColor(DesignSystem::color().onBackground());
         label->setContentsMargins(labelMargins);
     }
-    d->versionLabel->setTextColor(ColorHelper::transparent(
-        d->versionLabel->textColor(), Ui::DesignSystem::inactiveTextOpacity()));
+    d->versionLabel->setTextColor(ColorHelper::transparent(d->versionLabel->textColor(),
+                                                           DesignSystem::inactiveTextOpacity()));
     auto leftLabelMargins = labelMargins;
     leftLabelMargins.setRight(0);
     d->authorsLabel1->setContentsMargins(leftLabelMargins);
@@ -207,9 +208,9 @@ void AboutApplicationDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
     auto middleLabelMargins = leftLabelMargins;
     middleLabelMargins.setLeft(0);
     d->authorsLink->setContentsMargins(middleLabelMargins);
-    d->authorsLink->setTextColor(Ui::DesignSystem::color().accent());
+    d->authorsLink->setTextColor(DesignSystem::color().accent());
     d->partnerLink->setContentsMargins(middleLabelMargins);
-    d->partnerLink->setTextColor(Ui::DesignSystem::color().accent());
+    d->partnerLink->setTextColor(DesignSystem::color().accent());
     auto rightLabelMargins = labelMargins;
     rightLabelMargins.setLeft(0);
     d->authorsLabel2->setContentsMargins(rightLabelMargins);
@@ -221,19 +222,18 @@ void AboutApplicationDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
              d->telegramButton,
              d->vkButton,
          }) {
-        iconButton->setBackgroundColor(Ui::DesignSystem::color().background());
-        iconButton->setTextColor(Ui::DesignSystem::color().onBackground());
-        iconButton->setCustomFont(Ui::DesignSystem::font().brandsMid());
+        iconButton->setBackgroundColor(DesignSystem::color().background());
+        iconButton->setTextColor(DesignSystem::color().onBackground());
+        iconButton->setCustomFont(DesignSystem::font().brandsMid());
     }
-    d->mailButton->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->mailButton->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->mailButton->setBackgroundColor(DesignSystem::color().background());
+    d->mailButton->setTextColor(DesignSystem::color().onBackground());
 
-    d->closeButton->setBackgroundColor(Ui::DesignSystem::color().accent());
-    d->closeButton->setTextColor(Ui::DesignSystem::color().accent());
+    UiHelper::initColorsFor(d->closeButton, UiHelper::DialogAccept);
 
     d->buttonsLayout->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12())
+        QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+                  DesignSystem::layout().px16(), DesignSystem::layout().px12())
             .toMargins());
 }
 

@@ -10,6 +10,7 @@
 #include <ui/widgets/tree/tree.h>
 #include <ui/widgets/tree/tree_delegate.h>
 #include <utils/helpers/extension_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QApplication>
 #include <QEvent>
@@ -782,20 +783,20 @@ void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->tree->setBackgroundColor(DesignSystem::color().primary());
     d->tree->setTextColor(DesignSystem::color().onPrimary());
 
-    auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
-    titleMargins.setTop(Ui::DesignSystem::layout().px16());
-    titleMargins.setBottom(Ui::DesignSystem::layout().px4());
+    auto titleMargins = DesignSystem::label().margins().toMargins();
+    titleMargins.setTop(DesignSystem::layout().px16());
+    titleMargins.setBottom(DesignSystem::layout().px4());
     d->filesCountTitle->setContentsMargins(titleMargins);
-    d->filesCountTitle->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->filesCountTitle->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->filesCountTitle->setBackgroundColor(DesignSystem::color().background());
+    d->filesCountTitle->setTextColor(DesignSystem::color().onBackground());
 
     d->optionsWidget->setBackgroundColor(DesignSystem::color().background());
-    d->optionsWidget->layout()->setContentsMargins(0, Ui::DesignSystem::layout().px(32), 0, 0);
+    d->optionsWidget->layout()->setContentsMargins(0, DesignSystem::layout().px(32), 0, 0);
 
     for (auto label : { d->documentsTitle, d->textTitle }) {
         label->setContentsMargins(titleMargins);
-        label->setBackgroundColor(Ui::DesignSystem::color().background());
-        label->setTextColor(Ui::DesignSystem::color().onBackground());
+        label->setBackgroundColor(DesignSystem::color().background());
+        label->setTextColor(DesignSystem::color().onBackground());
     }
 
     for (auto checkBox : {
@@ -806,34 +807,29 @@ void ImportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->keepSceneNumbers,
              d->sameOptions,
          }) {
-        checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
-        checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
+        checkBox->setBackgroundColor(DesignSystem::color().background());
+        checkBox->setTextColor(DesignSystem::color().onBackground());
     }
 
-    for (auto button : {
-             d->importButton,
-             d->cancelButton,
-         }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
-    }
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->importButton, UiHelper::DialogAccept);
 
     for (auto textField : std::vector<TextField*>{
              d->documentType,
          }) {
-        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-        textField->setTextColor(Ui::DesignSystem::color().onBackground());
+        textField->setBackgroundColor(DesignSystem::color().onBackground());
+        textField->setTextColor(DesignSystem::color().onBackground());
     }
 
     for (auto combobox : {
              d->documentType,
          }) {
-        combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+        combobox->setPopupBackgroundColor(DesignSystem::color().background());
     }
 
     d->bottomLayout->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16())
+        QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+                  DesignSystem::layout().px16(), DesignSystem::layout().px16())
             .toMargins());
 }
 

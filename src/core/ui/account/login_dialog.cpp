@@ -4,6 +4,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/ui_helper.h>
 #include <utils/tools/debouncer.h>
 #include <utils/validators/email_validator.h>
 
@@ -216,39 +217,42 @@ void LoginDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    setContentFixedWidth(Ui::DesignSystem::dialog().minimumWidth());
+    setContentFixedWidth(DesignSystem::dialog().minimumWidth());
 
     for (auto label : {
              d->description,
              d->authorizationError,
              d->confirmationCodeSendedInfo,
          }) {
-        label->setBackgroundColor(Ui::DesignSystem::color().background());
-        label->setTextColor(Ui::DesignSystem::color().onBackground());
+        label->setBackgroundColor(DesignSystem::color().background());
+        label->setTextColor(DesignSystem::color().onBackground());
     }
-    d->authorizationError->setTextColor(Ui::DesignSystem::color().error());
-    auto labelContentMargins = Ui::DesignSystem::label().margins().toMargins();
+    d->authorizationError->setTextColor(DesignSystem::color().error());
+    auto labelContentMargins = DesignSystem::label().margins().toMargins();
     labelContentMargins.setTop(0);
-    labelContentMargins.setBottom(Ui::DesignSystem::layout().px12());
+    labelContentMargins.setBottom(DesignSystem::layout().px12());
     d->description->setContentsMargins(labelContentMargins);
-    labelContentMargins.setTop(Ui::DesignSystem::layout().px12());
+    labelContentMargins.setTop(DesignSystem::layout().px12());
     d->authorizationError->setContentsMargins(labelContentMargins);
     d->confirmationCodeSendedInfo->setContentsMargins(labelContentMargins);
 
     for (auto textField : { d->email, d->confirmationCode }) {
-        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-        textField->setTextColor(Ui::DesignSystem::color().onBackground());
+        textField->setBackgroundColor(DesignSystem::color().onBackground());
+        textField->setTextColor(DesignSystem::color().onBackground());
     }
 
     for (auto button : { d->signInButton, d->resendCodeButton, d->cancelButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
+        button->setBackgroundColor(DesignSystem::color().accent());
+        button->setTextColor(DesignSystem::color().accent());
     }
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->resendCodeButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->signInButton, UiHelper::DialogAccept);
 
-    contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::compactLayout().px8()));
+    contentsLayout()->setSpacing(static_cast<int>(DesignSystem::compactLayout().px8()));
     d->buttonsLayout->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16())
+        QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+                  DesignSystem::layout().px16(), DesignSystem::layout().px16())
             .toMargins());
 }
 

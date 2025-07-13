@@ -13,6 +13,7 @@
 #include <ui/widgets/stack_widget/stack_widget.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QBoxLayout>
 #include <QDesktopServices>
@@ -89,7 +90,7 @@ protected:
     void designSystemChangeEvent(DesignSystemChangeEvent* _event) override
     {
         Widget::designSystemChangeEvent(_event);
-        setFixedHeight(Ui::DesignSystem::layout().px(300));
+        setFixedHeight(DesignSystem::layout().px(300));
 
         for (auto widget : std::vector<Widget*>{
                  this,
@@ -98,18 +99,17 @@ protected:
                  m_text,
                  m_readMore,
              }) {
-            widget->setBackgroundColor(Ui::DesignSystem::color().background());
-            widget->setTextColor(Ui::DesignSystem::color().onBackground());
+            widget->setBackgroundColor(DesignSystem::color().background());
+            widget->setTextColor(DesignSystem::color().onBackground());
         }
 
-        m_icon->setContentsMargins(0, 0, Ui::DesignSystem::layout().px8(), 0);
-        m_title->setContentsMargins(0, 0, 0, Ui::DesignSystem::layout().px12());
-        m_text->setContentsMargins(Ui::DesignSystem::layout().px4(), 0,
-                                   Ui::DesignSystem::layout().px24(), 0);
-        m_readMore->setContentsMargins(Ui::DesignSystem::layout().px4(),
-                                       Ui::DesignSystem::layout().px12(),
-                                       Ui::DesignSystem::layout().px24(), 0);
-        m_readMore->setTextColor(Ui::DesignSystem::color().accent());
+        m_icon->setContentsMargins(0, 0, DesignSystem::layout().px8(), 0);
+        m_title->setContentsMargins(0, 0, 0, DesignSystem::layout().px12());
+        m_text->setContentsMargins(DesignSystem::layout().px4(), 0, DesignSystem::layout().px24(),
+                                   0);
+        m_readMore->setContentsMargins(DesignSystem::layout().px4(), DesignSystem::layout().px12(),
+                                       DesignSystem::layout().px24(), 0);
+        m_readMore->setTextColor(DesignSystem::color().accent());
     }
 
 private:
@@ -902,10 +902,10 @@ void LoglineGeneratorDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    setContentFixedWidth(Ui::DesignSystem::layout().px(800));
+    setContentFixedWidth(DesignSystem::layout().px(800));
 
-    d->progressBar->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->content->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->progressBar->setBackgroundColor(DesignSystem::color().background());
+    d->content->setBackgroundColor(DesignSystem::color().background());
 
     for (auto page : {
              d->characterPage,
@@ -917,8 +917,8 @@ void LoglineGeneratorDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
              d->stakesPage,
              d->loglinePage,
          }) {
-        page->setBackgroundColor(Ui::DesignSystem::color().background());
-        page->layout()->setContentsMargins(0, Ui::DesignSystem::layout().px24(), 0, 0);
+        page->setBackgroundColor(DesignSystem::color().background());
+        page->layout()->setContentsMargins(0, DesignSystem::layout().px24(), 0, 0);
     }
 
     for (auto textField : std::vector<TextField*>{
@@ -932,23 +932,23 @@ void LoglineGeneratorDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
              d->worldSpecialRules,
              d->stakes,
          }) {
-        textField->setTextColor(Ui::DesignSystem::color().onBackground());
-        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+        textField->setTextColor(DesignSystem::color().onBackground());
+        textField->setBackgroundColor(DesignSystem::color().onBackground());
     }
     for (auto textField : std::vector<TextField*>{
              d->characterInfo,
              d->mprEvent,
          }) {
-        textField->setCustomMargins({ Ui::DesignSystem::layout().px24(), 0,
-                                      Ui::DesignSystem::layout().px24(),
-                                      Ui::DesignSystem::layout().px24() });
+        textField->setCustomMargins({ DesignSystem::layout().px24(), 0,
+                                      DesignSystem::layout().px24(),
+                                      DesignSystem::layout().px24() });
     }
-    d->characterGender->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+    d->characterGender->setPopupBackgroundColor(DesignSystem::color().background());
 
     for (auto checkBox : { d->majorEventIncludesMainChanager, d->includeTheme, d->includeMpr,
                            d->worldHasSpecialRules, d->includeStakes }) {
-        checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
-        checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
+        checkBox->setBackgroundColor(DesignSystem::color().background());
+        checkBox->setTextColor(DesignSystem::color().onBackground());
     }
 
     for (auto label : std::vector<Widget*>{
@@ -956,30 +956,25 @@ void LoglineGeneratorDialog::designSystemChangeEvent(DesignSystemChangeEvent* _e
              d->loglineTitle,
              d->logline,
          }) {
-        label->setBackgroundColor(Ui::DesignSystem::color().background());
-        label->setTextColor(Ui::DesignSystem::color().onBackground());
+        label->setBackgroundColor(DesignSystem::color().background());
+        label->setTextColor(DesignSystem::color().onBackground());
         label->setContentsMargins({});
     }
-    d->loglineIcon->setTextColor(Ui::DesignSystem::color().accent());
-    d->loglineTitle->setContentsMargins(Ui::DesignSystem::layout().px24(),
-                                        Ui::DesignSystem::layout().px24(),
-                                        Ui::DesignSystem::layout().px24(), 0);
-    d->logline->setContentsMargins(Ui::DesignSystem::layout().px(160),
-                                   Ui::DesignSystem::layout().px24(),
-                                   Ui::DesignSystem::layout().px(160), 0);
+    d->loglineIcon->setTextColor(DesignSystem::color().accent());
+    d->loglineTitle->setContentsMargins(DesignSystem::layout().px24(),
+                                        DesignSystem::layout().px24(),
+                                        DesignSystem::layout().px24(), 0);
+    d->logline->setContentsMargins(DesignSystem::layout().px(160), DesignSystem::layout().px24(),
+                                   DesignSystem::layout().px(160), 0);
 
-    d->continueButton->setBackgroundColor(Ui::DesignSystem::color().accent());
-    d->continueButton->setTextColor(Ui::DesignSystem::color().accent());
-    d->doneButton->setBackgroundColor(Ui::DesignSystem::color().accent());
-    d->doneButton->setTextColor(Ui::DesignSystem::color().accent());
-    d->closeButton->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-    d->closeButton->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->backButton->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-    d->backButton->setTextColor(Ui::DesignSystem::color().onBackground());
+    UiHelper::initColorsFor(d->continueButton, UiHelper::DialogAccept);
+    UiHelper::initColorsFor(d->doneButton, UiHelper::DialogAccept);
+    UiHelper::initColorsFor(d->closeButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->backButton, UiHelper::DialogDefault);
 
     d->buttonsLayout->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12())
+        QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+                  DesignSystem::layout().px12(), DesignSystem::layout().px12())
             .toMargins());
 }
 

@@ -7,6 +7,7 @@
 #include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QHBoxLayout>
 #include <QSettings>
@@ -184,35 +185,33 @@ void AbstractExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _eve
 
     setContentMaximumWidth(topLevelWidget()->width() * 0.7);
 
-    auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
-    titleMargins.setTop(Ui::DesignSystem::layout().px8());
+    auto titleMargins = DesignSystem::label().margins().toMargins();
+    titleMargins.setTop(DesignSystem::layout().px8());
     titleMargins.setBottom(0);
 
     for (auto textField : std::vector<TextField*>{
              d->fileFormat,
              d->watermark,
          }) {
-        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-        textField->setTextColor(Ui::DesignSystem::color().onBackground());
+        textField->setBackgroundColor(DesignSystem::color().onBackground());
+        textField->setTextColor(DesignSystem::color().onBackground());
     }
 
-    d->fileFormat->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+    d->fileFormat->setPopupBackgroundColor(DesignSystem::color().background());
 
-    d->watermarkColorPopup->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->watermarkColorPopup->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->watermarkColorPopup->setBackgroundColor(DesignSystem::color().background());
+    d->watermarkColorPopup->setTextColor(DesignSystem::color().onBackground());
 
-    d->openDocumentAfterExport->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->openDocumentAfterExport->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->openDocumentAfterExport->setBackgroundColor(DesignSystem::color().background());
+    d->openDocumentAfterExport->setTextColor(DesignSystem::color().onBackground());
 
-    for (auto button : { d->exportButton, d->cancelButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
-    }
+    UiHelper::initColorsFor(d->exportButton, UiHelper::DialogAccept);
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
 
-    contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
-    d->bottomLayout->setContentsMargins(QMarginsF(0.0, Ui::DesignSystem::layout().px24(),
-                                                  Ui::DesignSystem::layout().px16(),
-                                                  Ui::DesignSystem::layout().px12())
+    contentsLayout()->setSpacing(static_cast<int>(DesignSystem::layout().px8()));
+    d->bottomLayout->setContentsMargins(QMarginsF(0.0, DesignSystem::layout().px24(),
+                                                  DesignSystem::layout().px16(),
+                                                  DesignSystem::layout().px12())
                                             .toMargins());
 }
 

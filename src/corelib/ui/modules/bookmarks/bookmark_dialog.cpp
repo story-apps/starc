@@ -4,6 +4,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QBoxLayout>
 
@@ -133,24 +134,19 @@ void BookmarkDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    d->bookmarkName->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->bookmarkName->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+    d->bookmarkName->setTextColor(DesignSystem::color().onBackground());
+    d->bookmarkName->setBackgroundColor(DesignSystem::color().onBackground());
 
-    d->bookmarkColorPopup->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->bookmarkColorPopup->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->bookmarkColorPopup->setBackgroundColor(DesignSystem::color().background());
+    d->bookmarkColorPopup->setTextColor(DesignSystem::color().onBackground());
 
-    for (auto button : {
-             d->cancelButton,
-             d->saveButton,
-         }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
-    }
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->saveButton, UiHelper::DialogAccept);
 
-    contentsLayout()->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
+    contentsLayout()->setVerticalSpacing(DesignSystem::compactLayout().px16());
     d->buttonsLayout->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12())
+        QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+                  DesignSystem::layout().px16(), DesignSystem::layout().px12())
             .toMargins());
 }
 

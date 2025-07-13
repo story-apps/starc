@@ -2,13 +2,48 @@
 
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
+#include <ui/design_system/design_system.h>
+#include <ui/widgets/button/button.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
+#include <utils/helpers/color_helper.h>
 
 #include <QScrollArea>
 #include <QToolTip>
 #include <QVBoxLayout>
 
+
+void UiHelper::initColorsFor(Button* _button, ButtonRole _role)
+{
+    auto backgroundColor = Ui::DesignSystem::color().onBackground();
+    auto textColor = Ui::DesignSystem::color().onBackground();
+    switch (_role) {
+    case DialogDefault: {
+        backgroundColor = ColorHelper::transparent(Ui::DesignSystem::color().onBackground(),
+                                                   Ui::DesignSystem::inactiveTextOpacity());
+        textColor = backgroundColor;
+        break;
+    }
+    case DialogAccept: {
+        backgroundColor = Ui::DesignSystem::color().accent();
+        textColor = backgroundColor;
+        break;
+    }
+    case DialogCritical: {
+        backgroundColor = Ui::DesignSystem::color().error();
+        textColor = backgroundColor;
+        break;
+    }
+
+    default: {
+        Q_ASSERT(false);
+        break;
+    }
+    }
+
+    _button->setBackgroundColor(backgroundColor);
+    _button->setTextColor(textColor);
+}
 
 QHBoxLayout* UiHelper::makeHBoxLayout()
 {

@@ -7,6 +7,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QApplication>
 #include <QHBoxLayout>
@@ -244,14 +245,9 @@ void PurchaseDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                            DesignSystem::layout().px12(),
                                            DesignSystem::layout().px16());
 
-    for (auto button : {
-             d->giftButton,
-             d->cancelButton,
-             d->purchaseButton,
-         }) {
-        button->setBackgroundColor(DesignSystem::color().accent());
-        button->setTextColor(DesignSystem::color().accent());
-    }
+    UiHelper::initColorsFor(d->giftButton, UiHelper::DialogAccept);
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->purchaseButton, UiHelper::DialogAccept);
 
     contentsLayout()->setSpacing(static_cast<int>(DesignSystem::layout().px8()));
     d->buttonsLayout->setContentsMargins(

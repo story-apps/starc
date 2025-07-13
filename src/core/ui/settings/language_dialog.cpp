@@ -5,6 +5,7 @@
 #include <ui/widgets/label/link_label.h>
 #include <ui/widgets/radio_button/percent_radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -363,18 +364,18 @@ void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    setContentMaximumWidth(Ui::DesignSystem::layout().px(800));
+    setContentMaximumWidth(DesignSystem::layout().px(800));
 
     const auto languages = d->languages();
     for (auto languge : languages) {
-        languge->setBackgroundColor(Ui::DesignSystem::color().background());
-        languge->setTextColor(Ui::DesignSystem::color().onBackground());
+        languge->setBackgroundColor(DesignSystem::color().background());
+        languge->setTextColor(DesignSystem::color().onBackground());
     }
 
-    d->languageHowToAddLink->setContentsMargins(Ui::DesignSystem::label().margins().toMargins());
+    d->languageHowToAddLink->setContentsMargins(DesignSystem::label().margins().toMargins());
     d->languageHowToAddLink->setBackgroundColor(DesignSystem::color().background());
     d->languageHowToAddLink->setTextColor(DesignSystem::color().accent());
-    d->translationProgressLabel->setContentsMargins(0, 0, Ui::DesignSystem::layout().px24(), 0);
+    d->translationProgressLabel->setContentsMargins(0, 0, DesignSystem::layout().px24(), 0);
     d->translationProgressLabel->setBackgroundColor(DesignSystem::color().background());
     d->translationProgressLabel->setTextColor(DesignSystem::color().onBackground());
 
@@ -383,14 +384,17 @@ void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->browseButton,
              d->closeButton,
          }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
+        button->setBackgroundColor(DesignSystem::color().accent());
+        button->setTextColor(DesignSystem::color().accent());
     }
+    UiHelper::initColorsFor(d->improveButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->browseButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->closeButton, UiHelper::DialogAccept);
 
-    contentsLayout()->setSpacing(static_cast<int>(Ui::DesignSystem::layout().px8()));
+    contentsLayout()->setSpacing(static_cast<int>(DesignSystem::layout().px8()));
     d->buttonsLayout->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px16())
+        QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+                  DesignSystem::layout().px16(), DesignSystem::layout().px16())
             .toMargins());
 }
 

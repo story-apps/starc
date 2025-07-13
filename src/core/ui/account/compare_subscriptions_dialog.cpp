@@ -269,7 +269,7 @@ CompareSubscriptionsDialog::CompareSubscriptionsDialog(QWidget* _parent)
     auto buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
-    buttonsLayout->addWidget(d->cancelButton, 1, Qt::AlignCenter);
+    buttonsLayout->addWidget(d->cancelButton, 1, Qt::AlignVCenter | Qt::AlignLeft);
     buttonsLayout->addStretch(1);
     buttonsLayout->addWidget(d->buyPro, 1, Qt::AlignCenter);
     buttonsLayout->addWidget(d->giftPro, 1, Qt::AlignCenter);
@@ -332,6 +332,7 @@ void CompareSubscriptionsDialog::updateTranslations()
     d->giftPro->setText(tr("Buy as a gift"));
     d->buyCloud->setText(tr("Activate"));
     d->giftCloud->setText(tr("Buy as a gift"));
+    d->cancelButton->setText(tr("Cancel"));
 }
 
 void CompareSubscriptionsDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
@@ -388,13 +389,14 @@ void CompareSubscriptionsDialog::designSystemChangeEvent(DesignSystemChangeEvent
              d->buyCloud,
              d->giftCloud,
          }) {
-        button->setBackgroundColor(DesignSystem::color().accent());
-        button->setTextColor(DesignSystem::color().accent());
+        UiHelper::initColorsFor(button, UiHelper::DialogAccept);
         button->setContentsMargins(0, DesignSystem::layout().px12(), 0,
                                    DesignSystem::layout().px12());
     }
-    d->cancelButton->setBackgroundColor(DesignSystem::color().background());
-    d->cancelButton->setTextColor(DesignSystem::color().background());
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
+    d->cancelButton->setContentsMargins(
+        DesignSystem::layout().px12(), DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+        DesignSystem::layout().px12());
 }
 
 } // namespace Ui

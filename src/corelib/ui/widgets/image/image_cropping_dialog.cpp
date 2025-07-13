@@ -7,6 +7,7 @@
 #include <ui/widgets/label/label.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
 
@@ -156,10 +157,8 @@ void ImageCroppingDialog::designSystemChangeEvent(DesignSystemChangeEvent* _even
         button->setBackgroundColor(Ui::DesignSystem::color().background());
         button->setTextColor(Ui::DesignSystem::color().onBackground());
     }
-    for (auto button : { d->cancelButton, d->selectButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
-    }
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->selectButton, UiHelper::DialogAccept);
 
     d->buttonsLayout->setContentsMargins(
         QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),

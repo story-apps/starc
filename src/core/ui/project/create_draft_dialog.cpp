@@ -7,6 +7,7 @@
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QBoxLayout>
 #include <QStringListModel>
@@ -172,10 +173,8 @@ void CreateDraftDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->lockEditingVersion->setTextColor(DesignSystem::color().onBackground());
     d->lockEditingVersion->setBackgroundColor(DesignSystem::color().background());
 
-    for (auto button : { d->cancelButton, d->createButton }) {
-        button->setBackgroundColor(DesignSystem::color().accent());
-        button->setTextColor(DesignSystem::color().accent());
-    }
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->createButton, UiHelper::DialogAccept);
 
     d->buttonsLayout->setContentsMargins(
         QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),

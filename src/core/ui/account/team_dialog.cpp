@@ -173,37 +173,32 @@ void TeamDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     AbstractDialog::designSystemChangeEvent(_event);
 
-    setContentFixedWidth(Ui::DesignSystem::layout().px(800));
+    setContentFixedWidth(DesignSystem::layout().px(800));
 
     for (auto textField : std::vector<TextField*>{
              d->teamName,
              d->teamDescription,
          }) {
-        textField->setTextColor(Ui::DesignSystem::color().onBackground());
-        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
+        textField->setTextColor(DesignSystem::color().onBackground());
+        textField->setBackgroundColor(DesignSystem::color().onBackground());
         textField->setDefaultMarginsEnabled(false);
     }
     d->teamName->setCustomMargins({ 0.0, DesignSystem::card().shadowMargins().top(), 0.0, 0.0 });
 
-    d->teamAvatar->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->teamAvatar->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->teamAvatar->setMaximumWidth(Ui::DesignSystem::layout().px(340));
+    d->teamAvatar->setBackgroundColor(DesignSystem::color().background());
+    d->teamAvatar->setTextColor(DesignSystem::color().onBackground());
+    d->teamAvatar->setMaximumWidth(DesignSystem::layout().px(340));
     d->updateTeamMainPhotoSize();
 
-    for (auto button : {
-             d->cancelButton,
-             d->saveButton,
-         }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
-    }
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->saveButton, UiHelper::DialogAccept);
 
     d->buttonsLayout->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-                  Ui::DesignSystem::layout().px16(), Ui::DesignSystem::layout().px12())
+        QMarginsF(DesignSystem::layout().px12(), DesignSystem::layout().px12(),
+                  DesignSystem::layout().px16(), DesignSystem::layout().px12())
             .toMargins());
-    contentsLayout()->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
-    contentsLayout()->setHorizontalSpacing(Ui::DesignSystem::compactLayout().px16());
+    contentsLayout()->setVerticalSpacing(DesignSystem::compactLayout().px16());
+    contentsLayout()->setHorizontalSpacing(DesignSystem::compactLayout().px16());
     contentsLayout()->setContentsMargins(DesignSystem::layout().px24(), 0,
                                          DesignSystem::layout().px12(), 0);
 }

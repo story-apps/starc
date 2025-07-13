@@ -8,6 +8,7 @@
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/ui_helper.h>
 #include <utils/validators/email_validator.h>
 
 #include <QBoxLayout>
@@ -175,13 +176,8 @@ void PurchaseGiftDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event
                                            DesignSystem::layout().px12(),
                                            DesignSystem::layout().px16());
 
-    for (auto button : {
-             d->cancelButton,
-             d->purchaseButton,
-         }) {
-        button->setBackgroundColor(DesignSystem::color().accent());
-        button->setTextColor(DesignSystem::color().accent());
-    }
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->purchaseButton, UiHelper::DialogAccept);
 
     d->content->layout()->setContentsMargins(DesignSystem::layout().px24(), 0,
                                              DesignSystem::layout().px24(), 0);
