@@ -495,7 +495,8 @@ QWidget* TextFieldItemDelegate::createEditor(QWidget* _parent, const QStyleOptio
     auto editor = new TextField(_parent);
     editor->setBackgroundColor(_parent->palette().text().color());
     editor->setTextColor(_parent->palette().text().color());
-    editor->setDefaultMarginsEnabled(false);
+    editor->setCustomMargins(
+        { Ui::DesignSystem::layout().px24(), 0.0, Ui::DesignSystem::layout().px24(), 0.0 });
     editor->setCapitalizeWords(false);
     editor->setLabel(m_label);
     editor->setPlaceholderText(" ");
