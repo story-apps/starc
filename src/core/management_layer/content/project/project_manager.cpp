@@ -2947,6 +2947,15 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
     connect(&d->documentImageStorage, &DataStorageLayer::DocumentImageStorage::imageRequested, this,
             [this](const QUuid& _uuid) { emit downloadDocumentRequested(_uuid); });
     //
+    // Соединения с хранилищем сырых данных
+    //
+    connect(&d->documentRawDataStorage, &DataStorageLayer::DocumentRawDataStorage::rawDataAdded,
+            this, [this](const QUuid& _uuid) { emit uploadDocumentRequested(_uuid, true); });
+    connect(&d->documentRawDataStorage, &DataStorageLayer::DocumentRawDataStorage::rawDataUpdated,
+            this, [this](const QUuid& _uuid) { emit uploadDocumentRequested(_uuid, false); });
+    connect(&d->documentRawDataStorage, &DataStorageLayer::DocumentRawDataStorage::rawDataRequested,
+            this, [this](const QUuid& _uuid) { emit downloadDocumentRequested(_uuid); });
+    //
     // Соединения со список соавторов
     //
     connect(d->collaboratorsToolBar, &Ui::CollaboratorsToolBar::collaboratorClicked, this,
@@ -3889,6 +3898,14 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
     }
 
     //
+    // Сырые данные обрабатываем строго через отдельное хранилище
+    //
+    case Domain::DocumentObjectType::BinaryData: {
+        d->documentRawDataStorage.save(_documentInfo.uuid, _documentInfo.content);
+        return;
+    }
+
+    //
     // Модели для документов, которые могут быть только в единственном экземпляре, достаём по
     // типу и применяем к ним помимо содержимого также и идентификатор с облака
     //
@@ -4137,6 +4154,13 @@ void ProjectManager::applyDocumentChanges(const Domain::DocumentInfo& _documentI
     //
     if (documentType == Domain::DocumentObjectType::ImageData) {
         d->documentImageStorage.save(_documentInfo.uuid, _documentInfo.content);
+        return;
+    }
+    //
+    // Если прилетело обновление данных, сохраним его
+    //
+    else if (documentType == Domain::DocumentObjectType::BinaryData) {
+        d->documentRawDataStorage.save(_documentInfo.uuid, _documentInfo.content);
         return;
     }
 

@@ -57,6 +57,7 @@ protected:
      * @brief Реализация модели для работы с документами
      */
     /** @{ */
+    void initRawDataWrapper() override;
     void initDocument() override;
     void clearDocument() override;
     QByteArray toXml() const override;

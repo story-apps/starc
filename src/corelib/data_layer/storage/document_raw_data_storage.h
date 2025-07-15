@@ -29,6 +29,11 @@ public:
     QUuid save(const QByteArray& _data) override;
 
     /**
+     * @brief Сохранить данные к существующему гуиду, полученное из внешнего сервиса
+     */
+    void save(const QUuid& _uuid, const QByteArray& _data) override;
+
+    /**
      * @brief Удалить данные
      */
     void remove(const QUuid& _uuid) override;

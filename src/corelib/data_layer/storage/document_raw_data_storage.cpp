@@ -11,10 +11,20 @@ namespace DataStorageLayer {
 class DocumentRawDataStorage::Implementation
 {
 public:
+    explicit Implementation(DocumentRawDataStorage* _q);
+
+    /**
+     * @brief Запросить изображение
+     */
+    void notifyRawDataRequested(const QUuid& _uuid) const;
+
+
+    DocumentRawDataStorage* q = nullptr;
+
     /**
      * @brief Список новых документов
      */
-    QHash<QUuid, QByteArray> newDocumetns;
+    QHash<QUuid, QByteArray> newDocuments;
 
     /**
      * @brief Список документов на удаление
@@ -22,13 +32,24 @@ public:
     QList<QUuid> documentsToRemove;
 };
 
+DocumentRawDataStorage::Implementation::Implementation(DocumentRawDataStorage* _q)
+    : q(_q)
+{
+}
+
+void DocumentRawDataStorage::Implementation::notifyRawDataRequested(const QUuid& _uuid) const
+{
+    QMetaObject::invokeMethod(
+        q, [this, _uuid] { emit q->rawDataRequested(_uuid); }, Qt::QueuedConnection);
+}
+
 
 // ****
 
 
 DocumentRawDataStorage::DocumentRawDataStorage(QObject* _parent)
     : AbstractRawDataWrapper(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
 }
 
@@ -40,7 +61,7 @@ QByteArray DocumentRawDataStorage::load(const QUuid& _uuid) const
         return {};
     }
 
-    if (auto documentIter = d->newDocumetns.find(_uuid); documentIter != d->newDocumetns.end()) {
+    if (auto documentIter = d->newDocuments.find(_uuid); documentIter != d->newDocuments.end()) {
         return documentIter.value();
     }
 
@@ -48,11 +69,18 @@ QByteArray DocumentRawDataStorage::load(const QUuid& _uuid) const
     // Загружаем документ
     //
     auto rawDataDocument = StorageFacade::documentStorage()->document(_uuid);
-    Q_ASSERT(rawDataDocument->type() == Domain::DocumentObjectType::BinaryData);
-
+    //
+    // ... подписываемся на его обновления (и загружаем, если не был ещё загружен из облака)
+    //
+    d->notifyRawDataRequested(_uuid);
+    //
+    // ... если изображения пока нет в базе, то прерываем выполнение
+    //
     if (rawDataDocument == nullptr) {
         return {};
     }
+
+    Q_ASSERT(rawDataDocument->type() == Domain::DocumentObjectType::BinaryData);
 
     return rawDataDocument->content();
 }
@@ -67,15 +95,50 @@ QUuid DocumentRawDataStorage::save(const QByteArray& _data)
     // Сохраним данные во временный буфер
     //
     const QUuid uuid = QUuid::createUuid();
-    d->newDocumetns.insert(uuid, _data);
+    d->newDocuments.insert(uuid, _data);
     //
     // ... положим в хранилище
     //
     auto document = StorageFacade::documentStorage()->createDocument(
         uuid, Domain::DocumentObjectType::BinaryData);
     document->setContent(_data);
+    //
+    // ... уведомляем о добавленных данных
+    //
+    emit rawDataAdded(uuid);
 
     return uuid;
+}
+
+void DocumentRawDataStorage::save(const QUuid& _uuid, const QByteArray& _data)
+{
+    if (_uuid.isNull()) {
+        return;
+    }
+
+    //
+    // Сохраним изображение во временный буфер
+    //
+    d->newDocuments.insert(_uuid, _data);
+    //
+    // ... положим в хранилище, если ещё не был сохранён
+    //
+    auto document = StorageFacade::documentStorage()->document(_uuid);
+    if (document == nullptr) {
+        document = StorageFacade::documentStorage()->createDocument(
+            _uuid, Domain::DocumentObjectType::BinaryData);
+    }
+    //
+    // ... а если был, проверим, нужно ли его обновлять
+    //
+    else if (document->content() == _data) {
+        return;
+    }
+    document->setContent(_data);
+    //
+    // ... уведомляем об обновлении изображения
+    //
+    emit rawDataUpdated(_uuid, _data);
 }
 
 void DocumentRawDataStorage::remove(const QUuid& _uuid)
@@ -84,24 +147,25 @@ void DocumentRawDataStorage::remove(const QUuid& _uuid)
     // Если документ новый, просто удаляем его из списка новых, иначе добавляем в список на
     // удаление из БД
     //
-    if (!d->newDocumetns.remove(_uuid)) {
+    if (!d->newDocuments.remove(_uuid)) {
         d->documentsToRemove.append(_uuid);
     }
+    emit rawDataRemoved(_uuid);
 }
 
 void DocumentRawDataStorage::clear()
 {
-    d->newDocumetns.clear();
+    d->newDocuments.clear();
     d->documentsToRemove.clear();
 }
 
 void DocumentRawDataStorage::saveChanges()
 {
-    for (auto documentIter = d->newDocumetns.begin(); documentIter != d->newDocumetns.end();
+    for (auto documentIter = d->newDocuments.begin(); documentIter != d->newDocuments.end();
          ++documentIter) {
         StorageFacade::documentStorage()->saveDocument(documentIter.key());
     }
-    d->newDocumetns.clear();
+    d->newDocuments.clear();
 
     while (!d->documentsToRemove.isEmpty()) {
         StorageFacade::documentStorage()->removeDocument(

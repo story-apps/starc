@@ -196,6 +196,18 @@ QUuid PresentationModel::loadImages(int _from, int _amount)
     return queryUuid;
 }
 
+void PresentationModel::initRawDataWrapper()
+{
+    connect(rawDataWrapper(), &AbstractRawDataWrapper::rawDataUpdated, this,
+            [this](const QUuid& _uuid, const QByteArray& _data) {
+                if (d->imagesArchiveUuid == _uuid) {
+                    d->imagesArchive = _data;
+
+                    updateDocumentContent();
+                }
+            });
+}
+
 void PresentationModel::initDocument()
 {
     if (document() == nullptr) {
