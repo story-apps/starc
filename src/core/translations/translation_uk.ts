@@ -4,7 +4,7 @@
 <context>
     <name>AppBar</name>
     <message>
-        <location filename="../../corelib/ui/widgets/app_bar/app_bar.cpp" line="390"/>
+        <location filename="../../corelib/ui/widgets/app_bar/app_bar.cpp" line="413"/>
         <source>Show module options</source>
         <translation>Показати параметри модуля</translation>
     </message>
@@ -12,59 +12,64 @@
 <context>
     <name>BaseTextEdit</name>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="438"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="485"/>
         <source>Formatting</source>
         <translation>Форматування</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="442"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="489"/>
         <source>Bold</source>
         <translation>Жирний</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="448"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="495"/>
         <source>Italic</source>
         <translation>Курсив</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="454"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="501"/>
         <source>Underline</source>
         <translation>Підкреслений</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="460"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="507"/>
         <source>Strikethrough</source>
         <translation>Закреслений</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="468"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="515"/>
         <source>Align left</source>
         <translation>Вирівняти за лівим краєм</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="474"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="522"/>
         <source>Align center</source>
         <translation>Вирівняти по центру</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="480"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="529"/>
         <source>Align right</source>
         <translation>Вирівняти за правим краєм</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="486"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="536"/>
         <source>Align justify</source>
         <translation>Вирівняти за шириною</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="493"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="544"/>
         <source>Make uppercase</source>
         <translation>Великими літерами</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="499"/>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="550"/>
         <source>Make lowercase</source>
         <translation>Малими літерами</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/widgets/text_edit/base/base_text_edit.cpp" line="568"/>
+        <source>Paste as plain text</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -294,52 +299,52 @@
 <context>
     <name>BusinessLayer::AudioplayCastReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_cast_report.cpp" line="290"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_cast_report.cpp" line="295"/>
         <source>Character name</source>
         <translation>Ім&apos;я персонажа</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_cast_report.cpp" line="294"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_cast_report.cpp" line="299"/>
         <source>Total words</source>
         <translation>Всього слів</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_cast_report.cpp" line="298"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_cast_report.cpp" line="303"/>
         <source>Total dialogues</source>
         <translation>Всього реплік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_cast_report.cpp" line="302"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_cast_report.cpp" line="307"/>
         <source>Total scenes</source>
         <translation>Всього сцен</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_cast_report.cpp" line="348"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_cast_report.cpp" line="353"/>
         <source>Cast report</source>
         <translation>Звіт по касту</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="352"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="357"/>
         <source>Dialogue report</source>
         <translation>Список реплік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="405"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="410"/>
         <source>Gender analysis report</source>
         <translation>Гендерний аналіз</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="417"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="422"/>
         <source>Bechdel test</source>
         <translation>Тест Бекдел</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="421"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="426"/>
         <source>Reverse Bechdel test</source>
         <translation>Реверсивний тест Бекдел</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="411"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="427"/>
         <source>Scene report</source>
         <translation>Звіт по сценам</translation>
     </message>
@@ -355,32 +360,32 @@
 <context>
     <name>BusinessLayer::AudioplayDialoguesReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="289"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="294"/>
         <source>Scene/character</source>
         <translation>Сцена/персонаж</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="293"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="298"/>
         <source>Dialogue</source>
         <translation>Репліка</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="297"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="302"/>
         <source>Number</source>
         <translation>Номер</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="462"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="467"/>
         <source>Scene number</source>
         <translation>Номер сцени</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="464"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="469"/>
         <source>Scene heading</source>
         <translation>Сетинг сцени</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="467"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_dialogues_report.cpp" line="472"/>
         <source>Dialogue number</source>
         <translation>Номер репліки</translation>
     </message>
@@ -388,49 +393,49 @@
 <context>
     <name>BusinessLayer::AudioplayGenderReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="252"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="283"/>
         <source>Male</source>
         <translation>Чоловік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="253"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="284"/>
         <source>Female</source>
         <translation>Жінка</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="254"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="285"/>
         <source>Other</source>
         <translation>Інше</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="255"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="286"/>
         <source>Undefined</source>
         <translation>Невизнечено</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="267"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="298"/>
         <source>Gender</source>
         <translation>Стать</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="271"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="302"/>
         <source>Occurrences</source>
         <translation>Кількість рядків</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="275"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="306"/>
         <source>Percents</source>
         <translation>Відсотків</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="412"/>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="577"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="417"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="582"/>
         <source>Does not pass</source>
         <translation>Не проходить</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="413"/>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="578"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="418"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="583"/>
         <source>Passed %n time(s)</source>
         <translation>
             <numerusform>Проходить %n раз</numerusform>
@@ -439,32 +444,32 @@
         </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="573"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="578"/>
         <source>Gender analysis</source>
         <translation>Гендерний аналіз</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="583"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="588"/>
         <source>Bechdel test</source>
         <translation>Тест Бекдел</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="588"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="593"/>
         <source>Reverse Bechdel test</source>
         <translation>Реверсивний тест Бекдел</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="596"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="601"/>
         <source>Characters statistics</source>
         <translation>Статистика персонажів</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="614"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="619"/>
         <source>Dialogues statistics</source>
         <translation>Статистика реплік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="632"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_gender_report.cpp" line="637"/>
         <source>Scenes statistics</source>
         <translation>Статистика сцен</translation>
     </message>
@@ -472,32 +477,32 @@
 <context>
     <name>BusinessLayer::AudioplayLocationReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="313"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="329"/>
         <source>SCENE TIME NOT SET</source>
         <translation>ЧАС СЦЕНИ НЕ ВСТАНОВЛЕНО</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="348"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="364"/>
         <source>Location/scene</source>
         <translation>Локація/сцена</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="352"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="368"/>
         <source>Number</source>
         <translation>Номер</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="356"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="372"/>
         <source>Page</source>
         <translation>Сторінка</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="360"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="376"/>
         <source>Scenes</source>
         <translation>Сцени</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="364"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_location_report.cpp" line="380"/>
         <source>Duration</source>
         <translation>Тривалість</translation>
     </message>
@@ -505,32 +510,32 @@
 <context>
     <name>BusinessLayer::AudioplaySceneReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_scene_report.cpp" line="335"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_scene_report.cpp" line="351"/>
         <source>Scene/characters</source>
         <translation>Сцена/персонажі</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_scene_report.cpp" line="339"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_scene_report.cpp" line="355"/>
         <source>Number</source>
         <translation>Номер</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_scene_report.cpp" line="343"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_scene_report.cpp" line="359"/>
         <source>Page</source>
         <translation>Сторінка</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_scene_report.cpp" line="347"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_scene_report.cpp" line="363"/>
         <source>Characters</source>
         <translation>Персонажі</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_scene_report.cpp" line="351"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_scene_report.cpp" line="367"/>
         <source>Duration</source>
         <translation>Тривалість</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_scene_report.cpp" line="398"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_scene_report.cpp" line="414"/>
         <source>Scene report</source>
         <translation>Звіт по сценам</translation>
     </message>
@@ -587,50 +592,50 @@
 <context>
     <name>BusinessLayer::AudioplaySummaryReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="215"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="220"/>
         <source>Paragraph</source>
         <translation>Тип рядка</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="219"/>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="366"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="224"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="371"/>
         <source>Words</source>
         <translation>Слів</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="223"/>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="283"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="228"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="288"/>
         <source>Occurrences</source>
         <translation>Кількість рядків</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="227"/>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="287"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="232"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="292"/>
         <source>Percents</source>
         <translation>Відсотків</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="279"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="284"/>
         <source>Character type</source>
         <translation>Тип персонажу</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="355"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="360"/>
         <source>Summary report</source>
         <translation>Підсумковий звіт</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="360"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="365"/>
         <source>Duration</source>
         <translation>Тривалість</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="363"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="368"/>
         <source>Pages</source>
         <translation>Сторінок</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="370"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="375"/>
         <source>Characters with/without spaces</source>
         <translation>Символів з/без пробілів</translation>
     </message>
@@ -1159,22 +1164,22 @@
 <context>
     <name>BusinessLayer::ComicBookSummaryReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="211"/>
+        <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="216"/>
         <source>Paragraph</source>
         <translation>Тип рядка</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="215"/>
+        <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="220"/>
         <source>Words</source>
         <translation>Слів</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="219"/>
+        <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="224"/>
         <source>Occurrences</source>
         <translation>Кількість рядків</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="223"/>
+        <location filename="../../corelib/business_layer/reports/comic_book/comic_book_summary_report.cpp" line="228"/>
         <source>Percents</source>
         <translation>Відсотків</translation>
     </message>
@@ -1380,22 +1385,22 @@
 <context>
     <name>BusinessLayer::NovelSummaryReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/novel/novel_summary_report.cpp" line="206"/>
+        <location filename="../../corelib/business_layer/reports/novel/novel_summary_report.cpp" line="211"/>
         <source>Paragraph</source>
         <translation>Рядок</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/novel/novel_summary_report.cpp" line="210"/>
+        <location filename="../../corelib/business_layer/reports/novel/novel_summary_report.cpp" line="215"/>
         <source>Words</source>
         <translation>Слів</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/novel/novel_summary_report.cpp" line="214"/>
+        <location filename="../../corelib/business_layer/reports/novel/novel_summary_report.cpp" line="219"/>
         <source>Occurrences</source>
         <translation>Кількість рядків</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/novel/novel_summary_report.cpp" line="218"/>
+        <location filename="../../corelib/business_layer/reports/novel/novel_summary_report.cpp" line="223"/>
         <source>Percents</source>
         <translation>Відсотків</translation>
     </message>
@@ -1427,65 +1432,65 @@
 <context>
     <name>BusinessLayer::ScreenplayCastReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="355"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="364"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="366"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="369"/>
         <source>Character name</source>
         <translation>Ім&apos;я персонажа</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="359"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="368"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="370"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="373"/>
         <source>Total words</source>
         <translation>Всього слів</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="363"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="372"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="374"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="377"/>
         <source>Total dialogues</source>
         <translation>Всього реплік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="367"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="376"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="378"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="381"/>
         <source>Speaking scenes</source>
         <translation>Сцени з репліками</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="371"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="380"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="382"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="385"/>
         <source>Nonspeaking scenes</source>
         <translation>Сцени без реплік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="375"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="384"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="386"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="389"/>
         <source>Total scenes</source>
         <translation>Всього сцен</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="431"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="440"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_cast_report.cpp" line="442"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_cast_report.cpp" line="445"/>
         <source>Cast report</source>
         <translation>Звіт по касту</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="453"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="458"/>
         <source>Gender analysis report</source>
         <translation>Гендерний аналіз</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="465"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="470"/>
         <source>Bechdel test</source>
         <translation>Тест Бекдел</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="469"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="474"/>
         <source>Reverse Bechdel test</source>
         <translation>Реверсивний тест Бекдел</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="413"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="437"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="429"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="456"/>
         <source>Scene report</source>
         <translation>Звіт по сценам</translation>
     </message>
@@ -1501,50 +1506,50 @@
 <context>
     <name>BusinessLayer::ScreenplayDialoguesReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="292"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="317"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="297"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="322"/>
         <source>Scene/character</source>
         <translation>Сцена/персонаж</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="296"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="321"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="301"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="326"/>
         <source>Dialogue/lyrics</source>
         <translation>Репліка/вірш</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="300"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="325"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="305"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="330"/>
         <source>Parenthetical</source>
         <translation>Ремарка</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="304"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="329"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="309"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="334"/>
         <source>Extension</source>
         <translation>Стан</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="359"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="384"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="364"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="389"/>
         <source>Dialogue report</source>
         <translation>Список реплік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="471"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="496"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="476"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="501"/>
         <source>Scene number</source>
         <translation>Номер сцени</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="474"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="499"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="479"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="504"/>
         <source>Scene heading</source>
         <translation>Сетинг сцени</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="477"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="502"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_dialogues_report.cpp" line="482"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_dialogues_report.cpp" line="507"/>
         <source>Dialogue number</source>
         <translation>Номер репліки</translation>
     </message>
@@ -1795,54 +1800,54 @@
 <context>
     <name>BusinessLayer::ScreenplayGenderReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="299"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="330"/>
         <source>Male</source>
         <translation>Чоловік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="300"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="331"/>
         <source>Female</source>
         <translation>Жінка</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="301"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="332"/>
         <source>Other</source>
         <translation>Інше</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="303"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="334"/>
         <source>Undefined</source>
         <translation>Невизнечено</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="315"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="346"/>
         <source>Gender</source>
         <translation>Стать</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="319"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="350"/>
         <source>Occurrences</source>
         <translation>Кількість рядків</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="323"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="354"/>
         <source>Percents</source>
         <translation>Відсотків</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="621"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="626"/>
         <source>Gender analysis</source>
         <translation>Гендерний аналіз</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="460"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="625"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="465"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="630"/>
         <source>Does not pass</source>
         <translation>Не проходить</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="461"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="626"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="466"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="631"/>
         <source>Passed %n time(s)</source>
         <translation>
             <numerusform>Проходить %n раз</numerusform>
@@ -1851,27 +1856,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="631"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="636"/>
         <source>Bechdel test</source>
         <translation>Тест Бекдел</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="636"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="641"/>
         <source>Reverse Bechdel test</source>
         <translation>Реверсивний тест Бекдел</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="644"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="649"/>
         <source>Characters statistics</source>
         <translation>Статистика персонажів</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="662"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="667"/>
         <source>Dialogues statistics</source>
         <translation>Статистика реплік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="680"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_gender_report.cpp" line="685"/>
         <source>Scenes statistics</source>
         <translation>Статистика сцен</translation>
     </message>
@@ -1879,38 +1884,38 @@
 <context>
     <name>BusinessLayer::ScreenplayLocationReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="315"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="339"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="331"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="358"/>
         <source>NOT SET</source>
         <translation>НЕ ЗАДАНО</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="350"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="374"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="366"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="393"/>
         <source>Location/scene</source>
         <translation>Локація/сцена</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="354"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="378"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="370"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="397"/>
         <source>Number</source>
         <translation>Номер</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="358"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="382"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="374"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="401"/>
         <source>Page</source>
         <translation>Сторінка</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="362"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="386"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="378"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="405"/>
         <source>Scenes</source>
         <translation>Сцени</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="366"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="390"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_location_report.cpp" line="382"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_location_report.cpp" line="409"/>
         <source>Duration</source>
         <translation>Тривалість</translation>
     </message>
@@ -1918,38 +1923,38 @@
 <context>
     <name>BusinessLayer::ScreenplaySceneReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="349"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp" line="381"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="365"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp" line="399"/>
         <source>Scene/characters</source>
         <translation>Сцена/персонажі</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="353"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp" line="385"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="369"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp" line="403"/>
         <source>Number</source>
         <translation>Номер</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="357"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp" line="389"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="373"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp" line="407"/>
         <source>Page</source>
         <translation>Сторінка</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="361"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp" line="393"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="377"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp" line="411"/>
         <source>Characters</source>
         <translation>Персонажі</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="365"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp" line="397"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="381"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp" line="415"/>
         <source>Duration</source>
         <translation>Тривалість</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="412"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp" line="444"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_scene_report.cpp" line="428"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_scene_report.cpp" line="462"/>
         <source>Scene report</source>
         <translation>Звіт по сценам</translation>
     </message>
@@ -2022,127 +2027,127 @@
 <context>
     <name>BusinessLayer::ScreenplaySummaryReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="272"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="286"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="277"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="291"/>
         <source>Paragraph</source>
         <translation>Тип рядка</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="498"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="276"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="559"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="768"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="290"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="574"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="783"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="503"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="281"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="564"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="773"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="295"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="579"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="788"/>
         <source>Words</source>
         <translation>Кількість слів</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="280"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="341"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="402"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="466"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="294"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="355"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="416"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="480"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="285"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="346"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="407"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="471"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="299"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="360"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="421"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="485"/>
         <source>Occurrences</source>
         <translation>Кількість рядків</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="284"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="345"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="406"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="470"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="298"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="359"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="420"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="484"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="289"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="350"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="411"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="475"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="303"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="364"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="425"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="489"/>
         <source>Percents</source>
         <translation>Відсотки</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="337"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="351"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="342"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="356"/>
         <source>Scene time</source>
         <translation>Режим сцени</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="398"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="412"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="403"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="417"/>
         <source>Scene intro</source>
         <translation>Місце дії</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="462"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="476"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="467"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="481"/>
         <source>Character type</source>
         <translation>Тип персонажу</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="548"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="563"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="553"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="568"/>
         <source>Summary report</source>
         <translation>Підсумковий звіт</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="484"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="754"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="769"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="489"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="759"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="774"/>
         <source>Summary statistics</source>
         <translation>Зведена статистика</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="488"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="553"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="758"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="568"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="773"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="493"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="558"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="763"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="573"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="778"/>
         <source>Duration</source>
         <translation>Тривалість</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="493"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="556"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="763"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="571"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="778"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="498"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="561"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="768"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="576"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="783"/>
         <source>Pages</source>
         <translation>Сторінок</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="503"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="563"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="773"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="578"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="788"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="508"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="568"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="778"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="583"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="793"/>
         <source>Characters with/without spaces</source>
         <translation>Символів з/без пробілів</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="514"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="784"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="799"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="519"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="789"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="804"/>
         <source>Text statistics</source>
         <translation>Статистика тексту</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="801"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="816"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="806"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="821"/>
         <source>Scenes statistics</source>
         <translation>Статистика сцен</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="817"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="832"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="822"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="837"/>
         <source>Locations statistics</source>
         <translation>Статистика локацій</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="530"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="834"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="849"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="535"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="839"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="854"/>
         <source>Characters statistics</source>
         <translation>Статистика персонажів</translation>
     </message>
@@ -2225,29 +2230,29 @@
 <context>
     <name>BusinessLayer::StageplaySummaryReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="240"/>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="245"/>
         <source>Paragraph</source>
         <translation>Рядок</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="244"/>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="249"/>
         <source>Words</source>
         <translation>Слів</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="248"/>
-        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="311"/>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="253"/>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="316"/>
         <source>Occurrences</source>
         <translation>Кількість рядків</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="252"/>
-        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="315"/>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="257"/>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="320"/>
         <source>Percents</source>
         <translation>Відсотків</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="307"/>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="312"/>
         <source>Character type</source>
         <translation>Тип персонажу</translation>
     </message>
@@ -2480,9 +2485,288 @@
     </message>
 </context>
 <context>
+    <name>BusinessLayer::WorldExporter</name>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="228"/>
+        <source>One sentence description</source>
+        <translation>Опис одним реченням</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="232"/>
+        <source>Long description</source>
+        <translation>Повний опис </translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="262"/>
+        <source>World description</source>
+        <translation>Світоустрій</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="263"/>
+        <source>Overview</source>
+        <translation>Огляд</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="264"/>
+        <source>Earth like?</source>
+        <translation>Схожий на Землю?</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="265"/>
+        <source>World history</source>
+        <translation>Історія світу</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="266"/>
+        <source>World mood</source>
+        <translation>Настрій світу</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="270"/>
+        <source>Nature</source>
+        <translation>Довкілля світу</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="271"/>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="319"/>
+        <source>Basic info</source>
+        <translation>Основна інформація</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="272"/>
+        <source>Biology</source>
+        <translation>Біологія</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="273"/>
+        <source>Physics</source>
+        <translation>Фізика</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="274"/>
+        <source>Astronomy</source>
+        <translation>Астрономія</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="275"/>
+        <source>Geography</source>
+        <translation>Географія</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="276"/>
+        <source>Races</source>
+        <translation>Раси</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="277"/>
+        <source>Flora</source>
+        <translation>Рослини</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="278"/>
+        <source>Animals</source>
+        <translation>Тварини</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="279"/>
+        <source>Natural resources</source>
+        <translation>Природні ресурси та екологія</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="280"/>
+        <source>Climate</source>
+        <translation>Клімат</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="283"/>
+        <source>Culture</source>
+        <translation>Культура</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="284"/>
+        <source>Religions and beliefs</source>
+        <translation>Релігії та вірування</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="285"/>
+        <source>Ethics and values</source>
+        <translation>Етичні норми та цінності</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="286"/>
+        <source>Languages</source>
+        <translation>Мови</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="287"/>
+        <source>Class/caste system</source>
+        <translation>Класова/кастова система</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="290"/>
+        <source>System info</source>
+        <translation>Про систему</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="291"/>
+        <source>Technology</source>
+        <translation>Технології</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="292"/>
+        <source>Economy</source>
+        <translation>Економіка</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="293"/>
+        <source>Trade</source>
+        <translation>Торгівля</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="294"/>
+        <source>Business</source>
+        <translation>Ділова активність</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="295"/>
+        <source>Industry</source>
+        <translation>Промисловість</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="296"/>
+        <source>Currency</source>
+        <translation>Валюти</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="297"/>
+        <source>Education</source>
+        <translation>Освіта</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="298"/>
+        <source>Communication method</source>
+        <translation>Спосіб спілкування</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="299"/>
+        <source>Art</source>
+        <translation>Мистецтво</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="300"/>
+        <source>Entertainment</source>
+        <translation>Розваги</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="301"/>
+        <source>Travel</source>
+        <translation>Подорожі</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="302"/>
+        <source>Science</source>
+        <translation>Наука</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="305"/>
+        <source>Politics</source>
+        <translation>Політична система</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="306"/>
+        <source>Government format</source>
+        <translation>Формат уряду</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="307"/>
+        <source>Government history</source>
+        <translation>Історія уряду</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="308"/>
+        <source>Laws and justice system</source>
+        <translation>Закони та судова система</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="309"/>
+        <source>Foreign relations</source>
+        <translation>Зовнішні зв&apos;язки</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="310"/>
+        <source>People perception of government</source>
+        <translation>Ставлення населення до уряду</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="311"/>
+        <source>Propaganda</source>
+        <translation>Пропаганда</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="312"/>
+        <source>Anti-government organisations</source>
+        <translation>Антиурядові організації</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="313"/>
+        <source>Past war</source>
+        <translation>Війни минулого</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="314"/>
+        <source>Current war</source>
+        <translation>Поточні війни</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="315"/>
+        <source>Potential war</source>
+        <translation>Потенційні війни</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="318"/>
+        <source>Magic</source>
+        <translation>Магія</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="320"/>
+        <source>Magic rule</source>
+        <translation>Правила магії</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="321"/>
+        <source>Who can use</source>
+        <translation>Хто може користуватися</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="322"/>
+        <source>Effect to world</source>
+        <translation>Вплив на світ</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="323"/>
+        <source>Effect to society</source>
+        <translation>Вплив на суспільство</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="324"/>
+        <source>Effect to technology</source>
+        <translation>Вплив на технології</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="325"/>
+        <source>Magic types</source>
+        <translation>Різновиди магії</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/business_layer/export/worlds/world_exporter.cpp" line="329"/>
+        <source>Additional photos</source>
+        <translation>Додаткові фотографії</translation>
+    </message>
+</context>
+<context>
     <name>BusinessLayer::WorldsModel</name>
     <message>
-        <location filename="../../corelib/business_layer/model/worlds/worlds_model.cpp" line="180"/>
+        <location filename="../../corelib/business_layer/model/worlds/worlds_model.cpp" line="189"/>
         <source>New group</source>
         <translation>Нова група</translation>
     </message>
@@ -2490,12 +2774,12 @@
 <context>
     <name>BusinessLogic::AudioplaySummaryReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="270"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="275"/>
         <source>More than 10 dialogues</source>
         <translation>Більш ніж 10 реплік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="273"/>
+        <location filename="../../corelib/business_layer/reports/audioplay/audioplay_summary_report.cpp" line="278"/>
         <source>About 10 dialogues</source>
         <translation>Не більше 10 реплік</translation>
     </message>
@@ -2503,28 +2787,28 @@
 <context>
     <name>BusinessLogic::ScreenplaySummaryReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="323"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="384"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="337"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="398"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="328"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="389"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="342"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="403"/>
         <source>[UNDEFINED]</source>
         <translation>[НЕ ВИЗНАЧЕНО]</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="449"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="463"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="454"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="468"/>
         <source>More than 10 dialogues</source>
         <translation>Більш ніж 10 реплік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="453"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="467"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="458"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="472"/>
         <source>About 10 dialogues</source>
         <translation>Не більше 10 реплік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="457"/>
-        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="471"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/screenplay_summary_report.cpp" line="462"/>
+        <location filename="../../corelib/business_layer/reports/screenplay/series/screenplay_series_summary_report.cpp" line="476"/>
         <source>Nonspeaking</source>
         <translation>Без реплік</translation>
     </message>
@@ -2552,17 +2836,17 @@
 <context>
     <name>BusinessLogic::StageplaySummaryReport</name>
     <message>
-        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="295"/>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="300"/>
         <source>More than 10 dialogues</source>
         <translation>Більш ніж 10 реплік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="298"/>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="303"/>
         <source>About 10 dialogues</source>
         <translation>Менше 10 реплік</translation>
     </message>
     <message>
-        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="302"/>
+        <location filename="../../corelib/business_layer/reports/stageplay/stageplay_summary_report.cpp" line="307"/>
         <source>Nonspeaking</source>
         <translation>Без реплік</translation>
     </message>
@@ -2863,47 +3147,47 @@
 <context>
     <name>ImageCard</name>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="147"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="148"/>
         <source>Choose image</source>
         <translation>Обрати зображення</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="148"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="149"/>
         <source>Images</source>
         <translation>Зображення</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="237"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="238"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="238"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="239"/>
         <source>Yes, delete</source>
         <translation>Так, видалити</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="376"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="377"/>
         <source>Delete image</source>
         <translation>Видалити зображення</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="619"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="620"/>
         <source>Select file</source>
         <translation>Вибрати файл</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="622"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="623"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="621"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="622"/>
         <source>Paste</source>
         <translation>Вставити</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="620"/>
+        <location filename="../../corelib/ui/widgets/image/image_card.cpp" line="621"/>
         <source>Copy</source>
         <translation>Скопіювати</translation>
     </message>
@@ -2911,22 +3195,22 @@
 <context>
     <name>ImageCroppingDialog</name>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="126"/>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="127"/>
         <source>Rotate image anticlockwise</source>
         <translation>Повернути зображення проти годинникової стрілки</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="127"/>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="128"/>
         <source>Rotate image clockwise</source>
         <translation>Повернути зображення за годинниковою стрілкою</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="128"/>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="129"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="129"/>
+        <location filename="../../corelib/ui/widgets/image/image_cropping_dialog.cpp" line="130"/>
         <source>Select</source>
         <translation>Вибрати</translation>
     </message>
@@ -2935,14 +3219,14 @@
     <name>KeyProcessingLayer::FolderFooterHandler</name>
     <message>
         <location filename="../../corelib/business_layer/export/abstract_exporter.cpp" line="116"/>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1122"/>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1063"/>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="946"/>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1232"/>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1114"/>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="900"/>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1166"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1240"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1214"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1155"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1040"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1325"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1206"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="992"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1259"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1332"/>
         <source>End of</source>
         <translation>Кінець</translation>
     </message>
@@ -3062,192 +3346,192 @@
 <context>
     <name>ManagementLayer::ApplicationManager</name>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="740"/>
+        <location filename="../management_layer/application_manager.cpp" line="744"/>
         <source>Please update to the latest version if you want to use the Cloud.</source>
         <translation>Будь ласка, оновіть застосунок до останньої версії, якщо хочете використовувати хмару.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="741"/>
+        <location filename="../management_layer/application_manager.cpp" line="745"/>
         <source>Nope, I’m fine without Cloud</source>
         <translation>Ні, мені чудово і без хмари</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="742"/>
+        <location filename="../management_layer/application_manager.cpp" line="746"/>
         <source>Update</source>
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="760"/>
+        <location filename="../management_layer/application_manager.cpp" line="764"/>
         <source>The last version is downloading</source>
         <translation>Завантажується остання версія</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1241"/>
+        <location filename="../management_layer/application_manager.cpp" line="1245"/>
         <source>in cloud</source>
         <translation>в хмарі</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1242"/>
+        <location filename="../management_layer/application_manager.cpp" line="1246"/>
         <source>Read only</source>
         <translation>Лише для читання</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1252"/>
+        <location filename="../management_layer/application_manager.cpp" line="1256"/>
         <source> - changed</source>
         <translation>- змінено</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1310"/>
-        <location filename="../management_layer/application_manager.cpp" line="1329"/>
-        <location filename="../management_layer/application_manager.cpp" line="1536"/>
+        <location filename="../management_layer/application_manager.cpp" line="1314"/>
+        <location filename="../management_layer/application_manager.cpp" line="1333"/>
+        <location filename="../management_layer/application_manager.cpp" line="1540"/>
         <source>Saving error</source>
         <translation>Помилка зберігання</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1311"/>
+        <location filename="../management_layer/application_manager.cpp" line="1315"/>
         <source>Changes can&apos;t be written. There is an internal database error: &quot;%1&quot; Please check, if your file exists and if you have permission to write.</source>
         <translation>Неможливо зберегти зміни. Внутрішня помилка бази даних: &quot;%1&quot;. Будь ласка, перевірте, чи існує Ваш файл і чи є у Вас дозвіл на запис.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1330"/>
+        <location filename="../management_layer/application_manager.cpp" line="1334"/>
         <source>Changes can&apos;t be written because the story located at &quot;%1&quot; doesn&apos;t exist. Please move the file back and retry saving.</source>
         <translation>Неможливо зберегти зміни, оскільки твір не знаходиться у &quot;%1&quot;. Будь ласка, поверніть туди файл і повторіть збереження.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1412"/>
+        <location filename="../management_layer/application_manager.cpp" line="1416"/>
         <source>Project was modified. Save changes?</source>
         <translation>Проєкт було змінено. Зберегти зміни?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1413"/>
+        <location filename="../management_layer/application_manager.cpp" line="1417"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1414"/>
+        <location filename="../management_layer/application_manager.cpp" line="1418"/>
         <source>Don&apos;t save</source>
         <translation>Не зберігати</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1415"/>
+        <location filename="../management_layer/application_manager.cpp" line="1419"/>
         <source>Save</source>
         <translation>Зберегти</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1496"/>
+        <location filename="../management_layer/application_manager.cpp" line="1500"/>
         <source>Choose file to save story</source>
         <translation>Оберіть файл для збереження твору</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1537"/>
+        <location filename="../management_layer/application_manager.cpp" line="1541"/>
         <source>Can&apos;t save the story to the file %1. Please check permissions and retry.</source>
         <translation>Не вдалося зберегти твір в файл %1. Перевірте дозвіл на запис і спробуйте знову.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1587"/>
+        <location filename="../management_layer/application_manager.cpp" line="1591"/>
         <source>You tried to create a project in nonexistent folder %1. Please, choose another location for the new project.</source>
         <translation>Ви намагаєтеся створити проєкт у неіснуючій теці %1. Будь ласка, оберіть для нового проєкту інше місце.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1592"/>
+        <location filename="../management_layer/application_manager.cpp" line="1596"/>
         <source>The file can&apos;t be written. Looks like it is opened by another application. Please close it and retry to create a new project.</source>
         <translation>Неможливо зберегти файл. Схоже, він відкритий іншою програмою. Будь ласка, закрийте його і повторіть спробу створити проєкт.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1596"/>
+        <location filename="../management_layer/application_manager.cpp" line="1600"/>
         <source>The file can&apos;t be written. Please, check and give permissions to the app to write into the selected folder, or choose another folder for saving a new project.</source>
         <translation>Неможливо зберегти файл. Будь ласка, перевірте та надайте дозвіл програмі на запис у вибрану теку або виберіть для збереження проєкту іншу теку.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1600"/>
+        <location filename="../management_layer/application_manager.cpp" line="1604"/>
         <source>Create project error</source>
         <translation>Помилка створення проєкту</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1791"/>
-        <location filename="../management_layer/application_manager.cpp" line="1814"/>
+        <location filename="../management_layer/application_manager.cpp" line="1795"/>
+        <location filename="../management_layer/application_manager.cpp" line="1818"/>
         <source>This file can&apos;t be open at this moment, because it is already open in another copy of the application.</source>
         <translation>Файл наразі не можна відкрити, оскільки він уже відкритий в іншій копії програми.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1817"/>
+        <location filename="../management_layer/application_manager.cpp" line="1821"/>
         <source>Ignore and open</source>
         <translation>Ігнорувати та відкрити</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1913"/>
+        <location filename="../management_layer/application_manager.cpp" line="1917"/>
         <source>A file you are trying to open does not have write permissions. Check out file properties and allow it to be edited. Since it isn&apos;t editable, it will be opened in a read-only mode.</source>
         <translation>Файл, який ви намагаєтеся відкрити, не має дозволу на редагування. Його буде відкрито в режимі лише для читання. Але ви можете надати дозвіл на редагування у властивостях файлу.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1930"/>
+        <location filename="../management_layer/application_manager.cpp" line="1934"/>
         <source>Do you want continue to use .%1 file format?</source>
         <translation>Бажаєте надалі працювати з форматом .%1?</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1931"/>
+        <location filename="../management_layer/application_manager.cpp" line="1935"/>
         <source>Some project data cannot be saved in .%1 format. We recommend you to use Story Architect .%2 format so all the project data will be saved properly.</source>
         <translation>Деякі дані проєкту неможливо зберегти у форматі .%1. Рекомендуємо вам формат Story Architect .%2, щоб усі дані проєкту було збережено належним чином.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1934"/>
+        <location filename="../management_layer/application_manager.cpp" line="1938"/>
         <source>Never ask again</source>
         <translation>Більше не питати</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1935"/>
+        <location filename="../management_layer/application_manager.cpp" line="1939"/>
         <source>Keep .%1</source>
         <translation>Лишити .%1</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="1936"/>
+        <location filename="../management_layer/application_manager.cpp" line="1940"/>
         <source>Switch to .STARC</source>
         <translation>Змінити на .STARC</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3040"/>
+        <location filename="../management_layer/application_manager.cpp" line="3046"/>
         <source>Maximum active sessions reached. To authorize from a new device, end one of the current sessions.</source>
         <translation>Щоб авторизуватися з нового пристрою, завершіть один з інших поточних сеансів, адже досягнуто максимальну кількість авторизацій на гаджетах вашого акаунту.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3324"/>
+        <location filename="../management_layer/application_manager.cpp" line="3332"/>
         <source>Cloud service subscription of the project owners is expired. You can continue working with the project as soon as they renew the subscription.</source>
         <translation>Закінчилася підписка власника проєкту на хмарний сервіс. Ви зможете продовжити роботу з проєктом, щойно її буде поновлено.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3568"/>
+        <location filename="../management_layer/application_manager.cpp" line="3580"/>
         <source>Novel</source>
         <translation>Роман</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3581"/>
+        <location filename="../management_layer/application_manager.cpp" line="3593"/>
         <source>Screenplay</source>
         <translation>Сценарій</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3305"/>
-        <location filename="../management_layer/application_manager.cpp" line="3326"/>
+        <location filename="../management_layer/application_manager.cpp" line="3313"/>
+        <location filename="../management_layer/application_manager.cpp" line="3334"/>
         <source>Continue offline</source>
         <translation>Продовжити офлайн</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="457"/>
-        <location filename="../management_layer/application_manager.cpp" line="471"/>
+        <location filename="../management_layer/application_manager.cpp" line="461"/>
+        <location filename="../management_layer/application_manager.cpp" line="475"/>
         <source>Open new window</source>
         <translation>Відкрити нове вікно</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="690"/>
+        <location filename="../management_layer/application_manager.cpp" line="694"/>
         <source>Loading missed fonts</source>
         <translation>Завантаження необхідних шрифтів</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3303"/>
+        <location filename="../management_layer/application_manager.cpp" line="3311"/>
         <source>Your cloud service subscription is expired. Activate subscription to continue working with the project.</source>
         <translation>Ваша підпискв на хмарний сервіс закінчилася. Активуйте підписку для продовження роботи з проєктом.</translation>
     </message>
     <message>
-        <location filename="../management_layer/application_manager.cpp" line="3306"/>
+        <location filename="../management_layer/application_manager.cpp" line="3314"/>
         <source>Renew subscription</source>
         <translation>Продовжити передплату</translation>
     </message>
@@ -3415,12 +3699,12 @@
 <context>
     <name>ManagementLayer::CloudServiceManager</name>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="461"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="462"/>
         <source>Promo code with %1% discount is activated and will be used with the next purchase.</source>
         <translation>Промокод зі знижкою %1% активовано і буде використано під час наступного платежу.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="470"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="471"/>
         <source>PRO version subscription activated for %n month(s).</source>
         <translation>
             <numerusform>Підписку на PRO версію активовано на %n місяць(ів).</numerusform>
@@ -3429,12 +3713,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="475"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="476"/>
         <source>PRO version lifetime access granted.</source>
         <translation>Вам надано довічний доступ до версії PRO.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="479"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="480"/>
         <source>CLOUD version subscription activated for %n month(s).</source>
         <translation>
             <numerusform>Підписку на версію CLOUD активовано на %n місяць.</numerusform>
@@ -3443,12 +3727,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="484"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="485"/>
         <source>CLOUD version lifetime access granted.</source>
         <translation>Вам надано довічний доступ до CLOUD версії.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../cloud/cloud_service_manager.cpp" line="492"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="493"/>
         <source>%n credits were added to your balance.</source>
         <translation>
             <numerusform>Баланс поповнено на %n кредит.</numerusform>
@@ -3457,116 +3741,121 @@
         </translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="506"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="507"/>
         <source>The gift has been sent to the recipient&apos;s mailbox</source>
         <translation>Подарунок відправлено на електронну пошу одержувача</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="754"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="755"/>
         <source>Promocode is incorrect</source>
         <translation>Промокод неправильний</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="758"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="759"/>
         <source>Promocode expired</source>
         <translation>Термін придатності промокоду минув</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="762"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="763"/>
         <source>Maximum number of promocode activations done</source>
         <translation>Кількість доступних активацій промокоду вичерпана</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="766"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="767"/>
         <source>Promocode already used</source>
         <translation>Цей промокод вже був активований раніше</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="835"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="836"/>
         <source>CUT TO:</source>
         <translation>СТИК:</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="851"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="852"/>
         <source>To use AI assistant, you need to replenish credits&apos; balance.</source>
         <translation>Щоб скористатися послугами асистента ШІ, поповніть баланс кредитів.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="852"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="853"/>
         <source>Maybe later</source>
         <translation>Можливо пізніше</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="853"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="854"/>
         <source>Replenish</source>
         <translation>Поповнити</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1431"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1449"/>
         <source>Rephrasing text</source>
         <translation>Перефразування тексту</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1542"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1560"/>
         <source>Expanding text</source>
         <translation>Розширення тексту</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1651"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1669"/>
         <source>Shortening text</source>
         <translation>Скорочення тексту</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1760"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1778"/>
         <source>Inserting text</source>
         <translation>Вставка тексту</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1869"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1887"/>
         <source>Summarizing text</source>
         <translation>Підсумковий текст</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="1978"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="1996"/>
         <source>Translating text</source>
         <translation>Переклад тексту</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2023"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2140"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2083"/>
+        <source>Translating document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2227"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2344"/>
         <source>Generating synopsis (scene %1 from %2)</source>
         <translation>Генерування синопсису (сцена %1 з %2)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2198"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2317"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2402"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2521"/>
         <source>Generating novel (scene %1 from %2)</source>
         <translation>Генерування роману (сцена %1 з %2)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2371"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2489"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2575"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2693"/>
         <source>Generating script (chapter %1 from %2)</source>
         <translation>Генерування сценарію (глава %1 з %2)</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="833"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="834"/>
         <source>INT.</source>
         <translation>ІНТ.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="834"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="835"/>
         <source>EXT.</source>
         <translation>НАТ.</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2537"/>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2693"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2741"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2897"/>
         <source>Processing text</source>
         <translation>Обробка тексту</translation>
     </message>
     <message>
-        <location filename="../../cloud/cloud_service_manager.cpp" line="2646"/>
+        <location filename="../../cloud/cloud_service_manager.cpp" line="2850"/>
         <source>Generating image</source>
         <translation>Генерування зображення</translation>
     </message>
@@ -3593,70 +3882,83 @@
 <context>
     <name>ManagementLayer::ExportManager</name>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="210"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="406"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="579"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="758"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="935"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1090"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1234"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1367"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1501"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1634"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="223"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="419"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="592"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="771"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="948"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1103"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1247"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1380"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1514"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1647"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1781"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1912"/>
         <source>Choose the file to export</source>
         <translation>Оберіть файл для імпорту</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="275"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="433"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="606"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="785"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="962"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1117"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1261"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1394"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1528"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1661"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="288"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="446"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="619"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="798"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="975"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1130"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1274"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1407"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1541"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1674"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1808"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1939"/>
         <source>Can&apos;t write to file. Looks like it&apos;s opened by another application. Please close it and retry the export.</source>
         <translation>Не вдається записати у файл. Схоже, його відкрито іншою програмою. Закрийте та повторіть спробу експорту.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="278"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="436"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="609"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="788"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="965"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1120"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1264"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1397"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1531"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1664"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="291"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="449"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="622"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="801"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="978"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1133"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1277"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1410"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1544"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1677"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1811"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1942"/>
         <source>Can&apos;t write to file. Check permissions to write in the chosen folder or choose another folder.</source>
         <translation>Не вдається записати у файл. Перевірте дозволи на запис у вибраній папці або виберіть іншу теку.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="281"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="439"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="612"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="791"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="968"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1123"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1267"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1400"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1534"/>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1667"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="294"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="452"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="625"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="804"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="981"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1136"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1280"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1413"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1547"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1680"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1814"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1945"/>
         <source>Export error</source>
         <translation>Помилка експорту</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1355"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1368"/>
         <source>Characters</source>
         <translation>Персонажі</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/export/export_manager.cpp" line="1622"/>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1635"/>
         <source>Locations</source>
         <translation>Локації</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/export/export_manager.cpp" line="1900"/>
+        <source>Worlds</source>
+        <translation>Світи</translation>
     </message>
 </context>
 <context>
@@ -3695,17 +3997,23 @@
 <context>
     <name>ManagementLayer::ImportManager</name>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="87"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="131"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="230"/>
         <source>File format not supported</source>
         <translation>Формат файлу не підтримується</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="88"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="110"/>
         <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
         <translation>Не підтримується імпорт файлів формату DOC. Збережіть файл як DOCX та повторіть імпорт.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="156"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="128"/>
+        <source>Importing from %1 files is not supported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="202"/>
         <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.
 
 The following files will not be imported:
@@ -3713,7 +4021,15 @@ The following files will not be imported:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/import/import_manager.cpp" line="414"/>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="223"/>
+        <source>Importing from %1 files is not supported.
+
+The following files will not be imported:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/import/import_manager.cpp" line="493"/>
         <source>Choose files to import</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3981,17 +4297,22 @@ If you want to continue editing novel text, switch to the corresponding module v
 <context>
     <name>ManagementLayer::PresentationManager</name>
     <message>
-        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="187"/>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="506"/>
+        <source>Choose the file to import</source>
+        <translation>Оберіть файл для імпорту</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="543"/>
         <source>Processing presentation for document &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="230"/>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="608"/>
         <source>File loading error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="232"/>
+        <location filename="../management_layer/plugins/presentation/presentation_manager.cpp" line="610"/>
         <source>Please check internet connection and firewall/anitivirus settings, and try to send the file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4037,304 +4358,304 @@ If you want to continue editing novel text, switch to the corresponding module v
 <context>
     <name>ManagementLayer::ProjectManager</name>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="562"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="578"/>
         <source>Find all characters</source>
         <translation>Знайти всіх персонажів</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="569"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="585"/>
         <source>Add character</source>
         <translation>Додати персонаж</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="574"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="590"/>
         <source>Find all locations</source>
         <translation>Знайти усі локації</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="581"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="597"/>
         <source>Add location</source>
         <translation>Додати локацію</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="587"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="603"/>
         <source>Empty recycle bin</source>
         <translation>Винести непотріб</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="721"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="737"/>
         <source>Add document</source>
         <translation>Додати елемент</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="741"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="757"/>
         <source>Remove document</source>
         <translation>Видалити елемент</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="612"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2362"/>
-        <source>Create new draft</source>
-        <translation>Зберегти драфт як попередній, щоб продовжити працювати в поточному драфті як в новому</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="625"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="641"/>
         <source>Open in new window</source>
         <translation>Відкрити в новому вікні</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="890"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="914"/>
         <source>Character with this name already exists</source>
         <translation>Персонаж з таким ім’ям вже існує</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="900"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="925"/>
         <source>Location with this name already exists</source>
         <translation>Локація з такою назвою вже існує</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1061"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3679"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1088"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3736"/>
         <source>Current draft</source>
         <translation>Поточний драфт</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1123"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1150"/>
         <source>Do you really want to remove document version &quot;%1&quot;?</source>
         <translation>Ви дійсно бажаєте видалити драфт документа &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1124"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1244"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1702"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1151"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1271"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1735"/>
         <source>No</source>
         <translation>Ні, в жодному разі</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="485"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="501"/>
         <source>Remove split</source>
         <translation>Прибрати розділення</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="486"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="502"/>
         <source>Split window</source>
         <translation>Розділити вікно</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="713"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="729"/>
         <source>Add folder</source>
         <translation>Додати теку</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="741"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="757"/>
         <source>Remove documents</source>
         <translation>Видалити документи</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="601"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="617"/>
         <source>Sort alphabetically</source>
         <translation>Сортувати за абеткою</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="549"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="565"/>
         <source>Remove permanently</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="637"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="628"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2397"/>
+        <source>Create draft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="653"/>
         <source>Export...</source>
         <translation>Експорт...</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="693"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="709"/>
         <source>Share access</source>
         <translation>Поділіться доступом</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="755"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="771"/>
         <source>Expand all</source>
         <translation>Розгорнути все</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="761"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="777"/>
         <source>Collapse all</source>
         <translation>Згорнути все</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="910"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="936"/>
         <source>World with this name already exists</source>
         <translation>Світ з такою назвою вже існує</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1125"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1245"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1703"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1152"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1272"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1736"/>
         <source>Yes, remove</source>
         <translation>Так, видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1234"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1261"/>
         <source>Do you really want to permanently remove document: &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1465"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1498"/>
         <source>Characters from the text</source>
         <translation>Персонажі виявлені у тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1475"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1508"/>
         <source>Characters that are not found in the text</source>
         <translation>Персонажі, яких у тексті немає</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1488"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1521"/>
         <source>Save only characters from the text</source>
         <translation>Зберегти лише персонажів з тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1489"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1522"/>
         <source>Save all characters</source>
         <translation>Зберегти всіх персонажів</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1490"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1620"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1523"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1653"/>
         <source>Change nothing</source>
         <translation>Залишити без змін</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1595"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1628"/>
         <source>Locations from the text</source>
         <translation>Локації виявлені у тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1605"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1638"/>
         <source>Locations that are not found in the text</source>
         <translation>Локації, яких у тексті немає</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1618"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1651"/>
         <source>Save only locations from the text</source>
         <translation>Зберегти лише локації з тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1619"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1652"/>
         <source>Save all locations</source>
         <translation>Зберегти всі локації</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1701"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1734"/>
         <source>Do you really want to permanently remove all documents from the recycle bin?</source>
         <translation>Дійсно видалити усі непотрібні документи назавжди?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2376"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2411"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2386"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2421"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2538"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2559"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2580"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2601"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2710"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2573"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2594"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2615"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2636"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2745"/>
         <source>draft</source>
         <translation>чернетка</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2557"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2578"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2599"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2592"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2613"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2634"/>
         <source>Script</source>
         <translation>Сценарій</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3372"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3418"/>
         <source>Mind map</source>
         <translation>Мапа думок</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3378"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3424"/>
         <source>Images gallery</source>
         <translation>Галерея зображень</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3449"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3486"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3522"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3564"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3608"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3495"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3532"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3568"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3610"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3654"/>
         <source>Title page</source>
         <translation>Титульна сторінка</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3452"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3489"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3523"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3566"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3611"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3498"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3535"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3569"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3612"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3657"/>
         <source>Synopsis</source>
         <translation>Синопсис</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3454"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3500"/>
         <source>Audioplay</source>
         <translation>Аудіовистава</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3491"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3537"/>
         <source>Comic book</source>
         <translation>Мальопис</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3578"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3624"/>
         <source>Treatment</source>
         <translation>Поепізодник</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3525"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3571"/>
         <source>Novel</source>
         <translation>Роман</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="1232"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="1259"/>
         <source>Do you really want to permanently remove following documents?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3534"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3580"/>
         <source>Outline</source>
         <translation>План</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3613"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3659"/>
         <source>Stageplay</source>
         <translation>П&apos;єса</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3929"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3987"/>
         <source>Conflicted version</source>
         <translation>Веріся з конфліктом</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2536"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="2708"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3569"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2571"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="2743"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3615"/>
         <source>Screenplay</source>
         <translation>Сценарій</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3457"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3494"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3528"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3572"/>
-        <location filename="../management_layer/content/project/project_manager.cpp" line="3616"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3503"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3540"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3574"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3618"/>
+        <location filename="../management_layer/content/project/project_manager.cpp" line="3662"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -4342,7 +4663,7 @@ If you want to continue editing novel text, switch to the corresponding module v
 <context>
     <name>ManagementLayer::ProjectsManager</name>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="292"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="294"/>
         <source>To move a project to the cloud, you need to upgrade to the CLOUD version.</source>
         <translation>Щоб перенести проєкт у хмару, перейдіть на CLOUD версію.</translation>
     </message>
@@ -4363,9 +4684,9 @@ If you want to continue editing novel text, switch to the corresponding module v
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="197"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="232"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="333"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="369"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="234"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="337"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="374"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
@@ -4375,13 +4696,8 @@ If you want to continue editing novel text, switch to the corresponding module v
         <translation>Так, хочу</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="332"/>
-        <source>Do you really want to remove this project?</source>
-        <translation>Дійсно хочете видалити цей проєкт?</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="233"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="334"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="235"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="338"/>
         <source>Yes, remove</source>
         <translation>Так, видалити</translation>
     </message>
@@ -4392,69 +4708,76 @@ If you want to continue editing novel text, switch to the corresponding module v
     </message>
     <message>
         <location filename="../management_layer/content/projects/projects_manager.cpp" line="225"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="326"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="328"/>
         <source>Remove story</source>
         <translation>Видалити твір</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="262"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="232"/>
+        <source>Do you really want to remove this project from the computer?
+This action can&apos;t be canceled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="264"/>
         <source>Move to the cloud</source>
         <translation>Перенести в хмару</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="271"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="273"/>
         <source>To move a project to the cloud, you should be authorized.</source>
         <translation>Щоб перенести проєкт у хмару, потрібно авторизуватися.</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="272"/>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="294"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="274"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="296"/>
         <source>Maybe later</source>
         <translation>Можливо пізніше</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="273"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="275"/>
         <source>Sign in</source>
         <translation>Авторизуйтеся</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="295"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="297"/>
         <source>Upgrade</source>
         <translation>Оновити</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="231"/>
-        <source>Do you really want to remove this project from the computer?</source>
-        <translation>Дійсно видалити цей проєкт з комп’ютера?</translation>
-    </message>
-    <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="402"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="407"/>
         <source>Save to local file</source>
         <translation>Зберегти на пристрої</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="362"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="367"/>
         <source>Unsubscribe</source>
         <translation>Відписатися</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="368"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="335"/>
+        <source>Do you really want to remove this project?
+This action can&apos;t be canceled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="373"/>
         <source>Do you really want to unsubscribe from this project?</source>
         <translation>Дійсно хочете відписатися від цього проєкту?</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="370"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="375"/>
         <source>Yes, unsubscribe</source>
         <translation>Так, відписатися</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="821"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="826"/>
         <source>Unnamed</source>
         <extracomment>Dummy title for name of a new project</extracomment>
         <translation>Без назви</translation>
     </message>
     <message>
-        <location filename="../management_layer/content/projects/projects_manager.cpp" line="906"/>
+        <location filename="../management_layer/content/projects/projects_manager.cpp" line="911"/>
         <source>Choose the file to open</source>
         <translation>Оберіть файл</translation>
     </message>
@@ -4966,22 +5289,22 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ManagementLayer::ScreenplayTextManager</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="531"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="583"/>
         <source>Scene intro</source>
         <translation>Місце дії</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="532"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="584"/>
         <source>Scene time</source>
         <translation>Режим сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="533"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="585"/>
         <source>Character extension</source>
         <translation>Характер репліки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="534"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_manager.cpp" line="586"/>
         <source>Transition</source>
         <translation>Перехід</translation>
     </message>
@@ -5398,247 +5721,247 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>ProjectPluginsBuilder</name>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="522"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="544"/>
         <source>Information about project</source>
         <translation>Про проєкт</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="524"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="546"/>
         <source>Project collaborators</source>
         <translation>Співавтори</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="528"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="550"/>
         <source>Information about screenplay</source>
         <translation>Про сценарій</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="530"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="552"/>
         <source>Screenplay parameters</source>
         <translation>Сценарні параметри</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="533"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="567"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="598"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="618"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="638"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="658"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="555"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="589"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="620"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="640"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="660"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="680"/>
         <source>Title page text</source>
         <translation>Текст титульної сторінки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="536"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="570"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="601"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="621"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="641"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="661"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="558"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="592"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="623"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="643"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="663"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="683"/>
         <source>Synopsis text</source>
         <translation>Текст синопсису</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="541"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="575"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="666"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="563"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="597"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="688"/>
         <source>Beats</source>
         <translation>Біти</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="550"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="584"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="675"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="572"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="606"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="697"/>
         <source>Timeline</source>
         <translation>Часова шкала</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="552"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="586"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="574"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="608"/>
         <source>Breakdown</source>
         <translation>Розбивка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="559"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="581"/>
         <source>Information about series</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="561"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="583"/>
         <source>Series parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="564"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="586"/>
         <source>Series plan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="593"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="615"/>
         <source>Information about comic book</source>
         <translation>Про мальопис</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="595"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="617"/>
         <source>Comic book parameters</source>
         <translation>Параметри мальопису</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="604"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="626"/>
         <source>Comic book text</source>
         <translation>Текст мальопису</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="613"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="635"/>
         <source>Information about audioplay</source>
         <translation>Інформація про аудіовиставу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="615"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="637"/>
         <source>Audioplay parameters</source>
         <translation>Параметри аудіовистави</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="624"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="646"/>
         <source>Audioplay text</source>
         <translation>Текст аудіовистави</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="633"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="655"/>
         <source>Information about stageplay</source>
         <translation>Про п&apos;єсу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="635"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="657"/>
         <source>Stageplay parameters</source>
         <translation>Парамаетри п&apos;єси</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="644"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="666"/>
         <source>Stageplay text</source>
         <translation>Текст п&apos;єси</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="653"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="675"/>
         <source>Information about novel</source>
         <translation>Про роман</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="655"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="677"/>
         <source>Novel parameters</source>
         <translation>Параметри роману</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="664"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="686"/>
         <source>Outline text</source>
         <translation>Текст плану</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="671"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="693"/>
         <source>Novel text</source>
         <translation>Текст роману</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="682"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="704"/>
         <source>Characters relations</source>
         <translation>Стосунки між персонажами</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="685"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="707"/>
         <source>Character information</source>
         <translation>Про персонажа</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="687"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="709"/>
         <source>Character dialogues</source>
         <translation>Репліки персонажа</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="691"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="713"/>
         <source>Locations map</source>
         <translation>Карта локацій</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="694"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="716"/>
         <source>Location information</source>
         <translation>Про локацію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="696"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="718"/>
         <source>Location scenes</source>
         <translation>Сцени локації</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="700"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="722"/>
         <source>Worlds map</source>
         <translation>Карта світу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="703"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="725"/>
         <source>World information</source>
         <translation>Про світ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="707"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="729"/>
         <source>Folder text</source>
         <translation>Текст теки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="710"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="732"/>
         <source>Document text</source>
         <translation>Текст документа</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="714"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="736"/>
         <source>Recycle bin summary info</source>
         <translation>Зведена інформація про непотріб</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="717"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="739"/>
         <source>Mind map</source>
         <translation>Мапа думок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="720"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="742"/>
         <source>Images gallery</source>
         <translation>Галерея зображень</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="723"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="745"/>
         <source>Presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="539"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="573"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="561"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="595"/>
         <source>Treatment text</source>
         <translation>Текст поепізоднику</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="546"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="580"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="568"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="602"/>
         <source>Screenplay text</source>
         <translation>Текст сценарію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="543"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="548"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="577"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="582"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="606"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="626"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="646"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="565"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="570"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="599"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="604"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="628"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="648"/>
         <location filename="../management_layer/plugins_builder.cpp" line="668"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="673"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="690"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="695"/>
         <source>Cards</source>
         <translation>Картки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins_builder.cpp" line="555"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="589"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="609"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="629"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="649"/>
-        <location filename="../management_layer/plugins_builder.cpp" line="678"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="577"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="611"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="631"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="651"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="671"/>
+        <location filename="../management_layer/plugins_builder.cpp" line="700"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
@@ -7322,32 +7645,32 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AboutApplicationDialog</name>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="158"/>
+        <location filename="../ui/about_application_dialog.cpp" line="159"/>
         <source>version</source>
         <translation>драфт</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="162"/>
+        <location filename="../ui/about_application_dialog.cpp" line="163"/>
         <source>Designed, coded and crafted with love at the</source>
         <translation>Розроблено, закодовано та створено з любов’ю - </translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="166"/>
+        <location filename="../ui/about_application_dialog.cpp" line="167"/>
         <source>company</source>
         <translation>компанія</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="167"/>
+        <location filename="../ui/about_application_dialog.cpp" line="168"/>
         <source>The Logline Generator is powered by</source>
         <translation>Генератор логлайнів заряджено в</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="171"/>
+        <location filename="../ui/about_application_dialog.cpp" line="172"/>
         <source>Starc is being developed with strong authors’ involvement and support so we won’t waste the app performance on the features you don’t need.</source>
         <translation>Starc створено у тісній співпраці з авторами. Ми об&apos;єднали у найзручніший та найтехнологічніший спосіб усі необхідні для сучасної творчості функції.</translation>
     </message>
     <message>
-        <location filename="../ui/about_application_dialog.cpp" line="174"/>
+        <location filename="../ui/about_application_dialog.cpp" line="175"/>
         <source>Feel free to contact us at any point of your creative journey to share your thoughts about the app, suggest ideas and report issues you met.</source>
         <translation>Зв’яжіться з нами на будь-якому етапі вашого творчого шляху, щоб поділитися ідеями щодо програми або повідомити про проблеми та зауваження. Ми обов&apos;язково відповімо.</translation>
     </message>
@@ -7355,27 +7678,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AbstractExportDialog</name>
     <message>
-        <location filename="../ui/export/abstract_export_dialog.cpp" line="221"/>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="220"/>
         <source>Format</source>
         <translation>Формат</translation>
     </message>
     <message>
-        <location filename="../ui/export/abstract_export_dialog.cpp" line="222"/>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="221"/>
         <source>Watermark</source>
         <translation>Водяний знак</translation>
     </message>
     <message>
-        <location filename="../ui/export/abstract_export_dialog.cpp" line="223"/>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="222"/>
         <source>Open document after export</source>
         <translation>Відкрити документ після експорту</translation>
     </message>
     <message>
-        <location filename="../ui/export/abstract_export_dialog.cpp" line="224"/>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="223"/>
         <source>Export</source>
         <translation>Експортувати</translation>
     </message>
     <message>
-        <location filename="../ui/export/abstract_export_dialog.cpp" line="225"/>
+        <location filename="../ui/export/abstract_export_dialog.cpp" line="224"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
@@ -7466,12 +7789,6 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <translation>Спробувати безкоштовно</translation>
     </message>
     <message>
-        <location filename="../ui/account/account_navigator.cpp" line="784"/>
-        <location filename="../ui/account/account_navigator.cpp" line="788"/>
-        <source>Renew</source>
-        <translation>Продовжити</translation>
-    </message>
-    <message>
         <location filename="../ui/account/account_navigator.cpp" line="785"/>
         <source>CLOUD version</source>
         <translation>CLOUD веріся</translation>
@@ -7521,6 +7838,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         <location filename="../ui/account/account_navigator.cpp" line="354"/>
         <source>Used %1 GB from %2 GB</source>
         <translation>Використано %1 ГБ із %2 ГБ</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/account_navigator.cpp" line="784"/>
+        <location filename="../ui/account/account_navigator.cpp" line="788"/>
+        <source>Activate</source>
+        <translation>Активувати</translation>
     </message>
     <message>
         <location filename="../ui/account/account_navigator.cpp" line="789"/>
@@ -7802,7 +8125,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AiAssistantView</name>
     <message numerus="yes">
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1090"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1136"/>
         <source>%n word(s) available</source>
         <translation>
             <numerusform>%n слово доступно</numerusform>
@@ -7811,929 +8134,939 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         </translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1091"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1137"/>
         <source>No words available</source>
         <translation>Слів немає в наявності</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1096"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1123"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1128"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1142"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1169"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1174"/>
         <source>Rephrase</source>
         <translation>Перефразувати</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1097"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1130"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1133"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1143"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1176"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1179"/>
         <source>Expand</source>
         <translation>Розширити</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1098"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1135"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1138"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1144"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1181"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1184"/>
         <source>Shorten</source>
         <translation>Скоротити</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1099"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1129"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1134"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1139"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1140"/>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1145"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1150"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1310"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1175"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1180"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1185"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1186"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1191"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1196"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1358"/>
         <source>Insert</source>
         <translation>Вставити</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1100"/>
         <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1146"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1149"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1192"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1195"/>
         <source>Summarize</source>
         <translation>Підсумувати</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1101"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1151"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1309"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1147"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1197"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1357"/>
         <source>Translate</source>
         <translation>Перекласти</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1102"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1311"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1148"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1359"/>
         <source>Generate synopsis</source>
         <translation>Генерувати синопсис</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1103"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1318"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1149"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1366"/>
         <source>Generate novel</source>
         <translation>Генерувати роман</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1104"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1320"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1150"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1368"/>
         <source>Generate script</source>
         <translation>Генерувати сценарій</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1105"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1144"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1317"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1319"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1321"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1322"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1328"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1329"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1337"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1338"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1340"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1151"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1190"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1365"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1367"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1369"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1370"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1376"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1377"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1385"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1386"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1388"/>
         <source>Generate</source>
         <translation>Генерувати</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1121"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1167"/>
         <source>Go back to list of assistant functions</source>
         <translation>Повернутися до переліку функцій асистента</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1124"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1170"/>
         <source>Text to rephrase</source>
         <translation>Текст для перефразування</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1125"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1171"/>
         <source>Rephrase in style of</source>
         <translation>Перефразувати в стилі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1126"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1172"/>
         <source>Keep empty to avoid style changing</source>
         <translation>Залиште порожнім, щоб не змінювати стиль</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1127"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1173"/>
         <source>Rephrased text</source>
         <translation>Перефразований текст</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1131"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1177"/>
         <source>Text to expand</source>
         <translation>Текст для розширення</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1132"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1178"/>
         <source>Expanded text</source>
         <translation>Розширений текст</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1136"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1182"/>
         <source>Text to shorten</source>
         <translation>Текст для скорочення</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1137"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1183"/>
         <source>Shortened text</source>
         <translation>Скорочений текст</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1141"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1187"/>
         <source>Text before inserted</source>
         <translation>Текст перед вставкою</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1142"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1188"/>
         <source>Text after inserted</source>
         <translation>Текст після вставки</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1143"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1189"/>
         <source>Inserted text</source>
         <translation>Вставлений текст</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1147"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1193"/>
         <source>Text to summarize</source>
         <translation>Текст для підсумку</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1148"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1194"/>
         <source>Summarized text</source>
         <translation>Підсумковий текст</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1152"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1198"/>
+        <source>Text</source>
+        <translation>Сценарій</translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1199"/>
         <source>Text to translate</source>
         <translation>Текст для перекладу</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1153"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1200"/>
+        <source>entire document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1201"/>
         <source>Translate to</source>
         <translation>Перекласти на</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1156"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1204"/>
         <source>Afrikaans</source>
         <translation>Африкаанс</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1157"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1205"/>
         <source>Albanian</source>
         <translation>Албанська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1158"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1206"/>
         <source>Amharic</source>
         <translation>Амхарська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1159"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1207"/>
         <source>Arabic</source>
         <translation>Арабська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1160"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1208"/>
         <source>Armenian</source>
         <translation>Вірменська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1161"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1209"/>
         <source>Assamese</source>
         <translation>Ассамська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1162"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1210"/>
         <source>Aymara</source>
         <translation>Аймара</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1163"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1211"/>
         <source>Azerbaijani</source>
         <translation>Азербайджанська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1164"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1212"/>
         <source>Bambara</source>
         <translation>Бамбара</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1165"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1213"/>
         <source>Basque</source>
         <translation>Баскійська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1166"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1214"/>
         <source>Belarusian</source>
         <translation>Біларуська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1167"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1215"/>
         <source>Bengali</source>
         <translation>Бенгальська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1168"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1216"/>
         <source>Bhojpuri</source>
         <translation>Бходжпурі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1169"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1217"/>
         <source>Bosnian</source>
         <translation>Боснійська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1170"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1218"/>
         <source>Bulgarian</source>
         <translation>Болгарська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1171"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1219"/>
         <source>Catalan</source>
         <translation>Каталанська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1172"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1220"/>
         <source>Cebuano</source>
         <translation>Кебуано</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1173"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1221"/>
         <source>Chinese (Simplified)</source>
         <translation>Китайська (спрощена)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1174"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1222"/>
         <source>Chinese (Traditional)</source>
         <translation>Китайська (традиційна)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1175"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1223"/>
         <source>Corsican</source>
         <translation>Корсиканська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1176"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1224"/>
         <source>Croatian</source>
         <translation>Хорватська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1177"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1225"/>
         <source>Czech</source>
         <translation>Чеська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1178"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1226"/>
         <source>Danish</source>
         <translation>Данська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1179"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1227"/>
         <source>Dhivehi</source>
         <translation>Дівехі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1180"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1228"/>
         <source>Dogri</source>
         <translation>Догрі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1181"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1229"/>
         <source>Dutch</source>
         <translation>Нідерландська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1182"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1230"/>
         <source>English</source>
         <translation>Англійська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1183"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1231"/>
         <source>Esperanto</source>
         <translation>Есперанто</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1184"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1232"/>
         <source>Estonian</source>
         <translation>Естонська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1185"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1233"/>
         <source>Ewe</source>
         <translation>Еве</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1186"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1234"/>
         <source>Filipino (Tagalog)</source>
         <translation>Філіппінська (тагальська)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1187"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1235"/>
         <source>Finnish</source>
         <translation>Фінська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1188"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1236"/>
         <source>French</source>
         <translation>Французька</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1189"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1237"/>
         <source>Frisian</source>
         <translation>Фризька</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1190"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1238"/>
         <source>Galician</source>
         <translation>Галісійська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1191"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1239"/>
         <source>Georgian</source>
         <translation>Грузинська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1192"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1240"/>
         <source>German</source>
         <translation>Німецька</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1193"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1241"/>
         <source>Greek</source>
         <translation>Грецька</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1194"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1242"/>
         <source>Guarani</source>
         <translation>Гуарані</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1195"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1243"/>
         <source>Gujarati</source>
         <translation>Гуджараті</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1196"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1244"/>
         <source>Haitian Creole</source>
         <translation>Гаїтянська креольська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1197"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1245"/>
         <source>Hausa</source>
         <translation>Хауса</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1198"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1246"/>
         <source>Hawaiian</source>
         <translation>Гавайська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1199"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1247"/>
         <source>Hebrew</source>
         <translation>Іврит</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1200"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1248"/>
         <source>Hindi</source>
         <translation>Гінді</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1201"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1249"/>
         <source>Hmong</source>
         <translation>Хмонґ</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1202"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1250"/>
         <source>Hungarian</source>
         <translation>Угорська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1203"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1251"/>
         <source>Icelandic</source>
         <translation>Ісландська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1204"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1252"/>
         <source>Igbo</source>
         <translation>Іґбо</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1205"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1253"/>
         <source>Ilocano</source>
         <translation>Ілоканська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1206"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1254"/>
         <source>Indonesian</source>
         <translation>Індонезійська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1207"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1255"/>
         <source>Irish</source>
         <translation>Ірландська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1208"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1256"/>
         <source>Italian</source>
         <translation>Італійська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1209"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1257"/>
         <source>Japanese</source>
         <translation>Японська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1210"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1258"/>
         <source>Javanese</source>
         <translation>Яванська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1211"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1259"/>
         <source>Kannada</source>
         <translation>Каннада</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1212"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1260"/>
         <source>Kazakh</source>
         <translation>Казахська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1213"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1261"/>
         <source>Khmer</source>
         <translation>Кхмерська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1214"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1262"/>
         <source>Kinyarwanda</source>
         <translation>Руандійська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1215"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1263"/>
         <source>Konkani</source>
         <translation>Конкані</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1216"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1264"/>
         <source>Korean</source>
         <translation>Корейська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1217"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1265"/>
         <source>Krio</source>
         <translation>Кріо</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1218"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1266"/>
         <source>Kurdish</source>
         <translation>Курдська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1219"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1267"/>
         <source>Kurdish (Sorani)</source>
         <translation>Курдська (сорані)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1220"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1268"/>
         <source>Kyrgyz</source>
         <translation>Киргизька</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1221"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1269"/>
         <source>Lao</source>
         <translation>Лаоська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1222"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1270"/>
         <source>Latin</source>
         <translation>Латина</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1223"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1271"/>
         <source>Latvian</source>
         <translation>Латиська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1224"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1272"/>
         <source>Lingala</source>
         <translation>Лінгала</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1225"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1273"/>
         <source>Lithuanian</source>
         <translation>Литовська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1226"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1274"/>
         <source>Luganda</source>
         <translation>Лугандійська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1227"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1275"/>
         <source>Luxembourgish</source>
         <translation>Люксембурзька</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1228"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1276"/>
         <source>Macedonian</source>
         <translation>Македонська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1229"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1277"/>
         <source>Maithili</source>
         <translation>Майтілі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1230"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1278"/>
         <source>Malagasy</source>
         <translation>Малагасійська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1231"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1279"/>
         <source>Malay</source>
         <translation>Малайська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1232"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1280"/>
         <source>Malayalam</source>
         <translation>Малаялам</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1233"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1281"/>
         <source>Maltese</source>
         <translation>Мальтійська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1234"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1282"/>
         <source>Maori</source>
         <translation>Маорі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1235"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1283"/>
         <source>Marathi</source>
         <translation>Маратхі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1236"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1284"/>
         <source>Meiteilon (Manipuri)</source>
         <translation>Мейтейлон (маніпурі)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1237"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1285"/>
         <source>Mizo</source>
         <translation>Мізо</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1238"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1286"/>
         <source>Mongolian</source>
         <translation>Монгольська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1239"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1287"/>
         <source>Myanmar (Burmese)</source>
         <translation>М&apos;янма (бірманська)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1240"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1288"/>
         <source>Nepali</source>
         <translation>Непальська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1241"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1289"/>
         <source>Norwegian</source>
         <translation>Норвезька</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1242"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1290"/>
         <source>Nyanja (Chichewa)</source>
         <translation>Нянджа (Чічева)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1243"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1291"/>
         <source>Odia (Oriya)</source>
         <translation>Одія (Орія)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1244"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1292"/>
         <source>Oromo</source>
         <translation>Оромо</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1245"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1293"/>
         <source>Pashto</source>
         <translation>Пушту</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1246"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1294"/>
         <source>Persian</source>
         <translation>Фарсі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1247"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1295"/>
         <source>Polish</source>
         <translation>Польська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1248"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1296"/>
         <source>Portuguese (Portugal, Brazil)</source>
         <translation>Португальська (Португалія, Бразилія)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1249"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1297"/>
         <source>Punjabi</source>
         <translation>Пенджабі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1250"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1298"/>
         <source>Quechua</source>
         <translation>Кечуа</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1251"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1299"/>
         <source>Romanian</source>
         <translation>Румунська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1252"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1300"/>
         <source>Russian</source>
         <translation>Російська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1253"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1301"/>
         <source>Samoan</source>
         <translation>Самоанська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1254"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1302"/>
         <source>Sanskrit</source>
         <translation>Санскріт</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1255"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1303"/>
         <source>Scots Gaelic</source>
         <translation>Шотландська гельська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1256"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1304"/>
         <source>Sepedi</source>
         <translation>Північна сото</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1257"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1305"/>
         <source>Serbian</source>
         <translation>Сербська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1258"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1306"/>
         <source>Sesotho</source>
         <translation>Сесото</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1259"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1307"/>
         <source>Shona</source>
         <translation>Шона</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1260"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1308"/>
         <source>Sindhi</source>
         <translation>Синдхі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1261"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1309"/>
         <source>Sinhala (Sinhalese)</source>
         <translation>Сингальська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1262"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1310"/>
         <source>Slovak</source>
         <translation>Словацька</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1263"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1311"/>
         <source>Slovenian</source>
         <translation>Словенська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1264"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1312"/>
         <source>Somali</source>
         <translation>Сомалійська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1265"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1313"/>
         <source>Spanish</source>
         <translation>Іспанська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1266"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1314"/>
         <source>Sundanese</source>
         <translation>Сунданська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1267"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1315"/>
         <source>Swahili</source>
         <translation>Суахілі</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1268"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1316"/>
         <source>Swedish</source>
         <translation>Шведська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1269"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1317"/>
         <source>Tagalog (Filipino)</source>
         <translation>Тагальська (Філіппіни)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1270"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1318"/>
         <source>Tajik</source>
         <translation>Таджицька</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1271"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1319"/>
         <source>Tamil</source>
         <translation>Тамільська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1272"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1320"/>
         <source>Tatar</source>
         <translation>Татарська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1273"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1321"/>
         <source>Telugu</source>
         <translation>Телуґу</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1274"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1322"/>
         <source>Thai</source>
         <translation>Тайська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1275"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1323"/>
         <source>Tigrinya</source>
         <translation>Тигринья</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1276"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1324"/>
         <source>Tsonga</source>
         <translation>Тсонга</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1277"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1325"/>
         <source>Turkish</source>
         <translation>Турецька</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1278"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1326"/>
         <source>Turkmen</source>
         <translation>Туркменська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1279"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1327"/>
         <source>Twi (Akan)</source>
         <translation>Чві (Акан)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1280"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1328"/>
         <source>Ukrainian</source>
         <translation>Українська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1281"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1329"/>
         <source>Urdu</source>
         <translation>Урду</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1282"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1330"/>
         <source>Uyghur</source>
         <translation>Уйгурська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1283"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1331"/>
         <source>Uzbek</source>
         <translation>Узбецька</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1284"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1332"/>
         <source>Vietnamese</source>
         <translation>В&apos;єтнамська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1285"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1333"/>
         <source>Welsh</source>
         <translation>Валлійська</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1286"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1334"/>
         <source>Xhosa</source>
         <translation>Коса</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1287"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1335"/>
         <source>Yiddish</source>
         <translation>Їдиш</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1288"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1336"/>
         <source>Yoruba</source>
         <translation>Йоруба</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1289"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1337"/>
         <source>Zulu</source>
         <translation>Зулу</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1308"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1356"/>
         <source>Translated text</source>
         <translation>Перекладений текст</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1312"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1360"/>
         <source>Synopsis length</source>
         <translation>Довжина синопсису</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1313"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1361"/>
         <source>short (20 words per scene)</source>
         <translation>стислий (20 слів на сцену)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1314"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1362"/>
         <source>medium (45 words per scene)</source>
         <translation>середній (45 слів на сцену)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1315"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1363"/>
         <source>unlimitted</source>
         <translation>без обмежень</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1316"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1364"/>
         <source>Synopsis</source>
         <translation>Синопсис</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1323"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1330"/>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1339"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1371"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1378"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1387"/>
         <source>Prompt</source>
         <translation>Запит</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1324"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1372"/>
         <source>Insert result</source>
         <translation>Вставити результат</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1325"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1373"/>
         <source>at the beginning of the document</source>
         <translation>на початку документа</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1326"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1374"/>
         <source>at the cursor position</source>
         <translation>у позицію курсору</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1327"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1375"/>
         <source>at the end of the document</source>
         <translation>в кінець документа</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1331"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1379"/>
         <source>Personal info</source>
         <translation>Метрика</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1332"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1380"/>
         <source>Physique</source>
         <translation>Зовнішність</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1333"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1381"/>
         <source>Life</source>
         <translation>Суспілля</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1334"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1382"/>
         <source>Attitude</source>
         <translation>Світовідчуття</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1335"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1383"/>
         <source>Biography</source>
         <translation>Біографія</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1336"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1384"/>
         <source>Photo</source>
         <translation>Фото</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1342"/>
+        <location filename="../../corelib/ui/modules/ai_assistant/ai_assistant_view.cpp" line="1390"/>
         <source>purchase</source>
         <translation>сплатити</translation>
     </message>
@@ -9139,19 +9472,29 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="337"/>
-        <source>Unlock ability to edit audioplay cards</source>
-        <translation>Розблокувати можливість редагування карток аудіовистави</translation>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="389"/>
+        <source>Unlock ability to manage audioplay statistics</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="338"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="390"/>
         <source>Update statistics</source>
         <translation>Оновити статистику</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="339"/>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="391"/>
         <source>Save statistics to the file</source>
         <translation>Зберегти статистику у файл</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="392"/>
+        <source>No statistics available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_statistics/audioplay_statistics_view.cpp" line="393"/>
+        <source>Statistics appear when you&apos;ll start to write audioplay</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9198,27 +9541,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1412"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1504"/>
         <source>Bookmark</source>
         <translation>Закладка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1416"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1508"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1422"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1514"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1427"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1519"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1434"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit.cpp" line="1526"/>
         <source>Show/hide list</source>
         <translation>Показати/приховати список</translation>
     </message>
@@ -9226,69 +9569,74 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayTextEditToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="92"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="96"/>
         <source>Scene heading</source>
         <translation>Сетинг сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="280"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="311"/>
         <source>Undo last action</source>
         <translation>Скасувати останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="284"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="315"/>
         <source>Redo last action</source>
         <translation>Повторити останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="287"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="318"/>
         <source>Current paragraph format</source>
         <translation>Поточний формат рядка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="289"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="320"/>
         <source>Hide fast format panel</source>
         <translation>Сховати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="290"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="321"/>
         <source>Show fast format panel</source>
         <translation>Показати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="292"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="323"/>
         <source>Search text</source>
         <translation>Шукати в тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="295"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="326"/>
         <source>Disable review mode</source>
         <translation>Вийти з режиму рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="296"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="327"/>
         <source>Enable review mode</source>
         <translation>Включити режим рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="297"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="328"/>
         <source>Disable AI assistant</source>
         <translation>Вимкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="298"/>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="329"/>
         <source>Enable AI assistant</source>
         <translation>Увімкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="300"/>
-        <source>Disable structure items isolation mode</source>
-        <translation>Вимкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="331"/>
+        <source>Show full text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="301"/>
-        <source>Enable structure items isolation mode</source>
-        <translation>Увімкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="332"/>
+        <source>Show only current scene text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/audioplay_text/text/audioplay_text_edit_toolbar.cpp" line="333"/>
+        <source>Additional options</source>
+        <translation type="unfinished">Додаткові опції</translation>
     </message>
 </context>
 <context>
@@ -9347,62 +9695,71 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::AudioplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="308"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="312"/>
         <source>Hide bookmarks list</source>
         <translation>Приховати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1017"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1083"/>
         <source>Writing text</source>
         <translation>Написання тексту</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1356"/>
+        <source>Document translation will take %n word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1391"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1475"/>
         <source>Formatting</source>
         <translation>Форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1392"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1476"/>
         <source>Comments</source>
         <translation>Коментарі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1393"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1477"/>
         <source>AI assistant</source>
         <translation>Асистент ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1394"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1478"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1397"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1481"/>
         <source>Start prompt from something like &quot;Write an audio drama about ...&quot;, or &quot;Write a radio drama about ...&quot;</source>
         <translation>Почніть запит з чогось на кшталт &quot;Напиши сценарій аудіовистави про...&quot;</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1414"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1498"/>
         <source>In the whole text</source>
         <translation>По всьому тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1415"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1499"/>
         <source>In scene heading</source>
         <translation>У сетингах сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1416"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1500"/>
         <source>In character</source>
         <translation>В дійових особах</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1417"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="1501"/>
         <source>In dialogue</source>
         <translation>У репліках</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="309"/>
+        <location filename="../management_layer/plugins/audioplay_text/audioplay_text_view.cpp" line="313"/>
         <source>Show bookmarks list</source>
         <translation>Показати список закладок</translation>
     </message>
@@ -9410,37 +9767,37 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::BookmarkDialog</name>
     <message>
-        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="124"/>
+        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="125"/>
         <source>Create new bookmark</source>
         <translation>Створити нову закладку</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="125"/>
+        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="126"/>
         <source>Edit bookmark</source>
         <translation>Редагувати закладку</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="126"/>
+        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="127"/>
         <source>Bookmark text</source>
         <translation>Текст закладки</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="127"/>
+        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="128"/>
         <source>Select bookmark color</source>
         <translation>Оберіть колір закладки</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="128"/>
+        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="129"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="129"/>
+        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="130"/>
         <source>Create</source>
         <translation>Створити</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="129"/>
+        <location filename="../../corelib/ui/modules/bookmarks/bookmark_dialog.cpp" line="130"/>
         <source>Update</source>
         <translation>Оновити</translation>
     </message>
@@ -9466,104 +9823,104 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CardItemParametersView</name>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="216"/>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="798"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="217"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="799"/>
         <source>Description</source>
         <translation>Опис</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="220"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="221"/>
         <source>Each line is a separate beat</source>
         <translation>Кожен рядок - окремий біт</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="292"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="293"/>
         <source>Value should be in format DD.MM.YYYY HH:MM</source>
         <translation>Значення має бути у форматі ДД.ММ.РРРР ГГ:ХХ</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="778"/>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="796"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="779"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="797"/>
         <source>Heading</source>
         <translation>Заголовок сцени</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="780"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="781"/>
         <source>Select item color</source>
         <translation>Виберіть колір елемента</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="785"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="786"/>
         <source>Title</source>
         <translation>Назва картки</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="786"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="787"/>
         <source>Human-readable name (hidden in text)</source>
         <translation>Тег картки (приховано в тексті)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="787"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="788"/>
         <source>Select scene color</source>
         <translation>Виберіть колір сцени</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="797"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="798"/>
         <source>Header text (visible in text)</source>
         <translation>Назва картки (видна в тексті)</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="800"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="801"/>
         <source>Story day</source>
         <translation>День подій</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="801"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="802"/>
         <source>Start date and time</source>
         <translation>Дата та час початку</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="802"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="803"/>
         <source>DD.MM.YYYY HH:MM</source>
         <translation>ДД.ММ.РРРР ГГ:ХХ</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="803"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="804"/>
         <source>Stamp</source>
         <translation>Відтиск</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="804"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="805"/>
         <source>Auto scene numbering</source>
         <translation>Автоматична нумерація сцен</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="805"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="806"/>
         <source>Scene number</source>
         <translation>Номер сцени</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="806"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="807"/>
         <source>Skip the number of this scene</source>
         <translation>Пропустити номер цієї сцени</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="808"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="809"/>
         <source>Skip logical number of this scene for determining the next scene number</source>
         <translation>Пропустити логічний номер цієї сцени при визначенні номера наступної сцени</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="809"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="810"/>
         <source>Tags</source>
         <translation>Мітки</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="810"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="811"/>
         <source>Add tag to the selected card</source>
         <translation>Додати мітку до вибраної картки</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="811"/>
+        <location filename="../../corelib/ui/modules/cards/card_item_parameters_view.cpp" line="812"/>
         <source>Tag name</source>
         <translation>Назва мітки</translation>
     </message>
@@ -9660,487 +10017,487 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CharacterInformationView</name>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="763"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="764"/>
         <source>Apply new character name</source>
         <translation>Застосувати нове ім’я персонажу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="769"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2208"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="770"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2209"/>
         <source>Select character color</source>
         <translation>Обрати колір персонажу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2204"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2205"/>
         <source>Unlock access to extended character profile</source>
         <translation>Розблокувати доступ до розширеного профілю персонажа</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2207"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2208"/>
         <source>Name</source>
         <translation>Назва</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2209"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2210"/>
         <source>Story role</source>
         <translation>Сюжетна роль</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="625"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="626"/>
         <source>Primary</source>
         <translation>Головна</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="625"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="626"/>
         <source>Secondary</source>
         <translation>Другий план</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="625"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="626"/>
         <source>Tertiary</source>
         <translation>Третій план</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="625"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="630"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="626"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="631"/>
         <source>Undefined</source>
         <translation>Невизнечена</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="784"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2213"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="785"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2214"/>
         <source>Age</source>
         <translation>Вік</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="790"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2214"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="791"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2215"/>
         <source>Gender</source>
         <translation>Стать</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="630"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="631"/>
         <source>Male</source>
         <translation>Чоловік</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="630"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="631"/>
         <source>Female</source>
         <translation>Жінка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="630"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="631"/>
         <source>Other</source>
         <translation>Інше</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2205"/>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2306"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2206"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2307"/>
         <source>AI assistant</source>
         <translation>Асистент ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2218"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2219"/>
         <source>One sentence description</source>
         <translation>Опис одним реченням</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2219"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2220"/>
         <source>Long description</source>
         <translation>Повний опис </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2220"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2221"/>
         <source>Dreamcast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2222"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2223"/>
         <source>Add photo +</source>
         <translation>Додати фото +</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2222"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2223"/>
         <source>Change photo...</source>
         <translation>Змінити фото</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2223"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2224"/>
         <source>Do you want to delete the character&apos;s main photo?</source>
         <translation>Видалити головне фото персонажу?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2224"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2225"/>
         <source>Select an area for the character main photo</source>
         <translation>Виберіть область для фотографії персонажу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2226"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2227"/>
         <source>Photos</source>
         <translation>Світлини</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2228"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2229"/>
         <source>Personal info</source>
         <translation>Метрика</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2229"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2230"/>
         <source>Real name</source>
         <translation>Справжнє ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2230"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2231"/>
         <source>Date of birth</source>
         <translation>Дата народження</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2231"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2232"/>
         <source>Place of birth</source>
         <translation>Місце народження</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2232"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2233"/>
         <source>Ethnicity/race</source>
         <translation>Походження</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2233"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2234"/>
         <source>Family</source>
         <translation>Сімейний стан</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2235"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2236"/>
         <source>Physique</source>
         <translation>Зовнішність</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2236"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2237"/>
         <source>Height</source>
         <translation>Зріст</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2237"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2238"/>
         <source>Weight</source>
         <translation>Вага</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2238"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2239"/>
         <source>Body</source>
         <translation>Статура</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2239"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2240"/>
         <source>Skin tone</source>
         <translation>Колір шкіри</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2240"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2241"/>
         <source>Hair style</source>
         <translation>Зачіска</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2241"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2242"/>
         <source>Hair color</source>
         <translation>Колір волосся</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2242"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2243"/>
         <source>Eye shape</source>
         <translation>Форма очей</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2243"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2244"/>
         <source>Eye color</source>
         <translation>Колір очей</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2244"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2245"/>
         <source>Facial shape</source>
         <translation>Форма обличчя</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2245"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2246"/>
         <source>Distinguish feature</source>
         <translation>Відмінна риса</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2246"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2247"/>
         <source>Other facial features</source>
         <translation>Інші особливості обличчя</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2247"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2248"/>
         <source>Posture</source>
         <translation>Постава</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2248"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2249"/>
         <source>Other physical appearance</source>
         <translation>Інші особливості зовнішності</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2250"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2251"/>
         <source>Life</source>
         <translation>Суспілля</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2251"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2252"/>
         <source>Skills</source>
         <translation>Вміння</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2252"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2253"/>
         <source>How skills developed</source>
         <translation>Як отримані вміння</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2253"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2254"/>
         <source>Incompetence</source>
         <translation>Невміння</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2254"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2255"/>
         <source>Strength/talent</source>
         <translation>Таланти</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2255"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2256"/>
         <source>Weakness</source>
         <translation>Слабкості</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2256"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2257"/>
         <source>Hobbies</source>
         <translation>Хобі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2257"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2258"/>
         <source>Habits</source>
         <translation>Звички</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2258"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2259"/>
         <source>Health</source>
         <translation>Здоров&apos;я</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2259"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2260"/>
         <source>Speech</source>
         <translation>Промова</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2260"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2261"/>
         <source>Pet</source>
         <translation>Домашня тварина</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2261"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2262"/>
         <source>Dress</source>
         <translation>Одяг</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2262"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2263"/>
         <source>Something always carried/weapon/tools</source>
         <translation>Що носить з собою/зброя/пристрої</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2263"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2264"/>
         <source>Accessories</source>
         <translation>Аксесуари</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2264"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2265"/>
         <source>Area of residence/environment</source>
         <translation>Територія проживання / навколишнє середовище</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2265"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2266"/>
         <source>Home description</source>
         <translation>Опис житла</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2266"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2267"/>
         <source>Neighborhood</source>
         <translation>Сусіди</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2267"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2268"/>
         <source>Organization involved</source>
         <translation>Участь в організаціях</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2268"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2269"/>
         <source>Income</source>
         <translation>Статки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2269"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2270"/>
         <source>Job/occupation</source>
         <translation>Робота/заняття</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2270"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2271"/>
         <source>Job rank/position</source>
         <translation>Звання/посада</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2271"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2272"/>
         <source>Job satisfaction</source>
         <translation>Ставлення до роботи</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2273"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2274"/>
         <source>Attitude</source>
         <translation>Світовідчуття</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2274"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2275"/>
         <source>Personality</source>
         <translation>Життєва позиція</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2275"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2276"/>
         <source>Moral</source>
         <translation>Моральні настанови</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2276"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2277"/>
         <source>Motivation</source>
         <translation>Що мотивує</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2277"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2278"/>
         <source>Discouragement</source>
         <translation>Що деморалізує</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2278"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2279"/>
         <source>Philosophy</source>
         <translation>Життєва філософія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2279"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2280"/>
         <source>Greatest fear</source>
         <translation>Найбільший страх</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2280"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2281"/>
         <source>Self control</source>
         <translation>Самоконтроль</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2281"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2282"/>
         <source>Intelligence level</source>
         <translation>Рівень інтелекту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2282"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2283"/>
         <source>Confidence level</source>
         <translation>Впевненість в собі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2284"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2285"/>
         <source>Biography</source>
         <translation>Біографія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2285"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2286"/>
         <source>Childhood</source>
         <translation>Дитинство</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2286"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2287"/>
         <source>Important past event</source>
         <translation>Важлива подія минулого</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2287"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2288"/>
         <source>Best accomplishment</source>
         <translation>Головне досягнення</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2288"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2289"/>
         <source>Other accomplishment</source>
         <translation>Інші досягнення</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2289"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2290"/>
         <source>Worst moment</source>
         <translation>Найгірший момент життя</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2290"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2291"/>
         <source>Failure</source>
         <translation>Невдачі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2291"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2292"/>
         <source>Secrets</source>
         <translation>Таємниці</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2292"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2293"/>
         <source>Best memories</source>
         <translation>Найкращі спогади</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2293"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2294"/>
         <source>Worst memories</source>
         <translation>Найгірші спогади</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2295"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2296"/>
         <source>Story</source>
         <translation>Історія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2296"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2297"/>
         <source>Short term goal</source>
         <translation>Короткострокова мета</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2297"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2298"/>
         <source>Long term goal</source>
         <translation>Довгострокова мета</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2298"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2299"/>
         <source>Initial beliefs</source>
         <translation>Початкові переконання</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2299"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2300"/>
         <source>Changed beliefs</source>
         <translation>Фінальні переконання</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2300"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2301"/>
         <source>What leads to change</source>
         <translation>Що призводить до змін</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2301"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2302"/>
         <source>First appearance</source>
         <translation>Перша поява</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2302"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2303"/>
         <source>Plot involvement</source>
         <translation>Залучення в сюжет</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2303"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2304"/>
         <source>Conflict</source>
         <translation>Конфлікт</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2304"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2305"/>
         <source>Most defining moment</source>
         <translation>Визначальний момент</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2309"/>
+        <location filename="../management_layer/plugins/character_information/character_information_view.cpp" line="2310"/>
         <source>Give AI a short description of the character you want it to elaborate.</source>
         <translation>Стисло опишіть персонажа, якого має розробити ШІ.</translation>
     </message>
@@ -10559,7 +10916,7 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ComicBookTextEdit</name>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1142"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1234"/>
         <source>%n panels</source>
         <translation>
             <numerusform>%n панель</numerusform>
@@ -10568,27 +10925,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1388"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1480"/>
         <source>Bookmark</source>
         <translation>Закладка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1392"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1484"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1398"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1490"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1403"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1495"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1410"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit.cpp" line="1502"/>
         <source>Show/hide list</source>
         <translation>Показати/приховати список</translation>
     </message>
@@ -10596,69 +10953,74 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ComicBookTextEditToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="92"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="96"/>
         <source>Scene heading</source>
         <translation>Сетинг сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="280"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="311"/>
         <source>Undo last action</source>
         <translation>Скасувати останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="284"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="315"/>
         <source>Redo last action</source>
         <translation>Повторити останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="287"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="318"/>
         <source>Current paragraph format</source>
         <translation>Поточний формат рядка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="289"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="320"/>
         <source>Hide fast format panel</source>
         <translation>Сховати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="290"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="321"/>
         <source>Show fast format panel</source>
         <translation>Показати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="292"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="323"/>
         <source>Search text</source>
         <translation>Шукати в тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="295"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="326"/>
         <source>Disable review mode</source>
         <translation>Вийти з режиму рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="296"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="327"/>
         <source>Enable review mode</source>
         <translation>Включити режим рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="297"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="328"/>
         <source>Disable AI assistant</source>
         <translation>Вимкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="298"/>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="329"/>
         <source>Enable AI assistant</source>
         <translation>Увімкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="300"/>
-        <source>Disable structure items isolation mode</source>
-        <translation>Вимкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="331"/>
+        <source>Show full text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="301"/>
-        <source>Enable structure items isolation mode</source>
-        <translation>Увімкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="332"/>
+        <source>Show only current scene text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/comic_book_text/text/comic_book_text_edit_toolbar.cpp" line="333"/>
+        <source>Additional options</source>
+        <translation type="unfinished">Додаткові опції</translation>
     </message>
 </context>
 <context>
@@ -10729,67 +11091,76 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ComicBookTextView</name>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="300"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="304"/>
         <source>Hide bookmarks list</source>
         <translation>Приховати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1005"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1071"/>
         <source>Writing text</source>
         <translation>Написання тексту</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1353"/>
+        <source>Document translation will take %n word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1387"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1471"/>
         <source>Formatting</source>
         <translation>Форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1388"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1472"/>
         <source>Comments</source>
         <translation>Коментарі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1389"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1473"/>
         <source>AI assistant</source>
         <translation>Асистент ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1390"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1474"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1393"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1477"/>
         <source>Start prompt from something like &quot;Write a comic book script about ...&quot;</source>
         <translation>Почніть запит з чогось на кшталт &quot;Напиши сценарій коміксу про...&quot;</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1409"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1493"/>
         <source>In the whole text</source>
         <translation>По всьому тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1410"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1494"/>
         <source>In scene heading</source>
         <translation>У сетингах сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1411"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1495"/>
         <source>In action</source>
         <translation>в описах дії</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1412"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1496"/>
         <source>In character</source>
         <translation>В дійових особах</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1413"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="1497"/>
         <source>In dialogue</source>
         <translation>У репліках</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="301"/>
+        <location filename="../management_layer/plugins/comic_book_text/comic_book_text_view.cpp" line="305"/>
         <source>Show bookmarks list</source>
         <translation>Показати список закладок</translation>
     </message>
@@ -10797,12 +11168,22 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CommentDelegate</name>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="182"/>
+        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="185"/>
+        <source>added</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="187"/>
+        <source>removed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="189"/>
         <source>edited</source>
         <translation>відредаговано</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="301"/>
+        <location filename="../../corelib/ui/modules/comments/comment_delegate.cpp" line="333"/>
         <source>%n reply(s)</source>
         <translation>
             <numerusform>%n відповідь(ей)</numerusform>
@@ -10832,64 +11213,83 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CommentsToolbar</name>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="519"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="540"/>
         <source>Choose review mode</source>
         <translation>Оберіть режим рецензування</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="520"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="541"/>
         <source>Review mode</source>
         <translation>Режим рецензування</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="521"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="542"/>
         <source>Track additions mode</source>
         <translation>Відстежувати зміни</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="522"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="543"/>
         <source>Revision mode</source>
         <translation>Режим візуалізації змін</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="525"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="546"/>
         <source>[select text to activate option]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="527"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="548"/>
         <source>Change text color</source>
         <translation>Позначити кольором тексту</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="532"/>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="542"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="553"/>
         <source>Change text highlight color</source>
         <translation>Позначити кольором тла</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="537"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="558"/>
         <source>Add comment</source>
         <translation>Додати коментар</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="547"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="562"/>
+        <source>Mark added</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="563"/>
+        <source>Mark removed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="565"/>
         <source>Mark revisited</source>
         <translation>Позначити зміни</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="551"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="569"/>
         <source>Choose color for the action</source>
         <extracomment>This allow user to choose color for the review mode actions like text higlight or comments</extracomment>
         <translation>Обрати колір позначки</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="552"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="570"/>
+        <source>Apply change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="571"/>
         <source>Mark as done</source>
         <translation>Виконане</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="553"/>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="572"/>
+        <source>Cancel change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/comments/comments_toolbar.cpp" line="573"/>
         <source>Remove selected mark</source>
         <translation>Прибрати позначку змін</translation>
     </message>
@@ -10897,44 +11297,64 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CommentsView</name>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="92"/>
-        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="185"/>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="106"/>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="265"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="97"/>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="116"/>
         <source>Discuss</source>
         <translation>Обговорити</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="113"/>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="130"/>
         <source>Mark as undone</source>
         <translation>Не виконане</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="119"/>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="136"/>
         <source>Mark as done</source>
         <translation>Виконане</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="126"/>
-        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="191"/>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="148"/>
+        <source>Apply change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="154"/>
+        <source>Cancel change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="165"/>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="271"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="136"/>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="195"/>
         <source>Mark selected notes as done</source>
         <translation>Позначити вибрані примітки як &quot;Виконане&quot;</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="142"/>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="201"/>
         <source>Mark selected notes as undone</source>
         <translation>Позначити вибрані примітки як &quot;Не виконане&quot;</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="148"/>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="211"/>
+        <source>Apply changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="217"/>
+        <source>Cancel changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../corelib/ui/modules/comments/comments_view.cpp" line="227"/>
         <source>Remove selected notes</source>
         <translation>Видалити вибрані примітки</translation>
     </message>
@@ -11184,14 +11604,19 @@ If you want to continue editing screenplay text, switch to the corresponding mod
     <message>
         <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="331"/>
         <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="333"/>
-        <source>Renew</source>
-        <translation>Продовжити</translation>
+        <source>Activate</source>
+        <translation>Активувати</translation>
     </message>
     <message>
         <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="332"/>
         <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="334"/>
         <source>Buy as a gift</source>
         <translation>Купити в подарунок</translation>
+    </message>
+    <message>
+        <location filename="../ui/account/compare_subscriptions_dialog.cpp" line="335"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Скасувати</translation>
     </message>
 </context>
 <context>
@@ -11500,27 +11925,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateCharacterDialog</name>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="68"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="69"/>
         <source>The character should have a name</source>
         <translation>Персонаж має мати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="101"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="102"/>
         <source>Create new character</source>
         <translation>Створити персонажа</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="102"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="103"/>
         <source>Character name</source>
         <translation>Ім&apos;я персонажа</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="103"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="104"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="104"/>
+        <location filename="../management_layer/plugins/characters_relations/ui/create_character_dialog.cpp" line="105"/>
         <source>Create</source>
         <translation>Створити</translation>
     </message>
@@ -11528,228 +11953,238 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateDocumentDialog</name>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="170"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="186"/>
         <source>Add folder</source>
         <translation>Додати теку</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="171"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="187"/>
         <source>Add text</source>
         <translation>Додати текст</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="172"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="188"/>
         <source>Add character</source>
         <translation>Додати персонажа</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="173"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="189"/>
         <source>Add location</source>
         <translation>Додати локацію</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="174"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="190"/>
         <source>Add world</source>
         <translation>Додати світ</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="175"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="191"/>
         <source>Add screenplay</source>
         <translation>Додати сценарій</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="176"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="192"/>
         <source>Add comic book</source>
         <translation>Додати комікс</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="177"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="193"/>
         <source>Add audioplay</source>
         <translation>Додати аудіовиставу</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="178"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="194"/>
         <source>Add stageplay</source>
         <translation>Додати п&apos;єсу</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="179"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="195"/>
         <source>Add novel</source>
         <translation>Додати роман</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="180"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="196"/>
         <source>Add mind map</source>
         <translation>Додати мапу думок</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="181"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="197"/>
         <source>Add image gallery</source>
         <translation>Додати галерею зображень</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="182"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="198"/>
         <source>Add presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="186"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="202"/>
         <source>Create a folder to group documents inside the story.</source>
         <translation>Створити теку для документів твору</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="188"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="204"/>
         <source>Create a plain text document to write out ideas and notes.</source>
         <translation>Створити простий текстовий документ для запису ідей та нотаток.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="190"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="206"/>
         <source>Create a document with full character&apos;s description to track his relations and follow his journey within the story.</source>
         <translation>Створіть документ із повним описом персонажа, щоб відстежити його стосунки та побачити його подорож у межах історії.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="193"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="209"/>
         <source>Create a document to note down the location&apos;s description and keep the details.</source>
         <translation>Створити документ із детальним описом локації.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="195"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="211"/>
         <source>Create a document with detailed world description to keep all the notes in one place</source>
         <translation>Створити документ з детальним описом світу</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="198"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="214"/>
         <source>Create a document set to streamline your work on the feature film, series, or animation.</source>
         <translation>Створити набір документів для роботи над сценарієм кінострічки, серіалу або анимації.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="201"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="217"/>
         <source>Create a document set to streamline your work on the comic book, graphic novel, or manga.</source>
         <translation>Створити набір документів для роботи над сценарієм мальопису, графічного роману або манґи.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="204"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="220"/>
         <source>Create a document set to streamline your work on the audio drama, or podcast.</source>
         <translation>Створити набір документів для роботи над аудіо-виставою або подкастом.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="206"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="222"/>
         <source>Create a document set to streamline your work on the stage play, or musical.</source>
         <translation>Створити набір документів для роботи над п&apos;єсою або мюзиклом.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="208"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="224"/>
         <source>Create a document set to streamline your work on the fiction book.</source>
         <translation>Створити набір документів для роботи над книгою.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="210"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="226"/>
         <source>Create a mind map to brainstorm ideas and plan your story development.</source>
         <translation>Створіть мапу думок для мозкового штурму ідей або планування розробки вашої історії.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="212"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="228"/>
         <source>Create a moodboard with atmospheric images or photos.</source>
         <translation>Створіть мудборд з атмосферними зображеннями.</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="214"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="230"/>
         <source>Create a presentation document to store valuable outside content with your project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="307"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="338"/>
         <source>Should be a number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="315"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="346"/>
         <source>Choose the file to import</source>
         <translation>Оберіть файл для імпорту</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="336"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="369"/>
         <source>The character should have a name</source>
         <translation>Персонаж має мати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="338"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="371"/>
         <source>The location should have a name</source>
         <translation>Локація має мати назву</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="340"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="373"/>
         <source>The world should have a name</source>
         <translation>Світ повинен мати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="378"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="411"/>
         <source>Please, select file for importing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="390"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="423"/>
         <source>The file doesn&apos;t exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="397"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="430"/>
         <source>Can&apos;t read data from the file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="465"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="513"/>
         <source>Insert into</source>
         <translation>Вставити в</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="492"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="540"/>
         <source>Story</source>
         <translation>Твір</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="493"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="541"/>
         <source>World of story</source>
         <translation>Світ твору</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="494"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="542"/>
         <source>Structure &amp; notes</source>
         <translation>Структура та примітки</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="496"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="544"/>
         <source>Add document</source>
         <translation>Додати документ</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="503"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="551"/>
         <source>Name</source>
         <translation>Назва</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="504"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="552"/>
         <source>Split to episodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="505"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="553"/>
         <source>Episodes amount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="506"/>
-        <location filename="../ui/project/create_document_dialog.cpp" line="507"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="554"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="555"/>
         <source>Choose file for importing</source>
         <translation>Виберіть файл для імпорту</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="508"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="557"/>
+        <source>Document can be created only with a PRO or CLOUD version of the app.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_document_dialog.cpp" line="558"/>
+        <source>Upgrade to PRO</source>
+        <translation>Прокачати до PRO версії</translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_document_dialog.cpp" line="559"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog.cpp" line="509"/>
+        <location filename="../ui/project/create_document_dialog.cpp" line="560"/>
         <source>Create</source>
         <translation>Створити</translation>
     </message>
@@ -11757,67 +12192,67 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateDocumentDialogOption</name>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="179"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="209"/>
         <source>Folder</source>
         <translation>Тека</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="184"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="214"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="189"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="219"/>
         <source>Character</source>
         <translation>Персонаж</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="194"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="224"/>
         <source>Location</source>
         <translation>Локація</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="199"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="229"/>
         <source>World</source>
         <translation>Світ</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="204"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="234"/>
         <source>Screenplay</source>
         <translation>Сценарій</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="209"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="239"/>
         <source>Comic book</source>
         <translation>Мальопис</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="214"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="244"/>
         <source>Audioplay</source>
         <translation>Аудіовистава</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="219"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="249"/>
         <source>Stageplay</source>
         <translation>П&apos;єса</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="224"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="254"/>
         <source>Novel</source>
         <translation>Роман</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="229"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="259"/>
         <source>Mind map</source>
         <translation>Мапа думок</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="234"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="264"/>
         <source>Image gallery</source>
         <translation>Галерея зображень</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_document_dialog_option.cpp" line="239"/>
+        <location filename="../ui/project/create_document_dialog_option.cpp" line="269"/>
         <source>Presentation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11825,42 +12260,47 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateDraftDialog</name>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="140"/>
-        <source>Create new document draft</source>
-        <translation>Створити новий драфт</translation>
-    </message>
-    <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="140"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="145"/>
         <source>Edit document draft</source>
         <translation>Редагувати драфт</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="142"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="145"/>
+        <source>Create document draft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="147"/>
+        <source>Store actual draft as a separate document to keep your progress.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="148"/>
         <source>Draft name</source>
         <translation>Назва драфту</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="143"/>
-        <source>New draft based on</source>
-        <translation>Новий драфт заснований на</translation>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="149"/>
+        <source>Based on</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="144"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="150"/>
         <source>Lock draft text editing</source>
         <translation>Блокувати редагування драфту</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="145"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="151"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="146"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="152"/>
         <source>Create</source>
         <translation>Створити</translation>
     </message>
     <message>
-        <location filename="../ui/project/create_draft_dialog.cpp" line="146"/>
+        <location filename="../ui/project/create_draft_dialog.cpp" line="152"/>
         <source>Save</source>
         <translation>Зберегти</translation>
     </message>
@@ -11868,27 +12308,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateLocationDialog</name>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="66"/>
+        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="67"/>
         <source>The location should have a name</source>
         <translation>Локація має мати назву</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="99"/>
+        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="100"/>
         <source>Create new location</source>
         <translation>Створити нову локацію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="100"/>
+        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="101"/>
         <source>Location name</source>
         <translation>Назва локації</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="101"/>
+        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="102"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="102"/>
+        <location filename="../management_layer/plugins/locations_map/ui/create_location_dialog.cpp" line="103"/>
         <source>Create</source>
         <translation>Створити</translation>
     </message>
@@ -11896,152 +12336,152 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateProjectDialog</name>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="174"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="175"/>
         <source>Choose the folder where new story will be saved</source>
         <translation>Оберіть теку для збереження майбутнього твору</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="182"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="183"/>
         <source>Choose the file to import</source>
         <translation>Оберіть файл для імпорту</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="192"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="193"/>
         <source>File format not supported</source>
         <translation>Формат файлу не підтримується</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="193"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="194"/>
         <source>Importing from DOC files is not supported. You need to save the file in DOCX format and repeat the import.</source>
         <translation>Не підтримується імпорт файлів формату DOC. Збережіть файл як DOCX та повторіть імпорт.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="209"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="210"/>
         <source>The story&apos;s name can&apos;t be empty. Fill it, please.</source>
         <translation>Будь ласка, заповніть поле назви твору</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="290"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="291"/>
         <source>Since connection to the cloud service unavailable, you only can create new story on the local computer.</source>
         <translation>Новий твір можна створити лише на комп&apos;ютері, адже підключення до хмари недоступне.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="321"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="322"/>
         <source>Outside the team</source>
         <translation>Поза командою</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="359"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="360"/>
         <source>The story will be created on the local computer.</source>
         <translation>Твір буде збережено на комп&apos;ютері</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="360"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="361"/>
         <source>to create stories in the cloud.</source>
         <translation>щоб створювати твори у хмарі.</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="362"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="363"/>
         <source>Subscribe to CLOUD version</source>
         <translation>Підпишіться на CLOUD версію</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="389"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="390"/>
         <source>Can&apos;t create project in this folder, choose another one</source>
         <translation>Не вдається створити проєкт у цій папці, виберіть іншу</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="404"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="405"/>
         <source>Create new story</source>
         <translation>Створити новий твір</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="406"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="407"/>
         <source>Type of story</source>
         <translation>Тип твору</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="412"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="413"/>
         <source>Not set</source>
         <translation>Не встановлено</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="417"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="418"/>
         <source>Screenplay</source>
         <translation>Сценарій</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="422"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="423"/>
         <source>Comic book</source>
         <translation>Мальопис</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="427"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="428"/>
         <source>Audioplay</source>
         <translation>Аудіовистава</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="432"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="433"/>
         <source>Stageplay</source>
         <translation>П&apos;єса</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="437"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="438"/>
         <source>Novel</source>
         <translation>Роман</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="443"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="444"/>
         <source>Name of the story</source>
         <translation>Назва твору</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="444"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="445"/>
         <source>Save story on the local computer</source>
         <translation>Зберегти твір на комп’ютері</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="445"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="446"/>
         <source>Save story in the cloud</source>
         <translation>Зберегти твір у хмарі</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="446"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="447"/>
         <source>Choose the team to place the story in it</source>
         <translation>Виберіть команду, в якій буде розміщена історія</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="447"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="448"/>
         <source>Location of the new story file</source>
         <translation>Розташування файлу нового твору</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="449"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="450"/>
         <source>Choose the folder where the new story will be placed</source>
         <translation>Виберіть теку, в якій буде розміщено новий твір</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="450"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="451"/>
         <source>Choose file with story to import</source>
         <translation>Оберіть для імпортування файл твору</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="451"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="452"/>
         <source>Choose file for importing</source>
         <translation>Виберіть файл для імпорту</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="452"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="453"/>
         <source>Advanced options</source>
         <translation>Розширені параметри</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="453"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="454"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../ui/projects/create_project_dialog.cpp" line="454"/>
+        <location filename="../ui/projects/create_project_dialog.cpp" line="455"/>
         <source>Create</source>
         <translation>Створити</translation>
     </message>
@@ -12049,27 +12489,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::CreateWorldDialog</name>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="65"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="66"/>
         <source>The world should have a name</source>
         <translation>Світ повинен мати ім&apos;я</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="98"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="99"/>
         <source>Create new world</source>
         <translation>Створити новий світ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="99"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="100"/>
         <source>World name</source>
         <translation>Назва світу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="100"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="101"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="101"/>
+        <location filename="../management_layer/plugins/worlds_map/ui/create_world_dialog.cpp" line="102"/>
         <source>Create</source>
         <translation>Створити</translation>
     </message>
@@ -12109,12 +12549,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::DocumentExportDialog</name>
     <message>
-        <location filename="../ui/export/document_export_dialog.cpp" line="87"/>
+        <location filename="../ui/export/document_export_dialog.cpp" line="85"/>
         <source>Include main photo</source>
         <translation>з головним фото</translation>
     </message>
     <message>
-        <location filename="../ui/export/document_export_dialog.cpp" line="88"/>
+        <location filename="../ui/export/document_export_dialog.cpp" line="86"/>
         <source>additional photos</source>
         <translation>додаткові фото</translation>
     </message>
@@ -12189,122 +12629,122 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::ImportDialog</name>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="368"/>
+        <location filename="../ui/import/import_dialog.cpp" line="370"/>
         <source>Import script text</source>
         <translation>Імпортувати текст сценарію</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="372"/>
+        <location filename="../ui/import/import_dialog.cpp" line="374"/>
         <source>Import novel text</source>
         <translation>Імпортувати текст роману</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="376"/>
+        <location filename="../ui/import/import_dialog.cpp" line="378"/>
         <source>Import presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="380"/>
+        <location filename="../ui/import/import_dialog.cpp" line="382"/>
         <source>Import text</source>
         <translation>Імпортувати текст</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="722"/>
+        <location filename="../ui/import/import_dialog.cpp" line="726"/>
         <source>Import data from files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="725"/>
+        <location filename="../ui/import/import_dialog.cpp" line="729"/>
         <source>Import data from the file</source>
         <translation>Імпортувати дані з файлу</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="730"/>
+        <location filename="../ui/import/import_dialog.cpp" line="734"/>
         <source>Documents</source>
         <translation>Документи</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="731"/>
+        <location filename="../ui/import/import_dialog.cpp" line="735"/>
         <source>Import characters</source>
         <translation>Імпортувати персонажів</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="732"/>
+        <location filename="../ui/import/import_dialog.cpp" line="736"/>
         <source>Import locations</source>
         <translation>Імпортувати локації</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="733"/>
+        <location filename="../ui/import/import_dialog.cpp" line="737"/>
         <source>Import research</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="734"/>
+        <location filename="../ui/import/import_dialog.cpp" line="738"/>
         <source>Text</source>
         <translation>Сценарій</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="48"/>
+        <location filename="../ui/import/import_dialog.cpp" line="49"/>
         <source>Audioplay</source>
         <translation>Аудіовистава</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="44"/>
+        <location filename="../ui/import/import_dialog.cpp" line="45"/>
         <source>Simple text</source>
         <translation>Звичайний текст</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="52"/>
+        <location filename="../ui/import/import_dialog.cpp" line="53"/>
         <source>Comic Book</source>
         <translation>Комікс</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="56"/>
+        <location filename="../ui/import/import_dialog.cpp" line="57"/>
         <source>Novel</source>
         <translation>Роман</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="60"/>
+        <location filename="../ui/import/import_dialog.cpp" line="61"/>
         <source>Screenplay</source>
         <translation>Сценарій</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="64"/>
+        <location filename="../ui/import/import_dialog.cpp" line="65"/>
         <source>Stageplay</source>
         <translation>П&apos;єса</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="68"/>
+        <location filename="../ui/import/import_dialog.cpp" line="69"/>
         <source>Presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="728"/>
+        <location filename="../ui/import/import_dialog.cpp" line="732"/>
         <source>Importing files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="738"/>
+        <location filename="../ui/import/import_dialog.cpp" line="742"/>
         <source>Same options for all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="748"/>
+        <location filename="../ui/import/import_dialog.cpp" line="752"/>
         <source>Import to</source>
         <translation>Імпортувати до</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="736"/>
+        <location filename="../ui/import/import_dialog.cpp" line="740"/>
         <source>Keep scene numbers</source>
         <translation>Зберегти номери сцен</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="739"/>
+        <location filename="../ui/import/import_dialog.cpp" line="743"/>
         <source>Import</source>
         <translation>Імпортувати</translation>
     </message>
     <message>
-        <location filename="../ui/import/import_dialog.cpp" line="740"/>
+        <location filename="../ui/import/import_dialog.cpp" line="744"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
@@ -12312,42 +12752,42 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LanguageDialog</name>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="306"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="307"/>
         <source>Translation is ready for %1%</source>
         <translation>Переклад готовий за %1%</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="316"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="317"/>
         <source>Select file with translation</source>
         <translation>Оберіть файл з перекладом</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="318"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="319"/>
         <source>Compiled Qt translation files</source>
         <translation>Скомпільовані файли перекладу Qt</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="352"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="353"/>
         <source>Change application language</source>
         <translation>Змінити мову інтерфейсу</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="355"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="356"/>
         <source>Did not find your preffered language? Read how you can add it yourself.</source>
         <translation>Не знайшли бажану мову? Дізнайтесь, як додати її власноруч.</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="357"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="358"/>
         <source>Improve</source>
         <translation>Удосконалити</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="358"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="359"/>
         <source>Browse</source>
         <translation>Переглянути</translation>
     </message>
     <message>
-        <location filename="../ui/settings/language_dialog.cpp" line="359"/>
+        <location filename="../ui/settings/language_dialog.cpp" line="360"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
@@ -12798,52 +13238,52 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LoginDialog</name>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="131"/>
+        <location filename="../ui/account/login_dialog.cpp" line="132"/>
         <source>Email invalid</source>
         <translation>Недійсна електронна адреса</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="78"/>
+        <location filename="../ui/account/login_dialog.cpp" line="79"/>
         <source>The confirmation code we&apos;ve sent expired.</source>
         <translation>Термін дії коду підтвердження закінчився.</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="80"/>
+        <location filename="../ui/account/login_dialog.cpp" line="81"/>
         <source>We&apos;ve sent a confirmation code to the e-mail above, please enter it here to verify</source>
         <translation>Код підтвердження надіслано на вказану електронну пошту. Будь ласка, введіть його для підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="203"/>
+        <location filename="../ui/account/login_dialog.cpp" line="204"/>
         <source>Get into your account</source>
         <translation>Вхід у обліківку</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="206"/>
+        <location filename="../ui/account/login_dialog.cpp" line="207"/>
         <source>Sign in to get access to extended features of the FREE, PRO and CLOUD versions</source>
         <translation>Авторизуйтеся, щоб отримати доступ до розширених функцій версій FREE, PRO та CLOUD</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="207"/>
+        <location filename="../ui/account/login_dialog.cpp" line="208"/>
         <source>Email</source>
         <translation>Електронна пошта</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="209"/>
+        <location filename="../ui/account/login_dialog.cpp" line="210"/>
         <source>Confirmation code</source>
         <translation>Код підтвердження</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="210"/>
+        <location filename="../ui/account/login_dialog.cpp" line="211"/>
         <source>Sign in</source>
         <translation>Увійти</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="211"/>
+        <location filename="../ui/account/login_dialog.cpp" line="212"/>
         <source>Send code again</source>
         <translation>Відправити код знову</translation>
     </message>
     <message>
-        <location filename="../ui/account/login_dialog.cpp" line="212"/>
+        <location filename="../ui/account/login_dialog.cpp" line="213"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
@@ -12851,12 +13291,12 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::LoglineGeneratorDialog</name>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="85"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="86"/>
         <source>Hint</source>
         <translation>Підказка</translation>
     </message>
     <message>
-        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="86"/>
+        <location filename="../../corelib/ui/modules/logline_generator/logline_generator_dialog.cpp" line="87"/>
         <source>Read more</source>
         <translation>Докладніше</translation>
     </message>
@@ -13312,98 +13752,98 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::MindMapSidebar</name>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="618"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="619"/>
         <source>Solid line</source>
         <translation>Суцільна лінія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="618"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="619"/>
         <source>Dash line</source>
         <translation>Пунктирна лінія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="618"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="619"/>
         <source>Dot line</source>
         <translation>Точкова лінія</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="620"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="621"/>
         <source>Parameters</source>
         <translation>Параметри</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="621"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="622"/>
         <source>AI assistant</source>
         <translation>Асистент ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="623"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="624"/>
         <source>Mind map name</source>
         <translation>Назва мапи думок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="624"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="625"/>
         <source>Mind map description</source>
         <translation>Опис мапи думок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="627"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="628"/>
         <source>To see node info and all their connections, select concrete node.</source>
         <translation>Щоб побачити інформацію про вузол та всі його зв&apos;язки, виберіть необхідний вузол.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="628"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="629"/>
         <source>To see connection details, select concrete connection.</source>
         <translation>Щоб побачити деталі з&apos;єднання, виберіть це з&apos;єднання.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="631"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="632"/>
         <source>To create a new connection, hold the Option button and move one node to another.</source>
         <translation>Щоб створити нове з&apos;єднання, затисніть клавишу Option та перетягніть один вузол на інший.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="634"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="635"/>
         <source>To create a new connection, hold the Alt button and move one node to another.</source>
         <translation>Щоб створити нове з&apos;єднання, затисніть клавішу Alt та перетягніть один вузол на інший.</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="640"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="641"/>
         <source>Node text</source>
         <translation>Назва вузла</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="641"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="642"/>
         <source>Node details</source>
         <translation>Опис вузла</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="643"/>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="647"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="644"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="648"/>
         <source>Line type</source>
         <translation>Тип лінії</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="644"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="645"/>
         <source>Connection text</source>
         <translation>Текст з&apos;єднання</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="645"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="646"/>
         <source>Connection details</source>
         <translation>Опис з&apos;єднання</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="648"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="649"/>
         <source>Group name</source>
         <translation>Назва групи</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="649"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="650"/>
         <source>Group details</source>
         <translation>Опис групи</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="651"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_sidebar.cpp" line="652"/>
         <source>Give AI a short description of the idea or question you want it to provide ideas about.</source>
         <translation>Дайте ШІ короткий опис вашої ідеї або питання, щоб він допоміг розігнати необхідну вам тему.</translation>
     </message>
@@ -13411,74 +13851,84 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::MindMapView</name>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="151"/>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="264"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="158"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="295"/>
         <source>New node</source>
         <translation>Новий вузол</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="271"/>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="763"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="302"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="818"/>
         <source>Add child node</source>
         <translation>Додати вкладений вузол</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="277"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="308"/>
         <source>Add sibling node</source>
         <translation>Додати споріднений вузол</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="298"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="329"/>
         <source>New group</source>
         <translation>Нова група</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="322"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="353"/>
         <source>Choose the file to save image</source>
         <translation>Виберіть файл для збереження зображення</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="599"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="632"/>
         <source>Writing ideas</source>
         <translation>Написання ідей</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="618"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="651"/>
         <source>Ideas</source>
         <translation>Ідеї</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="757"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="804"/>
+        <source>Undo last action</source>
+        <translation>Скасувати останню дію</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="809"/>
+        <source>Redo last action</source>
+        <translation>Повторити останню дію</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="812"/>
         <source>Unlock ability to edit mind map</source>
         <translation>Розблокувати редагування мапи думок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="760"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="815"/>
         <source>Add node</source>
         <translation>Додати вузол</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="764"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="819"/>
         <source>Add group</source>
         <translation>Додати групу</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="767"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="822"/>
         <source>Remove selected item</source>
         <translation>Видалити вибраний елемент</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="776"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="831"/>
         <source>AI assistant</source>
         <translation>Асистент ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="779"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="834"/>
         <source>Show connections titles only for the selected nodes</source>
         <translation>Показувати назви з&apos;єднань лише для вибраних вузлів</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="780"/>
+        <location filename="../management_layer/plugins/mind_map/ui/mind_map_view.cpp" line="835"/>
         <source>Save mind map to image</source>
         <translation>Зберегти мапу думок як зображення</translation>
     </message>
@@ -13486,42 +13936,42 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelCardsPrintDialog</name>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="286"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="287"/>
         <source>Print cards</source>
         <translation>Друкувати картки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="288"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="289"/>
         <source>Page orientation</source>
         <translation>Орієнтація сторінки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="289"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="290"/>
         <source>Portrait</source>
         <translation>Портретна</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="290"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="291"/>
         <source>Landscape</source>
         <translation>Альбомна</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="291"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="292"/>
         <source>Cards count</source>
         <translation>Кількість карток</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="292"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="293"/>
         <source>Print colored cards</source>
         <translation>Друк кольорових карток</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="294"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="295"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="295"/>
+        <location filename="../management_layer/plugins/novel_cards/ui/novel_cards_print_dialog.cpp" line="296"/>
         <source>Print</source>
         <translation>Друк</translation>
     </message>
@@ -13803,27 +14253,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelOutlineEdit</name>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1224"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1316"/>
         <source>Bookmark</source>
         <translation>Закладка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1228"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1320"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1233"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1325"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1238"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1330"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1245"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit.cpp" line="1337"/>
         <source>Show/hide list</source>
         <translation>Показати/приховати список</translation>
     </message>
@@ -13831,140 +14281,145 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelOutlineEditToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="92"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="96"/>
         <source>Scene heading</source>
         <translation>Сетинг сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="280"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="311"/>
         <source>Undo last action</source>
         <translation>Скасувати останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="284"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="315"/>
         <source>Redo last action</source>
         <translation>Повторити останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="287"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="318"/>
         <source>Current paragraph format</source>
         <translation>Поточний формат рядка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="289"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="320"/>
         <source>Hide fast format panel</source>
         <translation>Сховати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="290"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="321"/>
         <source>Show fast format panel</source>
         <translation>Показати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="292"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="323"/>
         <source>Search text</source>
         <translation>Шукати в тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="295"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="326"/>
         <source>Disable review mode</source>
         <translation>Вийти з режиму рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="296"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="327"/>
         <source>Enable review mode</source>
         <translation>Включити режим рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="297"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="328"/>
         <source>Disable AI assistant</source>
         <translation>Вимкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="298"/>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="329"/>
         <source>Enable AI assistant</source>
         <translation>Увімкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="300"/>
-        <source>Disable structure items isolation mode</source>
-        <translation>Вимкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="331"/>
+        <source>Show full text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="301"/>
-        <source>Enable structure items isolation mode</source>
-        <translation>Увімкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="332"/>
+        <source>Show only current chapter text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_outline/text/novel_outline_edit_toolbar.cpp" line="333"/>
+        <source>Additional options</source>
+        <translation type="unfinished">Додаткові опції</translation>
     </message>
 </context>
 <context>
     <name>Ui::NovelOutlineView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="326"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="330"/>
         <source>Hide scene parameters</source>
         <translation>Приховати параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="327"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="331"/>
         <source>Show scene parameters</source>
         <translation>Показати параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="328"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="332"/>
         <source>Hide bookmarks list</source>
         <translation>Сховати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="329"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="333"/>
         <source>Show bookmarks list</source>
         <translation>Показати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1407"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1432"/>
         <source>Writing text</source>
         <translation>Написання тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1729"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1754"/>
         <source>Formatting</source>
         <translation>Форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1730"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1755"/>
         <source>Scene parameters</source>
         <translation>Параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1731"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1756"/>
         <source>Comments</source>
         <translation>Коментарі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1732"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1757"/>
         <source>AI assistant</source>
         <translation>Асистент ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1733"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1758"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1736"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1761"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>Почніть запит з чогось на кшталт &quot;Напиши роман про...&quot; або &quot;Напиши главу про...&quot;</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1753"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1778"/>
         <source>In the whole text</source>
         <translation>По всьому тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1754"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1779"/>
         <source>In scene heading</source>
         <translation>У сетингах сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1755"/>
+        <location filename="../management_layer/plugins/novel_outline/novel_outline_view.cpp" line="1780"/>
         <source>In beats</source>
         <translation>У бітах</translation>
     </message>
@@ -14028,27 +14483,27 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1598"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1691"/>
         <source>Bookmark</source>
         <translation>Закладка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1602"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1695"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1607"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1700"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1612"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1705"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1618"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit.cpp" line="1711"/>
         <source>Show/hide list</source>
         <translation>Показати/приховати список</translation>
     </message>
@@ -14056,79 +14511,84 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelTextEditToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="100"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="104"/>
         <source>Scene heading</source>
         <translation>Сетинг сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="296"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="327"/>
         <source>Undo last action</source>
         <translation>Скасувати останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="300"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="331"/>
         <source>Redo last action</source>
         <translation>Повторити останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="303"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="334"/>
         <source>Current paragraph format</source>
         <translation>Поточний формат рядка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="305"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="336"/>
         <source>Hide fast format panel</source>
         <translation>Сховати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="306"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="337"/>
         <source>Show fast format panel</source>
         <translation>Показати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="307"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="338"/>
         <source>Hide beats headings</source>
         <translation>Приховати заголовки бітів</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="308"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="339"/>
         <source>Show beats headings</source>
         <translation>Показати заголовки бітів</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="310"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="341"/>
         <source>Search text</source>
         <translation>Шукати в тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="313"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="344"/>
         <source>Disable review mode</source>
         <translation>Вийти з режиму рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="314"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="345"/>
         <source>Enable review mode</source>
         <translation>Включити режим рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="315"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="346"/>
         <source>Disable AI assistant</source>
         <translation>Вимкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="316"/>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="347"/>
         <source>Enable AI assistant</source>
         <translation>Увімкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="318"/>
-        <source>Disable structure items isolation mode</source>
-        <translation>Вимкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="349"/>
+        <source>Show full text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="319"/>
-        <source>Enable structure items isolation mode</source>
-        <translation>Увімкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="350"/>
+        <source>Show only current chapter text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/novel_text/text/novel_text_edit_toolbar.cpp" line="351"/>
+        <source>Additional options</source>
+        <translation type="unfinished">Додаткові опції</translation>
     </message>
 </context>
 <context>
@@ -14188,32 +14648,41 @@ If you want to continue editing screenplay text, switch to the corresponding mod
 <context>
     <name>Ui::NovelTextView</name>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="344"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="348"/>
         <source>Hide scene parameters</source>
         <translation>Приховати параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="345"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="349"/>
         <source>Show scene parameters</source>
         <translation>Показати параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="346"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="350"/>
         <source>Hide bookmarks list</source>
         <translation>Сховати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="347"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="351"/>
         <source>Show bookmarks list</source>
         <translation>Показати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1428"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1493"/>
         <source>Writing text</source>
         <translation>Написання тексту</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1658"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1723"/>
+        <source>Document translation will take %n word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1725"/>
         <source>Script generation will take %n word(s)</source>
         <translation>
             <numerusform>Генерування сценарію задіє %n слово</numerusform>
@@ -14222,47 +14691,47 @@ If you want to continue editing screenplay text, switch to the corresponding mod
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1772"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1839"/>
         <source>Formatting</source>
         <translation>Форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1773"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1840"/>
         <source>Scene parameters</source>
         <translation>Параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1774"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1841"/>
         <source>Comments</source>
         <translation>Коментарі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1775"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1842"/>
         <source>AI assistant</source>
         <translation>Асистент ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1776"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1843"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1779"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1846"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>Почніть запит з чогось на кшталт &quot;Напиши роман про...&quot; або &quot;Напиши главу про...&quot;</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1796"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1863"/>
         <source>In the whole text</source>
         <translation>По всьому тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1797"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1864"/>
         <source>In scene heading</source>
         <translation>У сетингах сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1798"/>
+        <location filename="../management_layer/plugins/novel_text/novel_text_view.cpp" line="1865"/>
         <source>In text</source>
         <translation>В тексті</translation>
     </message>
@@ -14819,44 +15288,52 @@ Discuss everything with fellow community of writers, share your work in progress
     </message>
 </context>
 <context>
+    <name>Ui::PresentationView</name>
+    <message>
+        <location filename="../management_layer/plugins/presentation/presentation_view.cpp" line="322"/>
+        <source>Load new presentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ui::ProjectCollaboratorsAccessDialog</name>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="226"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="227"/>
         <source>Email invalid</source>
         <translation>Недійсна електронна адреса</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="380"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="381"/>
         <source>Configure access to the project</source>
         <translation>Налаштувати доступ до проєкту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="382"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="383"/>
         <source>Email</source>
         <translation>Електронна пошта</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="383"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="384"/>
         <source>Provide access to all documents</source>
         <translation>Надати доступ до всіх документів</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="384"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="385"/>
         <source>Documents</source>
         <translation>Документи</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="385"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="386"/>
         <source>Close access</source>
         <translation>Закрити доступ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="386"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="387"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="387"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_access_dialog.cpp" line="388"/>
         <source>Grant access</source>
         <translation>Надати доступ</translation>
     </message>
@@ -14864,47 +15341,47 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectCollaboratorsDocumentAccessDialog</name>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="201"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="202"/>
         <source>Collaborators and team members</source>
         <translation>Співавтори та колеги по команді</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="203"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="204"/>
         <source>Collaborators</source>
         <translation>Співавтори</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="205"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="206"/>
         <source>Team members</source>
         <translation>Колеги по команді</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="207"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="208"/>
         <source>Here will be a list of your collaborators</source>
         <translation>Тут буде список ваших співавторів</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="328"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="329"/>
         <source>Configure access to the document</source>
         <translation>Налаштуйте доступ до документа</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="330"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="331"/>
         <source>User name or email</source>
         <translation>Ім&apos;я або пошта користувача</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="331"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="332"/>
         <source>Invite collaborator</source>
         <translation>Запросити співавтора</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="332"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="333"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="333"/>
+        <location filename="../management_layer/plugins/project_collaborators/ui/project_collaborators_document_access_dialog.cpp" line="334"/>
         <source>Grant access</source>
         <translation>Надати доступ</translation>
     </message>
@@ -15031,17 +15508,17 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectNavigator</name>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="279"/>
+        <location filename="../ui/project/project_navigator.cpp" line="364"/>
         <source>Show document structure</source>
         <translation>Показати структуру документа</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="287"/>
+        <location filename="../ui/project/project_navigator.cpp" line="372"/>
         <source>Add document</source>
         <translation>Додати документ</translation>
     </message>
     <message>
-        <location filename="../ui/project/project_navigator.cpp" line="288"/>
+        <location filename="../ui/project/project_navigator.cpp" line="373"/>
         <source>Empty recycle bin</source>
         <translation>Винести непотріб</translation>
     </message>
@@ -15049,7 +15526,7 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::ProjectToolBar</name>
     <message>
-        <location filename="../ui/project/project_tool_bar.cpp" line="82"/>
+        <location filename="../ui/project/project_tool_bar.cpp" line="146"/>
         <source>Show main menu</source>
         <translation>Показати головне меню</translation>
     </message>
@@ -15151,22 +15628,22 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::PurchaseDialog</name>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="209"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="210"/>
         <source>Choose what suits you</source>
         <translation>Виберіть те, що вам підходить</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="210"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="211"/>
         <source>Buy as a gift</source>
         <translation>Купити в подарунок</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="211"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="212"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_dialog.cpp" line="212"/>
+        <location filename="../ui/account/purchase_dialog.cpp" line="213"/>
         <source>Purchase</source>
         <translation>Придбати</translation>
     </message>
@@ -15214,37 +15691,37 @@ Discuss everything with fellow community of writers, share your work in progress
 <context>
     <name>Ui::PurchaseGiftDialog</name>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="97"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="98"/>
         <source>Email invalid</source>
         <translation>Недійсна електронна адреса</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="126"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="127"/>
         <source>Purchasing a gift</source>
         <translation>Купівля подарунка</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="127"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="128"/>
         <source>Recepient email</source>
         <translation>Електронна пошта одержувача</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="128"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="129"/>
         <source>A promo code to activate the gift will be sent here</source>
         <translation>Промокод активації подарунка буде надіслано сюди</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="129"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="130"/>
         <source>Greeting text</source>
         <translation>Текст привітання</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="130"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="131"/>
         <source>You can leave it blank</source>
         <translation>Можете лишити порожнім</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="131"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="132"/>
         <source>A promo code to activate the gift will be sent to the recipient immediately after payment.
 
 Promo code validity period is a 1 year</source>
@@ -15253,12 +15730,12 @@ Promo code validity period is a 1 year</source>
 Термін дії промокоду - 1 рік&#xa0;</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="134"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="135"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../ui/account/purchase_gift_dialog.cpp" line="135"/>
+        <location filename="../ui/account/purchase_gift_dialog.cpp" line="136"/>
         <source>Purchase</source>
         <translation>Придбати</translation>
     </message>
@@ -15379,17 +15856,17 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayBreakdownCopyResourcesFromSceneDialog</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="203"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="204"/>
         <source>Copy elements from selected scene</source>
         <translation>Копіювати ресурси з обраної сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="204"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="205"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="205"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_from_scene_dialog.cpp" line="206"/>
         <source>Copy</source>
         <translation>Скопіювати</translation>
     </message>
@@ -15397,17 +15874,17 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayBreakdownCopyResourcesToSceneDialog</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_to_scene_dialog.cpp" line="137"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_to_scene_dialog.cpp" line="138"/>
         <source>Copy elements to selected scene</source>
         <translation>Копіювати ресурси в обрану сцену</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_to_scene_dialog.cpp" line="138"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_to_scene_dialog.cpp" line="139"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_to_scene_dialog.cpp" line="139"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/ui/screenplay_breakdown_copy_resources_to_scene_dialog.cpp" line="140"/>
         <source>Copy</source>
         <translation>Скопіювати</translation>
     </message>
@@ -15724,42 +16201,42 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayBreakdownStructureResourceCategoryDialog</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="153"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="154"/>
         <source>Create new category</source>
         <translation>Створити нову категорію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="154"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="155"/>
         <source>Edit category</source>
         <translation>Редагувати категорію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="155"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="156"/>
         <source>Category name</source>
         <translation>Назва категорії</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="156"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="157"/>
         <source>Select category color</source>
         <translation>Обрати колір категорії</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="157"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="158"/>
         <source>Assign board ID numbers for category elements</source>
         <translation>Присвоїти ID номери для ресурсів категорії</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="158"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="159"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="159"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="160"/>
         <source>Create</source>
         <translation>Створити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="159"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown_structure/ui/screenplay_breakdown_structure_resource_category_dialog.cpp" line="160"/>
         <source>Update</source>
         <translation>Оновити</translation>
     </message>
@@ -15833,107 +16310,107 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayBreakdownView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="397"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="402"/>
         <source>Hide scene parameters</source>
         <translation>Приховати параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="398"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="403"/>
         <source>Show scene parameters</source>
         <translation>Показати параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="399"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="404"/>
         <source>Hide bookmarks list</source>
         <translation>Сховати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="400"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="405"/>
         <source>Show bookmarks list</source>
         <translation>Показати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="402"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="407"/>
         <source>Hide screenplay dictionaries</source>
         <translation>Приховати словники сценаріїв</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="403"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="408"/>
         <source>Show screenplay dictionaries</source>
         <translation>Показати словники сценаріїв</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1242"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1265"/>
         <source>Do you really want to remove element &quot;%1&quot; from current scene?</source>
         <translation>Дійсно хочете видалити ресурс &quot;%1&quot; з поточної сцени?</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2109"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2133"/>
         <source>Elements</source>
         <translation>Ресурси</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2130"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2154"/>
         <source>In the whole text</source>
         <translation>По всьому тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2131"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2155"/>
         <source>In scene heading</source>
         <translation>У сетингах сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2132"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2156"/>
         <source>In cast list</source>
         <translation>В списку касту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2133"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2157"/>
         <source>In action</source>
         <translation>В описах дії</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2134"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2158"/>
         <source>In character</source>
         <translation>В дійових особах</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2135"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2159"/>
         <source>In dialogue</source>
         <translation>У репліках</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1244"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1267"/>
         <source>No</source>
         <translation>Ні</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1245"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="1268"/>
         <source>Yes, remove</source>
         <translation>Так, видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2110"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2134"/>
         <source>Formatting</source>
         <translation>Форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2111"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2135"/>
         <source>Scene parameters</source>
         <translation>Параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2112"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2136"/>
         <source>Comments</source>
         <translation>Коментарі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2113"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2137"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2114"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/screenplay_breakdown_view.cpp" line="2138"/>
         <source>Dictionaries</source>
         <translation>Словники</translation>
     </message>
@@ -15941,42 +16418,42 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayCardsPrintDialog</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="286"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="287"/>
         <source>Print cards</source>
         <translation>Друкувати картки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="288"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="289"/>
         <source>Page orientation</source>
         <translation>Орієнтація сторінки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="289"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="290"/>
         <source>Portrait</source>
         <translation>Портретна</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="290"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="291"/>
         <source>Landscape</source>
         <translation>Альбомна</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="291"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="292"/>
         <source>Cards count</source>
         <translation>Кількість карток</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="292"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="293"/>
         <source>Print colored cards</source>
         <translation>Друк кольорових карток</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="294"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="295"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="295"/>
+        <location filename="../management_layer/plugins/screenplay_cards/ui/screenplay_cards_print_dialog.cpp" line="296"/>
         <source>Print</source>
         <translation>Друк</translation>
     </message>
@@ -16592,54 +17069,140 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplaySeriesParametersView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="300"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="649"/>
         <source>Header</source>
         <translation>Верхній колонтитул</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="301"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="650"/>
         <source>Print header on title page</source>
         <translation>Друкувати верхній колонтитул на титульній сторінці</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="302"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="651"/>
         <source>Footer</source>
         <translation>Нижній колонтитул</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="303"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="652"/>
         <source>Print footer on title page</source>
         <translation>Друкувати нижній колонтитул на титульній сторінці</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="304"/>
-        <source>Override common settings for this screenplay</source>
-        <translation>Перевизначити загальні налаштування для цього сценарію</translation>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="653"/>
+        <source>Override common settings for this series</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="305"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="654"/>
         <source>Template</source>
         <translation>Шаблон</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="306"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="655"/>
         <source>Print scenes numbers</source>
         <translation>Друк номерів сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="307"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="656"/>
         <source>on the left</source>
         <translation>ліворуч</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="308"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="657"/>
         <source>on the right</source>
         <translation>праворуч</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="309"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="658"/>
         <source>Print dialogues numbers</source>
         <translation>Друк номерів реплік</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="659"/>
+        <source>Calculate duration based on the count of pages</source>
+        <translation>Визначати хронометраж за кількістю сторінок</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="660"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="666"/>
+        <source>at the rate of</source>
+        <translation>з розрахунку, що</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="661"/>
+        <source>pages</source>
+        <translation>сторінки</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="662"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="669"/>
+        <source>has duration</source>
+        <translation>триває</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="663"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="670"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="674"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="677"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="679"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="681"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="683"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="685"/>
+        <source>seconds</source>
+        <translation>сек.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="665"/>
+        <source>Calculate duration based on the count of letters</source>
+        <translation>Визначати хронометраж за кількістю символів</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="667"/>
+        <source>letters</source>
+        <translation>симв.</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="668"/>
+        <source>including spaces</source>
+        <translation>включно з пробілами</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="671"/>
+        <source>Calculate duration based on the custom rules</source>
+        <translation>Рахувати тривалість на основі власних налаштувань</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="672"/>
+        <source>For action</source>
+        <translation>Для Дії</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="673"/>
+        <source>Per entry</source>
+        <translation>кожен абзац</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="675"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="680"/>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="684"/>
+        <source>+</source>
+        <translation>+</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="676"/>
+        <source>Each 50 characters</source>
+        <translation>кожні 50 символів</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="678"/>
+        <source>For dialogue</source>
+        <translation>Для Реплік</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_parameters/screenplay_series_parameters_view.cpp" line="682"/>
+        <source>For scene heading</source>
+        <translation>Для сетингів сцен</translation>
     </message>
 </context>
 <context>
@@ -16783,19 +17346,29 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplaySeriesStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="308"/>
-        <source>Unlock ability to edit screenplay cards</source>
-        <translation>Розблокувати можливість редагування карток</translation>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="354"/>
+        <source>Unlock ability to manage screenplay series statistics</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="309"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="355"/>
         <source>Update statistics</source>
         <translation>Оновити статистику</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="310"/>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="356"/>
         <source>Save statistics to the file</source>
         <translation>Зберегти статистику у файл</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="357"/>
+        <source>No statistics available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_series_statistics/screenplay_series_statistics_view.cpp" line="358"/>
+        <source>Statistics appear when you&apos;ll start to write screenplay</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -17080,19 +17653,29 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayStatisticsView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="338"/>
-        <source>Unlock ability to edit screenplay cards</source>
-        <translation>Розблокувати можливість редагування карток</translation>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="390"/>
+        <source>Unlock ability to manage screenplay statistics</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="339"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="391"/>
         <source>Update statistics</source>
         <translation>Оновити статистику</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="340"/>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="392"/>
         <source>Save statistics to the file</source>
         <translation>Зберегти статистику у файл</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="393"/>
+        <source>No statistics available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_statistics/screenplay_statistics_view.cpp" line="394"/>
+        <source>Statistics appear when you&apos;ll start to write screenplay</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -17452,44 +18035,44 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1718"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1740"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1811"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1832"/>
         <source>Merge paragraph</source>
         <translation>Об&apos;єднати рядки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1720"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1742"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1813"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1834"/>
         <source>Split paragraph</source>
         <translation>Дві колонки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1685"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1771"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1778"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1863"/>
         <source>Bookmark</source>
         <translation>Закладка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1689"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1775"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1782"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1867"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1695"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1781"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1788"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1873"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1701"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1787"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1794"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1879"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1708"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1794"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit.cpp" line="1801"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit.cpp" line="1886"/>
         <source>Show/hide list</source>
         <translation>Показати/приховати список</translation>
     </message>
@@ -17497,98 +18080,104 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTextEditToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="102"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="101"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="106"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="105"/>
         <source>Scene heading</source>
         <translation>Сетинг сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="300"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="293"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="331"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="324"/>
         <source>Undo last action</source>
         <translation>Скасувати останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="304"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="297"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="335"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="328"/>
         <source>Redo last action</source>
         <translation>Повторити останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="307"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="300"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="338"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="331"/>
         <source>Current paragraph format</source>
         <translation>Поточний формат рядка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="309"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="302"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="340"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="333"/>
         <source>Hide fast format panel</source>
         <translation>Сховати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="310"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="303"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="341"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="334"/>
         <source>Show fast format panel</source>
         <translation>Показати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="311"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="342"/>
         <source>Hide beats headings</source>
         <translation>Приховати заголовки бітів</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="312"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="343"/>
         <source>Show beats headings</source>
         <translation>Показати заголовки бітів</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="314"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="305"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="345"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="336"/>
         <source>Search text</source>
         <translation>Шукати в тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="317"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="308"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="348"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="339"/>
         <source>Disable review mode</source>
         <translation>Вийти з режиму рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="318"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="309"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="349"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="340"/>
         <source>Enable review mode</source>
         <translation>Включити режим рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="319"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="350"/>
         <source>Disable AI assistant</source>
         <translation>Вимкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="320"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="351"/>
         <source>Enable AI assistant</source>
         <translation>Увімкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="322"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="311"/>
-        <source>Disable structure items isolation mode</source>
-        <translation>Вимкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="353"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="342"/>
+        <source>Show full text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="323"/>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="312"/>
-        <source>Enable structure items isolation mode</source>
-        <translation>Увімкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="354"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="343"/>
+        <source>Show only current scene text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="291"/>
+        <location filename="../management_layer/plugins/screenplay_text/text/screenplay_text_edit_toolbar.cpp" line="355"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="344"/>
+        <source>Additional options</source>
+        <translation type="unfinished">Додаткові опції</translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="322"/>
         <source>Unlock ability to work with the screenplay breakdown</source>
         <translation>Розблокувати роботу з розбивкою сценарію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="313"/>
+        <location filename="../management_layer/plugins/screenplay_breakdown/text/screenplay_text_edit_toolbar.cpp" line="345"/>
         <source>Export screenplay breakdown</source>
         <translation>Експортувати розбивку сценарію</translation>
     </message>
@@ -17649,37 +18238,46 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="392"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="397"/>
         <source>Hide scene parameters</source>
         <translation>Приховати параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="393"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="398"/>
         <source>Show scene parameters</source>
         <translation>Показати параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="394"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="399"/>
         <source>Hide bookmarks list</source>
         <translation>Приховати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="397"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="402"/>
         <source>Hide screenplay dictionaries</source>
         <translation>Приховати словники сценаріїв</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="398"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="403"/>
         <source>Show screenplay dictionaries</source>
         <translation>Показати словники сценаріїв</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1527"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1592"/>
         <source>Writing text</source>
         <translation>Написання тексту</translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1846"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1881"/>
+        <source>Document translation will take %n word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1883"/>
         <source>Synopsis generation will take %n word(s)</source>
         <translation>
             <numerusform>Генерування синопсису задіє %n слово</numerusform>
@@ -17688,7 +18286,7 @@ Promo code validity period is a 1 year</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1848"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1885"/>
         <source>Novel generation will take %n word(s)</source>
         <translation>
             <numerusform>Генерування роману задіє %n слово</numerusform>
@@ -17697,72 +18295,72 @@ Promo code validity period is a 1 year</source>
         </translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1967"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2004"/>
         <source>Formatting</source>
         <translation>Форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1968"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2005"/>
         <source>Scene parameters</source>
         <translation>Параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1969"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2006"/>
         <source>Comments</source>
         <translation>Коментарі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1970"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2007"/>
         <source>AI assistant</source>
         <translation>Асистент ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1971"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2008"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1972"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2009"/>
         <source>Dictionaries</source>
         <translation>Словники</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1975"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2012"/>
         <source>Start prompt from something like &quot;Write a screenplay about ...&quot;, or &quot;Write a short movie screenplay about ...&quot;</source>
         <translation>Почніть запит з чогось на кшталт &quot;Напиши сценарій про ...&quot; або &quot;Напиши сценарій короткометражного фільму про ...&quot;</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1992"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2029"/>
         <source>In the whole text</source>
         <translation>По всьому тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1993"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2030"/>
         <source>In scene heading</source>
         <translation>У сетингах сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1994"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2031"/>
         <source>In cast list</source>
         <translation>в списку касту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1995"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2032"/>
         <source>In action</source>
         <translation>в описах дії</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1996"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2033"/>
         <source>In character</source>
         <translation>В дійових особах</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="1997"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="2034"/>
         <source>In dialogue</source>
         <translation>У репліках</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="395"/>
+        <location filename="../management_layer/plugins/screenplay_text/screenplay_text_view.cpp" line="400"/>
         <source>Show bookmarks list</source>
         <translation>Показати список закладок</translation>
     </message>
@@ -17972,27 +18570,27 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTreatmentEdit</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1262"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1356"/>
         <source>Bookmark</source>
         <translation>Закладка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1266"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1360"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1272"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1366"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1278"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1372"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1285"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit.cpp" line="1379"/>
         <source>Show/hide list</source>
         <translation>Показати/приховати список</translation>
     </message>
@@ -18000,140 +18598,145 @@ Promo code validity period is a 1 year</source>
 <context>
     <name>Ui::ScreenplayTreatmentEditToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="93"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="97"/>
         <source>Scene heading</source>
         <translation>Сетинг сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="282"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="313"/>
         <source>Undo last action</source>
         <translation>Скасувати останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="286"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="317"/>
         <source>Redo last action</source>
         <translation>Повторити останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="289"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="320"/>
         <source>Current paragraph format</source>
         <translation>Поточний формат рядка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="291"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="322"/>
         <source>Hide fast format panel</source>
         <translation>Сховати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="292"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="323"/>
         <source>Show fast format panel</source>
         <translation>Показати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="294"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="325"/>
         <source>Search text</source>
         <translation>Шукати в тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="297"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="328"/>
         <source>Disable review mode</source>
         <translation>Вийти з режиму рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="298"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="329"/>
         <source>Enable review mode</source>
         <translation>Включити режим рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="299"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="330"/>
         <source>Disable AI assistant</source>
         <translation>Вимкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="300"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="331"/>
         <source>Enable AI assistant</source>
         <translation>Увімкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="302"/>
-        <source>Disable structure items isolation mode</source>
-        <translation>Вимкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="333"/>
+        <source>Show full text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="303"/>
-        <source>Enable structure items isolation mode</source>
-        <translation>Увімкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="334"/>
+        <source>Show only current scene text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/screenplay_treatment/text/screenplay_treatment_edit_toolbar.cpp" line="335"/>
+        <source>Additional options</source>
+        <translation type="unfinished">Додаткові опції</translation>
     </message>
 </context>
 <context>
     <name>Ui::ScreenplayTreatmentView</name>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="356"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="360"/>
         <source>Hide scene parameters</source>
         <translation>Приховати параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="357"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="361"/>
         <source>Show scene parameters</source>
         <translation>Показати параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="358"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="362"/>
         <source>Hide bookmarks list</source>
         <translation>Приховати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="359"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="363"/>
         <source>Show bookmarks list</source>
         <translation>Показати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1433"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1458"/>
         <source>Writing text</source>
         <translation>Написання тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1806"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1831"/>
         <source>Formatting</source>
         <translation>Форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1807"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1832"/>
         <source>Scene parameters</source>
         <translation>Параметри сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1808"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1833"/>
         <source>Comments</source>
         <translation>Коментарі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1809"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1834"/>
         <source>AI assistant</source>
         <translation>Асистент ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1810"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1835"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1813"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1838"/>
         <source>Start prompt from something like &quot;Write a novel about ...&quot;, or &quot;Write a chapter about ...&quot;</source>
         <translation>Почніть запит з чогось на кшталт &quot;Напиши роман про...&quot; або &quot;Напиши главу про...&quot;</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1830"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1855"/>
         <source>In the whole text</source>
         <translation>По всьому тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1831"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1856"/>
         <source>In scene heading</source>
         <translation>У сетингах сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1832"/>
+        <location filename="../management_layer/plugins/screenplay_treatment/screenplay_treatment_view.cpp" line="1857"/>
         <source>In beats</source>
         <translation>У бітах</translation>
     </message>
@@ -19752,27 +20355,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::SimpleTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="899"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="992"/>
         <source>Bookmark</source>
         <translation>Закладка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="903"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="996"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="908"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="1001"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="913"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="1006"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="920"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit.cpp" line="1013"/>
         <source>Show/hide list</source>
         <translation>Показати/приховати список</translation>
     </message>
@@ -19780,69 +20383,74 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::SimpleTextEditToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="92"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="96"/>
         <source>Scene heading</source>
         <translation>Сетинг сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="275"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="306"/>
         <source>Undo last action</source>
         <translation>Скасувати останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="279"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="310"/>
         <source>Redo last action</source>
         <translation>Повторити останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="282"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="313"/>
         <source>Current paragraph format</source>
         <translation>Поточний формат рядка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="284"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="315"/>
         <source>Hide fast format panel</source>
         <translation>Сховати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="285"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="316"/>
         <source>Show fast format panel</source>
         <translation>Показати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="287"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="318"/>
         <source>Search text</source>
         <translation>Шукати в тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="290"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="321"/>
         <source>Disable review mode</source>
         <translation>Вийти з режиму рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="291"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="322"/>
         <source>Enable review mode</source>
         <translation>Включити режим рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="292"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="323"/>
         <source>Disable AI assistant</source>
         <translation>Вимкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="293"/>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="324"/>
         <source>Enable AI assistant</source>
         <translation>Увімкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="295"/>
-        <source>Disable structure items isolation mode</source>
-        <translation>Вимкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="326"/>
+        <source>Show full text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="296"/>
-        <source>Enable structure items isolation mode</source>
-        <translation>Увімкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="327"/>
+        <source>Show only current scene text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/simple_text/text/simple_text_edit_toolbar.cpp" line="328"/>
+        <source>Additional options</source>
+        <translation type="unfinished">Додаткові опції</translation>
     </message>
 </context>
 <context>
@@ -19911,42 +20519,51 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::SimpleTextView</name>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="284"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="288"/>
         <source>Hide bookmarks list</source>
         <translation>Приховати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="285"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="289"/>
         <source>Show bookmarks list</source>
         <translation>Показати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="976"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1042"/>
         <source>Writing text</source>
         <translation>Написання тексту</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1260"/>
+        <source>Document translation will take %n word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1294"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1376"/>
         <source>Formatting</source>
         <translation>Форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1295"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1377"/>
         <source>Comments</source>
         <translation>Коментарі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1296"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1378"/>
         <source>AI assistant</source>
         <translation>Асистент ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1297"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1379"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1300"/>
+        <location filename="../management_layer/plugins/simple_text/simple_text_view.cpp" line="1382"/>
         <source>Start prompt from something like &quot;Write a story about ...&quot;, or &quot;Write about ...&quot;, or simply ask AI about anything</source>
         <translation>Почніть запит з чогось на кшталт &quot;Напиши оповідання про...&quot;, або &quot;Напиши про ...&quot;, або просто запитайте асистента ШІ про що завгодно</translation>
     </message>
@@ -20090,27 +20707,27 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayTextEdit</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1451"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1543"/>
         <source>Bookmark</source>
         <translation>Закладка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1455"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1547"/>
         <source>Add</source>
         <translation>Додати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1461"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1553"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1466"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1558"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1473"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit.cpp" line="1565"/>
         <source>Show/hide list</source>
         <translation>Показати/приховати список</translation>
     </message>
@@ -20118,69 +20735,74 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayTextEditToolbar</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="92"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="96"/>
         <source>Scene heading</source>
         <translation>Сетинг сцени</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="280"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="311"/>
         <source>Undo last action</source>
         <translation>Скасувати останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="284"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="315"/>
         <source>Redo last action</source>
         <translation>Повторити останню дію</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="287"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="318"/>
         <source>Current paragraph format</source>
         <translation>Поточний формат рядка</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="289"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="320"/>
         <source>Hide fast format panel</source>
         <translation>Сховати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="290"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="321"/>
         <source>Show fast format panel</source>
         <translation>Показати панель форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="292"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="323"/>
         <source>Search text</source>
         <translation>Шукати в тексті</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="295"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="326"/>
         <source>Disable review mode</source>
         <translation>Вийти з режиму рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="296"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="327"/>
         <source>Enable review mode</source>
         <translation>Включити режим рецензування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="297"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="328"/>
         <source>Disable AI assistant</source>
         <translation>Вимкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="298"/>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="329"/>
         <source>Enable AI assistant</source>
         <translation>Увімкнути асистента ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="300"/>
-        <source>Disable structure items isolation mode</source>
-        <translation>Вимкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="331"/>
+        <source>Show full text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="301"/>
-        <source>Enable structure items isolation mode</source>
-        <translation>Увімкнути режим ізоляції елементів структури</translation>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="332"/>
+        <source>Show only current scene text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../management_layer/plugins/stageplay_text/text/stageplay_text_edit_toolbar.cpp" line="333"/>
+        <source>Additional options</source>
+        <translation type="unfinished">Додаткові опції</translation>
     </message>
 </context>
 <context>
@@ -20239,62 +20861,71 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::StageplayTextView</name>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="286"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="290"/>
         <source>Hide bookmarks list</source>
         <translation>Сховати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="287"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="291"/>
         <source>Show bookmarks list</source>
         <translation>Показати список закладок</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="992"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1058"/>
         <source>Writing text</source>
         <translation>Написання тексту</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1314"/>
+        <source>Document translation will take %n word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1348"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1432"/>
         <source>Formatting</source>
         <translation>Форматування</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1349"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1433"/>
         <source>Comments</source>
         <translation>Коментарі</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1350"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1434"/>
         <source>AI assistant</source>
         <translation>Асистент ШІ</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1351"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1435"/>
         <source>Bookmarks</source>
         <translation>Закладки</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1354"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1438"/>
         <source>Start prompt from something like &quot;Write a stage play about ...&quot;</source>
         <translation>Почніть запит з чогось на кшталт &quot;Напиши п&apos;єсу про...&quot;</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1370"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1454"/>
         <source>In the whole text</source>
         <translation>По всьому тексту</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1371"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1455"/>
         <source>In scene heading</source>
         <translation>У сетингах сцен</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1372"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1456"/>
         <source>In character</source>
         <translation>В дійових особах</translation>
     </message>
     <message>
-        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1373"/>
+        <location filename="../management_layer/plugins/stageplay_text/stageplay_text_view.cpp" line="1457"/>
         <source>In dialogue</source>
         <translation>У репліках</translation>
     </message>
@@ -20361,6 +20992,11 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <source>Your CLOUD version lifetime subscription activated.</source>
         <translation>Довічна підписка на CLOUD версію активована.</translation>
     </message>
+    <message>
+        <location filename="../ui/notifications/subscription_view.cpp" line="138"/>
+        <source>Activate</source>
+        <translation>Активувати</translation>
+    </message>
     <message numerus="yes">
         <location filename="../ui/notifications/subscription_view.cpp" line="109"/>
         <source>Your PRO version subscription expires in %n day(s).</source>
@@ -20385,11 +21021,6 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../ui/notifications/subscription_view.cpp" line="131"/>
         <source>Your PRO version lifetime subscription activated.</source>
         <translation>Довічна підписка на PRO версію активована.</translation>
-    </message>
-    <message>
-        <location filename="../ui/notifications/subscription_view.cpp" line="138"/>
-        <source>Renew</source>
-        <translation>Продовжити</translation>
     </message>
 </context>
 <context>
@@ -20421,8 +21052,8 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     </message>
     <message>
         <location filename="../ui/account/subscription_widget.cpp" line="180"/>
-        <source>Renew</source>
-        <translation>Продовжити</translation>
+        <source>Activate</source>
+        <translation>Активувати</translation>
     </message>
     <message>
         <location filename="../ui/account/subscription_widget.cpp" line="181"/>
@@ -20636,6 +21267,44 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         <location filename="../../corelib/ui/modules/cover_generator/unsplash_images_view.cpp" line="358"/>
         <source>Photo by %1 on Unsplash.com</source>
         <translation>Фото %1 з Unsplash.com</translation>
+    </message>
+</context>
+<context>
+    <name>Ui::WorldExportDialog</name>
+    <message>
+        <location filename="../ui/export/world_export_dialog.cpp" line="129"/>
+        <source>Export world</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/world_export_dialog.cpp" line="131"/>
+        <source>Include world description info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/world_export_dialog.cpp" line="132"/>
+        <source>Include nature info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/world_export_dialog.cpp" line="133"/>
+        <source>Include culture info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/world_export_dialog.cpp" line="134"/>
+        <source>Include system info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/world_export_dialog.cpp" line="135"/>
+        <source>Include politics info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/export/world_export_dialog.cpp" line="136"/>
+        <source>Include magic info</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -21078,6 +21747,14 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
     </message>
 </context>
 <context>
+    <name>Ui::WorldsExportDialog</name>
+    <message>
+        <location filename="../ui/export/worlds_export_dialog.cpp" line="51"/>
+        <source>Export worlds</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Ui::WorldsMapSidebar</name>
     <message>
         <location filename="../management_layer/plugins/worlds_map/ui/worlds_map_sidebar.cpp" line="337"/>
@@ -21268,17 +21945,17 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
 <context>
     <name>Ui::WritingSprintPanel</name>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="222"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="236"/>
         <source>Until the end of the sprint left</source>
         <translation>До кінця спринту залишилося</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="228"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="242"/>
         <source>Sprint finished!</source>
         <translation>Спринт завершено!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="280"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="305"/>
         <source>Done! I&apos;ve just written %n word(s)</source>
         <translation>
             <numerusform>Готово! Я щойно написав %n слово</numerusform>
@@ -21287,7 +21964,7 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="281"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="306"/>
         <source>in %n minute(s)</source>
         <translation>
             <numerusform>за %n хвилину</numerusform>
@@ -21296,27 +21973,32 @@ If you work with no interruptions it saves the project every 3 minutes.</source>
         </translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="467"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="494"/>
         <source>Sprint duration</source>
         <translation>Тривалість спринту</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="468"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="495"/>
         <source>min</source>
         <translation>хвилин</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="469"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="496"/>
+        <source>Play sound at end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="497"/>
         <source>Great job</source>
         <translation>Блискуча робота</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="470"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="498"/>
         <source>words written</source>
         <translation>слів написано</translation>
     </message>
     <message>
-        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="471"/>
+        <location filename="../ui/writing_session/writing_sprint_panel.cpp" line="499"/>
         <source>Restart sprint</source>
         <translation>Повторити спринт</translation>
     </message>

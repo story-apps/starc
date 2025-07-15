@@ -959,7 +959,7 @@ void ApplicationManager::Implementation::setTranslation(QLocale::Language _langu
     }
 
     case QLocale::Chinese: {
-        translation = "zh_CN";
+        translation = "zh";
         break;
     }
 
