@@ -50,11 +50,6 @@ public:
     TextModelItem* rootItem() const;
 
     /**
-     * @brief Обновить название документа
-     */
-    void updateDisplayName(const QModelIndex& _index = {});
-
-    /**
      * @brief Обновить номера глав
      */
     void updateNumbering();
@@ -110,45 +105,6 @@ SimpleTextModel::Implementation::Implementation(SimpleTextModel* _q)
 TextModelItem* SimpleTextModel::Implementation::rootItem() const
 {
     return q->itemForIndex({});
-}
-
-void SimpleTextModel::Implementation::updateDisplayName(const QModelIndex& _index)
-{
-    //
-    // Если задано название, то его и отображаем
-    //
-    if (!name.isEmpty()) {
-        if (displayName == name) {
-            return;
-        }
-
-        displayName = name;
-    }
-    //
-    // А если название не задано, то используем текст из первой строчки документа
-    //
-    else {
-        //
-        // ... обновление производим, только когда нужно обрабовать изменение в корне модели
-        //
-        if (_index.isValid()) {
-            return;
-        }
-
-        const auto item = firstTextItem(rootItem());
-        QString newDisplayName;
-        if (item != nullptr && item->type() == TextModelItemType::Text) {
-            const auto textItem = static_cast<TextModelTextItem*>(item);
-            newDisplayName = textItem->text();
-        }
-        if (displayName == newDisplayName) {
-            return;
-        }
-
-        displayName = newDisplayName;
-    }
-
-    emit q->documentNameChanged(displayName);
 }
 
 
@@ -214,7 +170,7 @@ SimpleTextModel::SimpleTextModel(QObject* _parent)
     , d(new Implementation(this))
 {
     connect(this, &SimpleTextModel::dataChanged, this,
-            [this](const QModelIndex& _index) { d->updateDisplayName(_index); });
+            [this](const QModelIndex& _index) { updateDisplayName(_index); });
 
     auto updateCounters = [this](const QModelIndex& _index) {
         if (const auto hash = contentHash(); d->lastContentHash != hash) {
@@ -276,7 +232,7 @@ void SimpleTextModel::setName(const QString& _name)
     d->name = _name;
     emit nameChanged(d->name);
 
-    d->updateDisplayName();
+    updateDisplayName({});
 
     const auto item = firstTextItem(d->rootItem());
     if (item != nullptr && item->type() == TextModelItemType::Text) {
@@ -338,6 +294,45 @@ void SimpleTextModel::setTextPageCount(int _count)
     emit dataChanged(index(0, 0), index(0, 0));
 }
 
+void SimpleTextModel::updateDisplayName(const QModelIndex& _index)
+{
+    //
+    // Если задано название, то его и отображаем
+    //
+    if (!d->name.isEmpty()) {
+        if (d->displayName == d->name) {
+            return;
+        }
+
+        d->displayName = d->name;
+    }
+    //
+    // А если название не задано, то используем текст из первой строчки документа
+    //
+    else {
+        //
+        // ... обновление производим, только когда нужно обрабовать изменение в корне модели
+        //
+        if (_index.isValid()) {
+            return;
+        }
+
+        const auto item = firstTextItem(d->rootItem());
+        QString newDisplayName;
+        if (item != nullptr && item->type() == TextModelItemType::Text) {
+            const auto textItem = static_cast<TextModelTextItem*>(item);
+            newDisplayName = textItem->text();
+        }
+        if (d->displayName == newDisplayName) {
+            return;
+        }
+
+        d->displayName = newDisplayName;
+    }
+
+    emit documentNameChanged(d->displayName);
+}
+
 void SimpleTextModel::initEmptyDocument()
 {
     auto textItem = createTextItem();
@@ -347,7 +342,7 @@ void SimpleTextModel::initEmptyDocument()
 
 void SimpleTextModel::finalizeInitialization()
 {
-    d->updateDisplayName();
+    updateDisplayName({});
 
     beginChangeRows();
     d->updateNumbering();

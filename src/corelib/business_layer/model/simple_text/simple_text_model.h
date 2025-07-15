@@ -58,8 +58,12 @@ public:
     int textPageCount() const;
     void setTextPageCount(int _count);
 
-
 protected:
+    /**
+     * @brief Обновить название документа
+     */
+    virtual void updateDisplayName(const QModelIndex& _index);
+
     /**
      * @brief Инициилизировать пустой документ
      */
