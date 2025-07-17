@@ -1,6 +1,6 @@
 #include "document_change_storage.h"
 
-#include <data_layer/database.h>
+#include <data_layer/database_manager.h>
 #include <data_layer/mapper/document_change_mapper.h>
 #include <data_layer/mapper/mapper_facade.h>
 #include <domain/document_change_object.h>
@@ -119,12 +119,23 @@ QVector<Domain::DocumentChangeObject*> DocumentChangeStorage::unsyncedDocumentCh
 
 void DocumentChangeStorage::store()
 {
-    DatabaseLayer::Database::transaction();
+    //
+    // TODO: добавить обработку, если transaction() вернет false
+    //
+    DatabaseLayer::DatabaseManager::transaction();
     while (!d->newDocumentChanges.isEmpty()) {
         auto change = d->newDocumentChanges.takeFirst();
         DataMappingLayer::MapperFacade::documentChangeMapper()->insert(change);
     }
-    DatabaseLayer::Database::commit();
+    DatabaseLayer::DatabaseManager::commit();
+}
+
+void DocumentChangeStorage::storeAsync()
+{
+    while (!d->newDocumentChanges.isEmpty()) {
+        auto change = d->newDocumentChanges.takeFirst();
+        DataMappingLayer::MapperFacade::documentChangeMapper()->insertAsync(change);
+    }
 }
 
 void DocumentChangeStorage::removeAll()
@@ -132,7 +143,7 @@ void DocumentChangeStorage::removeAll()
     qDeleteAll(d->newDocumentChanges);
     d->newDocumentChanges.clear();
     DataMappingLayer::MapperFacade::documentChangeMapper()->removeAll();
-    DatabaseLayer::Database::vacuum();
+    DatabaseLayer::DatabaseManager::vacuum();
 }
 
 void DocumentChangeStorage::clear()

@@ -48,6 +48,11 @@ public:
      */
     void saveChanges();
 
+    /**
+     * @brief Сохранить все новые документы, ещё не сохранённые в базу данных, асинхронно
+     */
+    void saveChangesAsync();
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;
