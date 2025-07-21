@@ -162,9 +162,7 @@ void Card::paintEvent(QPaintEvent* _event)
     //
     // ... рисуем сам фон
     //
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(backgroundColor());
-    painter.drawRoundedRect(backgroundRect, borderRadius, borderRadius);
+    painter.drawPixmap(backgroundRect, backgroundImage, backgroundImage.rect());
 }
 
 #if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))

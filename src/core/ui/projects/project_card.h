@@ -39,17 +39,17 @@ public:
      */
     bool canBeEmbedded(AbstractCardItem* _container) const override;
 
-    /**
-     * @brief Отрисовка карточки
-     */
-    void paint(QPainter* _painter, const QStyleOptionGraphicsItem* _option,
-               QWidget* _widget) override;
-
 protected:
     /**
      * @brief Инициилизировать карточку после установки элемента модели в неё
      */
     void init() override;
+
+    /**
+     * @brief Отрисовка карточки
+     */
+    void paint(QPainter* _painter, const QStyleOptionGraphicsItem* _option,
+               QWidget* _widget) override;
 
     /**
      * @brief Анимируем hover

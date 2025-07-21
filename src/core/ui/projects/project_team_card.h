@@ -16,6 +16,7 @@ class ProjectTeamCard : public AbstractCardItem
 {
 public:
     explicit ProjectTeamCard(QGraphicsItem* _parent = nullptr);
+    ~ProjectTeamCard() override;
 
     /**
      * @brief Определяем тип карточки, для быстрых кастов графических элементов
@@ -59,6 +60,12 @@ protected:
      */
     void paint(QPainter* _painter, const QStyleOptionGraphicsItem* _option,
                QWidget* _widget) override;
+
+    /**
+     * @brief Анимируем hover
+     */
+    void hoverEnterEvent(QGraphicsSceneHoverEvent* _event) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent* _event) override;
 
     /**
      * @brief Реализуем клик на объекте

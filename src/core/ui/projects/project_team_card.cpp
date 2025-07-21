@@ -33,6 +33,11 @@ public:
     BusinessLayer::ProjectsModelTeamItem* teamItem = nullptr;
 
     /**
+     * @brief  Декорации тени при наведении
+     */
+    QVariantAnimation shadowBorderRadiusAnimation;
+
+    /**
      * @brief  Декорации при клике
      */
     ClickAnimation decorationAnimation;
@@ -59,8 +64,22 @@ ProjectTeamCard::ProjectTeamCard(QGraphicsItem* _parent)
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
     setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 
+    d->shadowBorderRadiusAnimation.setStartValue(DesignSystem::card().minimumShadowBlurRadius());
+    d->shadowBorderRadiusAnimation.setEndValue(DesignSystem::card().maximumShadowBlurRadius());
+    d->shadowBorderRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    d->shadowBorderRadiusAnimation.setDuration(160);
+    QObject::connect(&d->shadowBorderRadiusAnimation, &QVariantAnimation::valueChanged,
+                     &d->shadowBorderRadiusAnimation, [this] { update(); });
     QObject::connect(&d->decorationAnimation, &ClickAnimation::valueChanged,
                      &d->decorationAnimation, [this] { update(); });
+}
+
+ProjectTeamCard::~ProjectTeamCard()
+{
+    d->shadowBorderRadiusAnimation.disconnect();
+    d->shadowBorderRadiusAnimation.stop();
+    d->decorationAnimation.disconnect();
+    d->decorationAnimation.stop();
 }
 
 int ProjectTeamCard::type() const
@@ -192,11 +211,14 @@ void ProjectTeamCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* 
     //
     // ... рисуем тень
     //
-    const qreal shadowHeight = Ui::DesignSystem::floatingToolBar().minimumShadowBlurRadius();
-    const QPixmap shadow = ImageHelper::dropShadow(
-        backgroundPixmap, Ui::DesignSystem::floatingToolBar().shadowMargins(), shadowHeight,
-        Ui::DesignSystem::color().shadow());
-    _painter->drawPixmap(0, 0, shadow);
+    const qreal shadowHeight = std::max(DesignSystem::card().minimumShadowBlurRadius(),
+                                        d->shadowBorderRadiusAnimation.currentValue().toReal());
+    const QPixmap shadow
+        = ImageHelper::dropShadow(backgroundPixmap, Ui::DesignSystem::card().shadowMargins(),
+                                  shadowHeight, Ui::DesignSystem::color().shadow());
+    _painter->drawPixmap(
+        backgroundRect.marginsAdded(Ui::DesignSystem::card().shadowMargins().toMargins()).topLeft(),
+        shadow);
     //
     // ... рисуем сам фон
     //
@@ -327,6 +349,20 @@ void ProjectTeamCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* 
         _painter->setClipRect(QRectF(), Qt::NoClip);
         _painter->setOpacity(1.0);
     }
+}
+
+void ProjectTeamCard::hoverEnterEvent(QGraphicsSceneHoverEvent* _event)
+{
+    AbstractCardItem::hoverEnterEvent(_event);
+    d->shadowBorderRadiusAnimation.setDirection(QVariantAnimation::Forward);
+    d->shadowBorderRadiusAnimation.start();
+}
+
+void ProjectTeamCard::hoverLeaveEvent(QGraphicsSceneHoverEvent* _event)
+{
+    AbstractCardItem::hoverLeaveEvent(_event);
+    d->shadowBorderRadiusAnimation.setDirection(QVariantAnimation::Backward);
+    d->shadowBorderRadiusAnimation.start();
 }
 
 void ProjectTeamCard::mousePressEvent(QGraphicsSceneMouseEvent* _event)

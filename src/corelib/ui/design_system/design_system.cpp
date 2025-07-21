@@ -1505,8 +1505,8 @@ public:
 
     QMarginsF margins = { 16.0, 16.0, 16.0, 16.0 };
     QMarginsF shadowMargins = { 14.0, 14.0, 14.0, 16.0 };
-    qreal minimumShadowBlurRadius = 8.0;
-    qreal maximumShadowBlurRadius = 32.0;
+    qreal minimumShadowBlurRadius = 4.0;
+    qreal maximumShadowBlurRadius = 28.0;
     qreal borderRadius = 4.0;
     qreal height = 56.0;
     QSizeF iconSize = { 24.0, 24.0 };
@@ -2029,9 +2029,9 @@ public:
     explicit Implementation(qreal _scaleFactor);
 
     qreal borderRadius = 4.0;
-    QMarginsF shadowMargins = { 14.0, 14.0, 14.0, 16.0 };
-    qreal minimumShadowBlurRadius = 8.0;
-    qreal maximumShadowBlurRadius = 32.0;
+    QMarginsF shadowMargins = { 14.0, 14.0, 14.0, 14.0 };
+    qreal minimumShadowBlurRadius = 4.0;
+    qreal maximumShadowBlurRadius = 28.0;
 };
 
 DesignSystem::Card::Implementation::Implementation(qreal _scaleFactor)

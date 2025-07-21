@@ -41,7 +41,7 @@ public:
     /**
      * @brief  Декорации тени при наведении
      */
-    QVariantAnimation shadowHeightAnimation;
+    QVariantAnimation shadowBorderRadiusAnimation;
 
     /**
      * @brief  Декорации при клике
@@ -72,20 +72,22 @@ ProjectCard::ProjectCard(QGraphicsItem* _parent)
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
     setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 
-    d->shadowHeightAnimation.setStartValue(DesignSystem::card().minimumShadowBlurRadius());
-    d->shadowHeightAnimation.setEndValue(DesignSystem::card().maximumShadowBlurRadius());
-    d->shadowHeightAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    d->shadowHeightAnimation.setDuration(160);
-    QObject::connect(&d->shadowHeightAnimation, &QVariantAnimation::valueChanged,
-                     &d->shadowHeightAnimation, [this] { update(); });
+    d->shadowBorderRadiusAnimation.setStartValue(DesignSystem::card().minimumShadowBlurRadius());
+    d->shadowBorderRadiusAnimation.setEndValue(DesignSystem::card().maximumShadowBlurRadius());
+    d->shadowBorderRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
+    d->shadowBorderRadiusAnimation.setDuration(160);
+    QObject::connect(&d->shadowBorderRadiusAnimation, &QVariantAnimation::valueChanged,
+                     &d->shadowBorderRadiusAnimation, [this] { update(); });
     QObject::connect(&d->decorationAnimation, &ClickAnimation::valueChanged,
                      &d->decorationAnimation, [this] { update(); });
 }
 
 ProjectCard::~ProjectCard()
 {
-    d->shadowHeightAnimation.disconnect();
-    d->shadowHeightAnimation.stop();
+    d->shadowBorderRadiusAnimation.disconnect();
+    d->shadowBorderRadiusAnimation.stop();
+    d->decorationAnimation.disconnect();
+    d->decorationAnimation.stop();
 }
 
 int ProjectCard::type() const
@@ -141,6 +143,31 @@ bool ProjectCard::canBeEmbedded(AbstractCardItem* _container) const
     return false;
 }
 
+void ProjectCard::init()
+{
+    auto model = qobject_cast<const BusinessLayer::ProjectsModel*>(modelItemIndex().model());
+    Q_ASSERT(model);
+    auto projectItem = model->itemForIndex(modelItemIndex());
+    Q_ASSERT(projectItem);
+    Q_ASSERT(projectItem->type() == BusinessLayer::ProjectsModelItemType::Project);
+    d->project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(projectItem);
+    Q_ASSERT(d->project);
+
+    //
+    // Если название не влезает, то установим его тултипом
+    //
+    const QRectF backgroundRect = rect().marginsRemoved(DesignSystem::card().shadowMargins());
+    const QSizeF posterSize
+        = d->project->poster().size().scaled(backgroundRect.size().toSize(), Qt::KeepAspectRatio);
+    const auto textWidth
+        = backgroundRect.width() - posterSize.width() - DesignSystem::layout().px12() * 2;
+    if (TextHelper::fineTextWidthF(d->project->name(), DesignSystem::font().h6()) > textWidth) {
+        setToolTip(d->project->name());
+    } else {
+        setToolTip({});
+    }
+}
+
 void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _option,
                         QWidget* _widget)
 {
@@ -173,12 +200,14 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     //
     // ... рисуем тень
     //
-    const qreal shadowHeight = std::max(DesignSystem::floatingToolBar().minimumShadowBlurRadius(),
-                                        d->shadowHeightAnimation.currentValue().toReal());
-    const QPixmap shadow = ImageHelper::dropShadow(backgroundPixmapCache,
-                                                   DesignSystem::floatingToolBar().shadowMargins(),
-                                                   shadowHeight, DesignSystem::color().shadow());
-    _painter->drawPixmap(0, 0, shadow);
+    const qreal shadowHeight = std::max(DesignSystem::card().minimumShadowBlurRadius(),
+                                        d->shadowBorderRadiusAnimation.currentValue().toReal());
+    const QPixmap shadow
+        = ImageHelper::dropShadow(backgroundPixmapCache, DesignSystem::card().shadowMargins(),
+                                  shadowHeight, DesignSystem::color().shadow());
+    _painter->drawPixmap(
+        backgroundRect.marginsAdded(Ui::DesignSystem::card().shadowMargins().toMargins()).topLeft(),
+        shadow);
     //
     // ... рисуем сам фон
     //
@@ -329,51 +358,26 @@ void ProjectCard::paint(QPainter* _painter, const QStyleOptionGraphicsItem* _opt
     }
 }
 
-void ProjectCard::init()
-{
-    auto model = qobject_cast<const BusinessLayer::ProjectsModel*>(modelItemIndex().model());
-    Q_ASSERT(model);
-    auto projectItem = model->itemForIndex(modelItemIndex());
-    Q_ASSERT(projectItem);
-    Q_ASSERT(projectItem->type() == BusinessLayer::ProjectsModelItemType::Project);
-    d->project = static_cast<BusinessLayer::ProjectsModelProjectItem*>(projectItem);
-    Q_ASSERT(d->project);
-
-    //
-    // Если название не влезает, то установим его тултипом
-    //
-    const QRectF backgroundRect = rect().marginsRemoved(DesignSystem::card().shadowMargins());
-    const QSizeF posterSize
-        = d->project->poster().size().scaled(backgroundRect.size().toSize(), Qt::KeepAspectRatio);
-    const auto textWidth
-        = backgroundRect.width() - posterSize.width() - DesignSystem::layout().px12() * 2;
-    if (TextHelper::fineTextWidthF(d->project->name(), DesignSystem::font().h6()) > textWidth) {
-        setToolTip(d->project->name());
-    } else {
-        setToolTip({});
-    }
-}
-
 void ProjectCard::hoverEnterEvent(QGraphicsSceneHoverEvent* _event)
 {
     AbstractCardItem::hoverEnterEvent(_event);
-    d->shadowHeightAnimation.setDirection(QVariantAnimation::Forward);
-    d->shadowHeightAnimation.start();
+    d->shadowBorderRadiusAnimation.setDirection(QVariantAnimation::Forward);
+    d->shadowBorderRadiusAnimation.start();
 }
 
 void ProjectCard::hoverLeaveEvent(QGraphicsSceneHoverEvent* _event)
 {
     AbstractCardItem::hoverLeaveEvent(_event);
-    d->shadowHeightAnimation.setDirection(QVariantAnimation::Backward);
-    d->shadowHeightAnimation.start();
+    d->shadowBorderRadiusAnimation.setDirection(QVariantAnimation::Backward);
+    d->shadowBorderRadiusAnimation.start();
 }
 
 void ProjectCard::mousePressEvent(QGraphicsSceneMouseEvent* _event)
 {
     if (!boundingRect().contains(_event->pos())) {
-        if (d->shadowHeightAnimation.direction() == QVariantAnimation::Forward) {
-            d->shadowHeightAnimation.setDirection(QVariantAnimation::Backward);
-            d->shadowHeightAnimation.start();
+        if (d->shadowBorderRadiusAnimation.direction() == QVariantAnimation::Forward) {
+            d->shadowBorderRadiusAnimation.setDirection(QVariantAnimation::Backward);
+            d->shadowBorderRadiusAnimation.start();
         }
         return;
     }
