@@ -113,7 +113,7 @@ public:
     bool isContextMenuShown = false;
     bool isPasswordModeEnabled = false;
     bool isEnterMakesNewLine = false;
-    bool isUnderlineDecorationVisible = true;
+    bool isUnderlineDecorationVisible = false;
     bool isTitleVisible = true;
     bool isDefaultMarginsEnabled = true;
     QMarginsF customMargins;
@@ -1099,7 +1099,7 @@ void TextField::focusInEvent(QFocusEvent* _event)
     const QRectF decorationRect = d->decorationRectInFocus();
     const qreal contentsWidth
         = (width() - d->contentMargins().left() - d->contentMargins().right()) / 2;
-    if (d->decorationAnimation.endValue() != decorationRect) {
+    if (d->isUnderlineDecorationVisible && d->decorationAnimation.endValue() != decorationRect) {
         d->decorationAnimation.setStartValue(
             decorationRect.adjusted(contentsWidth, 0, -1 * contentsWidth, 0));
         d->decorationAnimation.setEndValue(decorationRect);
@@ -1129,13 +1129,15 @@ void TextField::focusOutEvent(QFocusEvent* _event)
         d->animateLabelToBottom();
     }
 
-    const QRectF decorationRect = d->decorationRectInFocus();
-    d->decorationAnimation.setStartValue(decorationRect);
-    const qreal contentsWidth
-        = (width() - d->contentMargins().left() - d->contentMargins().right()) / 2;
-    d->decorationAnimation.setEndValue(
-        decorationRect.adjusted(contentsWidth, 0, -1 * contentsWidth, 0));
-    d->decorationAnimation.start();
+    if (d->isUnderlineDecorationVisible) {
+        const QRectF decorationRect = d->decorationRectInFocus();
+        d->decorationAnimation.setStartValue(decorationRect);
+        const qreal contentsWidth
+            = (width() - d->contentMargins().left() - d->contentMargins().right()) / 2;
+        d->decorationAnimation.setEndValue(
+            decorationRect.adjusted(contentsWidth, 0, -1 * contentsWidth, 0));
+        d->decorationAnimation.start();
+    }
 
     d->finishAnimationIfInvisible();
 }
