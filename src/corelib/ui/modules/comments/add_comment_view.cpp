@@ -43,8 +43,9 @@ AddCommentView::Implementation::Implementation(QWidget* _parent)
     content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     content->setVerticalScrollBar(new ScrollBar);
 
-    UiHelper::initSpellingFor(comment);
     comment->setEnterMakesNewLine(true);
+    UiHelper::initSpellingFor(comment);
+    UiHelper::initOptionsFor(comment);
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);

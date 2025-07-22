@@ -17,6 +17,7 @@
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/ui_helper.h>
 #include <utils/tools/debouncer.h>
 
 #include <QAction>
@@ -125,6 +126,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     name->setCapitalizeWords(false);
     description->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     avatar->setDecorationIcon(u8"\U000F0004");
+    UiHelper::initOptionsFor(description);
     //
     accountInfoLayout->setContentsMargins({});
     accountInfoLayout->setSpacing(0);

@@ -80,12 +80,13 @@ CommentRepliesView::Implementation::Implementation(QWidget* _parent)
     cancelEditing->setIcon(u8"\U000F0156");
     cancelEditing->hide();
 
-    UiHelper::initSpellingFor(replyTextField);
     replyTextField->setEnterMakesNewLine(true);
     replyTextField->setTrailingIcon(u8"\U000f048A");
     replyTextField->setUnderlineDecorationVisible(false);
     replyTextField->setLabelVisible(false);
     replyTextField->setDefaultMarginsEnabled(false);
+    UiHelper::initSpellingFor(replyTextField);
+    UiHelper::initOptionsFor(replyTextField);
 }
 
 void CommentRepliesView::Implementation::fillComments()

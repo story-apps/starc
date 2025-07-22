@@ -140,6 +140,14 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
         description,
         beats.constFirst(),
         storyDay,
+        stamp,
+    });
+    UiHelper::initOptionsFor({
+        title,
+        heading,
+        description,
+        beats.constFirst(),
+        storyDay,
         startDateTime,
         stamp,
     });
@@ -547,6 +555,8 @@ void CardItemParametersView::setBeats(const QVector<QString>& _beats)
         while (d->beats.size() < beatsSize) {
             auto beat = new TextField(d->content->widget());
             beat->installEventFilter(this);
+            UiHelper::initSpellingFor(beat);
+            UiHelper::initOptionsFor(beat);
             connect(beat, &TextField::textChanged, this, [this, beat] {
                 const auto beatIndex = d->beats.indexOf(beat);
                 if (d->currentItemBeats.isEmpty()

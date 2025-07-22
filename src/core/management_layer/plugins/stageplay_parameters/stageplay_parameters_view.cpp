@@ -9,6 +9,7 @@
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
 #include <QScrollArea>
@@ -56,6 +57,10 @@ StageplayParametersView::Implementation::Implementation(QWidget* _parent)
 
     header->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     footer->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    UiHelper::initOptionsFor({
+        header,
+        footer,
+    });
 
     stageplayTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     stageplayTemplate->setModel(BusinessLayer::TemplatesFacade::stageplayTemplates());

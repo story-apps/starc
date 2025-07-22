@@ -44,9 +44,10 @@ TeamDialog::Implementation::Implementation(QWidget* _parent)
     , saveButton(new Button(_parent))
 {
     teamName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    UiHelper::initSpellingFor(teamDescription);
     teamAvatar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     teamAvatar->setDecorationIcon(u8"\U000F0381");
+    UiHelper::initSpellingFor(teamDescription);
+    UiHelper::initOptionsFor(teamDescription);
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);

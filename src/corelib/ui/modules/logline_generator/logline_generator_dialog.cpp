@@ -374,6 +374,27 @@ LoglineGeneratorDialog::Implementation::Implementation(QWidget* _parent)
         content->addWidget(loglinePage);
     }
 
+    UiHelper::initSpellingFor({
+        characterInfo,
+        majorEvent,
+        theme,
+        storyGoal,
+        mprEvent,
+        afterMprEvent,
+        worldSpecialRules,
+        stakes,
+    });
+    UiHelper::initOptionsFor({
+        characterInfo,
+        majorEvent,
+        theme,
+        storyGoal,
+        mprEvent,
+        afterMprEvent,
+        worldSpecialRules,
+        stakes,
+    });
+
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
     buttonsLayout->addWidget(backButton, 0, Qt::AlignVCenter);

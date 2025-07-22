@@ -5,7 +5,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
-#include <ui/widgets/text_edit/spell_check/spell_check_text_edit.h>
+#include <ui/widgets/text_edit/base/base_text_edit.h>
 #include <utils/helpers/color_helper.h>
 
 #include <QScrollArea>
@@ -70,6 +70,36 @@ void UiHelper::initSpellingFor(const QVector<SpellCheckTextEdit*>& _edits)
         if (useSpellChecker) {
             edit->setSpellCheckLanguage(spellingLanguage);
         }
+    }
+}
+
+void UiHelper::initOptionsFor(BaseTextEdit* _edit)
+{
+    initOptionsFor(QVector<BaseTextEdit*>{ _edit });
+}
+
+void UiHelper::initOptionsFor(const QVector<BaseTextEdit*>& _edits)
+{
+    const auto correctDoubleCapitals
+        = settingsValue(DataStorageLayer::kApplicationCorrectDoubleCapitalsKey).toBool();
+    const auto capitalizeSingleILetter
+        = settingsValue(DataStorageLayer::kApplicationCapitalizeSingleILetterKey).toBool();
+    const bool replaceThreeDots
+        = settingsValue(DataStorageLayer::kApplicationReplaceThreeDotsWithEllipsisKey).toBool();
+    const auto useSmartQuotes
+        = settingsValue(DataStorageLayer::kApplicationSmartQuotesKey).toBool();
+    const auto replaceTwoDashes
+        = settingsValue(DataStorageLayer::kApplicationReplaceTwoDashesWithEmDashKey).toBool();
+    const auto avoidMultipleSpaces
+        = settingsValue(DataStorageLayer::kApplicationAvoidMultipleSpacesKey).toBool();
+
+    for (auto edit : _edits) {
+        edit->setCorrectDoubleCapitals(correctDoubleCapitals);
+        edit->setCapitalizeSingleILetter(capitalizeSingleILetter);
+        edit->setReplaceThreeDots(replaceThreeDots);
+        edit->setUseSmartQuotes(useSmartQuotes);
+        edit->setReplaceTwoDashes(replaceTwoDashes);
+        edit->setAvoidMultipleSpaces(avoidMultipleSpaces);
     }
 }
 

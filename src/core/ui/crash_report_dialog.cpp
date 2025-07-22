@@ -6,6 +6,7 @@
 #include <ui/widgets/radio_button/radio_button.h>
 #include <ui/widgets/radio_button/radio_button_group.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QBoxLayout>
 
@@ -75,6 +76,9 @@ CrashReportDialog::Implementation::Implementation(QWidget* _parent)
 
     contactEmail->setCapitalizeWords(false);
     contactEmail->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+
+    UiHelper::initSpellingFor(crashDetails);
+    UiHelper::initOptionsFor(crashDetails);
 
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
@@ -239,10 +243,8 @@ void CrashReportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
     }
 
-    for (auto button : { d->cancelButton, d->sendButton }) {
-        button->setBackgroundColor(Ui::DesignSystem::color().accent());
-        button->setTextColor(Ui::DesignSystem::color().accent());
-    }
+    UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
+    UiHelper::initColorsFor(d->sendButton, UiHelper::DialogAccept);
 
     d->intro->setContentsMargins(Ui::DesignSystem::layout().px24(), 0,
                                  Ui::DesignSystem::layout().px24(),

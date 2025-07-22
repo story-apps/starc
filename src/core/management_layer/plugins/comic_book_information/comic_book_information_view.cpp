@@ -56,9 +56,17 @@ ComicBookInformationView::Implementation::Implementation(QWidget* _parent)
     content->setVerticalScrollBar(new ScrollBar);
 
     comicBookName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    UiHelper::initSpellingFor({ comicBookTagline, comicBookLogline });
     comicBookLogline->setEnterMakesNewLine(true);
     comicBookLogline->setTrailingIcon(u8"\U000F1353");
+    UiHelper::initSpellingFor({
+        comicBookTagline,
+        comicBookLogline,
+    });
+    UiHelper::initOptionsFor({
+        comicBookName,
+        comicBookTagline,
+        comicBookLogline,
+    });
 
     comicBookInfoLayout->setContentsMargins({});
     comicBookInfoLayout->setSpacing(0);

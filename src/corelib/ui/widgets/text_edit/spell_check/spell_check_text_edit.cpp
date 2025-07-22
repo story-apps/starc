@@ -273,26 +273,26 @@ void SpellCheckTextEdit::setHighlighterDocument(QTextDocument* _document)
 bool SpellCheckTextEdit::event(QEvent* _event)
 {
     switch (static_cast<int>(_event->type())) {
-    case static_cast<int>(EventType::SpellingChangeEvent): {
-        if (d->policy == SpellCheckPolicy::Auto) {
-            const auto event = static_cast<SpellingChangeEvent*>(_event);
+    case static_cast<int>(EventType::TextEditingOptionsChangeEvent): {
+        const auto event = static_cast<TextEditingOptionsChangeEvent*>(_event);
+        if (event->spelling.has_value() && d->policy == SpellCheckPolicy::Auto) {
             //
             // Включение проверки орфографии
             //
-            if (event->enabled && !useSpellChecker()) {
-                setSpellCheckLanguage(event->languageCode);
+            if (event->spelling->enabled && !useSpellChecker()) {
+                setSpellCheckLanguage(event->spelling->languageCode);
                 setUseSpellChecker(true);
             }
             //
             // Смена языка проверки орфографии
             //
-            else if (event->enabled && useSpellChecker()) {
-                setSpellCheckLanguage(event->languageCode);
+            else if (event->spelling->enabled && useSpellChecker()) {
+                setSpellCheckLanguage(event->spelling->languageCode);
             }
             //
             // Отключение
             //
-            else if (!event->enabled) {
+            else if (!event->spelling->enabled) {
                 setUseSpellChecker(false);
             }
         }

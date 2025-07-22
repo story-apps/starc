@@ -1,7 +1,10 @@
 #pragma once
 
+#include <optional>
+
 #include <QEvent>
 #include <QString>
+#include <QPair>
 
 
 /**
@@ -21,9 +24,9 @@ enum class EventType {
     //
     DesignSystemChangeEvent,
     //
-    // Событие смены параметров проверки орфографии
+    // Событие смены параметров текстового редактора
     //
-    SpellingChangeEvent
+    TextEditingOptionsChangeEvent
 };
 
 
@@ -72,23 +75,51 @@ public:
 /**
  * @brief Уведомление об изменении параметров проверки орфографии
  */
-class SpellingChangeEvent : public QEvent
+class TextEditingOptionsChangeEvent : public QEvent
 {
 public:
-    SpellingChangeEvent(bool _enabled, const QString& _languageCode = {})
-        : QEvent(static_cast<QEvent::Type>(EventType::SpellingChangeEvent))
-        , enabled(_enabled)
-        , languageCode(_languageCode)
+    TextEditingOptionsChangeEvent()
+        : QEvent(static_cast<QEvent::Type>(EventType::TextEditingOptionsChangeEvent))
     {
     }
 
     /**
-     * @brief Включена ли проверка орфографии
+     * @brief Проверка орфографии
      */
-    const bool enabled = false;
+    struct Spelling {
+        bool enabled = false;
+        QString languageCode;
+    };
+    std::optional<Spelling> spelling;
 
     /**
-     * @brief Язык проверки орфографии
+     * @brief Нужно ли исправлять ДВойные ЗАглавные буквы
      */
-    const QString languageCode;
+    std::optional<bool> correctDoubleCapitals;
+
+    /**
+     * @brief Необходимо ли заменять i на I
+     */
+    std::optional<bool> capitalizeSingleILetter;
+
+    /**
+     * @brief Необходимо ли заменять три точки на многоточие
+     */
+    std::optional<bool> replaceThreeDots;
+
+    /**
+     * @brief Использовать умные кавычки для текущего языка интерфейса
+     */
+    std::optional<bool> useSmartQuotes;
+
+    /**
+     * @brief Заменять два тира на длинное тире
+     */
+    std::optional<bool> replaceTwoDashes;
+
+    /**
+     * @brief Запретить вводить несколько пробелов подряд
+     */
+    std::optional<bool> avoidMultipleSpaces;
+
 };

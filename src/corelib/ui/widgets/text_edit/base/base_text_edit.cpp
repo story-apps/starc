@@ -596,6 +596,33 @@ bool BaseTextEdit::event(QEvent* _event)
         return true;
     }
 
+
+    case static_cast<int>(EventType::TextEditingOptionsChangeEvent): {
+        const auto event = static_cast<TextEditingOptionsChangeEvent*>(_event);
+        if (event->spelling.has_value()) {
+            SpellCheckTextEdit::event(_event);
+        }
+        if (event->correctDoubleCapitals.has_value()) {
+            setCorrectDoubleCapitals(event->correctDoubleCapitals.value());
+        }
+        if (event->capitalizeSingleILetter.has_value()) {
+            setCapitalizeSingleILetter(event->capitalizeSingleILetter.value());
+        }
+        if (event->replaceThreeDots.has_value()) {
+            setReplaceThreeDots(event->replaceThreeDots.value());
+        }
+        if (event->useSmartQuotes.has_value()) {
+            setUseSmartQuotes(event->useSmartQuotes.value());
+        }
+        if (event->replaceTwoDashes.has_value()) {
+            setReplaceTwoDashes(event->replaceTwoDashes.value());
+        }
+        if (event->avoidMultipleSpaces.has_value()) {
+            setAvoidMultipleSpaces(event->avoidMultipleSpaces.value());
+        }
+        return false;
+    }
+
     default: {
         return CompleterTextEdit::event(_event);
     }

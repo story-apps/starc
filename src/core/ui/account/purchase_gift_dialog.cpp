@@ -52,6 +52,8 @@ PurchaseGiftDialog::Implementation::Implementation(QWidget* _parent)
     paymentOption->setShowTotal(true);
     email->setCapitalizeWords(false);
     informationIcon->setIcon(u8"\U000F02FD");
+    UiHelper::initSpellingFor(greeting);
+    UiHelper::initOptionsFor(greeting);
 
     auto informationLayout = new QHBoxLayout;
     informationLayout->setContentsMargins({});

@@ -220,7 +220,7 @@ bool ScalableWrapper::event(QEvent* _event)
     }
 
     case static_cast<QEvent::Type>(EventType::DesignSystemChangeEvent):
-    case static_cast<QEvent::Type>(EventType::SpellingChangeEvent): {
+    case static_cast<QEvent::Type>(EventType::TextEditingOptionsChangeEvent): {
         QApplication::sendEvent(d->editor.data(), _event);
         break;
     }

@@ -56,9 +56,17 @@ AudioplayInformationView::Implementation::Implementation(QWidget* _parent)
     content->setVerticalScrollBar(new ScrollBar);
 
     audioplayName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    UiHelper::initSpellingFor({ audioplayTagline, audioplayLogline });
     audioplayLogline->setEnterMakesNewLine(true);
     audioplayLogline->setTrailingIcon(u8"\U000F1353");
+    UiHelper::initSpellingFor({
+        audioplayTagline,
+        audioplayLogline,
+    });
+    UiHelper::initOptionsFor({
+        audioplayName,
+        audioplayTagline,
+        audioplayLogline,
+    });
 
     audioplayInfoLayout->setContentsMargins({});
     audioplayInfoLayout->setSpacing(0);

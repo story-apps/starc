@@ -58,9 +58,17 @@ ScreenplaySeriesInformationView::Implementation::Implementation(QWidget* _parent
     content->setVerticalScrollBar(new ScrollBar);
 
     seriesName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    UiHelper::initSpellingFor({ seriesTagline, seriesLogline });
     seriesLogline->setEnterMakesNewLine(true);
     seriesLogline->setTrailingIcon(u8"\U000F1353");
+    UiHelper::initSpellingFor({
+        seriesTagline,
+        seriesLogline,
+    });
+    UiHelper::initOptionsFor({
+        seriesName,
+        seriesTagline,
+        seriesLogline,
+    });
 
     infoLayout->setContentsMargins({});
     infoLayout->setSpacing(0);

@@ -56,9 +56,17 @@ StageplayInformationView::Implementation::Implementation(QWidget* _parent)
     content->setVerticalScrollBar(new ScrollBar);
 
     stageplayName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    UiHelper::initSpellingFor({ stageplayTagline, stageplayLogline });
     stageplayLogline->setEnterMakesNewLine(true);
     stageplayLogline->setTrailingIcon(u8"\U000F1353");
+    UiHelper::initSpellingFor({
+        stageplayTagline,
+        stageplayLogline,
+    });
+    UiHelper::initOptionsFor({
+        stageplayName,
+        stageplayTagline,
+        stageplayLogline,
+    });
 
     stageplayInfoLayout->setContentsMargins({});
     stageplayInfoLayout->setSpacing(0);

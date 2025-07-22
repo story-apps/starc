@@ -58,9 +58,17 @@ NovelInformationView::Implementation::Implementation(QWidget* _parent)
     content->setVerticalScrollBar(new ScrollBar);
 
     novelName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    UiHelper::initSpellingFor({ novelTagline, novelLogline });
     novelLogline->setEnterMakesNewLine(true);
     novelLogline->setTrailingIcon(u8"\U000F1353");
+    UiHelper::initSpellingFor({
+        novelTagline,
+        novelLogline,
+    });
+    UiHelper::initOptionsFor({
+        novelName,
+        novelTagline,
+        novelLogline,
+    });
 
     novelInfoLayout->setContentsMargins({});
     novelInfoLayout->setSpacing(0);

@@ -4,6 +4,7 @@
 
 #include <corelib_global.h>
 
+class BaseTextEdit;
 class Button;
 class QHBoxLayout;
 class QScrollArea;
@@ -37,6 +38,12 @@ public:
      */
     static void initSpellingFor(SpellCheckTextEdit* _edit);
     static void initSpellingFor(const QVector<SpellCheckTextEdit*>& _edits);
+
+    /**
+     * @brief Настроить опции для редактора текста
+     */
+    static void initOptionsFor(BaseTextEdit* _edit);
+    static void initOptionsFor(const QVector<BaseTextEdit*>& _edits);
 
     /**
      * @brief Задать политику фокусирования для виджета и всех его детей

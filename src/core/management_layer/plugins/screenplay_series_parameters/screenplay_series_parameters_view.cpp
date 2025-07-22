@@ -116,6 +116,10 @@ ScreenplaySeriesParametersView::Implementation::Implementation(QWidget* _parent)
 
     header->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     footer->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    UiHelper::initOptionsFor({
+        header,
+        footer,
+    });
 
     screenplayTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     screenplayTemplate->setModel(BusinessLayer::TemplatesFacade::screenplayTemplates());

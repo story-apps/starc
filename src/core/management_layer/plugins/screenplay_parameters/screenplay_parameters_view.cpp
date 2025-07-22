@@ -16,6 +16,7 @@
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
 #include <QScrollArea>
@@ -147,6 +148,11 @@ ScreenplayParametersView::Implementation::Implementation(QWidget* _parent)
     footer->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     scenesNumbersTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     scenesNumberingStartAt->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    UiHelper::initOptionsFor({
+        header,
+        footer,
+        scenesNumbersTemplate,
+    });
 
     lockScenesNumbers->setContained(true);
     relockScenesNumbers->setContained(true);

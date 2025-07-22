@@ -639,6 +639,31 @@ AiAssistantView::Implementation::Implementation(QWidget* _parent)
         layout->addStretch();
     }
 
+    UiHelper::initSpellingFor({
+        rephraseSourceText,
+        rephraseStyleText,
+        expandSourceText,
+        shortenSourceText,
+        insertAfterText,
+        insertBeforeText,
+        translateSourceText,
+        generateTextPromptText,
+        generateCharacterPromptText,
+        generateMindMapPromptText,
+    });
+    UiHelper::initOptionsFor({
+        rephraseSourceText,
+        rephraseStyleText,
+        expandSourceText,
+        shortenSourceText,
+        insertAfterText,
+        insertBeforeText,
+        translateSourceText,
+        generateTextPromptText,
+        generateCharacterPromptText,
+        generateMindMapPromptText,
+    });
+
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
     buttonsLayout->addWidget(availableWordsLabel);

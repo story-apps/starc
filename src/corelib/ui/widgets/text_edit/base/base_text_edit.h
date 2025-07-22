@@ -22,7 +22,7 @@ public:
     void setCorrectDoubleCapitals(bool _correct);
 
     /**
-     * @brief Необходимо ли i на I
+     * @brief Необходимо ли заменять i на I
      */
     void setCapitalizeSingleILetter(bool _capitalize);
 

@@ -9,6 +9,7 @@
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/text_field/text_field.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QGridLayout>
 #include <QScrollArea>
@@ -60,6 +61,10 @@ AudioplayParametersView::Implementation::Implementation(QWidget* _parent)
 
     header->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     footer->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    UiHelper::initOptionsFor({
+        header,
+        footer,
+    });
 
     audioplayTemplate->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     audioplayTemplate->setModel(BusinessLayer::TemplatesFacade::audioplayTemplates());

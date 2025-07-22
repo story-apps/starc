@@ -2582,7 +2582,7 @@ bool ApplicationManager::event(QEvent* _event)
         return true;
     }
 
-    case static_cast<QEvent::Type>(EventType::SpellingChangeEvent): {
+    case static_cast<QEvent::Type>(EventType::TextEditingOptionsChangeEvent): {
         //
         // Уведомляем все редакторы текста о том, что сменились опции проверки орфографии
         //
@@ -2886,11 +2886,11 @@ void ApplicationManager::initConnections()
             [this] { d->setTranslation(QLocale().language()); });
     //
     auto postSpellingChangeEvent = [this] {
-        const auto useSpellChecker
-            = settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool();
-        const auto spellingLanguage
-            = settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString();
-        QApplication::postEvent(this, new SpellingChangeEvent(useSpellChecker, spellingLanguage));
+        auto event = new TextEditingOptionsChangeEvent;
+        event->spelling
+            = { settingsValue(DataStorageLayer::kApplicationUseSpellCheckerKey).toBool(),
+                settingsValue(DataStorageLayer::kApplicationSpellCheckerLanguageKey).toString() };
+        QApplication::postEvent(this, event);
     };
     connect(d->settingsManager.data(), &SettingsManager::applicationUseSpellCheckerChanged, this,
             postSpellingChangeEvent);
@@ -2922,6 +2922,39 @@ void ApplicationManager::initConnections()
     //
     connect(d->settingsManager.data(), &SettingsManager::simpleTextEditorChanged, this,
             [this](const QStringList& _changedSettingsKeys) {
+                using namespace DataStorageLayer;
+                //
+                // Отправим событие для текстовых полей
+                //
+                auto event = new TextEditingOptionsChangeEvent;
+                if (_changedSettingsKeys.contains(kApplicationCorrectDoubleCapitalsKey)) {
+                    event->correctDoubleCapitals
+                        = settingsValue(kApplicationCorrectDoubleCapitalsKey).toBool();
+                }
+                if (_changedSettingsKeys.contains(kApplicationCapitalizeSingleILetterKey)) {
+                    event->capitalizeSingleILetter
+                        = settingsValue(kApplicationCapitalizeSingleILetterKey).toBool();
+                }
+                if (_changedSettingsKeys.contains(kApplicationReplaceThreeDotsWithEllipsisKey)) {
+                    event->replaceThreeDots
+                        = settingsValue(kApplicationReplaceThreeDotsWithEllipsisKey).toBool();
+                }
+                if (_changedSettingsKeys.contains(kApplicationSmartQuotesKey)) {
+                    event->useSmartQuotes = settingsValue(kApplicationSmartQuotesKey).toBool();
+                }
+                if (_changedSettingsKeys.contains(kApplicationReplaceTwoDashesWithEmDashKey)) {
+                    event->replaceTwoDashes
+                        = settingsValue(kApplicationReplaceTwoDashesWithEmDashKey).toBool();
+                }
+                if (_changedSettingsKeys.contains(kApplicationAvoidMultipleSpacesKey)) {
+                    event->avoidMultipleSpaces
+                        = settingsValue(kApplicationAvoidMultipleSpacesKey).toBool();
+                }
+                QApplication::postEvent(this, event);
+
+                //
+                // Настроим плагины
+                //
                 d->projectManager->reconfigureSimpleTextEditor(_changedSettingsKeys);
             });
     connect(d->settingsManager.data(), &SettingsManager::simpleTextNavigatorChanged, this,
