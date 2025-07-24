@@ -539,7 +539,7 @@ void CommentsToolbar::updateTranslations()
     setCurtain(true, isLeftToRight() ? Qt::RightEdge : Qt::LeftEdge);
     d->typeAction->setToolTip(tr("Choose review mode"));
     d->reviewType->setToolTip(tr("Review mode"));
-    d->changesType->setToolTip(tr("Track additions mode"));
+    d->changesType->setToolTip(tr("Track changes mode"));
     d->revisionType->setToolTip(tr("Revision mode"));
     const auto addingActionNote = d->reviewTextColorAction->isEnabled()
         ? ""
