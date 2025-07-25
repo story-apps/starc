@@ -133,9 +133,9 @@ QVector<QUuid> DocumentChangeMapper::unsyncedDocuments()
     return documents;
 }
 
-void DocumentChangeMapper::insert(DocumentChangeObject* _object)
+bool DocumentChangeMapper::insert(DocumentChangeObject* _object)
 {
-    abstractInsert(_object);
+    return abstractInsert(_object);
 }
 
 bool DocumentChangeMapper::update(DocumentChangeObject* _object)
@@ -143,9 +143,9 @@ bool DocumentChangeMapper::update(DocumentChangeObject* _object)
     return abstractUpdate(_object);
 }
 
-void DocumentChangeMapper::remove(DocumentChangeObject* _object)
+bool DocumentChangeMapper::remove(DocumentChangeObject* _object)
 {
-    abstractDelete(_object);
+    return abstractDelete(_object);
 }
 
 void DocumentChangeMapper::removeAll()

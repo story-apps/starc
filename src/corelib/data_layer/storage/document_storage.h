@@ -58,13 +58,13 @@ public:
     /**
      * @brief Обновить документ
      */
-    void saveDocument(Domain::DocumentObject* _document);
-    void saveDocument(const QUuid& _documentUuid);
+    bool saveDocument(Domain::DocumentObject* _document);
+    bool saveDocument(const QUuid& _documentUuid);
 
     /**
      * @brief Удалить документ
      */
-    void removeDocument(Domain::DocumentObject* _document);
+    bool removeDocument(Domain::DocumentObject* _document);
 
     /**
      * @brief Очистить хранилище

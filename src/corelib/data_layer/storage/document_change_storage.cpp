@@ -121,8 +121,15 @@ void DocumentChangeStorage::store()
 {
     DatabaseLayer::Database::transaction();
     while (!d->newDocumentChanges.isEmpty()) {
-        auto change = d->newDocumentChanges.takeFirst();
-        DataMappingLayer::MapperFacade::documentChangeMapper()->insert(change);
+        const auto change = d->newDocumentChanges.first();
+        const auto isInserted
+            = DataMappingLayer::MapperFacade::documentChangeMapper()->insert(change);
+        if (!isInserted) {
+            DatabaseLayer::Database::rollback();
+            return;
+        }
+
+        d->newDocumentChanges.removeFirst();
     }
     DatabaseLayer::Database::commit();
 }

@@ -82,9 +82,9 @@ QVector<Domain::DocumentObject*> DocumentMapper::findAll()
     return documentObjects;
 }
 
-void DocumentMapper::insert(DocumentObject* _object)
+bool DocumentMapper::insert(DocumentObject* _object)
 {
-    abstractInsert(_object);
+    return abstractInsert(_object);
 }
 
 bool DocumentMapper::update(DocumentObject* _object)
@@ -92,9 +92,9 @@ bool DocumentMapper::update(DocumentObject* _object)
     return abstractUpdate(_object);
 }
 
-void DocumentMapper::remove(DocumentObject* _object)
+bool DocumentMapper::remove(DocumentObject* _object)
 {
-    abstractDelete(_object);
+    return abstractDelete(_object);
 }
 
 QString DocumentMapper::findStatement(const Identifier& _id) const

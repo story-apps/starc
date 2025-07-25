@@ -50,9 +50,9 @@ protected:
 protected:
     Domain::DomainObject* abstractFind(const Domain::Identifier& _id);
     QVector<Domain::DomainObject*> abstractFind(const QString& _filter);
-    void abstractInsert(Domain::DomainObject* _object);
+    bool abstractInsert(Domain::DomainObject* _object);
     bool abstractUpdate(Domain::DomainObject* _object);
-    void abstractDelete(Domain::DomainObject* _object);
+    bool abstractDelete(Domain::DomainObject* _object);
 
     /**
      * @brief Выполнить запрос

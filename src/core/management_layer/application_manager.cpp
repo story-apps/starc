@@ -1310,15 +1310,31 @@ void ApplicationManager::Implementation::saveChanges()
             //
             // ... то у нас случилась какая-то внутренняя ошибка базы данных
             //
-            StandardDialog::information(
-                applicationView, tr("Saving error"),
+            auto dialog = new Dialog(applicationView->topLevelWidget());
+            dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+            dialog->showDialog(
+                tr("Saving error"),
                 tr("Changes can't be written. There is an internal database error: \"%1\" "
                    "Please check, if your file exists and if you have permission to write.")
-                    .arg(DatabaseLayer::Database::lastError()));
+                    .arg(DatabaseLayer::Database::lastError()),
+                { { 0, StandardDialog::generateOkTerm(), Dialog::RejectButton },
+                  { 1, tr("Retry"), Dialog::AcceptButton } });
+            connect(dialog, &Dialog::finished, q,
+                    [this, dialog](const Dialog::ButtonInfo& _presedButton) {
+                        dialog->hideDialog();
+                        if (_presedButton.type == Dialog::AcceptButton) {
+                            DatabaseLayer::Database::setCurrentFile(
+                                DatabaseLayer::Database::currentFile());
+                            saveChanges();
+                        }
+                    });
+            QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
 
             //
             // TODO: пока хер знает, как реагировать на данную проблему...
             //       нужны реальные кейсы и пробовать что-то предпринимать
+            // NOTE: я добавил обработку с попыткой переоткрытия файла и повторным
+            //       сохранением, но как воспроизвести проблему так и не понял
             //
         }
         //

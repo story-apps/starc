@@ -22,9 +22,9 @@ public:
     QVector<Domain::DocumentObject*> findAll(Domain::DocumentObjectType _type);
     QVector<Domain::DocumentObject*> findAll();
 
-    void insert(Domain::DocumentObject* _object);
+    bool insert(Domain::DocumentObject* _object);
     bool update(Domain::DocumentObject* _object);
-    void remove(Domain::DocumentObject* _object);
+    bool remove(Domain::DocumentObject* _object);
 
 protected:
     QString findStatement(const Domain::Identifier& _id) const override;

@@ -107,39 +107,51 @@ void DocumentStorage::updateDocumentUuid(const QUuid& _old, const QUuid& _new)
     document->setUuid(_new);
 }
 
-void DocumentStorage::saveDocument(Domain::DocumentObject* _document)
+bool DocumentStorage::saveDocument(Domain::DocumentObject* _document)
 {
     if (d->notSavedDocuments.contains(_document->uuid())) {
-        DataMappingLayer::MapperFacade::documentMapper()->insert(_document);
+        const auto isInserted = DataMappingLayer::MapperFacade::documentMapper()->insert(_document);
+        if (!isInserted) {
+            return false;
+        }
+
         d->notSavedDocuments.remove(_document->uuid());
     } else {
-        DataMappingLayer::MapperFacade::documentMapper()->update(_document);
+        const auto isUpdated = DataMappingLayer::MapperFacade::documentMapper()->update(_document);
+        if (!isUpdated) {
+            return false;
+        }
     }
+
+    return true;
 }
 
-void DocumentStorage::saveDocument(const QUuid& _documentUuid)
+bool DocumentStorage::saveDocument(const QUuid& _documentUuid)
 {
     auto documentToSave = document(_documentUuid);
     if (documentToSave == nullptr) {
-        return;
+        Q_ASSERT(false);
+        return false;
     }
 
-    saveDocument(documentToSave);
+    return saveDocument(documentToSave);
 }
 
-void DocumentStorage::removeDocument(Domain::DocumentObject* _document)
+bool DocumentStorage::removeDocument(Domain::DocumentObject* _document)
 {
     if (_document == nullptr) {
-        return;
+        Q_ASSERT(false);
+        return false;
     }
 
     if (d->notSavedDocuments.contains(_document->uuid())) {
         d->notSavedDocuments.remove(_document->uuid());
         delete _document;
         _document = nullptr;
-    } else {
-        DataMappingLayer::MapperFacade::documentMapper()->remove(_document);
+        return true;
     }
+
+    return DataMappingLayer::MapperFacade::documentMapper()->remove(_document);
 }
 
 void DocumentStorage::clear()

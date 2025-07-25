@@ -171,6 +171,21 @@ void Database::commit()
     }
 }
 
+void Database::rollback()
+{
+    //
+    // Уменьшаем счётчик транзакций
+    //
+    --s_openedTransactions;
+
+    //
+    // При закрытии корневой транзакции отменяем изменения в базе данных
+    //
+    if (s_openedTransactions == 0) {
+        instanse().rollback();
+    }
+}
+
 void Database::vacuum()
 {
     auto query = Database::query();

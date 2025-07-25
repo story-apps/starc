@@ -53,7 +53,7 @@ QVector<Domain::DomainObject*> AbstractMapper::abstractFind(const QString& _filt
     return result;
 }
 
-void AbstractMapper::abstractInsert(DomainObject* _object)
+bool AbstractMapper::abstractInsert(DomainObject* _object)
 {
     //
     // Установим идентификатор для нового объекта
@@ -83,7 +83,11 @@ void AbstractMapper::abstractInsert(DomainObject* _object)
     //
     // Добавим данные в базу
     //
-    executeSql(insertQuery);
+    const auto isInsertSuccesful = executeSql(insertQuery);
+    if (isInsertSuccesful) {
+        _object->markChangesStored();
+    }
+    return isInsertSuccesful;
 }
 
 bool AbstractMapper::abstractUpdate(DomainObject* _object)
@@ -125,7 +129,7 @@ bool AbstractMapper::abstractUpdate(DomainObject* _object)
     return isUpdateSuccesful;
 }
 
-void AbstractMapper::abstractDelete(DomainObject* _object)
+bool AbstractMapper::abstractDelete(DomainObject* _object)
 {
     //
     // Получим данные для формирования запроса на их удаление
@@ -154,6 +158,7 @@ void AbstractMapper::abstractDelete(DomainObject* _object)
         delete _object;
         _object = nullptr;
     }
+    return isDeleteSuccesful;
 }
 
 bool AbstractMapper::executeSql(QSqlQuery& _sqlQuery)

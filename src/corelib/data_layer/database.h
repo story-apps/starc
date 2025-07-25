@@ -65,6 +65,11 @@ public:
     static void commit();
 
     /**
+     * @brief Откатить начавшующя транзакцию
+     */
+    static void rollback();
+
+    /**
      * @brief Сжать базу данных
      */
     static void vacuum();

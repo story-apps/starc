@@ -163,13 +163,19 @@ void DocumentRawDataStorage::saveChanges()
 {
     for (auto documentIter = d->newDocuments.begin(); documentIter != d->newDocuments.end();
          ++documentIter) {
-        StorageFacade::documentStorage()->saveDocument(documentIter.key());
+        const auto isSaved = StorageFacade::documentStorage()->saveDocument(documentIter.key());
+        if (!isSaved) {
+            return;
+        }
     }
     d->newDocuments.clear();
 
     while (!d->documentsToRemove.isEmpty()) {
-        StorageFacade::documentStorage()->removeDocument(
+        const auto isRemoved = StorageFacade::documentStorage()->removeDocument(
             StorageFacade::documentStorage()->document(d->documentsToRemove.takeFirst()));
+        if (!isRemoved) {
+            return;
+        }
     }
 }
 

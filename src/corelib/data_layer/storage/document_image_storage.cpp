@@ -203,13 +203,19 @@ void DocumentImageStorage::clear()
 void DocumentImageStorage::saveChanges()
 {
     for (auto imageIter = d->newImages.begin(); imageIter != d->newImages.end(); ++imageIter) {
-        StorageFacade::documentStorage()->saveDocument(imageIter.key());
+        const auto isSaved = StorageFacade::documentStorage()->saveDocument(imageIter.key());
+        if (!isSaved) {
+            return;
+        }
     }
     d->newImages.clear();
 
     while (!d->imagesToRemove.isEmpty()) {
-        StorageFacade::documentStorage()->removeDocument(
+        const auto isRemoved = StorageFacade::documentStorage()->removeDocument(
             StorageFacade::documentStorage()->document(d->imagesToRemove.takeFirst()));
+        if (!isRemoved) {
+            return;
+        }
     }
 }
 
