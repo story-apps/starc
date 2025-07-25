@@ -1149,7 +1149,7 @@ void ProjectManager::Implementation::removeVersion(const QModelIndex& _itemIndex
     dialog->showDialog(
         {}, tr("Do you really want to remove document version \"%1\"?").arg(version->name()),
         { { cancelButtonId, tr("No"), Dialog::RejectButton },
-          { removeButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
+          { removeButtonId, tr("Yes, remove"), Dialog::AcceptCriticalButton } });
     connect(
         dialog, &Dialog::finished, view.active,
         [this, item, _versionIndex, cancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
@@ -1269,7 +1269,7 @@ void ProjectManager::Implementation::removeDocuments(const QList<QModelIndex>& _
     auto dialog = new Dialog(topLevelWidget);
     dialog->showDialog({}, question,
                        { { kCancelButtonId, tr("No"), Dialog::RejectButton },
-                         { kRemoveButtonId, tr("Yes, remove"), Dialog::NormalButton } });
+                         { kRemoveButtonId, tr("Yes, remove"), Dialog::AcceptCriticalButton } });
     QObject::connect(
         dialog, &Dialog::finished,
         [this, itemsList, kCancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
@@ -1733,7 +1733,7 @@ void ProjectManager::Implementation::emptyRecycleBin()
     dialog->showDialog(
         {}, tr("Do you really want to permanently remove all documents from the recycle bin?"),
         { { kCancelButtonId, tr("No"), Dialog::RejectButton },
-          { kEmptyButtonId, tr("Yes, remove"), Dialog::NormalButton } });
+          { kEmptyButtonId, tr("Yes, remove"), Dialog::AcceptCriticalButton } });
     QObject::connect(
         dialog, &Dialog::finished,
         [this, recycleBin, kCancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {

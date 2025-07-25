@@ -211,7 +211,7 @@ void AccountManager::Implementation::initNavigatorConnections()
         constexpr int removeButtonId = 1;
         dialog->showDialog({}, tr("Do you really want to remove this team?"),
                            { { cancelButtonId, tr("No"), Dialog::RejectButton },
-                             { removeButtonId, tr("Yes, remove"), Dialog::AcceptButton } });
+                             { removeButtonId, tr("Yes, remove"), Dialog::AcceptCriticalButton } });
         connect(dialog, &Dialog::finished, q,
                 [this, _teamId, cancelButtonId, dialog](const Dialog::ButtonInfo& _buttonInfo) {
                     dialog->hideDialog();
