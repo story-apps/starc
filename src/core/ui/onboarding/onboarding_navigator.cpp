@@ -299,8 +299,13 @@ void OnboardingNavigator::Implementation::initUiPage()
     uiTitle->setAlignment(Qt::AlignCenter);
     uiSubtitle->setAlignment(Qt::AlignCenter);
     QStandardItem* defaultLanguage = nullptr;
-    auto addLanguage = [this, &defaultLanguage](const QString& _languageName,
-                                                QLocale::Language _language, qreal _trnaslated) {
+    auto addLanguage
+        = [this, &defaultLanguage](const QString& _languageName, QLocale::Language _language,
+                                   qreal _trnaslated) -> QStandardItem* {
+        if (_trnaslated <= 20) {
+            return nullptr;
+        }
+
         auto languageItem = new QStandardItem(_languageName);
         languageItem->setData(_language, LanguageRole);
         languageItem->setData(_trnaslated, LanguageTranslatedRole);

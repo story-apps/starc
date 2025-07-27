@@ -194,10 +194,10 @@ LanguageDialog::Implementation::Implementation(QWidget* _parent)
     buttonsLayout = new QHBoxLayout;
     buttonsLayout->setContentsMargins({});
     buttonsLayout->setSpacing(0);
-    buttonsLayout->addStretch();
     buttonsLayout->addWidget(translationProgressLabel, 0, Qt::AlignVCenter);
     buttonsLayout->addWidget(improveButton);
     buttonsLayout->addWidget(browseButton);
+    buttonsLayout->addStretch();
     buttonsLayout->addWidget(closeButton);
 
     auto projectLocationGroup = new RadioButtonGroup(_parent);
@@ -248,47 +248,64 @@ LanguageDialog::LanguageDialog(QWidget* _parent)
     });
 
     int row = 0;
-    contentsLayout()->addWidget(d->azerbaijani, row++, 0);
-    contentsLayout()->addWidget(d->belarusian, row++, 0);
-    contentsLayout()->addWidget(d->catalan, row++, 0);
-    contentsLayout()->addWidget(d->danish, row++, 0);
-    contentsLayout()->addWidget(d->german, row++, 0);
-    contentsLayout()->addWidget(d->english, row++, 0);
-    contentsLayout()->addWidget(d->spanish, row++, 0);
-    contentsLayout()->addWidget(d->esperanto, row++, 0);
-    contentsLayout()->addWidget(d->french, row++, 0);
+    int column = 0;
+    int maximumRow = 0;
+    auto addButton = [this, &row, &column](PercentRadioButton* _button) {
+        if (_button->percents <= 20) {
+            _button->hide();
+            return;
+        }
+        contentsLayout()->addWidget(_button, row++, column);
+    };
+    addButton(d->azerbaijani);
+    addButton(d->belarusian);
+    addButton(d->catalan);
+    addButton(d->danish);
+    addButton(d->german);
+    addButton(d->english);
+    addButton(d->spanish);
+    addButton(d->esperanto);
+    addButton(d->french);
+    maximumRow = std::max(row, maximumRow);
     //
-    int rowForSecondColumn = 0;
-    contentsLayout()->addWidget(d->galician, rowForSecondColumn++, 1);
-    contentsLayout()->addWidget(d->croatian, rowForSecondColumn++, 1);
-    contentsLayout()->addWidget(d->indonesian, rowForSecondColumn++, 1);
-    contentsLayout()->addWidget(d->italian, rowForSecondColumn++, 1);
-    contentsLayout()->addWidget(d->hungarian, rowForSecondColumn++, 1);
-    contentsLayout()->addWidget(d->dutch, rowForSecondColumn++, 1);
-    contentsLayout()->addWidget(d->polish, rowForSecondColumn++, 1);
-    contentsLayout()->addWidget(d->portuguese, rowForSecondColumn++, 1);
-    contentsLayout()->addWidget(d->portugueseBrazil, rowForSecondColumn++, 1);
-    int rowForThirdColumn = 0;
-    contentsLayout()->addWidget(d->romanian, rowForThirdColumn++, 2);
-    contentsLayout()->addWidget(d->russian, rowForThirdColumn++, 2);
-    contentsLayout()->addWidget(d->slovenian, rowForThirdColumn++, 2);
-    contentsLayout()->addWidget(d->swedish, rowForThirdColumn++, 2);
-    contentsLayout()->addWidget(d->tagalog, rowForThirdColumn++, 2);
-    contentsLayout()->addWidget(d->turkish, rowForThirdColumn++, 2);
-    contentsLayout()->addWidget(d->ukrainian, rowForThirdColumn++, 2);
+    row = 0;
+    ++column;
+    addButton(d->galician);
+    addButton(d->croatian);
+    addButton(d->indonesian);
+    addButton(d->italian);
+    addButton(d->hungarian);
+    addButton(d->dutch);
+    addButton(d->polish);
+    addButton(d->portuguese);
+    addButton(d->portugueseBrazil);
+    maximumRow = std::max(row, maximumRow);
     //
-    int rowForFifthColumn = 0;
-    contentsLayout()->addWidget(d->arabic, rowForFifthColumn++, 3);
-    contentsLayout()->addWidget(d->hebrew, rowForFifthColumn++, 3);
-    contentsLayout()->addWidget(d->hindi, rowForFifthColumn++, 3);
-    contentsLayout()->addWidget(d->persian, rowForFifthColumn++, 3);
-    contentsLayout()->addWidget(d->tamil, rowForFifthColumn++, 3);
-    contentsLayout()->addWidget(d->telugu, rowForFifthColumn++, 3);
-    contentsLayout()->addWidget(d->armenian, rowForFifthColumn++, 3);
-    contentsLayout()->addWidget(d->chinese, rowForFifthColumn++, 3);
-    contentsLayout()->addWidget(d->korean, rowForFifthColumn++, 3);
+    row = 0;
+    ++column;
+    addButton(d->romanian);
+    addButton(d->russian);
+    addButton(d->slovenian);
+    addButton(d->swedish);
+    addButton(d->tagalog);
+    addButton(d->turkish);
+    addButton(d->ukrainian);
+    maximumRow = std::max(row, maximumRow);
     //
-    contentsLayout()->setRowStretch(row++, 1);
+    row = 0;
+    ++column;
+    addButton(d->arabic);
+    addButton(d->hebrew);
+    addButton(d->hindi);
+    addButton(d->persian);
+    addButton(d->tamil);
+    addButton(d->telugu);
+    addButton(d->armenian);
+    addButton(d->chinese);
+    addButton(d->korean);
+    maximumRow = std::max(row, maximumRow);
+    //
+    contentsLayout()->setRowStretch(maximumRow++, 1);
     contentsLayout()->setColumnStretch(4, 1);
     contentsLayout()->addWidget(d->languageHowToAddLink, row++, 0, 1, 5);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0, 1, 5);
@@ -375,7 +392,8 @@ void LanguageDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->languageHowToAddLink->setContentsMargins(DesignSystem::label().margins().toMargins());
     d->languageHowToAddLink->setBackgroundColor(DesignSystem::color().background());
     d->languageHowToAddLink->setTextColor(DesignSystem::color().accent());
-    d->translationProgressLabel->setContentsMargins(0, 0, DesignSystem::layout().px24(), 0);
+    d->translationProgressLabel->setContentsMargins(DesignSystem::layout().px12(), 0,
+                                                    DesignSystem::layout().px12(), 0);
     d->translationProgressLabel->setBackgroundColor(DesignSystem::color().background());
     d->translationProgressLabel->setTextColor(DesignSystem::color().onBackground());
 
