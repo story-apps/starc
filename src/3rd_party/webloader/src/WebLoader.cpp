@@ -187,8 +187,13 @@ void WebLoader::run()
         QTimer timeoutTimer;
         connect(reply.data(), &QNetworkReply::uploadProgress, &timeoutTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
         connect(reply.data(), &QNetworkReply::downloadProgress, &timeoutTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-        connect(&timeoutTimer, &QTimer::timeout, this, &WebLoader::quit);
-        connect(&timeoutTimer, &QTimer::timeout, reply.data(), &QNetworkReply::abort);
+        connect(&timeoutTimer, &QTimer::timeout, reply.data(), [this, &reply]() {
+            m_isTimeout = true;
+            m_isNeedRedirect = false;
+            reply->abort();
+            quit();
+        });
+        m_isTimeout = false;
         timeoutTimer.setSingleShot(true);
         timeoutTimer.start(m_parameters.loadingTimeout());
 
@@ -202,22 +207,10 @@ void WebLoader::run()
         }
 
         //
-        // Если ответ ещё не удалён
+        // Если ответ получен, останавливаем таймер
         //
-        if (!reply.isNull()) {
-            //
-            // ... если ответ получен, останавливаем таймер
-            //
-            if (reply->isFinished()) {
-                timeoutTimer.stop();
-            }
-            //
-            // ... а если загрузка прервалась по таймеру, освобождаем ресурсы и закрываем соединение
-            //
-            else {
-                m_isNeedRedirect = false;
-                reply->abort();
-            }
+        if (!reply.isNull() && reply->isFinished()) {
+            timeoutTimer.stop();
         }
 
     } while (m_isNeedRedirect);
@@ -307,6 +300,9 @@ void WebLoader::downloadError(QNetworkReply::NetworkError _networkError)
         }
 
         default: {
+            if (m_isTimeout) {
+                _networkError = QNetworkReply::TimeoutError;
+            }
             const QString lastError =
                     tr("Sorry, we have some error while loading. Error is: %1")
                     .arg(networkErrorToString(_networkError));
