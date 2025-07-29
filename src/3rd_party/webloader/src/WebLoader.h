@@ -163,6 +163,11 @@ private:
      * @brief Загруженные данные
      */
     QByteArray m_downloadedData;
+
+    /**
+     * @brief Закончилось ли время ожидания ответа
+     */
+    bool m_isTimeout = false;
 };
 
 #endif // WEBLOADER_H
