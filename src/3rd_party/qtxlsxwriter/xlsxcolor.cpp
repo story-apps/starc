@@ -111,25 +111,37 @@ bool XlsxColor::loadFromXml(QXmlStreamReader &reader)
 
 XlsxColor::operator QVariant() const
 {
-    return QVariant(qMetaTypeId<XlsxColor>(), this);
+    const auto &cref
+#if QT_VERSION >= 0x060000 // Qt 6.0 or over
+        = QMetaType::fromType<XlsxColor>();
+#else
+        = qMetaTypeId<XlsxColor>();
+#endif
+    return QVariant(cref, this);
 }
 
 QColor XlsxColor::fromARGBString(const QString &c)
 {
-    Q_ASSERT(c.length() == 8);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+    if (c.startsWith(u'#')) {
+        return QColor::fromString(c);
+    } else {
+        return QColor::fromString(QLatin1Char('#') + c);
+    }
+#else
     QColor color;
-    color.setAlpha(c.mid(0, 2).toInt(0, 16));
-    color.setRed(c.mid(2, 2).toInt(0, 16));
-    color.setGreen(c.mid(4, 2).toInt(0, 16));
-    color.setBlue(c.mid(6, 2).toInt(0, 16));
+    if (c.startsWith(u'#')) {
+        color.setNamedColor(c);
+    } else {
+        color.setNamedColor(QLatin1Char('#') + c);
+    }
     return color;
+#endif
 }
 
 QString XlsxColor::toARGBString(const QColor &c)
 {
-    QString color;
-    color.sprintf("%02X%02X%02X%02X", c.alpha(), c.red(), c.green(), c.blue());
-    return color;
+    return QString::asprintf("%02X%02X%02X%02X", c.alpha(), c.red(), c.green(), c.blue());
 }
 
 #if !defined(QT_NO_DATASTREAM)

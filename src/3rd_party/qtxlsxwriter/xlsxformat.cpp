@@ -28,6 +28,7 @@
 #include "xlsxnumformatparser_p.h"
 #include <QDataStream>
 #include <QDebug>
+#include <QIODevice>
 
 QT_BEGIN_NAMESPACE_XLSX
 

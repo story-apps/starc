@@ -265,7 +265,7 @@ bool ChartPrivate::loadXmlPlotArea(QXmlStreamReader &reader)
 
 bool ChartPrivate::loadXmlXxxChart(QXmlStreamReader &reader)
 {
-    QStringRef name = reader.name();
+    const auto name = reader.name();
     if (name == QLatin1String("pieChart"))
         chartType = Chart::CT_Pie;
     else if (name == QLatin1String("pie3DChart"))
@@ -314,7 +314,7 @@ bool ChartPrivate::loadXmlSer(QXmlStreamReader &reader)
            && !(reader.tokenType() == QXmlStreamReader::EndElement
                 && reader.name() == QLatin1String("ser"))) {
         if (reader.readNextStartElement()) {
-            QStringRef name = reader.name();
+            const auto name = reader.name();
             if (name == QLatin1String("cat") || name == QLatin1String("xVal")) {
                 while (!reader.atEnd()
                        && !(reader.tokenType() == QXmlStreamReader::EndElement
@@ -613,7 +613,7 @@ bool ChartPrivate::loadXmlAxis(QXmlStreamReader &reader)
         if (reader.tokenType() == QXmlStreamReader::StartElement) {
             if (reader.name() == QLatin1String("axPos")) {
                 QXmlStreamAttributes attrs = reader.attributes();
-                QStringRef pos = attrs.value(QLatin1String("val"));
+                const auto pos = attrs.value(QLatin1String("val"));
                 if (pos == QLatin1String("l"))
                     axis->axisPos = XlsxAxis::Left;
                 else if (pos == QLatin1String("r"))

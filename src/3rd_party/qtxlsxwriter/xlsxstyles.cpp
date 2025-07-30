@@ -50,10 +50,19 @@ Styles::Styles(CreateFlag flag)
     //! Fix me. Should the custom num fmt Id starts with 164 or 176 or others??
 
     //! Fix me! Where should we put these register code?
-    if (QMetaType::type("XlsxColor") == QMetaType::UnknownType) {
+#if QT_VERSION >= 0x060000 // Qt 6.0 or over
+    if (QMetaType::fromName("XlsxColor").isRegistered())
+#else
+    if (QMetaType::type("XlsxColor") == QMetaType::UnknownType)
+#endif
+    {
         qRegisterMetaType<XlsxColor>("XlsxColor");
+#if QT_VERSION >= 0x060000
+        // Qt 6
+        /// TODO:
+#else
+        // Qt 5
         qRegisterMetaTypeStreamOperators<XlsxColor>("XlsxColor");
-#if QT_VERSION >= 0x050200
         QMetaType::registerDebugStreamOperator<XlsxColor>();
 #endif
     }
