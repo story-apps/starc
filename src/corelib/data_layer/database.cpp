@@ -17,6 +17,11 @@ namespace {
 static QString s_connectionName = "local_database";
 
 /**
+ * @brief Открытые соединения с базой данных
+ */
+static QStringList s_connections;
+
+/**
  * @brief Плагин используемый для работы с базой
  */
 static QString s_sqlDriver = "QSQLITE";
@@ -37,9 +42,9 @@ static QString s_openFileError;
 static QString s_lastError;
 
 /**
- * @brief Счётчик открытых транзакций
+ * @brief Счётчик открытых транзакций на каждое соединение
  */
-static int s_openedTransactions = 0;
+QPair<QString, int> s_openedTransactions;
 
 /**
  * @brief Получить ключ хранения номера версии приложения
@@ -126,8 +131,10 @@ void Database::setCurrentFile(const QString& _databaseFileName)
 
 void Database::closeCurrentFile()
 {
-    if (QSqlDatabase::contains(s_connectionName)) {
-        QSqlDatabase::removeDatabase(s_connectionName);
+    for (const auto& connection : s_connections) {
+        if (QSqlDatabase::contains(connection)) {
+            QSqlDatabase::removeDatabase(connection);
+        }
     }
 }
 
@@ -136,53 +143,67 @@ QString Database::currentFile()
     return instanse().databaseName();
 }
 
-QSqlQuery Database::query()
+QSqlQuery Database::query(const QString& _connection)
 {
-    return QSqlQuery(instanse());
+    return QSqlQuery(instanse(_connection));
 }
 
-void Database::transaction()
+bool Database::transaction(const QString& _connection)
 {
-    //
-    // Для первого запроса открываем транзакцию
-    //
-    if (s_openedTransactions == 0) {
-        instanse().transaction();
+    if (s_openedTransactions.first.isEmpty()) {
+        //
+        // Если открытой транзакции нет, открываем
+        //
+        instanse(_connection).transaction();
+        s_openedTransactions = { _connection, 1 };
+        return true;
+    } else if (s_openedTransactions.first == _connection) {
+        //
+        // Если транзакция открыта и она на этом же соединении, то увеличиваем счетчик
+        // открытых транзакций
+        //
+        ++s_openedTransactions.second;
+        return true;
+    } else {
+        //
+        // Если транзакция открыта и она на другом соединении, то вторую открывать не будем, т.к.
+        // это небезопасно
+        //
+        return false;
     }
-
-    //
-    // Увеличиваем счётчик открытых транзакций
-    //
-    ++s_openedTransactions;
 }
 
-void Database::commit()
+void Database::commit(const QString& _connection)
 {
     //
     // Уменьшаем счётчик транзакций
     //
-    --s_openedTransactions;
+    if (s_openedTransactions.first == _connection) {
+        --s_openedTransactions.second;
 
-    //
-    // При закрытии корневой транзакции фиксируем изменения в базе данных
-    //
-    if (s_openedTransactions == 0) {
-        instanse().commit();
+        //
+        // При закрытии корневой транзакции фиксируем изменения в базе данных
+        //
+        if (s_openedTransactions.second == 0) {
+            instanse(_connection).commit();
+        }
     }
 }
 
-void Database::rollback()
+void Database::rollback(const QString& _connection)
 {
     //
     // Уменьшаем счётчик транзакций
     //
-    --s_openedTransactions;
+    if (s_openedTransactions.first == _connection) {
+        --s_openedTransactions.second;
 
-    //
-    // При закрытии корневой транзакции отменяем изменения в базе данных
-    //
-    if (s_openedTransactions == 0) {
-        instanse().rollback();
+        //
+        // При закрытии корневой транзакции отменяем изменения в базе данных
+        //
+        if (s_openedTransactions.second == 0) {
+            instanse(_connection).rollback();
+        }
     }
 }
 
@@ -194,14 +215,15 @@ void Database::vacuum()
 
 // ****
 
-QSqlDatabase Database::instanse()
+QSqlDatabase Database::instanse(const QString& _connection)
 {
     QSqlDatabase database;
 
-    if (!QSqlDatabase::contains(s_connectionName)) {
-        open(database, s_connectionName, s_databaseName);
+    const QString connection = _connection.isEmpty() ? s_connectionName : _connection;
+    if (!QSqlDatabase::contains(connection)) {
+        open(database, connection, s_databaseName);
     } else {
-        database = QSqlDatabase::database(s_connectionName);
+        database = QSqlDatabase::database(connection);
     }
 
     return database;
@@ -215,6 +237,8 @@ void Database::open(QSqlDatabase& _database, const QString& _connectionName,
     _database = QSqlDatabase::addDatabase(s_sqlDriver, _connectionName);
     _database.setDatabaseName(_databaseName);
     _database.open();
+
+    s_connections.append(_connectionName);
 
     Database::States states = checkState(_database);
 

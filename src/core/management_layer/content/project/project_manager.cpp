@@ -25,7 +25,7 @@
 #include <business_layer/model/worlds/world_model.h>
 #include <business_layer/model/worlds/worlds_model.h>
 #include <business_layer/templates/text_template.h>
-#include <data_layer/database.h>
+#include <data_layer/database_manager.h>
 #include <data_layer/storage/document_change_storage.h>
 #include <data_layer/storage/document_image_storage.h>
 #include <data_layer/storage/document_raw_data_storage.h>
@@ -109,7 +109,7 @@ bool isTextItem(BusinessLayer::StructureModelItem* _item)
  */
 QString projectSettingsKey(const QString& _key)
 {
-    return DatabaseLayer::Database::currentFile() + "/" + _key;
+    return DatabaseLayer::DatabaseManager::currentFile() + "/" + _key;
 }
 
 /**
@@ -3366,6 +3366,38 @@ void ProjectManager::saveChanges()
     // Сохраняем все изменения документов
     //
     DataStorageLayer::StorageFacade::documentChangeStorage()->store();
+}
+
+void ProjectManager::saveChangesAsync()
+{
+    //
+    // Сохраняем структуру
+    //
+    const auto structure = d->projectStructureModel->document();
+    DataStorageLayer::StorageFacade::documentStorage()->saveDocumentAsync(structure);
+
+    //
+    // Сохраняем остальные документы
+    //
+    const auto loadedDocuments = d->modelsFacade.loadedDocuments();
+    for (auto document : loadedDocuments) {
+        DataStorageLayer::StorageFacade::documentStorage()->saveDocumentAsync(document);
+    }
+
+    //
+    // Сохраняем изображения
+    //
+    d->documentImageStorage.saveChangesAsync();
+
+    //
+    // Сохраняем сырые данные
+    //
+    d->documentRawDataStorage.saveChangesAsync();
+
+    //
+    // Сохраняем все изменения документов
+    //
+    DataStorageLayer::StorageFacade::documentChangeStorage()->storeAsync();
 }
 
 void ProjectManager::storeCharacter(const QString& _name, const QString& _content)

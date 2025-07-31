@@ -4,7 +4,7 @@
 #include "projects_model_project_item.h"
 #include "projects_model_team_item.h"
 
-#include <data_layer/database.h>
+#include <data_layer/database_manager.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
 #include <domain/document_object.h>
@@ -1169,7 +1169,7 @@ void ProjectsManager::setCurrentProject(const QString& _path, const QString& _re
     // Делаем проект текущим и загружаем из него БД
     // или создаём, если ранее его не существовало
     //
-    DatabaseLayer::Database::setCurrentFile(projectRealPath);
+    DatabaseLayer::DatabaseManager::setCurrentFile(projectRealPath);
 
     //
     // Определим, находится ли устанавливаемый проект уже в списке, или это новый
@@ -1349,7 +1349,7 @@ void ProjectsManager::closeCurrentProject()
     //
     // Закрываем сам файл с базой данных
     //
-    DatabaseLayer::Database::closeCurrentFile();
+    DatabaseLayer::DatabaseManager::closeCurrentFile();
 
     //
     // Очищаем хранилища

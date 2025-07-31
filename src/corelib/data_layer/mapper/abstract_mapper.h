@@ -2,7 +2,7 @@
 
 #include <domain/identifier.h>
 
-#include <QMap>
+#include <QUuid>
 
 namespace Domain {
 class DomainObject;
@@ -17,15 +17,21 @@ namespace DataMappingLayer {
 /**
  * @brief The AbstractMapper class
  */
-class AbstractMapper
+class AbstractMapper : public QObject
 {
+    Q_OBJECT
+
 public:
-    virtual ~AbstractMapper() = default;
+    virtual ~AbstractMapper();
 
     /**
      * @brief Очистить все загруженные ранее данные
      */
     void clear();
+
+signals:
+    void objectsFound(const QUuid& _queryUuid, QVector<Domain::DomainObject*> _objects);
+    void queryFailed(const QUuid& _queryUuid, const QString& _error);
 
 protected:
     virtual QString findStatement(const Domain::Identifier& _id) const = 0;
@@ -48,6 +54,10 @@ protected:
     virtual void doLoad(Domain::DomainObject* _object, const QSqlRecord& _record) = 0;
 
 protected:
+    /**
+     * @brief Методы для синхронной работы
+     */
+    /** @{ */
     Domain::DomainObject* abstractFind(const Domain::Identifier& _id);
     QVector<Domain::DomainObject*> abstractFind(const QString& _filter);
     bool abstractInsert(Domain::DomainObject* _object);
@@ -58,12 +68,24 @@ protected:
      * @brief Выполнить запрос
      */
     bool executeSql(QSqlQuery& _sqlQuery);
+    /** @} */
+
+    /**
+     * @brief Методы для асинхронной работы
+     * @return Гуид запроса
+     */
+    /** @{ */
+    QUuid abstractInsertAsync(Domain::DomainObject* _object);
+    QUuid abstractUpdateAsync(Domain::DomainObject* _object);
+    QUuid abstractFindAsync(const QString& _filter);
+    QUuid abstractDeleteAsync(Domain::DomainObject* _object);
+    /** @} */
 
 protected:
     /**
      * @brief Скрываем конструктор от публичного доступа
      */
-    AbstractMapper() = default;
+    AbstractMapper(QObject* _parent = nullptr);
 
 private:
     /**
@@ -82,15 +104,8 @@ private:
     Domain::DomainObject* load(const QSqlRecord& _record);
 
 private:
-    /**
-     * @brief Был ли загружен идентификатор последнего элемента
-     */
-    bool m_isLastIdentifierLoaded = false;
-
-    /**
-     * @brief Загруженные объекты из базы данных
-     */
-    std::map<Domain::Identifier, Domain::DomainObject*> m_loadedObjectsMap;
+    class Implementation;
+    QScopedPointer<Implementation> d;
 };
 
 } // namespace DataMappingLayer
