@@ -317,7 +317,7 @@ void SearchManager::setSearchInBlockTypes(
 {
     d->blockTypes.clear();
     QStringList list;
-    foreach (QPair type, _blockTypes) {
+    for (const auto& type : _blockTypes) {
         list.append(type.first);
         d->blockTypes.append(type.second);
     }

@@ -295,7 +295,7 @@ void PanelHandler::complete(const QString& _currentBlockText, const QString& _cu
     // Дополним текст
     //
     int cursorMovement = _currentBlockText.length();
-    while (!_cursorBackwardText.endsWith(_currentBlockText.leftRef(cursorMovement),
+    while (!_cursorBackwardText.endsWith(_currentBlockText.left(cursorMovement),
                                          Qt::CaseInsensitive)) {
         --cursorMovement;
     }

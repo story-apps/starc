@@ -381,7 +381,7 @@ void CharacterHandler::complete(const QString& _currentBlockText,
     //
     int cursorMovement = sectionText.length();
     while (
-        !_cursorBackwardText.endsWith(sectionText.leftRef(cursorMovement), Qt::CaseInsensitive)) {
+        !_cursorBackwardText.endsWith(sectionText.left(cursorMovement), Qt::CaseInsensitive)) {
         --cursorMovement;
     }
     //

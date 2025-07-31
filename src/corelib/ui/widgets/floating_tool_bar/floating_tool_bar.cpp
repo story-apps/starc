@@ -6,6 +6,7 @@
 #include <utils/helpers/image_helper.h>
 
 #include <QAction>
+#include <QActionGroup>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QToolTip>

@@ -448,7 +448,11 @@ void WritingSprintPanel::paintEvent(QPaintEvent* _event)
     }
 }
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+void WritingSprintPanel::enterEvent(QEnterEvent* _event)
+#else
 void WritingSprintPanel::enterEvent(QEvent* _event)
+#endif
 {
     Widget::enterEvent(_event);
 

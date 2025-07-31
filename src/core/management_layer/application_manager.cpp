@@ -2339,42 +2339,41 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     // ... встроенные в бинарник
     //
-    QFontDatabase fontDatabase;
-    fontDatabase.addApplicationFont(":/fonts/materialdesignicons");
-    fontDatabase.addApplicationFont(":/fonts/font-awesome-brands");
-    fontDatabase.addApplicationFont(":/fonts/roboto-bold");
-    fontDatabase.addApplicationFont(":/fonts/roboto-light");
-    fontDatabase.addApplicationFont(":/fonts/roboto-medium");
-    fontDatabase.addApplicationFont(":/fonts/roboto-regular");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-light");
-    fontDatabase.addApplicationFont(":/fonts/noto-sans-medium");
+    QFontDatabase::addApplicationFont(":/fonts/materialdesignicons");
+    QFontDatabase::addApplicationFont(":/fonts/font-awesome-brands");
+    QFontDatabase::addApplicationFont(":/fonts/roboto-bold");
+    QFontDatabase::addApplicationFont(":/fonts/roboto-light");
+    QFontDatabase::addApplicationFont(":/fonts/roboto-medium");
+    QFontDatabase::addApplicationFont(":/fonts/roboto-regular");
+    QFontDatabase::addApplicationFont(":/fonts/noto-sans");
+    QFontDatabase::addApplicationFont(":/fonts/noto-sans-light");
+    QFontDatabase::addApplicationFont(":/fonts/noto-sans-medium");
     //
-    fontDatabase.addApplicationFont(":/fonts/arial");
-    fontDatabase.addApplicationFont(":/fonts/arial-bold");
-    fontDatabase.addApplicationFont(":/fonts/arial-italic");
-    fontDatabase.addApplicationFont(":/fonts/arial-bold-italic");
-    fontDatabase.addApplicationFont(":/fonts/courier-new");
-    fontDatabase.addApplicationFont(":/fonts/courier-new-bold");
-    fontDatabase.addApplicationFont(":/fonts/courier-new-italic");
-    fontDatabase.addApplicationFont(":/fonts/courier-new-bold-italic");
-    fontDatabase.addApplicationFont(":/fonts/courier-prime");
-    fontDatabase.addApplicationFont(":/fonts/courier-prime-bold");
-    fontDatabase.addApplicationFont(":/fonts/courier-prime-italic");
-    fontDatabase.addApplicationFont(":/fonts/courier-prime-bold-italic");
-    fontDatabase.addApplicationFont(":/fonts/mallanna-regular");
-    fontDatabase.addApplicationFont(":/fonts/muktamalar-bold");
-    fontDatabase.addApplicationFont(":/fonts/muktamalar-regular");
-    fontDatabase.addApplicationFont(":/fonts/times-new-roman");
-    fontDatabase.addApplicationFont(":/fonts/times-new-roman-bold");
-    fontDatabase.addApplicationFont(":/fonts/times-new-roman-italic");
-    fontDatabase.addApplicationFont(":/fonts/times-new-roman-bold-italic");
+    QFontDatabase::addApplicationFont(":/fonts/arial");
+    QFontDatabase::addApplicationFont(":/fonts/arial-bold");
+    QFontDatabase::addApplicationFont(":/fonts/arial-italic");
+    QFontDatabase::addApplicationFont(":/fonts/arial-bold-italic");
+    QFontDatabase::addApplicationFont(":/fonts/courier-new");
+    QFontDatabase::addApplicationFont(":/fonts/courier-new-bold");
+    QFontDatabase::addApplicationFont(":/fonts/courier-new-italic");
+    QFontDatabase::addApplicationFont(":/fonts/courier-new-bold-italic");
+    QFontDatabase::addApplicationFont(":/fonts/courier-prime");
+    QFontDatabase::addApplicationFont(":/fonts/courier-prime-bold");
+    QFontDatabase::addApplicationFont(":/fonts/courier-prime-italic");
+    QFontDatabase::addApplicationFont(":/fonts/courier-prime-bold-italic");
+    QFontDatabase::addApplicationFont(":/fonts/mallanna-regular");
+    QFontDatabase::addApplicationFont(":/fonts/muktamalar-bold");
+    QFontDatabase::addApplicationFont(":/fonts/muktamalar-regular");
+    QFontDatabase::addApplicationFont(":/fonts/times-new-roman");
+    QFontDatabase::addApplicationFont(":/fonts/times-new-roman-bold");
+    QFontDatabase::addApplicationFont(":/fonts/times-new-roman-italic");
+    QFontDatabase::addApplicationFont(":/fonts/times-new-roman-bold-italic");
     //
-    fontDatabase.addApplicationFont(":/fonts/montserrat-regular");
-    fontDatabase.addApplicationFont(":/fonts/montserrat-bold");
-    fontDatabase.addApplicationFont(":/fonts/montserrat-italic");
-    fontDatabase.addApplicationFont(":/fonts/montserrat-bold-italic");
-    fontDatabase.addApplicationFont(":/fonts/sf-movie-poster");
+    QFontDatabase::addApplicationFont(":/fonts/montserrat-regular");
+    QFontDatabase::addApplicationFont(":/fonts/montserrat-bold");
+    QFontDatabase::addApplicationFont(":/fonts/montserrat-italic");
+    QFontDatabase::addApplicationFont(":/fonts/montserrat-bold-italic");
+    QFontDatabase::addApplicationFont(":/fonts/sf-movie-poster");
     //
     // ... скаченные
     //
@@ -2391,7 +2390,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
             continue;
         }
 
-        fontDatabase.addApplicationFont(font.absoluteFilePath());
+        QFontDatabase::addApplicationFont(font.absoluteFilePath());
     }
 
     //

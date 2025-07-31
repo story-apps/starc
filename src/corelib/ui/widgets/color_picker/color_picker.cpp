@@ -9,10 +9,10 @@
 #include <ui/widgets/text_field/text_field.h>
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QKeyEvent>
 #include <QScreen>
 #include <QVBoxLayout>
+#include <QWindow>
 
 
 class ColorPicker::Implementation
@@ -85,14 +85,15 @@ ColorPicker::Implementation::Implementation(QWidget* _parent)
 
 QColor ColorPicker::Implementation::grabScreenColor(const QPoint& _position)
 {
-    const auto desktop = QApplication::desktop();
     const auto screen = QGuiApplication::screenAt(_position);
-    if (desktop == nullptr || screen == nullptr) {
+    if (screen == nullptr) {
         return {};
     }
 
-    const auto sceenPixmap
-        = screen->grabWindow(desktop->winId(), _position.x(), _position.y(), 1, 1);
+    //
+    // Используем 0 вместо хэндла окна, чтобы захватить весь экран
+    //
+    const auto sceenPixmap = screen->grabWindow(0, _position.x(), _position.y(), 1, 1);
     return sceenPixmap.toImage().pixel(0, 0);
 }
 

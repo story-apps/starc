@@ -5,7 +5,6 @@
 #include <business_layer/plots/abstract_plot.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
-#include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/session_statistics/session_statistics_navigator.h>
 #include <ui/session_statistics/session_statistics_tool_bar.h>
@@ -148,7 +147,7 @@ void WritingSessionManager::Implementation::processStatistics()
     const auto overviewStart = QDateTime::currentDateTime().addDays(-30);
     bool hasStats = false;
     for (const auto& session : std::as_const(sessionStatistics)) {
-        const auto newX = session.startDateTime.date().startOfDay().toTime_t();
+        const auto newX = session.startDateTime.date().startOfDay().toSecsSinceEpoch();
         if (newX != lastX) {
             x.append(newX);
             lastX = newX;
@@ -205,7 +204,7 @@ void WritingSessionManager::Implementation::processStatistics()
 
         for (; sessionsStatisticsIndex < sessionStatistics.size(); ++sessionsStatisticsIndex) {
             const auto& session = sessionStatistics[sessionsStatisticsIndex];
-            const auto newX = session.startDateTime.date().startOfDay().toTime_t();
+            const auto newX = session.startDateTime.date().startOfDay().toSecsSinceEpoch();
             if (newX != nextX) {
                 break;
             }
@@ -214,7 +213,7 @@ void WritingSessionManager::Implementation::processStatistics()
             summaryY.last() += session.words;
         }
 
-        const auto infoTitle = QDateTime::fromTime_t(nextX).toString("dd.MM.yyyy");
+        const auto infoTitle = QDateTime::fromSecsSinceEpoch(nextX).toString("dd.MM.yyyy");
         QString infoText;
         for (auto iter = deviceNames.begin(); iter != deviceNames.end(); ++iter) {
             const auto words = deviceY[iter.key()].constLast();
@@ -223,7 +222,7 @@ void WritingSessionManager::Implementation::processStatistics()
             }
         }
         infoText.append(QString("%1: %2").arg(tr("Total words")).arg(summaryY.constLast()));
-        info.insert(nextX, { infoTitle, infoText });
+        info.insert(nextX, QStringList{ infoTitle, infoText });
     }
     //
     // ... формируем графики

@@ -237,7 +237,7 @@ void SceneCharactersHandler::complete(const QString& _currentBlockText,
     // Дополним текст
     //
     int cursorMovement = cursorBackwardTextToComma.length();
-    while (!_cursorBackwardText.endsWith(cursorBackwardTextToComma.leftRef(cursorMovement),
+    while (!_cursorBackwardText.endsWith(cursorBackwardTextToComma.left(cursorMovement),
                                          Qt::CaseInsensitive)) {
         --cursorMovement;
     }

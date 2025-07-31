@@ -47,7 +47,11 @@ protected:
 
     void paintEvent(QPaintEvent* _event) override;
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+    void enterEvent(QEnterEvent* _event) override;
+#else
     void enterEvent(QEvent* _event) override;
+#endif
     void leaveEvent(QEvent* _event) override;
 
     void mousePressEvent(QMouseEvent* _event) override;

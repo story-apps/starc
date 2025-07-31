@@ -729,7 +729,11 @@ void ImagesList::dropEvent(QDropEvent* _event)
     //
     // Удалим все обхекты, в которых по-факту нет картинок
     //
-    droppedImages.removeAll(QPixmap());
+    for (int index = droppedImages.size() - 1; index >= 0; --index) {
+        if (droppedImages[index].isNull()) {
+            droppedImages.removeAt(index);
+        }
+    }
     //
     // ... и если, что-то удалось подгрузить, уведомляем клиентов
     //

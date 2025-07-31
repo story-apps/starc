@@ -545,7 +545,7 @@ void CardItemParametersView::setBeats(const QVector<QString>& _beats)
     //
     // Настраиваем поля для отображения битов
     //
-    const int beatsSize = std::max(1, _beats.size());
+    const int beatsSize = std::max(1, static_cast<int>(_beats.size()));
     if (d->beats.size() != beatsSize) {
         while (d->beats.size() > beatsSize) {
             auto beat = d->beats.takeLast();

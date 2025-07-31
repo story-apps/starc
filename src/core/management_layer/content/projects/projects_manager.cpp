@@ -517,13 +517,13 @@ void ProjectsManager::loadProjects()
             const auto permissionsJson = _json["permissions"].toArray();
             for (const auto& documentAccessJson : permissionsJson) {
                 const auto documentAccess = documentAccessJson.toObject();
-                permissions[documentAccess["uuid"].toString()]
+                permissions[QUuid(documentAccess["uuid"].toString())]
                     = static_cast<DocumentEditingMode>(documentAccess["role"].toInt());
             }
             project->setEditingPermissions(permissions);
         }
         project->setProjectType(static_cast<BusinessLayer::ProjectType>(_json["type"].toInt()));
-        project->setUuid(_json["uuid"].toString());
+        project->setUuid(QUuid(_json["uuid"].toString()));
         project->setName(_json["name"].toString());
         project->setLogline(_json["logline"].toString());
         project->setPath(_json["path"].toString());
@@ -1066,7 +1066,7 @@ void ProjectsManager::addOrUpdateCloudProject(const Domain::ProjectInfo& _projec
     //
     const auto projectDir
         = QString("%1/projects/%2")
-              .arg(QStandardPaths::writableLocation(QStandardPaths::DataLocation),
+              .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),
                    DataStorageLayer::StorageFacade::settingsStorage()->accountEmail());
     QDir::root().mkpath(projectDir);
     const auto projectPath = QDir::toNativeSeparators(

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <QEvent>
-#include <QString>
 #include <QPair>
+#include <QString>
 
 #include <optional>
 

@@ -135,7 +135,7 @@ void SpellCheckHighlighter::highlightBlock(const QString& _text)
         const auto match = notWord.match(_text, wordPos);
         if (match.hasMatch()) {
             notWordPos = match.capturedStart();
-            notWordLength = std::max(1, match.capturedLength());
+            notWordLength = std::max(1, static_cast<int>(match.capturedLength()));
         } else {
             notWordPos = _text.length();
         }

@@ -149,28 +149,7 @@ class QCPPolarGraph;
 
   It provides QMetaObject-based reflection of its enums and flags via \a QCP::staticMetaObject.
 */
-#ifndef Q_MOC_RUN
 namespace QCP {
-#else
-class QCP
-{ // when in moc-run, make it look like a class, so we get Q_GADGET, Q_ENUMS/Q_FLAGS features in
-  // namespace
-    Q_GADGET
-    Q_ENUMS(ExportPen)
-    Q_ENUMS(ResolutionUnit)
-    Q_ENUMS(SignDomain)
-    Q_ENUMS(MarginSide)
-    Q_FLAGS(MarginSides)
-    Q_ENUMS(AntialiasedElement)
-    Q_FLAGS(AntialiasedElements)
-    Q_ENUMS(PlottingHint)
-    Q_FLAGS(PlottingHints)
-    Q_ENUMS(Interaction)
-    Q_FLAGS(Interactions)
-    Q_ENUMS(SelectionRectMode)
-    Q_ENUMS(SelectionType)
-public:
-#endif
 
 /*!
   Defines the different units in which the image resolution can be specified in the export

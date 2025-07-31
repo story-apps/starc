@@ -1,10 +1,8 @@
 #pragma once
 
-#include <QObject>
+#include <domain/starcloud_api.h>
 
-namespace Domain {
-struct Notification;
-}
+#include <QObject>
 
 
 namespace ManagementLayer {

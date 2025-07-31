@@ -263,7 +263,7 @@ QString TextHelper::elidedText(const QString& _text, const QFont& _font, const Q
         //
         const auto heightWithNextLine = height + lineHeight;
         if (heightWithNextLine <= _rect.height()) {
-            elidedText += _text.midRef(line.textStart(), line.textLength());
+            elidedText += _text.mid(line.textStart(), line.textLength());
         }
         //
         // А если это последняя строка, то многоточим её
@@ -415,7 +415,7 @@ QString TextHelper::simplified(const QString& _text, bool _keepLineBreaks)
     //
     // Убираем zero-width no-break пробел, также известный как BOM-метка
     //
-    result.remove(65279);
+    result.remove(QChar(65279));
     //
     // Убираем управляющие символы табуляции
     //

@@ -763,7 +763,7 @@ void ImportDialog::updateTranslations()
                  d->importText,
                  d->keepSceneNumbers,
              }) {
-            optionsVisability.append(QPair(option, option->isVisibleTo(d->optionsWidget)));
+            optionsVisability.append(qMakePair(option, option->isVisibleTo(d->optionsWidget)));
             option->setVisible(true);
         }
         d->optionsWidget->adjustSize();

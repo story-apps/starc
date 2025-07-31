@@ -1,12 +1,10 @@
 #pragma once
 
+#include <domain/starcloud_api.h>
+
 #include <QObject>
 
 class QKeyEvent;
-
-namespace Domain {
-struct SessionStatistics;
-}
 
 
 namespace ManagementLayer {
