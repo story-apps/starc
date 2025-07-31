@@ -190,6 +190,7 @@ void WebLoader::run()
         connect(&timeoutTimer, &QTimer::timeout, reply.data(), [this, &reply]() {
             m_isTimeout = true;
             m_isNeedRedirect = false;
+            m_isNeedStop = true;
             reply->abort();
             quit();
         });
