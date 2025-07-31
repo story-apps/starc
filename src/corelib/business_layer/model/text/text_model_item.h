@@ -5,7 +5,11 @@
 #include <QtContainerFwd>
 
 class QXmlStreamReader;
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+class QStringView;
+#else
 class QStringRef;
+#endif
 
 
 namespace BusinessLayer {
@@ -112,7 +116,11 @@ protected:
     /**
      * @brief Считать кастомный контент и вернуть название тэга на котором стоит ридер
      */
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+    virtual QStringView readCustomContent(QXmlStreamReader& _contentReader);
+#else
     virtual QStringRef readCustomContent(QXmlStreamReader& _contentReader);
+#endif
 
     /**
      * @brief Сформировать xml-блок с кастомными данными элемента

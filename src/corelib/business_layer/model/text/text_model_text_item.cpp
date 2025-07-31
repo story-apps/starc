@@ -261,7 +261,7 @@ void TextModelTextItem::Implementation::readXml(QXmlStreamReader& _contentReader
                 ResourceMark format;
                 format.from = formatAttributes.value(xml::kFromAttribute).toInt();
                 format.length = formatAttributes.value(xml::kLengthAttribute).toInt();
-                format.uuid = formatAttributes.value(xml::kUuidAttribute).toString();
+                format.uuid = QUuid(formatAttributes.value(xml::kUuidAttribute).toString());
 
                 resourceMarks.append(format);
             }

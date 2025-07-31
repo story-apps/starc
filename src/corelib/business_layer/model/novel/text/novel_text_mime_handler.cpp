@@ -67,7 +67,7 @@ QString NovelTextMimeHandler::removeInvisibleBlocksForTreatment(const QString& _
                          || tagContent.startsWith("part ") || tagContent.startsWith("chapter ")
                          || tagContent.startsWith("scene ") || tagContent.startsWith("beat ")
                          || tagContent == "content") {
-                    correctedMime += _mime.midRef(startTag.from, startTag.to - startTag.from + 1);
+                    correctedMime += _mime.mid(startTag.from, startTag.to - startTag.from + 1);
                 }
             } else if (endTag.inProcessing) {
                 endTag.to = pos;
@@ -84,7 +84,7 @@ QString NovelTextMimeHandler::removeInvisibleBlocksForTreatment(const QString& _
                     || tagContent.startsWith("beat_heading")
                     || tagContent.startsWith("scene_characters")) {
                     waitForEndTag = false;
-                    correctedMime += _mime.midRef(startTag.from, endTag.to - startTag.from + 1);
+                    correctedMime += _mime.mid(startTag.from, endTag.to - startTag.from + 1);
 
                     //
                     // Для бита, дополнительно вставляем пустой блок действия, чтобы его можно было
@@ -101,7 +101,7 @@ QString NovelTextMimeHandler::removeInvisibleBlocksForTreatment(const QString& _
                          || tagContent.startsWith("part ") || tagContent.startsWith("chapter ")
                          || tagContent.startsWith("scene ") || tagContent.startsWith("beat ")
                          || tagContent == "content") {
-                    correctedMime += _mime.midRef(endTag.from, endTag.to - endTag.from + 1);
+                    correctedMime += _mime.mid(endTag.from, endTag.to - endTag.from + 1);
                 }
             }
         }
@@ -170,13 +170,13 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                          || tagContent.startsWith("part ") || tagContent == QLatin1String("part")
                          || tagContent.startsWith("chapter") || tagContent.startsWith("scene")
                          || tagContent == "content") {
-                    correctedMime += _mime.midRef(startTag.from, startTag.to - startTag.from + 1);
+                    correctedMime += _mime.mid(startTag.from, startTag.to - startTag.from + 1);
                 }
                 //
                 // Содержимое битов не будем преобразовывать
                 //
                 else if (tagContent.startsWith("beat")) {
-                    correctedMime += _mime.midRef(startTag.from, startTag.to - startTag.from + 1);
+                    correctedMime += _mime.mid(startTag.from, startTag.to - startTag.from + 1);
                 }
                 //
                 // Остальные копируем целиком, дойдя до завершающего, при необходимости преобразуя
@@ -203,7 +203,7 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                     || tagContent.startsWith("scene_heading")
                     || tagContent.startsWith("beat_heading")) {
                     copyWithEndTagWithoutModification = false;
-                    correctedMime += _mime.midRef(startTag.from, endTag.to - startTag.from + 1);
+                    correctedMime += _mime.mid(startTag.from, endTag.to - startTag.from + 1);
                 }
                 //
                 // Некоторые тэги просто копируем целиком, без учёта начала
@@ -212,14 +212,14 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                          || tagContent.startsWith("part ") || tagContent == QLatin1String("part")
                          || tagContent.startsWith("chapter") || tagContent.startsWith("scene")
                          || tagContent == "content") {
-                    correctedMime += _mime.midRef(endTag.from, endTag.to - endTag.from + 1);
+                    correctedMime += _mime.mid(endTag.from, endTag.to - endTag.from + 1);
                 }
                 //
                 // Завершаем необходимость копировать текстовые блоки без преобразования
                 //
                 else if (tagContent.startsWith("beat")) {
                     copyAsIs = false;
-                    correctedMime += _mime.midRef(endTag.from, endTag.to - endTag.from + 1);
+                    correctedMime += _mime.mid(endTag.from, endTag.to - endTag.from + 1);
                 }
                 //
                 // Копируем содержимое текстового блока, при необходимости преобразуя в бит
@@ -228,7 +228,7 @@ QString NovelTextMimeHandler::convertTextBlocksToBeats(const QString& _mime)
                          || tagContent.startsWith("inline_note") || tagContent.startsWith("text")) {
                     if (copyAsIs) {
                         copyWithEndTagWithoutModification = false;
-                        correctedMime += _mime.midRef(startTag.from, endTag.to - startTag.from + 1);
+                        correctedMime += _mime.mid(startTag.from, endTag.to - startTag.from + 1);
                     } else {
                         copyWithEndTagAsBeat = false;
                         auto blockXml = _mime.mid(startTag.from, endTag.to - startTag.from + 1);

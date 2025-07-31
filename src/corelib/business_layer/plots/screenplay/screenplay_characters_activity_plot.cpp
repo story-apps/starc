@@ -221,7 +221,7 @@ void ScreenplayCharactersActivityPlot::build(QAbstractItemModel* _model) const
     // ... y
     QList<QVector<qreal>> charactersY;
     for (int characterIndex = 0; characterIndex < characters.size(); ++characterIndex) {
-        charactersY.append({ std::numeric_limits<qreal>::quiet_NaN() });
+        charactersY.append(QVector<qreal>{ std::numeric_limits<qreal>::quiet_NaN() });
     }
     //
     const auto millisecondsInMinute = 60000.0;
@@ -353,7 +353,8 @@ void ScreenplayCharactersActivityPlot::saveToFile(const QString& _fileName) cons
             }
             ++reportRow;
 
-            firstColumnWidth = std::max(firstColumnWidth, sceneInfo->constFirst().size());
+            firstColumnWidth
+                = std::max(firstColumnWidth, static_cast<int>(sceneInfo->constFirst().size()));
         }
     }
 

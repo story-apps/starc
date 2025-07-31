@@ -1,7 +1,6 @@
 #include "images_gallery_model.h"
 
 #include <business_layer/model/abstract_image_wrapper.h>
-#include <domain/document_object.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/text_helper.h>
 

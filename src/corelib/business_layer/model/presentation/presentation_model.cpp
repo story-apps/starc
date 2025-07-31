@@ -222,7 +222,7 @@ void PresentationModel::initDocument()
     };
     d->name = load(kNameKey);
     d->description = load(kDescriptionKey);
-    d->imagesArchiveUuid = load(kZipArchiveKey);
+    d->imagesArchiveUuid = QUuid(load(kZipArchiveKey));
     d->imagesArchive = rawDataWrapper()->load(d->imagesArchiveUuid);
 
     const auto imageSizesNode = documentNode.firstChildElement(kImageSizesKey);

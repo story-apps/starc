@@ -1542,7 +1542,7 @@ void TextDocument::addParagraph(BusinessLayer::TextParagraphType _type, TextCurs
     // Если параграф целиком переносится (энтер нажат перед всем текстом блока),
     // необходимо перенести данные блока с текущего на следующий
     //
-    if (_cursor.block().text().leftRef(_cursor.positionInBlock()).isEmpty()
+    if (_cursor.block().text().left(_cursor.positionInBlock()).isEmpty()
         && !_cursor.block().text().isEmpty()) {
         TextBlockData* blockData = nullptr;
         auto block = _cursor.block();

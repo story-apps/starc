@@ -155,7 +155,11 @@ bool NovelTextModelSceneItem::isFilterAccepted(const QString& _text, bool _isCas
     }
 }
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+QStringView NovelTextModelSceneItem::readCustomContent(QXmlStreamReader& _contentReader)
+#else
 QStringRef NovelTextModelSceneItem::readCustomContent(QXmlStreamReader& _contentReader)
+#endif
 {
     auto currentTag = _contentReader.name();
 

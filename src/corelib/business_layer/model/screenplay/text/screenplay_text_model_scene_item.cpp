@@ -233,7 +233,11 @@ bool ScreenplayTextModelSceneItem::isFilterAccepted(const QString& _text, bool _
     }
 }
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+QStringView ScreenplayTextModelSceneItem::readCustomContent(QXmlStreamReader& _contentReader)
+#else
 QStringRef ScreenplayTextModelSceneItem::readCustomContent(QXmlStreamReader& _contentReader)
+#endif
 {
     auto currentTag = _contentReader.name();
 
@@ -248,7 +252,7 @@ QStringRef ScreenplayTextModelSceneItem::readCustomContent(QXmlStreamReader& _co
         currentTag = xml::readNextElement(_contentReader); // next
         while (currentTag == xml::kResourceTag) {
             const QUuid resourceUuid
-                = _contentReader.attributes().value(xml::kUuidAttribute).toString();
+                = QUuid(_contentReader.attributes().value(xml::kUuidAttribute).toString());
             const int resourceQty = _contentReader.attributes().value(xml::kQtyAttribute).toInt();
             const auto resourceDescription
                 = TextHelper::fromHtmlEscaped(xml::readContent(_contentReader).toString());

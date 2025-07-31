@@ -2,9 +2,7 @@
 
 #include "../abstract_model.h"
 
-namespace Domain {
-struct DocumentImage;
-}
+#include <domain/document_object.h>
 
 
 namespace BusinessLayer {

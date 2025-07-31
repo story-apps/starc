@@ -73,10 +73,14 @@ public:
                           int _filterType) const override;
 
 protected:
-    /**
-     * @brief Считываем дополнительный контент
-     */
+/**
+ * @brief Считываем дополнительный контент
+ */
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+    QStringView readCustomContent(QXmlStreamReader& _contentReader) override;
+#else
     QStringRef readCustomContent(QXmlStreamReader& _contentReader) override;
+#endif
 
     /**
      * @brief Сформировать xml-блок с кастомными данными элемента

@@ -415,7 +415,8 @@ void ScreenplayStructureAnalysisPlot::saveToFile(const QString& _fileName) const
             }
             ++reportRow;
 
-            firstColumnWidth = std::max(firstColumnWidth, sceneInfo->constFirst().size());
+            firstColumnWidth
+                = std::max(firstColumnWidth, static_cast<int>(sceneInfo->constFirst().size()));
         }
     }
 

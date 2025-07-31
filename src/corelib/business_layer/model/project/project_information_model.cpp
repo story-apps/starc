@@ -3,7 +3,6 @@
 #include <business_layer/model/abstract_image_wrapper.h>
 #include <business_layer/model/abstract_model_xml.h>
 #include <domain/document_object.h>
-#include <domain/starcloud_api.h>
 #include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/helpers/image_helper.h>
 #include <utils/helpers/text_helper.h>
@@ -260,7 +259,8 @@ ChangeCursor ProjectInformationModel::applyPatch(const QByteArray& _patch)
         setLogline(loglineNode.text());
     }
     if (auto coverNode = documentNode.firstChildElement(kCoverKey); !coverNode.isNull()) {
-        setCover(coverNode.text(), imageWrapper()->load(coverNode.text()));
+        const auto coverUuid = QUuid(coverNode.text());
+        setCover(coverUuid, imageWrapper()->load(coverUuid));
     }
 
     return {};

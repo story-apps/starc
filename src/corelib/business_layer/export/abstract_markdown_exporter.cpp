@@ -13,6 +13,7 @@
 
 #include <QGuiApplication>
 #include <QVector>
+#include <QFile>
 
 namespace BusinessLayer {
 

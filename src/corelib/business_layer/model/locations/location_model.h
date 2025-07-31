@@ -2,12 +2,10 @@
 
 #include "../abstract_model.h"
 
+#include <domain/document_object.h>
+
 #include <QColor>
 #include <QUuid>
-
-namespace Domain {
-struct DocumentImage;
-}
 
 
 namespace BusinessLayer {

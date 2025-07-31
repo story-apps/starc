@@ -112,7 +112,11 @@ void TextModelItem::setCharactersCount(QPair<int, int> _count)
     d->charactersCount = _count;
 }
 
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+QStringView TextModelItem::readCustomContent(QXmlStreamReader& _contentReader)
+#else
 QStringRef TextModelItem::readCustomContent(QXmlStreamReader& _contentReader)
+#endif
 {
     return _contentReader.name();
 }

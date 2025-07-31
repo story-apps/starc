@@ -2,11 +2,8 @@
 
 #include "../abstract_model.h"
 
+#include <domain/starcloud_api.h>
 
-namespace Domain {
-struct ProjectCollaboratorInfo;
-struct TeamMemberInfo;
-} // namespace Domain
 
 namespace BusinessLayer {
 class StructureModel;

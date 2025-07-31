@@ -183,7 +183,10 @@ void AbstractModel::reassignContent()
 
 void AbstractModel::saveChanges()
 {
-    if (d->document == nullptr) {
+    //
+    // Если документ не задан, либо был наполнен данными при инициилизации, то ничего не сохраняем
+    //
+    if (d->document == nullptr || d->document->content().isNull()) {
         return;
     }
 

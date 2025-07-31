@@ -666,7 +666,8 @@ void ScreenplayDictionariesModel::initDocument()
         auto resourceCategoryNode = resourceCategoriesNode.firstChildElement();
         while (!resourceCategoryNode.isNull()) {
             BreakdownResourceCategory resourceCategory;
-            resourceCategory.uuid = resourceCategoryNode.attributeNode(kItemUuidAttribute).value();
+            resourceCategory.uuid
+                = QUuid(resourceCategoryNode.attributeNode(kItemUuidAttribute).value());
             resourceCategory.name = TextHelper::fromHtmlEscaped(resourceCategoryNode.text());
             resourceCategory.icon = resourceCategoryNode.attributeNode(kItemIconAttribute).value();
             //
@@ -698,8 +699,9 @@ void ScreenplayDictionariesModel::initDocument()
         auto resourceNode = resourcesNode.firstChildElement();
         while (!resourceNode.isNull()) {
             BreakdownResource resource;
-            resource.uuid = resourceNode.attributeNode(kItemUuidAttribute).value();
-            resource.categoryUuid = resourceNode.attributeNode(kItemParentUuidAttribute).value();
+            resource.uuid = QUuid(resourceNode.attributeNode(kItemUuidAttribute).value());
+            resource.categoryUuid
+                = QUuid(resourceNode.attributeNode(kItemParentUuidAttribute).value());
             resource.name = resourceNode.attributeNode(kItemNameAttribute).value();
             resource.description = TextHelper::fromHtmlEscaped(resourceNode.text());
             d->resources.append(resource);

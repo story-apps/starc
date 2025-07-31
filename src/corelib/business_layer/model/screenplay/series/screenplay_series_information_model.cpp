@@ -613,7 +613,7 @@ void ScreenplaySeriesInformationModel::initDocument()
     }
 
     QDomDocument domDocument;
-    const bool isContentValid = domDocument.setContent(document()->content());
+    const auto isContentValid = domDocument.setContent(document()->content());
     if (!isContentValid) {
         return;
     }
