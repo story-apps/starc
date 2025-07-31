@@ -12,7 +12,6 @@
 #include <QKeyEvent>
 #include <QLocale>
 #include <QRegularExpression>
-#include <QScrollBar>
 #include <QStyleHints>
 #include <QTextBlock>
 
@@ -715,9 +714,8 @@ bool BaseTextEdit::keyPressEventReimpl(QKeyEvent* _event)
     //
     else if (_event->modifiers().testFlag(Qt::ControlModifier)
              && (_event->key() == Qt::Key_Up || _event->key() == Qt::Key_Down)) {
-        verticalScrollBar()->setValue(verticalScrollBar()->value()
-                                      + verticalScrollBar()->singleStep()
-                                          * (_event->key() == Qt::Key_Up ? -1 : 1));
+        setVerticalScroll(verticalScroll()
+                          + verticalScrollSingleStep() * (_event->key() == Qt::Key_Up ? -1 : 1));
     }
     // ... перевод курсора к следующему символу
     //
@@ -1136,7 +1134,7 @@ bool BaseTextEdit::updateEnteredText(const QKeyEvent* _event)
     //
     if (d->capitalizeSingleILetter && !eventText.isEmpty()
         && (eventText.front().isPunct() || eventText.front().isSpace())
-        && cursorBackwardText.leftRef(cursorBackwardText.length() - eventText.length())
+        && cursorBackwardText.left(cursorBackwardText.length() - eventText.length())
                .endsWith(" i")) {
         //
         // Несколько последних символа

@@ -216,11 +216,7 @@ StageplayTextView::Implementation::Implementation(StageplayTextView* _q)
 
     commentsToolbar->hide();
 
-    textEdit->setVerticalScrollBar(new ScrollBar);
-    textEdit->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
-    scalableWrapper->setHorizontalScrollBar(new ScrollBar);
-    scalableWrapper->setVerticalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
 
     textEdit->setUsePageMode(true);
@@ -439,8 +435,7 @@ void StageplayTextView::Implementation::updateCommentsToolbar(bool _force)
     //
     // Если вьюпорт вмещается аккурат в видимую область, или не влезает,
     //
-    if (textEdit->width() - textEdit->verticalScrollBar()->width()
-        <= textEdit->viewport()->width() + commentsToolbar->width()) {
+    if (textEdit->width() <= textEdit->viewport()->width() + commentsToolbar->width()) {
         commentsToolbar->setCurtain(true, q->isLeftToRight() ? Qt::RightEdge : Qt::LeftEdge);
         //
         // ... то позиционируем панель рецензирования по краю панели комментариев
@@ -1390,13 +1385,12 @@ void StageplayTextView::setCursorPosition(int _position)
 
 int StageplayTextView::verticalScroll() const
 {
-    return d->textEdit->verticalScrollBar()->value();
+    return d->textEdit->verticalScroll();
 }
 
-void StageplayTextView::setverticalScroll(int _value)
+void StageplayTextView::setVerticalScroll(int _value)
 {
-    d->textEdit->stopVerticalScrollAnimation();
-    d->textEdit->verticalScrollBar()->setValue(_value);
+    d->textEdit->setVerticalScroll(_value);
 }
 
 bool StageplayTextView::eventFilter(QObject* _target, QEvent* _event)

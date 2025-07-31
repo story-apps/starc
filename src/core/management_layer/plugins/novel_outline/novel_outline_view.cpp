@@ -231,11 +231,7 @@ NovelOutlineView::Implementation::Implementation(NovelOutlineView* _q)
 
     commentsToolbar->hide();
 
-    textEdit->setVerticalScrollBar(new ScrollBar);
-    textEdit->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
-    scalableWrapper->setHorizontalScrollBar(new ScrollBar);
-    scalableWrapper->setVerticalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
 
     textEdit->setUsePageMode(true);
@@ -485,8 +481,7 @@ void NovelOutlineView::Implementation::updateCommentsToolbar(bool _force)
     //
     // Если вьюпорт вмещается аккурат в видимую область, или не влезает,
     //
-    if (textEdit->width() - textEdit->verticalScrollBar()->width()
-        <= textEdit->viewport()->width() + commentsToolbar->width()) {
+    if (textEdit->width() <= textEdit->viewport()->width() + commentsToolbar->width()) {
         commentsToolbar->setCurtain(true, q->isLeftToRight() ? Qt::RightEdge : Qt::LeftEdge);
         //
         // ... то позиционируем панель рецензирования по краю панели комментариев
@@ -1712,13 +1707,12 @@ void NovelOutlineView::setCursorPosition(int _position)
 
 int NovelOutlineView::verticalScroll() const
 {
-    return d->textEdit->verticalScrollBar()->value();
+    return d->textEdit->verticalScroll();
 }
 
-void NovelOutlineView::setverticalScroll(int _value)
+void NovelOutlineView::setVerticalScroll(int _value)
 {
-    d->textEdit->stopVerticalScrollAnimation();
-    d->textEdit->verticalScrollBar()->setValue(_value);
+    d->textEdit->setVerticalScroll(_value);
 }
 
 bool NovelOutlineView::eventFilter(QObject* _target, QEvent* _event)

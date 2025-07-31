@@ -34,7 +34,6 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QPointer>
-#include <QScrollBar>
 #include <QTextTable>
 #include <QTimer>
 
@@ -846,14 +845,13 @@ void StageplayTextEdit::paintEvent(QPaintEvent* _event)
     //
     const bool isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
     const qreal pageLeft = 0;
-    const qreal pageRight
-        = viewport()->width() - verticalScrollBar()->width() - DesignSystem::layout().px8();
+    const qreal pageRight = viewport()->width() - DesignSystem::layout().px8();
     const qreal spaceBetweenSceneNumberAndText = DesignSystem::layout().px(10);
-    const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
+    const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollMaximum())
         + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
-    const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
+    const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollMaximum() : 0)
         - document()->rootFrame()->frameFormat().rightMargin() + spaceBetweenSceneNumberAndText;
-    const qreal leftDelta = (isLeftToRight ? -1 : 1) * horizontalScrollBar()->value();
+    const qreal leftDelta = (isLeftToRight ? -1 : 1) * horizontalScroll();
     //    int colorRectWidth = 0;
     qreal verticalMargin = 0;
     const qreal splitterX = leftDelta + textLeft

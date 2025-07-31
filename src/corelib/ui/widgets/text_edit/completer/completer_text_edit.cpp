@@ -6,7 +6,6 @@
 
 #include <QAbstractItemView>
 #include <QAbstractProxyModel>
-#include <QScrollBar>
 #include <QTextBlock>
 
 
@@ -139,9 +138,7 @@ bool CompleterTextEdit::complete(QAbstractItemModel* _model, const QString& _com
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, _cursorMovement);
     QRect rect = cursorRect(cursor);
-    rect.moveLeft(rect.left()
-                  + (verticalScrollBar()->isVisible() ? verticalScrollBar()->width() : 0)
-                  + (viewportMargins().isNull() ? 0 : viewportMargins().left()));
+    rect.moveLeft(rect.left() + (viewportMargins().isNull() ? 0 : viewportMargins().left()));
     const int heightDelta
         = cursor.block().layout()->boundingRect().height() + Ui::DesignSystem::layout().px16();
     rect.moveTop(rect.top() + heightDelta);

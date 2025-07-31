@@ -5,7 +5,6 @@
 #include <utils/helpers/text_helper.h>
 
 #include <QRegularExpression>
-#include <QScrollBar>
 #include <QTextTable>
 
 using BusinessLayer::TextBlockStyle;
@@ -51,8 +50,8 @@ void ScriptTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
     // перед редактированием документа запомним прокрутку, а после завершения редактирования
     // восстановим значения полос прокрутки
     //
-    const auto verticalScrollValue = verticalScrollBar()->value();
-    const auto horizontalScrollValue = horizontalScrollBar()->value();
+    const auto verticalScrollValue = verticalScroll();
+    const auto horizontalScrollValue = horizontalScroll();
 
     //
     // Задаём курсор
@@ -62,8 +61,8 @@ void ScriptTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
     //
     // Восстанавливаем значения полос прокрутки
     //
-    verticalScrollBar()->setValue(verticalScrollValue);
-    horizontalScrollBar()->setValue(horizontalScrollValue);
+    setVerticalScroll(verticalScrollValue);
+    setHorizontalScroll(horizontalScrollValue);
 }
 
 bool ScriptTextEdit::updateEnteredText(const QKeyEvent* _event)

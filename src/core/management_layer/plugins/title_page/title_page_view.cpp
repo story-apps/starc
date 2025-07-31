@@ -73,10 +73,6 @@ TitlePageView::Implementation::Implementation(TitlePageView* _q)
     , scalableWrapper(new ScalableWrapper(textEdit, _q))
     , toolbar(new TitlePageEditToolbar(scalableWrapper))
 {
-    textEdit->setVerticalScrollBar(new ScrollBar);
-    textEdit->setHorizontalScrollBar(new ScrollBar);
-    scalableWrapper->setVerticalScrollBar(new ScrollBar);
-    scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
 
     textEdit->setUsePageMode(true);

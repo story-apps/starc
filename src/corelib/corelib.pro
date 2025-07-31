@@ -838,6 +838,9 @@ HEADERS += \
     ui/widgets/splitter/splitter.h \
     ui/widgets/stack_widget/stack_widget.h \
     ui/widgets/stepper/stepper.h \
+    ui/widgets/text_edit/page/abstract_scroll_area.h \
+    ui/widgets/text_edit/page/abstract_scroll_area_p.h \
+    ui/widgets/text_edit/page/page_text_edit_scroll_bar.h \
     ui/widgets/toggle/toggle.h \
     ui/widgets/tab_bar/tab_bar.h \
     ui/widgets/task_bar/task_bar.h \
@@ -901,6 +904,30 @@ HEADERS += \
     utils/tools/once.h \
     utils/tools/run_once.h \
     utils/validators/email_validator.h
+
+
+greaterThan(QT_MAJOR_VERSION, 5) {
+    SOURCES += \
+        ui/widgets/text_edit/page/qt6/abstract_scroll_area.cpp \
+        ui/widgets/text_edit/page/qt6/abstract_slider.cpp \
+        ui/widgets/text_edit/page/qt6/frame.cpp \
+        ui/widgets/text_edit/page/qt6/page_text_edit_scroll_bar.cpp
+
+    HEADERS += \
+        ui/widgets/text_edit/page/qt6/abstract_scroll_area.h \
+        ui/widgets/text_edit/page/qt6/abstract_scroll_area_p.h \
+        ui/widgets/text_edit/page/qt6/abstract_slider.h \
+        ui/widgets/text_edit/page/qt6/abstract_slider_p.h \
+        ui/widgets/text_edit/page/qt6/frame.h \
+        ui/widgets/text_edit/page/qt6/frame_p.h \
+        ui/widgets/text_edit/page/qt6/page_text_edit_scroll_bar.h \
+        ui/widgets/text_edit/page/qt6/page_text_edit_scroll_bar_p.h
+} else {
+    HEADERS += \
+        ui/widgets/text_edit/page/qt5/abstract_scroll_area.h \
+        ui/widgets/text_edit/page/qt5/abstract_scroll_area_p.h \
+        ui/widgets/text_edit/page/qt5/page_text_edit_scroll_bar.h
+}
 
 RESOURCES += \
     fonts.qrc \

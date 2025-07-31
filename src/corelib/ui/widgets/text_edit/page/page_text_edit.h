@@ -1,16 +1,15 @@
 #pragma once
 
+#include "abstract_scroll_area.h"
+
 #include <QtGui/qpagesize.h>
 #include <QtGui/qtextcursor.h>
 #include <QtGui/qtextdocument.h>
 #include <QtGui/qtextformat.h>
 #include <QtGui/qtextoption.h>
-#include <QtWidgets/qabstractscrollarea.h>
 
 #include <corelib_global.h>
 
-
-QT_BEGIN_NAMESPACE
 
 class ContextMenu;
 class PageTextEditPrivate;
@@ -21,7 +20,7 @@ class QRegularExpression;
 class QStyleSheet;
 class QTextDocument;
 
-class CORE_LIBRARY_EXPORT PageTextEdit : public QAbstractScrollArea
+class CORE_LIBRARY_EXPORT PageTextEdit : public AbstractScrollArea
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(PageTextEdit)
@@ -392,9 +391,19 @@ public:
     void updateTypewriterScroll();
 
     /**
-     * @brief Остановить анимацию вертикального скрола
+     * @brief Вертикальная прокрутка
      */
-    void stopVerticalScrollAnimation();
+    int verticalScroll() const;
+    int verticalScrollMaximum() const;
+    int verticalScrollSingleStep() const;
+    void setVerticalScroll(int _value);
+
+    /**
+     * @brief Горизонтальная прокрутка
+     */
+    int horizontalScroll() const;
+    int horizontalScrollMaximum() const;
+    void setHorizontalScroll(int _value);
 
     /**
      * @brief Создать контекстное меню в заданной позиции
@@ -415,5 +424,3 @@ protected:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PageTextEdit::AutoFormatting)
-
-QT_END_NAMESPACE

@@ -31,7 +31,6 @@
 #include <ui/modules/fast_format_widget/fast_format_widget.h>
 #include <ui/modules/search_toolbar/search_manager.h>
 #include <ui/widgets/floating_tool_bar/floating_toolbar_animator.h>
-#include <ui/widgets/scroll_bar/scroll_bar.h>
 #include <ui/widgets/shadow/shadow.h>
 #include <ui/widgets/splitter/splitter.h>
 #include <ui/widgets/stack_widget/stack_widget.h>
@@ -246,12 +245,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
 
     commentsToolbar->hide();
 
-    textEdit->setVerticalScrollBar(new ScrollBar);
-    textEdit->verticalScrollBar()->setObjectName("screenplay-vertical-scroll-bar");
-    textEdit->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
-    scalableWrapper->setVerticalScrollBar(new ScrollBar);
-    scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
     screenplayTextScrollbarManager = new ScreenplayTextScrollBarManager(scalableWrapper);
     screenplayTextScrollbarManager->initScrollBarsSyncing();
@@ -560,8 +554,7 @@ void ScreenplayTextView::Implementation::updateCommentsToolbar(bool _force)
     //
     // Если вьюпорт вмещается аккурат в видимую область, или не влезает,
     //
-    if (textEdit->width() - textEdit->verticalScrollBar()->width()
-        <= textEdit->viewport()->width() + commentsToolbar->width()) {
+    if (textEdit->width() <= textEdit->viewport()->width() + commentsToolbar->width()) {
         commentsToolbar->setCurtain(true, q->isLeftToRight() ? Qt::RightEdge : Qt::LeftEdge);
         //
         // ... то позиционируем панель рецензирования по краю панели комментариев
@@ -1962,13 +1955,12 @@ void ScreenplayTextView::setCursorPosition(int _position)
 
 int ScreenplayTextView::verticalScroll() const
 {
-    return d->textEdit->verticalScrollBar()->value();
+    return d->textEdit->verticalScroll();
 }
 
 void ScreenplayTextView::setVerticalScroll(int _value)
 {
-    d->textEdit->stopVerticalScrollAnimation();
-    d->textEdit->verticalScrollBar()->setValue(_value);
+    d->textEdit->setVerticalScroll(_value);
 }
 
 bool ScreenplayTextView::eventFilter(QObject* _target, QEvent* _event)

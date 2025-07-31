@@ -213,11 +213,7 @@ SimpleTextView::Implementation::Implementation(SimpleTextView* _q)
 
     commentsToolbar->hide();
 
-    textEdit->setVerticalScrollBar(new ScrollBar);
-    textEdit->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
-    scalableWrapper->setVerticalScrollBar(new ScrollBar);
-    scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
 
     textEdit->setUsePageMode(true);
@@ -428,8 +424,7 @@ void SimpleTextView::Implementation::updateCommentsToolbar(bool _force)
     //
     // Если вьюпорт вмещается аккурат в видимую область, или не влезает,
     //
-    if (textEdit->width() - textEdit->verticalScrollBar()->width()
-        <= textEdit->viewport()->width() + commentsToolbar->width()) {
+    if (textEdit->width() <= textEdit->viewport()->width() + commentsToolbar->width()) {
         commentsToolbar->setCurtain(true, q->isLeftToRight() ? Qt::RightEdge : Qt::LeftEdge);
         //
         // ... то позиционируем панель рецензирования по краю панели комментариев
@@ -1334,13 +1329,12 @@ void SimpleTextView::setCursorPosition(int _position)
 
 int SimpleTextView::verticalScroll() const
 {
-    return d->textEdit->verticalScrollBar()->value();
+    return d->textEdit->verticalScroll();
 }
 
-void SimpleTextView::setverticalScroll(int _value)
+void SimpleTextView::setVerticalScroll(int _value)
 {
-    d->textEdit->stopVerticalScrollAnimation();
-    d->textEdit->verticalScrollBar()->setValue(_value);
+    d->textEdit->setVerticalScroll(_value);
 }
 
 bool SimpleTextView::eventFilter(QObject* _target, QEvent* _event)

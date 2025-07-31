@@ -5,6 +5,7 @@
 #include <ui/widgets/text_edit/completer/completer.h>
 #include <ui/widgets/text_edit/completer/completer_text_edit.h>
 #include <ui/widgets/text_edit/page/page_text_edit.h>
+#include <ui/widgets/text_edit/page/page_text_edit_scroll_bar.h>
 #include <utils/tools/run_once.h>
 
 #include <QAbstractItemView>
@@ -473,9 +474,9 @@ void ScalableWrapper::setupScrollingSynchronization(bool _needSync)
     d->isScrollingSynchronizationActive = _needSync;
 
     if (_needSync) {
-        connect(d->editor->verticalScrollBar(), &QScrollBar::rangeChanged, this,
+        connect(d->editor->verticalScrollBar(), &PageTextEditScrollBar::rangeChanged, this,
                 &ScalableWrapper::updateTextEditSize);
-        connect(d->editor->horizontalScrollBar(), &QScrollBar::rangeChanged, this,
+        connect(d->editor->horizontalScrollBar(), &PageTextEditScrollBar::rangeChanged, this,
                 &ScalableWrapper::updateTextEditSize);
         //
         connect(verticalScrollBar(), SIGNAL(valueChanged(int)), d->editor->verticalScrollBar(),
@@ -488,9 +489,9 @@ void ScalableWrapper::setupScrollingSynchronization(bool _needSync)
         connect(d->editor->horizontalScrollBar(), SIGNAL(valueChanged(int)), horizontalScrollBar(),
                 SLOT(setValue(int)));
     } else {
-        disconnect(d->editor->verticalScrollBar(), &QScrollBar::rangeChanged, this,
+        disconnect(d->editor->verticalScrollBar(), &PageTextEditScrollBar::rangeChanged, this,
                    &ScalableWrapper::updateTextEditSize);
-        disconnect(d->editor->horizontalScrollBar(), &QScrollBar::rangeChanged, this,
+        disconnect(d->editor->horizontalScrollBar(), &PageTextEditScrollBar::rangeChanged, this,
                    &ScalableWrapper::updateTextEditSize);
         //
         disconnect(verticalScrollBar(), SIGNAL(valueChanged(int)), d->editor->verticalScrollBar(),

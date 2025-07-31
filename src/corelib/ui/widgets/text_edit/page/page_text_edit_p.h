@@ -8,14 +8,14 @@
 #include "QtGui/qtextdocumentfragment.h"
 #include "QtGui/qtextformat.h"
 #include "QtWidgets/qmenu.h"
-#include "QtWidgets/qscrollbar.h"
+#include "abstract_scroll_area_p.h"
 #include "page_metrics.h"
 #include "page_text_edit.h"
-#include "private/qabstractscrollarea_p.h"
+#include "page_text_edit_scroll_bar.h"
 #include "private/qwidgettextcontrol_p.h"
 
 class QMimeData;
-class PageTextEditPrivate : public QAbstractScrollAreaPrivate
+class PageTextEditPrivate : public AbstractScrollAreaPrivate
 {
     Q_DECLARE_PUBLIC(PageTextEdit)
 public:

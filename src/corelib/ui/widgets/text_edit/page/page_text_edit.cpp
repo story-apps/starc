@@ -252,10 +252,10 @@ void PageTextEditPrivate::pageUpDown(QTextCursor::MoveOperation op, QTextCursor:
     if (moved) {
         if (op == QTextCursor::Up) {
             cursor.movePosition(QTextCursor::Down, moveMode);
-            vbar->triggerAction(QAbstractSlider::SliderPageStepSub);
+            vbar->triggerAction(AbstractSlider::SliderPageStepSub);
         } else {
             cursor.movePosition(QTextCursor::Up, moveMode);
-            vbar->triggerAction(QAbstractSlider::SliderPageStepAdd);
+            vbar->triggerAction(AbstractSlider::SliderPageStepAdd);
         }
     }
 
@@ -640,7 +640,7 @@ void PageTextEditPrivate::_q_ensureVisible(const QRectF& _rect)
     parent.
 */
 PageTextEdit::PageTextEdit(QWidget* parent)
-    : QAbstractScrollArea(*new PageTextEditPrivate, parent)
+    : AbstractScrollArea(*new PageTextEditPrivate, parent)
 {
     Q_D(PageTextEdit);
     d->init();
@@ -650,7 +650,7 @@ PageTextEdit::PageTextEdit(QWidget* parent)
     \internal
 */
 PageTextEdit::PageTextEdit(PageTextEditPrivate& dd, QWidget* parent)
-    : QAbstractScrollArea(dd, parent)
+    : AbstractScrollArea(dd, parent)
 {
     Q_D(PageTextEdit);
     d->init();
@@ -661,7 +661,7 @@ PageTextEdit::PageTextEdit(PageTextEditPrivate& dd, QWidget* parent)
     the text \a text. The text is interpreted as html.
 */
 PageTextEdit::PageTextEdit(const QString& text, QWidget* parent)
-    : QAbstractScrollArea(*new PageTextEditPrivate, parent)
+    : AbstractScrollArea(*new PageTextEditPrivate, parent)
 {
     Q_D(PageTextEdit);
     d->init(text);
@@ -1140,7 +1140,7 @@ bool PageTextEdit::event(QEvent* e)
         QContextMenuEvent ce(QContextMenuEvent::Keyboard, cursorPos,
                              d->viewport->mapToGlobal(cursorPos));
         ce.setAccepted(e->isAccepted());
-        const bool result = QAbstractScrollArea::event(&ce);
+        const bool result = AbstractScrollArea::event(&ce);
         e->setAccepted(ce.isAccepted());
         return result;
     } else if (e->type() == QEvent::ShortcutOverride || e->type() == QEvent::ToolTip) {
@@ -1155,7 +1155,7 @@ bool PageTextEdit::event(QEvent* e)
             d->sendControlEvent(e);
     }
 #endif
-    return QAbstractScrollArea::event(e);
+    return AbstractScrollArea::event(e);
 }
 
 /*! \internal
@@ -1189,12 +1189,12 @@ void PageTextEdit::timerEvent(QTimerEvent* e)
 
             if (deltaY > 0)
                 d->vbar->triggerAction(pos.y() < visible.center().y()
-                                           ? QAbstractSlider::SliderSingleStepSub
-                                           : QAbstractSlider::SliderSingleStepAdd);
+                                           ? AbstractSlider::SliderSingleStepSub
+                                           : AbstractSlider::SliderSingleStepAdd);
             if (deltaX > 0)
                 d->hbar->triggerAction(pos.x() < visible.center().x()
-                                           ? QAbstractSlider::SliderSingleStepSub
-                                           : QAbstractSlider::SliderSingleStepAdd);
+                                           ? AbstractSlider::SliderSingleStepSub
+                                           : AbstractSlider::SliderSingleStepAdd);
         }
     }
 #ifdef QT_KEYPAD_NAVIGATION
@@ -1410,23 +1410,23 @@ void PageTextEdit::keyPressEvent(QKeyEvent* e)
         case Qt::Key_Space:
             e->accept();
             if (e->modifiers() & Qt::ShiftModifier)
-                d->vbar->triggerAction(QAbstractSlider::SliderPageStepSub);
+                d->vbar->triggerAction(AbstractSlider::SliderPageStepSub);
             else
-                d->vbar->triggerAction(QAbstractSlider::SliderPageStepAdd);
+                d->vbar->triggerAction(AbstractSlider::SliderPageStepAdd);
             break;
         default:
             d->sendControlEvent(e);
             if (!e->isAccepted() && e->modifiers() == Qt::NoModifier) {
                 if (e->key() == Qt::Key_Home) {
-                    d->vbar->triggerAction(QAbstractSlider::SliderToMinimum);
+                    d->vbar->triggerAction(AbstractSlider::SliderToMinimum);
                     e->accept();
                 } else if (e->key() == Qt::Key_End) {
-                    d->vbar->triggerAction(QAbstractSlider::SliderToMaximum);
+                    d->vbar->triggerAction(AbstractSlider::SliderToMaximum);
                     e->accept();
                 }
             }
             if (!e->isAccepted()) {
-                QAbstractScrollArea::keyPressEvent(e);
+                AbstractScrollArea::keyPressEvent(e);
             }
         }
         return;
@@ -1749,7 +1749,7 @@ void PageTextEditPrivate::relayoutDocument()
     // If the wider case causes a vertical scroll bar to appear and the narrower one
     // (narrower because the vertical scroll bar takes up horizontal space)) to disappear
     // again then we have an endless loop, as _q_adjustScrollBars sets new ranges on the
-    // scroll bars, the QAbstractScrollArea will find out about it and try to show/hide
+    // scroll bars, the AbstractScrollArea will find out about it and try to show/hide
     // the scroll bars again. That's why we try to detect this case here and break out.
     //
     // (if you change this please also check the layoutingLoop() testcase in
@@ -2503,7 +2503,7 @@ bool PageTextEdit::focusNextPrevChild(bool next)
     Q_D(const PageTextEdit);
     if (!d->tabChangesFocus && d->control->textInteractionFlags() & Qt::TextEditable)
         return false;
-    return QAbstractScrollArea::focusNextPrevChild(next);
+    return AbstractScrollArea::focusNextPrevChild(next);
 }
 
 #ifndef QT_NO_CONTEXTMENU
@@ -2660,7 +2660,7 @@ void PageTextEdit::focusInEvent(QFocusEvent* e)
     if (e->reason() == Qt::MouseFocusReason) {
         d->clickCausedFocus = 1;
     }
-    QAbstractScrollArea::focusInEvent(e);
+    AbstractScrollArea::focusInEvent(e);
     d->sendControlEvent(e);
 }
 
@@ -2669,7 +2669,7 @@ void PageTextEdit::focusInEvent(QFocusEvent* e)
 void PageTextEdit::focusOutEvent(QFocusEvent* e)
 {
     Q_D(PageTextEdit);
-    QAbstractScrollArea::focusOutEvent(e);
+    AbstractScrollArea::focusOutEvent(e);
     d->sendControlEvent(e);
 }
 
@@ -2693,7 +2693,7 @@ void PageTextEdit::showEvent(QShowEvent*)
 void PageTextEdit::changeEvent(QEvent* e)
 {
     Q_D(PageTextEdit);
-    QAbstractScrollArea::changeEvent(e);
+    AbstractScrollArea::changeEvent(e);
     if (e->type() == QEvent::ApplicationFontChange || e->type() == QEvent::FontChange) {
         d->control->document()->setDefaultFont(font());
     } else if (e->type() == QEvent::ActivationChange) {
@@ -2723,7 +2723,7 @@ void PageTextEdit::wheelEvent(QWheelEvent* e)
             return;
         }
     }
-    QAbstractScrollArea::wheelEvent(e);
+    AbstractScrollArea::wheelEvent(e);
     updateMicroFocus();
 }
 #endif
@@ -3907,10 +3907,47 @@ void PageTextEdit::updateTypewriterScroll()
     d->updateBlockWithCursorPlacement();
 }
 
-void PageTextEdit::stopVerticalScrollAnimation()
+int PageTextEdit::verticalScroll() const
+{
+    Q_D(const PageTextEdit);
+    return d->vbar->value();
+}
+
+int PageTextEdit::verticalScrollMaximum() const
+{
+    Q_D(const PageTextEdit);
+    return d->vbar->maximum();
+}
+
+int PageTextEdit::verticalScrollSingleStep() const
+{
+    Q_D(const PageTextEdit);
+    return d->vbar->singleStep();
+}
+
+void PageTextEdit::setVerticalScroll(int _value)
 {
     Q_D(PageTextEdit);
     d->scrollAnimation.stop();
+    d->vbar->setValue(_value);
+}
+
+int PageTextEdit::horizontalScroll() const
+{
+    Q_D(const PageTextEdit);
+    return d->hbar->value();
+}
+
+int PageTextEdit::horizontalScrollMaximum() const
+{
+    Q_D(const PageTextEdit);
+    return d->hbar->maximum();
+}
+
+void PageTextEdit::setHorizontalScroll(int _value)
+{
+    Q_D(PageTextEdit);
+    d->hbar->setValue(_value);
 }
 
 ContextMenu* PageTextEdit::createContextMenu(const QPoint& _position, QWidget* _parent)

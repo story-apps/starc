@@ -307,7 +307,7 @@ void AudioplayTextManager::Implementation::loadModelAndViewSettings(
     const auto cursorPosition = settingsValue(cursorPositionFor(_model->document()), 0).toInt();
     _view->setCursorPosition(cursorPosition);
     const auto verticalScroll = settingsValue(verticalScrollFor(_model->document()), 0).toInt();
-    _view->setverticalScroll(verticalScroll);
+    _view->setVerticalScroll(verticalScroll);
 
     _view->loadViewSettings();
 }

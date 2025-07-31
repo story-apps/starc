@@ -33,7 +33,6 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QPointer>
-#include <QScrollBar>
 #include <QTextTable>
 #include <QTimer>
 
@@ -752,11 +751,11 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
     const qreal pageRight = viewport()->width();
     const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();
     ;
-    const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollBar()->maximum())
+    const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollMaximum())
         + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
-    const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollBar()->maximum() : 0)
+    const qreal textRight = pageRight + (isLeftToRight ? horizontalScrollMaximum() : 0)
         - document()->rootFrame()->frameFormat().rightMargin() + spaceBetweenSceneNumberAndText;
-    const qreal leftDelta = (isLeftToRight ? -1 : 1) * horizontalScrollBar()->value();
+    const qreal leftDelta = (isLeftToRight ? -1 : 1) * horizontalScroll();
     //    int colorRectWidth = 0;
     qreal verticalMargin = 0;
     const qreal splitterX = leftDelta + textLeft

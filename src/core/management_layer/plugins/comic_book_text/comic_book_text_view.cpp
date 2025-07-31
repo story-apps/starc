@@ -217,11 +217,7 @@ ComicBookTextView::Implementation::Implementation(ComicBookTextView* _q)
 
     commentsToolbar->hide();
 
-    textEdit->setVerticalScrollBar(new ScrollBar);
-    textEdit->setHorizontalScrollBar(new ScrollBar);
     shortcutsManager.setShortcutsContext(scalableWrapper);
-    scalableWrapper->setVerticalScrollBar(new ScrollBar);
-    scalableWrapper->setHorizontalScrollBar(new ScrollBar);
     scalableWrapper->initScrollBarsSyncing();
 
     textEdit->setUsePageMode(true);
@@ -453,8 +449,7 @@ void ComicBookTextView::Implementation::updateCommentsToolbar(bool _force)
     //
     // Если вьюпорт вмещается аккурат в видимую область, или не влезает,
     //
-    if (textEdit->width() - textEdit->verticalScrollBar()->width()
-        <= textEdit->viewport()->width() + commentsToolbar->width()) {
+    if (textEdit->width() <= textEdit->viewport()->width() + commentsToolbar->width()) {
         commentsToolbar->setCurtain(true, q->isLeftToRight() ? Qt::RightEdge : Qt::LeftEdge);
         //
         // ... то позиционируем панель рецензирования по краю панели комментариев
@@ -1429,13 +1424,12 @@ void ComicBookTextView::setCursorPosition(int _position)
 
 int ComicBookTextView::verticalScroll() const
 {
-    return d->textEdit->verticalScrollBar()->value();
+    return d->textEdit->verticalScroll();
 }
 
-void ComicBookTextView::setverticalScroll(int _value)
+void ComicBookTextView::setVerticalScroll(int _value)
 {
-    d->textEdit->stopVerticalScrollAnimation();
-    d->textEdit->verticalScrollBar()->setValue(_value);
+    d->textEdit->setVerticalScroll(_value);
 }
 
 bool ComicBookTextView::eventFilter(QObject* _target, QEvent* _event)
