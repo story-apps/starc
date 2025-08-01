@@ -11,9 +11,9 @@
 #include <ui/widgets/text_edit/page/page_text_edit.h>
 #include <utils/helpers/measurement_helper.h>
 
+#include <QFile>
 #include <QGuiApplication>
 #include <QVector>
-#include <QFile>
 
 namespace BusinessLayer {
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "abstract_slider_p.h"
-#include "qstyle.h"
 #include "page_text_edit_scroll_bar.h"
+#include "qstyle.h"
 
 #include <QtWidgets/private/qtwidgetsglobal_p.h>
 
