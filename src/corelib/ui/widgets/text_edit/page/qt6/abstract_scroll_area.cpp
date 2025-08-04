@@ -806,7 +806,13 @@ bool AbstractScrollArea::event(QEvent* e)
     case QEvent::MouseButtonRelease:
     case QEvent::MouseButtonDblClick:
     case QEvent::MouseMove:
-    case QEvent::Wheel:
+
+        //
+        // Отключаем игнорирование события прокрутки, чтобы текстовый редактор можно было скролить
+        // в кейсе, когда масштаб страниц уменьшен и курсор находится сбоку от страниц
+        //
+        // case QEvent::Wheel:
+
 #if QT_CONFIG(draganddrop)
     case QEvent::Drop:
     case QEvent::DragEnter:
@@ -1153,7 +1159,7 @@ bool AbstractScrollAreaPrivate::canStartScrollingAt(const QPoint& startPos) cons
 {
     Q_Q(const AbstractScrollArea);
     // don't start scrolling on a QAbstractSlider
-    if (qobject_cast<QAbstractSlider*>(q->viewport()->childAt(startPos)))
+    if (qobject_cast<AbstractSlider*>(q->viewport()->childAt(startPos)))
         return false;
     return true;
 }
