@@ -146,12 +146,7 @@ ScreenplayTemplatePageView::Implementation::Implementation(QWidget* _parent)
     cardLayout->setColumnStretch(2, 2);
     card->setContentLayout(cardLayout);
 
-    auto contentWidget = new QWidget;
-    content->setWidget(contentWidget);
-    content->setWidgetResizable(true);
-    auto layout = new QVBoxLayout(contentWidget);
-    layout->setContentsMargins({});
-    layout->setSpacing(0);
+    auto layout = qobject_cast<QVBoxLayout*>(content->widget()->layout());
     layout->addWidget(card);
     layout->addStretch();
 }

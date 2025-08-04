@@ -236,10 +236,8 @@ NovelTextView::Implementation::Implementation(NovelTextView* _q)
     commentsToolbar->hide();
 
     shortcutsManager.setShortcutsContext(scalableWrapper);
-    //
-    // Вертикальный скрол настраивается менеджером novelTextScrollbarManager
-    //
     scalableWrapper->initScrollBarsSyncing();
+    UiHelper::setupScrolling(scalableWrapper, true);
 
     textEdit->setUsePageMode(true);
 

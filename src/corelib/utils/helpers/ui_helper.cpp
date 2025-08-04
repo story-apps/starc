@@ -120,8 +120,7 @@ QScrollArea* UiHelper::createScrollArea(QWidget* _parent, bool _withGridLayout)
     palette.setColor(QPalette::Window, Qt::transparent);
     content->setPalette(palette);
     content->setFrameShape(QFrame::NoFrame);
-    content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    content->setVerticalScrollBar(new ScrollBar);
+    setupScrolling(content);
 
     auto contentWidget = new QWidget;
     content->setWidget(contentWidget);
@@ -134,10 +133,44 @@ QScrollArea* UiHelper::createScrollArea(QWidget* _parent, bool _withGridLayout)
         auto layout = new QVBoxLayout(contentWidget);
         layout->setContentsMargins({});
         layout->setSpacing(0);
-        layout->addStretch();
     }
 
     return content;
+}
+
+QScrollArea* UiHelper::createScrollAreaWithGridLayout(QWidget* _parent)
+{
+    const bool withGridLayout = true;
+    return createScrollArea(_parent, withGridLayout);
+}
+
+void UiHelper::setupScrolling(QAbstractScrollArea* _scrollArea, bool _addHorizontalScrollBar)
+{
+    _scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    _scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    auto connectScrollBars = [](ScrollBar* _target, QScrollBar* _source) {
+        QObject::connect(_source, &QScrollBar::valueChanged, _target, &ScrollBar::setValue);
+        QObject::connect(_source, &QScrollBar::rangeChanged, _target,
+                         [_target](int _min, int _max) {
+                             _target->setRange(_min, _max);
+                             _target->setVisible(_min < _max);
+                         });
+        QObject::connect(_target, &ScrollBar::valueChanged, _source, &QScrollBar::setValue);
+    };
+
+    const bool stickToParent = true;
+    auto verticalScrollBar = new ScrollBar(_scrollArea, stickToParent);
+    verticalScrollBar->setOrientation(Qt::Vertical);
+    verticalScrollBar->setRange(0, 0);
+    connectScrollBars(verticalScrollBar, _scrollArea->verticalScrollBar());
+
+    if (_addHorizontalScrollBar) {
+        auto horizontalScrollBar = new ScrollBar(_scrollArea, stickToParent);
+        horizontalScrollBar->setOrientation(Qt::Horizontal);
+        horizontalScrollBar->setRange(0, 0);
+        connectScrollBars(horizontalScrollBar, _scrollArea->horizontalScrollBar());
+    }
 }
 
 void UiHelper::showToolTip(const QString& _text)

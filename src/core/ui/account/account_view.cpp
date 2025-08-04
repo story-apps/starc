@@ -86,7 +86,7 @@ public:
 AccountView::Implementation::Implementation(QWidget* _parent)
     : accountPage(new Widget(_parent))
     //
-    , accountContent(new QScrollArea(accountPage))
+    , accountContent(UiHelper::createScrollAreaWithGridLayout(accountPage))
     , accountInfo(new Card(accountPage))
     , accountInfoLayout(new QGridLayout)
     , accountTitle(new H6Label(accountInfo))
@@ -110,13 +110,6 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     //
     , teamPage(new AccountViewTeams(_parent))
 {
-    QPalette palette;
-    palette.setColor(QPalette::Base, Qt::transparent);
-    palette.setColor(QPalette::Window, Qt::transparent);
-    accountContent->setPalette(palette);
-    accountContent->setFrameShape(QFrame::NoFrame);
-    accountContent->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    accountContent->setVerticalScrollBar(new ScrollBar);
     scrollAnimation.setEasingCurve(QEasingCurve::OutQuad);
     scrollAnimation.setDuration(180);
     colorAnimation.setEasingCurve(QEasingCurve::InBack);
@@ -146,12 +139,7 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     promocodeInfoLayout->setColumnStretch(0, 1);
     promocodeInfo->setContentLayout(promocodeInfoLayout);
 
-    auto accountContentWidget = new QWidget;
-    accountContent->setWidget(accountContentWidget);
-    accountContent->setWidgetResizable(true);
-    auto accountContentLayout = new QGridLayout;
-    accountContentLayout->setContentsMargins({});
-    accountContentLayout->setSpacing(0);
+    auto accountContentLayout = qobject_cast<QGridLayout*>(accountContent->widget()->layout());
     row = 0;
     accountContentLayout->addWidget(accountInfo, row, 0, 1, 2);
     accountContentLayout->addWidget(avatar, row++, 2, 3, 1, Qt::AlignTop);
@@ -164,7 +152,6 @@ AccountView::Implementation::Implementation(QWidget* _parent)
     accountContentLayout->addWidget(sessionsTitle, row++, 0, 1, 2);
     accountContentLayout->setColumnStretch(0, 1);
     accountContentLayout->setColumnStretch(1, 1);
-    accountContentWidget->setLayout(accountContentLayout);
 
     auto accountLayout = new QVBoxLayout;
     accountLayout->setContentsMargins({});
@@ -574,8 +561,12 @@ void AccountView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     }
 
     d->accountContent->widget()->layout()->setContentsMargins(
-        QMarginsF(DesignSystem::layout().px24(), DesignSystem::compactLayout().topContentMargin(),
-                  DesignSystem::layout().px24(), DesignSystem::compactLayout().px24())
+        QMarginsF(DesignSystem::layout().px24()
+                      + (isLeftToRight() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
+                  DesignSystem::compactLayout().topContentMargin(),
+                  DesignSystem::layout().px24()
+                      + (isRightToLeft() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
+                  DesignSystem::compactLayout().px24())
             .toMargins());
 
     d->colorAnimation.setStartValue(DesignSystem::color().accent());

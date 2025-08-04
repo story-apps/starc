@@ -318,7 +318,6 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
 
 
     auto textLayout = qobject_cast<QVBoxLayout*>(textPage->widget()->layout());
-    auto stretch = textLayout->takeAt(0);
     textLayout->addWidget(textBackgroundColorTitle);
     textLayout->addWidget(textBackgroundColor);
     {
@@ -338,7 +337,7 @@ CoverGeneratorSidebar::Implementation::Implementation(QWidget* _parent)
     textLayout->addWidget(creditsText);
     textLayout->addWidget(releaseDateText);
     textLayout->addWidget(websiteText);
-    textLayout->addItem(stretch);
+    textLayout->addStretch();
 
     auto imageSourceLayout = new QHBoxLayout;
     imageSourceLayout->setContentsMargins({});
@@ -661,8 +660,12 @@ void CoverGeneratorSidebar::designSystemChangeEvent(DesignSystemChangeEvent* _ev
     d->content->setBackgroundColor(Ui::DesignSystem::color().primary());
 
     d->textPage->widget()->layout()->setContentsMargins(
-        Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-        Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12());
+        Ui::DesignSystem::layout().px12()
+            + (isLeftToRight() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
+        Ui::DesignSystem::layout().px12(),
+        Ui::DesignSystem::layout().px12()
+            + (isRightToLeft() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
+        Ui::DesignSystem::layout().px12());
     for (auto label : {
              d->textBackgroundColorTitle,
              d->textBackgroundColorBlack,

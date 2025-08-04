@@ -233,6 +233,7 @@ NovelOutlineView::Implementation::Implementation(NovelOutlineView* _q)
 
     shortcutsManager.setShortcutsContext(scalableWrapper);
     scalableWrapper->initScrollBarsSyncing();
+    UiHelper::setupScrolling(scalableWrapper, true);
 
     textEdit->setUsePageMode(true);
 

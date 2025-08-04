@@ -74,6 +74,7 @@ TitlePageView::Implementation::Implementation(TitlePageView* _q)
     , toolbar(new TitlePageEditToolbar(scalableWrapper))
 {
     scalableWrapper->initScrollBarsSyncing();
+    UiHelper::setupScrolling(scalableWrapper, true);
 
     textEdit->setUsePageMode(true);
 }

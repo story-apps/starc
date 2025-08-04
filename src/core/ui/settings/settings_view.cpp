@@ -27,6 +27,7 @@
 #include <ui/widgets/tree/tree.h>
 #include <ui/widgets/tree/tree_delegate.h>
 #include <ui/widgets/tree/tree_header_view.h>
+#include <utils/helpers/ui_helper.h>
 
 #include <QAction>
 #include <QFileDialog>
@@ -632,7 +633,7 @@ public:
 };
 
 SettingsView::Implementation::Implementation(QWidget* _parent)
-    : content(new QScrollArea(_parent))
+    : content(UiHelper::createScrollArea(_parent))
     , contextMenu(new ContextMenu(_parent))
     //
     , applicationCard(new Card(content))
@@ -890,13 +891,6 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , novelParagraphChangeTypeDelegate(
           new ComboBoxItemDelegate(shortcutsForNovel, novelParagraphTypesModel))
 {
-    QPalette palette;
-    palette.setColor(QPalette::Base, Qt::transparent);
-    palette.setColor(QPalette::Window, Qt::transparent);
-    content->setPalette(palette);
-    content->setFrameShape(QFrame::NoFrame);
-    content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    content->setVerticalScrollBar(new ScrollBar);
     scrollAnimation.setEasingCurve(QEasingCurve::OutQuad);
     scrollAnimation.setDuration(180);
     colorAnimation.setEasingCurve(QEasingCurve::InBack);
@@ -911,12 +905,7 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     initNovelCard();
     initShortcutsCard();
 
-    QWidget* contentWidget = new QWidget;
-    content->setWidget(contentWidget);
-    content->setWidgetResizable(true);
-    QVBoxLayout* layout = new QVBoxLayout(contentWidget);
-    layout->setContentsMargins({});
-    layout->setSpacing(0);
+    auto layout = qobject_cast<QVBoxLayout*>(content->widget()->layout());
     layout->addWidget(applicationCard);
     layout->addWidget(componentsTitle);
     layout->addWidget(simpleTextCard);
@@ -1693,7 +1682,7 @@ void SettingsView::Implementation::updateTablesGeometry()
         if (_table->model() != nullptr) {
             _table->setColumnWidth(0, _table->width() * _firstColumnWidthDelta);
             _table->setFixedHeight((_table->model()->rowCount() + 2)
-                                   * qCeil(Ui::DesignSystem::treeOneLineItem().height()));
+                                   * qCeil(DesignSystem::treeOneLineItem().height()));
         }
     };
     updateTableGeometry(shortcutsForApplication, 0.25);
@@ -1840,9 +1829,9 @@ SettingsView::SettingsView(QWidget* _parent)
              }) {
             widget->setVisible(_available);
         }
-        d->simpleTextCardLayout->setRowMinimumHeight(
-            d->simpleTextCardBottomSpacerIndex,
-            _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
+        d->simpleTextCardLayout->setRowMinimumHeight(d->simpleTextCardBottomSpacerIndex,
+                                                     _available ? DesignSystem::layout().px24()
+                                                                : DesignSystem::layout().px12());
         d->updateTablesGeometry();
 
         emit simpleTextAvailableChanged(_available);
@@ -1996,19 +1985,17 @@ SettingsView::SettingsView(QWidget* _parent)
              }) {
             widget->setVisible(_available);
         }
-        d->screenplayCardLayout->setRowMinimumHeight(
-            d->screenplayCardBottomSpacerIndex,
-            _available ? Ui::DesignSystem::layout().px24() : Ui::DesignSystem::layout().px12());
+        d->screenplayCardLayout->setRowMinimumHeight(d->screenplayCardBottomSpacerIndex,
+                                                     _available ? DesignSystem::layout().px24()
+                                                                : DesignSystem::layout().px12());
         const auto screenplayDurationByCharactersRow
             = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
-        d->screenplayCardLayout->setRowMinimumHeight(screenplayDurationByCharactersRow,
-                                                     _available ? Ui::DesignSystem::layout().px62()
-                                                                : 0.0);
+        d->screenplayCardLayout->setRowMinimumHeight(
+            screenplayDurationByCharactersRow, _available ? DesignSystem::layout().px62() : 0.0);
         const auto screenplayDurationConfigurableRow
             = d->screenplayCardLayout->indexOf(d->screenplayDurationConfigurable);
-        d->screenplayCardLayout->setRowMinimumHeight(screenplayDurationConfigurableRow,
-                                                     _available ? Ui::DesignSystem::layout().px62()
-                                                                : 0.0);
+        d->screenplayCardLayout->setRowMinimumHeight(
+            screenplayDurationConfigurableRow, _available ? DesignSystem::layout().px62() : 0.0);
         d->updateTablesGeometry();
 
         emit screenplayAvailableChanged(_available);
@@ -2340,8 +2327,8 @@ SettingsView::SettingsView(QWidget* _parent)
             widget->setVisible(_available);
         }
         d->comicBookCardLayout->setRowMinimumHeight(d->comicBookCardBottomSpacerIndex,
-                                                    _available ? Ui::DesignSystem::layout().px24()
-                                                               : Ui::DesignSystem::layout().px12());
+                                                    _available ? DesignSystem::layout().px24()
+                                                               : DesignSystem::layout().px12());
         d->updateTablesGeometry();
 
         emit comicBookAvailableChanged(_available);
@@ -2512,8 +2499,8 @@ SettingsView::SettingsView(QWidget* _parent)
             widget->setVisible(_available);
         }
         d->audioplayCardLayout->setRowMinimumHeight(d->audioplayCardBottomSpacerIndex,
-                                                    _available ? Ui::DesignSystem::layout().px24()
-                                                               : Ui::DesignSystem::layout().px12());
+                                                    _available ? DesignSystem::layout().px24()
+                                                               : DesignSystem::layout().px12());
         d->updateTablesGeometry();
 
         emit audioplayAvailableChanged(_available);
@@ -2699,8 +2686,8 @@ SettingsView::SettingsView(QWidget* _parent)
             widget->setVisible(_available);
         }
         d->stageplayCardLayout->setRowMinimumHeight(d->stageplayCardBottomSpacerIndex,
-                                                    _available ? Ui::DesignSystem::layout().px24()
-                                                               : Ui::DesignSystem::layout().px12());
+                                                    _available ? DesignSystem::layout().px24()
+                                                               : DesignSystem::layout().px12());
         d->updateTablesGeometry();
 
         emit stageplayAvailableChanged(_available);
@@ -2862,8 +2849,8 @@ SettingsView::SettingsView(QWidget* _parent)
             widget->setVisible(_available);
         }
         d->novelCardLayout->setRowMinimumHeight(d->novelCardBottomSpacerIndex,
-                                                _available ? Ui::DesignSystem::layout().px24()
-                                                           : Ui::DesignSystem::layout().px12());
+                                                _available ? DesignSystem::layout().px24()
+                                                           : DesignSystem::layout().px12());
         d->updateTablesGeometry();
 
         emit novelAvailableChanged(_available);
@@ -4443,14 +4430,17 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     setBackgroundColor(DesignSystem::color().surface());
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(),
-                  Ui::DesignSystem::compactLayout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
+        QMarginsF(DesignSystem::layout().px24()
+                      + (isLeftToRight() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
+                  DesignSystem::compactLayout().topContentMargin(),
+                  DesignSystem::layout().px24()
+                      + (isRightToLeft() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
+                  DesignSystem::compactLayout().px24())
             .toMargins());
-    d->contextMenu->setBackgroundColor(Ui::DesignSystem::color().background());
-    d->contextMenu->setTextColor(Ui::DesignSystem::color().onBackground());
+    d->contextMenu->setBackgroundColor(DesignSystem::color().background());
+    d->contextMenu->setTextColor(DesignSystem::color().onBackground());
 
-    d->colorAnimation.setStartValue(Ui::DesignSystem::color().accent());
+    d->colorAnimation.setStartValue(DesignSystem::color().accent());
 
     for (auto card : {
              d->applicationCard,
@@ -4467,8 +4457,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     auto titleColor = DesignSystem::color().onBackground();
     titleColor.setAlphaF(DesignSystem::inactiveTextOpacity());
-    auto titleMargins = Ui::DesignSystem::label().margins().toMargins();
-    titleMargins.setBottom(Ui::DesignSystem::compactLayout().px12());
+    auto titleMargins = DesignSystem::label().margins().toMargins();
+    titleMargins.setBottom(DesignSystem::compactLayout().px12());
     for (auto cardTitle : std::vector<Widget*>{
              d->applicationTitle,
              d->applicationUserInterfaceTitle,
@@ -4524,14 +4514,13 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
          }) {
         toggle->setBackgroundColor(DesignSystem::color().background());
         toggle->setTextColor(DesignSystem::color().onBackground());
-        toggle->setContentsMargins(Ui::DesignSystem::layout().px16(),
-                                   Ui::DesignSystem::layout().px16(),
-                                   Ui::DesignSystem::layout().px16(), 0);
+        toggle->setContentsMargins(DesignSystem::layout().px16(), DesignSystem::layout().px16(),
+                                   DesignSystem::layout().px16(), 0);
     }
 
-    auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
-    labelMargins.setTop(static_cast<int>(Ui::DesignSystem::button().shadowMargins().top()));
-    labelMargins.setBottom(static_cast<int>(Ui::DesignSystem::button().shadowMargins().bottom()));
+    auto labelMargins = DesignSystem::label().margins().toMargins();
+    labelMargins.setTop(static_cast<int>(DesignSystem::button().shadowMargins().top()));
+    labelMargins.setBottom(static_cast<int>(DesignSystem::button().shadowMargins().bottom()));
     for (auto label : std::vector<Widget*>{
              d->language,
              d->scaleFactorTitle,
@@ -4734,8 +4723,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->stageplayEditorDefaultTemplate,
              d->novelEditorDefaultTemplate,
          }) {
-        textField->setCustomMargins({ isLeftToRight() ? Ui::DesignSystem::layout().px24() : 0, 0,
-                                      isLeftToRight() ? 0 : Ui::DesignSystem::layout().px24(), 0 });
+        textField->setCustomMargins({ isLeftToRight() ? DesignSystem::layout().px24() : 0, 0,
+                                      isLeftToRight() ? 0 : DesignSystem::layout().px24(), 0 });
     }
     for (auto combobox : {
              d->spellCheckerLanguage,
@@ -4746,7 +4735,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->stageplayEditorDefaultTemplate,
              d->novelEditorDefaultTemplate,
          }) {
-        combobox->setPopupBackgroundColor(Ui::DesignSystem::color().background());
+        combobox->setPopupBackgroundColor(DesignSystem::color().background());
     }
     for (auto icon : {
              d->simpleTextEditorDefaultTemplateOptions,
@@ -4756,8 +4745,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->stageplayEditorDefaultTemplateOptions,
              d->novelEditorDefaultTemplateOptions,
          }) {
-        icon->setContentsMargins(isLeftToRight() ? 0 : Ui::DesignSystem::layout().px16(), 0,
-                                 isLeftToRight() ? Ui::DesignSystem::layout().px16() : 0, 0);
+        icon->setContentsMargins(isLeftToRight() ? 0 : DesignSystem::layout().px16(), 0,
+                                 isLeftToRight() ? DesignSystem::layout().px16() : 0, 0);
     }
 
     for (auto button : { d->changeLanuage }) {
@@ -4771,65 +4760,64 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->darkTheme,
              d->customTheme,
          }) {
-        theme->setBackgroundColor(Ui::DesignSystem::color().background());
-        theme->setTextColor(Ui::DesignSystem::color().onBackground());
+        theme->setBackgroundColor(DesignSystem::color().background());
+        theme->setTextColor(DesignSystem::color().onBackground());
     }
 
     d->scaleFactor->setBackgroundColor(DesignSystem::color().background());
-    d->scaleFactor->setContentsMargins({ static_cast<int>(Ui::DesignSystem::layout().px24()), 0,
-                                         static_cast<int>(Ui::DesignSystem::layout().px24()), 0 });
+    d->scaleFactor->setContentsMargins({ static_cast<int>(DesignSystem::layout().px24()), 0,
+                                         static_cast<int>(DesignSystem::layout().px24()), 0 });
 
     d->applicationCardLayout->setRowMinimumHeight(
         d->applicationCardBottomSpacerIndex,
-        static_cast<int>(Ui::DesignSystem::compactLayout().px24()));
-    d->applicationThemesLayout->setSpacing(Ui::DesignSystem::compactLayout().px24());
+        static_cast<int>(DesignSystem::compactLayout().px24()));
+    d->applicationThemesLayout->setSpacing(DesignSystem::compactLayout().px24());
     d->applicationThemesLayout->setContentsMargins(
-        QMargins(Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px12(),
-                 Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px16()));
+        QMargins(DesignSystem::layout().px24(), DesignSystem::compactLayout().px12(),
+                 DesignSystem::layout().px24(), DesignSystem::compactLayout().px16()));
     //
     d->simpleTextCardLayout->setRowMinimumHeight(d->simpleTextCardBottomSpacerIndex,
                                                  d->simpleTextAvailable->isChecked()
-                                                     ? Ui::DesignSystem::compactLayout().px24()
-                                                     : Ui::DesignSystem::compactLayout().px12());
+                                                     ? DesignSystem::compactLayout().px24()
+                                                     : DesignSystem::compactLayout().px12());
     //
     d->screenplayCardLayout->setRowMinimumHeight(d->screenplayCardBottomSpacerIndex,
                                                  d->screenplayAvailable->isChecked()
-                                                     ? Ui::DesignSystem::compactLayout().px24()
-                                                     : Ui::DesignSystem::compactLayout().px12());
+                                                     ? DesignSystem::compactLayout().px24()
+                                                     : DesignSystem::compactLayout().px12());
     const auto screenplayDurationByCharactersRow
         = d->screenplayCardLayout->indexOf(d->screenplayDurationByCharacters);
     d->screenplayCardLayout->setRowMinimumHeight(
         screenplayDurationByCharactersRow,
-        d->screenplayAvailable->isChecked() ? Ui::DesignSystem::compactLayout().px62() : 0.0);
+        d->screenplayAvailable->isChecked() ? DesignSystem::compactLayout().px62() : 0.0);
     const auto screenplayDurationConfigurableRow
         = d->screenplayCardLayout->indexOf(d->screenplayDurationConfigurable);
     d->screenplayCardLayout->setRowMinimumHeight(
         screenplayDurationConfigurableRow,
-        d->screenplayAvailable->isChecked() ? Ui::DesignSystem::compactLayout().px62() : 0.0);
+        d->screenplayAvailable->isChecked() ? DesignSystem::compactLayout().px62() : 0.0);
     //
     d->comicBookCardLayout->setRowMinimumHeight(d->comicBookCardBottomSpacerIndex,
                                                 d->comicBookAvailable->isChecked()
-                                                    ? Ui::DesignSystem::compactLayout().px24()
-                                                    : Ui::DesignSystem::compactLayout().px12());
+                                                    ? DesignSystem::compactLayout().px24()
+                                                    : DesignSystem::compactLayout().px12());
     //
     d->audioplayCardLayout->setRowMinimumHeight(d->audioplayCardBottomSpacerIndex,
                                                 d->audioplayAvailable->isChecked()
-                                                    ? Ui::DesignSystem::compactLayout().px24()
-                                                    : Ui::DesignSystem::compactLayout().px12());
+                                                    ? DesignSystem::compactLayout().px24()
+                                                    : DesignSystem::compactLayout().px12());
     //
     d->stageplayCardLayout->setRowMinimumHeight(d->stageplayCardBottomSpacerIndex,
                                                 d->stageplayAvailable->isChecked()
-                                                    ? Ui::DesignSystem::compactLayout().px24()
-                                                    : Ui::DesignSystem::compactLayout().px12());
+                                                    ? DesignSystem::compactLayout().px24()
+                                                    : DesignSystem::compactLayout().px12());
     //
     d->novelCardLayout->setRowMinimumHeight(d->simpleTextCardBottomSpacerIndex,
                                             d->novelAvailable->isChecked()
-                                                ? Ui::DesignSystem::compactLayout().px24()
-                                                : Ui::DesignSystem::compactLayout().px12());
+                                                ? DesignSystem::compactLayout().px24()
+                                                : DesignSystem::compactLayout().px12());
     //
     d->shortcutsCardLayout->setRowMinimumHeight(
-        d->shortcutsCardBottomSpacerIndex,
-        static_cast<int>(Ui::DesignSystem::compactLayout().px24()));
+        d->shortcutsCardBottomSpacerIndex, static_cast<int>(DesignSystem::compactLayout().px24()));
 
     for (auto table : {
              d->shortcutsForApplication,
@@ -4840,8 +4828,8 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->shortcutsForStageplay,
              d->shortcutsForNovel,
          }) {
-        table->setBackgroundColor(Ui::DesignSystem::color().background());
-        table->setTextColor(Ui::DesignSystem::color().onBackground());
+        table->setBackgroundColor(DesignSystem::color().background());
+        table->setTextColor(DesignSystem::color().onBackground());
     }
     d->updateTablesGeometry();
 }

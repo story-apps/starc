@@ -241,7 +241,9 @@ ScreenplayTemplateParagraphsView::Implementation::Implementation(QWidget* _paren
     }
     card->setContentLayout(cardLayout);
 
-    qobject_cast<QVBoxLayout*>(content->widget()->layout())->insertWidget(0, card);
+    auto layout = qobject_cast<QVBoxLayout*>(content->widget()->layout());
+    layout->addWidget(card);
+    layout->addStretch();
 }
 
 void ScreenplayTemplateParagraphsView::Implementation::updateParagraphOptions(

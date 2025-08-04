@@ -219,6 +219,7 @@ ComicBookTextView::Implementation::Implementation(ComicBookTextView* _q)
 
     shortcutsManager.setShortcutsContext(scalableWrapper);
     scalableWrapper->initScrollBarsSyncing();
+    UiHelper::setupScrolling(scalableWrapper, true);
 
     textEdit->setUsePageMode(true);
 

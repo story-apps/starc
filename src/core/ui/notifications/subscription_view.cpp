@@ -193,6 +193,10 @@ void SubscriptionView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 {
     Widget::designSystemChangeEvent(_event);
 
+    layout()->setContentsMargins(isLeftToRight() ? 0.0 : DesignSystem::scrollBar().minimumSize(), 0,
+                                 isRightToLeft() ? 0.0 : DesignSystem::scrollBar().minimumSize(),
+                                 0);
+
     for (auto widget : std::vector<Widget*>{
              this,
              d->avatarLabel,

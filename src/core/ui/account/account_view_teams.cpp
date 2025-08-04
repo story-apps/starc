@@ -89,7 +89,7 @@ AccountViewTeams::Implementation::Implementation(AccountViewTeams* _q)
     , emptyPage(new Widget(_q))
     , emptyPageTitle(new Body1Label(emptyPage))
     , teamPage(new Widget(_q))
-    , teamPageContent(new QScrollArea(_q))
+    , teamPageContent(UiHelper::createScrollArea(_q))
     , addMemberCard(new Card(_q))
     , addMemberCardLayout(new QVBoxLayout)
     , addMemberTitle(new H6Label(addMemberCard))
@@ -115,14 +115,6 @@ AccountViewTeams::Implementation::Implementation(AccountViewTeams* _q)
     emptyPageLayout->addStretch();
     emptyPage->setLayout(emptyPageLayout);
 
-
-    QPalette palette;
-    palette.setColor(QPalette::Base, Qt::transparent);
-    palette.setColor(QPalette::Window, Qt::transparent);
-    teamPageContent->setPalette(palette);
-    teamPageContent->setFrameShape(QFrame::NoFrame);
-    teamPageContent->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    teamPageContent->setVerticalScrollBar(new ScrollBar);
 
     email->setSpellCheckPolicy(SpellCheckPolicy::Manual);
     email->setCapitalizeWords(false);
@@ -161,16 +153,12 @@ AccountViewTeams::Implementation::Implementation(AccountViewTeams* _q)
     membersCard->setContentLayout(membersCardLayout);
     members->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    auto contentWidget = new QWidget;
-    teamPageContent->setWidget(contentWidget);
-    teamPageContent->setWidgetResizable(true);
-    auto contentWidgetLayout = new QVBoxLayout;
+    auto contentWidgetLayout = qobject_cast<QVBoxLayout*>(teamPageContent->widget()->layout());
     contentWidgetLayout->setContentsMargins({});
     contentWidgetLayout->setSpacing(0);
     contentWidgetLayout->addWidget(addMemberCard);
     contentWidgetLayout->addWidget(membersCard);
     contentWidgetLayout->addStretch();
-    contentWidget->setLayout(contentWidgetLayout);
 
     auto layout = new QVBoxLayout;
     layout->setContentsMargins({});
@@ -442,8 +430,12 @@ void AccountViewTeams::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->teamPage->setBackgroundColor(DesignSystem::color().surface());
 
     d->teamPageContent->widget()->layout()->setContentsMargins(
-        QMarginsF(DesignSystem::layout().px24(), DesignSystem::compactLayout().topContentMargin(),
-                  DesignSystem::layout().px24(), DesignSystem::compactLayout().px24())
+        QMarginsF(DesignSystem::layout().px24()
+                      + (isLeftToRight() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
+                  DesignSystem::compactLayout().topContentMargin(),
+                  DesignSystem::layout().px24()
+                      + (isRightToLeft() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
+                  DesignSystem::compactLayout().px24())
             .toMargins());
 
     d->addMemberCard->setBackgroundColor(DesignSystem::color().background());

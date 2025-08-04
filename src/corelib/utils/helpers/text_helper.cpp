@@ -577,8 +577,8 @@ void TextHelper::applyTextFormattingForBlock(QTextCursor& _cursor,
         const auto formats = currentBlock.textFormats();
         for (const auto& range : formats) {
             auto rangeFormat = range.format;
-            if (rangeFormat.fontFamily() == currentBlockCharFormat.fontFamily()) {
-                rangeFormat.setFontFamily(_newFormat.fontFamily());
+            if (rangeFormat.fontFamilies() == currentBlockCharFormat.fontFamilies()) {
+                rangeFormat.setFontFamilies(_newFormat.fontFamilies().toStringList());
             }
             if (rangeFormat.fontFamilies() == currentBlockCharFormat.fontFamilies()) {
                 rangeFormat.setFontFamilies(_newFormat.fontFamilies().toStringList());

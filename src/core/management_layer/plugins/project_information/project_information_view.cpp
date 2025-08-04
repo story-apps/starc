@@ -40,7 +40,7 @@ public:
 
 ProjectInformationView::Implementation::Implementation(QWidget* _parent)
     : content(new StackWidget(_parent))
-    , parametersPage(new QScrollArea(_parent))
+    , parametersPage(UiHelper::createScrollAreaWithGridLayout(_parent))
     , projectInfo(new Card(_parent))
     , projectInfoLayout(new QGridLayout)
     , projectName(new TextField(projectInfo))
@@ -51,13 +51,6 @@ ProjectInformationView::Implementation::Implementation(QWidget* _parent)
     content->setCurrentWidget(parametersPage);
     content->addWidget(generatorPage);
 
-    QPalette palette;
-    palette.setColor(QPalette::Base, Qt::transparent);
-    palette.setColor(QPalette::Window, Qt::transparent);
-    parametersPage->setPalette(palette);
-    parametersPage->setFrameShape(QFrame::NoFrame);
-    parametersPage->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    parametersPage->setVerticalScrollBar(new ScrollBar);
     projectCover->setDecorationIcon(u8"\U000F02E9");
 
     projectInfoLayout->setContentsMargins({});
@@ -77,16 +70,10 @@ ProjectInformationView::Implementation::Implementation(QWidget* _parent)
         projectLogline,
     });
 
-    QWidget* contentWidget = new QWidget;
-    parametersPage->setWidget(contentWidget);
-    parametersPage->setWidgetResizable(true);
-    auto layout = new QGridLayout;
-    layout->setContentsMargins({});
-    layout->setSpacing(0);
+    auto layout = qobject_cast<QGridLayout*>(parametersPage->widget()->layout());
     layout->addWidget(projectInfo, 0, 0);
     layout->addWidget(projectCover, 0, 1, 2, 1, Qt::AlignTop);
     layout->setRowStretch(1, 1);
-    contentWidget->setLayout(layout);
 }
 
 
@@ -177,9 +164,12 @@ void ProjectInformationView::designSystemChangeEvent(DesignSystemChangeEvent* _e
     d->content->setBackgroundColor(Ui::DesignSystem::color().surface());
 
     d->parametersPage->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(),
+        QMarginsF(Ui::DesignSystem::layout().px24()
+                      + (isLeftToRight() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
                   Ui::DesignSystem::compactLayout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
+                  Ui::DesignSystem::layout().px24()
+                      + (isRightToLeft() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
+                  Ui::DesignSystem::compactLayout().px24())
             .toMargins());
 
     d->projectInfo->setBackgroundColor(DesignSystem::color().background());

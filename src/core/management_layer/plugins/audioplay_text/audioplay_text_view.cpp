@@ -222,6 +222,7 @@ AudioplayTextView::Implementation::Implementation(AudioplayTextView* _q)
     scalableWrapper->initScrollBarsSyncing();
     audioplayTextScrollbarManager = new AudioplayTextScrollBarManager(scalableWrapper);
     audioplayTextScrollbarManager->initScrollBarsSyncing();
+    UiHelper::setupScrolling(scalableWrapper, true);
 
     textEdit->setUsePageMode(true);
 

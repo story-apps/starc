@@ -13,7 +13,7 @@ class CORE_LIBRARY_EXPORT ScrollBar : public QScrollBar
     Q_OBJECT
 
 public:
-    explicit ScrollBar(QWidget* _parent = nullptr);
+    explicit ScrollBar(QWidget* _parent = nullptr, bool _stickToParent = false);
     ~ScrollBar() override;
 
     /**
@@ -32,6 +32,11 @@ public:
     QSize sizeHint() const override;
 
 protected:
+    /**
+     * @brief Отслеживаем события родителя
+     */
+    bool eventFilter(QObject* _watched, QEvent* _event) override;
+
     /**
      * @brief Реализуем собственное рисование
      */

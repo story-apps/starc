@@ -101,8 +101,8 @@ public:
 CardItemParametersView::Implementation::Implementation(CardItemParametersView* _q)
     : q(_q)
     , colorPickerPopup(new ColorPickerPopup(_q))
-    , content(new QScrollArea(_q))
-    , contentLayout(new QVBoxLayout)
+    , content(UiHelper::createScrollArea(_q))
+    , contentLayout(qobject_cast<QVBoxLayout*>(content->widget()->layout()))
     , title(new TextField(content))
     , heading(new TextField(content))
     , description(new TextField(content))
@@ -124,14 +124,6 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
     , tagsDelegate(new TextFieldItemDelegate(tags))
 {
     colorPickerPopup->setColorCanBeDeselected(true);
-
-    QPalette palette;
-    palette.setColor(QPalette::Base, Qt::transparent);
-    palette.setColor(QPalette::Window, Qt::transparent);
-    content->setPalette(palette);
-    content->setFrameShape(QFrame::NoFrame);
-    content->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    content->setVerticalScrollBar(new ScrollBar);
 
     title->setTrailingIcon(u8"\U000F0766");
     UiHelper::initSpellingFor({
@@ -168,11 +160,6 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
     tagsDelegate->setTrailingIconPickColor(true);
     tagsDelegate->setCompletionModel(allTagsModel);
 
-    auto cardInfoPageContent = new QWidget;
-    content->setWidget(cardInfoPageContent);
-    content->setWidgetResizable(true);
-    contentLayout->setContentsMargins({});
-    contentLayout->setSpacing(0);
     contentLayout->addWidget(title);
     contentLayout->addWidget(heading);
     contentLayout->addWidget(description);
@@ -200,7 +187,6 @@ CardItemParametersView::Implementation::Implementation(CardItemParametersView* _
     }
     contentLayout->addWidget(tags);
     contentLayout->addStretch();
-    cardInfoPageContent->setLayout(contentLayout);
 }
 
 void CardItemParametersView::Implementation::initCardBeats()
@@ -899,8 +885,11 @@ void CardItemParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _e
     d->tags->setBackgroundColor(Ui::DesignSystem::color().primary());
     d->tags->setTextColor(Ui::DesignSystem::color().onPrimary());
 
-    d->contentLayout->setContentsMargins(0.0, Ui::DesignSystem::layout().px8(), 0.0,
-                                         Ui::DesignSystem::layout().px24());
+    d->contentLayout->setContentsMargins(
+        0.0 + (isLeftToRight() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
+        Ui::DesignSystem::layout().px8(),
+        0.0 + (isRightToLeft() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
+        Ui::DesignSystem::layout().px24());
 }
 
 } // namespace Ui

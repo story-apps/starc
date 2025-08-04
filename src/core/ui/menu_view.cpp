@@ -214,7 +214,7 @@ MenuView::Implementation::Implementation(MenuView* _parent)
         appInfoLayout->setColumnStretch(3, 1);
 
         auto layout = static_cast<QVBoxLayout*>(menuPage->widget()->layout());
-        layout->insertWidget(0, drawer);
+        layout->addWidget(drawer);
         layout->addStretch();
         layout->addLayout(appInfoLayout);
     }
@@ -450,11 +450,10 @@ void MenuView::setNotifications(const QVector<Domain::Notification>& _notificati
     //
     while (d->notificationsLayout->count() > 0) {
         auto item = d->notificationsLayout->takeAt(0);
-        if (item->widget() == nullptr) {
-            break;
+        if (item->widget() != nullptr) {
+            item->widget()->deleteLater();
         }
-
-        item->widget()->deleteLater();
+        delete item;
     }
 
     //

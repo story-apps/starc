@@ -215,6 +215,7 @@ SimpleTextView::Implementation::Implementation(SimpleTextView* _q)
 
     shortcutsManager.setShortcutsContext(scalableWrapper);
     scalableWrapper->initScrollBarsSyncing();
+    UiHelper::setupScrolling(scalableWrapper, true);
 
     textEdit->setUsePageMode(true);
 

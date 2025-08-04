@@ -249,6 +249,7 @@ ScreenplayTextView::Implementation::Implementation(ScreenplayTextView* _q)
     scalableWrapper->initScrollBarsSyncing();
     screenplayTextScrollbarManager = new ScreenplayTextScrollBarManager(scalableWrapper);
     screenplayTextScrollbarManager->initScrollBarsSyncing();
+    UiHelper::setupScrolling(scalableWrapper, true);
 
     textEdit->setUsePageMode(true);
 

@@ -6,6 +6,7 @@
 
 class BaseTextEdit;
 class Button;
+class QAbstractScrollArea;
 class QHBoxLayout;
 class QScrollArea;
 class QWidget;
@@ -54,6 +55,13 @@ public:
      * @brief Создать виджет скролареи с настроенной палитрой и скролбаром
      */
     static QScrollArea* createScrollArea(QWidget* _parent, bool _withGridLayout = false);
+    static QScrollArea* createScrollAreaWithGridLayout(QWidget* _parent);
+
+    /**
+     * @brief Настроить скроллинг для заданного виджета в заданных направлениях
+     */
+    static void setupScrolling(QAbstractScrollArea* _scrollArea,
+                               bool _addHorizontalScrollBar = false);
 
     /**
      * @brief Показать тултип в текущем положении мышки
