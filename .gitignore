@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+# Other
+Makefile*
+*.pro.user
+*.Po
+*.Plo
+config.*
+*.pc
+libtool
+POTFILES
+stamp-h1
+_en_source.qm
