@@ -105,8 +105,8 @@ void AbstractMarkdownImporter::collectSelectionTypes(QString& _paragraphText) co
     QVector<SelectionTypeInText> selectionTypes;
     QRegularExpressionMatch match = d->selectionTypeChecker.match(_paragraphText);
     while (match.hasMatch()) {
-        const SelectionTypeInText type
-            = { match.capturedStart(d->capturedGroup), match.captured(d->capturedGroup) };
+        const SelectionTypeInText type = { static_cast<int>(match.capturedStart(d->capturedGroup)),
+                                           match.captured(d->capturedGroup) };
         selectionTypes.append(type);
         int position = match.capturedEnd(d->capturedGroup);
         if (position > 1) {

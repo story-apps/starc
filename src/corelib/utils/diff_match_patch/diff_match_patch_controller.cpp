@@ -280,9 +280,10 @@ QPair<DiffMatchPatchController::Change, DiffMatchPatchController::Change> DiffMa
 
 
     return { { d->plainToXml(oldXmlForUpdate).toUtf8(),
-               d->plainToXml(oldXmlPlain.left(oldStartPosForXmlPlain)).length() },
+               static_cast<int>(d->plainToXml(oldXmlPlain.left(oldStartPosForXmlPlain)).length()) },
              { d->plainToXml(newXmlForUpdate).toUtf8(),
-               d->plainToXml(newXmlPlain.left(newStartPosForXmlPlain)).length() } };
+               static_cast<int>(
+                   d->plainToXml(newXmlPlain.left(newStartPosForXmlPlain)).length()) } };
 }
 
 int DiffMatchPatchController::changeEndPosition(const QString& _before, const QString& _after) const

@@ -607,7 +607,8 @@ QByteArray TextModelGroupItem::toXml(TextModelItem* _from, int _fromPosition, Te
         }
         //
         else if (textItem == _from) {
-            xml += { textItem, _fromPosition, textItem->text().length() - _fromPosition };
+            xml += { textItem, _fromPosition,
+                     static_cast<int>(textItem->text().length()) - _fromPosition };
         } else {
             xml += textItem;
         }

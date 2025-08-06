@@ -55,26 +55,6 @@ jobs:
           sudo apt update
           sudo apt install libgstreamer-plugins-base1.0-0 cmake make pkg-config libx11-dev xcb libx11-xcb-dev libxkbcommon-x11-0 libxkbcommon-dev libgtk-3-dev sassc libfuse2
 
-      - name: Install Adwaita-qt
-        run: |
-          git clone https://github.com/FedoraQt/adwaita-qt.git adwaita-qt
-          cd adwaita-qt
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_QT6=OFF
-          make -j2
-          sudo make install
-
-      - name: Install QGnomePlatform
-        run: |
-          git clone https://github.com/FedoraQt/QGnomePlatform qgnomeplatform
-          cd qgnomeplatform
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_QT6=OFF
-          make -j2
-          sudo make install
-
       - name: Run QMake
         shell: bash
         run: |
@@ -97,7 +77,7 @@ jobs:
       - name: Collect artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: linux packages
+          name: linux packages with qt5
           path: build/linux/starc-setup-qt5.AppImage
 
       - name: Publish artifacts to the GitHub releases
@@ -146,32 +126,13 @@ jobs:
         with:
           version: 6.8.3
           target: desktop
+          modules: 'qt5compat qtmultimedia qtspeech qtwebsockets'
 
       - name: Install dependencies
         shell: bash
         run: |
           sudo apt update
-          sudo apt install libgstreamer-plugins-base1.0-0 cmake make pkg-config libx11-dev xcb libx11-xcb-dev libxkbcommon-x11-0 libxkbcommon-dev libgtk-3-dev sassc libfuse2
-
-      - name: Install Adwaita-qt
-        run: |
-          git clone https://github.com/FedoraQt/adwaita-qt.git adwaita-qt
-          cd adwaita-qt
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_QT6=ON
-          make -j2
-          sudo make install
-
-      - name: Install QGnomePlatform
-        run: |
-          git clone https://github.com/FedoraQt/QGnomePlatform qgnomeplatform
-          cd qgnomeplatform
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_QT6=ON
-          make -j2
-          sudo make install
+          sudo apt install libgstreamer-plugins-base1.0-0 cmake make pkg-config libx11-dev xcb libx11-xcb-dev libxkbcommon-x11-0 libxkbcommon-dev libgtk-3-dev sassc libfuse2 libxcb-cursor0
 
       - name: Run QMake
         shell: bash
@@ -194,7 +155,7 @@ jobs:
       - name: Collect artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: linux packages
+          name: linux packagesw with qt6
           path: build/linux/starc-setup.AppImage
 
       - name: Publish artifacts to the dev stream and notify clients

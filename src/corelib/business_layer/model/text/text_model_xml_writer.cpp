@@ -109,7 +109,7 @@ void TextModelXmlWriter::operator+=(TextModelItem* _item)
     //
     if (_item->type() == TextModelItemType::Text) {
         auto textItem = static_cast<TextModelTextItem*>(_item);
-        operator+=({ textItem, 0, textItem->text().length() });
+        operator+=({ textItem, 0, static_cast<int>(textItem->text().length()) });
     }
     //
     // Остальные элементы пишем как есть

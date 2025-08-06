@@ -14,8 +14,8 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  build_mac:
-    name: Build Mac OS X version
+  build_mac_qt5:
+    name: Build Mac OS X version with qt5
     runs-on: macos-latest
     timeout-minutes: 120
     steps:
@@ -66,6 +66,7 @@ jobs:
         run: |
           cd build/mac
           ./create_dmg.sh ${{env.APP_VERSION}}
+          mv starc-setup.dmg starc-setup-qt5.dmg
         env:
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
@@ -78,7 +79,87 @@ jobs:
       - name: Collect artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: mac packages
+          name: mac packages with qt5
+          path: build/mac/starc-setup-qt5.dmg
+
+      - name: Publish artifacts to the GitHub releases
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: build/mac/starc-setup-qt5.dmg
+
+      - name: Notify clients that stable release published
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=mac" -F "qt=5" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
+
+
+  build_mac_qt6:
+    name: Build Mac OS X version with qt6
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout Sources for push or create tag event
+        if: github.event_name != 'pull_request'
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.ACTION_RUNNER }}
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Checkout sources for pull request event
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@master
+
+      - name: Checkout submodules for pull request event
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+
+      - name: Add info about dev build to the env
+        shell: bash
+        run: |
+          echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.8.3
+          target: desktop
+          modules: 'qt5compat qtmultimedia qtspeech qtwebsockets'
+
+      - name: Run QMake
+        shell: bash
+        run: |
+          cd src
+          qmake starc.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" DEFINES+="DEV_BUILD=$DEV_BUILD"
+
+      - name: Build
+        shell: bash
+        run: |
+          cd src
+          make -j2
+
+      - name: Make dmg image
+        shell: bash
+        run: |
+          cd build/mac
+          ./create_dmg.sh ${{env.APP_VERSION}}
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_APP_PASSWORD: ${{ secrets.APPLE_ID_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac packages with qt6
           path: build/mac/starc-setup.dmg
 
       - name: Publish artifacts to the dev stream and notify clients
@@ -86,7 +167,7 @@ jobs:
         shell: bash
         run: |
           curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "name_for_file=starc-setup.dmg" -F "file_bin=@build/mac/starc-setup.dmg" https://starc.app/api/app/updates/publish
-          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=mac" -F "version=${{env.APP_VERSION}} dev ${{env.DEV_BUILD}}" https://starc.app/api/app/updates/notify
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=mac" -F "qt=6" -F "version=${{env.APP_VERSION}} dev ${{env.DEV_BUILD}}" https://starc.app/api/app/updates/notify
 
       - name: Publish artifacts to the GitHub releases
         uses: softprops/action-gh-release@v1
@@ -98,4 +179,4 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         shell: bash
         run: |
-          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=mac" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=mac" -F "qt=6" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify

@@ -1017,7 +1017,8 @@ QString TextModel::mimeFromSelection(const QModelIndex& _from, int _fromPosition
                 if (textItem == fromItem && textItem == toItem) {
                     xml += { textItem, _fromPosition, _toPosition - _fromPosition };
                 } else if (textItem == fromItem) {
-                    xml += { textItem, _fromPosition, textItem->text().length() - _fromPosition };
+                    xml += { textItem, _fromPosition,
+                             static_cast<int>(textItem->text().length()) - _fromPosition };
                 } else if (textItem == toItem) {
                     xml += { textItem, 0, _toPosition };
                 } else {
