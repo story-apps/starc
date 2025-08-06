@@ -121,5 +121,4 @@ public:
      * @brief Запретить вводить несколько пробелов подряд
      */
     std::optional<bool> avoidMultipleSpaces;
-
 };
