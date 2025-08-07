@@ -2,7 +2,6 @@
 
 #include "abstract_slider.h"
 
-#include <QtWidgets/qtwidgetsglobal.h>
 #include <QtWidgets/qwidget.h>
 
 #include <corelib_global.h>

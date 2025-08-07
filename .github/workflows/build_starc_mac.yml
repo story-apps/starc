@@ -59,7 +59,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          make -j2
+          make -j4
 
       - name: Make dmg image
         shell: bash
@@ -140,7 +140,7 @@ jobs:
         shell: bash
         run: |
           cd src
-          make -j2
+          make -j4
 
       - name: Make dmg image
         shell: bash

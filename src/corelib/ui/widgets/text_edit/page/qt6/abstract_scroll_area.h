@@ -2,13 +2,13 @@
 
 #include "frame.h"
 
-#include <QtWidgets/qtwidgetsglobal.h>
+#include <corelib_global.h>
 
 
 class QMargins;
 class PageTextEditScrollBar;
 class AbstractScrollAreaPrivate;
-class AbstractScrollArea : public Frame
+class CORE_LIBRARY_EXPORT AbstractScrollArea : public Frame
 {
     Q_OBJECT
     Q_PROPERTY(Qt::ScrollBarPolicy verticalScrollBarPolicy READ verticalScrollBarPolicy WRITE

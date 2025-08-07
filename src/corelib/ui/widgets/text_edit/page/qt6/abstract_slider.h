@@ -1,11 +1,12 @@
 #pragma once
 
-#include <QtWidgets/qtwidgetsglobal.h>
 #include <QtWidgets/qwidget.h>
+
+#include <corelib_global.h>
 
 
 class AbstractSliderPrivate;
-class AbstractSlider : public QWidget
+class CORE_LIBRARY_EXPORT AbstractSlider : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(int minimum READ minimum WRITE setMinimum)

@@ -22,7 +22,7 @@
   ;Name and file
   Name "Story Architect"
   Caption "Installing application for creating stories"
-  OutFile "starc-setup-32.exe"
+  OutFile "starc-setup-qt5-32.exe"
   BrandingText "Story Apps LLC"
 
   ;Default installation folder
