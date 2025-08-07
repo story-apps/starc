@@ -14,8 +14,8 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  build_windows_64:
-    name: Build Windows 64 version
+  build_windows_64_qt5:
+    name: Build Windows 64 version with qt5
     runs-on: windows-latest
     timeout-minutes: 60
     steps:
@@ -71,6 +71,204 @@ jobs:
         run: |
           cd src
           nmake
+
+      - name: Prepare installer folder
+        shell: bash
+        run: |
+          cd build/windows
+          ./make-exe_qt5_64.sh ${{env.APP_VERSION}}
+
+      - name: Make installer
+        uses: joncloud/makensis-action@v3.4
+        with:
+          arguments: "/V3"
+          script-file: "build/windows/starc_qt5_64.nsi"
+
+      - name: Make archive with portable version
+        uses: vimtor/action-zip@v1
+        with:
+          files: build/windows/files_64
+          dest: build/windows/starc-qt5-64.zip
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows_64 packages with qt5
+          path: |
+            build/windows/starc-setup-qt5-64.exe
+            build/windows/starc-qt5-64.zip
+
+      - name: Publish artifacts to the GitHub releases
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            build/windows/starc-setup-qt5-64.exe
+            build/windows/starc-qt5-64.zip
+
+      - name: Notify clients that stable release published
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows64" -F "qt=5" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
+
+  build_windows_32_qt5:
+    name: Build Windows 32 version with qt5
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Sources for push or create tag event
+        if: github.event_name != 'pull_request'
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.ACTION_RUNNER }}
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Checkout sources for pull request event
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@master
+
+
+      - name: Checkout submodules for pull request event
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+
+      - name: Add info about dev build to the env
+        shell: bash
+        run: |
+          echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 5.15.2
+          arch: win32_msvc2019
+          target: desktop
+          setup-python: false
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          choco install openssl --version=1.1.1.2100 --forcex86
+
+      - name: Configure MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
+
+      - name: Run QMake
+        shell: bash
+        run: |
+          cd src
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
+
+      - name: Build
+        run: |
+          cd src
+          nmake
+
+      - name: Prepare installer folder
+        shell: bash
+        run: |
+          cd build/windows
+          ./make-exe_qt5_32.sh ${{env.APP_VERSION}}
+
+      - name: Make installer
+        uses: joncloud/makensis-action@v3.4
+        with:
+          arguments: "/V3"
+          script-file: "build/windows/starc_qt5_32.nsi"
+
+      - name: Make archive with portable version
+        uses: vimtor/action-zip@v1
+        with:
+          files: build/windows/files_32
+          dest: build/windows/starc-qt5-32.zip
+
+      - name: Collect artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows_32 packages with qt5
+          path: |
+            build/windows/starc-setup-qt5-32.exe
+            build/windows/starc-qt5-32.zip
+
+      - name: Publish artifacts to GitHub releases
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            build/windows/starc-setup-qt5-32.exe
+            build/windows/starc-qt5-32.zip
+
+      - name: Notify clients that stable release published
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows32" F "qt=5" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
+
+  build_windows_64_qt6:
+    name: Build Windows 64 version with qt6
+    runs-on: windows-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout Sources for push or create tag event
+        if: github.event_name != 'pull_request'
+        uses: actions/checkout@master
+        with:
+          token: ${{ secrets.ACTION_RUNNER }}
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Checkout sources for pull request event
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@master
+
+
+      - name: Checkout submodules for pull request event
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+
+      - name: Add info about dev build to the env
+        shell: bash
+        run: |
+          echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 6.8.3
+          arch: win64_msvc2022_64
+          target: desktop
+          setup-python: false
+          modules: "qt5compat qtimageformats qtmultimedia qtspeech qtwebsockets"
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          choco install openssl --version=3.1.1
+          choco install jom
+
+      - name: Configure MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Run QMake
+        shell: bash
+        run: |
+          cd src
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
+
+      - name: Build
+        run: |
+          cd src
+          jom -j4
 
       - name: Prepare installer folder
         shell: bash
@@ -152,145 +350,4 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         shell: bash
         run: |
-          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows64" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
-
-  build_windows_32:
-    name: Build Windows 32 version
-    runs-on: windows-latest
-    timeout-minutes: 60
-    steps:
-      - name: Checkout Sources for push or create tag event
-        if: github.event_name != 'pull_request'
-        uses: actions/checkout@master
-        with:
-          token: ${{ secrets.ACTION_RUNNER }}
-          submodules: recursive
-          fetch-depth: 0
-
-      - name: Checkout sources for pull request event
-        if: github.event_name == 'pull_request'
-        uses: actions/checkout@master
-
-
-      - name: Checkout submodules for pull request event
-        if: github.event_name == 'pull_request'
-        shell: bash
-        run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
-
-      - name: Add info about dev build to the env
-        shell: bash
-        run: |
-          echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
-
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: 5.15.2
-          arch: win32_msvc2019
-          target: desktop
-          setup-python: false
-
-      - name: Install dependencies
-        shell: bash
-        run: |
-          choco install openssl --version=1.1.1.2100 --forcex86
-
-      - name: Configure MSVC
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: x86
-
-      - name: Run QMake
-        shell: bash
-        run: |
-          cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
-
-      - name: Build
-        run: |
-          cd src
-          nmake
-
-      - name: Prepare installer folder
-        shell: bash
-        run: |
-          cd build/windows
-          ./make-exe_32.sh ${{env.APP_VERSION}}
-
-      - name: Make installer
-        uses: joncloud/makensis-action@v3.4
-        with:
-          arguments: "/V3"
-          script-file: "build/windows/starc_32.nsi"
-
-      - name: Make archive with portable version
-        uses: vimtor/action-zip@v1
-        with:
-          files: build/windows/files_32
-          dest: build/windows/starc-32.zip
-
-      - name: Update manifest
-        shell: pwsh
-        env:
-          APPXMANIFEST_PATH: build\windows\msix\AppxManifest.xml
-          BUILD_VERSION: ${{ env.APP_VERSION }}.0
-        run: |
-          $xml = [xml](Get-Content $env:APPXMANIFEST_PATH)
-          $xml.Package.Identity.ProcessorArchitecture = "x86"
-          $xml.Package.Identity.Version = $env:BUILD_VERSION
-          $xml.save($env:APPXMANIFEST_PATH)
-
-      - name: Build MSIX package
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Path build/windows/files_32/images
-          Copy-Item -Path build/windows/msix/visual-elements/* -Destination build/windows/files_32/images -Recurse
-          cp build/windows/msix/AppxManifest.xml build/windows/files_32
-          $env:PATH = $env:PATH + ";C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x86"
-          makeappx.exe pack /d build/windows/files_32 /p build/windows/starc-package-32.msix
-
-
-      - name: Collect artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows_32 packages
-          path: |
-            build/windows/starc-setup-32.exe
-            build/windows/starc-32.zip
-            build/windows/starc-package-32.msix
-
-      - name: Publish artifacts to the dev stream and notify clients
-        if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/') != true
-        shell: pwsh
-        env:
-          STARC_API_KEY: ${{ secrets.STARC_API_KEY }}
-          BUILD_VERSION: ${{env.APP_VERSION}} dev ${{env.DEV_BUILD}}
-        run: |
-          $PublishForm = @{
-            api_key = $env:STARC_API_KEY
-            name_for_file = 'starc-setup-32.exe'
-            file_bin = Get-Item -Path 'build\windows\starc-setup-32.exe'
-          }
-          Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/publish' -Method Post -Form $PublishForm
-          $NotifyForm = @{
-            api_key = $env:STARC_API_KEY
-            system = 'windows32'
-            version = $env:BUILD_VERSION
-          }
-          Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/notify' -Method Post -Form $NotifyForm
-
-      - name: Publish artifacts to GitHub releases
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            build/windows/starc-setup-32.exe
-            build/windows/starc-32.zip
-            build/windows/starc-package-32.msix
-
-      - name: Notify clients that stable release published
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: bash
-        run: |
-          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows32" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
+          curl -F "api_key=${{ secrets.STARC_API_KEY }}" -F "system=windows64" -F "qt=6" -F "version=${{env.APP_VERSION}}" https://starc.app/api/app/updates/notify
