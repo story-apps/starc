@@ -292,15 +292,6 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     }
 
     editor()->setTextCursorForced(cursor);
-
-    //
-    // Если курсор в абзаце с таблицей, а под таблицей ничего нет, то добавим блок вниз,
-    //
-    if (cursor.atEnd()
-        && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::PageSplitter) {
-        cursor.movePosition(QTextCursor::PreviousBlock);
-        editor()->addParagraph(TextParagraphType::Action);
-    }
 }
 
 void StandardKeyHandler::handlePageUp(QKeyEvent* _event)

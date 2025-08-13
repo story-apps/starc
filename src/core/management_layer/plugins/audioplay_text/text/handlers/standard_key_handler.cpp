@@ -307,7 +307,8 @@ void StandardKeyHandler::handleDown(QKeyEvent* _event)
     //
     if (cursor.atEnd()
         && TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::PageSplitter) {
-        cursor.movePosition(QTextCursor::PreviousBlock);
+        cursor.clearSelection();
+        editor()->setTextCursor(cursor);
         editor()->addParagraph(TextParagraphType::Cue);
     }
 }
