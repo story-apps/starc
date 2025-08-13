@@ -29,6 +29,13 @@ public:
 
 protected:
     /**
+     * @brief Дополнительная функция для обработки нажатий самим редактором
+     * @return Обработано ли событие
+     * @note В наследниках необходимо вызывать вручную при необходимости
+     */
+    bool keyPressEventReimpl(QKeyEvent* _event) override;
+
+    /**
      * @brief Обрабатываем специфичные ситуации для редактора сценария
      */
     bool updateEnteredText(const QKeyEvent* _event) override;

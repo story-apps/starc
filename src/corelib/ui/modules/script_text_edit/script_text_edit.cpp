@@ -1,6 +1,5 @@
 #include "script_text_edit.h"
 
-#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/templates/text_template.h>
 #include <utils/helpers/text_helper.h>
 
@@ -63,6 +62,35 @@ void ScriptTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
     //
     setVerticalScroll(verticalScrollValue);
     setHorizontalScroll(horizontalScrollValue);
+}
+
+bool ScriptTextEdit::keyPressEventReimpl(QKeyEvent* _event)
+{
+    //
+    // Стандартно обрабатываем в базовом классе
+    //
+    const bool isEventHandled = BaseTextEdit::keyPressEventReimpl(_event);
+    //
+    // ... если это было вырезание и курсор остался в пустом контейнере таблицы, то нужно его
+    //     удалить, чтобы он не оставлял за собой артефакта в виде открывающего/закрывающего блока
+    //
+    if (_event == QKeySequence::Cut) {
+        auto cursor = textCursor();
+        if (cursor.block().text().isEmpty()
+            && BusinessLayer::TextBlockStyle::forCursor(cursor)
+                == BusinessLayer::TextParagraphType::PageSplitter) {
+            if (!cursor.atStart()) {
+                cursor.deletePreviousChar();
+                cursor.movePosition(QTextCursor::PreviousCharacter);
+            } else {
+                cursor.deleteChar();
+                cursor.movePosition(QTextCursor::NextCharacter);
+            }
+            setTextCursor(cursor);
+        }
+    }
+
+    return isEventHandled;
 }
 
 bool ScriptTextEdit::updateEnteredText(const QKeyEvent* _event)
