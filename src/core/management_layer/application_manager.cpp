@@ -25,6 +25,8 @@
 #include <business_layer/model/comic_book/text/comic_book_text_model.h>
 #include <business_layer/model/screenplay/screenplay_information_model.h>
 #include <business_layer/model/screenplay/text/screenplay_text_model.h>
+#include <business_layer/model/stageplay/stageplay_information_model.h>
+#include <business_layer/model/stageplay/text/stageplay_text_model.h>
 #include <data_layer/mapper/document_change_mapper.h>
 #include <data_layer/mapper/mapper_facade.h>
 #include <data_layer/storage/document_image_storage.h>
@@ -2028,7 +2030,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     writingSessionManager->startSession(currentProject->uuid(), currentProject->name());
 
 #ifdef PRINT_DOCUMENT_HISTORY
-    const QUuid uuid("{03084088-e0fd-428a-bff1-bb65cfd32d65}");
+    const QUuid uuid("{0a0249bb-c8f4-4ac7-916c-ab461bfb764b}");
     //
     // Character
     //
@@ -2041,28 +2043,39 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     //
     // Screenplay text
     //
-    BusinessLayer::ScreenplayTextModel model;
-    BusinessLayer::ScreenplayInformationModel informationModel;
-    model.setInformationModel(&informationModel);
-    auto document = Domain::ObjectsBuilder::createDocument(
-        {}, {}, Domain::DocumentObjectType::ScreenplayText, {}, {});
+    // BusinessLayer::ScreenplayTextModel model;
+    // BusinessLayer::ScreenplayInformationModel informationModel;
+    // model.setInformationModel(&informationModel);
+    // auto document = Domain::ObjectsBuilder::createDocument(
+    //     {}, {}, Domain::DocumentObjectType::ScreenplayText, {}, {});
 
     //
     // Comic book text
     //
-    // BusinessLayer::ComicBookTextModel model;
-    // BusinessLayer::ComicBookInformationModel informationModel;
+    BusinessLayer::ComicBookTextModel model;
+    BusinessLayer::ComicBookInformationModel informationModel;
+    model.setInformationModel(&informationModel);
+    BusinessLayer::ComicBookDictionariesModel dictionariesModel;
+    model.setDictionariesModel(&dictionariesModel);
+    auto document = Domain::ObjectsBuilder::createDocument(
+        {}, {}, Domain::DocumentObjectType::ComicBookText, {}, {});
+
+    //
+    // Stageplay text
+    //
+    // BusinessLayer::StageplayTextModel model;
+    // BusinessLayer::StageplayInformationModel informationModel;
     // model.setInformationModel(&informationModel);
-    // BusinessLayer::ComicBookDictionariesModel dictionariesModel;
-    // model.setDictionariesModel(&dictionariesModel);
     // auto document = Domain::ObjectsBuilder::createDocument(
-    //     {}, {}, Domain::DocumentObjectType::ComicBookText, {}, {});
+    //     {}, {}, Domain::DocumentObjectType::StageplayText, {}, {});
 
     model.setDocument(document);
     const auto changes = DataMappingLayer::MapperFacade::documentChangeMapper()->findAll(uuid);
     for (int index = 0; index < changes.size(); ++index) {
-        qDebug() << "Applying change number" << index;
         const auto change = changes[index];
+        qDebug() << "Applying change number" << index << change->uuid();
+        qDebug() << "Undo patch is\n\n"
+                 << QByteArray::fromPercentEncoding(change->undoPatch()).constData();
         model.applyDocumentChanges({ change->redoPatch() });
     }
     qDebug() << qUtf8Printable(model.document()->content());
