@@ -2028,7 +2028,7 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     writingSessionManager->startSession(currentProject->uuid(), currentProject->name());
 
 #ifdef PRINT_DOCUMENT_HISTORY
-    const QUuid uuid("{78e9a213-46e4-4529-9363-f8ac12308b75}");
+    const QUuid uuid("{03084088-e0fd-428a-bff1-bb65cfd32d65}");
     //
     // Character
     //
@@ -2041,26 +2041,27 @@ void ApplicationManager::Implementation::goToEditCurrentProject(bool _afterProje
     //
     // Screenplay text
     //
-    //    BusinessLayer::ScreenplayTextModel model;
-    //    BusinessLayer::ScreenplayInformationModel informationModel;
-    //    model.setInformationModel(&informationModel);
-    // auto document = Domain::ObjectsBuilder::createDocument(
-    // {}, {}, Domain::DocumentObjectType::ScreenplayText, {}, {});
+    BusinessLayer::ScreenplayTextModel model;
+    BusinessLayer::ScreenplayInformationModel informationModel;
+    model.setInformationModel(&informationModel);
+    auto document = Domain::ObjectsBuilder::createDocument(
+        {}, {}, Domain::DocumentObjectType::ScreenplayText, {}, {});
 
     //
     // Comic book text
     //
-    BusinessLayer::ComicBookTextModel model;
-    BusinessLayer::ComicBookInformationModel informationModel;
-    model.setInformationModel(&informationModel);
-    BusinessLayer::ComicBookDictionariesModel dictionariesModel;
-    model.setDictionariesModel(&dictionariesModel);
-    auto document = Domain::ObjectsBuilder::createDocument(
-        {}, {}, Domain::DocumentObjectType::ComicBookText, {}, {});
+    // BusinessLayer::ComicBookTextModel model;
+    // BusinessLayer::ComicBookInformationModel informationModel;
+    // model.setInformationModel(&informationModel);
+    // BusinessLayer::ComicBookDictionariesModel dictionariesModel;
+    // model.setDictionariesModel(&dictionariesModel);
+    // auto document = Domain::ObjectsBuilder::createDocument(
+    //     {}, {}, Domain::DocumentObjectType::ComicBookText, {}, {});
 
     model.setDocument(document);
     const auto changes = DataMappingLayer::MapperFacade::documentChangeMapper()->findAll(uuid);
     for (int index = 0; index < changes.size(); ++index) {
+        qDebug() << "Applying change number" << index;
         const auto change = changes[index];
         model.applyDocumentChanges({ change->redoPatch() });
     }
@@ -2313,7 +2314,7 @@ ApplicationManager::ApplicationManager(QObject* _parent)
                    PlatformHelper::systemSavebleFileName(
                        QDateTime::currentDateTime().toString(Qt::ISODateWithMs)));
     const auto loggingLevel =
-#ifdef QT_DEBUG
+#if defined(QT_DEBUG) || (defined(DEV_BUILD) && DEV_BUILD > 0)
         Log::Level::Trace;
 #else
         Log::Level::Debug;
