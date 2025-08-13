@@ -564,7 +564,7 @@ ContextMenu* BaseTextEdit::createContextMenu(const QPoint& _position, QWidget* _
     if (d->pasteAsPlainTextAvailable && !QGuiApplication::clipboard()->text().isEmpty()) {
         auto pasteAsPlainTextAction = new QAction(menu);
         pasteAsPlainTextAction->setIconText(u8"\U000f68c0");
-        pasteAsPlainTextAction->setText(tr("Paste as plain text"));
+        pasteAsPlainTextAction->setText(tr("Paste without formatting"));
         pasteAsPlainTextAction->setWhatsThis(
             QKeySequence("Ctrl+Shift+V").toString(QKeySequence::NativeText));
         connect(pasteAsPlainTextAction, &QAction::triggered, this,
