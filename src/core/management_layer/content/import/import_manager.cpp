@@ -531,9 +531,6 @@ void ImportManager::importNovel(const QString& _filePath)
 void ImportManager::importToDocument(const QString& _filePath, const QUuid& _documentUuid,
                                      Domain::DocumentObjectType _type)
 {
-    //
-    // TODO: здесь будет магия импорта при создании документа
-    //
     switch (_type) {
     case Domain::DocumentObjectType::Presentation: {
         BusinessLayer::ImportOptions options;

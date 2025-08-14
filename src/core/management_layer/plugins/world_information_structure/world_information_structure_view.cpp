@@ -62,9 +62,6 @@ WorldInformationStructureView::Implementation::Implementation(QWidget* _parent)
     traits->setContextMenuPolicy(Qt::NoContextMenu);
     traits->setSelectionMode(QAbstractItemView::SingleSelection);
 
-    //
-    // TODO: подобрать иконки
-    //
     auto createItem = [](const QString& _icon) {
         auto item = new QStandardItem;
         item->setData(_icon, Qt::DecorationRole);

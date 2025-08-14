@@ -605,26 +605,16 @@ void LocationModel::initDocument()
     }
     d->oneSentenceDescription = load(kOneSentenceDescriptionKey);
     d->longDescription = load(kLongDescriptionKey);
-    //
-    // TODO: выпилить старый метод на считываниме главного изображения в версии 0.4.0
-    //
-    if (contains(kMainPhotoKey)) {
-        const auto uuid = QUuid::fromString(load(kMainPhotoKey));
-        if (!uuid.isNull()) {
-            d->photos.append({ uuid, imageWrapper()->load(uuid) });
-        }
-    } else {
-        const auto photosNode = documentNode.firstChildElement(kPhotosKey);
-        if (!photosNode.isNull()) {
-            auto photoNode = photosNode.firstChildElement(kPhotoKey);
-            while (!photoNode.isNull()) {
-                const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
-                if (!uuid.isNull()) {
-                    d->photos.append({ uuid, imageWrapper()->load(uuid) });
-                }
-
-                photoNode = photoNode.nextSiblingElement();
+    const auto photosNode = documentNode.firstChildElement(kPhotosKey);
+    if (!photosNode.isNull()) {
+        auto photoNode = photosNode.firstChildElement(kPhotoKey);
+        while (!photoNode.isNull()) {
+            const auto uuid = QUuid::fromString(TextHelper::fromHtmlEscaped(photoNode.text()));
+            if (!uuid.isNull()) {
+                d->photos.append({ uuid, imageWrapper()->load(uuid) });
             }
+
+            photoNode = photoNode.nextSiblingElement();
         }
     }
     auto relationsNode = documentNode.firstChildElement(kRoutesKey);

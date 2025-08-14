@@ -670,12 +670,6 @@ void ScreenplayDictionariesModel::initDocument()
                 = QUuid(resourceCategoryNode.attributeNode(kItemUuidAttribute).value());
             resourceCategory.name = TextHelper::fromHtmlEscaped(resourceCategoryNode.text());
             resourceCategory.icon = resourceCategoryNode.attributeNode(kItemIconAttribute).value();
-            //
-            // FIXME: выпилить в версии 0.6.0
-            //
-            if (resourceCategory.icon.isEmpty()) {
-                resourceCategory.icon = u8"\U000F0766";
-            }
             if (resourceCategoryNode.hasAttribute(kItemColorAttribute)) {
                 resourceCategory.color
                     = resourceCategoryNode.attributeNode(kItemColorAttribute).value();
@@ -683,14 +677,6 @@ void ScreenplayDictionariesModel::initDocument()
             resourceCategory.hasIds = resourceCategoryNode.hasAttribute(kItemHasIdsAttribute);
             d->resourceCategories.append(resourceCategory);
             resourceCategoryNode = resourceCategoryNode.nextSiblingElement();
-        }
-
-        //
-        // Для старых проектов тоже создадим категории
-        // FIXME: Выпилить в версии 0.6.0
-        //
-        if (d->resourceCategories.isEmpty()) {
-            createCategories();
         }
     }
     //

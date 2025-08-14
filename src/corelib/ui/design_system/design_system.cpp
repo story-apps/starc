@@ -103,18 +103,8 @@ DesignSystem::Color::Color(const QString& _color)
     setOnError(nextColor());
     setShadow(nextColor());
     setOnShadow(nextColor());
-
-    //
-    // TODO: Выпилить со временем
-    //
-    const auto colorName = nextColor();
-    if (colorName.isEmpty()) {
-        setTextEditor(background());
-        setOnTextEditor(onBackground());
-    } else {
-        setTextEditor(colorName);
-        setOnTextEditor(nextColor());
-    }
+    setTextEditor(nextColor());
+    setOnTextEditor(nextColor());
 }
 
 DesignSystem::Color& DesignSystem::Color::operator=(const DesignSystem::Color& _rhs)

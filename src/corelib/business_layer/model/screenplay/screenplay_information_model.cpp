@@ -32,7 +32,6 @@ const QLatin1String kHeaderKey("header");
 const QLatin1String kPrintHeaderOnTitlePageKey("print_header_on_title");
 const QLatin1String kFooterKey("footer");
 const QLatin1String kPrintFooterOnTitlePageKey("print_footer_on_title");
-const QLatin1String kScenesNumbersPrefixKey("scenes_numbers_prefix");
 const QLatin1String kScenesNumbersTemplateKey("scenes_numbers_template");
 const QLatin1String kScenesNumberingStartAtKey("scenes_numbering_start_at");
 const QLatin1String kIsScenesNumberingLockedKey("is_scenes_numbering_locked");
@@ -714,15 +713,7 @@ void ScreenplayInformationModel::initDocument()
     d->footer = documentNode.firstChildElement(kFooterKey).text();
     d->printFooterOnTitlePage
         = documentNode.firstChildElement(kPrintFooterOnTitlePageKey).text() == "true";
-    //
-    // TODO: выпилить в одной из будущих версий
-    //
-    if (!documentNode.firstChildElement(kScenesNumbersPrefixKey).isNull()) {
-        d->scenesNumbersTemplate
-            = documentNode.firstChildElement(kScenesNumbersPrefixKey).text() + "#.";
-    } else {
-        d->scenesNumbersTemplate = documentNode.firstChildElement(kScenesNumbersTemplateKey).text();
-    }
+    d->scenesNumbersTemplate = documentNode.firstChildElement(kScenesNumbersTemplateKey).text();
     const auto scenesNumberingStartAtNode
         = documentNode.firstChildElement(kScenesNumberingStartAtKey);
     if (!scenesNumberingStartAtNode.isNull()) {

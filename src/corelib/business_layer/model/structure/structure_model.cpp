@@ -237,7 +237,7 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
                                         bool _visible, int _episodesAmount)
 {
     //
-    // ATTENTION: В ProjectManager::addDocument и ProjectManager::add(something) есть копипаста
+    // ATTENTION: В ProjectManager::storeDocument и ProjectManager::store(something) есть копипаста
     // отсюда, быть внимательным при обновлении
     //
 
@@ -414,14 +414,6 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
         break;
     }
     case DocumentObjectType::World: {
-        //
-        // FIXME: SAD-811 выпилить в версии 0.6.0
-        //
-        auto worldsItem = itemForType(Domain::DocumentObjectType::Worlds);
-        if (worldsItem == nullptr) {
-            appendItem(createItem(Domain::DocumentObjectType::Worlds, tr("Worlds")), parentItem);
-        }
-
         parentItem = itemForType(Domain::DocumentObjectType::Worlds);
         Q_ASSERT(parentItem);
         appendItem(createItem(_type, _name.toUpper()), parentItem, _content);
