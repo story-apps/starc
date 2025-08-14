@@ -28,7 +28,7 @@ const QRegularExpression kPlaceContainsChecker(
  * @brief Регулярное выражение для определения строки, начинающейся с номера
  */
 const QRegularExpression kStartFromNumberChecker(
-    "^([\\d]{1,}[\\d\\S]{0,})([.]|[-]|)(([\\d\\S]{1,})([.]|)|) [^\\d]");
+    "^([\\d]{1,}[\\d\\S]{0,})([.]|[-]|)(([\\d\\S]{1,})([.]|)|)[ \\t]{1,}[^\\d]");
 
 /**
  * @brief Регулярное выражение для определения служебных блоков на разрывах страниц
@@ -503,7 +503,7 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
     //
     // Определим текст блока
     //
-    const QString blockText = _cursor.block().text();
+    const QString blockText = _cursor.block().text().trimmed();
     const QString blockTextUppercase = TextHelper::smartToUpper(blockText);
     const QString blockTextWithoutParentheses
         = _cursor.block().text().remove(kTextInParenthesisChecker);
