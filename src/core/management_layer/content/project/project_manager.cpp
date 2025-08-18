@@ -3866,9 +3866,16 @@ QVector<Domain::DocumentObject*> ProjectManager::unsyncedDocuments() const
         const auto unsyncedDocuments = StorageFacade::documentChangeStorage()->unsyncedDocuments();
         for (const auto& documentUuid : unsyncedDocuments) {
             auto document = StorageFacade::documentStorage()->document(documentUuid);
+            //
+            // ... если документ не был удалён, то добавим его к синхронизации
+            //
             if (document != nullptr) {
                 documents.append(document);
-            } else {
+            }
+            //
+            // ... иначе удаляем все несинхронизированные изменения удалённого документа
+            //
+            else {
                 const auto unsyncedDocumentChanges
                     = StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(documentUuid);
                 for (auto change : unsyncedDocumentChanges) {
@@ -3882,6 +3889,10 @@ QVector<Domain::DocumentObject*> ProjectManager::unsyncedDocuments() const
 
 void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo)
 {
+    if (_documentInfo.content.isEmpty() && _documentInfo.changes.isEmpty()) {
+        return;
+    }
+
     Log::trace("Merge content for document %1", _documentInfo.uuid.toString());
 
     const auto syncDatetime = QDateTime::currentDateTimeUtc();
@@ -3971,6 +3982,9 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
 
     //
     // Пробуем накатить несинхронизированные изменения
+    // NOTE: content всегда присутствует в сообщении от сервера, поэтому несинхронизированные
+    //       изменения будут пробоваться примениться именно к акутальной версии документа в облачном
+    //       сервисе
     //
     if (!unsyncedChanges.isEmpty()) {
         changes.clear();
