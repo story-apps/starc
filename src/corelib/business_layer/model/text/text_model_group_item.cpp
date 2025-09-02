@@ -201,7 +201,7 @@ bool TextModelGroupItem::setNumber(int _number, const QString& _followNumber)
         const unsigned alphabetLen = 'Z' - 'A' + 1;
         unsigned sceneLetter = _number % alphabetLen;
         unsigned sceneLetterNumber = _number / alphabetLen;
-        numberText = ('A' + QChar(sceneLetter));
+        numberText = QChar('A' + sceneLetter);
         if (sceneLetterNumber != 0) {
             numberText += QString::number(sceneLetterNumber);
         }
