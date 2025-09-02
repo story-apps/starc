@@ -176,11 +176,13 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
             topCursorPosition = cursor.selectionInterval().from;
             bottomCursorPosition = cursor.selectionInterval().to;
 
+            // ... если в конце выделения идёт завершение таблицы, то нужно удалять за пределы
+            //     таблицы, чтобы не оставлять висящих блоков завершения разделения
+            //
             const auto bottomBlock = document()->findBlock(bottomCursorPosition);
-            if (TextBlockStyle::forBlock(bottomBlock) == TextParagraphType::PageSplitter) {
-                bottomCursorPosition = bottomBlock.position() + bottomBlock.length()
-                    - 1; // отнимаем единицу, т.к. длина блока всегда включает перенос строки (даже
-                         // в пустом документе)
+            if (TextBlockStyle::forBlock(bottomBlock) == TextParagraphType::PageSplitter
+                && bottomBlock.next().isValid()) {
+                bottomCursorPosition += 1;
             }
         } else {
             topCursorPosition = cursor.position() - (_backward ? 1 : 0);
@@ -712,6 +714,17 @@ void TextCursor::removeCharacters(bool _backward, BaseTextEdit* _editor)
         cursor.setPosition(topCursorPosition);
         cursor.setPosition(bottomCursorPosition, QTextCursor::KeepAnchor);
         cursor.removeSelectedText();
+
+        //
+        // Если после удаления, курсор находится в конце документа, и попадает в оставшийся от
+        // таблицы абзац без контента, нужно его тоже удалить
+        //
+        if (TextBlockStyle::forBlock(cursor.block()) == TextParagraphType::PageSplitter
+            && !cursor.inTable()) {
+            if (cursor.atEnd()) {
+                cursor.deletePreviousChar();
+            }
+        }
 
         //
         // Положим корректные данные в блок
