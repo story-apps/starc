@@ -2362,20 +2362,21 @@ ChangeCursor TextModel::applyPatch(const QByteArray& _patch)
         //
         if (!movedSiblingItems.isEmpty() && movedSiblingItems.constFirst() == _item) {
             //
-            // Удалим сам якорный элемент
+            // ... удалим сам якорный элемент
             //
             movedSiblingItems.removeFirst();
             //
-            // То перенесём их в след за предводителем
+            // ... перенесём следующие элементы за предводителем
             //
-            for (auto siblingItem : reversed(movedSiblingItems)) {
-                takeItem(siblingItem);
-                insertItem(siblingItem, _item);
+            if (!movedSiblingItems.isEmpty()) {
+                takeItems(movedSiblingItems.constFirst(), movedSiblingItems.constLast(),
+                          movedSiblingItems.constFirst()->parent());
+                insertItems(movedSiblingItems, _item);
+                //
+                // ... и очистим список для будущих свершений
+                //
+                movedSiblingItems.clear();
             }
-            //
-            // и очистим список для будущих свершений
-            //
-            movedSiblingItems.clear();
         }
 
         return true;

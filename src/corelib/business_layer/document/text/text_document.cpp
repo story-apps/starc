@@ -821,17 +821,18 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                 //
                 d->correctPositionsToItems(cursor.position(), -1 * positionsCorrectionDelta);
                 //
-                // ... удалим сам блок и при этом нужно сохранить данные блока и его формат
+                // ... удалим сам блок и при этом нужно сохранить данные и формат предыдущего блока
                 //
-                auto block = cursor.block().previous();
-                TextBlockData* blockData = nullptr;
-                if (block.userData() != nullptr) {
-                    blockData = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
+                const auto previousBlock = cursor.block().previous();
+                TextBlockData* previousBlockData = nullptr;
+                if (previousBlock.userData() != nullptr) {
+                    previousBlockData
+                        = new TextBlockData(static_cast<TextBlockData*>(previousBlock.userData()));
                 }
-                const auto blockFormat = cursor.block().previous().blockFormat();
+                const auto previousBlockFormat = previousBlock.blockFormat();
                 cursor.deletePreviousChar();
-                cursor.block().setUserData(blockData);
-                cursor.setBlockFormat(blockFormat);
+                cursor.block().setUserData(previousBlockData);
+                cursor.setBlockFormat(previousBlockFormat);
                 d->correctPositionsToItems(cursor.position(), -1);
 
                 //
@@ -980,11 +981,11 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
             }
 
             //
-            // Если происходит удаление разделителя таблицы, то удаляем таблицу,
+            // Если происходит удаление одного лишь разделителя таблицы, то удаляем таблицу,
             // а все блоки переносим за таблицу
             //
             auto item = d->model->itemForIndex(fromIndex);
-            if (item->type() == TextModelItemType::Splitter) {
+            if (_from == _to && item->type() == TextModelItemType::Splitter) {
                 auto splitterItem = static_cast<TextModelSplitterItem*>(item);
 
                 //
@@ -1225,16 +1226,16 @@ void TextDocument::setModel(BusinessLayer::TextModel* _model, bool _canChangeMod
                     //
                     // ... и при этом нужно сохранить данные блока и его формат
                     //
-                    TextBlockData* blockData = nullptr;
-                    auto block = cursor.block().previous();
-                    if (block.userData() != nullptr) {
-                        blockData
-                            = new TextBlockData(static_cast<TextBlockData*>(block.userData()));
+                    const auto previousBlock = cursor.block().previous();
+                    TextBlockData* previousBlockData = nullptr;
+                    if (previousBlock.userData() != nullptr) {
+                        previousBlockData = new TextBlockData(
+                            static_cast<TextBlockData*>(previousBlock.userData()));
                     }
-                    const auto blockFormat = cursor.block().previous().blockFormat();
+                    const auto previousBlockFormat = previousBlock.blockFormat();
                     cursor.deletePreviousChar();
-                    cursor.block().setUserData(blockData);
-                    cursor.setBlockFormat(blockFormat);
+                    cursor.block().setUserData(previousBlockData);
+                    cursor.setBlockFormat(previousBlockFormat);
                 }
             }
             cursor.endEditBlock();
