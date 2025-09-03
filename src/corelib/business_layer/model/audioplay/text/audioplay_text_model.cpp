@@ -187,7 +187,7 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
     : ScriptTextModel(_parent, createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
-    auto updateCounters = [this](const QModelIndex& _index) {
+    auto updateCounters = [this](const QModelIndex& _index = {}) {
         if (const auto hash = contentHash(); d->lastContentHash != hash) {
             d->updateNumbering();
             d->lastContentHash = hash;
@@ -202,6 +202,7 @@ AudioplayTextModel::AudioplayTextModel(QObject* _parent)
     //
     connect(this, &AudioplayTextModel::afterRowsInserted, this, updateCounters);
     connect(this, &AudioplayTextModel::afterRowsRemoved, this, updateCounters);
+    connect(this, &AudioplayTextModel::modelReset, this, updateCounters);
     //
     // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
     //

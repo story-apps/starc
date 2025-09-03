@@ -624,12 +624,13 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
 
                 const auto pageItem = static_cast<ComicBookTextModelPageItem*>(item->parent());
                 const auto sourcePageTitle = ComicBookPanelParser::panelTitle(block.text());
-                auto newPageTitle = sourcePageTitle;
+                auto newPageTitle = sourcePageTitle.trimmed();
 
                 //
                 // При необходимости обновляем номер страницы
                 //
-                if (!sourcePageTitle.trimmed().endsWith(pageItem->pageNumber()->text)) {
+                if (pageItem->pageNumber().has_value()
+                    && !newPageTitle.endsWith(pageItem->pageNumber()->text)) {
                     newPageTitle.remove(QRegularExpression("(\\d|-)*$"));
                     if (!newPageTitle.endsWith(' ')) {
                         newPageTitle.append(' ');
@@ -663,7 +664,8 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
                 //
                 // При необходимости обновляем номер панели
                 //
-                if (!sourcePanelTitle.trimmed().endsWith(panelItem->panelNumber()->text)) {
+                if (panelItem->panelNumber().has_value()
+                    && !sourcePanelTitle.trimmed().endsWith(panelItem->panelNumber()->text)) {
                     newPanelTitle.remove(QRegularExpression("(\\d|-)*$"));
                     if (!newPanelTitle.endsWith(' ')) {
                         newPanelTitle.append(' ');
@@ -718,6 +720,10 @@ void ComicBookTextCorrector::Implementation::correctBlocksNumbers(int _position,
 
                 const auto textItem = static_cast<TextModelTextItem*>(item);
                 if (textItem->paragraphType() != TextParagraphType::Character) {
+                    break;
+                }
+
+                if (!textItem->number().has_value()) {
                     break;
                 }
 

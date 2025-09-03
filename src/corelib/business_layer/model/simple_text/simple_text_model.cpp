@@ -172,7 +172,7 @@ SimpleTextModel::SimpleTextModel(QObject* _parent)
     connect(this, &SimpleTextModel::dataChanged, this,
             [this](const QModelIndex& _index) { updateDisplayName(_index); });
 
-    auto updateCounters = [this](const QModelIndex& _index) {
+    auto updateCounters = [this](const QModelIndex& _index = {}) {
         if (const auto hash = contentHash(); d->lastContentHash != hash) {
             d->updateNumbering();
             d->lastContentHash = hash;
@@ -188,6 +188,7 @@ SimpleTextModel::SimpleTextModel(QObject* _parent)
     //
     connect(this, &SimpleTextModel::afterRowsInserted, this, updateCounters);
     connect(this, &SimpleTextModel::afterRowsRemoved, this, updateCounters);
+    connect(this, &SimpleTextModel::modelReset, this, updateCounters);
     //
     // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
     //

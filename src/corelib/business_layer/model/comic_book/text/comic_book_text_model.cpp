@@ -202,7 +202,7 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
     : ScriptTextModel(_parent, ComicBookTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
-    auto updateCounters = [this](const QModelIndex& _index) {
+    auto updateCounters = [this](const QModelIndex& _index = {}) {
         if (const auto hash = contentHash(); d->lastContentHash != hash) {
             d->updateNumbering();
             d->lastContentHash = hash;
@@ -218,6 +218,7 @@ ComicBookTextModel::ComicBookTextModel(QObject* _parent)
     //
     connect(this, &ComicBookTextModel::afterRowsInserted, this, updateCounters);
     connect(this, &ComicBookTextModel::afterRowsRemoved, this, updateCounters);
+    connect(this, &ComicBookTextModel::modelReset, this, updateCounters);
     //
     // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
     //

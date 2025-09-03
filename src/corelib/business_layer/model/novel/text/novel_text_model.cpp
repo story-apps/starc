@@ -165,7 +165,7 @@ NovelTextModel::NovelTextModel(QObject* _parent)
     : ScriptTextModel(_parent, NovelTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
-    auto updateCounters = [this](const QModelIndex& _index) {
+    auto updateCounters = [this](const QModelIndex& _index = {}) {
         if (const auto hash = contentHash(); d->lastContentHash != hash) {
             d->updateNumbering();
             d->lastContentHash = hash;
@@ -180,6 +180,7 @@ NovelTextModel::NovelTextModel(QObject* _parent)
     //
     connect(this, &NovelTextModel::afterRowsInserted, this, updateCounters);
     connect(this, &NovelTextModel::afterRowsRemoved, this, updateCounters);
+    connect(this, &NovelTextModel::modelReset, this, updateCounters);
     //
     // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
     //

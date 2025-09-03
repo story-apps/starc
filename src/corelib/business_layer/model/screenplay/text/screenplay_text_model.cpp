@@ -126,7 +126,7 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
     : ScriptTextModel(_parent, ScreenplayTextModel::createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
-    auto updateCounters = [this](const QModelIndex& _index) {
+    auto updateCounters = [this](const QModelIndex& _index = {}) {
         if (const auto hash = contentHash(); d->lastContentHash != hash) {
             updateNumbering();
             d->lastContentHash = hash;
@@ -141,6 +141,7 @@ ScreenplayTextModel::ScreenplayTextModel(QObject* _parent)
     //
     connect(this, &ScreenplayTextModel::afterRowsInserted, this, updateCounters);
     connect(this, &ScreenplayTextModel::afterRowsRemoved, this, updateCounters);
+    connect(this, &ScreenplayTextModel::modelReset, this, updateCounters);
     //
     // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
     //

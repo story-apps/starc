@@ -181,7 +181,7 @@ StageplayTextModel::StageplayTextModel(QObject* _parent)
     : ScriptTextModel(_parent, createFolderItem(TextFolderType::Root))
     , d(new Implementation(this))
 {
-    auto updateCounters = [this](const QModelIndex& _index) {
+    auto updateCounters = [this](const QModelIndex& _index = {}) {
         if (const auto hash = contentHash(); d->lastContentHash != hash) {
             d->updateNumbering();
             d->lastContentHash = hash;
@@ -196,6 +196,7 @@ StageplayTextModel::StageplayTextModel(QObject* _parent)
     //
     connect(this, &StageplayTextModel::afterRowsInserted, this, updateCounters);
     connect(this, &StageplayTextModel::afterRowsRemoved, this, updateCounters);
+    connect(this, &StageplayTextModel::modelReset, this, updateCounters);
     //
     // Если модель планируем большое изменение, то планируем отложенное обновление нумерации
     //
