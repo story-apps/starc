@@ -826,10 +826,12 @@ void diff_match_patch::diff_cleanupSemantic(QList<Diff>& diffs)
                 if (overlap_length1 >= deletion.length() / 2.0
                     || overlap_length1 >= insertion.length() / 2.0) {
                     // Overlap found.  Insert an equality and trim the surrounding edits.
-                    pointer.previous();
-                    pointer.insert(Diff(EQUAL, insertion.left(overlap_length1)));
                     prevDiff->text = deletion.left(deletion.length() - overlap_length1);
                     thisDiff->text = safeMid(insertion, overlap_length1);
+                    // pointer.insert affect thisDiff position, that's why we should firstly edit
+                    // prevDiff & thisDiff and then insert equality to the diffs list
+                    pointer.previous();
+                    pointer.insert(Diff(EQUAL, insertion.left(overlap_length1)));
                     // pointer.insert inserts the element before the cursor, so there is
                     // no need to step past the new element.
                 }
@@ -838,12 +840,14 @@ void diff_match_patch::diff_cleanupSemantic(QList<Diff>& diffs)
                     || overlap_length2 >= insertion.length() / 2.0) {
                     // Reverse overlap found.
                     // Insert an equality and swap and trim the surrounding edits.
-                    pointer.previous();
-                    pointer.insert(Diff(EQUAL, deletion.left(overlap_length2)));
                     prevDiff->operation = INSERT;
                     prevDiff->text = insertion.left(insertion.length() - overlap_length2);
                     thisDiff->operation = DELETE;
                     thisDiff->text = safeMid(deletion, overlap_length2);
+                    // pointer.insert affect thisDiff position, that's why we should firstly edit
+                    // prevDiff & thisDiff and then insert equality to the diffs list
+                    pointer.previous();
+                    pointer.insert(Diff(EQUAL, deletion.left(overlap_length2)));
                     // pointer.insert inserts the element before the cursor, so there is
                     // no need to step past the new element.
                 }
