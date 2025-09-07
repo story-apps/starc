@@ -32,6 +32,64 @@ LIBSDIR = ../_build/libs
 INCLUDEPATH += ..
 
 #
+# Подключаем Crashpad
+#
+LIBS += -L$$LIBSDIR/ -lcrashpad_paths
+INCLUDEPATH += $$PWD/../3rd_party/crashpad_paths
+DEPENDPATH += $$PWD/../3rd_party/crashpad_paths
+
+CRASHPAD_SRC = $$PWD/../3rd_party/chromium/crashpad/crashpad
+
+#
+# Если не задана архитектура, по умолчанию устанавливаем x64
+#
+isEmpty(CRASHPAD_ARCH) {
+    CRASHPAD_ARCH = x64
+}
+
+# Определяем путь к объектам crashpad в зависимости от режима сборки
+# Для macOS universal build используем специальный путь
+macx:equals(CRASHPAD_ARCH, universal) {
+    CONFIG(debug, debug|release) {
+        CRASHPAD_OBJ = $$PWD/../../bin/crashpad/debug_universal/obj
+        CRASHPAD_GEN = $$PWD/../../bin/crashpad/debug_universal/gen
+    }
+    CONFIG(release, debug|release) {
+        CRASHPAD_OBJ = $$PWD/../../bin/crashpad/release_universal/obj
+        CRASHPAD_GEN = $$PWD/../../bin/crashpad/release_universal/gen
+    }
+} else {
+    CONFIG(debug, debug|release) {
+        CRASHPAD_OBJ = $$PWD/../../bin/crashpad/debug_$${CRASHPAD_ARCH}/obj
+        CRASHPAD_GEN = $$PWD/../../bin/crashpad/debug_$${CRASHPAD_ARCH}/gen
+    }
+    CONFIG(release, debug|release) {
+        CRASHPAD_OBJ = $$PWD/../../bin/crashpad/release_$${CRASHPAD_ARCH}/obj
+        CRASHPAD_GEN = $$PWD/../../bin/crashpad/release_$${CRASHPAD_ARCH}/gen
+    }
+}
+
+INCLUDEPATH += $$CRASHPAD_SRC
+INCLUDEPATH += $$CRASHPAD_SRC/third_party/mini_chromium/mini_chromium
+INCLUDEPATH += $$CRASHPAD_GEN
+
+LIBS += -L$$CRASHPAD_OBJ/client/ -lcommon
+LIBS += -L$$CRASHPAD_OBJ/client/ -lclient
+LIBS += -L$$CRASHPAD_OBJ/util/ -lutil
+LIBS += -L$$CRASHPAD_OBJ/third_party/mini_chromium/mini_chromium/base/ -lbase
+win32 {
+    LIBS += -lAdvapi32
+}
+macx {
+    LIBS += -L$$CRASHPAD_OBJ/util/ -lmig_output
+
+    LIBS += -L/usr/lib/ -lbsm
+    LIBS += -framework AppKit
+    LIBS += -framework Security
+}
+#
+
+#
 # Подключаем библиотеку corelib
 #
 LIBS += -L$$CORELIBDIR/ -lcorelib
@@ -250,5 +308,5 @@ RESOURCES += \
 
 mac {
     load(resolve_target)
-    QMAKE_POST_LINK += install_name_tool -change libcorelib.1.dylib @executable_path/../Frameworks/libcorelib.dylib $$QMAKE_RESOLVED_TARGET
+    QMAKE_POST_LINK += "install_name_tool -change libcorelib.1.dylib @executable_path/../Frameworks/libcorelib.dylib $$QMAKE_RESOLVED_TARGET"
 }

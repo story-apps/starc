@@ -35,7 +35,7 @@ jobs:
         if: github.event_name == 'pull_request'
         shell: bash
         run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+          git submodule update --init --recursive src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
 
       - name: Add info about dev build to the env
         shell: bash
@@ -63,16 +63,70 @@ jobs:
         with:
           arch: x64
 
+      - name: Build crashpad
+        shell: bash
+        run: |
+          cd build
+          chmod +x ./build_crashpad.sh
+          ./build_crashpad.sh -a x64
+
       - name: Run QMake
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" CRASHPAD_ARCH=x64
 
       - name: Build
         run: |
           cd src
           nmake
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup Rust
+        shell: bash
+        run: |
+          rustup default stable
+          rustc --version
+          cargo --version
+
+      - name: Install dependencies for node-dump-syms
+        shell: bash
+        run: |
+          npm install -g @mapbox/node-pre-gyp cargo-cp-artifact
+
+      - name: Install node-dump-syms
+        run: |
+          npm i -g node-dump-syms
+
+      - name: Upload debug symbols from _build folder
+        uses: BugSplat-Git/symbol-upload@main
+        with:
+          username: "${{ secrets.BUGSPLAT_USER }}"
+          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          database: "${{ secrets.BUGSPLAT_DATABASE }}"
+          application: "starcapp-win"
+          version: ${{env.APP_VERSION}}
+          files: "*.{pdb,exe,dll}"
+          directory: "src/_build"
+          node-version: "22"
+          dumpSyms: true
+
+      - name: Upload debug symbols from _build/plugins folder
+        uses: BugSplat-Git/symbol-upload@main
+        with:
+          username: "${{ secrets.BUGSPLAT_USER }}"
+          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          database: "${{ secrets.BUGSPLAT_DATABASE }}"
+          application: "starcapp-win"
+          version: ${{env.APP_VERSION}}
+          files: "*.{pdb,dll}"
+          directory: "src/_build/plugins"
+          node-version: "22"
+          dumpSyms: true
 
       - name: Prepare installer folder
         shell: bash
@@ -135,7 +189,7 @@ jobs:
         if: github.event_name == 'pull_request'
         shell: bash
         run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+          git submodule update --init --recursive src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
 
       - name: Add info about dev build to the env
         shell: bash
@@ -161,16 +215,70 @@ jobs:
         with:
           arch: x86
 
+      - name: Build crashpad
+        shell: bash
+        run: |
+          cd build
+          chmod +x ./build_crashpad.sh
+          ./build_crashpad.sh -a x86
+
       - name: Run QMake
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" CRASHPAD_ARCH=x86
 
       - name: Build
         run: |
           cd src
           nmake
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup Rust
+        shell: bash
+        run: |
+          rustup default stable
+          rustc --version
+          cargo --version
+
+      - name: Install dependencies for node-dump-syms
+        shell: bash
+        run: |
+          npm install -g @mapbox/node-pre-gyp cargo-cp-artifact
+
+      - name: Install node-dump-syms
+        run: |
+          npm i -g node-dump-syms
+
+      - name: Upload debug symbols from _build folder
+        uses: BugSplat-Git/symbol-upload@main
+        with:
+          username: "${{ secrets.BUGSPLAT_USER }}"
+          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          database: "${{ secrets.BUGSPLAT_DATABASE }}"
+          application: "starcapp-win"
+          version: ${{env.APP_VERSION}}
+          files: "*.{pdb,exe,dll}"
+          directory: "src/_build"
+          node-version: "22"
+          dumpSyms: true
+
+      - name: Upload debug symbols from _build/plugins folder
+        uses: BugSplat-Git/symbol-upload@main
+        with:
+          username: "${{ secrets.BUGSPLAT_USER }}"
+          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          database: "${{ secrets.BUGSPLAT_DATABASE }}"
+          application: "starcapp-win"
+          version: ${{env.APP_VERSION}}
+          files: "*.{pdb,dll}"
+          directory: "src/_build/plugins"
+          node-version: "22"
+          dumpSyms: true
 
       - name: Prepare installer folder
         shell: bash
@@ -233,7 +341,7 @@ jobs:
         if: github.event_name == 'pull_request'
         shell: bash
         run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+          git submodule update --init --recursive src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
 
       - name: Add info about dev build to the env
         shell: bash
@@ -261,16 +369,70 @@ jobs:
         with:
           arch: x64
 
+      - name: Build crashpad
+        shell: bash
+        run: |
+          cd build
+          chmod +x ./build_crashpad.sh
+          ./build_crashpad.sh -a x64
+
       - name: Run QMake
         shell: bash
         run: |
           cd src
-          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD"
+          qmake starc.pro CONFIG+=release DEFINES+="DEV_BUILD=$DEV_BUILD" CRASHPAD_ARCH=x64
 
       - name: Build
         run: |
           cd src
           jom -j4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup Rust
+        shell: bash
+        run: |
+          rustup default stable
+          rustc --version
+          cargo --version
+
+      - name: Install dependencies for node-dump-syms
+        shell: bash
+        run: |
+          npm install -g @mapbox/node-pre-gyp cargo-cp-artifact
+
+      - name: Install node-dump-syms
+        run: |
+          npm i -g node-dump-syms
+
+      - name: Upload debug symbols from _build folder
+        uses: BugSplat-Git/symbol-upload@main
+        with:
+          username: "${{ secrets.BUGSPLAT_USER }}"
+          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          database: "${{ secrets.BUGSPLAT_DATABASE }}"
+          application: "starcapp-win"
+          version: ${{env.APP_VERSION}}
+          files: "*.{pdb,exe,dll}"
+          directory: "src/_build"
+          node-version: "22"
+          dumpSyms: true
+
+      - name: Upload debug symbols from _build/plugins folder
+        uses: BugSplat-Git/symbol-upload@main
+        with:
+          username: "${{ secrets.BUGSPLAT_USER }}"
+          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          database: "${{ secrets.BUGSPLAT_DATABASE }}"
+          application: "starcapp-win"
+          version: ${{env.APP_VERSION}}
+          files: "*.{pdb,dll}"
+          directory: "src/_build/plugins"
+          node-version: "22"
+          dumpSyms: true
 
       - name: Prepare installer folder
         shell: bash

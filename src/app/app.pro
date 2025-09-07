@@ -14,8 +14,6 @@ INCLUDEPATH += ..
 
 LIBS += -L$$DESTDIR
 
-include(../3rd_party/qbreakpad/qBreakpad.pri)
-
 SOURCES += \
         application.cpp \
         main.cpp

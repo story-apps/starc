@@ -1,5 +1,8 @@
 #include "application_manager.h"
 
+#include "client/crash_report_database.h"
+#include "client/crashpad_client.h"
+#include "client/settings.h"
 #include "content/account/account_manager.h"
 #include "content/export/export_manager.h"
 #include "content/import/import_manager.h"
@@ -11,6 +14,7 @@
 #include "content/settings/settings_manager.h"
 #include "content/shortcuts/shortcuts_manager.h"
 #include "content/writing_session/writing_session_manager.h"
+#include "crashpad_paths.h"
 #include "plugins_builder.h"
 
 #ifdef CLOUD_SERVICE_MANAGER
@@ -66,9 +70,12 @@
 #include <utils/validators/email_validator.h>
 
 #include <QApplication>
+#include <QDateTime>
 #include <QDesktopServices>
 #include <QDir>
+#include <QFile>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QFileSystemWatcher>
 #include <QFontDatabase>
 #include <QJsonDocument>
@@ -83,7 +90,9 @@
 #include <QSoundEffect>
 #include <QStandardPaths>
 #include <QStyleFactory>
+#include <QSysInfo>
 #include <QTemporaryFile>
+#include <QTextStream>
 #include <QTimer>
 #include <QTranslator>
 #include <QUuid>
@@ -106,6 +115,22 @@ enum class ApplicationState {
     Working,
     Importing,
 };
+
+QString bugsplatAppName()
+{
+    QString appName("starcapp");
+#if defined(Q_OS_MAC)
+    appName = appName + "-mac";
+#elif defined(Q_OS_WINDOWS)
+    appName = appName + "-win";
+#elif defined(Q_OS_LINUX)
+    appName = appName + "-linux";
+#endif
+    return appName;
+}
+
+const QString kBugsplatDatabaseName("starc-desktop");
+
 } // namespace
 
 class ApplicationManager::Implementation
@@ -213,6 +238,11 @@ public:
      * @brief Задать использование компакстного режима
      */
     void setDesignSystemDensity(int _density);
+
+    /**
+     * @brief Инициализировать сборщик крашдампов
+     */
+    bool initializeCrashpad();
 
     //
     // Работа с проектом
@@ -524,13 +554,50 @@ void ApplicationManager::Implementation::sendStartupStatistics()
 
 void ApplicationManager::Implementation::sendCrashInfo()
 {
-    const auto crashReportsFolderPath
-        = QString("%1/crashreports")
-              .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    const auto crashDumps = QDir(crashReportsFolderPath).entryInfoList(QDir::Files);
-    if (crashDumps.isEmpty()) {
+    CrashpadPaths crashpadPaths;
+
+    //
+    // Открываем базу данных
+    //
+    base::FilePath reportsDir(CrashpadPaths::getPlatformString(crashpadPaths.getReportsPath()));
+    std::unique_ptr<crashpad::CrashReportDatabase> database
+        = crashpad::CrashReportDatabase::Initialize(reportsDir);
+    if (database == nullptr) {
         return;
     }
+
+
+    //
+    // Проверяем, есть ли отчеты (pending и completed)
+    //
+    using Reports = std::vector<crashpad::CrashReportDatabase::Report>;
+    Reports reportsToSend;
+
+    {
+        Reports pendingReports;
+        crashpad::CrashReportDatabase::OperationStatus pendingStatus
+            = database->GetPendingReports(&pendingReports);
+        if (pendingStatus == crashpad::CrashReportDatabase::kNoError && !pendingReports.empty()) {
+            reportsToSend.insert(reportsToSend.end(), pendingReports.begin(), pendingReports.end());
+        }
+    }
+
+    {
+        Reports completedReports;
+        crashpad::CrashReportDatabase::OperationStatus completedStatus
+            = database->GetCompletedReports(&completedReports);
+        if (completedStatus == crashpad::CrashReportDatabase::kNoError
+            && !completedReports.empty()) {
+            reportsToSend.insert(reportsToSend.end(), completedReports.begin(),
+                                 completedReports.end());
+        }
+    }
+
+    if (reportsToSend.empty()) {
+        Log::debug("No reports to show (no pending reports and no recent completed reports)");
+        return;
+    }
+
 
     //
     // Если есть дампы для отправки, то предложим пользователю отправить отчёт об ошибке
@@ -542,77 +609,72 @@ void ApplicationManager::Implementation::sendCrashInfo()
     //
     // Настраиваем соединения диалога
     //
-    connect(dialog, &Ui::CrashReportDialog::sendReportPressed, q, [this, crashDumps, dialog] {
-        //
-        // Сформируем пары <дамп, лог>
-        //
-        const auto logs = QFileInfo(Log::logFilePath()).dir().entryInfoList(QDir::Files);
-        QVector<QPair<QString, QString>> dumpsAndLogs;
-        for (const auto& dump : crashDumps) {
-            for (const auto& log : logs) {
-                if (!log.completeBaseName().startsWith(dump.completeBaseName())) {
+    connect(
+        dialog, &Ui::CrashReportDialog::sendReportPressed, q,
+        [this, database = std::move(database), reportsToSend, dialog] {
+            for (auto& report : reportsToSend) {
+                const QUrl url(QStringLiteral("https://%1.bugsplat.com/post/bp/crash/crashpad.php")
+                                   .arg(kBugsplatDatabaseName));
+
+                //
+                // Проверим наличие файла дампа
+                //
+                if (report.file_path.empty()) {
+                    continue;
+                }
+#if defined(Q_OS_WIN)
+                const QString dmpPath = QString::fromStdWString(report.file_path.value());
+#else
+                const QString dmpPath = QString::fromStdString(report.file_path.value());
+#endif
+                if (!QFile::exists(dmpPath)) {
                     continue;
                 }
 
-                dumpsAndLogs.append({ dump.absoluteFilePath(), log.absoluteFilePath() });
-                break;
+                QString annotationsText;
+                if (!dialog->crashSource().isEmpty()) {
+                    annotationsText += QString("Source: %1\n").arg(dialog->crashSource());
+                }
+                if (!dialog->crashDetails().isEmpty()) {
+                    annotationsText += QString("Details: %1\n").arg(dialog->crashDetails());
+                }
+                if (!dialog->frequency().isEmpty()) {
+                    annotationsText += QString("Frequency: %1\n").arg(dialog->frequency());
+                }
+
+                NetworkRequest* loader = new NetworkRequest(q);
+                loader->setRequestMethod(NetworkRequestMethod::Post);
+                loader->clearRequestAttributes();
+                loader->addRequestAttribute("product", bugsplatAppName());
+                loader->addRequestAttribute("version", QApplication::applicationVersion());
+                loader->addRequestAttribute("qt", QString("Qt") + QT_VERSION_STR);
+                loader->addRequestAttribute("arch", QSysInfo::currentCpuArchitecture());
+                loader->addRequestAttribute("user", dialog->contactEmail());
+                loader->addRequestAttribute("list_annotations", annotationsText);
+                loader->addRequestAttributeFile("upload_file_minidump", dmpPath);
+
+                QObject::connect(loader, &NetworkRequest::downloadComplete,
+                                 [dmpPath](const QByteArray& body, const QUrl&) {
+                                     //
+                                     // Удаляем файл отчёта после успешной отправки
+                                     //
+                                     QFile::remove(dmpPath);
+                                 });
+
+                QObject::connect(loader, &NetworkRequest::error,
+                                 [dmpPath](const QString& err, const QUrl&) {
+                                     Log::info("BugSplat upload failed: " + err);
+                                 });
+
+                QObject::connect(loader, &NetworkRequest::finished, &NetworkRequest::deleteLater);
+                loader->loadAsync(url);
             }
-        }
 
-        //
-        // Отправляем дампы с логами
-        //
-        auto appInfo = [](const QString& logPath) {
-            QFile log(logPath);
-            if (log.open(QIODevice::ReadOnly)) {
-                QString info = log.readLine();
-                info = info.remove("[I] ");
-                return info;
-            }
-            return QString();
-        };
-        for (const auto& dumpAndLog : dumpsAndLogs) {
-            auto loader = new NetworkRequest;
-            QObject::connect(loader, &NetworkRequest::finished, loader, [loader, dumpAndLog] {
-                loader->deleteLater();
-                QFile::remove(dumpAndLog.first);
-                QFile::remove(dumpAndLog.second);
-            });
-            loader->setRequestMethod(NetworkRequestMethod::Post);
-            loader->addRequestAttribute("app_info", appInfo(dumpAndLog.second));
-            loader->addRequestAttribute("email", dialog->contactEmail());
-            loader->addRequestAttribute("username", accountManager->accountInfo().name);
-            loader->addRequestAttribute("frequency", dialog->frequency());
-            loader->addRequestAttribute("crashSource", dialog->crashSource());
-            loader->addRequestAttribute("message", dialog->crashDetails());
-            loader->addRequestAttribute("operating_system",
-#ifdef Q_OS_WIN
-                                        "windows"
-#elif defined Q_OS_LINUX
-                                        "linux"
-#elif defined Q_OS_MAC
-                                        "mac"
-#else
-                                        QSysInfo::kernelType()
-#endif
-            );
-            loader->addRequestAttributeFile("dump", dumpAndLog.first);
-            loader->addRequestAttributeFile("log", dumpAndLog.second);
-            loader->loadAsync("https://starc.app/api/app/feedback/");
-        }
-
-        //
-        // Сохраняем email, если он был введён
-        //
-        if (!dialog->contactEmail().isEmpty() && EmailValidator::isValid(dialog->contactEmail())) {
-            setSettingsValue(DataStorageLayer::kAccountEmailKey, dialog->contactEmail());
-        }
-
-        //
-        // Закрываем диалог
-        //
-        dialog->hideDialog();
-    });
+            //
+            // Закрываем диалог
+            //
+            dialog->hideDialog();
+        });
     connect(dialog, &Ui::CrashReportDialog::disappeared, dialog,
             &Ui::CrashReportDialog::deleteLater);
 
@@ -1216,6 +1278,71 @@ void ApplicationManager::Implementation::setDesignSystemDensity(int _density)
     QApplication::postEvent(q, new DesignSystemChangeEvent);
 }
 
+bool ApplicationManager::Implementation::initializeCrashpad()
+{
+    CrashpadPaths crashpadPaths;
+    base::FilePath handler(CrashpadPaths::getPlatformString(crashpadPaths.getHandlerPath()));
+    base::FilePath reportsDir(CrashpadPaths::getPlatformString(crashpadPaths.getReportsPath()));
+    base::FilePath metricsDir(CrashpadPaths::getPlatformString(crashpadPaths.getMetricsPath()));
+
+    const QString dbName = kBugsplatDatabaseName;
+    const QString appName = bugsplatAppName();
+    const QString appVersion = QApplication::applicationVersion();
+
+    const QString url = "https://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php";
+
+    QMap<std::string, std::string> annotations;
+    annotations["format"] = "minidump";
+    annotations["database"] = dbName.toStdString();
+    annotations["product"] = appName.toStdString();
+    annotations["version"] = appVersion.toStdString();
+
+    //
+    // Убираем лимиты по дампам
+    //
+    std::vector<std::string> arguments;
+    arguments.push_back("--no-rate-limit");
+
+    //
+    // Инициализируем базу данных crashpad
+    //
+    std::unique_ptr<crashpad::CrashReportDatabase> database
+        = crashpad::CrashReportDatabase::Initialize(reportsDir);
+    if (database == nullptr) {
+        return false;
+    }
+
+    //
+    // Отключаем автоматическую отправку отчетов
+    //
+    crashpad::Settings* settings = database->GetSettings();
+    if (settings == nullptr) {
+        return false;
+    }
+    settings->SetUploadsEnabled(false);
+
+    //
+    // Прикрепляем текущий лог-файл к дампу
+    //
+    std::vector<base::FilePath> attachments;
+    const QString logFilePath = q->logFilePath();
+    if (!logFilePath.isEmpty() && QFile::exists(logFilePath)) {
+#if defined(Q_OS_WIN)
+        attachments.push_back(base::FilePath(logFilePath.toStdWString()));
+#else
+        attachments.push_back(base::FilePath(logFilePath.toStdString()));
+#endif
+    }
+
+    //
+    // Запускаем crashpad
+    //
+    crashpad::CrashpadClient* client = new crashpad::CrashpadClient();
+    bool status = client->StartHandler(handler, reportsDir, metricsDir, url.toStdString(),
+                                       annotations.toStdMap(), arguments, true, true, attachments);
+    return status;
+}
+
 void ApplicationManager::Implementation::updateWindowTitle(const QString& _projectName)
 {
     if (projectsManager->currentProject() == nullptr) {
@@ -1732,6 +1859,8 @@ bool ApplicationManager::Implementation::openProject(const QString& _path)
     if (_path.isEmpty()) {
         return false;
     }
+
+    *(volatile int *)0 = 0;
 
     if (projectsManager->project(_path) != nullptr && projectsManager->project(_path)->isLocal()
         && !QFileInfo::exists(_path)) {
@@ -2408,6 +2537,11 @@ ApplicationManager::ApplicationManager(QObject* _parent)
     //
     Log::info("Init business logic between managers");
     initConnections();
+
+    //
+    // Инициилизируем crashpad
+    //
+    d->initializeCrashpad();
 }
 
 ApplicationManager::~ApplicationManager()
