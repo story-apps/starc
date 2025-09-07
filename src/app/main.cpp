@@ -2,7 +2,6 @@
 
 #include <interfaces/management_layer/i_application_manager.h>
 
-#include <QBreakpadHandler.h>
 #include <QDebug>
 #include <QDir>
 #include <QPluginLoader>
@@ -117,16 +116,6 @@ int main(int argc, char* argv[])
     if (applicationManager == nullptr) {
         return 1;
     }
-
-    //
-    // Настраиваем сборщик крашдампов
-    //
-    const auto crashReportsFolderPath
-        = QString("%1/crashreports")
-              .arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    QBreakpadInstance.init(
-        crashReportsFolderPath,
-        qobject_cast<ManagementLayer::IApplicationManager*>(applicationManager)->logFilePath());
 
     //
     // Устанавливаем менеджера в приложение и запускаемся

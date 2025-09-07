@@ -35,7 +35,7 @@ jobs:
         if: github.event_name == 'pull_request'
         shell: bash
         run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+          git submodule update --init --recursive src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
 
       - name: Add info about dev build to the env
         shell: bash
@@ -52,7 +52,14 @@ jobs:
         shell: bash
         run: |
           sudo apt update
-          sudo apt install libgstreamer-plugins-base1.0-0 cmake make pkg-config libx11-dev xcb libx11-xcb-dev libxkbcommon-x11-0 libxkbcommon-dev libgtk-3-dev sassc libfuse2
+          sudo apt install libgstreamer-plugins-base1.0-0 cmake make pkg-config libx11-dev xcb libx11-xcb-dev libxkbcommon-x11-0 libxkbcommon-dev libgtk-3-dev sassc libfuse2 libcurl4-openssl-dev zlib1g-dev
+
+      - name: Build crashpad
+        shell: bash
+        run: |
+          cd build
+          chmod +x ./build_crashpad.sh
+          ./build_crashpad.sh
 
       - name: Run QMake
         shell: bash
@@ -65,6 +72,59 @@ jobs:
         run: |
           cd src
           make -j$(nproc)
+
+      - name: Setup Rust
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          source $HOME/.cargo/env
+          echo "PATH=$PATH:$HOME/.cargo/bin" >> $GITHUB_ENV
+
+      - name: Verify Rust
+        run: |
+          source $HOME/.cargo/env
+          cargo --version
+          rustc --version
+
+      - name: Install dependencies for Node.js
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3
+          npm install -g @mapbox/node-pre-gyp cargo-cp-artifact
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install node-dump-syms
+        run: |
+          npm i -g node-dump-syms
+
+      - name: Upload Symbols for .so files
+        uses: BugSplat-Git/symbol-upload@main
+        with:
+          username: "${{ secrets.BUGSPLAT_USER }}"
+          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          database: "${{ secrets.BUGSPLAT_DATABASE }}"
+          application: "starcapp-linux"
+          version: "${{ env.APP_VERSION }}"
+          files: "**/*.so"
+          directory: "src/_build"
+          node-version: "22"
+          dumpSyms: true
+
+      - name: Upload Symbols for starcapp
+        uses: BugSplat-Git/symbol-upload@main
+        with:
+          username: "${{ secrets.BUGSPLAT_USER }}"
+          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          database: "${{ secrets.BUGSPLAT_DATABASE }}"
+          application: "starcapp-linux"
+          version: "${{ env.APP_VERSION }}"
+          files: "starcapp"
+          directory: "src/_build"
+          node-version: "22"
+          dumpSyms: true
 
       - name: Make AppImage
         shell: bash
@@ -112,7 +172,7 @@ jobs:
         if: github.event_name == 'pull_request'
         shell: bash
         run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+          git submodule update --init --recursive src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
 
       - name: Add info about dev build to the env
         shell: bash
@@ -130,7 +190,14 @@ jobs:
         shell: bash
         run: |
           sudo apt update
-          sudo apt install libgstreamer-plugins-base1.0-0 cmake make pkg-config libx11-dev xcb libx11-xcb-dev libxkbcommon-x11-0 libxkbcommon-dev libgtk-3-dev sassc libfuse2 libxcb-cursor0
+          sudo apt install libgstreamer-plugins-base1.0-0 cmake make pkg-config libx11-dev xcb libx11-xcb-dev libxkbcommon-x11-0 libxkbcommon-dev libgtk-3-dev sassc libfuse2 libxcb-cursor0 libcurl4-openssl-dev zlib1g-dev
+
+      - name: Build crashpad
+        shell: bash
+        run: |
+          cd build
+          chmod +x ./build_crashpad.sh
+          ./build_crashpad.sh
 
       - name: Run QMake
         shell: bash
@@ -143,6 +210,59 @@ jobs:
         run: |
           cd src
           make -j$(nproc)
+
+      - name: Setup Rust
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          source $HOME/.cargo/env
+          echo "PATH=$PATH:$HOME/.cargo/bin" >> $GITHUB_ENV
+
+      - name: Verify Rust
+        run: |
+          source $HOME/.cargo/env
+          cargo --version
+          rustc --version
+
+      - name: Install dependencies for Node.js
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3
+          npm install -g @mapbox/node-pre-gyp cargo-cp-artifact
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install node-dump-syms
+        run: |
+          npm i -g node-dump-syms
+
+      - name: Upload Symbols for .so files
+        uses: BugSplat-Git/symbol-upload@main
+        with:
+          username: "${{ secrets.BUGSPLAT_USER }}"
+          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          database: "${{ secrets.BUGSPLAT_DATABASE }}"
+          application: "starcapp-linux"
+          version: "${{ env.APP_VERSION }}"
+          files: "**/*.so"
+          directory: "src/_build"
+          node-version: "22"
+          dumpSyms: true
+
+      - name: Upload Symbols for starcapp
+        uses: BugSplat-Git/symbol-upload@main
+        with:
+          username: "${{ secrets.BUGSPLAT_USER }}"
+          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          database: "${{ secrets.BUGSPLAT_DATABASE }}"
+          application: "starcapp-linux"
+          version: "${{ env.APP_VERSION }}"
+          files: "starcapp"
+          directory: "src/_build"
+          node-version: "22"
+          dumpSyms: true
 
       - name: Make AppImage
         shell: bash
