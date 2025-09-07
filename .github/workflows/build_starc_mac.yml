@@ -35,7 +35,7 @@ jobs:
         if: github.event_name == 'pull_request'
         shell: bash
         run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+          git submodule update --init --recursive src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
 
       - name: Add info about dev build to the env
         shell: bash
@@ -48,6 +48,13 @@ jobs:
           version: 5.15.2
           target: desktop
 
+      - name: Build crashpad
+        shell: bash
+        run: |
+          cd build
+          chmod +x ./build_crashpad.sh
+          ./build_crashpad.sh
+
       - name: Run QMake
         shell: bash
         run: |
@@ -59,6 +66,21 @@ jobs:
         run: |
           cd src
           make -j4
+
+      - name: Upload debug symbols
+        uses: BugSplat-Git/symbol-upload@main
+        with:
+          username: "${{ secrets.BUGSPLAT_USER }}"
+          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          database: "${{ secrets.BUGSPLAT_DATABASE }}"
+          application: "starcapp-mac"
+          version: "${{ env.APP_VERSION }}"
+          files: "**/*.dSYM"
+          directory: "src/_build"
+          node-version: "22"
+          dumpSyms: false
+        env:
+          DEBUG: true
 
       - name: Make dmg image
         shell: bash
@@ -115,7 +137,7 @@ jobs:
         if: github.event_name == 'pull_request'
         shell: bash
         run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+          git submodule update --init --recursive src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
 
       - name: Add info about dev build to the env
         shell: bash
@@ -129,17 +151,37 @@ jobs:
           target: desktop
           modules: 'qt5compat qtmultimedia qtspeech qtwebsockets'
 
+      - name: Build crashpad
+        shell: bash
+        run: |
+          cd build
+          chmod +x ./build_crashpad.sh
+          ./build_crashpad.sh -u
+
       - name: Run QMake
         shell: bash
         run: |
           cd src
-          qmake starc.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" DEFINES+="DEV_BUILD=$DEV_BUILD"
+          qmake starc.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" CRASHPAD_ARCH=universal DEFINES+="DEV_BUILD=$DEV_BUILD"
 
       - name: Build
         shell: bash
         run: |
           cd src
           make -j4
+
+      - name: Upload debug symbols
+        uses: BugSplat-Git/symbol-upload@main
+        with:
+          username: "${{ secrets.BUGSPLAT_USER }}"
+          password: "${{ secrets.BUGSPLAT_PASSWORD }}"
+          database: "${{ secrets.BUGSPLAT_DATABASE }}"
+          application: "starcapp-mac"
+          version: "${{ env.APP_VERSION }}"
+          files: "**/*.dSYM"
+          directory: "src/_build"
+          node-version: "22"
+          dumpSyms: false
 
       - name: Make dmg image
         shell: bash
