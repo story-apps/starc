@@ -62,9 +62,13 @@ You can also add things like title page for your script, movie poster and other 
 
 
     git clone git@github.com:story-apps/starc.git
-    cd starc
-    git submodule update --init --recursive src/3rd_party/qbreakpad/
-    cd src
+    git submodule update --init --recursive src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
+
+    cd starc/build
+    chmod +x ./build_crashpad.sh
+    ./build_crashpad.sh
+
+    cd ../src
     qmake && make
 
 # Support the project
