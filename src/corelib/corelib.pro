@@ -404,6 +404,7 @@ SOURCES += \
     ui/modules/images_list/images_list_preview.cpp \
     ui/modules/logline_generator/logline_generator_dialog.cpp \
     ui/modules/cards/card_item_parameters_view.cpp \
+    ui/modules/promo_widget/module_promo_widget.cpp \
     ui/modules/script_text_edit/script_text_edit.cpp \
     ui/modules/search_toolbar/search_manager.cpp \
     ui/modules/search_toolbar/search_toolbar.cpp \
@@ -786,6 +787,7 @@ HEADERS += \
     ui/modules/images_list/images_list_preview.h \
     ui/modules/logline_generator/logline_generator_dialog.h \
     ui/modules/cards/card_item_parameters_view.h \
+    ui/modules/promo_widget/module_promo_widget.h \
     ui/modules/script_text_edit/script_text_edit.h \
     ui/modules/search_toolbar/search_manager.h \
     ui/modules/search_toolbar/search_toolbar.h \
@@ -931,4 +933,5 @@ greaterThan(QT_MAJOR_VERSION, 5) {
 
 RESOURCES += \
     fonts.qrc \
+    images.qrc \
     templates.qrc

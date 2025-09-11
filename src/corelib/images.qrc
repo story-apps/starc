@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/images/promo">
+        <file alias="mindmaps">images/promo/mindmaps.png</file>
+        <file alias="presentation">images/promo/presentation.png</file>
+        <file alias="cloud">images/promo/cloud.png</file>
+        <file alias="image-gallery">images/promo/image-gallery.png</file>
+        <file alias="statistics">images/promo/statistics.png</file>
+        <file alias="breakdown">images/promo/breakdown.png</file>
+        <file alias="timeline">images/promo/timeline.png</file>
+        <file alias="cards">images/promo/cards.png</file>
+        <file alias="world-profile">images/promo/world-profile.png</file>
+        <file alias="worlds-map">images/promo/worlds-map.png</file>
+        <file alias="location-scenes">images/promo/location-scenes.png</file>
+        <file alias="location-profile">images/promo/location-profile.png</file>
+        <file alias="locations-map">images/promo/locations-map.png</file>
+        <file alias="character-dialogues">images/promo/character-dialogues.png</file>
+        <file alias="character-profile">images/promo/character-profile.png</file>
+        <file alias="characters-relations">images/promo/characters-relations.png</file>
+        <file alias="series-plan">images/promo/series-plan.png</file>
+    </qresource>
+</RCC>

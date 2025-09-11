@@ -9,6 +9,7 @@ class Button;
 class QAbstractScrollArea;
 class QHBoxLayout;
 class QScrollArea;
+class QVBoxLayout;
 class QWidget;
 class SpellCheckTextEdit;
 
@@ -33,6 +34,7 @@ public:
      * @brief Создать и подготовить лейаут
      */
     static QHBoxLayout* makeHBoxLayout();
+    static QVBoxLayout* makeVBoxLayout();
 
     /**
      * @brief Настроить проверку орфографии для редактора текста

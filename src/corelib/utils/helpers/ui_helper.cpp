@@ -53,6 +53,14 @@ QHBoxLayout* UiHelper::makeHBoxLayout()
     return layout;
 }
 
+QVBoxLayout* UiHelper::makeVBoxLayout()
+{
+    auto layout = new QVBoxLayout;
+    layout->setContentsMargins({});
+    layout->setSpacing(0);
+    return layout;
+}
+
 void UiHelper::initSpellingFor(SpellCheckTextEdit* _edit)
 {
     initSpellingFor(QVector<SpellCheckTextEdit*>{ _edit });
