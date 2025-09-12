@@ -45,6 +45,7 @@ public:
     QVariantAnimation showHiddenPanelToolbarPositionAnimation;
     //
     bool isHideButtonAvailable = false;
+    bool isHideLeftPanel = true;
     FloatingToolBar* hideVisiblePanelToolbar = nullptr;
     QAction* hideLeftPanelAction = nullptr;
     QAction* hideRightPanelAction = nullptr;
@@ -235,13 +236,14 @@ Splitter::Splitter(QWidget* _parent)
 
 Splitter::~Splitter() = default;
 
-void Splitter::setHidePanelButtonAvailable(bool _available)
+void Splitter::setHidePanelButtonAvailable(bool _available, bool _forLeftPanel)
 {
-    if (d->isHideButtonAvailable == _available) {
+    if (d->isHideButtonAvailable == _available && d->isHideLeftPanel == _forLeftPanel) {
         return;
     }
 
     d->isHideButtonAvailable = _available;
+    d->isHideLeftPanel = _forLeftPanel;
     if (!d->isHideButtonAvailable && d->hideVisiblePanelToolbar->isVisibleTo(this)) {
         d->hideVisiblePanelToolbar->hide();
     }
@@ -387,18 +389,33 @@ void Splitter::setSizes(const QVector<int>& _sizes)
         || (d->sizes.constLast() <= minimumVisibleSize && widgets.constLast()->isVisibleTo(this))) {
         d->hideVisiblePanelToolbar->hide();
     } else {
-        d->hideVisiblePanelToolbar->setActionCustomWidth(d->hideRightPanelAction,
-                                                         Ui::DesignSystem::layout().px8());
-        d->hideVisiblePanelToolbar->clearActionCustomWidth(d->hideLeftPanelAction);
-        d->widgets.constLast()->raise();
-        d->handle->raise();
-        d->hideVisiblePanelToolbar->raise();
-        d->widgets.constFirst()->raise();
-        d->hideVisiblePanelToolbar->resize(d->hideVisiblePanelToolbar->sizeHint());
+        if (d->isHideLeftPanel) {
+            d->hideVisiblePanelToolbar->setActionCustomWidth(d->hideRightPanelAction,
+                                                             Ui::DesignSystem::layout().px8());
+            d->hideVisiblePanelToolbar->clearActionCustomWidth(d->hideLeftPanelAction);
+            d->widgets.constLast()->raise();
+            d->handle->raise();
+            d->hideVisiblePanelToolbar->raise();
+            d->widgets.constFirst()->raise();
+            d->hideVisiblePanelToolbar->resize(d->hideVisiblePanelToolbar->sizeHint());
 
-        d->hideVisiblePanelToolbar->move(
-            QPoint(handleGeometry.center().x() - (d->hideVisiblePanelToolbar->width() / 2),
-                   (height() - d->hideVisiblePanelToolbar->height()) / 2));
+            d->hideVisiblePanelToolbar->move(
+                QPoint(handleGeometry.center().x() - (d->hideVisiblePanelToolbar->width() / 2),
+                       (height() - d->hideVisiblePanelToolbar->height()) / 2));
+        } else {
+            d->hideVisiblePanelToolbar->setActionCustomWidth(d->hideLeftPanelAction,
+                                                             Ui::DesignSystem::layout().px8());
+            d->hideVisiblePanelToolbar->clearActionCustomWidth(d->hideRightPanelAction);
+            d->widgets.constFirst()->raise();
+            d->handle->raise();
+            d->hideVisiblePanelToolbar->raise();
+            d->widgets.constLast()->raise();
+            d->hideVisiblePanelToolbar->resize(d->hideVisiblePanelToolbar->sizeHint());
+
+            d->hideVisiblePanelToolbar->move(
+                QPoint(handleGeometry.center().x() - (d->hideVisiblePanelToolbar->width() / 2),
+                       (height() - d->hideVisiblePanelToolbar->height()) / 2));
+        }
     }
     d->showHiddenPanelToolbar->raise();
 }
@@ -560,15 +577,31 @@ bool Splitter::eventFilter(QObject* _watched, QEvent* _event)
         }
 
         if (widgetIndex == 0) {
-            d->hideVisiblePanelToolbarHidingTimer.stop();
-            if (!d->hideVisiblePanelToolbar->isVisibleTo(this)) {
-                d->hideVisiblePanelToolbar->setOpacity(0.0);
-                d->hideVisiblePanelToolbar->setVisible(true);
-                d->hideVisiblePanelToolbarOpacityAnimation.setDirection(QVariantAnimation::Forward);
-                d->hideVisiblePanelToolbarOpacityAnimation.start();
+            if (d->isHideLeftPanel) {
+                d->hideVisiblePanelToolbarHidingTimer.stop();
+                if (!d->hideVisiblePanelToolbar->isVisibleTo(this)) {
+                    d->hideVisiblePanelToolbar->setOpacity(0.0);
+                    d->hideVisiblePanelToolbar->setVisible(true);
+                    d->hideVisiblePanelToolbarOpacityAnimation.setDirection(
+                        QVariantAnimation::Forward);
+                    d->hideVisiblePanelToolbarOpacityAnimation.start();
+                }
+            } else if (d->hideVisiblePanelToolbar->isVisibleTo(this)) {
+                d->hideVisiblePanelToolbarHidingTimer.start();
             }
-        } else if (widgetIndex == 1 && d->hideVisiblePanelToolbar->isVisibleTo(this)) {
-            d->hideVisiblePanelToolbarHidingTimer.start();
+        } else if (widgetIndex == 1) {
+            if (!d->isHideLeftPanel) {
+                d->hideVisiblePanelToolbarHidingTimer.stop();
+                if (!d->hideVisiblePanelToolbar->isVisibleTo(this)) {
+                    d->hideVisiblePanelToolbar->setOpacity(0.0);
+                    d->hideVisiblePanelToolbar->setVisible(true);
+                    d->hideVisiblePanelToolbarOpacityAnimation.setDirection(
+                        QVariantAnimation::Forward);
+                    d->hideVisiblePanelToolbarOpacityAnimation.start();
+                }
+            } else if (d->hideVisiblePanelToolbar->isVisibleTo(this)) {
+                d->hideVisiblePanelToolbarHidingTimer.start();
+            }
         }
         break;
     }

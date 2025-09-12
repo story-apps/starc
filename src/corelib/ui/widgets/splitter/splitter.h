@@ -17,7 +17,7 @@ public:
     /**
      * @brief Задать доступность кнопки скрытия панели
      */
-    void setHidePanelButtonAvailable(bool _available);
+    void setHidePanelButtonAvailable(bool _available, bool _forLeftPanel = true);
 
     /**
      * @brief Задать виджеты в контейнер
