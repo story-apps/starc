@@ -2,6 +2,7 @@
 
 #include "../screenplay_text_edit.h"
 
+#include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/templates/screenplay_template.h>
 
 #include <QKeyEvent>
@@ -110,7 +111,11 @@ void LyricsHandler::handleEnter(QKeyEvent*)
 
                             if (TextBlockStyle::forBlock(cursorBlock)
                                 == TextParagraphType::Character) {
-                                characterName = cursorBlock.text().simplified();
+                                //
+                                // ... оставляем только имя персонажа
+                                //
+                                characterName = BusinessLayer::ScreenplayCharacterParser::name(
+                                    cursorBlock.text());
                             }
                         }
 

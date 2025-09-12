@@ -2,6 +2,7 @@
 
 #include "../screenplay_text_edit.h"
 
+#include <business_layer/model/screenplay/text/screenplay_text_block_parser.h>
 #include <business_layer/templates/screenplay_template.h>
 #include <data_layer/storage/settings_storage.h>
 #include <data_layer/storage/storage_facade.h>
@@ -113,7 +114,11 @@ void DialogHandler::handleEnter(QKeyEvent*)
 
                             if (TextBlockStyle::forBlock(cursorBlock)
                                 == TextParagraphType::Character) {
-                                characterName = cursorBlock.text().simplified();
+                                //
+                                // ... оставляем только имя персонажа
+                                //
+                                characterName = BusinessLayer::ScreenplayCharacterParser::name(
+                                    cursorBlock.text());
                             }
                         }
 
