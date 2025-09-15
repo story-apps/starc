@@ -560,17 +560,17 @@ void ModulePromoWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
         label->setBackgroundColor(DesignSystem::color().primary());
         label->setTextColor(DesignSystem::color().onPrimary());
     }
-    d->title->setContentsMargins(DesignSystem::layout().px16(), DesignSystem::layout().px16(),
-                                 DesignSystem::layout().px16(), DesignSystem::layout().px16());
+    d->title->setContentsMargins(DesignSystem::layout().px24(), DesignSystem::layout().px16(),
+                                 DesignSystem::layout().px24(), DesignSystem::layout().px16());
 
     d->preview->setBackgroundColor(DesignSystem::color().primary());
     for (auto previewModule : d->previewModules) {
-        previewModule->setContentsMargins(DesignSystem::layout().px16(),
+        previewModule->setContentsMargins(DesignSystem::layout().px24(),
                                           DesignSystem::layout().px4(),
-                                          DesignSystem::layout().px16(), 0);
+                                          DesignSystem::layout().px24(), 0);
     }
     d->previewTitle->setContentsMargins(
-        DesignSystem::layout().px24(), DesignSystem::layout().px12(), DesignSystem::layout().px16(),
+        DesignSystem::layout().px24(), DesignSystem::layout().px12(), DesignSystem::layout().px24(),
         DesignSystem::layout().px12());
     d->previewPrevious->setBackgroundColor(DesignSystem::color().primary());
     d->previewPrevious->setTextColor(DesignSystem::color().onPrimary());
@@ -582,33 +582,33 @@ void ModulePromoWidget::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->advancedVersionIcon->setBackgroundColor(DesignSystem::color().primary());
     d->advancedVersionIcon->setTextColor(DesignSystem::color().accent());
     d->advancedVersionIcon->setContentsMargins(
-        DesignSystem::layout().px12(), DesignSystem::layout().px24(), DesignSystem::layout().px8(),
+        DesignSystem::layout().px24(), DesignSystem::layout().px24(), DesignSystem::layout().px8(),
         DesignSystem::layout().px16());
     d->advancedVersionTitle->setContentsMargins(0, DesignSystem::layout().px24(),
-                                                DesignSystem::layout().px16(),
+                                                DesignSystem::layout().px24(),
                                                 DesignSystem::layout().px16());
     d->advancedVersionDescription->setBackgroundColor(DesignSystem::color().primary());
     d->advancedVersionDescription->setTextColor(ColorHelper::transparent(
         DesignSystem::color().onPrimary(), DesignSystem::inactiveTextOpacity()));
-    d->advancedVersionDescription->setContentsMargins(DesignSystem::layout().px16(), 0,
-                                                      DesignSystem::layout().px16(),
+    d->advancedVersionDescription->setContentsMargins(DesignSystem::layout().px24(), 0,
+                                                      DesignSystem::layout().px24(),
                                                       DesignSystem::layout().px12());
     for (auto option : d->advancedVersionOptions) {
         option.icon->setBackgroundColor(DesignSystem::color().primary());
         option.icon->setTextColor(ColorHelper::forNumber(5));
-        option.icon->setContentsMargins(DesignSystem::layout().px12(), 0,
+        option.icon->setContentsMargins(DesignSystem::layout().px24(), 0,
                                         DesignSystem::layout().px8(),
                                         DesignSystem::layout().px12());
         option.title->setBackgroundColor(DesignSystem::color().primary());
         option.title->setTextColor(DesignSystem::color().onPrimary());
-        option.title->setContentsMargins(0, 0, DesignSystem::layout().px16(),
+        option.title->setContentsMargins(0, 0, DesignSystem::layout().px24(),
                                          DesignSystem::layout().px12());
     }
 
     d->purchase->setBackgroundColor(DesignSystem::color().accent());
     d->purchase->setTextColor(DesignSystem::color().onAccent());
-    d->purchase->setContentsMargins(DesignSystem::layout().px8(), DesignSystem::layout().px16(),
-                                    DesignSystem::layout().px8(), DesignSystem::layout().px8());
+    d->purchase->setContentsMargins(DesignSystem::layout().px16(), DesignSystem::layout().px16(),
+                                    DesignSystem::layout().px16(), DesignSystem::layout().px16());
 }
 
 } // namespace Ui
