@@ -22,6 +22,14 @@ LIBSDIR = ../_build/libs
 INCLUDEPATH += ..
 
 #
+# Запишем commit hash и дату сборки либы, для отладки
+#
+GIT_COMIMT_HASH = $$system(git rev-parse HEAD)
+DEFINES += CORE_LIBRARY_GIT_COMMIT_HASH=\\\"$$GIT_COMIMT_HASH\\\"
+BUILD_TIMESTAMP = $$system(date +%Y-%m-%d_%H:%M:%S)
+DEFINES += CORE_LIBRARY_BUILD_TIMESTAMP=\\\"$$BUILD_TIMESTAMP\\\"
+
+#
 # Настраиваем QCustomPlot
 #
 DEFINES += QCP_LIB_DECL QCP_NO_PRINTER

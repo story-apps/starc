@@ -26,6 +26,11 @@ public:
     static void init(Level _logLevel, const QString& _filePath);
 
     /**
+     * @brief Напечатать информацию о сборке библиотеки
+     */
+    static void printBuildInfo();
+
+    /**
      * @brief Путь к текущему файлу логов
      */
     static QString logFilePath();

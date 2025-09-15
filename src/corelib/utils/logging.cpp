@@ -41,6 +41,19 @@ void Log::init(Log::Level _level, const QString& _filePath)
           QVariant::fromValue(_level).toString(), _filePath);
 }
 
+void Log::printBuildInfo()
+{
+    info("Corelib build info - hash: %1; build date: %2",
+         //
+         // git commit from corelib.pro
+         //
+         CORE_LIBRARY_GIT_COMMIT_HASH,
+         //
+         // build datetime from corelib.pro
+         //
+         CORE_LIBRARY_BUILD_TIMESTAMP);
+}
+
 QString Log::logFilePath()
 {
     return s_logFile.fileName();
