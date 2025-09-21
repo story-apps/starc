@@ -12,6 +12,7 @@ namespace BusinessLayer {
 namespace {
 const QLatin1String kDocumentKey("document");
 const QLatin1String kNameKey("name");
+const QLatin1String kDescriptionKey("description");
 const QLatin1String kPhotosKey("photos");
 const QLatin1String kPhotoKey("photo");
 } // namespace
@@ -21,6 +22,7 @@ class ImagesGalleryModel::Implementation
 {
 public:
     QString name;
+    QString description;
     QVector<Domain::DocumentImage> photos;
 };
 
@@ -32,8 +34,9 @@ ImagesGalleryModel::ImagesGalleryModel(QObject* _parent)
     : AbstractModel({}, _parent)
     , d(new Implementation)
 {
-
     connect(this, &ImagesGalleryModel::nameChanged, this,
+            &ImagesGalleryModel::updateDocumentContent);
+    connect(this, &ImagesGalleryModel::descriptionChanged, this,
             &ImagesGalleryModel::updateDocumentContent);
     connect(this, &ImagesGalleryModel::photosChanged, this,
             &ImagesGalleryModel::updateDocumentContent);
@@ -65,6 +68,21 @@ QString ImagesGalleryModel::documentName() const
 void ImagesGalleryModel::setDocumentName(const QString& _name)
 {
     setName(_name);
+}
+
+QString ImagesGalleryModel::description() const
+{
+    return d->description;
+}
+
+void ImagesGalleryModel::setDescription(const QString& _description)
+{
+    if (d->description == _description) {
+        return;
+    }
+
+    d->description = _description;
+    emit descriptionChanged(d->description);
 }
 
 QVector<Domain::DocumentImage> ImagesGalleryModel::photos() const
@@ -135,6 +153,7 @@ void ImagesGalleryModel::initDocument()
         return TextHelper::fromHtmlEscaped(documentNode.firstChildElement(_key).text());
     };
     d->name = load(kNameKey);
+    d->description = load(kDescriptionKey);
     const auto photosNode = documentNode.firstChildElement(kPhotosKey);
     if (!photosNode.isNull()) {
         auto photoNode = photosNode.firstChildElement(kPhotoKey);
@@ -170,6 +189,7 @@ QByteArray ImagesGalleryModel::toXml() const
                    .toUtf8();
     };
     save(kNameKey, d->name);
+    save(kDescriptionKey, d->description);
     if (!d->photos.isEmpty()) {
         xml += QString("<%1>\n").arg(kPhotosKey).toUtf8();
         for (const auto& photo : std::as_const(d->photos)) {
@@ -200,6 +220,7 @@ ChangeCursor ImagesGalleryModel::applyPatch(const QByteArray& _patch)
         return TextHelper::fromHtmlEscaped(documentNode.firstChildElement(_key).text());
     };
     setName(load(kNameKey));
+    setDescription(load(kDescriptionKey));
     //
     // Считываем фотографии
     //

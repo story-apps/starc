@@ -24,6 +24,10 @@ public:
     QString documentName() const override;
     void setDocumentName(const QString& _name) override;
 
+    QString description() const;
+    void setDescription(const QString& _description);
+    Q_SIGNAL void descriptionChanged(const QString& _description);
+
     QVector<Domain::DocumentImage> photos() const;
     void addPhoto(const Domain::DocumentImage& _photo);
     void addPhotos(const QVector<QPixmap>& _photos);
