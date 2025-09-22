@@ -2848,7 +2848,7 @@ void ApplicationManager::initConnections()
             [this] { d->showMenu(); });
     connect(d->projectManager.data(), &ProjectManager::upgradeToProRequested,
             d->accountManager.data(), &AccountManager::upgradeAccountToPro);
-    connect(d->projectManager.data(), &ProjectManager::upgradeToTeamRequested,
+    connect(d->projectManager.data(), &ProjectManager::upgradeToCloudRequested,
             d->accountManager.data(), &AccountManager::upgradeAccountToCloud);
     connect(d->projectManager.data(), &ProjectManager::buyCreditsRequested,
             d->accountManager.data(), &AccountManager::buyCredits);

@@ -4855,10 +4855,10 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             connect(documentManager, SIGNAL(upgradeToProRequested()), this,
                     SIGNAL(upgradeToProRequested()), Qt::UniqueConnection);
         }
-        if (documentManager->metaObject()->indexOfSignal("upgradeToTeamRequested()")
+        if (documentManager->metaObject()->indexOfSignal("upgradeToCloudRequested()")
             != invalidSignalIndex) {
-            connect(documentManager, SIGNAL(upgradeToTeamRequested()), this,
-                    SIGNAL(upgradeToTeamRequested()), Qt::UniqueConnection);
+            connect(documentManager, SIGNAL(upgradeToCloudRequested()), this,
+                    SIGNAL(upgradeToCloudRequested()), Qt::UniqueConnection);
         }
         if (documentManager->metaObject()->indexOfSignal("buyCreditsRequested()")
             != invalidSignalIndex) {
