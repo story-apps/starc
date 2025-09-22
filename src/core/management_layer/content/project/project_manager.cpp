@@ -4845,6 +4845,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     if (auto documentManager = d->pluginsBuilder.plugin(viewMimeType)->asQObject();
         documentManager != nullptr) {
         const auto invalidSignalIndex = -1;
+        if (documentManager->metaObject()->indexOfSignal("goBackRequested()")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(goBackRequested()), this,
+                    SLOT(showFirstViewForCurrentIndex()), Qt::UniqueConnection);
+        }
         if (documentManager->metaObject()->indexOfSignal("upgradeToProRequested()")
             != invalidSignalIndex) {
             connect(documentManager, SIGNAL(upgradeToProRequested()), this,
@@ -4997,6 +5002,31 @@ void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item
     if (!d->navigator->isProjectNavigatorShown() && d->view.active == d->view.left) {
         showNavigatorForVersion(_item);
     }
+}
+
+void ProjectManager::showFirstViewForCurrentIndex()
+{
+    if (!d->view.activeIndex.isValid()) {
+        d->view.active->showDefaultPage();
+        return;
+    }
+
+    //
+    // Определим текущий документ и его представления
+    //
+    const auto item = d->projectStructureModel->itemForIndex(d->view.activeIndex);
+    const auto documentMimeType = Domain::mimeTypeFor(item->type());
+    const auto views = d->pluginsBuilder.editorsInfoFor(documentMimeType, d->isProjectRemote);
+
+    //
+    // Откроем документ на редактирование в первом из представлений
+    //
+    if (views.isEmpty()) {
+        d->view.active->showDocumentLoadingPage();
+        return;
+    }
+    showView(d->projectStructureProxyModel->mapFromSource(d->view.activeIndex),
+             views.constFirst().mimeType, views.constFirst().mimeType);
 }
 
 void ProjectManager::activateView(const QModelIndex& _itemIndex, const QString& _viewMimeType)

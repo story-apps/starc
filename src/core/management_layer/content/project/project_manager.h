@@ -384,6 +384,11 @@ private:
     void showViewForVersion(BusinessLayer::StructureModelItem* _item);
 
     /**
+     * @brief Показать первый из редакторов для текущего элемента
+     */
+    Q_SLOT void showFirstViewForCurrentIndex();
+
+    /**
      * @brief Активировать представление заданным элементом и маймом редактора
      * @note Делается это, когда пользователь переключается между панелями в двухпанельном режиме
      */
