@@ -5027,6 +5027,11 @@ void ProjectManager::showFirstViewForCurrentIndex()
     }
     showView(d->projectStructureProxyModel->mapFromSource(d->view.activeIndex),
              views.constFirst().mimeType, views.constFirst().mimeType);
+
+    //
+    // Обновим панель модулей, чтобы корректно перерисовать текущий активный модуль
+    //
+    d->toolBar->update();
 }
 
 void ProjectManager::activateView(const QModelIndex& _itemIndex, const QString& _viewMimeType)
