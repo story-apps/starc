@@ -184,7 +184,7 @@ QSize ModulePromoToolbar::sizeHint() const
     return QSize(std::max(std::max(d->title->sizeHint().width(), d->subtitle->sizeHint().width()),
                           d->goBack->sizeHint().width() + d->purchase->sizeHint().width())
                      + DesignSystem::layout().px(120),
-                 DesignSystem::layout().px(164));
+                 DesignSystem::layout().px(168));
 }
 
 void ModulePromoToolbar::processBackgroundColorChange()
@@ -246,7 +246,7 @@ void ModulePromoToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event
     d->headerContainer->layout()->setContentsMargins(shadowMargins.left(), shadowMargins.top(),
                                                      shadowMargins.right(),
                                                      DesignSystem::layout().px(10));
-    d->title->setContentsMargins(0, DesignSystem::layout().px16(), 0, DesignSystem::layout().px4());
+    d->title->setContentsMargins(0, DesignSystem::layout().px16(), 0, DesignSystem::layout().px8());
     d->subtitle->setContentsMargins(0, 0, 0, DesignSystem::layout().px12());
     d->purchase->setTextColor(DesignSystem::color().accent());
 }

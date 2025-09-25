@@ -534,7 +534,7 @@ void ModulePromoWidget::resizeEvent(QResizeEvent* _event)
 {
     Widget::resizeEvent(_event);
 
-    d->preview->setMinimumHeight(width() * 0.68);
+    d->preview->setFixedHeight((d->preview->width() - DesignSystem::layout().px(48)) * 0.68);
 }
 
 void ModulePromoWidget::updateTranslations()
