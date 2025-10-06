@@ -102,6 +102,7 @@ CoverGeneratorView::Implementation::Implementation(CoverGeneratorView* _q)
 {
     splitter->setWidgets(coverBackground, sidebar);
     splitter->setSizes({ 7, 3 });
+    splitter->setHidePanelButtonAvailable(true, false);
 
     toolbar->setParent(coverBackground);
     toolbar->setCurtain(true);

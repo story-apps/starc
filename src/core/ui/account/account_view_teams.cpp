@@ -350,6 +350,7 @@ void AccountViewTeams::showTeam(int _teamId)
         d->sidebar->setEnabled(isOwner);
         d->sidebar->setVisible(isOwner);
         d->splitter->setSizes(isOwner ? QVector<int>{ 7, 2 } : QVector<int>{ 1, 0 });
+        d->splitter->setHidePanelButtonAvailable(true, false);
 
         break;
     }

@@ -666,6 +666,7 @@ NovelOutlineView::NovelOutlineView(QWidget* _parent)
 
     d->splitter->setWidgets(d->scalableWrapper, d->sidebarWidget);
     d->splitter->setSizes({ 1, 0 });
+    d->splitter->setHidePanelButtonAvailable(true, false);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins({});
