@@ -164,7 +164,7 @@ void ImageCard::Implementation::cropImage(const QPixmap& _image)
 {
     auto dlg = new ImageCroppingDialog(q->window());
     dlg->setImage(_image);
-    dlg->setImageProportion(kCoverSize);
+    dlg->setImageProportion(q->size());
     dlg->setImageProportionFixed(true);
     dlg->setImageCroppingText(imageCroppingText);
     connect(dlg, &ImageCroppingDialog::disappeared, dlg, &ImageCroppingDialog::deleteLater);
