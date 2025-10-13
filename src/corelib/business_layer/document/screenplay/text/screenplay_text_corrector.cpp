@@ -840,7 +840,7 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
         //     - если блок ну ни как не должен быть больше одной страницы размером
         //     - если блок настолько огромный, что не влезает на три страницы
         //
-        const QSet<TextParagraphType> blockWhichCantBeWiderThenPage = {
+        const QSet<TextParagraphType> blockWhichCantBeWiderThenHalfOfPage = {
             TextParagraphType::SceneHeading,    TextParagraphType::Shot,
             TextParagraphType::ActHeading,      TextParagraphType::SequenceHeading,
             TextParagraphType::ActFooter,       TextParagraphType::SequenceFooter,
@@ -848,7 +848,8 @@ void ScreenplayTextCorrector::Implementation::correctPageBreaks(int _position, i
             TextParagraphType::Character,       TextParagraphType::Parenthetical,
 
         };
-        if ((blockHeight >= pageHeight && blockWhichCantBeWiderThenPage.contains(blockType))
+        if ((blockHeight >= pageHeight / 2
+             && blockWhichCantBeWiderThenHalfOfPage.contains(blockType))
             || blockHeight >= pageHeight * 3) {
             return;
         }
