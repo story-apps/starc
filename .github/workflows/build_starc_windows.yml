@@ -43,6 +43,7 @@ jobs:
         shell: bash
         run: |
           choco install openssl --version=3.1.1
+          choco install nsis
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -67,7 +68,7 @@ jobs:
           ./make-exe_qt5_64.sh ${{env.APP_VERSION}}
 
       - name: Make installer
-        uses: joncloud/makensis-action@v3.4
+        uses: joncloud/makensis-action@v5.0
         with:
           arguments: "/V3"
           script-file: "build/windows/starc_qt5_64.nsi"
@@ -129,6 +130,7 @@ jobs:
         shell: bash
         run: |
           choco install openssl --version=1.1.1.2100 --forcex86
+          choco install nsis
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -153,7 +155,7 @@ jobs:
           ./make-exe_qt5_32.sh ${{env.APP_VERSION}}
 
       - name: Make installer
-        uses: joncloud/makensis-action@v3.4
+        uses: joncloud/makensis-action@v5.0
         with:
           arguments: "/V3"
           script-file: "build/windows/starc_qt5_32.nsi"
@@ -217,6 +219,7 @@ jobs:
         run: |
           choco install openssl --version=3.1.1
           choco install jom
+          choco install nsis
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -241,7 +244,7 @@ jobs:
           ./make-exe_64.sh ${{env.APP_VERSION}}
 
       - name: Make installer
-        uses: joncloud/makensis-action@v3.4
+        uses: joncloud/makensis-action@v5.0
         with:
           arguments: "/V3"
           script-file: "build/windows/starc_64.nsi"
