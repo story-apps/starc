@@ -19,24 +19,12 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 60
     steps:
-      - name: Checkout sources for push or create tag event
-        if: github.event_name != 'pull_request'
+      - name: Checkout sources
         uses: actions/checkout@master
         with:
           token: ${{ secrets.ACTION_RUNNER }}
           submodules: recursive
           fetch-depth: 0
-
-      - name: Checkout sources for pull request event
-        if: github.event_name == 'pull_request'
-        uses: actions/checkout@master
-
-
-      - name: Checkout submodules for pull request event
-        if: github.event_name == 'pull_request'
-        shell: bash
-        run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
 
       - name: Add info about dev build to the env
         shell: bash
@@ -97,24 +85,12 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 60
     steps:
-      - name: Checkout sources for push or create tag event
-        if: github.event_name != 'pull_request'
+      - name: Checkout sources
         uses: actions/checkout@master
         with:
           token: ${{ secrets.ACTION_RUNNER }}
           submodules: recursive
           fetch-depth: 0
-
-      - name: Checkout sources for pull request event
-        if: github.event_name == 'pull_request'
-        uses: actions/checkout@master
-
-
-      - name: Checkout submodules for pull request event
-        if: github.event_name == 'pull_request'
-        shell: bash
-        run: |
-          git submodule update --init --recursive src/3rd_party/qbreakpad/ src/3rd_party/pdfhummus/ src/3rd_party/pdftextextraction/
 
       - name: Add info about dev build to the env
         shell: bash
