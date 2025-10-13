@@ -8,7 +8,7 @@ namespace Ui {
 /**
  * @brief Доступные типы продвигаемых модулей
  */
-enum class ModulePromoType {
+enum class CORE_LIBRARY_EXPORT ModulePromoType {
     Undefined,
     CharactersRelations,
     CharacterInformation,

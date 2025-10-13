@@ -5,7 +5,7 @@
 
 namespace Ui {
 
-class ModulePromoToolbar : public FloatingToolBar
+class CORE_LIBRARY_EXPORT ModulePromoToolbar : public FloatingToolBar
 {
     Q_OBJECT
 
