@@ -26,8 +26,16 @@ INCLUDEPATH += ..
 #
 GIT_COMIMT_HASH = $$system(git rev-parse HEAD)
 DEFINES += CORE_LIBRARY_GIT_COMMIT_HASH=\\\"$$GIT_COMIMT_HASH\\\"
-BUILD_TIMESTAMP = $$system(date +%Y-%m-%d_%H:%M:%S)
-DEFINES += CORE_LIBRARY_BUILD_TIMESTAMP=\\\"$$BUILD_TIMESTAMP\\\"
+win32 {
+    BUILD_TIMESTAMP = $$system(powershell -Command "Get-Date -Format 'yyyy-MM-dd_HH-mm-ss'")
+} else {
+    BUILD_TIMESTAMP = $$system(date +%Y-%m-%d_%H:%M:%S)
+}
+!isEmpty(BUILD_TIMESTAMP) {
+    DEFINES += CORE_LIBRARY_BUILD_TIMESTAMP=\\\"$$BUILD_TIMESTAMP\\\"
+} else {
+    DEFINES += CORE_LIBRARY_BUILD_TIMESTAMP=\\\"unknown\\\"
+}
 
 #
 # Настраиваем QCustomPlot
