@@ -581,7 +581,6 @@ void CommentsToolbar::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     setActionColor(d->typeAction, DesignSystem::color().accent());
 
-    d->typeToolbar->setStartOpacity(1.0);
     d->typeToolbar->setBackgroundColor(DesignSystem::color().background());
     d->typeToolbar->setTextColor(DesignSystem::color().onBackground());
 

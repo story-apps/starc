@@ -30,11 +30,6 @@ public:
     void setFlat(bool _flat);
 
     /**
-     * @brief Задать стартовую прозрачность
-     */
-    void setStartOpacity(qreal _opacity);
-
-    /**
      * @brief Задать ширину области для отрисовки действия
      */
     void setActionCustomWidth(QAction* _action, int _width);

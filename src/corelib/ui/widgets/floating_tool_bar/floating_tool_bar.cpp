@@ -4,6 +4,7 @@
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/icon_helper.h>
 #include <utils/helpers/image_helper.h>
+#include <utils/tools/run_once.h>
 
 #include <QAction>
 #include <QActionGroup>
@@ -82,7 +83,6 @@ public:
     /**
      * @brief  Декорации тени при наведении
      */
-    QVariantAnimation opacityAnimation;
     QVariantAnimation shadowBlurRadiusAnimation;
 };
 
@@ -96,12 +96,6 @@ FloatingToolBar::Implementation::Implementation(FloatingToolBar* _q)
     decorationOpacityAnimation.setStartValue(0.5);
     decorationOpacityAnimation.setEndValue(0.0);
     decorationOpacityAnimation.setDuration(160);
-
-    opacityAnimation.setEasingCurve(QEasingCurve::OutQuad);
-    opacityAnimation.setDuration(160);
-    opacityAnimation.setStartValue(0.6);
-    opacityAnimation.setEndValue(1.0);
-    opacityAnimation.setCurrentTime(0);
 
     shadowBlurRadiusAnimation.setEasingCurve(QEasingCurve::OutQuad);
     shadowBlurRadiusAnimation.setDuration(160);
@@ -125,8 +119,6 @@ void FloatingToolBar::Implementation::animateHoverIn()
         return;
     }
 
-    opacityAnimation.setDirection(QVariantAnimation::Forward);
-    opacityAnimation.start();
     shadowBlurRadiusAnimation.setDirection(QVariantAnimation::Forward);
     shadowBlurRadiusAnimation.start();
 }
@@ -137,8 +129,6 @@ void FloatingToolBar::Implementation::animateHoverOut()
         return;
     }
 
-    opacityAnimation.setDirection(QVariantAnimation::Backward);
-    opacityAnimation.start();
     shadowBlurRadiusAnimation.setDirection(QVariantAnimation::Backward);
     shadowBlurRadiusAnimation.start();
 }
@@ -218,14 +208,11 @@ FloatingToolBar::FloatingToolBar(QWidget* _parent)
     , d(new Implementation(this))
 {
     setFocusPolicy(Qt::StrongFocus);
-    setOpacity(d->opacityAnimation.startValue().toDouble());
 
     connect(&d->decorationRadiusAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
     connect(&d->decorationOpacityAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
-    connect(&d->opacityAnimation, &QVariantAnimation::valueChanged, this,
-            [this](const QVariant& _value) { setOpacity(_value.toDouble()); });
     connect(&d->shadowBlurRadiusAnimation, &QVariantAnimation::valueChanged, this,
             [this] { update(); });
 }
@@ -262,11 +249,6 @@ void FloatingToolBar::setFlat(bool _flat)
 
     d->isFlat = _flat;
     update();
-}
-
-void FloatingToolBar::setStartOpacity(qreal _opacity)
-{
-    d->opacityAnimation.setStartValue(_opacity);
 }
 
 void FloatingToolBar::setActionCustomWidth(QAction* _action, int _width)
@@ -397,9 +379,13 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
 
+    const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
+    if (!canRun) {
+        return;
+    }
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setOpacity(opacity());
 
     const QRect backgroundRect
         = rect().marginsRemoved(Ui::DesignSystem::floatingToolBar().shadowMargins().toMargins());
@@ -444,8 +430,22 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         painter.drawPixmap(0, 0, shadow);
     }
     //
+    // ... рисуем заблюренный фон
+    //
+    if (parentWidget() != nullptr) {
+        auto backgroundImageRect = backgroundRect;
+        backgroundImageRect.moveTopLeft(backgroundImageRect.topLeft() + pos());
+        QPixmap backgroundPixmap(backgroundImageRect.size());
+        parentWidget()->render(&backgroundPixmap, {}, backgroundImageRect);
+        backgroundPixmap
+            = ImageHelper::blurImage(backgroundPixmap, Ui::DesignSystem::layout().px24());
+        ImageHelper::drawRoundedImage(painter, backgroundRect, backgroundPixmap, radius,
+                                      d->isCurtain ? d->curtainEdge : 0);
+    }
+    //
     // ... рисуем сам фон
     //
+    painter.setOpacity(0.7);
     painter.setPen(Qt::NoPen);
     painter.setBrush(backgroundColor());
     if (d->isCurtain) {
@@ -478,6 +478,7 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     } else {
         painter.drawRoundedRect(backgroundRect, radius, radius);
     }
+    painter.setOpacity(1.0);
 
     if (actions().isEmpty()) {
         return;

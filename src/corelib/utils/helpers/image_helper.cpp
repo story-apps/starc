@@ -299,6 +299,21 @@ extern void qt_blurImage(QPainter* p, QImage& blurImage, qreal radius, bool qual
                          int transposed = 0);
 QT_END_NAMESPACE
 
+QPixmap ImageHelper::blurImage(const QPixmap& _sourcePixmap, qreal _blurRadius)
+{
+    if (_sourcePixmap.isNull()) {
+        return QPixmap();
+    }
+
+    QImage sourceImage = _sourcePixmap.toImage();
+    QImage blurredImage(_sourcePixmap.size(), QImage::Format_ARGB32_Premultiplied);
+    blurredImage.fill(0);
+    QPainter blurPainter(&blurredImage);
+    qt_blurImage(&blurPainter, sourceImage, _blurRadius, true, false);
+    blurPainter.end();
+    return QPixmap::fromImage(blurredImage);
+}
+
 QPixmap ImageHelper::dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins,
                                 qreal _blurRadius, const QColor& _color, bool _useCache)
 {
@@ -369,8 +384,11 @@ void ImageHelper::drawRoundedImage(QPainter& _painter, const QRectF& _rect, cons
         return;
     }
 
-    _painter.setPen(Qt::NoPen);
+    const auto lastPen = _painter.pen();
+    const auto lastBrush = _painter.brush();
+    const auto lastAntialiasingState = _painter.testRenderHint(QPainter::Antialiasing);
 
+    _painter.setPen(Qt::NoPen);
     QBrush imageBrush(_image);
     auto transform = imageBrush.transform();
     transform.translate(_rect.left(), _rect.top());
@@ -394,7 +412,13 @@ void ImageHelper::drawRoundedImage(QPainter& _painter, const QRectF& _rect, cons
 
     _painter.setRenderHint(QPainter::Antialiasing);
     _painter.drawRoundedRect(roundedRect, _roundingRadius, _roundingRadius);
-    _painter.setRenderHint(QPainter::Antialiasing, false);
+
+    //
+    // Восстанавливаем состояние рисовальщика
+    //
+    _painter.setPen(lastPen);
+    _painter.setBrush(lastBrush);
+    _painter.setRenderHint(QPainter::Antialiasing, lastAntialiasingState);
 }
 
 QPixmap ImageHelper::rotateImage(const QPixmap& _image, bool _left)

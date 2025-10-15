@@ -71,6 +71,11 @@ public:
                               const QColor& _backgroundColor);
 
     /**
+     * @brief Заблюрить изображение
+     */
+    static QPixmap blurImage(const QPixmap& _sourcePixmap, qreal _blurRadius);
+
+    /**
      * @brief Получить изображение тени для заданного изображения и параметров
      */
     static QPixmap dropShadow(const QPixmap& _sourcePixmap, const QMarginsF& _shadowMargins,
