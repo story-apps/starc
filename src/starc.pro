@@ -6,9 +6,10 @@ SUBDIRS += \
     corelib \
     core/management_layer/plugins \
     core \
-   # testapp \
-   # starcaiapp \
-   # starcservices \
+    # testapp \
+    # starcaiapp \
+    # starcservices \
+    # starctools \
 
 CONFIG += ordered
 

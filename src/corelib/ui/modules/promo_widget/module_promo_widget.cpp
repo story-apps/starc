@@ -513,7 +513,7 @@ void ModulePromoWidget::setupCloudVersionContent(ModulePromoType _forType)
     }
     d->updatePreviewUi(d->previewModules.indexOf(d->preview->currentWidget()));
 
-    d->title->setText(tr("Activate PRO"));
+    d->title->setText(tr("Activate CLOUD"));
 
     d->advancedVersionIcon->setIcon(u8"\U000F18BC");
     d->advancedVersionTitle->setText(tr("Get access to all features with a CLOUD subscription"));
