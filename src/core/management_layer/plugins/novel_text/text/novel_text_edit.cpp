@@ -1254,10 +1254,12 @@ void NovelTextEdit::paintEvent(QPaintEvent* _event)
                         //
                         // Определим область для отрисовки плейсхолдера
                         //
-                        const auto placeholderText = QString("%1 %2").arg(
-                            QCoreApplication::translate("KeyProcessingLayer::FolderFooterHandler",
-                                                        "End of"),
-                            headerBlock.text());
+                        const auto placeholderText
+                            = QString("--- %1: %2 ---")
+                                  .arg(tr(blockType == TextParagraphType::PartFooter
+                                              ? "End of part"
+                                              : "End of chapter"),
+                                       headerBlock.text());
                         const auto rect = textRect();
                         painter.drawText(rect, block.blockFormat().alignment(), placeholderText);
                     }
