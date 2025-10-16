@@ -126,6 +126,15 @@ public:
     void applyDocumentChanges(const QVector<QByteArray>& _patches);
 
     /**
+     * @brief Адаптировать изменения документа к текущему контенту
+     * @note Используется в кейсе, когда у нас есть локальные изменения и с сервера пришли другие
+     *       изменения от соавторов, в этой ситуации, нужно адаптировать локальные изменения, чтобы
+     *       они уже учитывали контент соавторов
+     */
+    QVector<QPair<QByteArray, QByteArray>> adoptDocumentChanges(
+        const QVector<QByteArray>& _patches);
+
+    /**
      * @brief Применяются ли в данный момент изменения
      */
     bool isChangesApplyingInProcess() const;

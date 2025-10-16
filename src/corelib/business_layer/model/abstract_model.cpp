@@ -348,6 +348,47 @@ void AbstractModel::applyDocumentChanges(const QVector<QByteArray>& _patches)
     reassignContent();
 }
 
+QVector<QPair<QByteArray, QByteArray>> AbstractModel::adoptDocumentChanges(
+    const QVector<QByteArray>& _patches)
+{
+    QVector<QPair<QByteArray, QByteArray>> adoptedPatches;
+    auto content = toXml();
+    for (const auto& patch : _patches) {
+        auto patchedContent = d->dmpController.applyPatch(content, patch);
+
+        //
+        // Если патч не принёс успеха, значит ошибка в наложении изменений
+        //
+        if (patchedContent.size() == content.size() && patchedContent == content) {
+            return {};
+        }
+
+        //
+        // Формируем корректные патчи для отмены и повтора последнего действия
+        //
+        const QByteArray undoPatch = d->dmpController.makePatch(content, patchedContent);
+        if (undoPatch.isEmpty()) {
+            return {};
+        }
+        const QByteArray redoPatch = d->dmpController.makePatch(patchedContent, content);
+        if (redoPatch.isEmpty()) {
+            return {};
+        }
+
+        //
+        // Сохраним патчи
+        //
+        adoptedPatches.append({ undoPatch, redoPatch });
+
+        //
+        // Сохраним текущее состояние документа, чтобы продолжать накладывать следующие патчи
+        //
+        content.swap(patchedContent);
+    }
+
+    return adoptedPatches;
+}
+
 bool AbstractModel::isChangesApplyingInProcess() const
 {
     return d->isChangesApplyingInProgress;

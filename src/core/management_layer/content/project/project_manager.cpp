@@ -3997,6 +3997,35 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         //
         if (isChangesMerged) {
             //
+            // Если есть локальные несинхронизированные изменения, то нужно получить патч между
+            // текущей версией документа в облаке и несинхронизированными изменениями, чтобы
+            // отправить их в облако в корректном состоянии, а не в том, которое было до момента
+            // получения изменений соавтора
+            //
+            {
+                changes.clear();
+                //
+                // ... порядок изменений формируем таким образм, чтобы они быть последовательно
+                // применены
+                //
+                for (const auto change : unsyncedChanges) {
+                    changes.prepend(change->undoPatch());
+                }
+                auto adoptedChanges = documentModel->adoptDocumentChanges(changes);
+                Q_ASSERT(adoptedChanges.size());
+                //
+                // ... после адаптации, соответственно порядок нужно будет развернуть обратно
+                //
+                for (auto change : unsyncedChanges) {
+                    const auto adoptedChange = adoptedChanges.takeLast();
+                    change->setUndoPatch(adoptedChange.first);
+                    change->setRedoPatch(adoptedChange.second);
+                    DataStorageLayer::StorageFacade::documentChangeStorage()->updateDocumentChange(
+                        change);
+                }
+            }
+
+            //
             // Симулируем изменение модели, чтобы приложение запушило несинхронизированные изменения
             //
             emit contentsChanged(documentModel);
@@ -4193,6 +4222,35 @@ void ProjectManager::applyDocumentChanges(const Domain::DocumentInfo& _documentI
         changes.append(change.redoPatch);
     }
     documentModel->applyDocumentChanges(changes);
+
+    //
+    // Если есть локальные несинхронизированные изменения, то нужно получить патч между текущей
+    // версией документа в облаке и несинхронизированными изменениями, чтобы отправить их в облако
+    // в корректном состоянии, а не в том, которое было до момента получения изменений соавтора
+    //
+    const auto unsyncedChanges
+        = DataStorageLayer::StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(
+            document->uuid());
+    if (!unsyncedChanges.isEmpty()) {
+        changes.clear();
+        //
+        // ... порядок изменений формируем таким образм, чтобы они быть последовательно применены
+        //
+        for (const auto change : unsyncedChanges) {
+            changes.prepend(change->undoPatch());
+        }
+        auto adoptedChanges = documentModel->adoptDocumentChanges(changes);
+        Q_ASSERT(adoptedChanges.size());
+        //
+        // ... после адаптации, соответственно порядок нужно будет развернуть обратно
+        //
+        for (auto change : unsyncedChanges) {
+            const auto adoptedChange = adoptedChanges.takeLast();
+            change->setUndoPatch(adoptedChange.first);
+            change->setRedoPatch(adoptedChange.second);
+            DataStorageLayer::StorageFacade::documentChangeStorage()->updateDocumentChange(change);
+        }
+    }
 }
 
 QVector<Domain::DocumentChangeObject*> ProjectManager::unsyncedChanges(

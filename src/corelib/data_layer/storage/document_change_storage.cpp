@@ -41,7 +41,13 @@ bool DocumentChangeStorage::isEmpty() const
 
 void DocumentChangeStorage::updateDocumentChange(Domain::DocumentChangeObject* _change)
 {
-    DataMappingLayer::MapperFacade::documentChangeMapper()->update(_change);
+    //
+    // Обновляем изменения, только если они не находятся в списке новых, те, что в списке будут
+    // обновлены автоматически, т.к. мы работаем с их указателями
+    //
+    if (const auto changeIndex = d->newDocumentChanges.indexOf(_change); changeIndex == -1) {
+        DataMappingLayer::MapperFacade::documentChangeMapper()->update(_change);
+    }
 }
 
 void DocumentChangeStorage::removeDocumentChange(Domain::DocumentChangeObject* _change)
