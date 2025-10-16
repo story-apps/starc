@@ -327,16 +327,16 @@ void PageTextEditScrollBar::contextMenuEvent(QContextMenuEvent* event)
 #if QT_CONFIG(menu)
     bool horiz = HORIZONTAL;
     QPointer<QMenu> menu = new QMenu(this);
-    QAction* actScrollHere = menu->addAction(tr("Scroll here"));
+    QAction* actScrollHere = menu->addAction(("Scroll here"));
     menu->addSeparator();
-    QAction* actScrollTop = menu->addAction(horiz ? tr("Left edge") : tr("Top"));
-    QAction* actScrollBottom = menu->addAction(horiz ? tr("Right edge") : tr("Bottom"));
+    QAction* actScrollTop = menu->addAction(horiz ? ("Left edge") : ("Top"));
+    QAction* actScrollBottom = menu->addAction(horiz ? ("Right edge") : ("Bottom"));
     menu->addSeparator();
-    QAction* actPageUp = menu->addAction(horiz ? tr("Page left") : tr("Page up"));
-    QAction* actPageDn = menu->addAction(horiz ? tr("Page right") : tr("Page down"));
+    QAction* actPageUp = menu->addAction(horiz ? ("Page left") : ("Page up"));
+    QAction* actPageDn = menu->addAction(horiz ? ("Page right") : ("Page down"));
     menu->addSeparator();
-    QAction* actScrollUp = menu->addAction(horiz ? tr("Scroll left") : tr("Scroll up"));
-    QAction* actScrollDn = menu->addAction(horiz ? tr("Scroll right") : tr("Scroll down"));
+    QAction* actScrollUp = menu->addAction(horiz ? ("Scroll left") : ("Scroll up"));
+    QAction* actScrollDn = menu->addAction(horiz ? ("Scroll right") : ("Scroll down"));
     QAction* actionSelected = menu->exec(event->globalPos());
     delete menu;
     if (actionSelected == nullptr)

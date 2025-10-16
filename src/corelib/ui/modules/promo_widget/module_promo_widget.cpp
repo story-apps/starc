@@ -56,12 +56,12 @@ public:
 
     IconsMidLabel* advancedVersionIcon = nullptr;
     Subtitle2Label* advancedVersionTitle = nullptr;
-    Body2Label* advancedVersionDescription = nullptr;
+    Body1Label* advancedVersionDescription = nullptr;
     QVBoxLayout* advancedVersionOptionsLayout = nullptr;
     struct OptionItem {
         QHBoxLayout* layout = nullptr;
         IconsSmallLabel* icon = nullptr;
-        CaptionLabel* title = nullptr;
+        Body2Label* title = nullptr;
     };
     QVector<OptionItem> advancedVersionOptions;
     Button* purchase = nullptr;
@@ -87,7 +87,7 @@ ModulePromoWidget::Implementation::Implementation(ModulePromoWidget* _q)
     , previewNext(new IconButton(q))
     , advancedVersionIcon(new IconsMidLabel(q))
     , advancedVersionTitle(new Subtitle2Label(q))
-    , advancedVersionDescription(new Body2Label(q))
+    , advancedVersionDescription(new Body1Label(q))
     , advancedVersionOptionsLayout(UiHelper::makeVBoxLayout())
     , purchase(new Button(q))
 {
@@ -168,7 +168,7 @@ void ModulePromoWidget::Implementation::addPreview(ModulePromoType _forType,
         case ModulePromoType::WorldsMap: {
             return ":/images/promo/worlds-map";
         }
-        case ModulePromoType::WoldInformation: {
+        case ModulePromoType::WorldInformation: {
             return ":/images/promo/world-profile";
         }
         case ModulePromoType::ExtendedStatistics: {
@@ -224,7 +224,7 @@ void ModulePromoWidget::Implementation::addOption(const QString& _text)
 {
     auto icon = new IconsSmallLabel(q);
     icon->setIcon(u8"\U000F012C");
-    auto option = new CaptionLabel(q);
+    auto option = new Body2Label(q);
     option->setText(_text);
     auto layout = UiHelper::makeHBoxLayout();
     layout->addWidget(icon);
@@ -263,8 +263,8 @@ void ModulePromoWidget::Implementation::updatePreviewUi(int _currentModuleIndex)
         case ModulePromoType::WorldsMap: {
             return tr("Worlds map");
         }
-        case ModulePromoType::WoldInformation: {
-            return tr("Wold information");
+        case ModulePromoType::WorldInformation: {
+            return tr("World information");
         }
         case ModulePromoType::ExtendedStatistics: {
             return tr("Extended statistics");
@@ -386,7 +386,7 @@ void ModulePromoWidget::setupProVersionContent(ModulePromoType _forType)
             componentName = tr("worlds map");
             break;
         }
-        case ModulePromoType::WoldInformation: {
+        case ModulePromoType::WorldInformation: {
             componentName = tr("world profile");
             break;
         }
@@ -437,7 +437,7 @@ void ModulePromoWidget::setupProVersionContent(ModulePromoType _forType)
         d->addPreview(ModulePromoType::LocationInformation, _forType);
         d->addPreview(ModulePromoType::LocationScenes, _forType);
         d->addPreview(ModulePromoType::WorldsMap, _forType);
-        d->addPreview(ModulePromoType::WoldInformation, _forType);
+        d->addPreview(ModulePromoType::WorldInformation, _forType);
         d->addPreview(ModulePromoType::IndexCards, _forType);
         d->addPreview(ModulePromoType::StoryTimeline, _forType);
         d->addPreview(ModulePromoType::ExtendedStatistics, _forType);

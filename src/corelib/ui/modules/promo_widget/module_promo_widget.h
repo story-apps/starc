@@ -17,7 +17,7 @@ enum class CORE_LIBRARY_EXPORT ModulePromoType {
     LocationInformation,
     LocationScenes,
     WorldsMap,
-    WoldInformation,
+    WorldInformation,
     ExtendedStatistics,
     IndexCards,
     StoryTimeline,
