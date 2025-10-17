@@ -737,8 +737,7 @@ void AccountNavigator::setAccountTeams(const QVector<Domain::TeamInfo>& _teams)
     };
 
     for (const auto& team : _teams) {
-        constexpr int ownerRole = 0;
-        if (team.teamRole == ownerRole) {
+        if (team.isOwner()) {
             d->teamsOwnerModel->appendRow(teamModelRow(team));
         } else {
             d->teamsMemberModel->appendRow(teamModelRow(team));

@@ -254,6 +254,12 @@ struct TeamInfo {
     {
         return id != kInvalidId;
     }
+
+    bool isOwner() const
+    {
+        constexpr int ownerRole = 0;
+        return teamRole == ownerRole;
+    }
 };
 
 /**

@@ -683,7 +683,7 @@ void ProjectsManager::setTeams(const QVector<Domain::TeamInfo>& _teams)
     //
     d->teamsForProjects.clear();
     for (const auto& team : _teams) {
-        if (team.teamRole == 0) {
+        if (team.isOwner()) {
             d->teamsForProjects.append(team);
         }
     }
@@ -777,7 +777,7 @@ void ProjectsManager::addOrUpdateTeam(const Domain::TeamInfo& _teamInfo)
         //
         // ... если команды не нашлось, то нужно создать
         //
-        if (!hasTeam) {
+        if (!hasTeam && _teamInfo.isOwner()) {
             d->teamsForProjects.append(_teamInfo);
         }
     }

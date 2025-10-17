@@ -338,18 +338,18 @@ void AccountViewTeams::showTeam(int _teamId)
         //
         // Настроим возможность добавления участников в команду
         //
-        const auto isOwner = team.teamRole == 0;
-        d->addMemberCard->setVisible(isOwner);
+        d->addMemberCard->setVisible(team.isOwner());
         //
         // ... управления командой
         //
-        d->members->setContextMenuPolicy(isOwner ? Qt::CustomContextMenu : Qt::NoContextMenu);
+        d->members->setContextMenuPolicy(team.isOwner() ? Qt::CustomContextMenu
+                                                        : Qt::NoContextMenu);
         //
         // ... и управления параметрами участников
         //
-        d->sidebar->setEnabled(isOwner);
-        d->sidebar->setVisible(isOwner);
-        d->splitter->setSizes(isOwner ? QVector<int>{ 7, 2 } : QVector<int>{ 1, 0 });
+        d->sidebar->setEnabled(team.isOwner());
+        d->sidebar->setVisible(team.isOwner());
+        d->splitter->setSizes(team.isOwner() ? QVector<int>{ 7, 2 } : QVector<int>{ 1, 0 });
         d->splitter->setHidePanelButtonAvailable(true, false);
 
         break;
