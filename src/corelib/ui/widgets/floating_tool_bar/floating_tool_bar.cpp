@@ -379,6 +379,10 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
 {
     Q_UNUSED(_event)
 
+    //
+    // Ставим тут проверку, чтобы не рисовать себя в проходе, который нужен для формирования
+    // изображения под панелью, чтобы заблюрить его на фоне
+    //
     const auto canRun = RunOnce::tryRun(Q_FUNC_INFO);
     if (!canRun) {
         return;
@@ -436,7 +440,14 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         auto backgroundImageRect = backgroundRect;
         backgroundImageRect.moveTopLeft(backgroundImageRect.topLeft() + pos());
         QPixmap backgroundPixmap(backgroundImageRect.size());
+        //
+        // ... хитрим тут немного, чтобы Qt не срал в лог, что у нас рекурсивная отрисовка, в данном
+        //     случае мы полностью отдаём себе понимание в ситуации и пренебрегаем этой проверкой
+        //
+        setAttribute(Qt::WA_WState_InPaintEvent, false);
         parentWidget()->render(&backgroundPixmap, {}, backgroundImageRect);
+        setAttribute(Qt::WA_WState_InPaintEvent);
+        //
         backgroundPixmap
             = ImageHelper::blurImage(backgroundPixmap, Ui::DesignSystem::layout().px24());
         ImageHelper::drawRoundedImage(painter, backgroundRect, backgroundPixmap, radius,
