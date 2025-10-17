@@ -1218,9 +1218,12 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             });
     connect(d->view, &Ui::SettingsView::saveToFileCurrentSimpleTextEditorTemplateRequested, this,
             [this](const QString& _templateId) {
+                const auto simpleTextTemplate
+                    = BusinessLayer::TemplatesFacade::simpleTextTemplate(_templateId);
                 auto saveToFilePath = QFileDialog::getSaveFileName(
                     d->view->topLevelWidget(), tr("Choose the file to save template"),
-                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/"
+                        + simpleTextTemplate.name(),
                     DialogHelper::starcTemplateFilter());
                 if (saveToFilePath.isEmpty()) {
                     return;
@@ -1229,27 +1232,28 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
                 if (!saveToFilePath.endsWith(ExtensionHelper::starct())) {
                     saveToFilePath.append(QString(".%1").arg(ExtensionHelper::starct()));
                 }
-                const auto simpleTextTemplate
-                    = BusinessLayer::TemplatesFacade::simpleTextTemplate(_templateId);
                 simpleTextTemplate.saveToFile(saveToFilePath);
             });
     connect(d->view, &Ui::SettingsView::removeCurrentSimpleTextEditorTemplateRequested, this,
             [](const QString& _templateId) {
                 BusinessLayer::TemplatesFacade::removeSimpleTextTemplate(_templateId);
             });
-    connect(d->view, &Ui::SettingsView::loadFromFileSimpleTextEditorTemplateRequested, this,
-            [this] {
-                const auto templateFilePath = QFileDialog::getOpenFileName(
-                    d->view->topLevelWidget(), tr("Choose the file with template to load"),
-                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
-                    DialogHelper::starcTemplateFilter());
-                if (templateFilePath.isEmpty()) {
-                    return;
-                }
+    connect(
+        d->view, &Ui::SettingsView::loadFromFileSimpleTextEditorTemplateRequested, this, [this] {
+            const auto templateFilePath = QFileDialog::getOpenFileName(
+                d->view->topLevelWidget(), tr("Choose the file with template to load"),
+                QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                DialogHelper::starcTemplateFilter());
+            if (templateFilePath.isEmpty()) {
+                return;
+            }
 
-                const BusinessLayer::SimpleTextTemplate simpleTextTemplate(templateFilePath);
-                BusinessLayer::TemplatesFacade::saveSimpleTextTemplate(simpleTextTemplate);
-            });
+            const BusinessLayer::SimpleTextTemplate simpleTextTemplate(templateFilePath);
+            BusinessLayer::TemplatesFacade::saveSimpleTextTemplate(simpleTextTemplate);
+
+            BusinessLayer::TemplatesFacade::setDefaultSimpleTextTemplate(simpleTextTemplate.id());
+            d->view->setSimpleTextEditorDefaultTemplate(simpleTextTemplate.id());
+        });
     //
     // ... сценарий
     //
@@ -1269,9 +1273,12 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             });
     connect(d->view, &Ui::SettingsView::saveToFileCurrentScreenplayEditorTemplateRequested, this,
             [this](const QString& _templateId) {
+                const auto screenplayTemplate
+                    = BusinessLayer::TemplatesFacade::screenplayTemplate(_templateId);
                 auto saveToFilePath = QFileDialog::getSaveFileName(
                     d->view->topLevelWidget(), tr("Choose the file to save template"),
-                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/"
+                        + screenplayTemplate.name(),
                     DialogHelper::starcTemplateFilter());
                 if (saveToFilePath.isEmpty()) {
                     return;
@@ -1280,27 +1287,28 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
                 if (!saveToFilePath.endsWith(ExtensionHelper::starct())) {
                     saveToFilePath.append(QString(".%1").arg(ExtensionHelper::starct()));
                 }
-                const auto screenplayTemplate
-                    = BusinessLayer::TemplatesFacade::screenplayTemplate(_templateId);
                 screenplayTemplate.saveToFile(saveToFilePath);
             });
     connect(d->view, &Ui::SettingsView::removeCurrentScreenplayEditorTemplateRequested, this,
             [](const QString& _templateId) {
                 BusinessLayer::TemplatesFacade::removeScreenplayTemplate(_templateId);
             });
-    connect(d->view, &Ui::SettingsView::loadFromFileScreenplayEditorTemplateRequested, this,
-            [this] {
-                const auto templateFilePath = QFileDialog::getOpenFileName(
-                    d->view->topLevelWidget(), tr("Choose the file with template to load"),
-                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
-                    DialogHelper::starcTemplateFilter());
-                if (templateFilePath.isEmpty()) {
-                    return;
-                }
+    connect(
+        d->view, &Ui::SettingsView::loadFromFileScreenplayEditorTemplateRequested, this, [this] {
+            const auto templateFilePath = QFileDialog::getOpenFileName(
+                d->view->topLevelWidget(), tr("Choose the file with template to load"),
+                QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                DialogHelper::starcTemplateFilter());
+            if (templateFilePath.isEmpty()) {
+                return;
+            }
 
-                const BusinessLayer::ScreenplayTemplate screenplayTemplate(templateFilePath);
-                BusinessLayer::TemplatesFacade::saveScreenplayTemplate(screenplayTemplate);
-            });
+            const BusinessLayer::ScreenplayTemplate screenplayTemplate(templateFilePath);
+            BusinessLayer::TemplatesFacade::saveScreenplayTemplate(screenplayTemplate);
+
+            BusinessLayer::TemplatesFacade::setDefaultScreenplayTemplate(screenplayTemplate.id());
+            d->view->setScreenplayEditorDefaultTemplate(screenplayTemplate.id());
+        });
     //
     // ... комикс
     //
@@ -1320,9 +1328,12 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             });
     connect(d->view, &Ui::SettingsView::saveToFileCurrentComicBookEditorTemplateRequested, this,
             [this](const QString& _templateId) {
+                const auto comicBookTemplate
+                    = BusinessLayer::TemplatesFacade::comicBookTemplate(_templateId);
                 auto saveToFilePath = QFileDialog::getSaveFileName(
                     d->view->topLevelWidget(), tr("Choose the file to save template"),
-                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/"
+                        + comicBookTemplate.name(),
                     DialogHelper::starcTemplateFilter());
                 if (saveToFilePath.isEmpty()) {
                     return;
@@ -1331,8 +1342,6 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
                 if (!saveToFilePath.endsWith(ExtensionHelper::starct())) {
                     saveToFilePath.append(QString(".%1").arg(ExtensionHelper::starct()));
                 }
-                const auto comicBookTemplate
-                    = BusinessLayer::TemplatesFacade::comicBookTemplate(_templateId);
                 comicBookTemplate.saveToFile(saveToFilePath);
             });
     connect(d->view, &Ui::SettingsView::removeCurrentComicBookEditorTemplateRequested, this,
@@ -1350,6 +1359,9 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
 
         const BusinessLayer::ComicBookTemplate comicBookTemplate(templateFilePath);
         BusinessLayer::TemplatesFacade::saveComicBookTemplate(comicBookTemplate);
+
+        BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(comicBookTemplate.id());
+        d->view->setComicBookEditorDefaultTemplate(comicBookTemplate.id());
     });
     //
     // ... аудиопостановка
@@ -1370,9 +1382,12 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             });
     connect(d->view, &Ui::SettingsView::saveToFileCurrentAudioplayEditorTemplateRequested, this,
             [this](const QString& _templateId) {
+                const auto audioplayTemplate
+                    = BusinessLayer::TemplatesFacade::audioplayTemplate(_templateId);
                 auto saveToFilePath = QFileDialog::getSaveFileName(
                     d->view->topLevelWidget(), tr("Choose the file to save template"),
-                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/"
+                        + audioplayTemplate.name(),
                     DialogHelper::starcTemplateFilter());
                 if (saveToFilePath.isEmpty()) {
                     return;
@@ -1381,8 +1396,6 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
                 if (!saveToFilePath.endsWith(ExtensionHelper::starct())) {
                     saveToFilePath.append(QString(".%1").arg(ExtensionHelper::starct()));
                 }
-                const auto audioplayTemplate
-                    = BusinessLayer::TemplatesFacade::audioplayTemplate(_templateId);
                 audioplayTemplate.saveToFile(saveToFilePath);
             });
     connect(d->view, &Ui::SettingsView::removeCurrentAudioplayEditorTemplateRequested, this,
@@ -1400,6 +1413,9 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
 
         const BusinessLayer::AudioplayTemplate audioplayTemplate(templateFilePath);
         BusinessLayer::TemplatesFacade::saveAudioplayTemplate(audioplayTemplate);
+
+        BusinessLayer::TemplatesFacade::setDefaultAudioplayTemplate(audioplayTemplate.id());
+        d->view->setAudioplayEditorDefaultTemplate(audioplayTemplate.id());
     });
     //
     // ... пьеса
@@ -1420,9 +1436,12 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             });
     connect(d->view, &Ui::SettingsView::saveToFileCurrentStageplayEditorTemplateRequested, this,
             [this](const QString& _templateId) {
+                const auto stageplayTemplate
+                    = BusinessLayer::TemplatesFacade::stageplayTemplate(_templateId);
                 auto saveToFilePath = QFileDialog::getSaveFileName(
                     d->view->topLevelWidget(), tr("Choose the file to save template"),
-                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/"
+                        + stageplayTemplate.name(),
                     DialogHelper::starcTemplateFilter());
                 if (saveToFilePath.isEmpty()) {
                     return;
@@ -1431,8 +1450,6 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
                 if (!saveToFilePath.endsWith(ExtensionHelper::starct())) {
                     saveToFilePath.append(QString(".%1").arg(ExtensionHelper::starct()));
                 }
-                const auto stageplayTemplate
-                    = BusinessLayer::TemplatesFacade::stageplayTemplate(_templateId);
                 stageplayTemplate.saveToFile(saveToFilePath);
             });
     connect(d->view, &Ui::SettingsView::removeCurrentStageplayEditorTemplateRequested, this,
@@ -1450,6 +1467,9 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
 
         const BusinessLayer::StageplayTemplate stageplayTemplate(templateFilePath);
         BusinessLayer::TemplatesFacade::saveStageplayTemplate(stageplayTemplate);
+
+        BusinessLayer::TemplatesFacade::setDefaultStageplayTemplate(stageplayTemplate.id());
+        d->view->setStageplayEditorDefaultTemplate(stageplayTemplate.id());
     });
     //
     // ... роман
@@ -1470,9 +1490,12 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
             });
     connect(d->view, &Ui::SettingsView::saveToFileCurrentNovelEditorTemplateRequested, this,
             [this](const QString& _templateId) {
+                const auto novelTemplate
+                    = BusinessLayer::TemplatesFacade::novelTemplate(_templateId);
                 auto saveToFilePath = QFileDialog::getSaveFileName(
                     d->view->topLevelWidget(), tr("Choose the file to save template"),
-                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/"
+                        + novelTemplate.name(),
                     DialogHelper::starcTemplateFilter());
                 if (saveToFilePath.isEmpty()) {
                     return;
@@ -1481,8 +1504,6 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
                 if (!saveToFilePath.endsWith(ExtensionHelper::starct())) {
                     saveToFilePath.append(QString(".%1").arg(ExtensionHelper::starct()));
                 }
-                const auto novelTemplate
-                    = BusinessLayer::TemplatesFacade::novelTemplate(_templateId);
                 novelTemplate.saveToFile(saveToFilePath);
             });
     connect(d->view, &Ui::SettingsView::removeCurrentNovelEditorTemplateRequested, this,
@@ -1500,6 +1521,9 @@ SettingsManager::SettingsManager(QObject* _parent, QWidget* _parentWidget,
 
         const BusinessLayer::NovelTemplate novelTemplate(templateFilePath);
         BusinessLayer::TemplatesFacade::saveNovelTemplate(novelTemplate);
+
+        BusinessLayer::TemplatesFacade::setDefaultNovelTemplate(novelTemplate.id());
+        d->view->setNovelEditorDefaultTemplate(novelTemplate.id());
     });
     //
     // ... сам менеджер шаблона
