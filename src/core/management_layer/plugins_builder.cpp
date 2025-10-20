@@ -979,7 +979,6 @@ void PluginsBuilder::reconfigurePlugin(const QString& _mimeType,
 
 void PluginsBuilder::reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys) const
 {
-
     reconfigurePlugin(kSimpleTextEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplayTitlePageEditorMime, _changedSettingsKeys);
     reconfigurePlugin(kScreenplaySeriesTitlePageEditorMime, _changedSettingsKeys);

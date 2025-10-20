@@ -8,7 +8,17 @@
 #include <business_layer/export/export_options.h>
 #include <business_layer/export/simple_text/simple_text_markdown_exporter.h>
 #include <business_layer/import/text/simple_text_markdown_importer.h>
+#include <business_layer/model/audioplay/audioplay_information_model.h>
+#include <business_layer/model/audioplay/audioplay_synopsis_model.h>
+#include <business_layer/model/comic_book/comic_book_information_model.h>
+#include <business_layer/model/comic_book/comic_book_synopsis_model.h>
+#include <business_layer/model/novel/novel_information_model.h>
+#include <business_layer/model/novel/novel_synopsis_model.h>
+#include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/model/stageplay/stageplay_information_model.h>
+#include <business_layer/model/stageplay/stageplay_synopsis_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
@@ -219,17 +229,140 @@ void SimpleTextEdit::initWithModel(BusinessLayer::SimpleTextModel* _model)
 {
     if (d->model) {
         d->model->disconnect(this);
+
+        if (auto synopsisModel = qobject_cast<BusinessLayer::ScreenplaySynopsisModel*>(d->model)) {
+            synopsisModel->informationModel()->disconnect(this);
+        } else if (auto synopsisModel
+                   = qobject_cast<BusinessLayer::ComicBookSynopsisModel*>(d->model)) {
+            synopsisModel->informationModel()->disconnect(this);
+        } else if (auto synopsisModel
+                   = qobject_cast<BusinessLayer::AudioplaySynopsisModel*>(d->model)) {
+            synopsisModel->informationModel()->disconnect(this);
+        } else if (auto synopsisModel
+                   = qobject_cast<BusinessLayer::StageplaySynopsisModel*>(d->model)) {
+            synopsisModel->informationModel()->disconnect(this);
+        } else if (auto synopsisModel
+                   = qobject_cast<BusinessLayer::NovelSynopsisModel*>(d->model)) {
+            synopsisModel->informationModel()->disconnect(this);
+        }
     }
 
     d->model = _model;
 
-    if (usePageMode()) {
-        const auto currentTemplate = TemplatesFacade::textTemplate(_model);
-        setPageFormat(currentTemplate.pageSizeId());
-        setPageMarginsMm(currentTemplate.pageMargins());
-        setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
-        setShowPageNumberAtFirstPage(currentTemplate.isFirstPageNumberVisible());
+    //
+    // Сбрасываем модель, чтобы не вылезали изменения документа при изменении параметров страницы
+    //
+    d->document.setModel(nullptr);
+
+    //
+    // Сценарий
+    //
+    if (auto synopsisModel = qobject_cast<BusinessLayer::ScreenplaySynopsisModel*>(d->model)) {
+        auto updateHeader
+            = [this, synopsisModel] { setHeader(synopsisModel->informationModel()->header()); };
+        updateHeader();
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::headerChanged, this, updateHeader);
+
+        auto updateFooter
+            = [this, synopsisModel] { setFooter(synopsisModel->informationModel()->footer()); };
+        updateFooter();
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::footerChanged, this, updateFooter);
+
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::ScreenplayInformationModel::templateIdChanged, this,
+                &SimpleTextEdit::reinit);
     }
+    //
+    // Комикс
+    //
+    else if (auto synopsisModel = qobject_cast<BusinessLayer::ComicBookSynopsisModel*>(d->model)) {
+        auto updateHeader
+            = [this, synopsisModel] { setHeader(synopsisModel->informationModel()->header()); };
+        updateHeader();
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::ComicBookInformationModel::headerChanged, this, updateHeader);
+
+        auto updateFooter
+            = [this, synopsisModel] { setFooter(synopsisModel->informationModel()->footer()); };
+        updateFooter();
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::ComicBookInformationModel::footerChanged, this, updateFooter);
+
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::ComicBookInformationModel::templateIdChanged, this,
+                &SimpleTextEdit::reinit);
+    }
+    //
+    // Аудиопостановка
+    //
+    else if (auto synopsisModel = qobject_cast<BusinessLayer::AudioplaySynopsisModel*>(d->model)) {
+        auto updateHeader
+            = [this, synopsisModel] { setHeader(synopsisModel->informationModel()->header()); };
+        updateHeader();
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::AudioplayInformationModel::headerChanged, this, updateHeader);
+
+        auto updateFooter
+            = [this, synopsisModel] { setFooter(synopsisModel->informationModel()->footer()); };
+        updateFooter();
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::AudioplayInformationModel::footerChanged, this, updateFooter);
+
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::AudioplayInformationModel::templateIdChanged, this,
+                &SimpleTextEdit::reinit);
+    }
+    //
+    // Пьеса
+    //
+    else if (auto synopsisModel = qobject_cast<BusinessLayer::StageplaySynopsisModel*>(d->model)) {
+        auto updateHeader
+            = [this, synopsisModel] { setHeader(synopsisModel->informationModel()->header()); };
+        updateHeader();
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::StageplayInformationModel::headerChanged, this, updateHeader);
+
+        auto updateFooter
+            = [this, synopsisModel] { setFooter(synopsisModel->informationModel()->footer()); };
+        updateFooter();
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::StageplayInformationModel::footerChanged, this, updateFooter);
+
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::StageplayInformationModel::templateIdChanged, this,
+                &SimpleTextEdit::reinit);
+    }
+    //
+    // Роман
+    //
+    else if (auto synopsisModel = qobject_cast<BusinessLayer::NovelSynopsisModel*>(d->model)) {
+        auto updateHeader
+            = [this, synopsisModel] { setHeader(synopsisModel->informationModel()->header()); };
+        updateHeader();
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::NovelInformationModel::headerChanged, this, updateHeader);
+
+        auto updateFooter
+            = [this, synopsisModel] { setFooter(synopsisModel->informationModel()->footer()); };
+        updateFooter();
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::NovelInformationModel::footerChanged, this, updateFooter);
+
+        connect(synopsisModel->informationModel(),
+                &BusinessLayer::NovelInformationModel::templateIdChanged, this,
+                &SimpleTextEdit::reinit);
+    }
+
+    //
+    // Настроим редактор в соответствии с параметрами шаблона
+    //
+    const auto currentTemplate = TemplatesFacade::textTemplate(_model);
+    setPageFormat(currentTemplate.pageSizeId());
+    setPageMarginsMm(currentTemplate.pageMargins());
+    setPageNumbersAlignment(currentTemplate.pageNumbersAlignment());
+    setShowPageNumberAtFirstPage(currentTemplate.isFirstPageNumberVisible());
 
     //
     // Документ нужно формировать только после того, как редактор настроен, чтобы избежать лишний

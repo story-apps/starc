@@ -6,7 +6,12 @@
 
 #include <business_layer/document/text/text_block_data.h>
 #include <business_layer/document/text/text_cursor.h>
+#include <business_layer/model/audioplay/audioplay_synopsis_model.h>
+#include <business_layer/model/comic_book/comic_book_synopsis_model.h>
+#include <business_layer/model/novel/novel_synopsis_model.h>
+#include <business_layer/model/screenplay/screenplay_synopsis_model.h>
 #include <business_layer/model/simple_text/simple_text_model.h>
+#include <business_layer/model/stageplay/stageplay_synopsis_model.h>
 #include <business_layer/model/text/text_model_text_item.h>
 #include <business_layer/templates/simple_text_template.h>
 #include <business_layer/templates/templates_facade.h>
@@ -1113,9 +1118,19 @@ void SimpleTextView::reconfigure(const QStringList& _changedSettingsKeys)
 {
     UiHelper::initSpellingFor(d->textEdit);
 
-    if (_changedSettingsKeys.isEmpty()
-        || _changedSettingsKeys.contains(
-            DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey)) {
+    QString defaultTemplateKey = DataStorageLayer::kComponentsSimpleTextEditorDefaultTemplateKey;
+    if (qobject_cast<BusinessLayer::ComicBookSynopsisModel*>(d->model)) {
+        defaultTemplateKey = DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey;
+    } else if (qobject_cast<BusinessLayer::ScreenplaySynopsisModel*>(d->model)) {
+        defaultTemplateKey = DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey;
+    } else if (qobject_cast<BusinessLayer::AudioplaySynopsisModel*>(d->model)) {
+        defaultTemplateKey = DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey;
+    } else if (qobject_cast<BusinessLayer::StageplaySynopsisModel*>(d->model)) {
+        defaultTemplateKey = DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey;
+    } else if (qobject_cast<BusinessLayer::NovelSynopsisModel*>(d->model)) {
+        defaultTemplateKey = DataStorageLayer::kComponentsNovelEditorDefaultTemplateKey;
+    }
+    if (_changedSettingsKeys.isEmpty() || _changedSettingsKeys.contains(defaultTemplateKey)) {
         d->reconfigureTemplate();
     }
 

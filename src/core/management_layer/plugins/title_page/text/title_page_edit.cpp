@@ -166,6 +166,11 @@ void TitlePageEdit::initWithModel(BusinessLayer::TitlePageModel* _model)
     d->model = _model;
 
     //
+    // Сбрасываем модель, чтобы не вылезали изменения документа при изменении параметров страницы
+    //
+    d->document.setModel(nullptr);
+
+    //
     // Сценарий
     //
     if (auto titlePageModel = qobject_cast<BusinessLayer::ScreenplayTitlePageModel*>(d->model)) {

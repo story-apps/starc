@@ -2096,6 +2096,8 @@ void SettingsManager::setScreenplayEditorDefaultTemplate(const QString& _templat
 {
     setSettingsValue(DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey, _templateId);
     BusinessLayer::TemplatesFacade::setDefaultScreenplayTemplate(_templateId);
+    emit simpleTextEditorChanged(
+        { DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey });
     emit screenplayEditorChanged(
         { DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey });
 }
@@ -2294,6 +2296,8 @@ void SettingsManager::setComicBookEditorDefaultTemplate(const QString& _template
 {
     setSettingsValue(DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey, _templateId);
     BusinessLayer::TemplatesFacade::setDefaultComicBookTemplate(_templateId);
+    emit simpleTextEditorChanged(
+        { DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey });
     emit comicBookEditorChanged({ DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey });
 }
 
@@ -2352,6 +2356,8 @@ void SettingsManager::setAudioplayEditorDefaultTemplate(const QString& _template
 {
     setSettingsValue(DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey, _templateId);
     BusinessLayer::TemplatesFacade::setDefaultAudioplayTemplate(_templateId);
+    emit simpleTextEditorChanged(
+        { DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey });
     emit audioplayEditorChanged({ DataStorageLayer::kComponentsAudioplayEditorDefaultTemplateKey });
 }
 
@@ -2431,6 +2437,8 @@ void SettingsManager::setStageplayEditorDefaultTemplate(const QString& _template
 {
     setSettingsValue(DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey, _templateId);
     BusinessLayer::TemplatesFacade::setDefaultStageplayTemplate(_templateId);
+    emit simpleTextEditorChanged(
+        { DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey });
     emit stageplayEditorChanged({ DataStorageLayer::kComponentsStageplayEditorDefaultTemplateKey });
 }
 
@@ -2488,6 +2496,7 @@ void SettingsManager::setNovelEditorDefaultTemplate(const QString& _templateId)
 {
     setSettingsValue(DataStorageLayer::kComponentsNovelEditorDefaultTemplateKey, _templateId);
     BusinessLayer::TemplatesFacade::setDefaultNovelTemplate(_templateId);
+    emit simpleTextEditorChanged({ DataStorageLayer::kComponentsNovelEditorDefaultTemplateKey });
     emit novelEditorChanged({ DataStorageLayer::kComponentsNovelEditorDefaultTemplateKey });
 }
 
