@@ -976,7 +976,7 @@ void ComicBookTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mod
 
 void ComicBookTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
-    d->textEdit->setCursors(_cursors);
+    d->textEdit->setCollaboratorsCursors(_cursors);
 }
 
 void ComicBookTextView::setCurrentModelIndex(const QModelIndex& _index)
@@ -1394,7 +1394,7 @@ void ComicBookTextView::setModel(BusinessLayer::ComicBookTextModel* _model)
             Qt::QueuedConnection);
     }
 
-    d->textEdit->setCursors({});
+    d->textEdit->setCollaboratorsCursors({});
     d->textEdit->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);

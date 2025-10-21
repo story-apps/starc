@@ -962,7 +962,7 @@ void StageplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mod
 
 void StageplayTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
-    d->textEdit->setCursors(_cursors);
+    d->textEdit->setCollaboratorsCursors(_cursors);
 }
 
 void StageplayTextView::setCurrentModelIndex(const QModelIndex& _index)
@@ -1355,7 +1355,7 @@ void StageplayTextView::setModel(BusinessLayer::StageplayTextModel* _model)
             Qt::QueuedConnection);
     }
 
-    d->textEdit->setCursors({});
+    d->textEdit->setCollaboratorsCursors({});
     d->textEdit->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);

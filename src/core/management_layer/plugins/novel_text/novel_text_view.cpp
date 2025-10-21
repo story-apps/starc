@@ -1394,7 +1394,7 @@ void NovelTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
 
 void NovelTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
-    d->textEdit->setCursors(_cursors);
+    d->textEdit->setCollaboratorsCursors(_cursors);
 }
 
 void NovelTextView::setCurrentModelIndex(const QModelIndex& _index)
@@ -1758,7 +1758,7 @@ void NovelTextView::setModel(BusinessLayer::NovelTextModel* _model)
             Qt::QueuedConnection);
     }
 
-    d->textEdit->setCursors({});
+    d->textEdit->setCollaboratorsCursors({});
     d->textEdit->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);

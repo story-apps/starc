@@ -1,8 +1,14 @@
 #include "script_text_edit.h"
 
+#include <business_layer/document/text/text_cursor.h>
 #include <business_layer/templates/text_template.h>
+#include <domain/starcloud_api.h>
+#include <ui/design_system/design_system.h>
+#include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
+#include <utils/tools/debouncer.h>
 
+#include <QPainter>
 #include <QRegularExpression>
 #include <QTextTable>
 
@@ -14,11 +20,38 @@ namespace Ui {
 class ScriptTextEdit::Implementation
 {
 public:
+    Implementation(ScriptTextEdit* _q);
+
+
+    ScriptTextEdit* q = nullptr;
+
     /**
      * @brief Показывать автодополения в пустых блоках
      */
     bool showSuggestionsInEmptyBlocks = true;
+
+    /**
+     * @brief Последнее положение мыши
+     */
+    QPoint lastMousePos;
+
+    /**
+     * @brief Курсоры соавторов
+     */
+    QVector<Domain::CursorInfo> collaboratorsCursorInfo;
+    QVector<Domain::CursorInfo> pendingCollaboratorsCursorInfo;
+    Debouncer collaboratorCursorInfoUpdateDebouncer;
 };
+
+ScriptTextEdit::Implementation::Implementation(ScriptTextEdit* _q)
+    : q(_q)
+    , collaboratorCursorInfoUpdateDebouncer(500)
+{
+    connect(&collaboratorCursorInfoUpdateDebouncer, &Debouncer::gotWork, q, [this] {
+        std::swap(collaboratorsCursorInfo, pendingCollaboratorsCursorInfo);
+        q->update();
+    });
+}
 
 
 // ****
@@ -26,7 +59,7 @@ public:
 
 ScriptTextEdit::ScriptTextEdit(QWidget* _parent)
     : BaseTextEdit(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
 }
 
@@ -62,6 +95,93 @@ void ScriptTextEdit::setTextCursorAndKeepScrollBars(const QTextCursor& _cursor)
     //
     setVerticalScroll(verticalScrollValue);
     setHorizontalScroll(horizontalScrollValue);
+}
+
+void ScriptTextEdit::setCollaboratorsCursors(const QVector<Domain::CursorInfo>& _cursors)
+{
+    d->pendingCollaboratorsCursorInfo = _cursors;
+    d->collaboratorCursorInfoUpdateDebouncer.orderWork();
+}
+
+void ScriptTextEdit::updateCollaboratorsCursors(int _position, int _charsRemoved, int _charsAdded)
+{
+    for (auto& collaboratorCursor : d->collaboratorsCursorInfo) {
+        int collaboratorCursorPosition = collaboratorCursor.cursorData.toInt();
+        if (collaboratorCursorPosition >= _position) {
+            collaboratorCursorPosition += _charsAdded - _charsRemoved;
+            collaboratorCursor.cursorData = QByteArray::number(collaboratorCursorPosition);
+        }
+    }
+
+    d->collaboratorCursorInfoUpdateDebouncer.abortWork();
+}
+
+void ScriptTextEdit::paintCollaboratorsCursors(QPainter& _painter, const QUuid& _documentUuid,
+                                               const QTextBlock& _topBlock,
+                                               const QTextBlock& _bottomBlock) const
+{
+    if (!d->collaboratorsCursorInfo.isEmpty()) {
+        for (const auto& cursorInfo : std::as_const(d->collaboratorsCursorInfo)) {
+            //
+            // Пропускаем курсоры из других документов
+            //
+            if (cursorInfo.documentUuid != _documentUuid) {
+                continue;
+            }
+
+            //
+            // Пропускаем курсоры, которые находятся за пределами экрана
+            //
+            const auto cursorPosition = cursorInfo.cursorData.toInt();
+            if (_bottomBlock.isValid()
+                && (cursorPosition < _topBlock.position()
+                    || cursorPosition > (_bottomBlock.position() + _bottomBlock.length()))) {
+                continue;
+            }
+
+
+            BusinessLayer::TextCursor cursor(document());
+            cursor.setPosition(cursorPosition);
+            if (!cursor.block().isVisible()) {
+                continue;
+            }
+
+            const auto cursorR = cursorRect(cursor).adjusted(-DesignSystem::layout().px(), 0,
+                                                             DesignSystem::layout().px(), 0);
+            const auto backgroundColor = ColorHelper::forText(cursorInfo.name);
+
+            //
+            // ... рисуем его
+            //
+            _painter.fillRect(cursorR, backgroundColor);
+
+            //
+            // ... выводим имя соавтора, если курсор мыши около курсора соавтора
+            //
+            if (cursorR.adjusted(-DesignSystem::layout().px4(), 0, DesignSystem::layout().px4(), 0)
+                    .contains(d->lastMousePos)) {
+                _painter.setFont(DesignSystem::font().subtitle2());
+                const QRect usernameRect(cursorR.left() - DesignSystem::layout().px4(),
+                                         cursorR.top() - DesignSystem::layout().px24(),
+                                         TextHelper::fineTextWidth(cursorInfo.name, _painter.font())
+                                             + DesignSystem::layout().px12(),
+                                         DesignSystem::layout().px24());
+                _painter.setPen(Qt::NoPen);
+                _painter.setBrush(backgroundColor);
+                _painter.drawRoundedRect(usernameRect, DesignSystem::button().borderRadius(),
+                                         DesignSystem::button().borderRadius());
+                _painter.setPen(ColorHelper::contrasted(backgroundColor));
+                _painter.drawText(usernameRect, Qt::AlignCenter, cursorInfo.name);
+            }
+        }
+    }
+}
+
+void ScriptTextEdit::mouseMoveEvent(QMouseEvent* _event)
+{
+    d->lastMousePos = _event->pos();
+
+    BaseTextEdit::mouseMoveEvent(_event);
 }
 
 bool ScriptTextEdit::keyPressEventReimpl(QKeyEvent* _event)

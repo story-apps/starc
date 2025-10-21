@@ -138,11 +138,6 @@ public:
     void setAutoReviewMode(const QColor& _textColor, const QColor& _backgroundColor,
                            bool _isRevision, bool _isTrackChanges);
 
-    /**
-     * @brief Задать курсоры соавторов
-     */
-    void setCursors(const QVector<Domain::CursorInfo>& _cursors);
-
 signals:
     /**
      * @brief Изменён тип абзаца

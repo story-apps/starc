@@ -19,13 +19,11 @@
 #include <business_layer/templates/novel_template.h>
 #include <business_layer/templates/templates_facade.h>
 #include <domain/document_object.h>
-#include <domain/starcloud_api.h>
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/context_menu/context_menu.h>
 #include <utils/helpers/color_helper.h>
 #include <utils/helpers/text_helper.h>
 #include <utils/shugar.h>
-#include <utils/tools/debouncer.h>
 
 #include <QAction>
 #include <QCoreApplication>
@@ -96,22 +94,12 @@ public:
         bool isRevision = false;
         bool isTrackChanges = false;
     } autoReviewMode;
-
-    QVector<Domain::CursorInfo> collaboratorsCursorInfo;
-    QVector<Domain::CursorInfo> pendingCollaboratorsCursorInfo;
-    Debouncer collaboratorCursorInfoUpdateDebouncer;
 };
 
 NovelOutlineEdit::Implementation::Implementation(NovelOutlineEdit* _q)
     : q(_q)
-    , collaboratorCursorInfoUpdateDebouncer(500)
 {
     document.setOutlineDocument(true);
-
-    connect(&collaboratorCursorInfoUpdateDebouncer, &Debouncer::gotWork, q, [this] {
-        std::swap(collaboratorsCursorInfo, pendingCollaboratorsCursorInfo);
-        q->update();
-    });
 }
 
 const BusinessLayer::NovelTemplate& NovelOutlineEdit::Implementation::novelTemplate() const
@@ -226,22 +214,7 @@ NovelOutlineEdit::NovelOutlineEdit(QWidget* _parent)
 
 
     connect(document(), &QTextDocument::contentsChange, this,
-            [this](int _position, int _charsRemoved, int _charsAdded) {
-                auto updateCursors = [_position, _charsRemoved,
-                                      _charsAdded](QVector<Domain::CursorInfo>& _cursors) {
-                    for (auto& collaboratorCursor : _cursors) {
-                        int collaboratorCursorPosition = collaboratorCursor.cursorData.toInt();
-                        if (collaboratorCursorPosition >= _position) {
-                            collaboratorCursorPosition += _charsAdded - _charsRemoved;
-                            collaboratorCursor.cursorData
-                                = QByteArray::number(collaboratorCursorPosition);
-                        }
-                    }
-                };
-                updateCursors(d->collaboratorsCursorInfo);
-
-                d->collaboratorCursorInfoUpdateDebouncer.abortWork();
-            });
+            &NovelOutlineEdit::updateCollaboratorsCursors);
     connect(this, &NovelOutlineEdit::completed, this,
             [this](const QModelIndex& _index, int _from, int _to) {
                 Q_UNUSED(_index)
@@ -542,12 +515,6 @@ void NovelOutlineEdit::setAutoReviewMode(const QColor& _textColor, const QColor&
     d->autoReviewMode.isTrackChanges = _isTrackChanges;
 }
 
-void NovelOutlineEdit::setCursors(const QVector<Domain::CursorInfo>& _cursors)
-{
-    d->pendingCollaboratorsCursorInfo = _cursors;
-    d->collaboratorCursorInfoUpdateDebouncer.orderWork();
-}
-
 void NovelOutlineEdit::keyPressEvent(QKeyEvent* _event)
 {
     if (isReadOnly()) {
@@ -749,7 +716,7 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
     const bool isLeftToRight = QLocale().textDirection() == Qt::LeftToRight;
     const qreal pageLeft = 0;
     const qreal pageRight = viewport()->width();
-    const qreal spaceBetweenSceneNumberAndText = 10 * Ui::DesignSystem::scaleFactor();
+    const qreal spaceBetweenSceneNumberAndText = 10 * DesignSystem::scaleFactor();
     ;
     const qreal textLeft = pageLeft - (isLeftToRight ? 0 : horizontalScrollMaximum())
         + document()->rootFrame()->frameFormat().leftMargin() - spaceBetweenSceneNumberAndText;
@@ -811,12 +778,12 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
     //
     // Прорисовка дополнительных элементов редактора
     //
+    QPainter painter(viewport());
 
     //
     // Декорации текста
     //
     {
-        QPainter painter(viewport());
         clipPageDecorationRegions(&painter);
 
         //
@@ -833,7 +800,7 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                 _color,
                 1.0
                     - (isFocusCurrentParagraph() && block != textCursor().block()
-                           ? Ui::DesignSystem::inactiveTextOpacity()
+                           ? DesignSystem::inactiveTextOpacity()
                            : 0.0)));
         };
 
@@ -913,18 +880,17 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                     //
                     // Определим область для отрисовки
                     //
-                    QPointF topLeft(isLeftToRight
-                                        ? (pageLeft + leftDelta
-                                           + Ui::DesignSystem::card().shadowMargins().left())
-                                        : (textRight + leftDelta),
+                    QPointF topLeft(isLeftToRight ? (pageLeft + leftDelta
+                                                     + DesignSystem::card().shadowMargins().left())
+                                                  : (textRight + leftDelta),
                                     cursorR.top());
                     QPointF bottomRight(isLeftToRight
                                             ? textLeft + leftDelta
                                             : (pageRight + leftDelta
-                                               - Ui::DesignSystem::card().shadowMargins().right()),
+                                               - DesignSystem::card().shadowMargins().right()),
                                         cursorR.bottom());
                     QRectF rect(topLeft, bottomRight);
-                    const auto yDelta = Ui::DesignSystem::layout().px(32) - rect.height() / 2.0;
+                    const auto yDelta = DesignSystem::layout().px(32) - rect.height() / 2.0;
                     //
                     // корректируем размер области, чтобы получить квадрат для отрисовки иконки
                     // закладки
@@ -938,8 +904,8 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                         rect.setLeft(rect.right() - rect.height());
                     }
                     painter.fillRect(rect,
-                                     ColorHelper::transparent(
-                                         bookmark.color, Ui::DesignSystem::elevationEndOpacity()));
+                                     ColorHelper::transparent(bookmark.color,
+                                                              DesignSystem::elevationEndOpacity()));
                     painter.drawText(rect, Qt::AlignCenter, u8"\U000F00C0");
                 }
 
@@ -952,8 +918,8 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
                     //
                     // Настроим цвет
                     //
-                    setPainterPen(ColorHelper::transparent(
-                        palette().text().color(), Ui::DesignSystem::inactiveItemOpacity()));
+                    setPainterPen(ColorHelper::transparent(palette().text().color(),
+                                                           DesignSystem::inactiveItemOpacity()));
 
                     //
                     // Для пустого футера рисуем плейсхолдер
@@ -1236,63 +1202,13 @@ void NovelOutlineEdit::paintEvent(QPaintEvent* _event)
 
             block = block.next();
         }
-
-        //
-        // Курсоры соавторов
-        //
-        painter.setClipRect(QRectF(), Qt::NoClip);
-        if (!d->collaboratorsCursorInfo.isEmpty()) {
-            for (const auto& cursorInfo : std::as_const(d->collaboratorsCursorInfo)) {
-                //
-                // Пропускаем курсоры из других документов
-                //
-                if (cursorInfo.documentUuid != d->model->document()->uuid()) {
-                    continue;
-                }
-
-                //
-                // Пропускаем курсоры, которые находятся за пределами экрана
-                //
-                const auto cursorPosition = cursorInfo.cursorData.toInt();
-                if (bottomBlock.isValid()
-                    && (cursorPosition < topBlock.position()
-                        || cursorPosition > (bottomBlock.position() + bottomBlock.length()))) {
-                    continue;
-                }
-
-
-                QTextCursor cursor(document());
-                cursor.setPosition(cursorPosition);
-                if (!cursor.block().isVisible()) {
-                    continue;
-                }
-
-                const auto cursorR = cursorRect(cursor).adjusted(0, 0, 1, 0);
-                const auto backgroundColor = ColorHelper::forText(cursorInfo.name);
-
-                //
-                // ... рисуем его
-                //
-                painter.fillRect(cursorR, backgroundColor);
-
-                //
-                // ... выводим имя соавтора
-                //
-                painter.setFont(DesignSystem::font().subtitle2());
-                const QRect usernameRect(cursorR.left() - Ui::DesignSystem::layout().px4(),
-                                         cursorR.top() - Ui::DesignSystem::layout().px24(),
-                                         TextHelper::fineTextWidth(cursorInfo.name, painter.font())
-                                             + Ui::DesignSystem::layout().px12(),
-                                         Ui::DesignSystem::layout().px24());
-                painter.setPen(Qt::NoPen);
-                painter.setBrush(backgroundColor);
-                painter.drawRoundedRect(usernameRect, Ui::DesignSystem::button().borderRadius(),
-                                        Ui::DesignSystem::button().borderRadius());
-                painter.setPen(ColorHelper::contrasted(backgroundColor));
-                painter.drawText(usernameRect, Qt::AlignCenter, cursorInfo.name);
-            }
-        }
     }
+
+    //
+    // Курсоры соавторов
+    //
+    painter.setClipRect(QRectF(), Qt::NoClip);
+    paintCollaboratorsCursors(painter, d->model->document()->uuid(), topBlock, bottomBlock);
 }
 
 ContextMenu* NovelOutlineEdit::createContextMenu(const QPoint& _position, QWidget* _parent)

@@ -987,7 +987,7 @@ void AudioplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mod
 
 void AudioplayTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
-    d->textEdit->setCursors(_cursors);
+    d->textEdit->setCollaboratorsCursors(_cursors);
 }
 
 void AudioplayTextView::setCurrentModelIndex(const QModelIndex& _index)
@@ -1396,7 +1396,7 @@ void AudioplayTextView::setModel(BusinessLayer::AudioplayTextModel* _model)
             Qt::QueuedConnection);
     }
 
-    d->textEdit->setCursors({});
+    d->textEdit->setCollaboratorsCursors({});
     d->textEdit->initWithModel(d->model);
     d->audioplayTextScrollbarManager->setModel(d->model);
     d->commentsModel->setTextModel(d->model);

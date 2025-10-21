@@ -1485,7 +1485,7 @@ void ScreenplayTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mo
 
 void ScreenplayTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
-    d->textEdit->setCursors(_cursors);
+    d->textEdit->setCollaboratorsCursors(_cursors);
 }
 
 void ScreenplayTextView::setCurrentCursor(const Domain::CursorInfo& _cursor)
@@ -1924,7 +1924,7 @@ void ScreenplayTextView::setModel(BusinessLayer::ScreenplayTextModel* _model)
             Qt::QueuedConnection);
     }
 
-    d->textEdit->setCursors({});
+    d->textEdit->setCollaboratorsCursors({});
     d->textEdit->initWithModel(d->model);
     d->screenplayTextScrollbarManager->setModel(d->model);
     d->commentsModel->setTextModel(d->model);

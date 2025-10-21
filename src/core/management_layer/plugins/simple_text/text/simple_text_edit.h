@@ -8,10 +8,6 @@ class TextTemplate;
 enum class TextParagraphType;
 } // namespace BusinessLayer
 
-namespace Domain {
-struct CursorInfo;
-}
-
 
 namespace Ui {
 
@@ -107,11 +103,6 @@ public:
     void setAutoReviewModeEnabled(bool _enabled);
     void setAutoReviewMode(const QColor& _textColor, const QColor& _backgroundColor,
                            bool _isRevision, bool _isTrackChanges);
-
-    /**
-     * @brief Задать курсоры соавторов
-     */
-    void setCursors(const QVector<Domain::CursorInfo>& _cursors);
 
 signals:
     /**

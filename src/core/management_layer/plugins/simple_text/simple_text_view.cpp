@@ -952,7 +952,7 @@ void SimpleTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
 
 void SimpleTextView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
-    d->textEdit->setCursors(_cursors);
+    d->textEdit->setCollaboratorsCursors(_cursors);
 }
 
 void SimpleTextView::setCurrentModelIndex(const QModelIndex& _index)
@@ -1314,7 +1314,7 @@ void SimpleTextView::setModel(BusinessLayer::SimpleTextModel* _model)
             Qt::QueuedConnection);
     }
 
-    d->textEdit->setCursors({});
+    d->textEdit->setCollaboratorsCursors({});
     d->textEdit->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);

@@ -1401,7 +1401,7 @@ void ScreenplayTreatmentView::setEditingMode(ManagementLayer::DocumentEditingMod
 
 void ScreenplayTreatmentView::setCursors(const QVector<Domain::CursorInfo>& _cursors)
 {
-    d->textEdit->setCursors(_cursors);
+    d->textEdit->setCollaboratorsCursors(_cursors);
 }
 
 void ScreenplayTreatmentView::setCurrentModelIndex(const QModelIndex& _index)
@@ -1754,7 +1754,7 @@ void ScreenplayTreatmentView::setModel(BusinessLayer::ScreenplayTextModel* _mode
             Qt::QueuedConnection);
     }
 
-    d->textEdit->setCursors({});
+    d->textEdit->setCollaboratorsCursors({});
     d->textEdit->initWithModel(d->model);
     d->commentsModel->setTextModel(d->model);
     d->bookmarksModel->setTextModel(d->model);
