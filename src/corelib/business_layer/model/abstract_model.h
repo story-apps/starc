@@ -178,6 +178,12 @@ signals:
     void contentsChanged(const QByteArray& _undo, const QByteArray& _redo);
 
     /**
+     * @brief Сигналы уведомляющие о начале массового изменения документа и его завершении
+     */
+    void changesAboutToBeApplied();
+    void changesApplied(const ChangeCursor& _lastChangeCursor);
+
+    /**
      * @brief Сигналы для выполнения действий после изменения модели, чтобы пропустить вперёд
      *        обработку событий модели в нативных Qt-классах, например в прокси модели
      */

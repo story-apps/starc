@@ -335,17 +335,22 @@ void AbstractModel::applyDocumentChanges(const QVector<QByteArray>& _patches)
 {
     QScopedValueRollback isChangesApplyingInProgressRollback(d->isChangesApplyingInProgress, true);
 
+    emit changesAboutToBeApplied();
+
     //
     // Накладываем изменения
     //
+    ChangeCursor lastChangeCursor;
     for (const auto& patch : _patches) {
-        applyPatch(patch);
+        lastChangeCursor = applyPatch(patch);
     }
 
     //
     // Чтобы изменения не продуцировали патч, применим новый контент с изменениями к документу
     //
     reassignContent();
+
+    emit changesApplied(lastChangeCursor);
 }
 
 QVector<QPair<QByteArray, QByteArray>> AbstractModel::adoptDocumentChanges(
