@@ -3889,10 +3889,6 @@ QVector<Domain::DocumentObject*> ProjectManager::unsyncedDocuments() const
 
 void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo)
 {
-    if (_documentInfo.content.isEmpty() && _documentInfo.changes.isEmpty()) {
-        return;
-    }
-
     Log::trace("Merge content for document %1", _documentInfo.uuid.toString());
 
     const auto syncDatetime = QDateTime::currentDateTimeUtc();
@@ -3951,6 +3947,15 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         }
         break;
     }
+    }
+
+    //
+    // Нет смысла продолжать, если в документе нет контента с изменениями,
+    // если это конечно не новый документ
+    //
+    if (_documentInfo.content.isEmpty() && _documentInfo.changes.isEmpty()
+        && document->id().isValid()) {
+        return;
     }
 
     //
