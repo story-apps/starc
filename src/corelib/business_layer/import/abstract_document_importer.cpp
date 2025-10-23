@@ -578,9 +578,9 @@ TextParagraphType AbstractDocumentImporter::typeForTextCursor(const QTextCursor&
             }
             //
             // Реплика
-            // 1. не имеет сверху отступа
+            // 1. не имеет сверху отступа (допустим минимальный отступ, меньше высоты строки)
             //
-            else if (blockFormat.topMargin() == 0) {
+            else if (blockFormat.topMargin() < TextHelper::fineLineSpacing(charFormat.font())) {
                 blockType = TextParagraphType::Dialogue;
             }
             //
