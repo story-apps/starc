@@ -2,13 +2,17 @@
 
 #include <QDateTime>
 #include <QDir>
+#include <QElapsedTimer>
 #include <QVariant>
 
 #include <iostream>
 
+namespace {
+static QFile s_logFile;
+static QElapsedTimer s_dayTimer;
+} // namespace
 
 Log::Level Log::s_logLevel = Log::Level::Warning;
-QFile Log::s_logFile;
 
 void Log::init(Log::Level _level, const QString& _filePath)
 {
@@ -35,6 +39,8 @@ void Log::init(Log::Level _level, const QString& _filePath)
                     s_logFile.errorString());
             return;
         }
+
+        s_dayTimer.start();
     }
 
     trace("Logger initialized with \"%1\" level and \"%2\" log file path",
@@ -63,6 +69,13 @@ void Log::message(const QString& _message, Level _logLevel)
 {
     if (_logLevel < s_logLevel) {
         return;
+    }
+
+    if (s_logFile.isOpen() && s_dayTimer.hasExpired(24 * 60 * 60 * 1000)) {
+        const auto logPath = s_logFile.fileName();
+        s_logFile.close();
+        s_logFile.rename(QDate::currentDate().addDays(-1).toString(Qt::ISODate) + ".log");
+        init(s_logLevel, logPath);
     }
 
     const QString time = QDateTime::currentDateTime().toString("yyyy.MM.dd HH:mm:ss.zzz");

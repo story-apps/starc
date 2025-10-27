@@ -133,9 +133,4 @@ private:
      * @brief Loging level
      */
     static Level s_logLevel;
-
-    /**
-     * @brief File with log
-     */
-    static QFile s_logFile;
 };
