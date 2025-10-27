@@ -875,18 +875,19 @@ TextParagraphType TextTemplate::Implementation::defaultParagraphType() const
 TextParagraphType TextTemplate::Implementation::baseParagraphType() const
 {
     const QVector<TextParagraphType> defaultTypes = {
-        // plays
+        // plays & novels
         TextParagraphType::Action,
         TextParagraphType::Cue,
+        TextParagraphType::Text,
         TextParagraphType::SceneHeading,
+        TextParagraphType::SequenceHeading,
+        TextParagraphType::ActHeading,
+        TextParagraphType::ChapterHeading,
+        TextParagraphType::PartHeading,
         // comicbook
         TextParagraphType::Description,
         TextParagraphType::PanelHeading,
         TextParagraphType::PageHeading,
-        // novel
-        TextParagraphType::Text,
-        TextParagraphType::ChapterHeading,
-        TextParagraphType::PartHeading,
         // all
         TextParagraphType::UnformattedText,
     };
@@ -987,7 +988,6 @@ void TextTemplate::Implementation::buildSynopsisTemplate()
     }
     //
     auto headingBlockStyle = defaultBlockStyle;
-    headingBlockStyle.setFirstLineMargin(0.0);
     auto headingFont = headingBlockStyle.font();
     headingFont.setBold(true);
     headingBlockStyle.setFont(headingFont);
