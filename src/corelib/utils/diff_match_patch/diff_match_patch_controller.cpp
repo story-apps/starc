@@ -397,10 +397,13 @@ DiffMatchPatchController::changedXmlList(const QString& _xml, const QString& _pa
                 = newXmlPlain.mid(newStartPosForXmlPlain, newEndPosForXml - newStartPosForXmlPlain);
 
 
-            result.append({ { d->plainToXml(oldXmlForUpdate).toUtf8(),
-                              d->plainToXml(oldXmlPlain.left(oldStartPosForXmlPlain)).length() },
-                            { d->plainToXml(newXmlForUpdate).toUtf8(),
-                              d->plainToXml(newXmlPlain.left(newStartPosForXmlPlain)).length() } });
+            result.append(
+                { { d->plainToXml(oldXmlForUpdate).toUtf8(),
+                    static_cast<int>(
+                        d->plainToXml(oldXmlPlain.left(oldStartPosForXmlPlain)).length()) },
+                  { d->plainToXml(newXmlForUpdate).toUtf8(),
+                    static_cast<int>(
+                        d->plainToXml(newXmlPlain.left(newStartPosForXmlPlain)).length()) } });
         }
     }
 
