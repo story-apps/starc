@@ -53,7 +53,6 @@
 #include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/dialog/standard_dialog.h>
 #include <ui/widgets/splitter/splitter.h>
-#include <utils/diff_match_patch/diff_match_patch_controller.h>
 #include <utils/logging.h>
 #include <utils/shugar.h>
 #include <utils/tools/debouncer.h>
@@ -61,8 +60,6 @@
 #include <QAction>
 #include <QApplication>
 #include <QDateTime>
-#include <QDomDocument>
-#include <QDomNode>
 #include <QHBoxLayout>
 #include <QSet>
 #include <QShortcut>
@@ -1774,7 +1771,7 @@ void ProjectManager::Implementation::compareDocuments(const QModelIndex& _lhs,
     view.active->setDocumentDraft(rhsItem->versions());
 
     //
-    // Сформировать диф с заданной моделью
+    // Сформировать диф с заданной моделью в новую версию
     //
     const auto comparisonItem = rhsItem->versions().constLast();
     auto comparisonModel = modelsFacade.modelFor(comparisonItem->uuid());
@@ -4067,6 +4064,7 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         for (const auto& change : unsyncedChanges) {
             changes.append(change->redoPatch());
         }
+        const auto oldContent = documentModel->document()->content();
         const auto isChangesMerged = documentModel->mergeDocumentChanges({}, changes);
         //
         // ... если успех - пушим несинхронизированные изменения
@@ -4074,31 +4072,18 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         if (isChangesMerged) {
             //
             // Если есть локальные несинхронизированные изменения, то нужно получить патч между
-            // текущей версией документа в облаке и несинхронизированными изменениями, чтобы
-            // отправить их в облако в корректном состоянии, а не в том, которое было до момента
-            // получения изменений соавтора
+            // текущей версией документа в облаке и версией с применёнными несинхронизированными
+            // изменениями, чтобы отправить в облако новый патч в корректном состоянии, а не в том,
+            // которое было до момента получения изменений соавтора
             //
-            {
-                changes.clear();
-                //
-                // ... порядок изменений формируем таким образм, чтобы они быть последовательно
-                // применены
-                //
-                for (const auto change : unsyncedChanges) {
-                    changes.prepend(change->undoPatch());
-                }
-                auto adoptedChanges = documentModel->adoptDocumentChanges(changes);
-                Q_ASSERT(adoptedChanges.size());
-                //
-                // ... после адаптации, соответственно порядок нужно будет развернуть обратно
-                //
-                for (auto change : unsyncedChanges) {
-                    const auto adoptedChange = adoptedChanges.takeLast();
-                    change->setUndoPatch(adoptedChange.first);
-                    change->setRedoPatch(adoptedChange.second);
-                    DataStorageLayer::StorageFacade::documentChangeStorage()->updateDocumentChange(
-                        change);
-                }
+            const auto adoptedChange = documentModel->adoptDocumentChanges(oldContent);
+            handleModelChange(documentModel, adoptedChange.first, adoptedChange.second);
+            //
+            // ... а старые несинхроинизированные патчи удаляем
+            //
+            for (auto change : unsyncedChanges) {
+                DataStorageLayer::StorageFacade::documentChangeStorage()->removeDocumentChange(
+                    change);
             }
 
             //

@@ -353,6 +353,14 @@ void AbstractModel::applyDocumentChanges(const QVector<QByteArray>& _patches)
     emit changesApplied(lastChangeCursor);
 }
 
+QPair<QByteArray, QByteArray> AbstractModel::adoptDocumentChanges(const QByteArray& _content)
+{
+    const auto content = toXml();
+    const auto undoPatch = d->dmpController.makePatch(content, _content);
+    const auto redoPatch = d->dmpController.makePatch(_content, content);
+    return { undoPatch, redoPatch };
+}
+
 QVector<QPair<QByteArray, QByteArray>> AbstractModel::adoptDocumentChanges(
     const QVector<QByteArray>& _patches)
 {
