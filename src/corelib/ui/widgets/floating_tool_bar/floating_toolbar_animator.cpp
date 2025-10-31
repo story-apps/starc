@@ -132,11 +132,8 @@ void FloatingToolbarAnimator::switchToolbarsBack()
     d->opacityAnimation.start();
 }
 
-void FloatingToolbarAnimator::paintEvent(QPaintEvent* _event)
+void FloatingToolbarAnimator::paintEventPostprocess(QPainter& _painter)
 {
-    FloatingToolBar::paintEvent(_event);
-
-    QPainter painter(this);
     const auto leftMargin = Ui::DesignSystem::floatingToolBar().shadowMargins().left()
         + Ui::DesignSystem::floatingToolBar().margins().left();
     const auto rightMargin = Ui::DesignSystem::floatingToolBar().shadowMargins().right()
@@ -146,16 +143,16 @@ void FloatingToolbarAnimator::paintEvent(QPaintEvent* _event)
 
     const auto iconRect = QRectF(d->iconPositionAnimation.currentValue().toPointF(),
                                  Ui::DesignSystem::floatingToolBar().iconSize());
-    painter.drawPixmap(iconRect.left(), topMargin, d->targetWidgetImage, leftMargin, topMargin,
-                       width() - iconRect.left() - rightMargin,
-                       height() - topMargin - bottomMargin);
+    _painter.drawPixmap(iconRect.left(), topMargin, d->targetWidgetImage, leftMargin, topMargin,
+                        width() - iconRect.left() - rightMargin,
+                        height() - topMargin - bottomMargin);
 
-    painter.setOpacity(d->opacityAnimation.currentValue().toReal());
-    painter.drawPixmap(leftMargin, topMargin, d->sourceWidgetImage, leftMargin, topMargin,
-                       d->sourceWidgetImage.width() - leftMargin - rightMargin,
-                       d->sourceWidgetImage.height() - topMargin - bottomMargin);
+    _painter.setOpacity(d->opacityAnimation.currentValue().toReal());
+    _painter.drawPixmap(leftMargin, topMargin, d->sourceWidgetImage, leftMargin, topMargin,
+                        d->sourceWidgetImage.width() - leftMargin - rightMargin,
+                        d->sourceWidgetImage.height() - topMargin - bottomMargin);
 
-    painter.setOpacity(d->opacityAnimation.currentValue().toReal());
-    painter.fillRect(iconRect, backgroundColor());
-    painter.drawText(iconRect, Qt::AlignCenter, d->targetIcon);
+    _painter.setOpacity(d->opacityAnimation.currentValue().toReal());
+    _painter.fillRect(iconRect, backgroundColor());
+    _painter.drawText(iconRect, Qt::AlignCenter, d->targetIcon);
 }

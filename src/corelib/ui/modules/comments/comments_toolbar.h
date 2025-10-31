@@ -134,7 +134,7 @@ protected:
     /**
      * @brief Добавим возможность анимированного отображения
      */
-    void paintEvent(QPaintEvent* _event) override;
+    bool paintEventPreprocess(QPainter& _painter) override;
 
     /**
      * @brief При смещении панели инструментов, сдвигаем панель режимов, если она была открыта

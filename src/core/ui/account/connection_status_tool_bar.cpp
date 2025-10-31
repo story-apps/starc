@@ -257,30 +257,25 @@ bool ConnectionStatusToolBar::eventFilter(QObject* _watched, QEvent* _event)
     return FloatingToolBar::eventFilter(_watched, _event);
 }
 
-void ConnectionStatusToolBar::paintEvent(QPaintEvent* _event)
+void ConnectionStatusToolBar::paintEventPostprocess(QPainter& _painter)
 {
-    FloatingToolBar::paintEvent(_event);
-
     if (d->isWaitingTooLong || d->startAngleAnimation->state() != QVariantAnimation::Running
         || d->spanAngleAnimation->state() != QVariantAnimation::Running) {
         return;
     }
-
-    QPainter paiter(this);
-    paiter.setRenderHints(QPainter::Antialiasing);
 
     QPen pen;
     pen.setWidthF(DesignSystem::layout().px4());
     pen.setCapStyle(Qt::SquareCap);
     pen.setCosmetic(true);
     pen.setColor(DesignSystem::color().error());
-    paiter.setPen(pen);
+    _painter.setPen(pen);
 
     const auto circleRect
         = QRectF(rect()).marginsRemoved(DesignSystem::floatingToolBar().shadowMargins()
                                         + DesignSystem::floatingToolBar().margins());
-    paiter.drawArc(circleRect, d->startAngleAnimation->currentValue().toInt() * 16,
-                   d->spanAngleAnimation->currentValue().toInt() * 16);
+    _painter.drawArc(circleRect, d->startAngleAnimation->currentValue().toInt() * 16,
+                     d->spanAngleAnimation->currentValue().toInt() * 16);
 }
 
 void ConnectionStatusToolBar::updateTranslations()

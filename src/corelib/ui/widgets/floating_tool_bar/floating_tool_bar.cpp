@@ -397,6 +397,11 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
         return;
     }
 
+    const auto finishProcessing = paintEventPreprocess(painter);
+    if (finishProcessing) {
+        return;
+    }
+
     //
     // Заливаем фон
     //
@@ -630,6 +635,19 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
                 * (actionRect.width() + Ui::DesignSystem::floatingToolBar().spacing());
         }
     }
+
+    paintEventPostprocess(painter);
+}
+
+bool FloatingToolBar::paintEventPreprocess(QPainter& _painter)
+{
+    Q_UNUSED(_painter)
+    return false;
+}
+
+void FloatingToolBar::paintEventPostprocess(QPainter& _painter)
+{
+    Q_UNUSED(_painter)
 }
 
 void FloatingToolBar::showEvent(QShowEvent* _event)

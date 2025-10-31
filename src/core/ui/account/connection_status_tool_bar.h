@@ -36,7 +36,7 @@ protected:
     /**
      * @brief Рисуем крутящийся лоадер
      */
-    void paintEvent(QPaintEvent* _event) override;
+    void paintEventPostprocess(QPainter& _painter) override;
 
     /**
      * @brief Обновить переводы

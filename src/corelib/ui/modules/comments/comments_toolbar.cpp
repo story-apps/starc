@@ -501,19 +501,18 @@ bool CommentsToolbar::eventFilter(QObject* _watched, QEvent* _event)
     return FloatingToolBar::eventFilter(_watched, _event);
 }
 
-void CommentsToolbar::paintEvent(QPaintEvent* _event)
+bool CommentsToolbar::paintEventPreprocess(QPainter& _painter)
 {
     //
     // Если надо, анимируем появление
     //
     if (d->opacityAnimation.state() == QVariantAnimation::Running) {
-        QPainter painter(this);
-        painter.setOpacity(d->opacityAnimation.currentValue().toReal());
-        painter.drawPixmap(QPointF{}, d->contentPixmap);
-        return;
+        _painter.setOpacity(d->opacityAnimation.currentValue().toReal());
+        _painter.drawPixmap(QPointF{}, d->contentPixmap);
+        return true;
     }
 
-    FloatingToolBar::paintEvent(_event);
+    return false;
 }
 
 void CommentsToolbar::moveEvent(QMoveEvent* _event)

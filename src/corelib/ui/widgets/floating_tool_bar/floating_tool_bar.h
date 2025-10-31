@@ -83,7 +83,13 @@ protected:
     /**
      * @brief Реализуем собственное рисование
      */
-    void paintEvent(QPaintEvent* _event) override;
+    void paintEvent(QPaintEvent* _event) override final;
+
+    /**
+     * @brief Интерфейс для рисования в классах наследниках
+     */
+    virtual bool paintEventPreprocess(QPainter& _painter);
+    virtual void paintEventPostprocess(QPainter& _painter);
 
     /**
      * @brief Если при отображении курсор уже над панелью, то не анимируем ховер

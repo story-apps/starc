@@ -29,7 +29,7 @@ protected:
     /**
      * @brief Рисуем анимированное состояние сменяющихся тулбаров
      */
-    void paintEvent(QPaintEvent* _event) override;
+    void paintEventPostprocess(QPainter& _painter) override;
 
 private:
     class Implementation;
