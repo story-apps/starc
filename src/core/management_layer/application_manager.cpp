@@ -3059,10 +3059,15 @@ void ApplicationManager::initConnections()
     //
 
     auto configureConnectionStatus = [this](bool _connected) {
-        Log::trace("Connection status changed. %1.", _connected ? "Conected" : "Disconnected");
+        Log::trace("Connection status changed. %1.", _connected ? "Conтected" : "Disconnected");
         d->accountManager->setConnected(_connected);
         d->connectionStatus->setConnectionAvailable(_connected);
         d->projectsManager->setConnected(_connected);
+
+        //
+        // Сбросим список курсоров соавторов при смене состояния соединения
+        //
+        d->projectManager->clearCursors();
 
         //
         // Синхронизация офлайн правок будет сделана, после проверки ключа сессии на сервере
