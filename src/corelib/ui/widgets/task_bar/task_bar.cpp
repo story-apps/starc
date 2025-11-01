@@ -6,6 +6,7 @@
 
 #include <QEvent>
 #include <QPainter>
+#include <QTimer>
 
 
 class TaskBar::Implementation
@@ -15,6 +16,11 @@ public:
      * @brief Скорректировать геометрию панели
      */
     void correctGeometry(QWidget* _taskBar);
+
+    /**
+     * @brief Обновить таймер неопределённых задач в зависимости от их наличия
+     */
+    void updateIndeterminateTimer();
 
 
     /**
@@ -34,12 +40,18 @@ public:
         QString id;
         QString title;
         qreal progress = 0.0;
+        bool isIndeterminate = false;
     };
 
     /**
      * @brief Список выполняющихся фоновых процессов
      */
     QVector<Task> tasks;
+
+    /**
+     * @brief Анимация прогресса для задач в неопределённом состоянии
+     */
+    QTimer indeterminateTimer;
 };
 
 TaskBar* TaskBar::Implementation::instance = nullptr;
@@ -70,6 +82,25 @@ void TaskBar::Implementation::correctGeometry(QWidget* _taskBar)
     _taskBar->move(x, y);
 }
 
+void TaskBar::Implementation::updateIndeterminateTimer()
+{
+    bool hasIndeteminateTasks = false;
+    for (const auto& task : std::as_const(tasks)) {
+        if (task.isIndeterminate) {
+            hasIndeteminateTasks = true;
+            break;
+        }
+    }
+
+    if (hasIndeteminateTasks) {
+        if (!indeterminateTimer.isActive()) {
+            indeterminateTimer.start();
+        }
+    } else {
+        indeterminateTimer.stop();
+    }
+}
+
 
 // ****
 
@@ -95,6 +126,24 @@ void TaskBar::registerTaskBar(QWidget* _parent, const QColor& _backgroundColor,
     taskBar->setBackgroundColor(_backgroundColor);
     taskBar->setTextColor(_textColor);
     taskBar->setBarColor(_barColor);
+
+    auto& animationTimer = taskBar->d->indeterminateTimer;
+    animationTimer.setInterval(40);
+    connect(&animationTimer, &QTimer::timeout, taskBar, [taskBar] {
+        for (auto& task : taskBar->d->tasks) {
+            if (task.isIndeterminate) {
+                task.progress += 0.5;
+                //
+                // Тут немного хитрим, чтобы прогрессбар заполнялся чуть долше, т.к. там рисуется
+                // полоса, которая проходит как бы насквозь
+                //
+                if (task.progress > 150.0) {
+                    task.progress = 0;
+                }
+            }
+        }
+        taskBar->update();
+    });
 }
 
 void TaskBar::addTask(const QString& _taskId)
@@ -159,6 +208,21 @@ void TaskBar::setTaskProgress(const QString& _taskId, qreal _progress)
     Implementation::instance->update();
 }
 
+void TaskBar::setIndeterminate(const QString& _taskId, bool _indeterminate)
+{
+    Q_ASSERT(Implementation::instance);
+
+    auto& tasks = Implementation::instance->d->tasks;
+    for (auto& task : tasks) {
+        if (task.id == _taskId) {
+            task.isIndeterminate = _indeterminate;
+            break;
+        }
+    }
+
+    Implementation::instance->d->updateIndeterminateTimer();
+}
+
 void TaskBar::finishTask(const QString& _taskId)
 {
     Q_ASSERT(Implementation::instance);
@@ -173,6 +237,7 @@ void TaskBar::finishTask(const QString& _taskId)
     }
 
     Implementation::instance->d->correctGeometry(Implementation::instance);
+    Implementation::instance->d->updateIndeterminateTimer();
 
     if (tasks.isEmpty()) {
         Implementation::instance->hide();
@@ -266,13 +331,32 @@ void TaskBar::paintEvent(QPaintEvent* _event)
         //
         // ... заполненная часть
         //
-        const QRectF progressRect(
-            progressBackgroundRect.left()
-                + (isLeftToRight() ? 0.0
-                                   : (progressBackgroundRect.width()
-                                      - progressBackgroundRect.width() * task.progress / 100.0)),
-            progressBackgroundRect.top(), progressBackgroundRect.width() * task.progress / 100.0,
-            progressBackgroundRect.height());
+        QRectF progressRect;
+        if (!task.isIndeterminate) {
+            progressRect
+                = QRectF(progressBackgroundRect.left()
+                             + (isLeftToRight()
+                                    ? 0.0
+                                    : (progressBackgroundRect.width()
+                                       - progressBackgroundRect.width() * task.progress / 100.0)),
+                         progressBackgroundRect.top(),
+                         progressBackgroundRect.width() * task.progress / 100.0,
+                         progressBackgroundRect.height());
+        } else {
+            const auto left
+                = progressBackgroundRect.width() * std::max(0.0, task.progress - 50.0) / 100.0;
+            progressRect
+                = QRectF(progressBackgroundRect.left()
+                             + (isLeftToRight()
+                                    ? left
+                                    : (progressBackgroundRect.width()
+                                       - progressBackgroundRect.width() * task.progress / 100.0)),
+                         progressBackgroundRect.top(),
+                         progressBackgroundRect.width() * task.progress / 100.0 - left,
+                         progressBackgroundRect.height());
+            progressRect.setLeft(std::max(0.0, progressRect.left()));
+            progressRect.setRight(std::min(progressRect.right(), progressBackgroundRect.right()));
+        }
         painter.setOpacity(1.0);
         painter.drawRoundedRect(progressRect, progressRadius, progressRadius);
 

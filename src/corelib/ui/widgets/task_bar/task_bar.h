@@ -34,6 +34,11 @@ public:
     static void setTaskProgress(const QString& _taskId, qreal _progress);
 
     /**
+     * @brief Установить неопределённое состояние задачи
+     */
+    static void setIndeterminate(const QString& _taskId, bool _indeterminate);
+
+    /**
      * @brief Завершить заданный процесс
      */
     static void finishTask(const QString& _taskId);
