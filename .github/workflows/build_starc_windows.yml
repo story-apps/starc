@@ -42,8 +42,10 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          choco install openssl --version=3.1.1
           choco install nsis
+          mkdir -p build/windows/openssl
+          curl -O --output-dir build/windows/openssl https://starc.app/downloads/3rd_party/openssl/libcrypto-1_1-x64.dll
+          curl -O --output-dir build/windows/openssl https://starc.app/downloads/3rd_party/openssl/libssl-1_1-x64.dll
 
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1

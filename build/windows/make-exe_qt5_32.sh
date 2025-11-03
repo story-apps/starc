@@ -22,7 +22,6 @@ mkdir $EXE_APP_DIR/plugins
 # Copy application binaries
 #
 APP_BIN_DIR="../../src/_build"
-ls -l $APP_BIN_DIR
 cp $APP_BIN_DIR/starcapp.exe $EXE_APP_DIR
 cp $APP_BIN_DIR/corelib.dll $EXE_APP_DIR
 cp $APP_BIN_DIR/plugins/*.dll $EXE_APP_DIR/plugins/
@@ -75,7 +74,8 @@ cp $Qt5_Dir/plugins/styles/qwindowsvistastyle.dll $EXE_APP_DIR/styles/
 #
 # Copy openssl lib
 #
-cp /c/Program\ Files\ \(x86\)/OpenSSL-Win32/*.dll $EXE_APP_DIR
+OPEN_SSL_DIR="../../build/windows/openssl"
+cp $OPEN_SSL_DIR/*.dll $EXE_APP_DIR
 #
 # Copy msvc lib
 #
