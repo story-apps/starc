@@ -4285,31 +4285,30 @@ void ProjectManager::applyDocumentChanges(const Domain::DocumentInfo& _documentI
     documentModel->applyDocumentChanges(changes);
 
     //
-    // Если есть локальные несинхронизированные изменения, то нужно получить патч между текущей
-    // версией документа в облаке и несинхронизированными изменениями, чтобы отправить их в облако
-    // в корректном состоянии, а не в том, которое было до момента получения изменений соавтора
+    // Если есть локальные несинхронизированные изменения, то нужно получить патч между
+    // текущей версией документа в облаке и версией с применёнными несинхронизированными
+    // изменениями, чтобы отправить в облако новый патч в корректном состоянии, а не в том,
+    // которое было до момента получения изменений соавтора
     //
     const auto unsyncedChanges
         = DataStorageLayer::StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(
             document->uuid());
     if (!unsyncedChanges.isEmpty()) {
+        //
+        // ... соберём список несинхронизированных изменений в обратном порядке, чтобы отменить их
+        //     для определения корректного патча, который сможет встроиться у соавторов
+        //
         changes.clear();
-        //
-        // ... порядок изменений формируем таким образм, чтобы они быть последовательно применены
-        //
-        for (const auto change : unsyncedChanges) {
+        for (const auto& change : unsyncedChanges) {
             changes.prepend(change->undoPatch());
         }
-        auto adoptedChanges = documentModel->adoptDocumentChanges(changes);
-        Q_ASSERT(adoptedChanges.size());
+        auto adoptedChange = documentModel->adoptDocumentChanges(changes);
+        handleModelChange(documentModel, adoptedChange.first, adoptedChange.second);
         //
-        // ... после адаптации, соответственно порядок нужно будет развернуть обратно
+        // ... а старые несинхроинизированные патчи удаляем
         //
         for (auto change : unsyncedChanges) {
-            const auto adoptedChange = adoptedChanges.takeLast();
-            change->setUndoPatch(adoptedChange.first);
-            change->setRedoPatch(adoptedChange.second);
-            DataStorageLayer::StorageFacade::documentChangeStorage()->updateDocumentChange(change);
+            DataStorageLayer::StorageFacade::documentChangeStorage()->removeDocumentChange(change);
         }
     }
 }

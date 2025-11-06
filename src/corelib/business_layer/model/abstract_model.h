@@ -132,7 +132,7 @@ public:
      *       они уже учитывали контент соавторов
      */
     QPair<QByteArray, QByteArray> adoptDocumentChanges(const QByteArray& _content);
-    QVector<QPair<QByteArray, QByteArray>> adoptDocumentChanges(
+    QPair<QByteArray, QByteArray> adoptDocumentChanges(
         const QVector<QByteArray>& _patches);
 
     /**

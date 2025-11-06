@@ -361,45 +361,17 @@ QPair<QByteArray, QByteArray> AbstractModel::adoptDocumentChanges(const QByteArr
     return { undoPatch, redoPatch };
 }
 
-QVector<QPair<QByteArray, QByteArray>> AbstractModel::adoptDocumentChanges(
+QPair<QByteArray, QByteArray> AbstractModel::adoptDocumentChanges(
     const QVector<QByteArray>& _patches)
 {
-    QVector<QPair<QByteArray, QByteArray>> adoptedPatches;
-    auto content = toXml();
+    const auto content = toXml();
+    auto oldContent = content;
     for (const auto& patch : _patches) {
-        auto patchedContent = d->dmpController.applyPatch(content, patch);
-
-        //
-        // Если патч не принёс успеха, значит ошибка в наложении изменений
-        //
-        if (patchedContent.size() == content.size() && patchedContent == content) {
-            return {};
-        }
-
-        //
-        // Формируем корректные патчи для отмены и повтора последнего действия
-        //
-        const QByteArray undoPatch = d->dmpController.makePatch(content, patchedContent);
-        if (undoPatch.isEmpty()) {
-            return {};
-        }
-        const QByteArray redoPatch = d->dmpController.makePatch(patchedContent, content);
-        if (redoPatch.isEmpty()) {
-            return {};
-        }
-
-        //
-        // Сохраним патчи
-        //
-        adoptedPatches.append({ undoPatch, redoPatch });
-
-        //
-        // Сохраним текущее состояние документа, чтобы продолжать накладывать следующие патчи
-        //
-        content.swap(patchedContent);
+        oldContent = d->dmpController.applyPatch(oldContent, patch);
     }
-
-    return adoptedPatches;
+    const auto undoPatch = d->dmpController.makePatch(content, oldContent);
+    const auto redoPatch = d->dmpController.makePatch(oldContent, content);
+    return { undoPatch, redoPatch };
 }
 
 bool AbstractModel::isChangesApplyingInProcess() const
