@@ -423,7 +423,7 @@ ProjectsManager::ProjectsManager(QObject* _parent, QWidget* _parentWidget)
             menu->showContextMenu(QCursor::pos());
         });
     connect(&d->cloudProjectChangeDebouncer, &Debouncer::gotWork, this, [this] {
-        if (!d->currentProject->isRemote()) {
+        if (d->currentProject == nullptr || d->currentProject->isLocal()) {
             return;
         }
 

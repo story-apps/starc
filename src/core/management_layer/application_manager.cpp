@@ -3059,7 +3059,7 @@ void ApplicationManager::initConnections()
     //
 
     auto configureConnectionStatus = [this](bool _connected) {
-        Log::trace("Connection status changed. %1.", _connected ? "Conтected" : "Disconnected");
+        Log::trace("Connection status changed. %1.", _connected ? "Connected" : "Disconnected");
         d->accountManager->setConnected(_connected);
         d->connectionStatus->setConnectionAvailable(_connected);
         d->projectsManager->setConnected(_connected);
