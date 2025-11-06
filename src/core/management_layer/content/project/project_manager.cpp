@@ -4283,34 +4283,6 @@ void ProjectManager::applyDocumentChanges(const Domain::DocumentInfo& _documentI
         changes.append(change.redoPatch);
     }
     documentModel->applyDocumentChanges(changes);
-
-    //
-    // Если есть локальные несинхронизированные изменения, то нужно получить патч между
-    // текущей версией документа в облаке и версией с применёнными несинхронизированными
-    // изменениями, чтобы отправить в облако новый патч в корректном состоянии, а не в том,
-    // которое было до момента получения изменений соавтора
-    //
-    const auto unsyncedChanges
-        = DataStorageLayer::StorageFacade::documentChangeStorage()->unsyncedDocumentChanges(
-            document->uuid());
-    if (!unsyncedChanges.isEmpty()) {
-        //
-        // ... соберём список несинхронизированных изменений в обратном порядке, чтобы отменить их
-        //     для определения корректного патча, который сможет встроиться у соавторов
-        //
-        changes.clear();
-        for (const auto& change : unsyncedChanges) {
-            changes.prepend(change->undoPatch());
-        }
-        auto adoptedChange = documentModel->adoptDocumentChanges(changes);
-        handleModelChange(documentModel, adoptedChange.first, adoptedChange.second);
-        //
-        // ... а старые несинхроинизированные патчи удаляем
-        //
-        for (auto change : unsyncedChanges) {
-            DataStorageLayer::StorageFacade::documentChangeStorage()->removeDocumentChange(change);
-        }
-    }
 }
 
 QVector<Domain::DocumentChangeObject*> ProjectManager::unsyncedChanges(

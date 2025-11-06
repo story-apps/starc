@@ -361,19 +361,6 @@ QPair<QByteArray, QByteArray> AbstractModel::adoptDocumentChanges(const QByteArr
     return { undoPatch, redoPatch };
 }
 
-QPair<QByteArray, QByteArray> AbstractModel::adoptDocumentChanges(
-    const QVector<QByteArray>& _patches)
-{
-    const auto content = toXml();
-    auto oldContent = content;
-    for (const auto& patch : _patches) {
-        oldContent = d->dmpController.applyPatch(oldContent, patch);
-    }
-    const auto undoPatch = d->dmpController.makePatch(content, oldContent);
-    const auto redoPatch = d->dmpController.makePatch(oldContent, content);
-    return { undoPatch, redoPatch };
-}
-
 bool AbstractModel::isChangesApplyingInProcess() const
 {
     return d->isChangesApplyingInProgress;
