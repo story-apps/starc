@@ -759,7 +759,8 @@ void TitlePageEdit::insertFromMimeData(const QMimeData* _source)
                                                                 : _source->text();
 
         BusinessLayer::SimpleTextMarkdownImporter markdownImporter;
-        textToInsert = markdownImporter.importSimpleText(text).text;
+        textToInsert
+            = markdownImporter.importSimpleText(TextHelper::removeControlCharacters(text)).text;
     }
 
     //

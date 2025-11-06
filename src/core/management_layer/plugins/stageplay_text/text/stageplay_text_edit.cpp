@@ -1661,7 +1661,8 @@ void StageplayTextEdit::insertFromMimeData(const QMimeData* _source)
         //       не воспринимался как титульная страница
         //
         StageplayFountainImporter fountainImporter;
-        textToInsert = fountainImporter.stageplayText("\n" + text).text;
+        textToInsert
+            = fountainImporter.stageplayText("\n" + TextHelper::removeControlCharacters(text)).text;
     }
 
     //

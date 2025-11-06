@@ -1428,7 +1428,9 @@ void NovelOutlineEdit::insertFromMimeData(const QMimeData* _source)
         //       не воспринимался как титульная страница
         //
         BusinessLayer::NovelMarkdownImporter markdownImporter;
-        textToInsert = markdownImporter.novelText("\n" + _source->text()).text;
+        textToInsert = markdownImporter
+                           .novelText("\n" + TextHelper::removeControlCharacters(_source->text()))
+                           .text;
     }
 
     //

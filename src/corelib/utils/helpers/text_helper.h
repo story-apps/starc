@@ -87,6 +87,11 @@ public:
     static QChar smartToLower(const QChar& _char);
 
     /**
+     * @brief Очистить текст от управляющих символов
+     */
+    static QString removeControlCharacters(const QString& _text);
+
+    /**
      * @brief Убрать все "пустые" символы строки
      */
     static QString simplified(const QString& _text, bool _keepLineBreaks = false);

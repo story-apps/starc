@@ -1598,7 +1598,8 @@ void ComicBookTextEdit::insertFromMimeData(const QMimeData* _source)
         //       не воспринимался как титульная страница
         //
         ComicBookFountainImporter fountainImporter;
-        textToInsert = fountainImporter.comicbookText("\n" + text).text;
+        textToInsert
+            = fountainImporter.comicbookText("\n" + TextHelper::removeControlCharacters(text)).text;
     }
 
     //

@@ -1219,9 +1219,7 @@ void TextField::insertFromMimeData(const QMimeData* _source)
         return;
     }
 
-    QString text = _source->text();
-    if (wordWrapMode() == QTextOption::NoWrap) {
-        text = text.simplified();
-    }
+    const auto keepLineBreaks = wordWrapMode() != QTextOption::NoWrap;
+    const auto text = TextHelper::simplified(_source->text(), keepLineBreaks);
     insertPlainText(text);
 }

@@ -409,7 +409,7 @@ QChar TextHelper::smartToLower(const QChar& _char)
     return _char.toLower();
 }
 
-QString TextHelper::simplified(const QString& _text, bool _keepLineBreaks)
+QString TextHelper::removeControlCharacters(const QString& _text)
 {
     QString result = _text;
     //
@@ -425,6 +425,13 @@ QString TextHelper::simplified(const QString& _text, bool _keepLineBreaks)
     result.remove(QChar('\v'));
     result.remove(QChar('\f'));
     result.remove(QChar('\r'));
+
+    return result;
+}
+
+QString TextHelper::simplified(const QString& _text, bool _keepLineBreaks)
+{
+    QString result = removeControlCharacters(_text);
 
     //
     // Убираем оставшийся whitespace в зависимости от необходимости сохранять переносы строк

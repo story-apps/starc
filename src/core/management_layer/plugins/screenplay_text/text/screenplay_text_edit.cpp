@@ -1958,7 +1958,9 @@ void ScreenplayTextEdit::insertFromMimeData(const QMimeData* _source)
         //       не воспринимался как титульная страница
         //
         BusinessLayer::ScreenplayFountainImporter fountainImporter;
-        textToInsert = fountainImporter.screenplayText("\n" + text).text;
+        textToInsert
+            = fountainImporter.screenplayText("\n" + TextHelper::removeControlCharacters(text))
+                  .text;
     }
 
     //
