@@ -3149,13 +3149,13 @@ void ApplicationManager::initConnections()
                     //
                     const auto unsyncedDocuments = d->projectManager->unsyncedDocuments();
                     for (const auto document : unsyncedDocuments) {
-                        d->cloudServiceManager->openDocument(currentProjectId, document);
+                        d->projectManager->notifyDownloadDocumentRequested(document->uuid());
                     }
                     //
                     // ... текущий открытый документ
                     //
-                    d->cloudServiceManager->openDocument(currentProjectId,
-                                                         d->projectManager->currentDocument());
+                    d->projectManager->notifyDownloadDocumentRequested(
+                        d->projectManager->currentDocument()->uuid());
                     //
                     // ... а также структуру, данные проекта и словари
                     //

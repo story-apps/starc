@@ -4034,6 +4034,11 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         : d->modelsFacade.modelFor(document);
 
     //
+    // Сохраним изменения документа, которые накопились до момента синхронизации
+    //
+    documentModel->saveChanges();
+
+    //
     // Если есть локальные несинхронизированные изменения данного документа, сохраним копию контента
     //
     QByteArray lastDocumentVersion;
@@ -4276,6 +4281,11 @@ void ProjectManager::applyDocumentChanges(const Domain::DocumentInfo& _documentI
         : d->modelsFacade.modelFor(document);
 
     //
+    // Сохраним изменения документа, которые накопились до момента синхронизации
+    //
+    documentModel->saveChanges();
+
+    //
     // Применяем полученные изменения к модели
     //
     QVector<QByteArray> changes;
@@ -4468,6 +4478,11 @@ QVector<QUuid> ProjectManager::documentBundle(const QUuid& _documentUuid) const
     }
 
     return documents;
+}
+
+void ProjectManager::notifyDownloadDocumentRequested(const QUuid& _documentUuid)
+{
+    emit downloadDocumentRequested(_documentUuid);
 }
 
 void ProjectManager::setCursors(const QVector<Domain::CursorInfo>& _cursors)

@@ -188,6 +188,11 @@ public:
     QVector<QUuid> documentBundle(const QUuid& _documentUuid) const;
 
     /**
+     * @brief Запрос на загрузку данных документа
+     */
+    void notifyDownloadDocumentRequested(const QUuid& _documentUuid);
+
+    /**
      * @brief Задать курсоры соавторов
      */
     void setCursors(const QVector<Domain::CursorInfo>& _cursors);
