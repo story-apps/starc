@@ -36,6 +36,11 @@ public:
                          static_cast<void (NetworkRequest::*)(QByteArray, QUrl)>(
                              &NetworkRequest::downloadComplete),
                          _func);
+        QObject::connect(request, &NetworkRequest::error, request,
+                         [request](const QString& _error, const QUrl& _url) {
+                             Q_UNUSED(_error)
+                             emit request->downloadComplete(QByteArray(), _url);
+                         });
         QObject::connect(request, &NetworkRequest::finished, request, &NetworkRequest::deleteLater);
         request->loadAsync(_urlToLoad);
     }
@@ -72,6 +77,11 @@ public:
                          static_cast<void (NetworkRequest::*)(QByteArray, QUrl)>(
                              &NetworkRequest::downloadComplete),
                          _context, _slot);
+        QObject::connect(request, &NetworkRequest::error, request,
+                         [request](const QString& _error, const QUrl& _url) {
+                             Q_UNUSED(_error)
+                             emit request->downloadComplete(QByteArray(), _url);
+                         });
         QObject::connect(request, &NetworkRequest::finished, request, &NetworkRequest::deleteLater);
         request->loadAsync(_urlToLoad);
     }
