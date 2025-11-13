@@ -942,6 +942,9 @@ void SimpleTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
     d->textEdit->setReadOnly(readOnly);
     d->toolbar->setReadOnly(readOnly);
     d->searchManager->setReadOnly(readOnly);
+    if (readOnly && d->commentsToolbar->isVisible()) {
+        d->commentsToolbar->hideToolbar();
+    }
     d->commentsView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->aiAssistantView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->bookmarksView->setReadOnly(readOnly);

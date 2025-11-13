@@ -1384,6 +1384,9 @@ void NovelTextView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
     d->toolbar->setReadOnly(readOnly);
     d->searchManager->setReadOnly(readOnly);
     d->itemParametersView->setReadOnly(readOnly);
+    if (readOnly && d->commentsToolbar->isVisible()) {
+        d->commentsToolbar->hideToolbar();
+    }
     d->commentsView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->aiAssistantView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->bookmarksView->setReadOnly(readOnly);

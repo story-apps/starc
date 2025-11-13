@@ -1390,6 +1390,9 @@ void ScreenplayTreatmentView::setEditingMode(ManagementLayer::DocumentEditingMod
     d->textEdit->setReadOnly(readOnly);
     d->toolbar->setReadOnly(readOnly);
     d->searchManager->setReadOnly(readOnly);
+    if (readOnly && d->commentsToolbar->isVisible()) {
+        d->commentsToolbar->hideToolbar();
+    }
     d->itemParametersView->setReadOnly(readOnly);
     d->commentsView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
     d->aiAssistantView->setReadOnly(_mode == ManagementLayer::DocumentEditingMode::Read);
