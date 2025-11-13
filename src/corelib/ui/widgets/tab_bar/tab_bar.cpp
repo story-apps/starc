@@ -14,6 +14,7 @@
 namespace {
 
 struct Tab {
+    int id = 0;
     QString name;
     QString icon;
     QColor color;
@@ -26,7 +27,8 @@ struct Tab {
 
     bool operator==(const Tab& _other) const
     {
-        return name == _other.name && icon == _other.icon && visible == _other.visible;
+        return id == _other.id && name == _other.name && icon == _other.icon
+            && visible == _other.visible;
     }
 };
 
@@ -289,7 +291,14 @@ int TabBar::count() const
 void TabBar::addTab(const QString& _tabName, const QString& _tabIcon, const QColor& _color)
 {
     const bool visible = true;
-    d->tabs.append({ _tabName, _tabIcon, _color, visible });
+    const auto tabId = [this] {
+        int id = 0;
+        for (const auto& tab : d->tabs) {
+            id = std::max(id, tab.id + 1);
+        }
+        return id;
+    }();
+    d->tabs.append({ tabId, _tabName, _tabIcon, _color, visible });
 
     d->updateScrollState();
     updateGeometry();
