@@ -340,10 +340,10 @@ DiffMatchPatchController::changedXmlList(const QString& _xml, const QString& _pa
             //
             // Отнимаем один символ, т.к. в патче указан индекс символа начиная с 1
             //
-            --oldStartPos;
-            --oldEndPos;
-            --newStartPos;
-            --newEndPos;
+            oldStartPos = std::max(0, oldStartPos - 1);
+            oldEndPos = std::max(0, oldEndPos - 1);
+            newStartPos = std::max(0, newStartPos - 1);
+            newEndPos = std::max(0, newEndPos - 1);
 
             //
             // Определим кусок xml из текущего документа для обновления
@@ -369,7 +369,7 @@ DiffMatchPatchController::changedXmlList(const QString& _xml, const QString& _pa
             }
             const QString oldXmlForUpdate
                 = oldXmlPlain.mid(oldStartPosForXmlPlain, oldEndPosForXml - oldStartPosForXmlPlain);
-
+            qDebug(qUtf8Printable(oldXmlForUpdate));
 
             //
             // Определим кусок из нового документа для обновления
@@ -395,6 +395,7 @@ DiffMatchPatchController::changedXmlList(const QString& _xml, const QString& _pa
             }
             const QString newXmlForUpdate
                 = newXmlPlain.mid(newStartPosForXmlPlain, newEndPosForXml - newStartPosForXmlPlain);
+            qDebug(qUtf8Printable(newXmlForUpdate));
 
 
             result.append(

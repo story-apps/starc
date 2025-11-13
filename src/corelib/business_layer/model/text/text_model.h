@@ -146,7 +146,8 @@ public:
     /**
      * @brief Сравнить модель с заданной и отобразить все изменения
      */
-    void compareWith(const QByteArray& _modelContent);
+    void compareWith(const QByteArray& _modelContent, const QString& _rhsName,
+                     const QString& _lhsName);
 
 protected:
     /**
@@ -168,6 +169,16 @@ protected:
      * @brief Финализировать инициилизацию
      */
     virtual void finalizeInitialization() = 0;
+
+    /**
+     * @brief Подготовить xml документа к сравнению
+     */
+    virtual QByteArray prepareToComparison(const QByteArray& _xml) const;
+
+    /**
+     * @brief Восстановить xml после сравнения документов
+     */
+    virtual QByteArray restoreAfterComparison(const QByteArray& _xml) const;
 
 private:
     class Implementation;
