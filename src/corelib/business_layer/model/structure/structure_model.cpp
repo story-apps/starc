@@ -37,6 +37,7 @@ const QLatin1String kNameAttribute("name");
 const QLatin1String kColorAttribute("color");
 const QLatin1String kVisibleAttribute("visible");
 const QLatin1String kReadOnlyAttribute("readonly");
+const QLatin1String kComparisonAttribute("comparison");
 } // namespace
 
 class StructureModel::Implementation
@@ -87,8 +88,8 @@ public:
 };
 
 StructureModel::Implementation::Implementation()
-    : rootItem(
-        new StructureModelItem({}, Domain::DocumentObjectType::Undefined, {}, {}, true, false))
+    : rootItem(new StructureModelItem({}, Domain::DocumentObjectType::Undefined, {}, {}, true,
+                                      false, false))
 {
 }
 
@@ -115,11 +116,13 @@ StructureModelItem* StructureModel::Implementation::buildItem(const QDomElement&
     // Формируем элемент структуры
     //
     const auto readOnly = false;
+    const auto comparison = false;
     auto item = new StructureModelItem(QUuid::fromString(_node.attribute(kUuidAttribute)),
                                        Domain::typeFor(_node.attribute(kTypeAttribute).toUtf8()),
                                        TextHelper::fromHtmlEscaped(_node.attribute(kNameAttribute)),
                                        ColorHelper::fromString(_node.attribute(kColorAttribute)),
-                                       _node.attribute(kVisibleAttribute) == "true", readOnly);
+                                       _node.attribute(kVisibleAttribute) == "true", readOnly,
+                                       comparison);
     //
     // ... вкладываем в родителя
     //
@@ -146,10 +149,13 @@ StructureModelItem* StructureModel::Implementation::buildItem(const QDomElement&
             const auto visible = true;
             const auto readOnly = versionNode.hasAttribute(kReadOnlyAttribute)
                 && versionNode.attribute(kReadOnlyAttribute) == "true";
+            const auto comparison = versionNode.hasAttribute(kComparisonAttribute)
+                && versionNode.attribute(kComparisonAttribute) == "true";
             auto version = new StructureModelItem(
                 QUuid::fromString(versionNode.attribute(kUuidAttribute)), item->type(),
                 TextHelper::fromHtmlEscaped(versionNode.attribute(kNameAttribute)),
-                ColorHelper::fromString(versionNode.attribute(kColorAttribute)), visible, readOnly);
+                ColorHelper::fromString(versionNode.attribute(kColorAttribute)), visible, readOnly,
+                comparison);
             item->addVersion(version);
         }
         child = child.nextSiblingElement();
@@ -173,11 +179,13 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
                .arg(kDocumentKey, Domain::mimeTypeFor(_structure->type()))
                .toUtf8();
     auto writeVersionXml = [&xml](StructureModelItem* _item) {
-        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\"/>\n")
+        xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\"%10/>\n")
                    .arg(kVersionKey, kUuidAttribute, _item->uuid().toString(), kNameAttribute,
                         TextHelper::toHtmlEscaped(_item->name()), kColorAttribute,
                         ColorHelper::toString(_item->color()), kReadOnlyAttribute,
-                        (_item->isReadOnly() ? "true" : "false"))
+                        (_item->isReadOnly() ? "true" : "false"),
+                        (_item->isComparison() ? QString(" %1=\"true\"").arg(kComparisonAttribute)
+                                               : ""))
                    .toUtf8();
     };
     std::function<void(StructureModelItem*)> writeItemXml;
@@ -246,7 +254,8 @@ QModelIndex StructureModel::addDocument(Domain::DocumentObjectType _type, const 
     auto createItem = [_visible](DocumentObjectType _type, const QString& _name) {
         auto uuid = QUuid::createUuid();
         const auto readOnly = false;
-        return new StructureModelItem(uuid, _type, _name, {}, _visible, readOnly);
+        const auto comparison = false;
+        return new StructureModelItem(uuid, _type, _name, {}, _visible, readOnly, comparison);
     };
 
     auto parentItem = itemForIndex(_parent);
@@ -1235,14 +1244,14 @@ void StructureModel::setItemVisible(StructureModelItem* _item, bool _visible)
 
 void StructureModel::addItemVersion(StructureModelItem* _item, const QString& _name,
                                     const QColor& _color, bool _readOnly,
-                                    const QByteArray& _content)
+                                    const QByteArray& _content, bool _comparison)
 {
     if (_item == nullptr) {
         return;
     }
 
     const auto itemIndex = indexForItem(_item);
-    auto newVersion = _item->addVersion(_name, _color, _readOnly);
+    auto newVersion = _item->addVersion(_name, _color, _readOnly, _comparison);
     emit dataChanged(itemIndex, itemIndex);
 
     emit documentAdded(newVersion->uuid(), _item->parent()->uuid(), newVersion->type(),

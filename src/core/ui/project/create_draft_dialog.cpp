@@ -6,7 +6,6 @@
 #include <ui/widgets/color_picker/color_picker_popup.h>
 #include <ui/widgets/combo_box/combo_box.h>
 #include <ui/widgets/label/label.h>
-#include <ui/widgets/text_field/text_field.h>
 #include <utils/helpers/ui_helper.h>
 
 #include <QBoxLayout>
@@ -34,11 +33,11 @@ public:
 
 
     Body1Label* draftHint = nullptr;
-    TextField* versionName = nullptr;
-    ColorPickerPopup* versionColorPopup = nullptr;
-    ComboBox* sourceVersion = nullptr;
-    QStringListModel* sourceVersionModel = nullptr;
-    CheckBox* lockEditingVersion = nullptr;
+    TextField* draftName = nullptr;
+    ColorPickerPopup* draftColorPopup = nullptr;
+    ComboBox* sourceDraft = nullptr;
+    QStringListModel* sourceDraftModel = nullptr;
+    CheckBox* lockEditingDraft = nullptr;
 
     QHBoxLayout* buttonsLayout = nullptr;
     Button* cancelButton = nullptr;
@@ -49,22 +48,22 @@ public:
 
 CreateDraftDialog::Implementation::Implementation(QWidget* _parent)
     : draftHint(new Body1Label(_parent))
-    , versionName(new TextField(_parent))
-    , versionColorPopup(new ColorPickerPopup(_parent))
-    , sourceVersion(new ComboBox(_parent))
-    , sourceVersionModel(new QStringListModel(sourceVersion))
-    , lockEditingVersion(new CheckBox(_parent))
+    , draftName(new TextField(_parent))
+    , draftColorPopup(new ColorPickerPopup(_parent))
+    , sourceDraft(new ComboBox(_parent))
+    , sourceDraftModel(new QStringListModel(sourceDraft))
+    , lockEditingDraft(new CheckBox(_parent))
     , buttonsLayout(new QHBoxLayout)
     , cancelButton(new Button(_parent))
     , createButton(new Button(_parent))
 {
-    versionColorPopup->setColorCanBeDeselected(false);
-    versionColorPopup->setSelectedColor(Qt::white);
-    versionName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
-    versionName->setTrailingIcon(u8"\U000F0765");
-    versionName->setTrailingIconColor(versionColorPopup->selectedColor());
-    sourceVersion->setModel(sourceVersionModel);
-    lockEditingVersion->setChecked(false);
+    draftColorPopup->setColorCanBeDeselected(false);
+    draftColorPopup->setSelectedColor(Qt::white);
+    draftName->setSpellCheckPolicy(SpellCheckPolicy::Manual);
+    draftName->setTrailingIcon(u8"\U000F0765");
+    draftName->setTrailingIconColor(draftColorPopup->selectedColor());
+    sourceDraft->setModel(sourceDraftModel);
+    lockEditingDraft->setChecked(false);
     createButton->setEnabled(false);
 
     buttonsLayout->setContentsMargins({});
@@ -88,51 +87,53 @@ CreateDraftDialog::CreateDraftDialog(QWidget* _parent)
     contentsLayout()->setSpacing(0);
     int row = 0;
     contentsLayout()->addWidget(d->draftHint, row++, 0);
-    contentsLayout()->addWidget(d->versionName, row++, 0);
-    contentsLayout()->addWidget(d->sourceVersion, row++, 0);
-    contentsLayout()->addWidget(d->lockEditingVersion, row++, 0);
+    contentsLayout()->addWidget(d->draftName, row++, 0);
+    contentsLayout()->addWidget(d->sourceDraft, row++, 0);
+    contentsLayout()->addWidget(d->lockEditingDraft, row++, 0);
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
 
-    connect(d->versionName, &TextField::textChanged, this,
-            [this] { d->createButton->setEnabled(!d->versionName->text().isEmpty()); });
-    connect(d->versionName, &TextField::trailingIconPressed, this, [this] {
-        d->versionColorPopup->showPopup(d->versionName, Qt::AlignBottom | Qt::AlignRight);
+    connect(d->draftName, &TextField::textChanged, this,
+            [this] { d->createButton->setEnabled(!d->draftName->text().isEmpty()); });
+    connect(d->draftName, &TextField::trailingIconPressed, this, [this] {
+        d->draftColorPopup->showPopup(d->draftName, Qt::AlignBottom | Qt::AlignRight);
     });
-    connect(d->versionColorPopup, &ColorPickerPopup::selectedColorChanged, this,
-            [this](const QColor& _color) { d->versionName->setTrailingIconColor(_color); });
+    connect(d->draftColorPopup, &ColorPickerPopup::selectedColorChanged, this,
+            [this](const QColor& _color) { d->draftName->setTrailingIconColor(_color); });
     connect(d->createButton, &Button::clicked, this, [this] {
-        emit savePressed(d->versionName->text(), d->versionColorPopup->selectedColor(),
-                         d->sourceVersion->currentIndex().row(),
-                         d->lockEditingVersion->isChecked());
+        emit savePressed(d->draftName->text(), d->draftColorPopup->selectedColor(),
+                         d->sourceDraft->currentIndex().row(),
+                         d->lockEditingDraft->isChecked());
     });
     connect(d->cancelButton, &Button::clicked, this, &CreateDraftDialog::hideDialog);
 }
 
 CreateDraftDialog::~CreateDraftDialog() = default;
 
-void CreateDraftDialog::setVersions(const QStringList& _versions, int _selectVersionIndex)
+void CreateDraftDialog::setDrafts(const QStringList& _drafts, int _selectDraftIndex)
 {
-    d->sourceVersion->setVisible(_versions.size() > 1);
+    d->sourceDraft->setVisible(_drafts.size() > 1);
 
-    d->sourceVersionModel->setStringList(_versions);
-    d->sourceVersion->setCurrentText(_versions.at(_selectVersionIndex));
+    d->sourceDraftModel->setStringList(_drafts);
+    d->sourceDraft->setCurrentText(_drafts.at(_selectDraftIndex));
 }
 
-void CreateDraftDialog::edit(const QString& _name, const QColor& _color, bool _readOnly)
+void CreateDraftDialog::edit(const QString& _name, const QColor& _color, bool _readOnly,
+                             bool _comparison)
 {
     d->state = Edit;
     updateTranslations();
 
-    d->versionName->setText(_name);
-    d->versionName->setTrailingIconColor(_color);
-    d->sourceVersion->hide();
-    d->versionColorPopup->setSelectedColor(_color);
-    d->lockEditingVersion->setChecked(_readOnly);
+    d->draftName->setText(_name);
+    d->draftName->setTrailingIconColor(_color);
+    d->sourceDraft->hide();
+    d->draftColorPopup->setSelectedColor(_color);
+    d->lockEditingDraft->setChecked(_readOnly);
+    d->lockEditingDraft->setVisible(_comparison == false);
 }
 
 QWidget* CreateDraftDialog::focusedWidgetAfterShow() const
 {
-    return d->versionName;
+    return d->draftName;
 }
 
 QWidget* CreateDraftDialog::lastFocusableWidget() const
@@ -145,9 +146,9 @@ void CreateDraftDialog::updateTranslations()
     setTitle(d->state == AddNew ? tr("Create document draft") : tr("Edit document draft"));
 
     d->draftHint->setText(tr("Store actual draft as a separate document to keep your progress."));
-    d->versionName->setLabel(tr("Draft name"));
-    d->sourceVersion->setLabel(tr("Based on"));
-    d->lockEditingVersion->setText(tr("Lock draft text editing"));
+    d->draftName->setLabel(tr("Draft name"));
+    d->sourceDraft->setLabel(tr("Based on"));
+    d->lockEditingDraft->setText(tr("Lock draft text editing"));
     d->cancelButton->setText(tr("Cancel"));
     d->createButton->setText(d->state == AddNew ? tr("Create") : tr("Save"));
 }
@@ -160,18 +161,18 @@ void CreateDraftDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
                                      DesignSystem::layout().px16(), DesignSystem::layout().px24());
     d->draftHint->setBackgroundColor(DesignSystem::color().background());
     d->draftHint->setTextColor(DesignSystem::color().onBackground());
-    d->versionName->setTextColor(DesignSystem::color().onBackground());
-    d->versionName->setBackgroundColor(DesignSystem::color().onBackground());
-    d->versionColorPopup->setBackgroundColor(DesignSystem::color().background());
-    d->versionColorPopup->setTextColor(DesignSystem::color().onBackground());
-    d->sourceVersion->setTextColor(DesignSystem::color().onBackground());
-    d->sourceVersion->setBackgroundColor(DesignSystem::color().onBackground());
-    d->sourceVersion->setPopupBackgroundColor(DesignSystem::color().background());
-    d->sourceVersion->setCustomMargins({ DesignSystem::layout().px24(),
+    d->draftName->setTextColor(DesignSystem::color().onBackground());
+    d->draftName->setBackgroundColor(DesignSystem::color().onBackground());
+    d->draftColorPopup->setBackgroundColor(DesignSystem::color().background());
+    d->draftColorPopup->setTextColor(DesignSystem::color().onBackground());
+    d->sourceDraft->setTextColor(DesignSystem::color().onBackground());
+    d->sourceDraft->setBackgroundColor(DesignSystem::color().onBackground());
+    d->sourceDraft->setPopupBackgroundColor(DesignSystem::color().background());
+    d->sourceDraft->setCustomMargins({ DesignSystem::layout().px24(),
                                          DesignSystem::layout().px12(),
                                          DesignSystem::layout().px24(), 0.0 });
-    d->lockEditingVersion->setTextColor(DesignSystem::color().onBackground());
-    d->lockEditingVersion->setBackgroundColor(DesignSystem::color().background());
+    d->lockEditingDraft->setTextColor(DesignSystem::color().onBackground());
+    d->lockEditingDraft->setBackgroundColor(DesignSystem::color().background());
 
     UiHelper::initColorsFor(d->cancelButton, UiHelper::DialogDefault);
     UiHelper::initColorsFor(d->createButton, UiHelper::DialogAccept);

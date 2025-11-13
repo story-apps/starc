@@ -5,30 +5,26 @@
 
 namespace Ui {
 
-class CreateDraftDialog : public AbstractDialog
+class CompareDraftDialog : public AbstractDialog
 {
     Q_OBJECT
 
 public:
-    explicit CreateDraftDialog(QWidget* _parent = nullptr);
-    ~CreateDraftDialog() override;
+    explicit CompareDraftDialog(QWidget* _parent = nullptr);
+    ~CompareDraftDialog() override;
 
     /**
      * @brief Задать список драфтов из которых можно создать новую
      */
-    void setDrafts(const QStringList& _drafts, int _selectDraftIndex);
-
-    /**
-     * @brief Редактировать драфт с заданными параметрами
-     */
-    void edit(const QString& _name, const QColor& _color, bool _readOnly, bool _comparison);
+    void setDrafts(const QString& _lhsName, const QStringList& _lhsDrafts,
+                     int _selectLhsDraftIndex, const QString& _rhsName,
+                     const QStringList& _rhsDrafts, int _selectRhsDraftIndex);
 
 signals:
     /**
-     * @brief Пользователь нажал кнопку создания нового драфта/сохранения редактируемого
+     * @brief Пользователь нажал кнопку сравнения выбранных драфтов
      */
-    void savePressed(const QString& _draftName, const QColor& _color, int _sourceDraftIndex,
-                     bool _readOnly);
+    void comparePressed(int _lhsDraftIndex, int _rhsDraftIndex);
 
 protected:
     /**

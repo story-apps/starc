@@ -227,7 +227,7 @@ void ProjectView::setActive(bool _active)
     }
 }
 
-void ProjectView::setDocumentDraft(const QVector<BusinessLayer::StructureModelItem*>& _drafts)
+void ProjectView::setDocumentDrafts(const QVector<BusinessLayer::StructureModelItem*>& _drafts)
 {
     if (d->documentDrafts->count() == 1 && _drafts.isEmpty()) {
         return;
@@ -243,8 +243,11 @@ void ProjectView::setDocumentDraft(const QVector<BusinessLayer::StructureModelIt
     d->documentDrafts->removeAllTabs();
     d->documentDrafts->addTab(tr("Current draft"));
     for (const auto draft : _drafts) {
-        d->documentDrafts->addTab(
-            draft->name(), draft->isReadOnly() ? u8"\U000F033E" : u8"\U000F0765", draft->color());
+        d->documentDrafts->addTab(draft->name(),
+                                  draft->isComparison()
+                                      ? u8"\U000F1492"
+                                      : (draft->isReadOnly() ? u8"\U000F033E" : u8"\U000F0765"),
+                                  draft->color());
     }
 
     d->documentDrafts->setCurrentTab(lastActiveDraft);

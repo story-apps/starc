@@ -22,7 +22,7 @@ class CORE_LIBRARY_EXPORT StructureModelItem : public AbstractModelItem
 public:
     explicit StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
                                 const QString& _name, const QColor& _color, bool _visible,
-                                bool _readOnly);
+                                bool _readOnly, bool _comparison);
     explicit StructureModelItem(const StructureModelItem& _other);
     ~StructureModelItem() override;
 
@@ -61,12 +61,19 @@ public:
     void setReadOnly(bool _readOnly);
 
     /**
+     * @brief Является ли элемент результатом сравнения документов
+     */
+    bool isComparison() const;
+    void setComparison(bool _comparison);
+
+    /**
      * @brief Версии документа (добавляются в начало списка, т.е. сверху находятся наиболее свежие
      *        версии)
      */
     const QVector<StructureModelItem*>& versions() const;
     StructureModelItem* addVersion(StructureModelItem* _version);
-    StructureModelItem* addVersion(const QString& _name, const QColor& _color, bool _readOnly);
+    StructureModelItem* addVersion(const QString& _name, const QColor& _color, bool _readOnly,
+                                   bool _comparison);
     void removeVersion(int _versionIndex);
 
     /**

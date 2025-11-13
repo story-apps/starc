@@ -15,7 +15,7 @@ class StructureModelItem::Implementation
 public:
     explicit Implementation(const QUuid& _uuid, Domain::DocumentObjectType _type,
                             const QString& _name, const QColor& _color, bool _visible,
-                            bool _readOnly);
+                            bool _readOnly, bool _comparison);
 
     QUuid uuid;
     Domain::DocumentObjectType type;
@@ -23,19 +23,21 @@ public:
     QColor color;
     bool visible = true;
     bool readOnly = false;
+    bool comparison = false;
     QVector<StructureModelItem*> versions;
 };
 
 StructureModelItem::Implementation::Implementation(const QUuid& _uuid,
                                                    Domain::DocumentObjectType _type,
                                                    const QString& _name, const QColor& _color,
-                                                   bool _visible, bool _readOnly)
+                                                   bool _visible, bool _readOnly, bool _comparison)
     : uuid(_uuid)
     , type(_type)
     , name(_name)
     , color(_color)
     , visible(_visible)
     , readOnly(_readOnly)
+    , comparison(_comparison)
 {
 }
 
@@ -45,16 +47,16 @@ StructureModelItem::Implementation::Implementation(const QUuid& _uuid,
 
 StructureModelItem::StructureModelItem(const QUuid& _uuid, Domain::DocumentObjectType _type,
                                        const QString& _name, const QColor& _color, bool _visible,
-                                       bool _readOnly)
+                                       bool _readOnly, bool _comparison)
     : AbstractModelItem()
-    , d(new Implementation(_uuid, _type, _name, _color, _visible, _readOnly))
+    , d(new Implementation(_uuid, _type, _name, _color, _visible, _readOnly, _comparison))
 {
 }
 
 StructureModelItem::StructureModelItem(const StructureModelItem& _other)
     : AbstractModelItem()
     , d(new Implementation(_other.d->uuid, _other.d->type, _other.d->name, _other.d->color,
-                           _other.d->visible, _other.d->readOnly))
+                           _other.d->visible, _other.d->readOnly, _other.d->comparison))
 {
     //
     // Я не знаю зачем это может понадобится, по идее новый элемент должен создаваться без версий
@@ -118,6 +120,16 @@ void StructureModelItem::setReadOnly(bool _readOnly)
     d->readOnly = _readOnly;
 }
 
+bool StructureModelItem::isComparison() const
+{
+    return d->comparison;
+}
+
+void StructureModelItem::setComparison(bool _comparison)
+{
+    d->comparison = _comparison;
+}
+
 const QVector<StructureModelItem*>& StructureModelItem::versions() const
 {
     return d->versions;
@@ -131,13 +143,24 @@ StructureModelItem* StructureModelItem::addVersion(StructureModelItem* _version)
 }
 
 StructureModelItem* StructureModelItem::addVersion(const QString& _name, const QColor& _color,
-                                                   bool _readOnly)
+                                                   bool _readOnly, bool _comparison)
 {
     const auto visible = true;
-    auto version
-        = new StructureModelItem(QUuid::createUuid(), type(), _name, _color, visible, _readOnly);
+    auto version = new StructureModelItem(QUuid::createUuid(), type(), _name, _color, visible,
+                                          _readOnly, _comparison);
     version->setParent(parent());
-    d->versions.prepend(version);
+    //
+    // Новые драфты добавляются вначало, чтобы идти сразу за текущим драфтом
+    //
+    if (!_comparison) {
+        d->versions.prepend(version);
+    }
+    //
+    // Сравнения же добавляются в конец списка драфтов
+    //
+    else {
+        d->versions.prepend(version);
+    }
     return version;
 }
 
@@ -200,7 +223,8 @@ bool StructureModelItem::isEqual(const StructureModelItem* _other) const
 {
     return d->uuid == _other->d->uuid && d->type == _other->d->type && d->name == _other->d->name
         && d->color == _other->d->color && d->visible == _other->d->visible
-        && d->readOnly == _other->d->readOnly && d->versions == _other->d->versions;
+        && d->readOnly == _other->d->readOnly && d->comparison == _other->d->comparison
+        && d->versions == _other->d->versions;
 }
 
 void StructureModelItem::copyFrom(const StructureModelItem* _other) const
@@ -216,6 +240,7 @@ void StructureModelItem::copyFrom(const StructureModelItem* _other) const
     d->color = _other->d->color;
     d->visible = _other->d->visible;
     d->readOnly = _other->d->readOnly;
+    d->comparison = _other->d->comparison;
 
     qDeleteAll(d->versions);
     d->versions.clear();

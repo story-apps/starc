@@ -58,7 +58,7 @@ public:
     /**
      * @brief Задать драфты документа для отображения
      */
-    void setDocumentDraft(const QVector<BusinessLayer::StructureModelItem*>& _drafts);
+    void setDocumentDrafts(const QVector<BusinessLayer::StructureModelItem*>& _drafts);
 
     /**
      * @brief Настроить видимость списка драфтов документа
