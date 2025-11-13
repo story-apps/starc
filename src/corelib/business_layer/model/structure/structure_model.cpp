@@ -30,6 +30,7 @@ namespace {
 const char* kMimeType = "application/x-starc/document";
 const QLatin1String kDocumentKey("document");
 const QLatin1String kItemKey("item");
+const QLatin1String kDraftKey("draft");
 const QLatin1String kVersionKey("version");
 const QLatin1String kUuidAttribute("uuid");
 const QLatin1String kTypeAttribute("type");
@@ -142,9 +143,13 @@ StructureModelItem* StructureModel::Implementation::buildItem(const QDomElement&
             buildItem(child, item);
         }
         //
-        // ... и версии
+        // ... и драфты
         //
-        else if (child.tagName() == kVersionKey) {
+        else if (child.tagName() == kDraftKey
+                 //
+                 // TODO: выпилить версии в версии 0.9
+                 //
+                 || child.tagName() == kVersionKey) {
             const auto versionNode = child.toElement();
             const auto visible = true;
             const auto readOnly = versionNode.hasAttribute(kReadOnlyAttribute)
@@ -156,7 +161,7 @@ StructureModelItem* StructureModel::Implementation::buildItem(const QDomElement&
                 TextHelper::fromHtmlEscaped(versionNode.attribute(kNameAttribute)),
                 ColorHelper::fromString(versionNode.attribute(kColorAttribute)), visible, readOnly,
                 comparison);
-            item->addVersion(version);
+            item->addDraft(version);
         }
         child = child.nextSiblingElement();
     }
@@ -180,7 +185,7 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
                .toUtf8();
     auto writeVersionXml = [&xml](StructureModelItem* _item) {
         xml += QString("<%1 %2=\"%3\" %4=\"%5\" %6=\"%7\" %8=\"%9\"%10/>\n")
-                   .arg(kVersionKey, kUuidAttribute, _item->uuid().toString(), kNameAttribute,
+                   .arg(kDraftKey, kUuidAttribute, _item->uuid().toString(), kNameAttribute,
                         TextHelper::toHtmlEscaped(_item->name()), kColorAttribute,
                         ColorHelper::toString(_item->color()), kReadOnlyAttribute,
                         (_item->isReadOnly() ? "true" : "false"),
@@ -197,13 +202,13 @@ QByteArray StructureModel::Implementation::toXml(Domain::DocumentObject* _struct
                         ColorHelper::toString(_item->color()), kVisibleAttribute,
                         (_item->isVisible() ? "true" : "false"))
                    .toUtf8();
-        if (_item->versions().isEmpty() && !_item->hasChildren()) {
+        if (_item->drafts().isEmpty() && !_item->hasChildren()) {
             xml += "/>\n";
             return;
         }
 
         xml += ">\n";
-        for (const auto version : _item->versions()) {
+        for (const auto version : _item->drafts()) {
             writeVersionXml(version);
         }
         for (int childIndex = 0; childIndex < _item->childCount(); ++childIndex) {
@@ -1147,7 +1152,7 @@ StructureModelItem* StructureModel::itemForUuid(const QUuid& _uuid) const
                 return item;
             }
 
-            const auto versions = item->versions();
+            const auto versions = item->drafts();
             for (auto version : versions) {
                 if (version->uuid() == _uuid) {
                     return version;
@@ -1242,49 +1247,49 @@ void StructureModel::setItemVisible(StructureModelItem* _item, bool _visible)
     emit dataChanged(itemIndex, itemIndex);
 }
 
-void StructureModel::addItemVersion(StructureModelItem* _item, const QString& _name,
-                                    const QColor& _color, bool _readOnly,
-                                    const QByteArray& _content, bool _comparison)
+void StructureModel::addItemDraft(StructureModelItem* _item, const QString& _name,
+                                  const QColor& _color, bool _readOnly, const QByteArray& _content,
+                                  bool _comparison)
 {
     if (_item == nullptr) {
         return;
     }
 
     const auto itemIndex = indexForItem(_item);
-    auto newVersion = _item->addVersion(_name, _color, _readOnly, _comparison);
+    auto newVersion = _item->addDraft(_name, _color, _readOnly, _comparison);
     emit dataChanged(itemIndex, itemIndex);
 
     emit documentAdded(newVersion->uuid(), _item->parent()->uuid(), newVersion->type(),
                        newVersion->name(), _content);
 
-    emit versionAdded(_item->uuid());
+    emit draftAdded(_item->uuid());
 }
 
-void StructureModel::updateItemVersion(StructureModelItem* _item, int _versionIndex,
-                                       const QString& _name, const QColor& _color, bool _readOnly)
+void StructureModel::updateItemDraft(StructureModelItem* _item, int _versionIndex,
+                                     const QString& _name, const QColor& _color, bool _readOnly)
 {
     if (_item == nullptr) {
         return;
     }
 
     const auto itemIndex = indexForItem(_item);
-    auto version = _item->versions().at(_versionIndex);
+    auto version = _item->drafts().at(_versionIndex);
     version->setName(_name);
     version->setColor(_color);
     version->setReadOnly(_readOnly);
     emit dataChanged(itemIndex, itemIndex);
 }
 
-void StructureModel::removeItemVersion(StructureModelItem* _item, int _versionIndex)
+void StructureModel::removeItemDraft(StructureModelItem* _item, int _versionIndex)
 {
     if (_item == nullptr) {
         return;
     }
 
     const auto itemIndex = indexForItem(_item);
-    _item->removeVersion(_versionIndex);
+    _item->removeDraft(_versionIndex);
     emit dataChanged(itemIndex, itemIndex);
-    emit versionRemoved(_item->uuid());
+    emit draftRemoved(_item->uuid());
 }
 
 void StructureModel::setNavigatorAvailableFor(const QModelIndex& _index, bool isAvailable)

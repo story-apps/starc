@@ -125,7 +125,7 @@ public:
                            const QString& _presentationFilePath);
 
     /**
-     * @brief Версии модели документа для экспорта
+     * @brief Драфты модели документа для экспорта
      * @note Маппим модели для случаев, когда у пользователя выбрана титульная страница, чтобы
      *       экспортировался сам скрипт
      */
@@ -386,7 +386,7 @@ private:
     void showView(const QModelIndex& _index);
     void showView(const QModelIndex& _itemIndex, const QString& _viewMimeType,
                   const QString& _defaultMimeType = {});
-    void showViewForVersion(BusinessLayer::StructureModelItem* _item);
+    void showViewForDraft(BusinessLayer::StructureModelItem* _item);
 
     /**
      * @brief Показать первый из редакторов для текущего элемента
@@ -404,7 +404,7 @@ private:
      * @note Если индекс невалидный, то отображается навигатор по проекту
      */
     void showNavigator(const QModelIndex& _itemIndex, const QString& _viewMimeType = {});
-    void showNavigatorForVersion(BusinessLayer::StructureModelItem* _item);
+    void showNavigatorForDraft(BusinessLayer::StructureModelItem* _item);
 
     /**
      * @brief Уведомить клиентов об обновлении курсора

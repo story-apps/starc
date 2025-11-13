@@ -162,9 +162,9 @@ void ExportManager::Implementation::exportScreenplays(
     using namespace BusinessLayer;
 
     if (screenplayExportDialog == nullptr) {
-        const auto currentVersion = _models.constFirst().second;
+        const auto currentDraft = _models.constFirst().second;
         screenplayExportDialog = new Ui::ScreenplayExportDialog(
-            currentVersion->document()->uuid().toString(), topLevelWidget);
+            currentDraft->document()->uuid().toString(), topLevelWidget);
         connect(screenplayExportDialog, &Ui::ScreenplayExportDialog::exportRequested,
                 screenplayExportDialog, [this, _models] {
                     auto exportOptions = screenplayExportDialog->exportOptions();
@@ -198,7 +198,7 @@ void ExportManager::Implementation::exportScreenplays(
                         break;
                     }
                     }
-                    auto model = _models.at(screenplayExportDialog->selectedVersion()).second;
+                    auto model = _models.at(screenplayExportDialog->selectedDraft()).second;
                     const auto screenplayTextModel
                         = qobject_cast<BusinessLayer::ScreenplayTextModel*>(model);
                     const auto projectExportFolder
@@ -257,11 +257,11 @@ void ExportManager::Implementation::exportScreenplays(
                 });
     }
 
-    QVector<QString> versions;
-    for (const auto& version : _models) {
-        versions.append(version.first);
+    QVector<QString> drafts;
+    for (const auto& draft : _models) {
+        drafts.append(draft.first);
     }
-    screenplayExportDialog->setVersions(versions, _currentModelIndex);
+    screenplayExportDialog->setDrafts(drafts, _currentModelIndex);
     screenplayExportDialog->showDialog();
 }
 
@@ -363,9 +363,9 @@ void ExportManager::Implementation::exportComicBooks(
     using namespace BusinessLayer;
 
     if (comicBookExportDialog == nullptr) {
-        const auto currentVersion = _models.constFirst().second;
+        const auto currentDraft = _models.constFirst().second;
         comicBookExportDialog = new Ui::ComicBookExportDialog(
-            currentVersion->document()->uuid().toString(), topLevelWidget);
+            currentDraft->document()->uuid().toString(), topLevelWidget);
         connect(
             comicBookExportDialog, &Ui::ComicBookExportDialog::exportRequested,
             comicBookExportDialog, [this, _models] {
@@ -395,7 +395,7 @@ void ExportManager::Implementation::exportComicBooks(
                     break;
                 }
                 }
-                auto model = _models.at(comicBookExportDialog->selectedVersion()).second;
+                auto model = _models.at(comicBookExportDialog->selectedDraft()).second;
                 const auto comicBookTextModel
                     = qobject_cast<BusinessLayer::ComicBookTextModel*>(model);
                 const auto projectExportFolder
@@ -523,11 +523,11 @@ void ExportManager::Implementation::exportComicBooks(
                 });
     }
 
-    QVector<QString> versions;
-    for (const auto& version : _models) {
-        versions.append(version.first);
+    QVector<QString> drafts;
+    for (const auto& draft : _models) {
+        drafts.append(draft.first);
     }
-    comicBookExportDialog->setVersions(versions, _currentModelIndex);
+    comicBookExportDialog->setDrafts(drafts, _currentModelIndex);
     comicBookExportDialog->showDialog();
 }
 
@@ -537,9 +537,9 @@ void ExportManager::Implementation::exportAudioplays(
     using namespace BusinessLayer;
 
     if (audioplayExportDialog == nullptr) {
-        const auto currentVersion = _models.constFirst().second;
+        const auto currentDraft = _models.constFirst().second;
         audioplayExportDialog = new Ui::AudioplayExportDialog(
-            currentVersion->document()->uuid().toString(), topLevelWidget);
+            currentDraft->document()->uuid().toString(), topLevelWidget);
         connect(
             audioplayExportDialog, &Ui::AudioplayExportDialog::exportRequested,
             audioplayExportDialog, [this, _models] {
@@ -568,7 +568,7 @@ void ExportManager::Implementation::exportAudioplays(
                     break;
                 }
                 }
-                auto model = _models.at(audioplayExportDialog->selectedVersion()).second;
+                auto model = _models.at(audioplayExportDialog->selectedDraft()).second;
                 const auto audioplayTextModel
                     = qobject_cast<BusinessLayer::AudioplayTextModel*>(model);
                 const auto projectExportFolder
@@ -702,11 +702,11 @@ void ExportManager::Implementation::exportAudioplays(
                 });
     }
 
-    QVector<QString> versions;
-    for (const auto& version : _models) {
-        versions.append(version.first);
+    QVector<QString> drafts;
+    for (const auto& draft : _models) {
+        drafts.append(draft.first);
     }
-    audioplayExportDialog->setVersions(versions, _currentModelIndex);
+    audioplayExportDialog->setDrafts(drafts, _currentModelIndex);
     audioplayExportDialog->showDialog();
 }
 
@@ -716,9 +716,9 @@ void ExportManager::Implementation::exportStageplays(
     using namespace BusinessLayer;
 
     if (stageplayExportDialog == nullptr) {
-        const auto currentVersion = _models.constFirst().second;
+        const auto currentDraft = _models.constFirst().second;
         stageplayExportDialog = new Ui::StageplayExportDialog(
-            currentVersion->document()->uuid().toString(), topLevelWidget);
+            currentDraft->document()->uuid().toString(), topLevelWidget);
         connect(
             stageplayExportDialog, &Ui::StageplayExportDialog::exportRequested,
             stageplayExportDialog, [this, _models] {
@@ -747,7 +747,7 @@ void ExportManager::Implementation::exportStageplays(
                     break;
                 }
                 }
-                auto model = _models.at(stageplayExportDialog->selectedVersion()).second;
+                auto model = _models.at(stageplayExportDialog->selectedDraft()).second;
                 const auto stageplayTextModel
                     = qobject_cast<BusinessLayer::StageplayTextModel*>(model);
                 const auto projectExportFolder
@@ -880,11 +880,11 @@ void ExportManager::Implementation::exportStageplays(
                 });
     }
 
-    QVector<QString> versions;
-    for (const auto& version : _models) {
-        versions.append(version.first);
+    QVector<QString> drafts;
+    for (const auto& draft : _models) {
+        drafts.append(draft.first);
     }
-    stageplayExportDialog->setVersions(versions, _currentModelIndex);
+    stageplayExportDialog->setDrafts(drafts, _currentModelIndex);
     stageplayExportDialog->showDialog();
 }
 
@@ -894,8 +894,8 @@ void ExportManager::Implementation::exportNovels(
     using namespace BusinessLayer;
 
     if (novelExportDialog == nullptr) {
-        const auto currentVersion = _models.constFirst().second;
-        novelExportDialog = new Ui::NovelExportDialog(currentVersion->document()->uuid().toString(),
+        const auto currentDraft = _models.constFirst().second;
+        novelExportDialog = new Ui::NovelExportDialog(currentDraft->document()->uuid().toString(),
                                                       topLevelWidget);
         connect(
             novelExportDialog, &Ui::NovelExportDialog::exportRequested, novelExportDialog,
@@ -925,7 +925,7 @@ void ExportManager::Implementation::exportNovels(
                     break;
                 }
                 }
-                auto model = _models.at(novelExportDialog->selectedVersion()).second;
+                auto model = _models.at(novelExportDialog->selectedDraft()).second;
                 const auto novelTextModel = qobject_cast<BusinessLayer::NovelTextModel*>(model);
                 const auto projectExportFolder
                     = settingsValue(DataStorageLayer::kProjectExportFolderKey).toString();
@@ -1040,11 +1040,11 @@ void ExportManager::Implementation::exportNovels(
         });
     }
 
-    QVector<QString> versions;
-    for (const auto& version : _models) {
-        versions.append(version.first);
+    QVector<QString> drafts;
+    for (const auto& draft : _models) {
+        drafts.append(draft.first);
     }
-    novelExportDialog->setVersions(versions, _currentModelIndex);
+    novelExportDialog->setDrafts(drafts, _currentModelIndex);
     novelExportDialog->showDialog();
 }
 

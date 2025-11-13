@@ -234,7 +234,7 @@ void ProjectView::setDocumentDrafts(const QVector<BusinessLayer::StructureModelI
     }
 
     //
-    // Блокируем сигналы, чтобы менеджер не думал, что мы переключаемся тут между разными версиями
+    // Блокируем сигналы, чтобы менеджер не думал, что мы переключаемся тут между разными драфтами
     //
     QSignalBlocker blocker(this);
 

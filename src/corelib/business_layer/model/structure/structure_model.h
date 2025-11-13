@@ -152,13 +152,13 @@ public:
     void setItemVisible(StructureModelItem* _item, bool _visible);
 
     /**
-     * @brief Работа со списком версий элемента
+     * @brief Работа со списком драфтов элемента
      */
-    void addItemVersion(StructureModelItem* _item, const QString& _name, const QColor& _color,
-                        bool _readOnly, const QByteArray& _content, bool _comparison);
-    void updateItemVersion(StructureModelItem* _item, int _versionIndex, const QString& _name,
-                           const QColor& _color, bool _readOnly);
-    void removeItemVersion(StructureModelItem* _item, int _versionIndex);
+    void addItemDraft(StructureModelItem* _item, const QString& _name, const QColor& _color,
+                      bool _readOnly, const QByteArray& _content, bool _comparison);
+    void updateItemDraft(StructureModelItem* _item, int _versionIndex, const QString& _name,
+                         const QColor& _color, bool _readOnly);
+    void removeItemDraft(StructureModelItem* _item, int _versionIndex);
 
     /**
      * @brief Задать возможность перехода в навигатор для заданного индекса
@@ -174,14 +174,14 @@ signals:
                        const QByteArray& _content);
 
     /**
-     * @brief Была добавлена версия документа
+     * @brief Был добавлен драфт документа
      */
-    void versionAdded(const QUuid& _uuid);
+    void draftAdded(const QUuid& _uuid);
 
     /**
-     * @brief Была удалена версия документа
+     * @brief Был удалён драфт документа
      */
-    void versionRemoved(const QUuid& _uuid);
+    void draftRemoved(const QUuid& _uuid);
 
     /**
      * @brief Документ сейчас будет удалён

@@ -74,7 +74,7 @@ namespace ManagementLayer {
 namespace {
 
 const QLatin1String kCurrentViewMimeTypeKey("view-mime-type");
-const QLatin1String kCurrentVersionKey("current-version");
+const QLatin1String kCurrentDraftKey("current-draft");
 constexpr int kCollaboratorsUpdateTimeoutMs = 60 * 1000;
 
 /**
@@ -664,16 +664,16 @@ void ProjectManager::Implementation::updateNavigatorContextMenu(const QModelInde
             }
 
             //
-            // Для текстовых документов можно создать версию
+            // Для текстовых документов можно создать драфт
             //
             if (isTextItem(currentItem)) {
-                auto createNewVersion = new QAction(tr("Create draft"));
-                createNewVersion->setSeparator(!menuActions.isEmpty());
-                createNewVersion->setIconText(u8"\U000F00FB");
-                createNewVersion->setEnabled(enabled);
-                connect(createNewVersion, &QAction::triggered, q,
+                auto createNewDraft = new QAction(tr("Create draft"));
+                createNewDraft->setSeparator(!menuActions.isEmpty());
+                createNewDraft->setIconText(u8"\U000F00FB");
+                createNewDraft->setEnabled(enabled);
+                connect(createNewDraft, &QAction::triggered, q,
                         [this, currentItemIndex] { this->createNewDraft(currentItemIndex); });
-                menuActions.append(createNewVersion);
+                menuActions.append(createNewDraft);
             }
 
             //
@@ -877,7 +877,7 @@ void ProjectManager::Implementation::openCurrentDocumentInNewWindow()
         windowWidget->resize(800, 600);
         windowWidget->show();
         //
-        // TODO: Ещё сюда нужно писать версию открытого документа, если это не текущая версия
+        // TODO: Ещё сюда нужно писать драфт открытого документа, если это не текущий драфт
         //
         windowWidget->setWindowTitle(view.activeModel->documentName());
 
@@ -1152,26 +1152,25 @@ void ProjectManager::Implementation::createNewDraft(const QModelIndex& _itemInde
     dialog->setDrafts(
         [this, _itemIndex] {
             const auto item = aliasedItemForIndex(_itemIndex);
-            QStringList versions = { tr("Current draft") };
-            for (const auto version : item->versions()) {
-                versions.append(version->name());
+            QStringList drafts = { tr("Current draft") };
+            for (const auto draft : item->drafts()) {
+                drafts.append(draft->name());
             }
-            return versions;
+            return drafts;
         }(),
         view.active->currentDraft());
     connect(dialog, &Ui::CreateDraftDialog::savePressed, view.active,
-            [this, _itemIndex, dialog](const QString& _name, const QColor& _color,
-                                       int _versionIndex, bool _readOnly) {
+            [this, _itemIndex, dialog](const QString& _name, const QColor& _color, int _draftIndex,
+                                       bool _readOnly) {
                 dialog->hideDialog();
 
                 const auto item = aliasedItemForIndex(_itemIndex);
                 const auto model = modelsFacade.modelFor(
-                    _versionIndex == 0 ? item->uuid()
-                                       : item->versions().at(_versionIndex - 1)->uuid());
+                    _draftIndex == 0 ? item->uuid() : item->drafts().at(_draftIndex - 1)->uuid());
                 const auto comparison = false;
-                projectStructureModel->addItemVersion(item, _name, _color, _readOnly,
-                                                      model->document()->content(), comparison);
-                view.active->setDocumentDrafts(item->versions());
+                projectStructureModel->addItemDraft(item, _name, _color, _readOnly,
+                                                    model->document()->content(), comparison);
+                view.active->setDocumentDrafts(item->drafts());
             });
     connect(dialog, &Ui::CreateDraftDialog::disappeared, dialog,
             &Ui::CreateDraftDialog::deleteLater);
@@ -1183,23 +1182,22 @@ void ProjectManager::Implementation::editDraft(const QModelIndex& _itemIndex, in
 {
     auto dialog = new Ui::CreateDraftDialog(topLevelWidget);
     const auto item = aliasedItemForIndex(_itemIndex);
-    const auto draft = item->versions().at(_draftIndex);
+    const auto draft = item->drafts().at(_draftIndex);
     dialog->edit(draft->name(), draft->color(), draft->isReadOnly(), draft->isComparison());
     connect(dialog, &Ui::CreateDraftDialog::savePressed, view.active,
             [this, item, _draftIndex, dialog](const QString& _name, const QColor& _color,
-                                              int _sourceVersionIndex, bool _readOnly) {
-                Q_UNUSED(_sourceVersionIndex)
+                                              int _sourceDraftIndex, bool _readOnly) {
+                Q_UNUSED(_sourceDraftIndex)
 
                 dialog->hideDialog();
 
-                projectStructureModel->updateItemVersion(item, _draftIndex, _name, _color,
-                                                         _readOnly);
-                view.active->setDocumentDrafts(item->versions());
+                projectStructureModel->updateItemDraft(item, _draftIndex, _name, _color, _readOnly);
+                view.active->setDocumentDrafts(item->drafts());
 
                 //
-                // Пеерзагрузим отображение, чтобы обновить флаг редактируемости версии
+                // Пеерзагрузим отображение, чтобы обновить флаг редактируемости драфта
                 //
-                q->showViewForVersion(item->versions().at(_draftIndex));
+                q->showViewForDraft(item->drafts().at(_draftIndex));
             });
     connect(dialog, &Ui::CreateDraftDialog::disappeared, dialog,
             &Ui::CreateDraftDialog::deleteLater);
@@ -1211,7 +1209,7 @@ void ProjectManager::Implementation::removeDraft(const QModelIndex& _itemIndex, 
 {
     auto dialog = new Dialog(view.active->topLevelWidget());
     const auto item = aliasedItemForIndex(_itemIndex);
-    const auto draft = item->versions().at(_draftIndex);
+    const auto draft = item->drafts().at(_draftIndex);
     const auto dialogTitle = draft->isComparison()
         ? tr("Do you really want to close comparison \"%1\"?")
         : tr("Do you really want to remove document draft \"%1\"?");
@@ -1238,32 +1236,32 @@ void ProjectManager::Implementation::removeDraft(const QModelIndex& _itemIndex, 
             //
             if ((view.active->currentDraft() - 1) == _draftIndex) {
                 //
-                // ... если удалена последняя версия, то покажем текущую
+                // ... если удалён последний драфт, то покажем текущую
                 //
                 if (_draftIndex == 0) {
-                    q->showViewForVersion(item);
+                    q->showViewForDraft(item);
                 }
                 //
-                // ... если удалена не последняя, то покажем предыдущую
+                // ... если удалён не последний, то покажем предыдущий
                 //
                 else {
-                    q->showViewForVersion(item->versions().at(_draftIndex - 1));
+                    q->showViewForDraft(item->drafts().at(_draftIndex - 1));
                 }
                 //
-                // ... уменьшим на один индекс вкладки выбранной версии
+                // ... уменьшим на один индекс вкладки выбранного драфта
                 //
                 view.active->setCurrentDraft(_draftIndex);
             }
             //
-            // ... а потом собственно удалим заданную версию
+            // ... а потом собственно удалим заданный драфт
             //
-            const auto documentUuid = item->versions().at(_draftIndex)->uuid();
+            const auto documentUuid = item->drafts().at(_draftIndex)->uuid();
             auto document
                 = DataStorageLayer::StorageFacade::documentStorage()->document(documentUuid);
             modelsFacade.removeModelFor(document);
             DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
-            projectStructureModel->removeItemVersion(item, _draftIndex);
-            view.active->setDocumentDrafts(item->versions());
+            projectStructureModel->removeItemDraft(item, _draftIndex);
+            view.active->setDocumentDrafts(item->drafts());
             emit q->documentRemoved(documentUuid);
         });
     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
@@ -1489,10 +1487,10 @@ void ProjectManager::Implementation::removeDocumentImpl(BusinessLayer::Structure
         }
         }
         //
-        // ... версии
+        // ... драфты
         //
-        for (const auto& version : _item->versions()) {
-            documentsToRemove.append(version->uuid());
+        for (const auto& draft : _item->drafts()) {
+            documentsToRemove.append(draft->uuid());
         }
         //
         // ... удалим все невалидные айдишники
@@ -1792,19 +1790,19 @@ void ProjectManager::Implementation::compareTextDocuments(const QModelIndex& _lh
                                                           const QModelIndex& _rhs)
 {
     //
-    // Если у сравниваемых элементов есть версии, то нужно уточнить у пользователя, какую версию он
+    // Если у сравниваемых элементов есть драфты, то нужно уточнить у пользователя, какой драфт он
     // хочет сравнить
     //
     const auto lhsItem = aliasedItemForIndex(_lhs);
     const auto rhsItem = aliasedItemForIndex(_rhs);
-    if (lhsItem->versions().size() > 1 || rhsItem->versions().size() > 1) {
+    if (lhsItem->drafts().size() > 1 || rhsItem->drafts().size() > 1) {
         auto dialog = new Ui::CompareDraftDialog(topLevelWidget);
         dialog->setDrafts(
             itemConcreteName(lhsItem),
             [this, _lhs] {
                 const auto item = aliasedItemForIndex(_lhs);
                 QStringList drafts = { tr("Current draft") };
-                for (const auto draft : item->versions()) {
+                for (const auto draft : item->drafts()) {
                     if (!draft->isComparison()) {
                         drafts.append(draft->name());
                     }
@@ -1815,7 +1813,7 @@ void ProjectManager::Implementation::compareTextDocuments(const QModelIndex& _lh
             [this, _rhs] {
                 const auto item = aliasedItemForIndex(_rhs);
                 QStringList drafts = { tr("Current draft") };
-                for (const auto draft : item->versions()) {
+                for (const auto draft : item->drafts()) {
                     if (!draft->isComparison()) {
                         drafts.append(draft->name());
                     }
@@ -1831,24 +1829,24 @@ void ProjectManager::Implementation::compareTextDocuments(const QModelIndex& _lh
                     if (_lhsIndex > 0) {
                         int index = 0;
                         for (int draftIndex = 0; draftIndex < _lhsIndex;) {
-                            if (!lhsItem->versions().at(index)->isComparison()) {
+                            if (!lhsItem->drafts().at(index)->isComparison()) {
                                 ++draftIndex;
                             }
                             ++index;
                         }
-                        lhsItem = lhsItem->versions().at(index - 1); // отнимаем текущий драфт
+                        lhsItem = lhsItem->drafts().at(index - 1); // отнимаем текущий драфт
                     }
 
                     auto rhsItem = aliasedItemForIndex(_rhs);
                     if (_rhsIndex > 0) {
                         int index = 0;
                         for (int draftIndex = 0; draftIndex < _rhsIndex;) {
-                            if (!rhsItem->versions().at(index)->isComparison()) {
+                            if (!rhsItem->drafts().at(index)->isComparison()) {
                                 ++draftIndex;
                             }
                             ++index;
                         }
-                        rhsItem = rhsItem->versions().at(index - 1); // отнимаем текущий драфт
+                        rhsItem = rhsItem->drafts().at(index - 1); // отнимаем текущий драфт
                     }
 
                     compareTextDocumentsItems(lhsItem, rhsItem);
@@ -1877,12 +1875,12 @@ void ProjectManager::Implementation::compareTextDocumentsItems(
     const auto rhsXml = rhsModel->document()->content();
 
     //
-    // Создать новую версию и поместить туда xml исходной модели
+    // Создать новый драфт и поместить туда xml исходной модели
     //
     constexpr bool readOnly = true;
     constexpr bool comparison = true;
     //
-    // ... определим элемент внутрь которого будем помещать версию со сравнением
+    // ... определим элемент внутрь которого будем помещать драфт со сравнением
     //     по умолчанию это будет второй из выбранных элементов
     //
     auto comparisonDraftHostItem = _rhsItem;
@@ -1905,24 +1903,24 @@ void ProjectManager::Implementation::compareTextDocumentsItems(
         lhsName = _lhsItem == comparisonDraftHostItem ? tr("Current draft") : _lhsItem->name();
         rhsName = _rhsItem == comparisonDraftHostItem ? tr("Current draft") : _rhsItem->name();
     }
-    projectStructureModel->addItemVersion(comparisonDraftHostItem,
-                                          tr("%1 vs %2").arg(lhsName, rhsName), QColor(), readOnly,
-                                          lhsXml, comparison);
-    view.active->setDocumentDrafts(comparisonDraftHostItem->versions());
+    projectStructureModel->addItemDraft(comparisonDraftHostItem,
+                                        tr("%1 vs %2").arg(lhsName, rhsName), QColor(), readOnly,
+                                        lhsXml, comparison);
+    view.active->setDocumentDrafts(comparisonDraftHostItem->drafts());
 
     //
-    // Сформировать диф с заданной моделью в новую версию
+    // Сформировать диф с заданной моделью в новый драфт
     //
-    const auto comparisonItem = comparisonDraftHostItem->versions().constLast();
+    const auto comparisonItem = comparisonDraftHostItem->drafts().constLast();
     auto comparisonModel = modelsFacade.modelFor(comparisonItem->uuid());
     auto comparisonTextModel = qobject_cast<BusinessLayer::TextModel*>(comparisonModel);
     Q_ASSERT(comparisonTextModel);
     comparisonTextModel->compareWith(rhsXml, lhsName, rhsName);
 
     //
-    // Открыть получившуюся версию в режиме отображения дифа
+    // Открыть получившийся драфт в режиме отображения дифа
     //
-    view.active->setCurrentDraft(comparisonDraftHostItem->versions().size());
+    view.active->setCurrentDraft(comparisonDraftHostItem->drafts().size());
 }
 
 void ProjectManager::Implementation::emptyRecycleBin()
@@ -2259,7 +2257,7 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 }
 
                 auto item = d->aliasedItemForIndex(sourceIndex);
-                d->view.active->setDocumentDrafts(item->versions());
+                d->view.active->setDocumentDrafts(item->drafts());
             });
     connect(
         d->projectStructureModel, &BusinessLayer::StructureModel::rowsInserted, this,
@@ -2559,13 +2557,13 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                 }
             }
         });
-    connect(d->projectStructureModel, &BusinessLayer::StructureModel::versionAdded, this,
+    connect(d->projectStructureModel, &BusinessLayer::StructureModel::draftAdded, this,
             [this] { d->view.active->setDraftsVisible(true); });
-    connect(d->projectStructureModel, &BusinessLayer::StructureModel::versionRemoved, this,
+    connect(d->projectStructureModel, &BusinessLayer::StructureModel::draftRemoved, this,
             [this](const QUuid& _uuid) {
-                const auto versionsCount
-                    = d->projectStructureModel->itemForUuid(_uuid)->versions().count();
-                d->view.active->setDraftsVisible(versionsCount > 0);
+                const auto draftsCount
+                    = d->projectStructureModel->itemForUuid(_uuid)->drafts().count();
+                d->view.active->setDraftsVisible(draftsCount > 0);
             });
 
     //
@@ -2579,17 +2577,17 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             const auto currentItem = d->aliasedItemForIndex(currentItemIndex);
 
             //
-            // Показать текущую версию
+            // Показать текущий драфт
             //
             if (_draftIndex == 0) {
-                showViewForVersion(currentItem);
+                showViewForDraft(currentItem);
                 return;
             }
 
             //
-            // Показать одну из установленных версий
+            // Показать один из установленных драфтов
             //
-            showViewForVersion(currentItem->versions().at(_draftIndex - 1));
+            showViewForDraft(currentItem->drafts().at(_draftIndex - 1));
         });
         connect(view, &Ui::ProjectView::showDraftContextMenuPressed, this, [this](int _draftIndex) {
             const auto currentItemIndex
@@ -2598,11 +2596,11 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             const auto isCurrentDraft = _draftIndex == 0;
             const auto realDraftIndex = _draftIndex - 1;
             const auto hasActualDrafts
-                = std::find_if(item->versions().begin(), item->versions().end(),
+                = std::find_if(item->drafts().begin(), item->drafts().end(),
                                [](const BusinessLayer::StructureModelItem* _draft) {
                                    return !_draft->isComparison();
                                })
-                != item->versions().end();
+                != item->drafts().end();
 
             const auto enabled = d->documentEditingMode(item) == DocumentEditingMode::Edit;
 
@@ -2611,22 +2609,22 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             //
             // Создать новый драфт можно из текущего, или другого, но не сравнения
             //
-            if (isCurrentDraft || !item->versions().at(realDraftIndex)->isComparison()) {
-                auto createNewVersionAction = new QAction;
-                createNewVersionAction->setIconText(u8"\U000F00FB");
-                createNewVersionAction->setText(tr("Create draft"));
-                createNewVersionAction->setEnabled(enabled);
-                createNewVersionAction->setSeparator(_draftIndex > 0);
-                connect(createNewVersionAction, &QAction::triggered, this,
+            if (isCurrentDraft || !item->drafts().at(realDraftIndex)->isComparison()) {
+                auto createNewDraftAction = new QAction;
+                createNewDraftAction->setIconText(u8"\U000F00FB");
+                createNewDraftAction->setText(tr("Create draft"));
+                createNewDraftAction->setEnabled(enabled);
+                createNewDraftAction->setSeparator(_draftIndex > 0);
+                connect(createNewDraftAction, &QAction::triggered, this,
                         [this, currentItemIndex] { d->createNewDraft(currentItemIndex); });
-                menuActions.append(createNewVersionAction);
+                menuActions.append(createNewDraftAction);
             }
 
             //
             // Сравнить драфты показываем, если есть другие актуальные драфты
             //
             if (hasActualDrafts
-                && (isCurrentDraft || !item->versions().at(realDraftIndex)->isComparison())) {
+                && (isCurrentDraft || !item->drafts().at(realDraftIndex)->isComparison())) {
                 auto compareDraftsAction = new QAction;
                 compareDraftsAction->setIconText(u8"\U000F1492");
                 compareDraftsAction->setText(tr("Compare drafts"));
@@ -2638,18 +2636,18 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             }
 
             //
-            // Для любой версии, кроме текущей показываем опции редактирования
+            // Для любого драфта, кроме текущего, показываем опции редактирования
             //
-            if (_draftIndex > 0 && !item->versions().at(realDraftIndex)->isComparison()) {
-                auto editVersionAction = new QAction;
-                editVersionAction->setIconText(u8"\U000F090C");
-                editVersionAction->setText(tr("Edit"));
-                editVersionAction->setEnabled(enabled);
-                connect(editVersionAction, &QAction::triggered, this,
+            if (_draftIndex > 0 && !item->drafts().at(realDraftIndex)->isComparison()) {
+                auto editDraftAction = new QAction;
+                editDraftAction->setIconText(u8"\U000F090C");
+                editDraftAction->setText(tr("Edit"));
+                editDraftAction->setEnabled(enabled);
+                connect(editDraftAction, &QAction::triggered, this,
                         [this, currentItemIndex, realDraftIndex] {
                             d->editDraft(currentItemIndex, realDraftIndex);
                         });
-                menuActions.prepend(editVersionAction);
+                menuActions.prepend(editDraftAction);
                 //
                 auto removeAction = new QAction;
                 removeAction->setIconText(u8"\U000F01B4");
@@ -2659,13 +2657,13 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
                         [this, currentItemIndex, realDraftIndex] {
                             d->removeDraft(currentItemIndex, realDraftIndex);
                         });
-                menuActions.insert(menuActions.indexOf(editVersionAction) + 1, removeAction);
+                menuActions.insert(menuActions.indexOf(editDraftAction) + 1, removeAction);
             }
 
             //
             // Для сравнений показываем только опцию закрыть
             //
-            if (_draftIndex > 0 && item->versions().at(realDraftIndex)->isComparison()) {
+            if (_draftIndex > 0 && item->drafts().at(realDraftIndex)->isComparison()) {
                 auto closeAction = new QAction;
                 closeAction->setIconText(u8"\U000F0156");
                 closeAction->setText(tr("Close"));
@@ -3293,7 +3291,7 @@ void ProjectManager::toggleFullScreen(bool _isFullScreen)
         }
 
         const auto item = d->aliasedItemForIndex(d->view.activeIndex);
-        d->view.active->setDraftsVisible(item->versions().count() > 0);
+        d->view.active->setDraftsVisible(item->drafts().count() > 0);
     }
 }
 
@@ -3509,11 +3507,11 @@ void ProjectManager::closeCurrentProject(const QString& _path)
                      d->navigator->isProjectNavigatorShown());
 
     //
-    // Сохранить состояние отображения версий для текущего документа
+    // Сохранить состояние отображения драфтов для текущего документа
     //
     if (d->view.activeModel != nullptr && d->view.activeModel->document() != nullptr) {
         const auto item = d->aliasedItemForIndex(d->view.activeIndex);
-        setSettingsValue(documentSettingsKey(item->uuid(), kCurrentVersionKey),
+        setSettingsValue(documentSettingsKey(item->uuid(), kCurrentDraftKey),
                          d->view.active->currentDraft());
     }
 
@@ -4006,7 +4004,7 @@ QVector<QPair<QString, BusinessLayer::AbstractModel*>> ProjectManager::currentMo
 
         QVector<QPair<QString, BusinessLayer::AbstractModel*>> models;
         models.append({ tr("Current draft"), d->modelsFacade.modelFor(_item->uuid()) });
-        for (const auto& version : _item->versions()) {
+        for (const auto& version : _item->drafts()) {
             models.append({ version->name(), d->modelsFacade.modelFor(version->uuid()) });
         }
         return models;
@@ -4310,9 +4308,9 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
                 const auto color = Qt::red;
                 const auto readOnly = false;
                 const auto comparison = false;
-                d->projectStructureModel->addItemVersion(item, versionName, color, readOnly,
-                                                         lastDocumentVersion, comparison);
-                d->view.active->setDocumentDrafts(item->versions());
+                d->projectStructureModel->addItemDraft(item, versionName, color, readOnly,
+                                                       lastDocumentVersion, comparison);
+                d->view.active->setDocumentDrafts(item->drafts());
             }
 
             //
@@ -4421,9 +4419,9 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
             if (d->view.active->currentDraft() == 0 && item->uuid() == _documentInfo.uuid) {
                 showView(d->navigator->currentIndex(), d->view.activeViewMimeType);
             } else if (const auto versionItem
-                       = item->versions().value(d->view.active->currentDraft() - 1);
+                       = item->drafts().value(d->view.active->currentDraft() - 1);
                        versionItem != nullptr && versionItem->uuid() == _documentInfo.uuid) {
-                showViewForVersion(versionItem);
+                showViewForDraft(versionItem);
             }
         }
     }
@@ -4656,7 +4654,7 @@ QVector<QUuid> ProjectManager::documentBundle(const QUuid& _documentUuid) const
             documents.append(childItem->uuid());
         }
         //
-        // Версии документов из комплекта добавляем вручную
+        // Драфты документов из комплекта добавляем вручную
         //
         if (!documents.contains(_documentUuid)) {
             documents.append(_documentUuid);
@@ -5023,7 +5021,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     if (!d->view.activeModel.isNull() && d->view.activeModel->document() != nullptr) {
 
         const auto previousActiveAliasedItem = d->aliasedItemForIndex(d->view.activeIndex);
-        setSettingsValue(documentSettingsKey(previousActiveAliasedItem->uuid(), kCurrentVersionKey),
+        setSettingsValue(documentSettingsKey(previousActiveAliasedItem->uuid(), kCurrentDraftKey),
                          d->view.active->currentDraft());
     }
 
@@ -5038,11 +5036,10 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     auto aliasedItem = d->aliasedItemForIndex(sourceItemIndex);
     auto itemForShow = aliasedItem;
     if (const auto versionIndex
-        = settingsValue(documentSettingsKey(aliasedItem->uuid(), kCurrentVersionKey), 0).toInt()
-            - 1;
-        versionIndex != -1 && !aliasedItem->versions().isEmpty()
-        && versionIndex < aliasedItem->versions().size()) {
-        itemForShow = aliasedItem->versions().at(versionIndex);
+        = settingsValue(documentSettingsKey(aliasedItem->uuid(), kCurrentDraftKey), 0).toInt() - 1;
+        versionIndex != -1 && !aliasedItem->drafts().isEmpty()
+        && versionIndex < aliasedItem->drafts().size()) {
+        itemForShow = aliasedItem->drafts().at(versionIndex);
     }
     emit downloadDocumentRequested(itemForShow->uuid());
 
@@ -5097,7 +5094,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     Log::trace("Set view cursors");
     view->setCursors({ d->collaboratorsCursors.begin(), d->collaboratorsCursors.end() });
     Log::trace("Set document versions");
-    d->view.active->setDocumentDrafts(aliasedItem->versions());
+    d->view.active->setDocumentDrafts(aliasedItem->drafts());
     Log::trace("Show view");
     d->view.active->showEditor(view->asQWidget());
     d->view.activeIndex = sourceItemIndex;
@@ -5137,7 +5134,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     //
     // Установим видимость панели драфтов
     //
-    d->view.active->setDraftsVisible(aliasedItem->versions().count() > 0);
+    d->view.active->setDraftsVisible(aliasedItem->drafts().count() > 0);
 
     //
     // Настроим уведомления плагина
@@ -5247,10 +5244,10 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     }
 
     //
-    // Выберем нужную версию документа
+    // Выберем нужный драфт документа
     //
     d->view.active->setCurrentDraft(
-        settingsValue(documentSettingsKey(aliasedItem->uuid(), kCurrentVersionKey), 0).toInt());
+        settingsValue(documentSettingsKey(aliasedItem->uuid(), kCurrentDraftKey), 0).toInt());
 
     //
     // Фокусируем представление
@@ -5264,7 +5261,7 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
     Log::info("Plugin activated");
 }
 
-void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item)
+void ProjectManager::showViewForDraft(BusinessLayer::StructureModelItem* _item)
 {
     emit downloadDocumentRequested(_item->uuid());
 
@@ -5301,7 +5298,7 @@ void ProjectManager::showViewForVersion(BusinessLayer::StructureModelItem* _item
     // редактору
     //
     if (!d->navigator->isProjectNavigatorShown() && d->view.active == d->view.left) {
-        showNavigatorForVersion(_item);
+        showNavigatorForDraft(_item);
     }
 }
 
@@ -5388,8 +5385,8 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
 
     auto item = d->aliasedItemForIndex(sourceItemIndex);
     if (int versionIndex = d->view.active->currentDraft() - 1;
-        versionIndex != -1 && item->versions().size() > versionIndex) {
-        item = item->versions().at(versionIndex);
+        versionIndex != -1 && item->drafts().size() > versionIndex) {
+        item = item->drafts().at(versionIndex);
     }
 
     //
@@ -5434,7 +5431,7 @@ void ProjectManager::showNavigator(const QModelIndex& _itemIndex, const QString&
     d->navigator->setCurrentWidget(navigatorView);
 }
 
-void ProjectManager::showNavigatorForVersion(BusinessLayer::StructureModelItem* _item)
+void ProjectManager::showNavigatorForDraft(BusinessLayer::StructureModelItem* _item)
 {
     //
     // Определим модель
@@ -5487,9 +5484,9 @@ void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex&
         const auto parent = item->parent();
         for (int childIndex = 0; childIndex < parent->childCount(); ++childIndex) {
             const auto childItem = parent->childAt(childIndex);
-            if (childItem->versions().contains(item)) {
+            if (childItem->drafts().contains(item)) {
                 sourceIndex = d->projectStructureModel->indexForItem(childItem);
-                versionIndex = childItem->versions().indexOf(item) + 1;
+                versionIndex = childItem->drafts().indexOf(item) + 1;
                 break;
             }
         }
@@ -5544,13 +5541,13 @@ void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex&
         showView(itemIndex, viewMimeType);
     }
     //
-    // ... если нужно, активируем заданную версию
+    // ... если нужно, активируем заданный драфт
     //
     if (versionIndex != invalidVersionIndex) {
         d->view.active->setCurrentDraft(versionIndex);
     }
     //
-    // ... если работаем с текущей версией, но редактор находится на другой, возвращаемся к текущей
+    // ... если работаем с текущим драфтом, но редактор находится на другой, возвращаемся к текущему
     //
     else if (d->view.active->currentDraft() > 0) {
         d->view.active->setCurrentDraft(0);

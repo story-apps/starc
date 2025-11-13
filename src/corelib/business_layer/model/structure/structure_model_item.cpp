@@ -24,7 +24,7 @@ public:
     bool visible = true;
     bool readOnly = false;
     bool comparison = false;
-    QVector<StructureModelItem*> versions;
+    QVector<StructureModelItem*> drafts;
 };
 
 StructureModelItem::Implementation::Implementation(const QUuid& _uuid,
@@ -59,15 +59,15 @@ StructureModelItem::StructureModelItem(const StructureModelItem& _other)
                            _other.d->visible, _other.d->readOnly, _other.d->comparison))
 {
     //
-    // Я не знаю зачем это может понадобится, по идее новый элемент должен создаваться без версий
+    // Я не знаю зачем это может понадобится, по идее новый элемент должен создаваться без драфтов
     //
-    Q_ASSERT(_other.versions().isEmpty());
+    Q_ASSERT(_other.drafts().isEmpty());
 }
 
 StructureModelItem::~StructureModelItem()
 {
-    qDeleteAll(d->versions);
-    d->versions.clear();
+    qDeleteAll(d->drafts);
+    d->drafts.clear();
 }
 
 const QUuid& StructureModelItem::uuid() const
@@ -130,52 +130,52 @@ void StructureModelItem::setComparison(bool _comparison)
     d->comparison = _comparison;
 }
 
-const QVector<StructureModelItem*>& StructureModelItem::versions() const
+const QVector<StructureModelItem*>& StructureModelItem::drafts() const
 {
-    return d->versions;
+    return d->drafts;
 }
 
-StructureModelItem* StructureModelItem::addVersion(StructureModelItem* _version)
+StructureModelItem* StructureModelItem::addDraft(StructureModelItem* _draft)
 {
-    _version->setParent(parent());
-    d->versions.append(_version);
-    return _version;
+    _draft->setParent(parent());
+    d->drafts.append(_draft);
+    return _draft;
 }
 
-StructureModelItem* StructureModelItem::addVersion(const QString& _name, const QColor& _color,
-                                                   bool _readOnly, bool _comparison)
+StructureModelItem* StructureModelItem::addDraft(const QString& _name, const QColor& _color,
+                                                 bool _readOnly, bool _comparison)
 {
     const auto visible = true;
-    auto version = new StructureModelItem(QUuid::createUuid(), type(), _name, _color, visible,
-                                          _readOnly, _comparison);
-    version->setParent(parent());
+    auto draft = new StructureModelItem(QUuid::createUuid(), type(), _name, _color, visible,
+                                        _readOnly, _comparison);
+    draft->setParent(parent());
     //
     // Новые драфты добавляются вначало, чтобы идти сразу за текущим драфтом
     //
     if (!_comparison) {
-        d->versions.prepend(version);
+        d->drafts.prepend(draft);
     }
     //
     // Сравнения же добавляются в конец списка драфтов
     //
     else {
-        d->versions.prepend(version);
+        d->drafts.prepend(draft);
     }
-    return version;
+    return draft;
 }
 
-void StructureModelItem::removeVersion(int _versionIndex)
+void StructureModelItem::removeDraft(int _draftIndex)
 {
-    if (d->versions.isEmpty()) {
+    if (d->drafts.isEmpty()) {
         return;
     }
 
-    if (_versionIndex < 0 || _versionIndex > d->versions.size()) {
+    if (_draftIndex < 0 || _draftIndex > d->drafts.size()) {
         return;
     }
 
-    auto version = d->versions.takeAt(_versionIndex);
-    delete version;
+    auto draft = d->drafts.takeAt(_draftIndex);
+    delete draft;
 }
 
 QVariant StructureModelItem::data(int _role) const
@@ -224,7 +224,7 @@ bool StructureModelItem::isEqual(const StructureModelItem* _other) const
     return d->uuid == _other->d->uuid && d->type == _other->d->type && d->name == _other->d->name
         && d->color == _other->d->color && d->visible == _other->d->visible
         && d->readOnly == _other->d->readOnly && d->comparison == _other->d->comparison
-        && d->versions == _other->d->versions;
+        && d->drafts == _other->d->drafts;
 }
 
 void StructureModelItem::copyFrom(const StructureModelItem* _other) const
@@ -242,12 +242,12 @@ void StructureModelItem::copyFrom(const StructureModelItem* _other) const
     d->readOnly = _other->d->readOnly;
     d->comparison = _other->d->comparison;
 
-    qDeleteAll(d->versions);
-    d->versions.clear();
-    for (auto version : std::as_const(_other->d->versions)) {
+    qDeleteAll(d->drafts);
+    d->drafts.clear();
+    for (auto version : std::as_const(_other->d->drafts)) {
         auto newVersion = new StructureModelItem(*version);
         newVersion->setParent(parent());
-        d->versions.append(newVersion);
+        d->drafts.append(newVersion);
     }
 }
 

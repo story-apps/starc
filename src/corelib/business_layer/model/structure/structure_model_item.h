@@ -67,14 +67,13 @@ public:
     void setComparison(bool _comparison);
 
     /**
-     * @brief Версии документа (добавляются в начало списка, т.е. сверху находятся наиболее свежие
-     *        версии)
+     * @brief Драфты документа (добавляются в начало списка, т.е. сверху находятся наиболее свежие)
      */
-    const QVector<StructureModelItem*>& versions() const;
-    StructureModelItem* addVersion(StructureModelItem* _version);
-    StructureModelItem* addVersion(const QString& _name, const QColor& _color, bool _readOnly,
-                                   bool _comparison);
-    void removeVersion(int _versionIndex);
+    const QVector<StructureModelItem*>& drafts() const;
+    StructureModelItem* addDraft(StructureModelItem* _draft);
+    StructureModelItem* addDraft(const QString& _name, const QColor& _color, bool _readOnly,
+                                 bool _comparison);
+    void removeDraft(int _draftIndex);
 
     /**
      * @brief Переопределяем интерфейс для получения данных модели по роли

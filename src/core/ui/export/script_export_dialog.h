@@ -21,14 +21,14 @@ public:
     ~ScriptExportDialog() override;
 
     /**
-     * @brief Задать список версий сценария для экспорта
+     * @brief Задать список драфтов сценария для экспорта
      */
-    void setVersions(const QVector<QString>& _versions, int _currentVersionIndex);
+    void setDrafts(const QVector<QString>& _drafts, int _currentDraftIndex);
 
     /**
-     * @brief Индекс версии для экспорта
+     * @brief Индекс драфта для экспорта
      */
-    int selectedVersion() const;
+    int selectedDraft() const;
 
     /**
      * @brief Получить опции экспорта

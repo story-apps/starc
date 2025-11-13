@@ -16,7 +16,7 @@ namespace {
 const QLatin1String kIncludeTitlePageKey("include-title-page");
 const QLatin1String kIncludeSynopsisKey("include-synopsis");
 const QLatin1String kIncludeTextKey("include-text");
-const QLatin1String kVersionKey("version");
+const QLatin1String kDraftKey("draft");
 const QLatin1String kIncludeInlineNotesKey("include-inline-notes");
 const QLatin1String kIncludeReviewMarksKey("include-review-marks");
 } // namespace
@@ -31,7 +31,7 @@ public:
     CheckBox* includeSynopsis = nullptr;
     CheckBox* includeText = nullptr;
 
-    ComboBox* version = nullptr;
+    ComboBox* draft = nullptr;
     CheckBox* includeInlineNotes = nullptr;
     CheckBox* includeReviewMarks = nullptr;
 
@@ -42,7 +42,7 @@ ScriptExportDialog::Implementation::Implementation(QWidget* _parent)
     : includeTitlePage(new CheckBox(_parent))
     , includeSynopsis(new CheckBox(_parent))
     , includeText(new CheckBox(_parent))
-    , version(new ComboBox(_parent))
+    , draft(new ComboBox(_parent))
     , includeInlineNotes(new CheckBox(_parent))
     , includeReviewMarks(new CheckBox(_parent))
 {
@@ -63,7 +63,7 @@ ScriptExportDialog::ScriptExportDialog(const QVector<BusinessLayer::ExportFileFo
     leftLayout()->addStretch();
 
     int row = 1;
-    rightLayout()->insertWidget(row++, d->version);
+    rightLayout()->insertWidget(row++, d->draft);
     rightLayout()->insertWidget(row++, d->includeInlineNotes);
     rightLayout()->insertWidget(row++, d->includeReviewMarks);
 
@@ -103,48 +103,48 @@ ScriptExportDialog::~ScriptExportDialog()
     settings.setValue(settingsKey(kIncludeTitlePageKey), d->includeTitlePage->isChecked());
     settings.setValue(settingsKey(kIncludeSynopsisKey), d->includeSynopsis->isChecked());
     settings.setValue(settingsKey(kIncludeTextKey), d->includeText->isChecked());
-    settings.setValue(settingsKey(kVersionKey), d->version->currentIndex().row());
+    settings.setValue(settingsKey(kDraftKey), d->draft->currentIndex().row());
     settings.setValue(settingsKey(kIncludeInlineNotesKey), d->includeInlineNotes->isChecked());
     settings.setValue(settingsKey(kIncludeReviewMarksKey), d->includeReviewMarks->isChecked());
 }
 
-void ScriptExportDialog::setVersions(const QVector<QString>& _versions, int _currentVersionIndex)
+void ScriptExportDialog::setDrafts(const QVector<QString>& _drafts, int _currentDraftIndex)
 {
     QStringListModel* model = nullptr;
-    const bool isInitialSetup = d->version->model() == nullptr;
+    const bool isInitialSetup = d->draft->model() == nullptr;
     if (isInitialSetup) {
-        model = new QStringListModel(d->version);
-        d->version->setModel(model);
+        model = new QStringListModel(d->draft);
+        d->draft->setModel(model);
     } else {
-        model = qobject_cast<QStringListModel*>(d->version->model());
+        model = qobject_cast<QStringListModel*>(d->draft->model());
     }
 
     const int invalidIndex = -1;
-    int versionRow = 0;
+    int draftRow = 0;
     if (!isInitialSetup) {
-        versionRow = selectedVersion();
+        draftRow = selectedDraft();
     }
-    model->setStringList({ _versions.begin(), _versions.end() });
-    if (_currentVersionIndex != invalidIndex) {
+    model->setStringList({ _drafts.begin(), _drafts.end() });
+    if (_currentDraftIndex != invalidIndex) {
         //
         // Если задан индекс напрямую, то используем его
         //
-        versionRow = _currentVersionIndex;
+        draftRow = _currentDraftIndex;
     } else if (isInitialSetup) {
         //
-        // Когда версии были заданы в первый раз для диалога восстановим прошлое значение выбранной
-        // версии
+        // Когда драфты были заданы в первый раз для диалога восстановим прошлое значение выбранного
+        // драфта
         //
-        versionRow = QSettings().value(settingsKey(kVersionKey), 0).toInt();
+        draftRow = QSettings().value(settingsKey(kDraftKey), 0).toInt();
     }
-    const auto versionIndex = d->version->model()->index(versionRow, 0);
-    d->version->setCurrentIndex(versionIndex);
-    d->version->setVisible(_versions.size() > 1);
+    const auto draftIndex = d->draft->model()->index(draftRow, 0);
+    d->draft->setCurrentIndex(draftIndex);
+    d->draft->setVisible(_drafts.size() > 1);
 }
 
-int ScriptExportDialog::selectedVersion() const
+int ScriptExportDialog::selectedDraft() const
 {
-    return d->version->currentIndex().row();
+    return d->draft->currentIndex().row();
 }
 
 BusinessLayer::ExportOptions& ScriptExportDialog::exportOptions() const
@@ -251,7 +251,7 @@ void ScriptExportDialog::updateTranslations()
     d->includeSynopsis->setText(tr("Synopsis"));
     d->includeText->setText(tr("Text"));
 
-    d->version->setLabel(tr("Draft"));
+    d->draft->setLabel(tr("Draft"));
     d->includeInlineNotes->setText(tr("Include inline notes"));
     d->includeReviewMarks->setText(tr("Include review marks / revisions"));
 }
@@ -261,7 +261,7 @@ void ScriptExportDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event
     AbstractExportDialog::designSystemChangeEvent(_event);
 
     for (auto combobox : {
-             d->version,
+             d->draft,
          }) {
         combobox->setBackgroundColor(Ui::DesignSystem::color().onBackground());
         combobox->setTextColor(Ui::DesignSystem::color().onBackground());
