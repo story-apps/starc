@@ -32,6 +32,47 @@ LIBSDIR = ../_build/libs
 INCLUDEPATH += ..
 
 #
+# Подключаем Crashpad
+#
+LIBS += -L$$LIBSDIR/ -lcrashpad_paths
+INCLUDEPATH += $$PWD/../3rd_party/crashpad_paths
+DEPENDPATH += $$PWD/../3rd_party/crashpad_paths
+
+CRASHPAD_DIR = $$PWD/../3rd_party/chromium/crashpad/crashpad
+
+#
+# Если не задана архитектура, по умолчанию устанавливаем x64
+#
+isEmpty(CRASHPAD_ARCH) {
+    CRASHPAD_ARCH = x64
+}
+
+INCLUDEPATH += $$CRASHPAD_DIR
+INCLUDEPATH += $$CRASHPAD_DIR/third_party/mini_chromium/mini_chromium
+CONFIG(debug, debug|release) {
+    INCLUDEPATH += $$CRASHPAD_DIR/out/debug_$${CRASHPAD_ARCH}/gen
+}
+CONFIG(release, debug|release) {
+    INCLUDEPATH += $$CRASHPAD_DIR/out/release_$${CRASHPAD_ARCH}/gen
+}
+
+LIBS += -L$$LIBSDIR/ -lcommon
+LIBS += -L$$LIBSDIR/ -lclient
+LIBS += -L$$LIBSDIR/ -lutil
+LIBS += -L$$LIBSDIR/ -lbase
+win32 {
+    LIBS += -lAdvapi32
+}
+macx {
+    LIBS += -L$$LIBSDIR/ -lmig_output
+
+    LIBS += -L/usr/lib/ -lbsm
+    LIBS += -framework AppKit
+    LIBS += -framework Security
+}
+#
+
+#
 # Подключаем библиотеку corelib
 #
 LIBS += -L$$CORELIBDIR/ -lcorelib
@@ -248,5 +289,5 @@ RESOURCES += \
 
 mac {
     load(resolve_target)
-    QMAKE_POST_LINK += install_name_tool -change libcorelib.1.dylib @executable_path/../Frameworks/libcorelib.dylib $$QMAKE_RESOLVED_TARGET
+    QMAKE_POST_LINK += "&& install_name_tool -change libcorelib.1.dylib @executable_path/../Frameworks/libcorelib.dylib $$QMAKE_RESOLVED_TARGET"
 }
