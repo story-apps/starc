@@ -2,6 +2,8 @@
 
 #include "diff_match_patch.h"
 
+#include <utils/shugar.h>
+
 
 namespace {
 
@@ -299,56 +301,60 @@ DiffMatchPatchController::changedXmlList(const QString& _xml, const QString& _pa
     // для текста сценария текущего пользователя
     //
     const QString newPatch = makePatch(oldXmlPlain, newXmlPlain);
+    if (newPatch.isEmpty()) {
+        return {};
+    }
 
     QVector<QPair<Change, Change>> result;
-    if (!newPatch.isEmpty()) {
-        //
-        // Разберём патчи на список
-        //
-        diff_match_patch dmp;
-        QList<Patch> patches = dmp.patch_fromText(newPatch);
 
-        //
-        // Рассчитаем метрики для формирования xml для обновления
-        //
-        int patchesDelta = 0;
-        for (const Patch& patch : patches) {
-            int oldStartPos = patch.start1 - patchesDelta;
-            int oldEndPos = patch.start1 + patch.length1 - patchesDelta;
-            int oldDistance = patch.length2 - patch.length1;
-            int newStartPos = patch.start2;
-            int newEndPos = patch.start2 + patch.length2;
-            for (const auto& diff : patch.diffs) {
-                if (diff.operation == EQUAL) {
-                    if (diff == patch.diffs.first()) {
-                        oldStartPos += diff.text.length();
-                        newStartPos += diff.text.length();
-                    } else if (diff == patch.diffs.last()) {
-                        oldEndPos -= diff.text.length();
-                        newEndPos -= diff.text.length();
-                    }
-                }
+    //
+    // Разберём патчи на список
+    //
+    diff_match_patch dmp;
+    QList<Patch> patches = dmp.patch_fromText(newPatch);
+
+    //
+    // Рассчитаем метрики для формирования xml для обновления
+    //
+    int patchesDelta = 0;
+    for (const Patch& patch : patches) {
+        int oldStartPos = patch.start1 - patchesDelta;
+        int oldEndPos = patch.start1 + patch.length1 - patchesDelta;
+        int oldDistance = patch.length2 - patch.length1;
+        int newStartPos = patch.start2;
+        int newEndPos = patch.start2 + patch.length2;
+        for (const auto& diff : patch.diffs) {
+            if (diff.operation != EQUAL) {
+                break;
             }
-            patchesDelta += patch.length2 - patch.length1;
 
-            //
-            // Для случая, когда текста остаётся ровно столько же, сколько и было
-            //
-            if (oldDistance == 0) {
-                oldEndPos = newEndPos;
+            oldStartPos += diff.text.length();
+            newStartPos += diff.text.length();
+        }
+        for (const auto& diff : reversed(patch.diffs)) {
+            if (diff.operation != EQUAL) {
+                break;
             }
-            //
-            // Отнимаем один символ, т.к. в патче указан индекс символа начиная с 1
-            //
-            oldStartPos = std::max(0, oldStartPos - 1);
-            oldEndPos = std::max(0, oldEndPos - 1);
-            newStartPos = std::max(0, newStartPos - 1);
-            newEndPos = std::max(0, newEndPos - 1);
 
-            //
-            // Определим кусок xml из текущего документа для обновления
-            //
-            int oldStartPosForXmlPlain = oldStartPos;
+            oldEndPos -= diff.text.length();
+            newEndPos -= diff.text.length();
+        }
+        patchesDelta += patch.length2 - patch.length1;
+
+        //
+        // Отнимаем один символ, т.к. в патче указан индекс символа начиная с 1
+        //
+        oldStartPos = std::max(0, oldStartPos - 1);
+        oldEndPos = std::max(0, oldEndPos - 1);
+        newStartPos = std::max(0, newStartPos - 1);
+        newEndPos = std::max(0, newEndPos - 1);
+
+        //
+        // Определим кусок xml из текущего документа для обновления
+        //
+        int oldStartPosForXmlPlain = oldStartPos;
+        int oldEndPosForXml = oldEndPos;
+        if (oldStartPosForXmlPlain > 0 || oldEndPosForXml > 0) {
             for (; oldStartPosForXmlPlain > 0; --oldStartPosForXmlPlain) {
                 //
                 // Идём до открывающего тега
@@ -357,7 +363,6 @@ DiffMatchPatchController::changedXmlList(const QString& _xml, const QString& _pa
                     break;
                 }
             }
-            int oldEndPosForXml = oldEndPos;
             for (; oldEndPosForXml < oldXmlPlain.length(); ++oldEndPosForXml) {
                 //
                 // Идём до закрывающего тэга, он находится в конце строки
@@ -367,14 +372,16 @@ DiffMatchPatchController::changedXmlList(const QString& _xml, const QString& _pa
                     break;
                 }
             }
-            const QString oldXmlForUpdate
-                = oldXmlPlain.mid(oldStartPosForXmlPlain, oldEndPosForXml - oldStartPosForXmlPlain);
-            qDebug(qUtf8Printable(oldXmlForUpdate));
+        }
+        const QString oldXmlPlainForUpdate
+            = oldXmlPlain.mid(oldStartPosForXmlPlain, oldEndPosForXml - oldStartPosForXmlPlain);
 
-            //
-            // Определим кусок из нового документа для обновления
-            //
-            int newStartPosForXmlPlain = newStartPos;
+        //
+        // Определим кусок из нового документа для обновления
+        //
+        int newStartPosForXmlPlain = newStartPos;
+        int newEndPosForXml = newEndPos;
+        if (newStartPosForXmlPlain > 0 || newEndPosForXml > 0) {
             for (; newStartPosForXmlPlain > 0; --newStartPosForXmlPlain) {
                 //
                 // Идём до открывающего тега
@@ -383,7 +390,6 @@ DiffMatchPatchController::changedXmlList(const QString& _xml, const QString& _pa
                     break;
                 }
             }
-            int newEndPosForXml = newEndPos;
             for (; newEndPosForXml < newXmlPlain.length(); ++newEndPosForXml) {
                 //
                 // Идём до закрывающего тэга, он находится в конце строки
@@ -393,19 +399,79 @@ DiffMatchPatchController::changedXmlList(const QString& _xml, const QString& _pa
                     break;
                 }
             }
-            const QString newXmlForUpdate
-                = newXmlPlain.mid(newStartPosForXmlPlain, newEndPosForXml - newStartPosForXmlPlain);
-            qDebug(qUtf8Printable(newXmlForUpdate));
-
-
-            result.append(
-                { { d->plainToXml(oldXmlForUpdate).toUtf8(),
-                    static_cast<int>(
-                        d->plainToXml(oldXmlPlain.left(oldStartPosForXmlPlain)).length()) },
-                  { d->plainToXml(newXmlForUpdate).toUtf8(),
-                    static_cast<int>(
-                        d->plainToXml(newXmlPlain.left(newStartPosForXmlPlain)).length()) } });
         }
+        const QString newXmlPlainForUpdate
+            = newXmlPlain.mid(newStartPosForXmlPlain, newEndPosForXml - newStartPosForXmlPlain);
+
+        QPair<Change, Change> change = {
+            { d->plainToXml(oldXmlPlainForUpdate).toUtf8(),
+              static_cast<int>(d->plainToXml(oldXmlPlain.left(oldStartPosForXmlPlain)).length()) },
+            { d->plainToXml(newXmlPlainForUpdate).toUtf8(),
+              static_cast<int>(d->plainToXml(newXmlPlain.left(newStartPosForXmlPlain)).length()) }
+        };
+        //
+        // Если текст нового изменения такой же как и у предыдущего
+        //
+        if (!result.isEmpty() && change.first.xml == result.constLast().first.xml
+            && change.second.xml == result.constLast().second.xml) {
+            //
+            // ... если они начинаются в одном месте
+            //
+            if (change.first.from == result.constLast().first.from
+                && change.second.from == result.constLast().second.from) {
+                //
+                // ... то пропускаем такое изменение, т.к. это дубликат
+                //
+                qDebug("skip similar");
+            }
+            //
+            // ... а если в разных местах
+            //
+            else {
+                //
+                // ... то сохраняем, как самодостаточное изменение
+                //
+                result.append(change);
+                qDebug("append similar");
+            }
+        }
+        //
+        // Если текст нового изменения содержит в себе текст предыдущего изменения
+        //
+        else if (!result.isEmpty() && change.first.xml.contains(result.constLast().first.xml)
+                 && change.first.from <= result.constLast().first.from
+                 && change.second.xml.contains(result.constLast().second.xml)
+                 && change.second.from <= result.constLast().second.from) {
+            //
+            // ... заменяем старое изменение новым
+            //
+            result.last() = change;
+            qDebug("replace previous");
+        }
+        //
+        // Если текст нового изменения входит в текст предыдущего изменения
+        //
+        else if (!result.isEmpty() && result.constLast().first.xml.contains(change.first.xml)
+                 && result.constLast().first.from <= change.first.from
+                 && result.constLast().second.xml.contains(change.second.xml)
+                 && result.constLast().second.from <= change.second.from) {
+            //
+            // ... то пропускаем такое изменение, т.к. оно по-сути уже есть в списке результатов
+            //
+            qDebug("skip as contained in previous");
+        }
+        //
+        // Во всех остальны случаях
+        //
+        else {
+            //
+            // ... добавляем изменение в список результатов
+            //
+            result.append(change);
+            qDebug("append new");
+        }
+
+        qDebug("\n\n\n");
     }
 
     return result;

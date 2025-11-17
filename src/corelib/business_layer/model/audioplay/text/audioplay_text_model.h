@@ -128,6 +128,11 @@ protected:
      */
     ChangeCursor applyPatch(const QByteArray& _patch) override;
 
+    /**
+     * @brief Восстановить xml после сравнения документов
+     */
+    QByteArray restoreAfterComparison(const QByteArray& _xml) const override;
+
 private:
     class Implementation;
     QScopedPointer<Implementation> d;

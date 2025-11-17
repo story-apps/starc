@@ -672,4 +672,85 @@ ChangeCursor AudioplayTextModel::applyPatch(const QByteArray& _patch)
     return changeCursor;
 }
 
+QByteArray AudioplayTextModel::restoreAfterComparison(const QByteArray& _xml) const
+{
+    QByteArray xml = "<?xml version=\"1.0\"?>\n";
+    xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type())
+        + "\" version=\"1.0\">\n";
+    bool hasOpenedScene = false;
+    bool hasOpenedBeat = false;
+    auto closeScene = [&xml, &hasOpenedScene] {
+        if (hasOpenedScene) {
+            xml += "</content>\n"
+                   "</scene>\n";
+            hasOpenedScene = false;
+        }
+    };
+    auto closeBeat = [&xml, &hasOpenedBeat] {
+        if (hasOpenedBeat) {
+            xml += "</content>\n"
+                   "</beat>\n";
+            hasOpenedBeat = false;
+        }
+    };
+    const auto lines = _xml.split('\n');
+    for (const auto& line : lines) {
+        if (!line.startsWith("<")) {
+            xml += line + "\n";
+            continue;
+        }
+
+        if (line.startsWith("<act_heading")) {
+            closeBeat();
+            closeScene();
+            xml += QString("<act uuid=\"%1\" plots=\"\">\n"
+                           "<content>\n")
+                       .arg(QUuid::createUuid().toString())
+                       .toUtf8();
+            xml += line + "\n";
+        } else if (line.startsWith("</act_footer")) {
+            closeBeat();
+            closeScene();
+            xml += line + "\n";
+            xml += "</content>\n"
+                   "</act>\n";
+        } else if (line.startsWith("<sequence_heading")) {
+            closeBeat();
+            closeScene();
+            xml += QString("<sequence uuid=\"%1\" plots=\"\">\n"
+                           "<content>\n")
+                       .arg(QUuid::createUuid().toString())
+                       .toUtf8();
+            xml += line + "\n";
+        } else if (line.startsWith("</sequence_footer")) {
+            closeBeat();
+            closeScene();
+            xml += line + "\n";
+            xml += "</content>\n"
+                   "</sequence>\n";
+        } else if (line.startsWith("<scene_heading")) {
+            closeBeat();
+            closeScene();
+            xml += QString("<scene uuid=\"%1\" plots=\"\">\n"
+                           "<content>\n")
+                       .arg(QUuid::createUuid().toString())
+                       .toUtf8();
+            hasOpenedScene = true;
+            xml += line + "\n";
+        } else if (line.startsWith("<beat_heading")) {
+            closeBeat();
+            xml += QString("<beat uuid=\"%1\" plots=\"\">\n"
+                           "<content>\n")
+                       .arg(QUuid::createUuid().toString())
+                       .toUtf8();
+            hasOpenedBeat = true;
+            xml += line + "\n";
+        } else {
+            xml += line + "\n";
+        }
+    }
+    xml += "</document";
+    return xml;
+}
+
 } // namespace BusinessLayer

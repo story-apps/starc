@@ -618,4 +618,57 @@ ChangeCursor ComicBookTextModel::applyPatch(const QByteArray& _patch)
     return changeCursor;
 }
 
+QByteArray ComicBookTextModel::restoreAfterComparison(const QByteArray& _xml) const
+{
+    QByteArray xml = "<?xml version=\"1.0\"?>\n";
+    xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type())
+        + "\" version=\"1.0\">\n";
+    bool hasOpenedPage = false;
+    bool hasOpenedPanel = false;
+    auto closePage = [&xml, &hasOpenedPage] {
+        if (hasOpenedPage) {
+            xml += "</content>\n"
+                   "</page>\n";
+            hasOpenedPage = false;
+        }
+    };
+    auto closePanel = [&xml, &hasOpenedPanel] {
+        if (hasOpenedPanel) {
+            xml += "</content>\n"
+                   "</panel>\n";
+            hasOpenedPanel = false;
+        }
+    };
+    const auto lines = _xml.split('\n');
+    for (const auto& line : lines) {
+        if (!line.startsWith("<")) {
+            xml += line + "\n";
+            continue;
+        }
+
+        if (line.startsWith("<page_heading")) {
+            closePanel();
+            closePage();
+            xml += QString("<page uuid=\"%1\" plots=\"\">\n"
+                           "<content>\n")
+                       .arg(QUuid::createUuid().toString())
+                       .toUtf8();
+            hasOpenedPage = true;
+            xml += line + "\n";
+        } else if (line.startsWith("<panel_heading")) {
+            closePanel();
+            xml += QString("<panel uuid=\"%1\" plots=\"\">\n"
+                           "<content>\n")
+                       .arg(QUuid::createUuid().toString())
+                       .toUtf8();
+            hasOpenedPanel = true;
+            xml += line + "\n";
+        } else {
+            xml += line + "\n";
+        }
+    }
+    xml += "</document";
+    return xml;
+}
+
 } // namespace BusinessLayer

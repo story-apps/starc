@@ -178,7 +178,7 @@ protected:
     /**
      * @brief Восстановить xml после сравнения документов
      */
-    virtual QByteArray restoreAfterComparison(const QByteArray& _xml) const;
+    virtual QByteArray restoreAfterComparison(const QByteArray& _xml) const = 0;
 
 private:
     class Implementation;

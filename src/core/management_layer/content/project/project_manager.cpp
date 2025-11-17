@@ -108,7 +108,7 @@ bool isTextItem(BusinessLayer::StructureModelItem* _item)
 /**
  * @brief Полное имя заданного элемента
  */
-QString itemConcreteName(const BusinessLayer::StructureModelItem* _item)
+QString itemConcreteName(const BusinessLayer::StructureModelItem* _item, bool _addDraftName = false)
 {
     switch (_item->type()) {
     case Domain::DocumentObjectType::ScreenplayTitlePage:
@@ -132,7 +132,18 @@ QString itemConcreteName(const BusinessLayer::StructureModelItem* _item)
     case Domain::DocumentObjectType::NovelSynopsis:
     case Domain::DocumentObjectType::NovelOutline:
     case Domain::DocumentObjectType::NovelText: {
-        return _item->parent()->name();
+        QString name = _item->parent()->name();
+        if (_addDraftName) {
+            for (int index = 0; index < _item->parent()->childCount(); ++index) {
+                if (auto childItem = _item->parent()->childAt(index);
+                    childItem->type() == _item->type()) {
+                    name += QString(" [%1]").arg(
+                        childItem != _item ? _item->name() : ProjectManager::tr("Current draft"));
+                    break;
+                }
+            }
+        }
+        return name;
     }
     default:
         return _item->name();
@@ -1795,7 +1806,7 @@ void ProjectManager::Implementation::compareTextDocuments(const QModelIndex& _lh
     //
     const auto lhsItem = aliasedItemForIndex(_lhs);
     const auto rhsItem = aliasedItemForIndex(_rhs);
-    if (lhsItem->drafts().size() > 1 || rhsItem->drafts().size() > 1) {
+    if (!lhsItem->drafts().isEmpty() || !rhsItem->drafts().isEmpty()) {
         auto dialog = new Ui::CompareDraftDialog(topLevelWidget);
         dialog->setDrafts(
             itemConcreteName(lhsItem),
@@ -1820,7 +1831,7 @@ void ProjectManager::Implementation::compareTextDocuments(const QModelIndex& _lh
                 }
                 return drafts;
             }(),
-            1);
+            0);
         connect(dialog, &Ui::CompareDraftDialog::comparePressed, view.active,
                 [this, _lhs, _rhs, dialog](int _lhsIndex, int _rhsIndex) {
                     dialog->hideDialog();
@@ -1866,11 +1877,12 @@ void ProjectManager::Implementation::compareTextDocumentsItems(
     //
     // Сформировать xml документа, который будет включать дифф между заданными документами
     //
-    auto lhsName = itemConcreteName(_lhsItem);
+    const bool addDraftName = true;
+    auto lhsName = itemConcreteName(_lhsItem, addDraftName);
     const auto lhsModel = modelsFacade.modelFor(_lhsItem->uuid());
     const auto lhsXml = lhsModel->document()->content();
     //
-    auto rhsName = itemConcreteName(_rhsItem);
+    auto rhsName = itemConcreteName(_rhsItem, addDraftName);
     const auto rhsModel = modelsFacade.modelFor(_rhsItem->uuid());
     const auto rhsXml = rhsModel->document()->content();
 
@@ -1884,22 +1896,17 @@ void ProjectManager::Implementation::compareTextDocumentsItems(
     //     по умолчанию это будет второй из выбранных элементов
     //
     auto comparisonDraftHostItem = _rhsItem;
+    for (int index = 0; index < _rhsItem->parent()->childCount(); ++index) {
+        if (auto childItem = _rhsItem->parent()->childAt(index);
+            childItem->type() == _rhsItem->type()) {
+            comparisonDraftHostItem = childItem;
+            break;
+        }
+    }
     //
-    // ... если же сравнение происходит для драфтов одного документа, то будем помещать драфт со
-    //     сравнением внутрь их базового элемента
+    // ... если же сравнение происходит для драфтов одного документа, то скорректируем названия
     //
     if (_lhsItem->parent() == _rhsItem->parent()) {
-        for (int index = 0; index < _lhsItem->parent()->childCount(); ++index) {
-            if (auto childItem = _lhsItem->parent()->childAt(index);
-                childItem->type() == _lhsItem->type()) {
-                comparisonDraftHostItem = childItem;
-                break;
-            }
-        }
-
-        //
-        // ... также скорректируем названия
-        //
         lhsName = _lhsItem == comparisonDraftHostItem ? tr("Current draft") : _lhsItem->name();
         rhsName = _rhsItem == comparisonDraftHostItem ? tr("Current draft") : _rhsItem->name();
     }
@@ -2609,7 +2616,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             //
             // Создать новый драфт можно из текущего, или другого, но не сравнения
             //
-            if (isCurrentDraft || !item->drafts().at(realDraftIndex)->isComparison()) {
+            if (isCurrentDraft
+                || (_draftIndex > 0 && !item->drafts().at(realDraftIndex)->isComparison())) {
                 auto createNewDraftAction = new QAction;
                 createNewDraftAction->setIconText(u8"\U000F00FB");
                 createNewDraftAction->setText(tr("Create draft"));
@@ -2624,7 +2632,8 @@ ProjectManager::ProjectManager(QObject* _parent, QWidget* _parentWidget,
             // Сравнить драфты показываем, если есть другие актуальные драфты
             //
             if (hasActualDrafts
-                && (isCurrentDraft || !item->drafts().at(realDraftIndex)->isComparison())) {
+                && (isCurrentDraft
+                    || (_draftIndex > 0 && !item->drafts().at(realDraftIndex)->isComparison()))) {
                 auto compareDraftsAction = new QAction;
                 compareDraftsAction->setIconText(u8"\U000F1492");
                 compareDraftsAction->setText(tr("Compare drafts"));

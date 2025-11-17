@@ -1837,30 +1837,33 @@ void TextModel::compareWith(const QByteArray& _modelContent, const QString& _rhs
         //
         // Если ячейка содержит в себе текст
         //
-        if (const auto vNode = _node.firstChildElement("v"); !vNode.isNull()) {
+        if (const auto vNode = _node.firstChildElement(xml::kValueTag); !vNode.isNull()) {
             //
             // ... добавляем информацию об изменении
             //
-            auto rms = _document.createElement("rms");
-            auto rm = _document.createElement("rm");
-            rm.setAttribute("from", QString::number(_from));
-            rm.setAttribute("length",
+            auto rms = _node.firstChildElement(xml::kReviewMarksTag);
+            if (rms.isNull()) {
+                rms = _document.createElement(xml::kReviewMarksTag);
+            }
+            auto rm = _document.createElement(xml::kReviewMarkTag);
+            rm.setAttribute(xml::kFromAttribute, QString::number(_from));
+            rm.setAttribute(xml::kLengthAttribute,
                             QString::number(_length != -1
                                                 ? _length
                                                 : vNode.firstChild().toCDATASection().length()));
             if (_isAdded) {
-                rm.setAttribute("color", "#000000");
-                rm.setAttribute("bgcolor", "#65df66");
+                rm.setAttribute(xml::kColorAttribute, "#000000");
+                rm.setAttribute(xml::kBackgroundColorAttribute, "#65df66");
             } else {
-                rm.setAttribute("color", "#ffffff");
-                rm.setAttribute("bgcolor", "#b00020");
+                rm.setAttribute(xml::kColorAttribute, "#ffffff");
+                rm.setAttribute(xml::kBackgroundColorAttribute, "#b00020");
             }
             QDomElement c = _document.createElement("c");
-            c.setAttribute("author", _isAdded ? _rhsName : _lhsName);
+            c.setAttribute(xml::kAuthorAttribute, _isAdded ? _lhsName : _rhsName);
             if (_isAdded) {
-                c.setAttribute("add", "true");
+                c.setAttribute(xml::kIsCommentAdditionAttribute, "true");
             } else {
-                c.setAttribute("rem", "true");
+                c.setAttribute(xml::kIsCommentRemovalAttribute, "true");
             }
             c.appendChild(_document.createCDATASection(""));
             rm.appendChild(c);
@@ -1973,34 +1976,55 @@ void TextModel::compareWith(const QByteArray& _modelContent, const QString& _rhs
                 //
                 // Если в блоках есть похожие части
                 //
-                const auto blockPatches
-                    = diff_match_patch().patch_make(nodeValue(oldDataNode), nodeValue(newDataNode));
-                Q_ASSERT(blockPatches.size() == 1);
-                if (blockPatches.size() == 1
-                    && std::find_if(blockPatches.constFirst().diffs.begin(),
-                                    blockPatches.constFirst().diffs.end(),
-                                    [](const Diff& _diff) { return _diff.operation == EQUAL; })
-                        != blockPatches.constFirst().diffs.end()) {
-                    //
-                    // ... то размечаем параграф в соответствии с полученными дифами
-                    //
-                    const auto blockDiffs = blockPatches.constFirst().diffs;
-                    QString blockText;
-                    for (const auto& diff : blockDiffs) {
-                        if (diff.operation == INSERT) {
-                            markAdded(oldDataElement, resultData, blockText.length(),
-                                      diff.text.length());
-                        } else if (diff.operation == DELETE) {
-                            markRemoved(oldDataElement, resultData, blockText.length(),
-                                        diff.text.length());
+                const auto oldBlockText = nodeValue(oldDataNode);
+                const auto newBlockText = nodeValue(newDataNode);
+                if (!oldBlockText.isEmpty() && !newBlockText.isEmpty()) {
+                    const auto blockPatches
+                        = diff_match_patch().patch_make(oldBlockText, newBlockText);
+                    if (std::find_if(blockPatches.begin(), blockPatches.end(),
+                                     [](const Patch& _patch) {
+                                         return std::find_if(_patch.diffs.begin(),
+                                                             _patch.diffs.end(),
+                                                             [](const Diff& _diff) {
+                                                                 return _diff.operation == EQUAL;
+                                                             })
+                                             != _patch.diffs.end();
+                                     })
+                        != blockPatches.end()) {
+                        //
+                        // ... то размечаем параграф в соответствии с полученными дифами
+                        //
+                        QString blockText = oldBlockText;
+                        int removedCharacters = 0;
+                        for (const auto& patch : blockPatches) {
+                            int blockPos = patch.start1 + removedCharacters;
+                            for (const auto& diff : patch.diffs) {
+                                switch (diff.operation) {
+                                case EQUAL: {
+                                    break;
+                                }
+                                case INSERT: {
+                                    markAdded(oldDataElement, resultData, blockPos,
+                                              diff.text.length());
+                                    blockText.insert(blockPos, diff.text);
+                                    break;
+                                }
+                                case DELETE: {
+                                    markRemoved(oldDataElement, resultData, blockPos,
+                                                diff.text.length());
+                                    removedCharacters += diff.text.length();
+                                    break;
+                                }
+                                }
+                                blockPos += diff.text.length();
+                            }
                         }
-                        blockText += diff.text;
+                        oldDataElement.firstChildElement("v").firstChild().toCDATASection().setData(
+                            blockText);
+                        storeNode(oldDataElement, resultData);
+                        ++newDataIndex;
+                        continue;
                     }
-                    oldDataElement.firstChildElement("v").firstChild().toCDATASection().setData(
-                        blockText);
-                    storeNode(oldDataElement, resultData);
-                    ++newDataIndex;
-                    continue;
                 }
 
                 //
@@ -2025,7 +2049,14 @@ void TextModel::compareWith(const QByteArray& _modelContent, const QString& _rhs
         //
         // После того, как xml изменения был сформирован поместим его в текст документа сценария
         //
-        resultScript.replace(diff.second.xml, resultData.toString(0));
+        const QString xmlToReplace = diff.second.xml;
+        const auto replaceIndex = resultScript.indexOf(xmlToReplace, diff.second.from);
+        if (replaceIndex == -1) {
+            Log::warning("Can't find source text to replace when comparing with other model");
+            resultScript.replace(xmlToReplace, resultData.toString(0));
+        } else {
+            resultScript.replace(replaceIndex, xmlToReplace.length(), resultData.toString(0));
+        }
     }
 
     //
@@ -2036,8 +2067,6 @@ void TextModel::compareWith(const QByteArray& _modelContent, const QString& _rhs
     //
     // Устанавливаем дифф в качестве контента модели и перечитываем его
     //
-
-    qDebug(qPrintable(resultScript));
     clearDocument();
     document()->setContent(resultScript.toUtf8());
     initDocument();
@@ -2844,11 +2873,15 @@ QByteArray TextModel::prepareToComparison(const QByteArray& _xml) const
     auto regExp = [](const QString& _pattern) {
         return QRegularExpression(_pattern, QRegularExpression::MultilineOption);
     };
-    result.remove(regExp(
-        "^<(document|act|sequence|scene) (.*)>$")); // beat, panel, chapter, part, heading1...
+    result.remove(regExp("^<"
+                         "(document|act|part|sequence|chapter|scene|beat|page|panel|chapter1|"
+                         "chapter2|chapter3|chapter4|chapter5|chapter6) (.*)>$"));
     result.remove(regExp("^<content>$"));
-    result.remove(regExp("^</(document|act|sequence|scene|content)>$"));
+    result.remove(regExp("^</"
+                         "(document|act|part|sequence|chapter|scene|beat|page|panel|chapter1|"
+                         "chapter2|chapter3|chapter4|chapter5|chapter6|content)>$"));
     result.remove(regExp("^<color>(.*)</color>$"));
+    result.remove(regExp("^<number (.*)/>$"));
     result.replace(regExp("\n{2,}"), "\n");
 
     //
@@ -2858,61 +2891,6 @@ QByteArray TextModel::prepareToComparison(const QByteArray& _xml) const
     result.remove(regExp("<fms>(.*)</fms>"));
 
     return result.toUtf8();
-}
-
-QByteArray TextModel::restoreAfterComparison(const QByteArray& _xml) const
-{
-    QByteArray xml = "<?xml version=\"1.0\"?>\n";
-    xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type())
-        + "\" version=\"1.0\">\n";
-    bool hasOpenedScene = false;
-    auto closeScene = [&xml, &hasOpenedScene] {
-        if (hasOpenedScene) {
-            xml += "</content>\n"
-                   "</scene>\n";
-            hasOpenedScene = false;
-        }
-    };
-    const auto lines = _xml.split('\n');
-    for (const auto& line : lines) {
-        if (line.startsWith("<act_heading")) {
-            closeScene();
-            xml += QString("<act uuid=\"%1\" plots=\"\">\n"
-                           "<content>\n")
-                       .arg(QUuid::createUuid().toString())
-                       .toUtf8();
-            xml += line + "\n";
-        } else if (line.startsWith("</act_footer")) {
-            closeScene();
-            xml += line + "\n";
-            xml += "</content>\n"
-                   "</act>\n";
-        } else if (line.startsWith("<sequence_heading")) {
-            closeScene();
-            xml += QString("<sequence uuid=\"%1\" plots=\"\">\n"
-                           "<content>\n")
-                       .arg(QUuid::createUuid().toString())
-                       .toUtf8();
-            xml += line + "\n";
-        } else if (line.startsWith("</sequence_footer")) {
-            closeScene();
-            xml += line + "\n";
-            xml += "</content>\n"
-                   "</sequence>\n";
-        } else if (line.startsWith("<scene_heading")) {
-            closeScene();
-            xml += QString("<scene uuid=\"%1\" plots=\"\">\n"
-                           "<content>\n")
-                       .arg(QUuid::createUuid().toString())
-                       .toUtf8();
-            hasOpenedScene = true;
-            xml += line + "\n";
-        } else {
-            xml += line + "\n";
-        }
-    }
-    xml += "</document";
-    return xml;
 }
 
 } // namespace BusinessLayer

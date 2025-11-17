@@ -159,7 +159,7 @@ StructureModelItem* StructureModelItem::addDraft(const QString& _name, const QCo
     // Сравнения же добавляются в конец списка драфтов
     //
     else {
-        d->drafts.prepend(draft);
+        d->drafts.append(draft);
     }
     return draft;
 }

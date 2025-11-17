@@ -367,4 +367,85 @@ void NovelTextModel::finalizeInitialization()
     d->updateNumbering();
 }
 
+QByteArray NovelTextModel::restoreAfterComparison(const QByteArray& _xml) const
+{
+    QByteArray xml = "<?xml version=\"1.0\"?>\n";
+    xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type())
+        + "\" version=\"1.0\">\n";
+    bool hasOpenedScene = false;
+    bool hasOpenedBeat = false;
+    auto closeScene = [&xml, &hasOpenedScene] {
+        if (hasOpenedScene) {
+            xml += "</content>\n"
+                   "</scene>\n";
+            hasOpenedScene = false;
+        }
+    };
+    auto closeBeat = [&xml, &hasOpenedBeat] {
+        if (hasOpenedBeat) {
+            xml += "</content>\n"
+                   "</beat>\n";
+            hasOpenedBeat = false;
+        }
+    };
+    const auto lines = _xml.split('\n');
+    for (const auto& line : lines) {
+        if (!line.startsWith("<")) {
+            xml += line + "\n";
+            continue;
+        }
+
+        if (line.startsWith("<part_heading")) {
+            closeBeat();
+            closeScene();
+            xml += QString("<part uuid=\"%1\" plots=\"\">\n"
+                           "<content>\n")
+                       .arg(QUuid::createUuid().toString())
+                       .toUtf8();
+            xml += line + "\n";
+        } else if (line.startsWith("</part_footer")) {
+            closeBeat();
+            closeScene();
+            xml += line + "\n";
+            xml += "</content>\n"
+                   "</part>\n";
+        } else if (line.startsWith("<chapter_heading")) {
+            closeBeat();
+            closeScene();
+            xml += QString("<chapter uuid=\"%1\" plots=\"\">\n"
+                           "<content>\n")
+                       .arg(QUuid::createUuid().toString())
+                       .toUtf8();
+            xml += line + "\n";
+        } else if (line.startsWith("</chapter_footer")) {
+            closeBeat();
+            closeScene();
+            xml += line + "\n";
+            xml += "</content>\n"
+                   "</chapter>\n";
+        } else if (line.startsWith("<scene_heading")) {
+            closeBeat();
+            closeScene();
+            xml += QString("<scene uuid=\"%1\" plots=\"\">\n"
+                           "<content>\n")
+                       .arg(QUuid::createUuid().toString())
+                       .toUtf8();
+            hasOpenedScene = true;
+            xml += line + "\n";
+        } else if (line.startsWith("<beat_heading")) {
+            closeBeat();
+            xml += QString("<beat uuid=\"%1\" plots=\"\">\n"
+                           "<content>\n")
+                       .arg(QUuid::createUuid().toString())
+                       .toUtf8();
+            hasOpenedBeat = true;
+            xml += line + "\n";
+        } else {
+            xml += line + "\n";
+        }
+    }
+    xml += "</document";
+    return xml;
+}
+
 } // namespace BusinessLayer

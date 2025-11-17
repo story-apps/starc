@@ -359,4 +359,64 @@ ChangeCursor SimpleTextModel::applyPatch(const QByteArray& _patch)
     return changeCursor;
 }
 
+QByteArray SimpleTextModel::restoreAfterComparison(const QByteArray& _xml) const
+{
+    QByteArray xml = "<?xml version=\"1.0\"?>\n";
+    xml += "<document mime-type=\"" + Domain::mimeTypeFor(document()->type())
+        + "\" version=\"1.0\">\n";
+    QVector<bool> hasOpenedChapter(6, false);
+    auto closeHeading = [&xml, &hasOpenedChapter](int _upToLevel) {
+        for (int level = 6; level >= _upToLevel; --level) {
+            if (hasOpenedChapter[level - 1]) {
+                xml += QString("</content>\n"
+                               "</chapter_%1>\n")
+                           .arg(level)
+                           .toUtf8();
+                hasOpenedChapter[level - 1] = false;
+            }
+        }
+    };
+    auto startHeading = [&xml, &hasOpenedChapter](int _level) {
+        xml += QString("<chapter%1 uuid=\"%2\" plots=\"\">\n"
+                       "<content>\n")
+                   .arg(QString::number(_level), QUuid::createUuid().toString())
+                   .toUtf8();
+        hasOpenedChapter[_level - 1] = true;
+    };
+    auto processHeading = [&closeHeading, &startHeading](int _level) {
+        closeHeading(_level);
+        startHeading(_level);
+    };
+    const auto lines = _xml.split('\n');
+    for (const auto& line : lines) {
+        if (!line.startsWith("<")) {
+            xml += line + "\n";
+            continue;
+        }
+
+        if (line.startsWith("<heading_1")) {
+            constexpr int level = 1;
+            processHeading(level);
+        } else if (line.startsWith("<heading_2")) {
+            constexpr int level = 2;
+            processHeading(level);
+        } else if (line.startsWith("<heading_3")) {
+            constexpr int level = 3;
+            processHeading(level);
+        } else if (line.startsWith("<heading_4")) {
+            constexpr int level = 4;
+            processHeading(level);
+        } else if (line.startsWith("<heading_5")) {
+            constexpr int level = 5;
+            processHeading(level);
+        } else if (line.startsWith("<heading_6")) {
+            constexpr int level = 6;
+            processHeading(level);
+        }
+        xml += line + "\n";
+    }
+    xml += "</document";
+    return xml;
+}
+
 } // namespace BusinessLayer
