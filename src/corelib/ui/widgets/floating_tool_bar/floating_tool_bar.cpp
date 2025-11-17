@@ -461,7 +461,7 @@ void FloatingToolBar::paintEvent(QPaintEvent* _event)
     //
     // ... рисуем сам фон
     //
-    painter.setOpacity(0.7);
+    painter.setOpacity(0.8);
     painter.setPen(Qt::NoPen);
     painter.setBrush(backgroundColor());
     if (d->isCurtain) {
