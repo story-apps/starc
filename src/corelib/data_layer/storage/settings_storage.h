@@ -95,6 +95,8 @@ const QString kApplicationReplaceTwoDashesWithEmDashKey
     = kApplicationGroupKey + "/replace-two-dashes-with-em-dash";
 // запретить вводить несколько пробелов подряд
 const QString kApplicationAvoidMultipleSpacesKey = kApplicationGroupKey + "/avoid-multiple-spaces";
+// доступен ли ИИ помощник
+const QString kApplicationAiAssistantEnabledKey = kApplicationGroupKey + "/ai-assistant-enabled";
 // список недавних проектов
 const QString kApplicationProjectsKey = kApplicationGroupKey + "/projects";
 //

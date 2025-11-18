@@ -32,6 +32,7 @@ public:
     void showApplicationUserInterface();
     void showApplicationSaveAndBackups();
     void showApplicationTextEditing();
+    void showApplicationAiAssistant();
     void showComponents();
     void showComponentsSimpleText();
     void showComponentsScreenplay();
@@ -64,6 +65,7 @@ public:
     void setApplicationUseSmartQuotes(bool _use);
     void setApplicationReplaceTwoDashesWithEmDash(bool _replace);
     void setApplicationAvoidMultipleSpaces(bool _avoid);
+    void setApplicationAiAssistantEnabled(bool _enabled);
 
     //
     // Задание параметров редактора текста
@@ -199,6 +201,7 @@ signals:
     void applicationUseSmartQuotesChanged(bool _use);
     void applicationReplaceTwoDashedWithEmDashChanged(bool _replace);
     void applicationAvoidMultipleSpacesChanged(bool _avoid);
+    void applicationAiAssistantEnabledChanged(bool _enabled);
 
     //
     // Уведомление об изменении параметров редактора текста

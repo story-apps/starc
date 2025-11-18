@@ -101,8 +101,7 @@ CreateDraftDialog::CreateDraftDialog(QWidget* _parent)
             [this](const QColor& _color) { d->draftName->setTrailingIconColor(_color); });
     connect(d->createButton, &Button::clicked, this, [this] {
         emit savePressed(d->draftName->text(), d->draftColorPopup->selectedColor(),
-                         d->sourceDraft->currentIndex().row(),
-                         d->lockEditingDraft->isChecked());
+                         d->sourceDraft->currentIndex().row(), d->lockEditingDraft->isChecked());
     });
     connect(d->cancelButton, &Button::clicked, this, &CreateDraftDialog::hideDialog);
 }
@@ -168,9 +167,8 @@ void CreateDraftDialog::designSystemChangeEvent(DesignSystemChangeEvent* _event)
     d->sourceDraft->setTextColor(DesignSystem::color().onBackground());
     d->sourceDraft->setBackgroundColor(DesignSystem::color().onBackground());
     d->sourceDraft->setPopupBackgroundColor(DesignSystem::color().background());
-    d->sourceDraft->setCustomMargins({ DesignSystem::layout().px24(),
-                                         DesignSystem::layout().px12(),
-                                         DesignSystem::layout().px24(), 0.0 });
+    d->sourceDraft->setCustomMargins({ DesignSystem::layout().px24(), DesignSystem::layout().px12(),
+                                       DesignSystem::layout().px24(), 0.0 });
     d->lockEditingDraft->setTextColor(DesignSystem::color().onBackground());
     d->lockEditingDraft->setBackgroundColor(DesignSystem::color().background());
 

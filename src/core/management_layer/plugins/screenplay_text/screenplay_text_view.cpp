@@ -1709,6 +1709,12 @@ void ScreenplayTextView::reconfigure(const QStringList& _changedSettingsKeys)
 
     using namespace DataStorageLayer;
 
+    if (_changedSettingsKeys.isEmpty() || contains(kApplicationAiAssistantEnabledKey)) {
+        d->toolbar->setAiAssistantVisible(
+            settingsValue(kApplicationAiAssistantEnabledKey).toBool());
+        d->updateToolbarUi();
+    }
+
     if (_changedSettingsKeys.isEmpty() || contains(kComponentsScreenplayEditorDefaultTemplateKey)) {
         d->reconfigureTemplate();
     }

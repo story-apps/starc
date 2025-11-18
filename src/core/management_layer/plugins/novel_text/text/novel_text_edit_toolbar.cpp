@@ -301,6 +301,14 @@ void NovelTextEditToolbar::setAiAssistantEnabled(bool _enabled)
     d->aiAssistantAction->setChecked(_enabled);
 }
 
+void NovelTextEditToolbar::setAiAssistantVisible(bool _visible)
+{
+    d->aiAssistantAction->setVisible(_visible);
+    if (!_visible) {
+        d->aiAssistantAction->setChecked(false);
+    }
+}
+
 bool NovelTextEditToolbar::isItemIsolationEnabled() const
 {
     return d->isolationAction->isChecked();

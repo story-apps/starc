@@ -16,9 +16,9 @@ public:
     /**
      * @brief Задать список драфтов из которых можно создать новую
      */
-    void setDrafts(const QString& _lhsName, const QStringList& _lhsDrafts,
-                     int _selectLhsDraftIndex, const QString& _rhsName,
-                     const QStringList& _rhsDrafts, int _selectRhsDraftIndex);
+    void setDrafts(const QString& _lhsName, const QStringList& _lhsDrafts, int _selectLhsDraftIndex,
+                   const QString& _rhsName, const QStringList& _rhsDrafts,
+                   int _selectRhsDraftIndex);
 
 signals:
     /**

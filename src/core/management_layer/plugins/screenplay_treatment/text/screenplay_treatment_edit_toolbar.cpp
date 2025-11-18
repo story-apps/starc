@@ -287,6 +287,14 @@ void ScreenplayTreatmentEditToolbar::setAiAssistantEnabled(bool _enabled)
     d->aiAssistantAction->setChecked(_enabled);
 }
 
+void ScreenplayTreatmentEditToolbar::setAiAssistantVisible(bool _visible)
+{
+    d->aiAssistantAction->setVisible(_visible);
+    if (!_visible) {
+        d->aiAssistantAction->setChecked(false);
+    }
+}
+
 bool ScreenplayTreatmentEditToolbar::isItemIsolationEnabled() const
 {
     return d->isolationAction->isChecked();

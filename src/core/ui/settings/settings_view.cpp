@@ -327,6 +327,11 @@ public:
     CheckBox* replaceTwoDashesWithEmDash = nullptr;
     CheckBox* avoidMultipleSpaces = nullptr;
     //
+    // ... AI assistant
+    //
+    H6Label* applicationAiAssistantTitle = nullptr;
+    CheckBox* enableAiAssistant = nullptr;
+    //
     int applicationCardBottomSpacerIndex = 0;
 
     H5Label* componentsTitle = nullptr;
@@ -674,6 +679,8 @@ SettingsView::Implementation::Implementation(QWidget* _parent)
     , useSmartQuotes(new CheckBox(applicationCard))
     , replaceTwoDashesWithEmDash(new CheckBox(applicationCard))
     , avoidMultipleSpaces(new CheckBox(applicationCard))
+    , applicationAiAssistantTitle(new H6Label(applicationCard))
+    , enableAiAssistant(new CheckBox(applicationCard))
     //
     , componentsTitle(new H5Label(content))
     //
@@ -1019,6 +1026,8 @@ void SettingsView::Implementation::initApplicationCard()
     applicationCardLayout->addWidget(useSmartQuotes, itemIndex++, 0);
     applicationCardLayout->addWidget(replaceTwoDashesWithEmDash, itemIndex++, 0);
     applicationCardLayout->addWidget(avoidMultipleSpaces, itemIndex++, 0);
+    applicationCardLayout->addWidget(applicationAiAssistantTitle, itemIndex++, 0);
+    applicationCardLayout->addWidget(enableAiAssistant, itemIndex++, 0);
 
     applicationCardBottomSpacerIndex = itemIndex;
     applicationCard->setContentLayout(applicationCardLayout);
@@ -1806,6 +1815,8 @@ SettingsView::SettingsView(QWidget* _parent)
             &SettingsView::applicationReplaceTwoDashedWithEmDashChanged);
     connect(d->avoidMultipleSpaces, &CheckBox::checkedChanged, this,
             &SettingsView::applicationAvoidMultipleSpacesChanged);
+    connect(d->enableAiAssistant, &CheckBox::checkedChanged, this,
+            &SettingsView::applicationAiAssistantEnabledChanged);
 
     //
     // Компоненты
@@ -2993,6 +3004,11 @@ void SettingsView::showApplicationTextEditing()
     d->scrollToTitle(d->applicationTextEditingTitle);
 }
 
+void SettingsView::showApplicationAiAssistant()
+{
+    d->scrollToTitle(d->applicationAiAssistantTitle);
+}
+
 void SettingsView::showComponents()
 {
     d->scrollToTitle(d->componentsTitle);
@@ -3245,6 +3261,11 @@ void SettingsView::setApplicationReplaceTwoDashesWithEmDash(bool _replace)
 void SettingsView::setApplicationAvoidMultipleSpaces(bool _avoid)
 {
     d->avoidMultipleSpaces->setChecked(_avoid);
+}
+
+void SettingsView::setApplicationAiAssistantEnabled(bool _enabled)
+{
+    d->enableAiAssistant->setChecked(_enabled);
 }
 
 void SettingsView::setSimpleTextAvailable(bool _available)
@@ -4162,6 +4183,8 @@ void SettingsView::updateTranslations()
     d->useSmartQuotes->setText(tr("Replace vertical quotation marks to curly ones"));
     d->replaceTwoDashesWithEmDash->setText(tr("Replace two dashes with em dash"));
     d->avoidMultipleSpaces->setText(tr("Avoid multiple spaces"));
+    d->applicationAiAssistantTitle->setText(tr("AI assistant"));
+    d->enableAiAssistant->setText(tr("Enable AI assistant"));
 
     d->componentsTitle->setText(tr("Components"));
     //
@@ -4465,6 +4488,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->applicationSaveAndBackupTitle,
              d->applicationTextEditingTitle,
              d->applicationTextEditingSubtitle,
+             d->applicationAiAssistantTitle,
              d->simpleTextTitle,
              d->simpleTextEditorTitle,
              d->simpleTextNavigatorTitle,
@@ -4575,6 +4599,7 @@ void SettingsView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
              d->useSmartQuotes,
              d->replaceTwoDashesWithEmDash,
              d->avoidMultipleSpaces,
+             d->enableAiAssistant,
              //
              d->simpleTextNavigatorShowSceneText,
              //

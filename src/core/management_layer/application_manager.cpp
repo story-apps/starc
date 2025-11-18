@@ -2948,6 +2948,9 @@ void ApplicationManager::initConnections()
             [this](int _density) { d->setDesignSystemDensity(_density); });
     connect(d->settingsManager.data(), &SettingsManager::applicationUseAutoSaveChanged, this,
             [this] { d->configureAutoSave(); });
+    connect(d->settingsManager.data(), &SettingsManager::applicationAiAssistantEnabledChanged,
+            d->projectManager.data(), &ProjectManager::reconfigurePluginsWithAiAssistant);
+
     //
     connect(d->settingsManager.data(), &SettingsManager::simpleTextEditorChanged, this,
             [this](const QStringList& _changedSettingsKeys) {

@@ -29,6 +29,7 @@ signals:
     void applicationUserInterfacePressed();
     void applicationSaveAndBackupsPressed();
     void applicationTextEditingPressed();
+    void applicationAiAssistantPressed();
     void componentsPressed();
     void componentsSimpleTextPressed();
     void componentsScreenplayPressed();

@@ -73,6 +73,11 @@ public:
     void setAiAssistantEnabled(bool _enabled);
 
     /**
+     * @brief Видна ли кнопка включения ИИ помощника
+     */
+    void setAiAssistantVisible(bool _visible);
+
+    /**
      * @brief Включена ли опция изолирования элементов на экране
      */
     bool isItemIsolationEnabled() const;

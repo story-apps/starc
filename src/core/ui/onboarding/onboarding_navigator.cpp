@@ -95,6 +95,7 @@ public:
     void initAccountPage();
     void initModulesPage();
     void initStyleChoosePage();
+    void initAiPage();
     void initBackupsPage();
     void initSocialPage();
 
@@ -177,6 +178,15 @@ public:
     ComboBox* styleChooseComboBox = nullptr;
     QStandardItemModel* styleChooseModel = nullptr;
     Button* styleChooseContinueButton = nullptr;
+
+    Widget* aiPage = nullptr;
+    ImageLabel* aiLogo = nullptr;
+    H6Label* aiTitle = nullptr;
+    Body2Label* aiSubtitle = nullptr;
+    Subtitle1Label* aiDescription = nullptr;
+    Body1Label* aiEnabledTitle = nullptr;
+    Toggle* aiEnabledToggle = nullptr;
+    Button* aiContinueButton = nullptr;
 
     Widget* backupsPage = nullptr;
     ImageLabel* backupsLogo = nullptr;
@@ -266,6 +276,15 @@ OnboardingNavigator::Implementation::Implementation(OnboardingNavigator* _q)
     , styleChooseModel(new QStandardItemModel(styleChooseComboBox))
     , styleChooseContinueButton(new Button(styleChoosePage))
     //
+    , aiPage(new Widget(q))
+    , aiLogo(new ImageLabel(aiPage))
+    , aiTitle(new H6Label(aiPage))
+    , aiSubtitle(new Body2Label(aiPage))
+    , aiDescription(new Subtitle1Label(aiPage))
+    , aiEnabledTitle(new Body1Label(aiPage))
+    , aiEnabledToggle(new Toggle(aiPage))
+    , aiContinueButton(new Button(aiPage))
+    //
     , backupsPage(new Widget(q))
     , backupsLogo(new ImageLabel(backupsPage))
     , backupsTitle(new H6Label(backupsPage))
@@ -290,6 +309,7 @@ OnboardingNavigator::Implementation::Implementation(OnboardingNavigator* _q)
     initAccountPage();
     initModulesPage();
     initStyleChoosePage();
+    initAiPage();
     initBackupsPage();
     initSocialPage();
 }
@@ -515,6 +535,26 @@ void OnboardingNavigator::Implementation::initStyleChoosePage()
     styleChoosePage->setLayout(pageLayout);
 }
 
+void OnboardingNavigator::Implementation::initAiPage()
+{
+    aiLogo->setImage(QPixmap(":/images/logo"));
+    aiTitle->setAlignment(Qt::AlignCenter);
+    aiSubtitle->setAlignment(Qt::AlignCenter);
+    aiContinueButton->setContained(true);
+
+    auto pageLayout = new QVBoxLayout;
+    pageLayout->setContentsMargins({});
+    pageLayout->setSpacing(0);
+    pageLayout->addWidget(aiLogo, 0, Qt::AlignHCenter);
+    pageLayout->addWidget(aiTitle);
+    pageLayout->addWidget(aiSubtitle);
+    pageLayout->addWidget(aiDescription);
+    addToggleWithTitle(pageLayout, aiEnabledToggle, aiEnabledTitle);
+    pageLayout->addStretch();
+    pageLayout->addWidget(aiContinueButton);
+    aiPage->setLayout(pageLayout);
+}
+
 void OnboardingNavigator::Implementation::initBackupsPage()
 {
     backupsLogo->setImage(QPixmap(":/images/logo"));
@@ -598,6 +638,7 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
     addWidget(d->accountPage);
     addWidget(d->styleChoosePage);
     addWidget(d->modulesPage);
+    addWidget(d->aiPage);
     addWidget(d->backupsPage);
     addWidget(d->socialPage);
 
@@ -735,6 +776,25 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
     connect(d->accountContinueButton, &Button::clicked, this,
             [this] { setCurrentWidget(d->styleChoosePage); });
     //
+    connect(d->styleChooseActivateToggle, &Toggle::checkedChanged, this, [this](bool _checked) {
+        d->styleChooseComboBox->setEnabled(_checked);
+
+        if (_checked) {
+            const auto& themeHash = kCompetitors.at(d->styleChooseComboBox->currentIndex().row())
+                                        .theme(d->selectedTheme);
+            emit useCustomThemeRequested(themeHash);
+        } else {
+            emit themeChanged(d->selectedTheme);
+        }
+    });
+    connect(d->styleChooseComboBox, &ComboBox::currentIndexChanged, this,
+            [this](const QModelIndex& _index) {
+                const auto& themeHash = kCompetitors.at(_index.row()).theme(d->selectedTheme);
+                emit useCustomThemeRequested(themeHash);
+            });
+    connect(d->styleChooseContinueButton, &Button::clicked, this,
+            [this] { setCurrentWidget(d->modulesPage); });
+    //
     connect(d->modulesScreenplayToggle, &Toggle::checkedChanged, this, [](bool _checked) {
         setSettingsValue(DataStorageLayer::kComponentsScreenplayAvailableKey, _checked);
     });
@@ -751,27 +811,13 @@ OnboardingNavigator::OnboardingNavigator(QWidget* _parent)
         setSettingsValue(DataStorageLayer::kComponentsNovelAvailableKey, _checked);
     });
     connect(d->modulesContinueButton, &Button::clicked, this,
-            [this] { setCurrentWidget(d->backupsPage); });
+            [this] { setCurrentWidget(d->aiPage); });
     //
-    connect(d->styleChooseActivateToggle, &Toggle::checkedChanged, this, [this](bool _checked) {
-        d->styleChooseComboBox->setEnabled(_checked);
-
-        if (_checked) {
-            const auto& themeHash = kCompetitors.at(d->styleChooseComboBox->currentIndex().row())
-                                        .theme(d->selectedTheme);
-            emit useCustomThemeRequested(themeHash);
-        } else {
-            emit themeChanged(d->selectedTheme);
-        }
+    connect(d->aiEnabledToggle, &Toggle::checkedChanged, this, [](bool _checked) {
+        setSettingsValue(DataStorageLayer::kApplicationAiAssistantEnabledKey, _checked);
     });
-    connect(d->styleChooseContinueButton, &Button::clicked, this,
-            [this] { setCurrentWidget(d->modulesPage); });
-    connect(d->styleChooseComboBox, &ComboBox::currentIndexChanged, this,
-            [this](const QModelIndex& _index) {
-                const auto& themeHash = kCompetitors.at(_index.row()).theme(d->selectedTheme);
-                emit useCustomThemeRequested(themeHash);
-            });
-
+    connect(d->aiContinueButton, &Button::clicked, this,
+            [this] { setCurrentWidget(d->backupsPage); });
     //
     connect(d->backupsContinueButton, &Button::clicked, this,
             [this] { setCurrentWidget(d->socialPage); });
@@ -924,6 +970,20 @@ void OnboardingNavigator::updateTranslations()
     d->styleChooseComboBox->setLabel(tr("Application"));
     d->styleChooseActivateTitle->setText(tr("Adapt the interface and workflow"));
 
+    d->aiTitle->setText(tr("AI assistant"));
+    d->aiSubtitle->setText(tr("Your writing mate"));
+    d->aiDescription->setText(
+        tr("An intelligent assistant speeds up your work and helps you hear yourself clearly. It "
+           "will help you:\n\n"
+           "• paraphrase, supplement, expand, abbreviate, translate, and summarize text\n\n"
+           "• brainstorm and suggest ways to organize your ideas as text or mind maps\n\n"
+           "• translate a script, comic, or novel into any language while fully preserving its "
+           "formatting\n\n"
+           "• create a summary of any text document, convert a script to a novel and back, and "
+           "much more."));
+    d->aiEnabledTitle->setText(tr("Enable AI assistant"));
+    d->aiContinueButton->setText(tr("Continue"));
+
     d->backupsTitle->setText(tr("Before you get started"));
     d->backupsSubtitle->setText(tr("Feel our care"));
     d->backupsDescription->setText(
@@ -996,18 +1056,25 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->modulesStageplayTitle,
              d->modulesNovelTitle,
              //
-             d->backupsPage,
-             d->backupsLogo,
-             d->backupsTitle,
-             d->backupsSubtitle,
-             d->backupsDescription,
-             //
              d->styleChoosePage,
              d->styleChooseLogo,
              d->styleChooseTitle,
              d->styleChooseSubtitle,
              d->styleChooseDescription,
              d->styleChooseActivateTitle,
+             //
+             d->aiPage,
+             d->aiLogo,
+             d->aiTitle,
+             d->aiSubtitle,
+             d->aiEnabledTitle,
+             d->aiDescription,
+             //
+             d->backupsPage,
+             d->backupsLogo,
+             d->backupsTitle,
+             d->backupsSubtitle,
+             d->backupsDescription,
              //
              d->socialPage,
              d->socialLogo,
@@ -1052,6 +1119,11 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
                                                   DesignSystem::layout().px12());
     d->styleChooseActivateTitle->setContentsMargins(isLeftToRight() ? 0 : margin, 0,
                                                     isLeftToRight() ? margin : 0, 0);
+    d->aiTitle->setContentsMargins(margin / 2.0, DesignSystem::layout().px24(), margin / 2.0,
+                                   DesignSystem::layout().px4());
+    d->aiSubtitle->setContentsMargins(margin, 0, margin, 0);
+    d->aiDescription->setContentsMargins(margin, DesignSystem::layout().px24(), margin,
+                                         DesignSystem::layout().px12());
     d->backupsTitle->setContentsMargins(margin / 2.0, DesignSystem::layout().px24(), margin / 2.0,
                                         DesignSystem::layout().px4());
     d->backupsSubtitle->setContentsMargins(margin, 0, margin, 0);
@@ -1067,6 +1139,7 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->uiLogo,
              d->modulesLogo,
              d->styleChooseLogo,
+             d->aiLogo,
              d->backupsLogo,
              d->socialLogo,
          }) {
@@ -1112,6 +1185,7 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->accountContinueButton,
              d->modulesContinueButton,
              d->styleChooseContinueButton,
+             d->aiContinueButton,
              d->backupsContinueButton,
              d->socialContinueButton,
          }) {
@@ -1136,6 +1210,7 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
              d->modulesStageplayToggle,
              d->modulesNovelToggle,
              d->styleChooseActivateToggle,
+             d->aiEnabledToggle,
          }) {
         toggle->setBackgroundColor(DesignSystem::color().primary());
         toggle->setTextColor(DesignSystem::color().onPrimary());

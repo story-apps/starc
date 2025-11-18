@@ -285,6 +285,14 @@ void ComicBookTextEditToolbar::setAiAssistantEnabled(bool _enabled)
     d->aiAssistantAction->setChecked(_enabled);
 }
 
+void ComicBookTextEditToolbar::setAiAssistantVisible(bool _visible)
+{
+    d->aiAssistantAction->setVisible(_visible);
+    if (!_visible) {
+        d->aiAssistantAction->setChecked(false);
+    }
+}
+
 bool ComicBookTextEditToolbar::isItemIsolationEnabled() const
 {
     return d->isolationAction->isChecked();

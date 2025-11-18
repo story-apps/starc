@@ -52,7 +52,7 @@ public:
     /**
      * @brief Перенастроить плагины
      */
-    void reconfigureAll();
+    void reconfigurePluginsWithAiAssistant(const QStringList& _changedSettingsKeys);
     void reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys);
     void reconfigureSimpleTextNavigator();
     void reconfigureScreenplayEditor(const QStringList& _changedSettingsKeys);

@@ -977,6 +977,37 @@ void PluginsBuilder::reconfigurePlugin(const QString& _mimeType,
     plugin->reconfigure(_changedSettingsKeys);
 }
 
+void PluginsBuilder::reconfigurePluginsWithAiAssistant(
+    const QStringList& _changedSettingsKeys) const
+{
+    //
+    // Текстовые плагины
+    //
+    reconfigurePlugin(kSimpleTextEditorMime, _changedSettingsKeys);
+    //
+    reconfigurePlugin(kScreenplayTreatmentEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kScreenplayTextEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kScreenplayTextBreakdownMime, _changedSettingsKeys);
+    reconfigurePlugin(kScreenplaySeriesTreatmentEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kScreenplaySeriesTextEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kScreenplaySeriesTextBreakdownMime, _changedSettingsKeys);
+    //
+    reconfigurePlugin(kComicBookTextEditorMime, _changedSettingsKeys);
+    //
+    reconfigurePlugin(kAudioplayTextEditorMime, _changedSettingsKeys);
+    //
+    reconfigurePlugin(kStageplayTextEditorMime, _changedSettingsKeys);
+    //
+    reconfigurePlugin(kNovelOutlineEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kNovelTextEditorMime, _changedSettingsKeys);
+
+    //
+    // Остальные
+    //
+    reconfigurePlugin(kCharacterEditorMime, _changedSettingsKeys);
+    reconfigurePlugin(kMindMapMime, _changedSettingsKeys);
+}
+
 void PluginsBuilder::reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys) const
 {
     reconfigurePlugin(kSimpleTextEditorMime, _changedSettingsKeys);

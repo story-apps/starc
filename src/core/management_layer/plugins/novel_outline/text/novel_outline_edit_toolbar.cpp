@@ -285,6 +285,14 @@ void NovelOutlineEditToolbar::setAiAssistantEnabled(bool _enabled)
     d->aiAssistantAction->setChecked(_enabled);
 }
 
+void NovelOutlineEditToolbar::setAiAssistantVisible(bool _visible)
+{
+    d->aiAssistantAction->setVisible(_visible);
+    if (!_visible) {
+        d->aiAssistantAction->setChecked(false);
+    }
+}
+
 bool NovelOutlineEditToolbar::isItemIsolationEnabled() const
 {
     return d->isolationAction->isChecked();

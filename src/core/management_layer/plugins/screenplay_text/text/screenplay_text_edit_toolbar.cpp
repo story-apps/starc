@@ -305,6 +305,14 @@ void ScreenplayTextEditToolbar::setAiAssistantEnabled(bool _enabled)
     d->aiAssistantAction->setChecked(_enabled);
 }
 
+void ScreenplayTextEditToolbar::setAiAssistantVisible(bool _visible)
+{
+    d->aiAssistantAction->setVisible(_visible);
+    if (!_visible) {
+        d->aiAssistantAction->setChecked(false);
+    }
+}
+
 bool ScreenplayTextEditToolbar::isItemIsolationEnabled() const
 {
     return d->isolationAction->isChecked();

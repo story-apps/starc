@@ -3304,9 +3304,9 @@ void ProjectManager::toggleFullScreen(bool _isFullScreen)
     }
 }
 
-void ProjectManager::reconfigureAll()
+void ProjectManager::reconfigurePluginsWithAiAssistant(const QStringList& _changedSettingsKeys)
 {
-    d->pluginsBuilder.reconfigureAll();
+    d->pluginsBuilder.reconfigurePluginsWithAiAssistant(_changedSettingsKeys);
 }
 
 void ProjectManager::reconfigureSimpleTextEditor(const QStringList& _changedSettingsKeys)

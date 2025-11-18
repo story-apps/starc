@@ -100,7 +100,7 @@ public:
     /**
      * @brief Обновить настройки UI панели инструментов
      */
-    void updateToolBarUi();
+    void updateToolbarUi();
     void updateToolbarPositon();
 
     /**
@@ -360,7 +360,7 @@ void ScreenplayTreatmentView::Implementation::updateOptionsTranslations()
                                                                   : tr("Show bookmarks list"));
 }
 
-void ScreenplayTreatmentView::Implementation::updateToolBarUi()
+void ScreenplayTreatmentView::Implementation::updateToolbarUi()
 {
     updateToolbarPositon();
     toolbar->setBackgroundColor(ColorHelper::nearby(Ui::DesignSystem::color().background()));
@@ -1539,6 +1539,13 @@ void ScreenplayTreatmentView::reconfigure(const QStringList& _changedSettingsKey
     UiHelper::initSpellingFor(d->textEdit);
 
     if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationAiAssistantEnabledKey)) {
+        d->toolbar->setAiAssistantVisible(
+            settingsValue(DataStorageLayer::kApplicationAiAssistantEnabledKey).toBool());
+        d->updateToolbarUi();
+    }
+
+    if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsScreenplayEditorDefaultTemplateKey)) {
         d->reconfigureTemplate();
@@ -1862,7 +1869,7 @@ void ScreenplayTreatmentView::designSystemChangeEvent(DesignSystemChangeEvent* _
 
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
-    d->updateToolBarUi();
+    d->updateToolbarUi();
 
     d->textEdit->setPageSpacing(Ui::DesignSystem::layout().px24());
     QPalette palette;

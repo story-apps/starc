@@ -280,6 +280,14 @@ void SimpleTextEditToolbar::setAiAssistantEnabled(bool _enabled)
     d->aiAssistantAction->setChecked(_enabled);
 }
 
+void SimpleTextEditToolbar::setAiAssistantVisible(bool _visible)
+{
+    d->aiAssistantAction->setVisible(_visible);
+    if (!_visible) {
+        d->aiAssistantAction->setChecked(false);
+    }
+}
+
 bool SimpleTextEditToolbar::isItemIsolationEnabled() const
 {
     return d->isolationAction->isChecked();

@@ -97,7 +97,7 @@ public:
     /**
      * @brief Обновить настройки UI панели инструментов
      */
-    void updateToolBarUi();
+    void updateToolbarUi();
     void updateToolbarPositon();
 
     /**
@@ -330,7 +330,7 @@ void NovelOutlineView::Implementation::updateOptionsTranslations()
                                                                   : tr("Show bookmarks list"));
 }
 
-void NovelOutlineView::Implementation::updateToolBarUi()
+void NovelOutlineView::Implementation::updateToolbarUi()
 {
     updateToolbarPositon();
     toolbar->setBackgroundColor(ColorHelper::nearby(Ui::DesignSystem::color().background()));
@@ -1491,6 +1491,13 @@ void NovelOutlineView::reconfigure(const QStringList& _changedSettingsKeys)
     UiHelper::initSpellingFor(d->textEdit);
 
     if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationAiAssistantEnabledKey)) {
+        d->toolbar->setAiAssistantVisible(
+            settingsValue(DataStorageLayer::kApplicationAiAssistantEnabledKey).toBool());
+        d->updateToolbarUi();
+    }
+
+    if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsNovelEditorDefaultTemplateKey)) {
         d->reconfigureTemplate();
@@ -1785,7 +1792,7 @@ void NovelOutlineView::designSystemChangeEvent(DesignSystemChangeEvent* _event)
 
     setBackgroundColor(Ui::DesignSystem::color().surface());
 
-    d->updateToolBarUi();
+    d->updateToolbarUi();
 
     d->textEdit->setPageSpacing(Ui::DesignSystem::layout().px24());
     QPalette palette;

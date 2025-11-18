@@ -1174,6 +1174,13 @@ void ComicBookTextView::reconfigure(const QStringList& _changedSettingsKeys)
     UiHelper::initSpellingFor(d->textEdit);
 
     if (_changedSettingsKeys.isEmpty()
+        || _changedSettingsKeys.contains(DataStorageLayer::kApplicationAiAssistantEnabledKey)) {
+        d->toolbar->setAiAssistantVisible(
+            settingsValue(DataStorageLayer::kApplicationAiAssistantEnabledKey).toBool());
+        d->updateToolbarUi();
+    }
+
+    if (_changedSettingsKeys.isEmpty()
         || _changedSettingsKeys.contains(
             DataStorageLayer::kComponentsComicBookEditorDefaultTemplateKey)) {
         d->reconfigureTemplate();
