@@ -4236,6 +4236,15 @@ void ProjectManager::mergeDocumentInfo(const Domain::DocumentInfo& _documentInfo
         : d->modelsFacade.modelFor(document);
 
     //
+    // Если не получилось загрузить модель, значит прерываем выполнение
+    // NOTE: это кейс, когда прилетают изменения документов, являющимися алиасами к реальным
+    //       документам, такими как поэпизодник и план
+    //
+    if (documentModel == nullptr) {
+        return;
+    }
+
+    //
     // Сохраним изменения документа, которые накопились до момента синхронизации
     //
     documentModel->saveChanges();
