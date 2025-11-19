@@ -62,6 +62,11 @@ bool StageplayFountainExporter::processBlock(QString& _paragraph, const QTextBlo
         return true;
     }
 
+    case TextParagraphType::Parenthetical: {
+        _paragraph = "(" + _paragraph + ")";
+        return true;
+    }
+
     case TextParagraphType::Dialogue: {
         return true;
     }
@@ -125,11 +130,12 @@ void StageplayFountainExporter::addIndentationAtBegin(QString& _paragraph,
     //
     const QVector<QVector<int>> countIndentation = {
         // Undefined, SceneHeading, Character, Dialogue, Action/InlineNote/UnformattedText
-        { 0, 0, 0, 0, 0 }, // Undefined
-        { 0, 2, 3, 3, 3 }, // SceneHeading
-        { 0, 2, 2, 2, 2 }, // Character
-        { 0, 2, 1, 2, 2 }, // Dialogue
-        { 0, 2, 2, 2, 2 }, // Action/InlineNote/UnformattedText
+        { 0, 0, 0, 0, 0, 0 }, // Undefined
+        { 0, 2, 3, 3, 3, 3 }, // SceneHeading
+        { 0, 2, 2, 2, 2, 2 }, // Character
+        { 0, 2, 1, 1, 1, 1 }, // Parenthetical
+        { 0, 2, 1, 1, 2, 2 }, // Dialogue
+        { 0, 2, 2, 2, 2, 2 }, // Action/InlineNote/UnformattedText
     };
 
     auto positionInTable = [](TextParagraphType _type) {
@@ -140,13 +146,16 @@ void StageplayFountainExporter::addIndentationAtBegin(QString& _paragraph,
         case TextParagraphType::Character: {
             return 2;
         }
-        case TextParagraphType::Dialogue: {
+        case TextParagraphType::Parenthetical: {
             return 3;
+        }
+        case TextParagraphType::Dialogue: {
+            return 4;
         }
         case TextParagraphType::Action:
         case TextParagraphType::InlineNote:
         case TextParagraphType::UnformattedText: {
-            return 4;
+            return 5;
         }
         default: {
             return 0;
