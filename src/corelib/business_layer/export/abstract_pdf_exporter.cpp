@@ -13,6 +13,12 @@
 #include <QTextBlock>
 #include <QtMath>
 
+// При необходимости можно отдебажить то, как рисуются блоки текста
+#undef DEBUG_BLOCKS_PRINTING
+#ifdef DEBUG_BLOCKS_PRINTING
+#include <QRandomGenerator>
+#endif
+
 
 namespace BusinessLayer {
 
@@ -173,6 +179,14 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
                     >= blockLineHeight);
             if (isFirstLineCanBePlacedAtCurrentPage
                 || (isBlockStartedOnPreviousPage && !isFirstLinePlacedAtPreviousPage)) {
+#ifdef DEBUG_BLOCKS_PRINTING
+                _painter->setOpacity(0.5);
+                _painter->fillRect(
+                    blockRect,
+                    static_cast<Qt::GlobalColor>(QRandomGenerator::global()->bounded(4, 18)));
+                _painter->setOpacity(1);
+#endif
+
                 const auto paragraphType = TextBlockStyle::forBlock(block);
                 q->printBlockDecorations(_painter, pageYPos, _body, paragraphType, blockRect, block,
                                          _exportOptions);

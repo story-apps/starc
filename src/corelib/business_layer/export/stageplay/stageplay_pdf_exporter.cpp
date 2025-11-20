@@ -121,52 +121,135 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
     //
     if (!_block.text().isEmpty()
         || !_block.blockFormat().boolProperty(TextBlockStyle::PropertyIsCorrection)) {
-        const auto correctedBlockRect
-            = QRectF({ _block.blockFormat().leftMargin()
-                           + MeasurementHelper::mmToPx(exportTemplate.pageMargins().left()),
-                       _blockRect.top() },
-                     _blockRect.size());
+        //
+        // ... вспомогательные функции для вычислении ширины заданной строки блока
+        //
+        auto lineWidth = [_block, _painter](int _lineIndex) {
+            auto lineText = _block.text().mid(_block.layout()->lineAt(_lineIndex).textStart(),
+                                              _block.layout()->lineAt(_lineIndex).textLength());
+            if (_lineIndex < _block.layout()->lineCount() - 1) {
+                lineText = lineText.trimmed();
+            }
+            return TextHelper::fineTextWidthF(lineText, _painter->font());
+        };
+        auto firstLineWidth = [&lineWidth] { return lineWidth(0); };
+        auto lastLineWidth = [&lineWidth, lastLineIndex = _block.layout()->lineCount() - 1] {
+            return lineWidth(lastLineIndex);
+        };
+
         //
         // ... префикс
         //
         if (_block.charFormat().hasProperty(TextBlockStyle::PropertyPrefix)) {
+            //
+            // Настроим шрифт рисовальщика, он будет использоваться для вычисления ширины строк
+            //
             _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
 
+            //
+            // Определим параметры блока, необходимые для вычисления положения префикса
+            //
+            const qreal blockTextIndent = _block.blockFormat().textIndent();
+            //
+            // ... если в блоке всего одна строка, то красная строка выключена из геомерии блока,
+            //     а значит её не нужно учитывать при вычислении пустой области образованной
+            //     вследствии выравнивания текста внутри блока
+            //
+            const qreal alignmentDeltaBlockTextIndent
+                = _block.layout()->lineCount() == 1 ? 0.0 : blockTextIndent;
+            //
+            // ... вычислим пустую область образованной из-за выравнивания текста внутри блока
+            //     если выравнивание по левому краю, то её нет
+            //
+            qreal alignmentDelta = 0;
+            if (_block.blockFormat().alignment().testFlag(Qt::AlignHCenter)) {
+                //
+                // ... если выравнивание по середине, то пустая область равномерно распологается с
+                //     обеих сторон вокруг текста
+                //
+                alignmentDelta
+                    += (_blockRect.width() - alignmentDeltaBlockTextIndent - firstLineWidth())
+                    / 2.0;
+            } else if (_block.blockFormat().alignment().testFlag(Qt::AlignRight)) {
+                //
+                // ... если выравнивание по правому краю, то пустая область распологается с
+                //     левой стороны текста
+                //
+                alignmentDelta
+                    += (_blockRect.width() - alignmentDeltaBlockTextIndent - firstLineWidth());
+            }
+
+            //
+            // Определим сам префикс и область, в которой его нужно нарисовать
+            //
             const auto prefix = _block.charFormat().stringProperty(TextBlockStyle::PropertyPrefix);
-            auto prefixRect = _blockRect;
-            prefixRect.setWidth(TextHelper::fineTextWidthF(prefix, _painter->font()));
-            prefixRect.moveLeft(prefixRect.left() + _block.blockFormat().leftMargin()
-                                - prefixRect.width());
-            prefixRect.setHeight(_painter->fontMetrics().boundingRect(prefix).height());
+            const auto prefixWidth = TextHelper::fineTextWidthF(prefix, _painter->font());
+            const auto prefixHeight = _painter->fontMetrics().boundingRect(prefix).height();
+            const auto prefixLeft = _blockRect.left() // положение блока
+                + _block.blockFormat().leftMargin() // левый отступ блока
+                + blockTextIndent // красная строка
+                + alignmentDelta // пустая область из-за выравнивания
+                - prefixWidth; // ширина префикса
+            const auto prefixTop = _blockRect.top();
+            const QRectF prefixRect(QPointF(prefixLeft, prefixTop),
+                                    QSizeF(prefixWidth, prefixHeight));
+
+            //
+            // Собственно рисуем декорацию
+            //
             _painter->drawText(prefixRect, Qt::AlignLeft | Qt::AlignBottom, prefix);
         }
         //
         // ... постфикс
         //
         if (_block.charFormat().hasProperty(TextBlockStyle::PropertyPostfix)) {
+            //
+            // Настроим шрифт рисовальщика, он будет использоваться для вычисления ширины строк
+            //
             _painter->setFont(TextHelper::fineBlockCharFormat(_block).font());
 
-            const auto postfix
-                = _block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
+            //
+            // Определим параметры блока, необходимые для вычисления положения постфикса
+            //
+            const qreal blockTextIndent = _block.blockFormat().textIndent();
+            //
+            // ... вычислим пустую область образованной из-за выравнивания текста внутри блока
+            //     если выравнивание по левому краю, то её нет
+            //
+            qreal alignmentDelta = 0;
+            if (_block.blockFormat().alignment().testFlag(Qt::AlignHCenter)) {
+                //
+                // ... если выравнивание по середине, то пустая область равномерно распологается с
+                //     обеих сторон вокруг текста
+                //
+                alignmentDelta += (_blockRect.width() - lastLineWidth()) / 2.0;
+            } else if (_block.blockFormat().alignment().testFlag(Qt::AlignRight)) {
+                //
+                // ... если выравнивание по правому краю, то пустая область распологается с
+                //     левой стороны текста
+                //
+                alignmentDelta += (_blockRect.width() - lastLineWidth());
+            }
 
             //
-            // Почему-то если взять просто ширину последней строки текста, то получается
-            // слишком широко в некоторых случаях, так, что постфикс рисуется очень далеко
-            // от текста. Поэтому решил брать текст последней строки, добавлять к нему
-            // постфикс, считать их совместную ширину и брать её, как конечную точку
+            // Определим сам постфикс и область, в которой его нужно нарисовать
             //
-            const auto lastLineText
-                = TextHelper::lastLineText(_block.text(), _painter->font(), _blockRect.width())
-                + postfix;
-            const QPoint bottomRight
-                = QPoint(_blockRect.left() + _block.blockFormat().leftMargin()
-                             + TextHelper::fineTextWidthF(lastLineText, _painter->font()),
-                         correctedBlockRect.bottom());
-            const QPoint topLeft
-                = QPoint(bottomRight.x() - TextHelper::fineTextWidthF(postfix, _painter->font()),
-                         correctedBlockRect.bottom()
-                             - _painter->fontMetrics().boundingRect(postfix).height());
-            const QRect postfixRect(topLeft, bottomRight);
+            const auto postfix
+                = _block.charFormat().stringProperty(TextBlockStyle::PropertyPostfix);
+            const auto postfixWidth = TextHelper::fineTextWidthF(postfix, _painter->font());
+            const auto postfixHeight = _painter->fontMetrics().boundingRect(postfix).height();
+            const auto postfixLeft = _blockRect.left() // положение блока
+                + _block.blockFormat().leftMargin() // левый отступ блока
+                + (_block.layout()->lineCount() == 1 ? blockTextIndent : 0.0) // красная строка
+                + alignmentDelta // пустая область из-за выравнивания
+                + lastLineWidth(); // ширина текста
+            const auto postfixTop = _blockRect.bottom() - postfixHeight;
+            const QRectF postfixRect(QPointF(postfixLeft, postfixTop),
+                                     QSizeF(postfixWidth, postfixHeight));
+
+            //
+            // Собственно рисуем декорацию
+            //
             _painter->drawText(postfixRect, Qt::AlignLeft | Qt::AlignBottom, postfix);
         }
     }
