@@ -186,6 +186,7 @@ void TemplatesFacade::Implementation::updateTranslations()
             templateModelItem->setText(templateItem.name());
         }
     }
+    templatesModel.sort(0);
 }
 
 template<typename TemplateType>
