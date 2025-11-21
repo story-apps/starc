@@ -24,6 +24,11 @@ TitlePageModel::TitlePageModel(QObject* _parent)
 
 TitlePageModel::~TitlePageModel() = default;
 
+void TitlePageModel::setDocumentName(const QString& _name)
+{
+    Q_UNUSED(_name)
+}
+
 void TitlePageModel::setCharacters(const QVector<QPair<QString, QString>>& _characters)
 {
     d->characters = _characters;

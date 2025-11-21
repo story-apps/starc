@@ -17,6 +17,11 @@ public:
     ~TitlePageModel() override;
 
     /**
+     * @brief Игнорируем установку названия документа
+     */
+    void setDocumentName(const QString& _name) override;
+
+    /**
      * @brief Список действующих лиц
      */
     void setCharacters(const QVector<QPair<QString, QString>>& _characters);
