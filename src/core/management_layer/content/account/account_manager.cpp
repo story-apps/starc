@@ -338,7 +338,7 @@ void AccountManager::Implementation::initLoginDialog()
                     return;
                 }
 
-                emit q->checkConfirmationCodeRequested(_code);
+                emit q->checkConfirmationCodeRequested(loginDialog->email(), _code);
             });
     connect(loginDialog, &Ui::LoginDialog::cancelPressed, loginDialog,
             &Ui::LoginDialog::hideDialog);
