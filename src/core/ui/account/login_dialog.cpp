@@ -27,6 +27,7 @@ public:
 
     Body1Label* description = nullptr;
     TextField* email = nullptr;
+    QString enteredEmail;
     Body1Label* authorizationError = nullptr;
     Body1Label* confirmationCodeSendedInfo = nullptr;
     TextField* confirmationCode = nullptr;
@@ -104,8 +105,17 @@ LoginDialog::LoginDialog(QWidget* _parent)
     contentsLayout()->addLayout(d->buttonsLayout, row++, 0);
 
     connect(d->email, &TextField::textChanged, this, [this] {
+        //
+        // Весим дополнительную проверку, чтобы избежать реакцию на события поля ввода,
+        // которые не приводят к фактической смене текста
+        //
+        if (d->enteredEmail == d->email->text()) {
+            return;
+        }
+
         d->email->setError({});
-        d->signInButton->setVisible(EmailValidator::isValid(d->email->text()));
+        d->enteredEmail = d->email->text();
+        d->signInButton->setVisible(EmailValidator::isValid(d->enteredEmail));
         showEmailStep();
     });
     connect(d->confirmationCode, &TextField::textChanged, this, [this] {
