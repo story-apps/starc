@@ -58,7 +58,7 @@ OnboardingManager::OnboardingManager(QObject* _parent, QWidget* _parentWidget)
                     return;
                 }
 
-                emit checkConfirmationCodeRequested(_code);
+                emit checkConfirmationCodeRequested(d->navigator->email(), _code);
             });
     connect(d->navigator, &Ui::OnboardingNavigator::accountInfoChanged, this,
             &OnboardingManager::updateAccountInfoRequested);

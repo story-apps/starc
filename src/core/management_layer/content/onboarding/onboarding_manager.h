@@ -91,7 +91,7 @@ signals:
     /**
      * @brief Код проверки авторизации был введён пользователем
      */
-    void checkConfirmationCodeRequested(const QString& _code);
+    void checkConfirmationCodeRequested(const QString& _email, const QString& _code);
 
     //
     // Страница с информацией об аккаунте
