@@ -314,6 +314,21 @@ const QString kComponentsScreenplayStatisticsKey
 const QString kComponentsScreenplayStatisticsSplitterStateKey
     = kComponentsScreenplayStatisticsKey + QStringLiteral("/splitter-state");
 //
+// сериал
+const QString kComponentsScreenplaySeriesKey
+    = kComponentsGroupKey + QStringLiteral("/screenplay-series");
+// ... посерийник
+const QString kComponentsScreenplaySeriesPlanKey
+    = kComponentsScreenplaySeriesKey + QStringLiteral("/plan");
+const QString kComponentsScreenplaySeriesPlanSplitterStateKey
+    = kComponentsScreenplaySeriesPlanKey + QStringLiteral("/splitter-state");
+const QString kComponentsScreenplaySeriesPlanCardsSizeKey
+    = kComponentsScreenplaySeriesPlanKey + QStringLiteral("/cards-size");
+const QString kComponentsScreenplaySeriesPlanCardsRatioKey
+    = kComponentsScreenplaySeriesPlanKey + QStringLiteral("/cards-ratio");
+const QString kComponentsScreenplaySeriesPlanCardsSpacingKey
+    = kComponentsScreenplaySeriesPlanKey + QStringLiteral("/cards-spacing");
+//
 // комикс
 const QString kComponentsComicBookKey = kComponentsGroupKey + QStringLiteral("/comicbook");
 const QString kComponentsComicBookAvailableKey

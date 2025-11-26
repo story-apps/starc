@@ -418,6 +418,11 @@ private:
                              const QString& _viewMimeType);
 
     /**
+     * @brief  Создать документ заданного типа
+     */
+    Q_SLOT void createDocument(Domain::DocumentObjectType _type);
+
+    /**
      * @brief Обновить значение текущей модели и её представления
      */
     void updateCurrentDocument(BusinessLayer::AbstractModel* _model, const QString& _viewMimeType);

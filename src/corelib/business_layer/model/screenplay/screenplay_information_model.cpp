@@ -45,6 +45,8 @@ const QLatin1String kShowDialoguesNumbersKey("show_dialogues_numbers");
 const QLatin1String kChronomertyOptionsKey("chronmetry_options");
 const QLatin1String kCharactersOrderKey("characters_order");
 const QLatin1String kLocationsOrderKey("locations_order");
+const QLatin1String kStoryLinesKey("story_lines");
+const QLatin1String kStoryLineKey("story_line");
 } // namespace
 
 class ScreenplayInformationModel::Implementation
@@ -78,6 +80,7 @@ public:
 
     QVector<QString> charactersOrder;
     QVector<QString> locationsOrder;
+    QVector<QString> storyLines;
 };
 
 
@@ -113,6 +116,8 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
             kChronomertyOptionsKey,
             kCharactersOrderKey,
             kLocationsOrderKey,
+            kStoryLinesKey,
+            kStoryLineKey,
         },
         _parent)
     , d(new Implementation)
@@ -166,6 +171,8 @@ ScreenplayInformationModel::ScreenplayInformationModel(QObject* _parent)
     connect(this, &ScreenplayInformationModel::charactersOrderChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
     connect(this, &ScreenplayInformationModel::locationsOrderChanged, this,
+            &ScreenplayInformationModel::updateDocumentContent);
+    connect(this, &ScreenplayInformationModel::storyLinesChanged, this,
             &ScreenplayInformationModel::updateDocumentContent);
 }
 
@@ -684,6 +691,21 @@ void ScreenplayInformationModel::setLocationsOrder(const QVector<QString>& _loca
     emit locationsOrderChanged(d->locationsOrder);
 }
 
+QVector<QString> ScreenplayInformationModel::storyLines() const
+{
+    return d->storyLines;
+}
+
+void ScreenplayInformationModel::setStoryLines(const QVector<QString>& _storyLines)
+{
+    if (d->storyLines == _storyLines) {
+        return;
+    }
+
+    d->storyLines = _storyLines;
+    emit storyLinesChanged(d->storyLines);
+}
+
 void ScreenplayInformationModel::initDocument()
 {
     if (document() == nullptr) {
@@ -775,6 +797,15 @@ void ScreenplayInformationModel::initDocument()
         = documentNode.firstChildElement(kCharactersOrderKey).text().split(",").toVector();
     d->locationsOrder
         = documentNode.firstChildElement(kLocationsOrderKey).text().split(",").toVector();
+    QVector<QString> storyLines;
+    if (const auto storyLinesNode = documentNode.firstChildElement(kStoryLinesKey);
+        !storyLinesNode.isNull()) {
+        for (int index = 0; index < storyLinesNode.childNodes().size(); ++index) {
+            const auto child = storyLinesNode.childNodes().at(index);
+            storyLines.append(TextHelper::fromHtmlEscaped(child.toElement().text()));
+        }
+    }
+    d->storyLines = storyLines;
 }
 
 void ScreenplayInformationModel::clearDocument()
@@ -858,6 +889,11 @@ QByteArray ScreenplayInformationModel::toXml() const
     writeChronometerOptions(kChronomertyOptionsKey, d->chronometerOptions);
     writeTag(kCharactersOrderKey, d->charactersOrder.toList().join(','));
     writeTag(kLocationsOrderKey, d->locationsOrder.toList().join(','));
+    xml += QString("<%1>\n").arg(kStoryLinesKey).toUtf8();
+    for (const auto& storyLine : d->storyLines) {
+        writeTag(kStoryLineKey, TextHelper::toHtmlEscaped(storyLine));
+    }
+    xml += QString("</%1>\n").arg(kStoryLinesKey).toUtf8();
     xml += QString("</%1>").arg(kDocumentKey).toUtf8();
     return xml;
 }
@@ -905,6 +941,19 @@ ChangeCursor ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
                   _setter(node.text().split(_separator).toVector());
               }
           };
+    auto setHtmlEscapedVector =
+        [&documentNode](const QString& _key, std::function<void(const QVector<QString>&)> _setter) {
+            const auto node = documentNode.firstChildElement(_key);
+            QVector<QString> value;
+            if (!node.isNull()) {
+                for (int index = 0; index < node.childNodes().size(); ++index) {
+                    const auto child = node.childNodes().at(index);
+                    value.append(TextHelper::fromHtmlEscaped(child.toElement().text()));
+                }
+            }
+            _setter(value);
+        };
+
     auto setChronometerOptions
         = [&documentNode](const QString& _key,
                           std::function<void(const ChronometerOptions&)> _setter) {
@@ -969,6 +1018,7 @@ ChangeCursor ScreenplayInformationModel::applyPatch(const QByteArray& _patch)
     setChronometerOptions(kChronomertyOptionsKey, std::bind(&M::setChronometerOptions, this, _1));
     setVector(kCharactersOrderKey, std::bind(&M::setCharactersOrder, this, _1), ',');
     setVector(kLocationsOrderKey, std::bind(&M::setLocationsOrder, this, _1), ',');
+    setHtmlEscapedVector(kStoryLinesKey, std::bind(&M::setStoryLines, this, _1));
 
     return {};
 }

@@ -86,6 +86,9 @@ exists (screenplay_statistics/screenplay_statistics.pro) {
     SUBDIRS += screenplay_statistics
 }
 
+exists (screenplay_series_plan/screenplay_series_plan.pro) {
+    SUBDIRS += screenplay_series_plan
+}
 exists (screenplay_series_statistics/screenplay_series_statistics.pro) {
     SUBDIRS += screenplay_series_statistics
 }

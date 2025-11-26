@@ -585,6 +585,12 @@ SettingsStorage::Implementation::Implementation()
         defaultValues.insert(kComponentsScreenplayTimelineCardsSizeKey, 10);
         defaultValues.insert(kComponentsScreenplayTimelineCardsRatioKey, 2);
         defaultValues.insert(kComponentsScreenplayTimelineCardsSpacingKey, 20);
+        //
+        // Параметры посерийного плана
+        //
+        defaultValues.insert(kComponentsScreenplaySeriesPlanCardsSizeKey, 10);
+        defaultValues.insert(kComponentsScreenplaySeriesPlanCardsRatioKey, 2);
+        defaultValues.insert(kComponentsScreenplaySeriesPlanCardsSpacingKey, 20);
     }
     //
     // Параметры редактора комикса

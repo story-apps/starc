@@ -47,6 +47,7 @@ enum class SubscriptionType {
     //
     Features = 100000,
     ScreenplayBreakdownFeature = 100001,
+    ScreenplaySeriesPlanFeature = 100003,
     ScreenplaySeriesStatisticsFeature = 100002,
 };
 

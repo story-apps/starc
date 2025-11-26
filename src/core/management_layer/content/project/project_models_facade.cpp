@@ -215,14 +215,23 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
                 }
 
                 //
-                // Если сценарий является эпизодом сериала, нужно подгрузить информацию о сериале
+                // Если сценарий является эпизодом сериала, пробуем подгрузить информацию о сериале,
+                // чтобы изменения в сценарии были подхвачены на уровне сериала
                 //
                 if (screenplayItem->parent() != nullptr
                     && screenplayItem->parent()->type()
                         == Domain::DocumentObjectType::ScreenplaySeriesEpisodes) {
-                    documentsToLoad.append(
-                        DataStorageLayer::StorageFacade::documentStorage()->document(
-                            screenplayItem->parent()->uuid()));
+                    auto screenplaySeriesEpisodes
+                        = DataStorageLayer::StorageFacade::documentStorage()->document(
+                            screenplayItem->parent()->uuid());
+                    //
+                    // ... но при синхронизации документ сериала может быть ещё не загружен из
+                    //     облака, в такой ситуации просто дожидаемся его загрузки, а вся настройка
+                    //     произойдёт, когда он станет доступен
+                    //
+                    if (screenplaySeriesEpisodes != nullptr) {
+                        documentsToLoad.append(screenplaySeriesEpisodes);
+                    }
                 }
 
                 auto screenplayModel = new BusinessLayer::ScreenplayInformationModel;
@@ -524,13 +533,19 @@ BusinessLayer::AbstractModel* ProjectModelsFacade::modelFor(Domain::DocumentObje
 
                     episodesModel->setEpisodes(episodes);
                 };
-                updateEpisodes();
                 connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsInserted,
                         episodesModel, updateEpisodes, Qt::QueuedConnection);
                 connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsMoved,
                         episodesModel, updateEpisodes);
                 connect(d->projectStructureModel, &BusinessLayer::StructureModel::rowsRemoved,
                         episodesModel, updateEpisodes);
+                //
+                // Выполним сбор вложенных сценариев после того, как будет сконструирована сама
+                // модель, т.к. при инициилизации моделей сценариев они будут запрашивать модель
+                // сериала, поэтому нам нужно сперва сформировать до конца модель сериала и добавить
+                // её в список загруженных моделей
+                //
+                QMetaObject::invokeMethod(this, updateEpisodes, Qt::QueuedConnection);
 
                 model = episodesModel;
                 break;

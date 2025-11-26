@@ -126,6 +126,10 @@ public:
     void setLocationsOrder(const QVector<QString>& _locations);
     Q_SIGNAL void locationsOrderChanged(const QVector<QString>& _locations);
 
+    QVector<QString> storyLines() const;
+    void setStoryLines(const QVector<QString>& _storyLines);
+    Q_SIGNAL void storyLinesChanged(const QVector<QString>& _storyLines);
+
 protected:
     /**
      * @brief Реализация модели для работы с документами

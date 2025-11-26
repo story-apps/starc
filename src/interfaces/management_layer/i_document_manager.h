@@ -126,6 +126,27 @@ public:
     virtual void setAvailableCredits(int)
     {
     }
+
+
+    //
+    // Сигналы
+    //
+
+
+    // /**
+    //  * @brief Пользователь хочет проапгрейдить свой аккаунт
+    //  */
+    // void upgradeToProRequested();
+
+    // /**
+    //  * @brief Пользователь хочет проапгрейдить свой аккаунт
+    //  */
+    // void upgradeToCloudRequested();
+
+    // /**
+    //  * @brief Запрос на создание документа заданного типа
+    //  */
+    // void createDocumentRequested(Domain::DocumentObjectType _type);
 };
 
 } // namespace ManagementLayer

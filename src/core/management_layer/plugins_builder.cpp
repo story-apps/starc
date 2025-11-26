@@ -63,6 +63,7 @@ const QString kScreenplayBreakdownNavigatorMime = QStringLiteral("application/x-
 const QString kScreenplayStatisticsViewMime = QStringLiteral("application/x-starc/view/screenplay/statistics");
 const QString kScreenplayStatisticsNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay/statistics");
 //
+const QString kScreenplaySeriesEpisodesPlanEditorMime = QStringLiteral("application/x-starc/editor/screenplay-series/episodes/plan");
 const QString kScreenplaySeriesTitlePageEditorMime = QStringLiteral("application/x-starc/editor/screenplay-series/title-page");
 const QString kScreenplaySeriesTreatmentEditorMime = QStringLiteral("application/x-starc/editor/screenplay-series/treatment/text");
 const QString kScreenplaySeriesTreatmentNavigatorMime = QStringLiteral("application/x-starc/navigator/screenplay-series/treatment");
@@ -167,7 +168,7 @@ const QHash<QString, QVector<PluginsBuilder::EditorInfo>> kDocumentToEditors
         //
         { "application/x-starc/document/screenplay-series", { { "application/x-starc/editor/screenplay-series/information", u8"\U000f02fd" },
                                                               { "application/x-starc/editor/screenplay-series/parameters", u8"\U000f0493" } } },
-        { "application/x-starc/document/screenplay-series/episodes",   { { "application/x-starc/editor/screenplay-series/episodes", u8"\U000f02fd" } } },
+        { "application/x-starc/document/screenplay-series/episodes",   { { kScreenplaySeriesEpisodesPlanEditorMime, u8"\U000f0554" } } },
         { "application/x-starc/document/screenplay-series/title-page", { { kScreenplaySeriesTitlePageEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/screenplay-series/synopsis",   { { kSimpleTextEditorMime, u8"\U000f09ed" } } },
         { "application/x-starc/document/screenplay-series/treatment",  { { kScreenplaySeriesTreatmentEditorMime, u8"\U000f09ed" },
@@ -262,7 +263,7 @@ const QHash<QString, QString> kMimeToPlugin
         //
         { "application/x-starc/editor/screenplay-series/information", "*screenplayseriesinformationplugin*" },
         { "application/x-starc/editor/screenplay-series/parameters", "*screenplayseriesparametersplugin*" },
-        { "application/x-starc/editor/screenplay-series/episodes", "*screenplayseriesepisodesplugin*" },
+        { kScreenplaySeriesEpisodesPlanEditorMime, "*screenplayseriesplanplugin*" },
         { kScreenplaySeriesTitlePageEditorMime, "*titlepageplugin*" },
         { kScreenplaySeriesTreatmentEditorMime, "*screenplayseriestreatmentplugin*" },
         { kScreenplaySeriesTreatmentNavigatorMime, "*screenplayseriestreatmentstructureplugin*" },
@@ -581,9 +582,9 @@ QString PluginsBuilder::editorDescription(const QString& _documentMimeType,
                   QApplication::translate("ProjectPluginsBuilder", "Information about series") },
                 { "application/x-starc/editor/screenplay-series/parameters",
                   QApplication::translate("ProjectPluginsBuilder", "Series parameters") } } },
-            { "application/x-starc/document/screenplay-series/plan",
-              { { "application/x-starc/editor/screenplay-series/plan",
-                  QApplication::translate("ProjectPluginsBuilder", "Series plan") } } },
+            { "application/x-starc/document/screenplay-series/episodes",
+              { { kScreenplaySeriesEpisodesPlanEditorMime,
+                  QApplication::translate("ProjectPluginsBuilder", "Episodes plan") } } },
             { "application/x-starc/document/screenplay-series/title-page",
               { { kScreenplaySeriesTitlePageEditorMime,
                   QApplication::translate("ProjectPluginsBuilder", "Title page text") } } },

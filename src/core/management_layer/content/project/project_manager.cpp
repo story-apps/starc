@@ -4680,6 +4680,68 @@ QVector<QUuid> ProjectManager::documentBundle(const QUuid& _documentUuid) const
         break;
     }
 
+    case Domain::DocumentObjectType::ScreenplaySeriesEpisodes: {
+        //
+        // Локации
+        //
+        for (int index = 0; index < topLevelParent->childCount(); ++index) {
+            auto childItem = topLevelParent->childAt(index);
+            if (childItem->type() == Domain::DocumentObjectType::Locations) {
+                //
+                // ... каждая из локаций
+                //
+                for (int index = 0; index < childItem->childCount(); ++index) {
+                    documents.append(childItem->childAt(index)->uuid());
+                }
+                //
+                // ... сам группирующий документ
+                //
+                documents.append(childItem->uuid());
+                break;
+            }
+        }
+        //
+        // Персонажи
+        //
+        for (int index = 0; index < topLevelParent->childCount(); ++index) {
+            auto childItem = topLevelParent->childAt(index);
+            if (childItem->type() == Domain::DocumentObjectType::Characters) {
+                //
+                // ... каждый из персонажей
+                //
+                for (int index = 0; index < childItem->childCount(); ++index) {
+                    documents.append(childItem->childAt(index)->uuid());
+                }
+                //
+                // ... сам группирующий документ
+                //
+                documents.append(childItem->uuid());
+                break;
+            }
+        }
+
+        //
+        // Сначала комплекты документов сценариев
+        //
+        for (int screenplayIndex = 0; screenplayIndex < item->childCount(); ++screenplayIndex) {
+            const auto screenplayItem = item->childAt(screenplayIndex);
+            documents.append(screenplayItem->uuid());
+            for (int index = 0; index < screenplayItem->childCount(); ++index) {
+                auto childItem = screenplayItem->childAt(index);
+                documents.append(childItem->uuid());
+            }
+        }
+        //
+        // Информация о посерийнике
+        //
+        documents.append(item->parent()->uuid());
+        //
+        // А уже потом сам документ посерийника
+        //
+        documents.append(_documentUuid);
+        break;
+    }
+
     default: {
         //
         // Для обычных документов загружаем лишь сам документ
@@ -5186,6 +5248,12 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             connect(documentManager, SIGNAL(linkActivated(QUuid, QModelIndex, QString)), this,
                     SLOT(activateLink(QUuid, QModelIndex, QString)), Qt::UniqueConnection);
         }
+        if (documentManager->metaObject()->indexOfSignal(
+                "createDocumentRequested(Domain::DocumentObjectType)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(createDocumentRequested(Domain::DocumentObjectType)),
+                    this, SLOT(createDocument(Domain::DocumentObjectType)), Qt::UniqueConnection);
+        }
         if (documentManager->metaObject()->indexOfSignal("rephraseTextRequested(QString,QString)")
             != invalidSignalIndex) {
             connect(documentManager, SIGNAL(rephraseTextRequested(QString, QString)), this,
@@ -5584,6 +5652,21 @@ void ProjectManager::activateLink(const QUuid& _documentUuid, const QModelIndex&
     if (d->view.right->isVisible()) {
         d->switchViews(withActivation);
     }
+}
+
+void ProjectManager::createDocument(Domain::DocumentObjectType _type)
+{
+    //
+    // Определим индекс родительского элемента, куда будет вставлен новый документ
+    //
+    const auto currentItemIndex
+        = d->projectStructureProxyModel->mapToSource(d->navigator->currentIndex());
+    auto parentIndex = currentItemIndex;
+
+    //
+    // Создаём новый документ
+    //
+    d->projectStructureModel->addDocument(_type, {}, parentIndex, {}, true, 0);
 }
 
 void ProjectManager::updateCurrentDocument(BusinessLayer::AbstractModel* _model,

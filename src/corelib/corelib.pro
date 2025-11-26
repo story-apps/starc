@@ -304,6 +304,9 @@ SOURCES += \
     business_layer/model/screenplay/screenplay_statistics_model.cpp \
     business_layer/model/screenplay/screenplay_synopsis_model.cpp \
     business_layer/model/screenplay/series/screenplay_series_episodes_model.cpp \
+    business_layer/model/screenplay/series/screenplay_series_episodes_model_episode_item.cpp \
+    business_layer/model/screenplay/series/screenplay_series_episodes_model_item.cpp \
+    business_layer/model/screenplay/series/screenplay_series_episodes_model_story_line_item.cpp \
     business_layer/model/screenplay/series/screenplay_series_information_model.cpp \
     business_layer/model/screenplay/series/screenplay_series_statistics_model.cpp \
     business_layer/model/screenplay/text/screenplay_text_block_parser.cpp \
@@ -683,6 +686,9 @@ HEADERS += \
     business_layer/model/screenplay/screenplay_statistics_model.h \
     business_layer/model/screenplay/screenplay_synopsis_model.h \
     business_layer/model/screenplay/series/screenplay_series_episodes_model.h \
+    business_layer/model/screenplay/series/screenplay_series_episodes_model_episode_item.h \
+    business_layer/model/screenplay/series/screenplay_series_episodes_model_item.h \
+    business_layer/model/screenplay/series/screenplay_series_episodes_model_story_line_item.h \
     business_layer/model/screenplay/series/screenplay_series_information_model.h \
     business_layer/model/screenplay/series/screenplay_series_statistics_model.h \
     business_layer/model/screenplay/text/screenplay_text_block_parser.h \

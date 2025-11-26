@@ -196,10 +196,10 @@ void CardItemParametersView::Implementation::initCardBeats()
         cardBeat->setLabelVisible(false);
         cardBeat->setLabel({});
         cardBeat->setHelper({});
-        cardBeat->setBackgroundColor(Ui::DesignSystem::color().onPrimary());
-        cardBeat->setTextColor(Ui::DesignSystem::color().onPrimary());
+        cardBeat->setBackgroundColor(DesignSystem::color().onPrimary());
+        cardBeat->setTextColor(DesignSystem::color().onPrimary());
         cardBeat->setCustomMargins(
-            { Ui::DesignSystem::layout().px24(), 0, Ui::DesignSystem::layout().px24(), 0 });
+            { DesignSystem::layout().px24(), 0, DesignSystem::layout().px24(), 0 });
     }
 
     for (int index = 1; index < beats.size(); ++index) {
@@ -209,23 +209,23 @@ void CardItemParametersView::Implementation::initCardBeats()
 
     beats.constFirst()->setLabelVisible(true);
     beats.constFirst()->setLabel(tr("Description"));
-    beats.constFirst()->setCustomMargins({ Ui::DesignSystem::layout().px24(),
-                                           Ui::DesignSystem::layout().px16(),
-                                           Ui::DesignSystem::layout().px24(), 0 });
+    beats.constFirst()->setCustomMargins({ DesignSystem::layout().px24(),
+                                           DesignSystem::layout().px16(),
+                                           DesignSystem::layout().px24(), 0 });
     beats.constLast()->setHelper(tr("Each line is a separate beat"));
 }
 
 void CardItemParametersView::Implementation::updateCustomNumberMargins()
 {
     const auto isNumberingFixed = !autoNumbering->isVisible();
-    customNumber->setCustomMargins({ Ui::DesignSystem::layout().px24(),
-                                     (isNumberingFixed ? Ui::DesignSystem::layout().px16() : 0.0),
-                                     Ui::DesignSystem::layout().px24(), 0.0 });
+    customNumber->setCustomMargins({ DesignSystem::layout().px24(),
+                                     (isNumberingFixed ? DesignSystem::layout().px16() : 0.0),
+                                     DesignSystem::layout().px24(), 0.0 });
 }
 
 void CardItemParametersView::Implementation::updateTagsSize()
 {
-    tags->setFixedHeight(tagsModel->rowCount() * Ui::DesignSystem::treeOneLineItem().height());
+    tags->setFixedHeight(tagsModel->rowCount() * DesignSystem::treeOneLineItem().height());
 }
 
 void CardItemParametersView::Implementation::notifyTagsChanged()
@@ -482,7 +482,7 @@ void CardItemParametersView::setColor(const QColor& _color)
     d->colorPickerPopup->setSelectedColor(_color);
     const bool isColorSet = _color.isValid();
     d->title->setTrailingIcon(isColorSet ? u8"\U000F0765" : u8"\U000f0766");
-    d->title->setTrailingIconColor(isColorSet ? _color : Ui::DesignSystem::color().onPrimary());
+    d->title->setTrailingIconColor(isColorSet ? _color : DesignSystem::color().onPrimary());
 }
 
 void CardItemParametersView::setTitle(const QString& _title)
@@ -812,12 +812,12 @@ void CardItemParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _e
 {
     Widget::designSystemChangeEvent(_event);
 
-    setBackgroundColor(Ui::DesignSystem::color().primary());
+    setBackgroundColor(DesignSystem::color().primary());
 
-    d->colorPickerPopup->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->colorPickerPopup->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->colorPickerPopup->setBackgroundColor(DesignSystem::color().primary());
+    d->colorPickerPopup->setTextColor(DesignSystem::color().onPrimary());
     //
-    auto labelMargins = Ui::DesignSystem::label().margins().toMargins();
+    auto labelMargins = DesignSystem::label().margins().toMargins();
     labelMargins.setTop(0);
     if (isLeftToRight()) {
         labelMargins.setRight(0);
@@ -829,23 +829,22 @@ void CardItemParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _e
              d->numberingTitle,
              d->tagsTitle,
          }) {
-        label->setBackgroundColor(Ui::DesignSystem::color().primary());
-        label->setTextColor(Ui::DesignSystem::color().onPrimary());
+        label->setBackgroundColor(DesignSystem::color().primary());
+        label->setTextColor(DesignSystem::color().onPrimary());
         label->setContentsMargins(labelMargins);
     }
     auto numberingTitleMargins = labelMargins;
-    numberingTitleMargins.setTop(Ui::DesignSystem::layout().px8());
+    numberingTitleMargins.setTop(DesignSystem::layout().px8());
     d->numberingTitle->setContentsMargins(numberingTitleMargins);
     //
     for (auto iconButton : {
              d->addTagButton,
          }) {
-        iconButton->setBackgroundColor(Ui::DesignSystem::color().primary());
-        iconButton->setTextColor(Ui::DesignSystem::color().onPrimary());
+        iconButton->setBackgroundColor(DesignSystem::color().primary());
+        iconButton->setTextColor(DesignSystem::color().onPrimary());
     }
-    const QMargins lastIconButtonMargins(isLeftToRight() ? 0 : Ui::DesignSystem::layout().px12(), 0,
-                                         isLeftToRight() ? Ui::DesignSystem::layout().px12() : 0,
-                                         0);
+    const QMargins lastIconButtonMargins(isLeftToRight() ? 0 : DesignSystem::layout().px12(), 0,
+                                         isLeftToRight() ? DesignSystem::layout().px12() : 0, 0);
     d->addTagButton->setContentsMargins(lastIconButtonMargins);
     //
     for (auto textField : std::vector<TextField*>{
@@ -857,39 +856,39 @@ void CardItemParametersView::designSystemChangeEvent(DesignSystemChangeEvent* _e
              d->stamp,
              d->customNumber,
          }) {
-        textField->setBackgroundColor(Ui::DesignSystem::color().onPrimary());
-        textField->setTextColor(Ui::DesignSystem::color().onPrimary());
-        textField->setCustomMargins({ Ui::DesignSystem::layout().px24(),
-                                      Ui::DesignSystem::compactLayout().px16(),
-                                      Ui::DesignSystem::layout().px24(), 0.0 });
+        textField->setBackgroundColor(DesignSystem::color().onPrimary());
+        textField->setTextColor(DesignSystem::color().onPrimary());
+        textField->setCustomMargins({ DesignSystem::layout().px24(),
+                                      DesignSystem::compactLayout().px16(),
+                                      DesignSystem::layout().px24(), 0.0 });
     }
     d->updateCustomNumberMargins();
     //
-    d->storyDay->completer()->setTextColor(Ui::DesignSystem::color().onBackground());
-    d->storyDay->completer()->setBackgroundColor(Ui::DesignSystem::color().background());
+    d->storyDay->completer()->setTextColor(DesignSystem::color().onBackground());
+    d->storyDay->completer()->setBackgroundColor(DesignSystem::color().background());
     //
     d->datePickerPopup->setBackgroundColor(DesignSystem::color().background());
     d->datePickerPopup->setTextColor(DesignSystem::color().onBackground());
     //
     d->initCardBeats();
     //
-    d->autoNumbering->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->autoNumbering->setTextColor(Ui::DesignSystem::color().onPrimary());
-    d->autoNumbering->setContentsMargins(
-        isLeftToRight() ? 0 : Ui::DesignSystem::layout().px12(), Ui::DesignSystem::layout().px12(),
-        isLeftToRight() ? Ui::DesignSystem::layout().px12() : 0, 0);
+    d->autoNumbering->setBackgroundColor(DesignSystem::color().primary());
+    d->autoNumbering->setTextColor(DesignSystem::color().onPrimary());
+    d->autoNumbering->setContentsMargins(isLeftToRight() ? 0 : DesignSystem::layout().px12(),
+                                         DesignSystem::layout().px12(),
+                                         isLeftToRight() ? DesignSystem::layout().px12() : 0, 0);
     //
-    d->eatNumber->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->eatNumber->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->eatNumber->setBackgroundColor(DesignSystem::color().primary());
+    d->eatNumber->setTextColor(DesignSystem::color().onPrimary());
     //
-    d->tags->setBackgroundColor(Ui::DesignSystem::color().primary());
-    d->tags->setTextColor(Ui::DesignSystem::color().onPrimary());
+    d->tags->setBackgroundColor(DesignSystem::color().primary());
+    d->tags->setTextColor(DesignSystem::color().onPrimary());
 
     d->contentLayout->setContentsMargins(
         0.0 + (isLeftToRight() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
-        Ui::DesignSystem::layout().px8(),
+        DesignSystem::layout().px8(),
         0.0 + (isRightToLeft() ? 0.0 : DesignSystem::scrollBar().minimumSize()),
-        Ui::DesignSystem::layout().px24());
+        DesignSystem::layout().px24());
 }
 
 } // namespace Ui
