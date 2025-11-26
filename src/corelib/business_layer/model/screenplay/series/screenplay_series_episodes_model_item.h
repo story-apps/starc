@@ -8,7 +8,7 @@ namespace BusinessLayer {
 /**
  * @brief Тип элемента модели проектов
  */
-enum class ScreenplaySeriesEpisodesModelItemType {
+enum class CORE_LIBRARY_EXPORT ScreenplaySeriesEpisodesModelItemType {
     //
     // Корень дерева
     //
@@ -26,7 +26,7 @@ enum class ScreenplaySeriesEpisodesModelItemType {
 /**
  * @brief Абстрактный класс элемента модели
  */
-class ScreenplaySeriesEpisodesModelItem : public AbstractModelItem
+class CORE_LIBRARY_EXPORT ScreenplaySeriesEpisodesModelItem : public AbstractModelItem
 {
 public:
     ScreenplaySeriesEpisodesModelItem();

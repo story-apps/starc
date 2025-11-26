@@ -10,7 +10,8 @@ namespace BusinessLayer {
 /**
  * @brief Файл проекта
  */
-class ScreenplaySeriesEpisodesModelStoryLineItem : public ScreenplaySeriesEpisodesModelItem
+class CORE_LIBRARY_EXPORT ScreenplaySeriesEpisodesModelStoryLineItem
+    : public ScreenplaySeriesEpisodesModelItem
 {
 public:
     ScreenplaySeriesEpisodesModelStoryLineItem();

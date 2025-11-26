@@ -10,7 +10,8 @@ namespace BusinessLayer {
 /**
  * @brief Эпизод
  */
-class ScreenplaySeriesEpisodesModelEpisodeItem : public ScreenplaySeriesEpisodesModelItem
+class CORE_LIBRARY_EXPORT ScreenplaySeriesEpisodesModelEpisodeItem
+    : public ScreenplaySeriesEpisodesModelItem
 {
 public:
     ScreenplaySeriesEpisodesModelEpisodeItem();
