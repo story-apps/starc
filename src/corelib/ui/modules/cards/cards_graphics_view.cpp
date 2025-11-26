@@ -131,6 +131,8 @@ public:
         }
     } cardsPositionsInterval;
 
+    bool isKanbanLikeStyle = false;
+
     bool cardsAnimationsAvailable = true;
     QHash<QGraphicsRectItem*, QPointer<QVariantAnimation>> cardsAnimations;
 };
@@ -1533,10 +1535,17 @@ void CardsGraphicsView::Implementation::reorderCardsInColumns()
             isAct = true;
             isFullWidth = true;
             hasChildren = card->childCount() > 0;
-            xDelta = isLeftToRight ? Ui::DesignSystem::layout().px(48)
-                                   : Ui::DesignSystem::layout().px24();
-            widthDelta = isLeftToRight ? Ui::DesignSystem::layout().px24()
-                                       : Ui::DesignSystem::layout().px(48);
+            if (isKanbanLikeStyle) {
+                xDelta = isLeftToRight ? Ui::DesignSystem::layout().px(3)
+                                       : Ui::DesignSystem::layout().px4();
+                widthDelta = isLeftToRight ? Ui::DesignSystem::layout().px4()
+                                           : Ui::DesignSystem::layout().px(3);
+            } else {
+                xDelta = isLeftToRight ? Ui::DesignSystem::layout().px(48)
+                                       : Ui::DesignSystem::layout().px24();
+                widthDelta = isLeftToRight ? Ui::DesignSystem::layout().px24()
+                                           : Ui::DesignSystem::layout().px(48);
+            }
             containersStack.push(card->modelItemIndex());
         } else if (card->isContainer() && !card->isTopLevel()) {
             isFullWidth = card->isOpened();
@@ -2537,6 +2546,12 @@ void CardsGraphicsView::restoreState(const QByteArray& _state)
     }
 
     ScalableGraphicsView::restoreState(_state);
+}
+
+void CardsGraphicsView::setViewStyle(bool _kanbanLike)
+{
+    d->isKanbanLikeStyle = _kanbanLike;
+    d->reorderCardsImpl();
 }
 
 bool CardsGraphicsView::excludeFromFlatIndex(const QModelIndex& _index) const
