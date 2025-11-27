@@ -269,7 +269,7 @@ ScreenplaySeriesEpisodesModelItem* ScreenplaySeriesEpisodesModel::appendStoryLin
             = d->episodes[index - 1]; // отнимаем единицу, т.к. в списке нет фейкового эпизода
         auto episodeStoryLines = episode->informationModel()->storyLines();
         episodeStoryLines.append(QString());
-        // Q_ASSERT(episodeStoryLines.size() == d->storyLines.size());
+        Q_ASSERT(episodeStoryLines.size() == d->storyLines.size());
         episode->informationModel()->setStoryLines(episodeStoryLines);
 
         auto episodeItem
