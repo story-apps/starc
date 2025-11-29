@@ -74,6 +74,7 @@ jobs:
           make -j4
 
       - name: Upload debug symbols
+        if: github.ref == 'refs/heads/master'
         uses: BugSplat-Git/symbol-upload@main
         with:
           username: "${{ secrets.BUGSPLAT_USER }}"
@@ -183,6 +184,7 @@ jobs:
           make -j4
 
       - name: Upload debug symbols
+        if: github.ref == 'refs/heads/master'
         uses: BugSplat-Git/symbol-upload@main
         with:
           username: "${{ secrets.BUGSPLAT_USER }}"

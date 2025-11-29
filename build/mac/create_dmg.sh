@@ -8,6 +8,16 @@ find Story\ Architect.app -name "*.dSYM" -print0 | xargs -0 rm -rf
 macdeployqt Story\ Architect.app
 
 #
+# проверяем наличие crashpad_handler
+#
+if [ ! -f "Story Architect.app/Contents/MacOS/crashpad/crashpad_handler" ]; then
+    echo "Error: crashpad_handler not found in Story Architect.app/Contents/MacOS/crashpad/"
+    echo "Make sure crashpad was built and copied during the build process."
+    exit 1
+fi
+chmod +x "Story Architect.app/Contents/MacOS/crashpad/crashpad_handler"
+
+#
 # подпишем app-файл
 #
 echo $APPLE_CERTIFICATE | base64 --decode > certificate.p12

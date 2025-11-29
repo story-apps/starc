@@ -96,16 +96,16 @@ win32 {
 # Копируем crashpad_handler в директорию сборки
 #
 macx {
-    QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad"
-    QMAKE_POST_LINK += " && cp $$CRASHPAD_HANDLER_SRC $$OUT_PWD/crashpad/crashpad_handler"
+    QMAKE_POST_LINK += "mkdir -p $$DESTDIR/../MacOS/crashpad"
+    QMAKE_POST_LINK += " && cp $$CRASHPAD_HANDLER_SRC $$DESTDIR/../MacOS/crashpad/crashpad_handler"
 }
 win32 {
-    QMAKE_POST_LINK += "mkdir $$shell_path($$OUT_PWD)\\crashpad"
-    QMAKE_POST_LINK += " & copy /y $$shell_path($$CRASHPAD_HANDLER_SRC) $$shell_path($$OUT_PWD)\\crashpad\\crashpad_handler.exe"
+    QMAKE_POST_LINK += "mkdir $$shell_path($$DESTDIR)\\..\\crashpad"
+    QMAKE_POST_LINK += " & copy /y $$shell_path($$CRASHPAD_HANDLER_SRC) $$shell_path($$DESTDIR)\\..\\crashpad\\crashpad_handler.exe"
 }
 linux {
-    QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad"
-    QMAKE_POST_LINK += " && cp $$CRASHPAD_HANDLER_SRC $$OUT_PWD/crashpad/crashpad_handler"
+    QMAKE_POST_LINK += "mkdir -p $$DESTDIR/../crashpad"
+    QMAKE_POST_LINK += " && cp $$CRASHPAD_HANDLER_SRC $$DESTDIR/../crashpad/crashpad_handler"
 }
 #
 
