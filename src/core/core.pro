@@ -47,45 +47,65 @@ isEmpty(CRASHPAD_ARCH) {
     CRASHPAD_ARCH = x64
 }
 
-# Определяем путь к объектам crashpad в зависимости от режима сборки
+#
+# Определяем базовый путь к директории сборки crashpad
 # Для macOS universal build используем специальный путь
+#
 macx:equals(CRASHPAD_ARCH, universal) {
     CONFIG(debug, debug|release) {
-        CRASHPAD_OBJ = $$PWD/../../bin/crashpad/debug_universal/obj
-        CRASHPAD_GEN = $$PWD/../../bin/crashpad/debug_universal/gen
+        CRASHPAD_BUILD = $$PWD/../../bin/crashpad/debug_universal
     }
     CONFIG(release, debug|release) {
-        CRASHPAD_OBJ = $$PWD/../../bin/crashpad/release_universal/obj
-        CRASHPAD_GEN = $$PWD/../../bin/crashpad/release_universal/gen
+        CRASHPAD_BUILD = $$PWD/../../bin/crashpad/release_universal
     }
 } else {
     CONFIG(debug, debug|release) {
-        CRASHPAD_OBJ = $$PWD/../../bin/crashpad/debug_$${CRASHPAD_ARCH}/obj
-        CRASHPAD_GEN = $$PWD/../../bin/crashpad/debug_$${CRASHPAD_ARCH}/gen
+        CRASHPAD_BUILD = $$PWD/../../bin/crashpad/debug_$${CRASHPAD_ARCH}
     }
     CONFIG(release, debug|release) {
-        CRASHPAD_OBJ = $$PWD/../../bin/crashpad/release_$${CRASHPAD_ARCH}/obj
-        CRASHPAD_GEN = $$PWD/../../bin/crashpad/release_$${CRASHPAD_ARCH}/gen
+        CRASHPAD_BUILD = $$PWD/../../bin/crashpad/release_$${CRASHPAD_ARCH}
     }
 }
 
 INCLUDEPATH += $$CRASHPAD_SRC
 INCLUDEPATH += $$CRASHPAD_SRC/third_party/mini_chromium/mini_chromium
-INCLUDEPATH += $$CRASHPAD_GEN
+INCLUDEPATH += $$CRASHPAD_BUILD/gen
 
-LIBS += -L$$CRASHPAD_OBJ/client/ -lcommon
-LIBS += -L$$CRASHPAD_OBJ/client/ -lclient
-LIBS += -L$$CRASHPAD_OBJ/util/ -lutil
-LIBS += -L$$CRASHPAD_OBJ/third_party/mini_chromium/mini_chromium/base/ -lbase
+LIBS += -L$$CRASHPAD_BUILD/obj/client/ -lcommon
+LIBS += -L$$CRASHPAD_BUILD/obj/client/ -lclient
+LIBS += -L$$CRASHPAD_BUILD/obj/util/ -lutil
+LIBS += -L$$CRASHPAD_BUILD/obj/third_party/mini_chromium/mini_chromium/base/ -lbase
 win32 {
     LIBS += -lAdvapi32
 }
 macx {
-    LIBS += -L$$CRASHPAD_OBJ/util/ -lmig_output
+    LIBS += -L$$CRASHPAD_BUILD/obj/util/ -lmig_output
 
     LIBS += -L/usr/lib/ -lbsm
     LIBS += -framework AppKit
     LIBS += -framework Security
+}
+
+win32 {
+    CRASHPAD_HANDLER_SRC = $$CRASHPAD_BUILD/crashpad_handler.exe
+} else {
+    CRASHPAD_HANDLER_SRC = $$CRASHPAD_BUILD/crashpad_handler
+}
+
+#
+# Копируем crashpad_handler в директорию сборки
+#
+macx {
+    QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad"
+    QMAKE_POST_LINK += " && cp $$CRASHPAD_HANDLER_SRC $$OUT_PWD/crashpad/crashpad_handler"
+}
+win32 {
+    QMAKE_POST_LINK += "mkdir $$shell_path($$OUT_PWD)\\crashpad"
+    QMAKE_POST_LINK += " & copy /y $$shell_path($$CRASHPAD_HANDLER_SRC) $$shell_path($$OUT_PWD)\\crashpad\\crashpad_handler.exe"
+}
+linux {
+    QMAKE_POST_LINK += "mkdir -p $$OUT_PWD/crashpad"
+    QMAKE_POST_LINK += " && cp $$CRASHPAD_HANDLER_SRC $$OUT_PWD/crashpad/crashpad_handler"
 }
 #
 
@@ -308,5 +328,5 @@ RESOURCES += \
 
 mac {
     load(resolve_target)
-    QMAKE_POST_LINK += "install_name_tool -change libcorelib.1.dylib @executable_path/../Frameworks/libcorelib.dylib $$QMAKE_RESOLVED_TARGET"
+    QMAKE_POST_LINK += " && install_name_tool -change libcorelib.1.dylib @executable_path/../Frameworks/libcorelib.dylib $$QMAKE_RESOLVED_TARGET"
 }
