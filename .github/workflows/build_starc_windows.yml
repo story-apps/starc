@@ -40,7 +40,13 @@ jobs:
       - name: Add info about dev build to the env
         shell: bash
         run: |
-          echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
+          DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
+          echo "DEV_BUILD=$DEV_BUILD" >> $GITHUB_ENV
+          if [ "$DEV_BUILD" -gt "0" ]; then
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}} dev $DEV_BUILD" >> $GITHUB_ENV
+          else
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}}" >> $GITHUB_ENV
+          fi
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -109,7 +115,7 @@ jobs:
           password: "${{ secrets.BUGSPLAT_PASSWORD }}"
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-win"
-          version: ${{env.APP_VERSION}}
+          version: ${{env.BUGSPLAT_VERSION}}
           files: "*.{pdb,exe,dll}"
           directory: "src/_build"
           node-version: "22"
@@ -122,7 +128,7 @@ jobs:
           password: "${{ secrets.BUGSPLAT_PASSWORD }}"
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-win"
-          version: ${{env.APP_VERSION}}
+          version: ${{env.BUGSPLAT_VERSION}}
           files: "*.{pdb,dll}"
           directory: "src/_build/plugins"
           node-version: "22"
@@ -194,7 +200,13 @@ jobs:
       - name: Add info about dev build to the env
         shell: bash
         run: |
-          echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
+          DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
+          echo "DEV_BUILD=$DEV_BUILD" >> $GITHUB_ENV
+          if [ "$DEV_BUILD" -gt "0" ]; then
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}} dev $DEV_BUILD" >> $GITHUB_ENV
+          else
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}}" >> $GITHUB_ENV
+          fi
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -261,7 +273,7 @@ jobs:
           password: "${{ secrets.BUGSPLAT_PASSWORD }}"
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-win"
-          version: ${{env.APP_VERSION}}
+          version: ${{env.BUGSPLAT_VERSION}}
           files: "*.{pdb,exe,dll}"
           directory: "src/_build"
           node-version: "22"
@@ -274,7 +286,7 @@ jobs:
           password: "${{ secrets.BUGSPLAT_PASSWORD }}"
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-win"
-          version: ${{env.APP_VERSION}}
+          version: ${{env.BUGSPLAT_VERSION}}
           files: "*.{pdb,dll}"
           directory: "src/_build/plugins"
           node-version: "22"
@@ -346,7 +358,13 @@ jobs:
       - name: Add info about dev build to the env
         shell: bash
         run: |
-          echo "DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)" >> $GITHUB_ENV
+          DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
+          echo "DEV_BUILD=$DEV_BUILD" >> $GITHUB_ENV
+          if [ "$DEV_BUILD" -gt "0" ]; then
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}} dev $DEV_BUILD" >> $GITHUB_ENV
+          else
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}}" >> $GITHUB_ENV
+          fi
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -415,7 +433,7 @@ jobs:
           password: "${{ secrets.BUGSPLAT_PASSWORD }}"
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-win"
-          version: ${{env.APP_VERSION}}
+          version: ${{env.BUGSPLAT_VERSION}}
           files: "*.{pdb,exe,dll}"
           directory: "src/_build"
           node-version: "22"
@@ -428,7 +446,7 @@ jobs:
           password: "${{ secrets.BUGSPLAT_PASSWORD }}"
           database: "${{ secrets.BUGSPLAT_DATABASE }}"
           application: "starcapp-win"
-          version: ${{env.APP_VERSION}}
+          version: ${{env.BUGSPLAT_VERSION}}
           files: "*.{pdb,dll}"
           directory: "src/_build/plugins"
           node-version: "22"
