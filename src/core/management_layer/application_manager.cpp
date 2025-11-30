@@ -646,7 +646,13 @@ void ApplicationManager::Implementation::sendCrashInfo()
                 loader->setRequestMethod(NetworkRequestMethod::Post);
                 loader->clearRequestAttributes();
                 loader->addRequestAttribute("product", bugsplatAppName());
-                loader->addRequestAttribute("version", QApplication::applicationVersion());
+                QString appVersion = QApplication::applicationVersion();
+#if QT_VERSION_MAJOR == 5
+                appVersion += "-qt5";
+#elif QT_VERSION_MAJOR == 6
+                appVersion += "-qt6";
+#endif
+                loader->addRequestAttribute("version", appVersion);
                 loader->addRequestAttribute("qt", QString("Qt") + QT_VERSION_STR);
                 loader->addRequestAttribute("arch", QSysInfo::currentCpuArchitecture());
                 loader->addRequestAttribute("user", dialog->contactEmail());
@@ -1287,7 +1293,12 @@ bool ApplicationManager::Implementation::initializeCrashpad()
 
     const QString dbName = kBugsplatDatabaseName;
     const QString appName = bugsplatAppName();
-    const QString appVersion = QApplication::applicationVersion();
+    QString appVersion = QApplication::applicationVersion();
+#if QT_VERSION_MAJOR == 5
+    appVersion += "-qt5";
+#elif QT_VERSION_MAJOR == 6
+    appVersion += "-qt6";
+#endif
 
     const QString url = "https://" + dbName + ".bugsplat.com/post/bp/crash/crashpad.php";
 
@@ -1306,11 +1317,19 @@ bool ApplicationManager::Implementation::initializeCrashpad()
     //
     // Инициализируем базу данных crashpad
     //
+#if defined(Q_OS_WIN)
+    const QString reportsPath = QString::fromStdWString(reportsDir.value());
+#else
+    const QString reportsPath = QString::fromStdString(reportsDir.value());
+#endif
+    Log::info("Initializing Crashpad database at: %1", reportsPath);
     std::unique_ptr<crashpad::CrashReportDatabase> database
         = crashpad::CrashReportDatabase::Initialize(reportsDir);
     if (database == nullptr) {
+        Log::error("Failed to initialize Crashpad database");
         return false;
     }
+    Log::info("Crashpad database initialized successfully");
 
     //
     // Отключаем автоматическую отправку отчетов
@@ -1332,14 +1351,21 @@ bool ApplicationManager::Implementation::initializeCrashpad()
 #else
         attachments.push_back(base::FilePath(logFilePath.toStdString()));
 #endif
+        Log::info("Crashpad will attach log file: %1", logFilePath);
     }
 
     //
     // Запускаем crashpad
     //
     crashpad::CrashpadClient* client = new crashpad::CrashpadClient();
+    Log::info("Starting Crashpad handler...");
     bool status = client->StartHandler(handler, reportsDir, metricsDir, url.toStdString(),
                                        annotations.toStdMap(), arguments, true, true, attachments);
+    if (status) {
+        Log::info("Crashpad handler started successfully");
+    } else {
+        Log::error("Failed to start Crashpad handler");
+    }
     return status;
 }
 
@@ -1860,7 +1886,7 @@ bool ApplicationManager::Implementation::openProject(const QString& _path)
         return false;
     }
 
-    *(volatile int *)0 = 0;
+    *(volatile int*)0 = 0;
 
     if (projectsManager->project(_path) != nullptr && projectsManager->project(_path)->isLocal()
         && !QFileInfo::exists(_path)) {

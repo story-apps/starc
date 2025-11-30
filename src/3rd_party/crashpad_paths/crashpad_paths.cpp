@@ -1,5 +1,7 @@
 #include "crashpad_paths.h"
 
+#include <QStandardPaths>
+
 #if defined(Q_OS_WIN)
 #define NOMINMAX
 #include <filesystem>
@@ -105,7 +107,7 @@ QString CrashpadPaths::getReportsPath()
 #elif defined(Q_OS_WINDOWS)
     return m_exeDir + "\\crashpad";
 #elif defined(Q_OS_LINUX)
-    return m_exeDir + "/crashpad";
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
 #else
 #error getReportsPath not implemented on this platform
 #endif
@@ -118,7 +120,7 @@ QString CrashpadPaths::getMetricsPath()
 #elif defined(Q_OS_WINDOWS)
     return m_exeDir + "\\crashpad";
 #elif defined(Q_OS_LINUX)
-    return m_exeDir + "/crashpad";
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
 #else
 #error getMetricsPath not implemented on this platform
 #endif
