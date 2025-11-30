@@ -395,6 +395,11 @@ public:
 #endif
 
     /**
+     * @brief Клиент Crashpad для обработки крашей
+     */
+    QScopedPointer<crashpad::CrashpadClient> crashpadClient;
+
+    /**
      * @brief Таймер автосохранения проекта
      */
     QTimer autosaveTimer;
@@ -1357,14 +1362,16 @@ bool ApplicationManager::Implementation::initializeCrashpad()
     //
     // Запускаем crashpad
     //
-    crashpad::CrashpadClient* client = new crashpad::CrashpadClient();
+    crashpadClient.reset(new crashpad::CrashpadClient());
     Log::info("Starting Crashpad handler...");
-    bool status = client->StartHandler(handler, reportsDir, metricsDir, url.toStdString(),
-                                       annotations.toStdMap(), arguments, true, true, attachments);
+    bool status
+        = crashpadClient->StartHandler(handler, reportsDir, metricsDir, url.toStdString(),
+                                       annotations.toStdMap(), arguments, true, false, attachments);
     if (status) {
         Log::info("Crashpad handler started successfully");
     } else {
         Log::critical("Failed to start Crashpad handler");
+        crashpadClient.reset();
     }
     return status;
 }
