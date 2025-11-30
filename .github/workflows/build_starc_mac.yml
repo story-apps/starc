@@ -43,9 +43,9 @@ jobs:
           DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
           echo "DEV_BUILD=$DEV_BUILD" >> $GITHUB_ENV
           if [ "$DEV_BUILD" -gt "0" ]; then
-            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}} dev $DEV_BUILD" >> $GITHUB_ENV
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}} dev $DEV_BUILD-qt5" >> $GITHUB_ENV
           else
-            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}}" >> $GITHUB_ENV
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}}-qt5" >> $GITHUB_ENV
           fi
 
       - name: Install Qt
@@ -152,9 +152,9 @@ jobs:
           DEV_BUILD=$(git rev-list `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
           echo "DEV_BUILD=$DEV_BUILD" >> $GITHUB_ENV
           if [ "$DEV_BUILD" -gt "0" ]; then
-            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}} dev $DEV_BUILD" >> $GITHUB_ENV
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}} dev $DEV_BUILD-qt6" >> $GITHUB_ENV
           else
-            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}}" >> $GITHUB_ENV
+            echo "BUGSPLAT_VERSION=${{env.APP_VERSION}}-qt6" >> $GITHUB_ENV
           fi
 
       - name: Install Qt
