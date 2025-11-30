@@ -1336,7 +1336,7 @@ bool ApplicationManager::Implementation::initializeCrashpad()
     std::unique_ptr<crashpad::CrashReportDatabase> database
         = crashpad::CrashReportDatabase::Initialize(reportsDir);
     if (database == nullptr) {
-        Log::error("Failed to initialize Crashpad database");
+        Log::critical("Failed to initialize Crashpad database");
         return false;
     }
     Log::info("Crashpad database initialized successfully");
@@ -1374,7 +1374,7 @@ bool ApplicationManager::Implementation::initializeCrashpad()
     if (status) {
         Log::info("Crashpad handler started successfully");
     } else {
-        Log::error("Failed to start Crashpad handler");
+        Log::critical("Failed to start Crashpad handler");
     }
     return status;
 }

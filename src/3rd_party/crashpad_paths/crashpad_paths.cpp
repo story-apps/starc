@@ -103,9 +103,9 @@ QString CrashpadPaths::getHandlerPath()
 QString CrashpadPaths::getReportsPath()
 {
 #if defined(Q_OS_MAC)
-    return m_exeDir + "/crashpad";
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
 #elif defined(Q_OS_WINDOWS)
-    return m_exeDir + "\\crashpad";
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
 #elif defined(Q_OS_LINUX)
     return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
 #else
@@ -116,9 +116,9 @@ QString CrashpadPaths::getReportsPath()
 QString CrashpadPaths::getMetricsPath()
 {
 #if defined(Q_OS_MAC)
-    return m_exeDir + "/crashpad";
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
 #elif defined(Q_OS_WINDOWS)
-    return m_exeDir + "\\crashpad";
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
 #elif defined(Q_OS_LINUX)
     return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
 #else
