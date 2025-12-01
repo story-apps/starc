@@ -3111,13 +3111,6 @@ void ApplicationManager::initConnections()
             d->cloudServiceManager.data(), &CloudServiceManager::askConfirmationCode);
     connect(d->accountManager.data(), &AccountManager::askConfirmationCodeRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::askConfirmationCode);
-    connect(d->cloudServiceManager.data(), &CloudServiceManager::maxSessionsAmountReached,
-            d->accountManager.data(), [this]() {
-                const auto error = tr("Maximum active sessions reached. To authorize from a new "
-                                      "device, end one of the current sessions.");
-                d->onboardingManager->setAuthorizationError(error);
-                d->accountManager->setAuthorizationError(error);
-            });
     connect(d->cloudServiceManager.data(), &CloudServiceManager::confirmationCodeInfoRecieved,
             d->accountManager.data(), [this](int _codeLength) {
                 d->onboardingManager->setConfirmationCodeInfo(_codeLength);

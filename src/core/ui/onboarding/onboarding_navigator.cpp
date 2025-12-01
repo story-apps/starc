@@ -1235,9 +1235,8 @@ void OnboardingNavigator::designSystemChangeEvent(DesignSystemChangeEvent* _even
 
     d->uiScaleSlider->setContentsMargins(margin, 0, margin, 0);
 
-    d->accountSubscription->setContentsMargins(
-        margin - Ui::DesignSystem::radioButton().margins().left(), 0,
-        margin - Ui::DesignSystem::radioButton().margins().right(), 0);
+    d->accountSubscription->setContentsMargins(margin, DesignSystem::compactLayout().px16(), margin,
+                                               DesignSystem::compactLayout().px16());
 }
 
 } // namespace Ui
