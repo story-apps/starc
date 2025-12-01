@@ -5,6 +5,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/label/label.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/price_helper.h>
 
 #include <QDateTime>
 #include <QVBoxLayout>
@@ -154,7 +155,8 @@ void SubscriptionWidget::setPaymentOptions(const QVector<Domain::PaymentOption>&
             continue;
         }
 
-        const auto monthPrice = option.totalAmount / 100.0 / static_cast<qreal>(option.duration);
+        const auto monthPrice = PriceHelper::adoptPrice(option.totalAmount / 100.0
+                                                        / static_cast<qreal>(option.duration));
         if (monthPrice < minimumPrice) {
             minimumPrice = monthPrice;
         }
@@ -165,7 +167,8 @@ void SubscriptionWidget::setPaymentOptions(const QVector<Domain::PaymentOption>&
     d->minimumPrice->setTextColor(
         ColorHelper::transparent(DesignSystem::color().onBackground(),
                                  hasTrial ? DesignSystem::inactiveTextOpacity() : 1.0));
-    d->minimumPrice->setText(tr("from $%1/mo").arg(minimumPrice, 0, 'f', 2));
+    d->minimumPrice->setText(
+        PriceHelper::adoptPriceLabel(tr("from $%1/mo").arg(minimumPrice, 0, 'f', 2)));
     d->trialInfo->setVisible(hasTrial);
     d->tryButton->setVisible(hasTrial);
     d->buyButton->setVisible(!hasTrial && !d->isLifetime);

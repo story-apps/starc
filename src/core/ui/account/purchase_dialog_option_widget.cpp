@@ -4,6 +4,7 @@
 #include <ui/design_system/design_system.h>
 #include <ui/widgets/animations/click_animation.h>
 #include <utils/helpers/color_helper.h>
+#include <utils/helpers/price_helper.h>
 #include <utils/helpers/text_helper.h>
 
 #include <QPaintEvent>
@@ -151,8 +152,10 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
         ? "PRO"
         : "CLOUD";
     const auto paymentMethodsTitle = tr("Pay with:");
-    const auto regularPrice = QString("$%1").arg(d->option.amount / 100.0, 0, 'f', 2);
-    const auto totalPrice = QString("$%1").arg(d->option.totalAmount / 100.0, 0, 'f', 2);
+    const auto regularPrice = PriceHelper::adoptPriceLabel(
+        QString("$%1").arg(PriceHelper::adoptPrice(d->option.amount / 100.0), 0, 'f', 2));
+    const auto totalPrice = PriceHelper::adoptPriceLabel(
+        QString("$%1").arg(PriceHelper::adoptPrice(d->option.totalAmount / 100.0), 0, 'f', 2));
     auto paymentMethodsText
         = [](int _price) { return _price >= 2000 ? u8" \U000F019B" : u8" \U000F019B"; };
 
@@ -291,9 +294,11 @@ void PurchaseDialogOptionWidget::paintEvent(QPaintEvent* _event)
             painter.setFont(DesignSystem::font().caption());
             painter.drawText(
                 textRect, Qt::AlignLeft | Qt::AlignVCenter,
-                tr("$%1 per month")
-                    .arg(d->option.totalAmount / 100.0 / static_cast<qreal>(d->option.duration), 0,
-                         'f', 2));
+                PriceHelper::adoptPriceLabel(
+                    tr("$%1 per month")
+                        .arg(PriceHelper::adoptPrice(d->option.totalAmount / 100.0
+                                                     / static_cast<qreal>(d->option.duration)),
+                             0, 'f', 2)));
         }
         //
         // ... стоимость без скидки

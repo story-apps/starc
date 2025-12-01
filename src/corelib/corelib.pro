@@ -519,6 +519,7 @@ SOURCES += \
     utils/helpers/model_helper.cpp \
     utils/helpers/names_generator.cpp \
     utils/helpers/platform_helper.cpp \
+    utils/helpers/price_helper.cpp \
     utils/helpers/quotes_generator.cpp \
     utils/helpers/scroller_helper.cpp \
     utils/helpers/shortcuts_helper.cpp \
@@ -913,6 +914,7 @@ HEADERS += \
     utils/helpers/model_helper.h \
     utils/helpers/names_generator.h \
     utils/helpers/platform_helper.h \
+    utils/helpers/price_helper.h \
     utils/helpers/quotes_generator.h \
     utils/helpers/scroller_helper.h \
     utils/helpers/shortcuts_helper.h \
