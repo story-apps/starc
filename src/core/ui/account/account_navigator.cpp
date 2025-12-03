@@ -540,6 +540,7 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
     bool hasProLifetime = false;
     bool hasCloudSubscription = false;
     bool hasCloudLifetime = false;
+    bool hasStudio = false;
     d->cloudStorageSize = _account.cloudStorageSize;
     d->cloudStorageSizeUsed = _account.cloudStorageSizeUsed;
     auto isAccountTeamsCanBeAdded = false;
@@ -598,6 +599,7 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
             d->freeSubtitle->hide();
             d->proTitleIcon->hide();
             d->proTitle->hide();
+            d->proSubtitle->hide();
             //
             d->cloudSubscriptionEnds = {};
             d->updateCloudSubtitleLabel();
@@ -608,13 +610,14 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
 
         case Domain::SubscriptionType::Studio: {
+            hasStudio = true;
+
             d->freeTitleIcon->hide();
             d->freeTitle->hide();
             d->freeSubtitle->hide();
-            d->proTitle->hide();
-            d->proSubtitle->hide();
             d->proTitleIcon->hide();
             d->proTitle->hide();
+            d->proSubtitle->hide();
             d->cloudTitleIcon->hide();
             d->cloudTitle->hide();
             d->cloudSubtitle->hide();
@@ -636,69 +639,82 @@ void AccountNavigator::setAccountInfo(const Domain::AccountInfo& _account)
         }
     }
     d->setAccountTeamsCanBeAdded(isAccountTeamsCanBeAdded);
-    bool isProTrialAvailable = false;
-    bool isCloudoTrialAvailable = false;
-    for (const auto& paymentOption : _account.paymentOptions) {
-        switch (paymentOption.subscriptionType) {
-        case Domain::SubscriptionType::ProMonthly: {
-            if (paymentOption.amount == 0) {
-                isProTrialAvailable = true;
-                d->tryProButton->show();
-            } else {
-                d->renewProSubscriptionButton->show();
+
+    //
+    // Если у пользователя нет студийной подписки
+    //
+    if (!hasStudio) {
+        //
+        // ... настроим заголовки и кнопки в зависимости от доступных опций оплат
+        //
+        bool isProTrialAvailable = false;
+        bool isCloudoTrialAvailable = false;
+        for (const auto& paymentOption : _account.paymentOptions) {
+            switch (paymentOption.subscriptionType) {
+            case Domain::SubscriptionType::ProMonthly: {
+                if (paymentOption.amount == 0) {
+                    isProTrialAvailable = true;
+                    d->tryProButton->show();
+                } else {
+                    d->renewProSubscriptionButton->show();
+                }
+                break;
             }
-            break;
-        }
 
-        case Domain::SubscriptionType::CloudMonthly: {
-            if (paymentOption.amount == 0) {
-                isCloudoTrialAvailable = true;
-                d->tryCloudButton->show();
-            } else {
-                d->renewCloudSubscriptionButton->show();
+            case Domain::SubscriptionType::CloudMonthly: {
+                if (paymentOption.amount == 0) {
+                    isCloudoTrialAvailable = true;
+                    d->tryCloudButton->show();
+                } else {
+                    d->renewCloudSubscriptionButton->show();
+                }
+                break;
             }
-            break;
+
+            default: {
+                break;
+            }
+            }
         }
 
-        default: {
-            break;
+        //
+        // Если доступны бесплатные опции, то уберём кнопки активации платных
+        //
+        if (isProTrialAvailable) {
+            d->renewProSubscriptionButton->hide();
         }
+        if (isCloudoTrialAvailable) {
+            d->renewCloudSubscriptionButton->hide();
         }
-    }
 
-    //
-    // Если доступны бесплатные опции, то уберём кнопки активации платных
-    //
-    if (isProTrialAvailable) {
-        d->renewProSubscriptionButton->hide();
-    }
-    if (isCloudoTrialAvailable) {
-        d->renewCloudSubscriptionButton->hide();
-    }
+        //
+        // Если активна только какая-то одна подписка, то оставим интерфейс только для неё
+        //
+        if (hasProSubscription && !hasCloudSubscription && !hasCloudLifetime) {
+            d->cloudTitleIcon->hide();
+            d->cloudTitle->hide();
+            d->cloudSubtitle->hide();
+            d->tryCloudButton->hide();
+            d->renewCloudSubscriptionButton->hide();
+        } else if (!hasProSubscription && !hasProLifetime && hasCloudSubscription) {
+            d->proTitleIcon->hide();
+            d->proTitle->hide();
+            d->proSubtitle->hide();
+            d->tryProButton->hide();
+            d->renewProSubscriptionButton->hide();
+        }
 
-    //
-    // Если активна только какая-то одна подписка, то оставим интерфейс только для неё
-    //
-    if (hasProSubscription && !hasCloudSubscription) {
-        d->cloudTitleIcon->hide();
-        d->cloudTitle->hide();
-        d->tryCloudButton->hide();
-        d->renewCloudSubscriptionButton->hide();
-    } else if (!hasProSubscription && hasCloudSubscription) {
-        d->proTitleIcon->hide();
-        d->proTitle->hide();
-        d->tryProButton->hide();
-        d->renewProSubscriptionButton->hide();
-    }
-
-    //
-    // Если есть подписки навсегда, то просто оставляем заголовки, а кнопку продления скрываем
-    //
-    if (hasProLifetime) {
-        d->renewProSubscriptionButton->hide();
-    }
-    if (hasCloudLifetime) {
-        d->renewCloudSubscriptionButton->hide();
+        //
+        // Если есть подписки навсегда, то просто оставляем заголовки, а кнопку продления скрываем
+        //
+        if (hasProLifetime) {
+            d->tryProButton->hide();
+            d->renewProSubscriptionButton->hide();
+        }
+        if (hasCloudLifetime) {
+            d->tryCloudButton->hide();
+            d->renewCloudSubscriptionButton->hide();
+        }
     }
 
     //
