@@ -53,41 +53,58 @@ void NotificationsManager::setShowDevVersions(bool _show)
 
 void NotificationsManager::processNotifications(const QVector<Domain::Notification>& _notifications)
 {
-    const QVector<Domain::NotificationType> irrelevantNotificationTypes =
+    const QVector<Domain::NotificationType> irrelevantNotificationTypes = {
 #if defined(Q_OS_LINUX)
-    { Domain::NotificationType::UpdateDevMac,
-      Domain::NotificationType::UpdateDevWindows32,
-      Domain::NotificationType::UpdateDevWindows64,
-      Domain::NotificationType::UpdateStableMac,
-      Domain::NotificationType::UpdateStableWindows32,
-      Domain::NotificationType::UpdateStableWindows64,
-    }
-#elif defined(Q_OS_MACOS)
-    { Domain::NotificationType::UpdateDevLinux,
-      Domain::NotificationType::UpdateDevWindows32,
-      Domain::NotificationType::UpdateDevWindows64,
-      Domain::NotificationType::UpdateStableLinux,
-      Domain::NotificationType::UpdateStableWindows32,
-      Domain::NotificationType::UpdateStableWindows64,
-    }
-#elif defined(Q_OS_WIN64)
-    { Domain::NotificationType::UpdateDevLinux,
-      Domain::NotificationType::UpdateDevMac,
-      Domain::NotificationType::UpdateDevWindows32,
-      Domain::NotificationType::UpdateStableLinux,
-      Domain::NotificationType::UpdateStableMac,
-      Domain::NotificationType::UpdateStableWindows32,
-    }
-#elif defined(Q_OS_WIN32)
-    { Domain::NotificationType::UpdateDevLinux,
-      Domain::NotificationType::UpdateDevMac,
-      Domain::NotificationType::UpdateDevWindows64,
-      Domain::NotificationType::UpdateStableLinux,
-      Domain::NotificationType::UpdateStableMac,
-      Domain::NotificationType::UpdateStableWindows64,
-    }
+        Domain::NotificationType::UpdateDevMac,
+        Domain::NotificationType::UpdateDevWindows,
+        Domain::NotificationType::UpdateStableQt5Mac,
+        Domain::NotificationType::UpdateStableQt5Windows32,
+        Domain::NotificationType::UpdateStableQt5Windows64,
+        Domain::NotificationType::UpdateStableQt6Mac,
+        Domain::NotificationType::UpdateStableQt6Windows,
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        Domain::NotificationType::UpdateStableQt5Linux,
+#else
+        Domain::NotificationType::UpdateStableQt6Linux,
 #endif
-    ;
+#elif defined(Q_OS_MACOS)
+        Domain::NotificationType::UpdateDevLinux,
+        Domain::NotificationType::UpdateDevWindows,
+        Domain::NotificationType::UpdateStableQt5Linux,
+        Domain::NotificationType::UpdateStableQt5Windows32,
+        Domain::NotificationType::UpdateStableQt5Windows64,
+        Domain::NotificationType::UpdateStableQt6Linux,
+        Domain::NotificationType::UpdateStableQt6Windows,
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        Domain::NotificationType::UpdateStableQt5Mac,
+#else
+        Domain::NotificationType::UpdateStableQt6Mac,
+#endif
+#elif defined(Q_OS_WIN64)
+        Domain::NotificationType::UpdateDevLinux,
+        Domain::NotificationType::UpdateDevMac,
+        Domain::NotificationType::UpdateStableQt5Linux,
+        Domain::NotificationType::UpdateStableQt5Mac,
+        Domain::NotificationType::UpdateStableQt5Windows32,
+        Domain::NotificationType::UpdateStableQt6Linux,
+        Domain::NotificationType::UpdateStableQt6Mac,
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        Domain::NotificationType::UpdateStableQt5Windows64,
+#else
+        Domain::NotificationType::UpdateStableQt6Windows,
+#endif
+#elif defined(Q_OS_WIN32)
+        Domain::NotificationType::UpdateDevLinux,
+        Domain::NotificationType::UpdateDevMac,
+        Domain::NotificationType::UpdateDevWindows,
+        Domain::NotificationType::UpdateStableQt5Linux,
+        Domain::NotificationType::UpdateStableQt5Mac,
+        Domain::NotificationType::UpdateStableQt5Windows64,
+        Domain::NotificationType::UpdateStableQt6Linux,
+        Domain::NotificationType::UpdateStableQt6Mac,
+        Domain::NotificationType::UpdateStableQt6Windows,
+#endif
+    };
 
     const auto lastReadNotificationDateTime
         = QSettings().value(kLastReadNotificationDateTimeKey).toDateTime();
@@ -118,8 +135,7 @@ void NotificationsManager::processNotifications(const QVector<Domain::Notificati
         if (!d->showDevVersions
             && (notification.type == Domain::NotificationType::UpdateDevLinux
                 || notification.type == Domain::NotificationType::UpdateDevMac
-                || notification.type == Domain::NotificationType::UpdateDevWindows32
-                || notification.type == Domain::NotificationType::UpdateDevWindows64)) {
+                || notification.type == Domain::NotificationType::UpdateDevWindows)) {
             continue;
         }
 
@@ -159,10 +175,13 @@ QString NotificationsManager::lastVersionDownloadLink() const
     //
     Domain::Notification latestUpdate;
     for (const auto& notification : std::as_const(d->notifications)) {
-        if (notification.type == Domain::NotificationType::UpdateStableLinux
-            || notification.type == Domain::NotificationType::UpdateStableMac
-            || notification.type == Domain::NotificationType::UpdateStableWindows32
-            || notification.type == Domain::NotificationType::UpdateStableWindows64) {
+        if (notification.type == Domain::NotificationType::UpdateStableQt5Linux
+            || notification.type == Domain::NotificationType::UpdateStableQt5Mac
+            || notification.type == Domain::NotificationType::UpdateStableQt5Windows32
+            || notification.type == Domain::NotificationType::UpdateStableQt5Windows64
+            || notification.type == Domain::NotificationType::UpdateStableQt6Linux
+            || notification.type == Domain::NotificationType::UpdateStableQt6Mac
+            || notification.type == Domain::NotificationType::UpdateStableQt6Windows) {
             latestUpdate = notification;
             break;
         }

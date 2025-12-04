@@ -288,7 +288,7 @@ jobs:
         uses: vimtor/action-zip@v1
         with:
           files: build/windows/files_64
-          dest: build/windows/starc-64.zip
+          dest: build/windows/starc.zip
 
       - name: Update manifest
         shell: pwsh
@@ -308,16 +308,16 @@ jobs:
           Copy-Item -Path build/windows/msix/visual-elements/* -Destination build/windows/files_64/images -Recurse
           cp build/windows/msix/AppxManifest.xml build/windows/files_64
           $env:PATH = $env:PATH + ";C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64"
-          makeappx.exe pack /d build/windows/files_64 /p build/windows/starc-package-64.msix
+          makeappx.exe pack /d build/windows/files_64 /p build/windows/starc-package.msix
 
       - name: Collect artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows_64 packages
           path: |
-            build/windows/starc-setup-64.exe
-            build/windows/starc-64.zip
-            build/windows/starc-package-64.msix
+            build/windows/starc-setup.exe
+            build/windows/starc.zip
+            build/windows/starc-package.msix
 
       - name: Publish artifacts to the dev stream and notify clients
         if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/') != true
@@ -328,8 +328,8 @@ jobs:
         run: |
           $PublishForm = @{
             api_key = $env:STARC_API_KEY
-            name_for_file = 'starc-setup-64.exe'
-            file_bin = Get-Item -Path 'build\windows\starc-setup-64.exe'
+            name_for_file = 'starc-setup.exe'
+            file_bin = Get-Item -Path 'build\windows\starc-setup.exe'
           }
           Invoke-WebRequest -Uri 'https://starc.app/api/app/updates/publish' -Method Post -Form $PublishForm
           $NotifyForm = @{
@@ -344,9 +344,9 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            build/windows/starc-setup-64.exe
-            build/windows/starc-64.zip
-            build/windows/starc-package-64.msix
+            build/windows/starc-setup.exe
+            build/windows/starc.zip
+            build/windows/starc-package.msix
 
       - name: Notify clients that stable release published
         if: startsWith(github.ref, 'refs/tags/')

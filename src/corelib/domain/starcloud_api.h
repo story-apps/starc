@@ -13,21 +13,24 @@ const int kInvalidId = -1;
  * @brief Тип уведомления
  */
 enum class NotificationType {
-    Undefined,
+    Undefined = 0,
     //
-    UpdateDevLinux,
-    UpdateDevMac,
-    UpdateDevWindows32,
-    UpdateDevWindows64,
-    UpdateStableLinux,
-    UpdateStableMac,
-    UpdateStableWindows32,
-    UpdateStableWindows64,
+    UpdateDevLinux = 1,
+    UpdateDevMac = 2,
+    // UpdateDevWindows32 = 3 - deprecated
+    UpdateDevWindows = 4,
+    UpdateStableQt5Linux = 5,
+    UpdateStableQt5Mac = 6,
+    UpdateStableQt5Windows32 = 7,
+    UpdateStableQt5Windows64 = 8,
+    UpdateStableQt6Linux = 101,
+    UpdateStableQt6Mac = 102,
+    UpdateStableQt6Windows = 103,
     //
-    ProSubscriptionEnds,
-    TeamSubscriptionEnds,
+    ProSubscriptionEnds = 9,
+    TeamSubscriptionEnds = 10,
     //
-    CreditsAdded,
+    CreditsAdded = 11,
 };
 
 /**

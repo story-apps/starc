@@ -204,8 +204,7 @@ void ReleaseView::Implementation::updateState()
     //
     if (notification.type == Domain::NotificationType::UpdateDevLinux
         || notification.type == Domain::NotificationType::UpdateDevMac
-        || notification.type == Domain::NotificationType::UpdateDevWindows32
-        || notification.type == Domain::NotificationType::UpdateDevWindows64) {
+        || notification.type == Domain::NotificationType::UpdateDevWindows) {
         titleLabel->setText(tr("Dev version updated"));
         bodyLabel->setText(
             tr("Story Architect version %1 was published for testing.").arg(version));

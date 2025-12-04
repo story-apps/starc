@@ -465,12 +465,14 @@ void MenuView::setNotifications(const QVector<Domain::Notification>& _notificati
         switch (notification.type) {
         case Domain::NotificationType::UpdateDevLinux:
         case Domain::NotificationType::UpdateDevMac:
-        case Domain::NotificationType::UpdateDevWindows32:
-        case Domain::NotificationType::UpdateDevWindows64:
-        case Domain::NotificationType::UpdateStableLinux:
-        case Domain::NotificationType::UpdateStableMac:
-        case Domain::NotificationType::UpdateStableWindows32:
-        case Domain::NotificationType::UpdateStableWindows64: {
+        case Domain::NotificationType::UpdateDevWindows:
+        case Domain::NotificationType::UpdateStableQt5Linux:
+        case Domain::NotificationType::UpdateStableQt5Mac:
+        case Domain::NotificationType::UpdateStableQt5Windows32:
+        case Domain::NotificationType::UpdateStableQt5Windows64:
+        case Domain::NotificationType::UpdateStableQt6Linux:
+        case Domain::NotificationType::UpdateStableQt6Mac:
+        case Domain::NotificationType::UpdateStableQt6Windows: {
             notificationView = new ReleaseView(this, notification);
             break;
         }
