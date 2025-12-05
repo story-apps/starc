@@ -39,9 +39,14 @@ public:
      * @brief Получить список фильтров файлов которые приложение может импортировать
      */
     static QString filtersForImport();
+    static QString filtersForImportScreenplay();
+    static QString filtersForImportComicBook();
+    static QString filtersForImportAudioplay();
+    static QString filtersForImportStageplay();
+    static QString filtersForImportNovel();
 
     /**
-     * @brief Получить список фильтров файлов, в которые можно сохранять содержимое сцены
+     * @brief Получить список фильтров файлов, в которые можно сохранять содержимое холста
      */
     static QString filtersForSceneImage();
 

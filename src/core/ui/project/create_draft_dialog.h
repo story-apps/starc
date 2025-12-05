@@ -2,6 +2,10 @@
 
 #include <ui/widgets/dialog/abstract_dialog.h>
 
+namespace Domain {
+enum class DocumentObjectType;
+}
+
 
 namespace Ui {
 
@@ -14,9 +18,17 @@ public:
     ~CreateDraftDialog() override;
 
     /**
-     * @brief Задать список драфтов из которых можно создать новую
+     * @brief Задать список драфтов из которых можно создать новый, а так же тип документа, чтобы
+     *        понять, можно ли импортировать
      */
-    void setDrafts(const QStringList& _drafts, int _selectDraftIndex);
+    void setDrafts(const QStringList& _drafts, int _selectDraftIndex,
+                   Domain::DocumentObjectType _documentType);
+
+    /**
+     * @brief Папка, из которой будут выбираться проекты для импорта
+     */
+    QString importFilePath() const;
+    void setImportFolder(const QString& _path);
 
     /**
      * @brief Редактировать драфт с заданными параметрами

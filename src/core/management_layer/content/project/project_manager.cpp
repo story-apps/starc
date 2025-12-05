@@ -506,6 +506,18 @@ public:
      * @brief Возможность экспортирования для текущего документа
      */
     bool isCurrentDocumentExportAvailable = false;
+
+    /**
+     * @brief Контейнер для иморта документа при создании драфта
+     */
+    struct {
+        bool waitForDocument = false;
+        QString name;
+        QString titlePage;
+        QString synopsis;
+        QString treatment;
+        QString text;
+    } documentImportingContainer;
 };
 
 ProjectManager::Implementation::Implementation(ProjectManager* _q, QWidget* _parent,
@@ -1159,30 +1171,62 @@ BusinessLayer::StructureModelItem* ProjectManager::Implementation::aliasedItemFo
 
 void ProjectManager::Implementation::createNewDraft(const QModelIndex& _itemIndex)
 {
+    const auto item = aliasedItemForIndex(_itemIndex);
+
     auto dialog = new Ui::CreateDraftDialog(topLevelWidget);
     dialog->setDrafts(
-        [this, _itemIndex] {
-            const auto item = aliasedItemForIndex(_itemIndex);
+        [item] {
             QStringList drafts = { tr("Current draft") };
             for (const auto draft : item->drafts()) {
                 drafts.append(draft->name());
             }
             return drafts;
         }(),
-        view.active->currentDraft());
-    connect(dialog, &Ui::CreateDraftDialog::savePressed, view.active,
-            [this, _itemIndex, dialog](const QString& _name, const QColor& _color, int _draftIndex,
-                                       bool _readOnly) {
-                dialog->hideDialog();
+        view.active->currentDraft(), item->type());
+    dialog->setImportFolder(settingsValue(DataStorageLayer::kProjectImportFolderKey).toString());
+    connect(
+        dialog, &Ui::CreateDraftDialog::savePressed, view.active,
+        [this, item, dialog](const QString& _name, const QColor& _color, int _draftIndex,
+                             bool _readOnly) {
+            dialog->hideDialog();
 
-                const auto item = aliasedItemForIndex(_itemIndex);
+            QByteArray itemContent;
+
+            //
+            // Если новый драфт создаётся на базе одного из существущих
+            //
+            if (dialog->importFilePath().isEmpty()) {
+                //
+                // ... возьмём его содержимое из модели
+                //
                 const auto model = modelsFacade.modelFor(
                     _draftIndex == 0 ? item->uuid() : item->drafts().at(_draftIndex - 1)->uuid());
-                const auto comparison = false;
-                projectStructureModel->addItemDraft(item, _name, _color, _readOnly,
-                                                    model->document()->content(), comparison);
-                view.active->setDocumentDrafts(item->drafts());
-            });
+                itemContent = model->document()->content();
+            }
+            //
+            // В противном случае импортируем из заданного файла
+            //
+            else {
+                documentImportingContainer.waitForDocument = true;
+                emit q->importFileRequested(dialog->importFilePath(), {}, item->type());
+                Q_ASSERT(documentImportingContainer.waitForDocument == false);
+                itemContent = documentImportingContainer.text.toUtf8();
+                documentImportingContainer = {};
+            }
+
+            const auto comparison = false;
+            projectStructureModel->addItemDraft(item, _name, _color, _readOnly, itemContent,
+                                                comparison);
+            view.active->setDocumentDrafts(item->drafts());
+
+            //
+            // Если в данный момент открыт не текущий драфт, то нужно сместить индекс выделенной
+            // вкладки драфта на 1, т.к. новые драфты добавляются после текущего
+            //
+            if (const int currentDraftIndex = view.active->currentDraft(); currentDraftIndex > 0) {
+                view.active->setCurrentDraft(currentDraftIndex + 1);
+            }
+        });
     connect(dialog, &Ui::CreateDraftDialog::disappeared, dialog,
             &Ui::CreateDraftDialog::deleteLater);
 
@@ -1273,6 +1317,17 @@ void ProjectManager::Implementation::removeDraft(const QModelIndex& _itemIndex, 
             DataStorageLayer::StorageFacade::documentStorage()->removeDocument(document);
             projectStructureModel->removeItemDraft(item, _draftIndex);
             view.active->setDocumentDrafts(item->drafts());
+
+            //
+            // Если в данный момент открыт драфт, который находится после удаляемого, то нужно
+            // сместить индекс выделенной вкладки драфта на -1, т.к. в текущем индексе после
+            // удаления будет уже другой драфт
+            //
+            if (const int currentDraftIndex = view.active->currentDraft();
+                currentDraftIndex > _draftIndex) {
+                view.active->setCurrentDraft(currentDraftIndex - 1);
+            }
+
             emit q->documentRemoved(documentUuid);
         });
     connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
@@ -3742,6 +3797,17 @@ void ProjectManager::storeAudioplay(const QString& _name, const QString& _titleP
                                     const QString& _text)
 {
     //
+    // Если ожидаем драфт, то наполняем контейнер для импорта
+    //
+    if (d->documentImportingContainer.waitForDocument) {
+        d->documentImportingContainer.waitForDocument = false;
+        d->documentImportingContainer.name = _name;
+        d->documentImportingContainer.titlePage = _titlePage;
+        d->documentImportingContainer.text = _text;
+        return;
+    }
+
+    //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
     //
 
@@ -3781,6 +3847,17 @@ void ProjectManager::storeComicBook(const QString& _name, const QString& _titleP
                                     const QString& _text)
 {
     //
+    // Если ожидаем драфт, то наполняем контейнер для импорта
+    //
+    if (d->documentImportingContainer.waitForDocument) {
+        d->documentImportingContainer.waitForDocument = false;
+        d->documentImportingContainer.name = _name;
+        d->documentImportingContainer.titlePage = _titlePage;
+        d->documentImportingContainer.text = _text;
+        return;
+    }
+
+    //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
     //
 
@@ -3818,6 +3895,16 @@ void ProjectManager::storeComicBook(const QString& _name, const QString& _titleP
 
 void ProjectManager::storeNovel(const QString& _name, const QString& _text)
 {
+    //
+    // Если ожидаем драфт, то наполняем контейнер для импорта
+    //
+    if (d->documentImportingContainer.waitForDocument) {
+        d->documentImportingContainer.waitForDocument = false;
+        d->documentImportingContainer.name = _name;
+        d->documentImportingContainer.text = _text;
+        return;
+    }
+
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
     //
@@ -3862,6 +3949,19 @@ void ProjectManager::storeScreenplay(const QString& _name, const QString& _title
                                      const QString& _synopsis, const QString& _treatment,
                                      const QString& _text)
 {
+    //
+    // Если ожидаем драфт, то наполняем контейнер для импорта
+    //
+    if (d->documentImportingContainer.waitForDocument) {
+        d->documentImportingContainer.waitForDocument = false;
+        d->documentImportingContainer.name = _name;
+        d->documentImportingContainer.titlePage = _titlePage;
+        d->documentImportingContainer.synopsis = _synopsis;
+        d->documentImportingContainer.treatment = _treatment;
+        d->documentImportingContainer.text = _text;
+        return;
+    }
+
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
     //
@@ -3908,6 +4008,17 @@ void ProjectManager::storeScreenplay(const QString& _name, const QString& _title
 void ProjectManager::storeStageplay(const QString& _name, const QString& _titlePage,
                                     const QString& _text)
 {
+    //
+    // Если ожидаем драфт, то наполняем контейнер для импорта
+    //
+    if (d->documentImportingContainer.waitForDocument) {
+        d->documentImportingContainer.waitForDocument = false;
+        d->documentImportingContainer.name = _name;
+        d->documentImportingContainer.titlePage = _titlePage;
+        d->documentImportingContainer.text = _text;
+        return;
+    }
+
     //
     // ATTENTION: Копипаста из StructureModel::addDocument, быть внимательным при обновлении
     //

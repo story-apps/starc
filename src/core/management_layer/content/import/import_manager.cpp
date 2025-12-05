@@ -520,6 +520,33 @@ void ImportManager::importScreenplay(const QString& _filePath, bool _importDocum
     d->importScreenplay(options);
 }
 
+void ImportManager::importComicBook(const QString& _filePath, bool _importDocuments)
+{
+    BusinessLayer::ImportOptions options;
+    options.filePath = _filePath;
+    options.documentType = Domain::DocumentObjectType::Screenplay;
+    options.importCharacters = _importDocuments;
+    d->importComicBook(options);
+}
+
+void ImportManager::importAudioplay(const QString& _filePath, bool _importDocuments)
+{
+    BusinessLayer::ImportOptions options;
+    options.filePath = _filePath;
+    options.documentType = Domain::DocumentObjectType::Screenplay;
+    options.importCharacters = _importDocuments;
+    d->importAudioplay(options);
+}
+
+void ImportManager::importStageplay(const QString& _filePath, bool _importDocuments)
+{
+    BusinessLayer::ImportOptions options;
+    options.filePath = _filePath;
+    options.documentType = Domain::DocumentObjectType::Screenplay;
+    options.importCharacters = _importDocuments;
+    d->importStageplay(options);
+}
+
 void ImportManager::importNovel(const QString& _filePath)
 {
     BusinessLayer::ImportOptions options;
@@ -532,6 +559,31 @@ void ImportManager::importToDocument(const QString& _filePath, const QUuid& _doc
                                      Domain::DocumentObjectType _type)
 {
     switch (_type) {
+    case Domain::DocumentObjectType::ScreenplayText: {
+        const bool importDocuments = false;
+        importScreenplay(_filePath, importDocuments);
+        break;
+    }
+    case Domain::DocumentObjectType::ComicBookText: {
+        const bool importDocuments = false;
+        importComicBook(_filePath, importDocuments);
+        break;
+    }
+    case Domain::DocumentObjectType::AudioplayText: {
+        const bool importDocuments = false;
+        importAudioplay(_filePath, importDocuments);
+        break;
+    }
+    case Domain::DocumentObjectType::StageplayText: {
+        const bool importDocuments = false;
+        importStageplay(_filePath, importDocuments);
+        break;
+    }
+    case Domain::DocumentObjectType::NovelText: {
+        importNovel(_filePath);
+        break;
+    }
+
     case Domain::DocumentObjectType::Presentation: {
         BusinessLayer::ImportOptions options;
         options.documentUuid = _documentUuid;

@@ -40,12 +40,12 @@ public:
     void setTabVisible(int _tabIndex, bool _visible);
 
     /**
-     * @brief Задать индекс текущей вкладки
+     * @brief Задать текущей вкладку с указанным индексом
      */
     void setCurrentTab(int _index);
 
     /**
-     * @brief Получить текущую вкладку
+     * @brief Получить индекс текущей вкладки
      */
     int currentTab() const;
 

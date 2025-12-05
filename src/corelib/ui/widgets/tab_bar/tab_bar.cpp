@@ -293,7 +293,7 @@ void TabBar::addTab(const QString& _tabName, const QString& _tabIcon, const QCol
     const bool visible = true;
     const auto tabId = [this] {
         int id = 0;
-        for (const auto& tab : d->tabs) {
+        for (const auto& tab : std::as_const(d->tabs)) {
             id = std::max(id, tab.id + 1);
         }
         return id;

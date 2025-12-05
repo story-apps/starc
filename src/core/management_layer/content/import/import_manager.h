@@ -31,6 +31,9 @@ public:
      * @brief Импортировать все возможные данные из указанного файла
      */
     void importScreenplay(const QString& _filePath, bool _importDocuments = true);
+    void importComicBook(const QString& _filePath, bool _importDocuments = true);
+    void importAudioplay(const QString& _filePath, bool _importDocuments = true);
+    void importStageplay(const QString& _filePath, bool _importDocuments = true);
     void importNovel(const QString& _filePath);
 
     /**
