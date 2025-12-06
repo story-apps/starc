@@ -664,6 +664,45 @@ void ApplicationManager::Implementation::sendCrashInfo()
                 loader->addRequestAttribute("list_annotations", annotationsText);
                 loader->addRequestAttributeFile("upload_file_minidump", dmpPath);
 
+                //
+                // Прикрепляем лог-файл сессии, когда произошел краш
+                //
+                const QDateTime crashTime = QDateTime::fromSecsSinceEpoch(report.creation_time);
+                const QDir logsDir(q->logFilePath());
+
+                QString previousSessionLogPath;
+                if (logsDir.exists()) {
+                    QFileInfo bestLogFile;
+                    QDateTime bestLogTime;
+
+                    const auto logFiles
+                        = logsDir.entryInfoList({ "*.log" }, QDir::Files, QDir::Time);
+                    for (const auto& logFile : logFiles) {
+                        const QDateTime logFileTime = logFile.lastModified();
+                        //
+                        // Ищем тот, который был изменен до времени краша, но максимально близко к
+                        // нему
+                        //
+                        if (logFileTime <= crashTime) {
+                            if (bestLogFile.filePath().isEmpty() || logFileTime > bestLogTime) {
+                                bestLogFile = logFile;
+                                bestLogTime = logFileTime;
+                            }
+                        }
+                    }
+
+                    //
+                    // Если нашли подходящий файл, используем его
+                    //
+                    if (!bestLogFile.filePath().isEmpty() && bestLogFile.exists()) {
+                        previousSessionLogPath = bestLogFile.absoluteFilePath();
+                    }
+                }
+
+                if (!previousSessionLogPath.isEmpty() && QFile::exists(previousSessionLogPath)) {
+                    loader->addRequestAttributeFile("upload_file_log", previousSessionLogPath);
+                }
+
                 QObject::connect(loader, &NetworkRequest::downloadComplete,
                                  [dmpPath](const QByteArray& body, const QUrl&) {
                                      //
