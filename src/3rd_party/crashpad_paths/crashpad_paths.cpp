@@ -1,5 +1,6 @@
 #include "crashpad_paths.h"
 
+#include <QDir>
 #include <QStandardPaths>
 
 #if defined(Q_OS_WIN)
@@ -74,19 +75,6 @@ CrashpadPaths::CrashpadPaths()
 {
 }
 
-QString CrashpadPaths::getAttachmentPath()
-{
-#if defined(Q_OS_MACOS)
-    return m_exeDir + "/../Resources/attachment.txt";
-#elif defined(Q_OS_WINDOWS)
-    return m_exeDir + "\\..\\attachment.txt";
-#elif defined(Q_OS_LINUX)
-    return m_exeDir + "/attachment.txt";
-#else
-#error getAttachmentPath() not implemented on this platform
-#endif
-}
-
 QString CrashpadPaths::getHandlerPath()
 {
 #if defined(Q_OS_MAC)
@@ -102,28 +90,18 @@ QString CrashpadPaths::getHandlerPath()
 
 QString CrashpadPaths::getReportsPath()
 {
-#if defined(Q_OS_MAC)
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
-#elif defined(Q_OS_WINDOWS)
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
-#elif defined(Q_OS_LINUX)
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
-#else
-#error getReportsPath not implemented on this platform
-#endif
+    QString basePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString reportsPath = QDir(basePath).absoluteFilePath("crashpad");
+    QDir::root().mkpath(reportsPath);
+    return QDir::toNativeSeparators(reportsPath);
 }
 
 QString CrashpadPaths::getMetricsPath()
 {
-#if defined(Q_OS_MAC)
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
-#elif defined(Q_OS_WINDOWS)
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
-#elif defined(Q_OS_LINUX)
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/crashpad";
-#else
-#error getMetricsPath not implemented on this platform
-#endif
+    QString basePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString metricsPath = QDir(basePath).absoluteFilePath("crashpad");
+    QDir::root().mkpath(metricsPath);
+    return QDir::toNativeSeparators(metricsPath);
 }
 
 #if defined(Q_OS_UNIX)
