@@ -302,21 +302,42 @@ void Splitter::setSizes(const QVector<int>& _sizes)
 
     Q_ASSERT(d->widgets.size() == _sizes.size());
 
+    auto newSizes = _sizes;
+    const auto sizesMax = std::accumulate(newSizes.begin(), newSizes.end(), 0);
+    const auto sizeDelta = static_cast<qreal>(width()) / sizesMax;
+    auto lessThan24px
+        = [sizeDelta](int _size) { return sizeDelta * _size < Ui::DesignSystem::layout().px24(); };
+
+    //
+    // Если одна из сторон становится меньше 24 пикселей, скроем её автоматически
+    //
+    if (!newSizes.contains(0)) {
+        if (newSizes.constFirst() < newSizes.constLast() && lessThan24px(newSizes.constFirst())) {
+            newSizes.last() += newSizes.first();
+            newSizes.first() = 0;
+        } else if (newSizes.constFirst() > newSizes.constLast()
+                   && lessThan24px(newSizes.constLast())) {
+            newSizes.first() += newSizes.last();
+            newSizes.last() = 0;
+        }
+    }
+
+
     //
     // Автоматом распределяем пространство между вложенными виджетами
     //
     d->sizes.clear();
-    const auto sizesMax = std::accumulate(_sizes.begin(), _sizes.end(), 0);
-    for (auto size : _sizes) {
+    for (auto size : newSizes) {
         d->sizes.append(static_cast<qreal>(size) / sizesMax);
     }
-    const auto sizeDelta = static_cast<qreal>(width()) / sizesMax;
+    auto sizes = d->sizes;
     auto widgets = d->widgets;
-    auto widgetsSizes = _sizes;
+    auto widgetsSizes = newSizes;
     for (auto& widgetSize : widgetsSizes) {
         widgetSize *= sizeDelta;
     }
     if (isRightToLeft()) {
+        std::reverse(sizes.begin(), sizes.end());
         std::reverse(widgets.begin(), widgets.end());
         std::reverse(widgetsSizes.begin(), widgetsSizes.end());
     }
@@ -334,7 +355,12 @@ void Splitter::setSizes(const QVector<int>& _sizes)
             widgetGeometry.setBottom(height());
         } else {
             if (d->orientation == Qt::Horizontal) {
-                widgetGeometry.setWidth(widgetSize);
+                //
+                // Геометрия, при установке в неё ширину, считает на два пикселя меньше, поэтому
+                // тут добавляем дельту, которая будет компенсировать этот недостаток
+                //
+                const auto widthDelta = isRightToLeft() ? -2 : 1;
+                widgetGeometry.setWidth(widgetSize + widthDelta);
             } else {
                 widgetGeometry.setHeight(widgetSize);
             }
@@ -348,24 +374,25 @@ void Splitter::setSizes(const QVector<int>& _sizes)
         // +1, чтобы виджеты не накладывались друг на друга
         //
         if (d->orientation == Qt::Horizontal) {
-            widgetGeometry.moveLeft(widgetGeometry.right() + 1);
+            widgetGeometry.setLeft(widgetGeometry.right() + 1);
         } else {
-            widgetGeometry.moveTop(widgetGeometry.bottom() + 1);
+            widgetGeometry.setTop(widgetGeometry.bottom() + 1);
         }
     }
 
     //
     // Позиционируем хэндл
     //
-    const QRect handleGeometry(widgets.constFirst()->geometry().right() - 2, 0, 5, height());
+    const QRect handleGeometry(widgets.constFirst()->geometry().right() - 4, 0,
+                               newSizes.contains(0) ? 0 : 9, height());
     d->handle->setGeometry(handleGeometry);
     //
     // ... и кнопку отображения скрытой панели
     //
     const auto minimumVisibleSize = 0.005;
-    if ((d->sizes.constFirst() <= minimumVisibleSize && widgets.constFirst()->isVisibleTo(this))
-        || (d->sizes.constLast() <= minimumVisibleSize && widgets.constLast()->isVisibleTo(this))) {
-        if (d->sizes.constFirst() <= minimumVisibleSize) {
+    if ((sizes.constFirst() <= minimumVisibleSize && widgets.constFirst()->isVisibleTo(this))
+        || (sizes.constLast() <= minimumVisibleSize && widgets.constLast()->isVisibleTo(this))) {
+        if (sizes.constFirst() <= minimumVisibleSize) {
             d->showHiddenPanelToolbar->setActionCustomWidth(d->showRightPanelAction,
                                                             Ui::DesignSystem::layout().px8());
             d->showHiddenPanelToolbar->clearActionCustomWidth(d->showLeftPanelAction);
@@ -385,8 +412,8 @@ void Splitter::setSizes(const QVector<int>& _sizes)
     //
     // ... и кнопку скрытия панели
     //
-    if ((d->sizes.constFirst() <= minimumVisibleSize && widgets.constFirst()->isVisibleTo(this))
-        || (d->sizes.constLast() <= minimumVisibleSize && widgets.constLast()->isVisibleTo(this))) {
+    if ((sizes.constFirst() <= minimumVisibleSize && widgets.constFirst()->isVisibleTo(this))
+        || (sizes.constLast() <= minimumVisibleSize && widgets.constLast()->isVisibleTo(this))) {
         d->hideVisiblePanelToolbar->hide();
     } else {
         if (d->isHideLeftPanel) {
@@ -552,6 +579,7 @@ bool Splitter::eventFilter(QObject* _watched, QEvent* _event)
         }
 
         if (d->sizes.at(widgetIndex) == 0) {
+            d->animateShowHiddenPanelToolbar({});
             break;
         }
 
@@ -562,6 +590,7 @@ bool Splitter::eventFilter(QObject* _watched, QEvent* _event)
         } else {
             setSizes({ 1, 0 });
         }
+        d->hideVisiblePanelToolbar->hide();
         break;
     }
 
