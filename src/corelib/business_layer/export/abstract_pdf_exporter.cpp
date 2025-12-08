@@ -11,10 +11,11 @@
 #include <QPainter>
 #include <QPdfWriter>
 #include <QTextBlock>
+#include <QTextTable>
 #include <QtMath>
 
 // При необходимости можно отдебажить то, как рисуются блоки текста
-#undef DEBUG_BLOCKS_PRINTING
+// #define DEBUG_BLOCKS_PRINTING
 #ifdef DEBUG_BLOCKS_PRINTING
 #include <QRandomGenerator>
 #endif
@@ -151,6 +152,8 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
         //
         // Собственно переходим к отрисовке
         //
+        const auto& exportTemplate = q->documentTemplate(_exportOptions);
+        const auto pageTopMargin = MeasurementHelper::mmToPx(exportTemplate.pageMargins().top());
         while (block.isValid()) {
             if (!block.isVisible()) {
                 block = block.next();
@@ -163,7 +166,21 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
             // но туда не влезла даже одна строка
             //
             const auto blockLineHeight = block.layout()->lineAt(0).height();
-            const auto blockRect = layout->blockBoundingRect(block);
+            auto blockRect = block.layout()->boundingRect();
+            blockRect.translate(block.layout()->position());
+            //
+            // ... если блок находится в таблице, то корректируем его расположение
+            //
+            const auto table = qobject_cast<QTextTable*>(_document->frameAt(block.position()));
+            if (table != nullptr) {
+                blockRect = layout->blockBoundingRect(block);
+                //
+                // ... необходимо также учитывать высоту строки для особых случаев
+                //
+                blockRect.moveTop(blockRect.top() + block.blockFormat().lineHeight()
+                                  - TextHelper::fineLineSpacing(block.charFormat().font()));
+            }
+
             const bool isFirstLineCanBePlacedAtCurrentPage = (blockRect.top() > pageYPos)
                 && (pageYPos + _body.height()
                         - MeasurementHelper::mmToPx(
@@ -179,6 +196,15 @@ void AbstractPdfExporter::Implementation::printPage(int _pageNumber, QPainter* _
                     >= blockLineHeight);
             if (isFirstLineCanBePlacedAtCurrentPage
                 || (isBlockStartedOnPreviousPage && !isFirstLinePlacedAtPreviousPage)) {
+                //
+                // ... если блок должен начинаться на предыдущей странице, но ни одна строка туда
+                //     не влезает, корректируем верхнюю точку обрасти блока
+                //
+                if (isBlockStartedOnPreviousPage && !isFirstLinePlacedAtPreviousPage) {
+                    blockRect.moveTop(pageYPos + pageTopMargin + block.blockFormat().lineHeight()
+                                      - TextHelper::fineLineSpacing(block.charFormat().font()));
+                }
+
 #ifdef DEBUG_BLOCKS_PRINTING
                 _painter->setOpacity(0.5);
                 _painter->fillRect(

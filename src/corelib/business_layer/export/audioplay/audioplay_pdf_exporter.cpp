@@ -41,23 +41,6 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
 {
     const auto& exportTemplate = documentTemplate(_exportOptions);
     const auto& exportOptions = static_cast<const AudioplayExportOptions&>(_exportOptions);
-    //
-    // FIXME: проверить в разных системах и разобраться какое тут должно быть значение
-    //
-    const auto firstBlockYDelta =
-#ifdef Q_OS_WINDOWS
-        6
-#else
-        9
-#endif
-        ;
-    const auto notFirstBlockYDelta =
-#ifdef Q_OS_WINDOWS
-        -1
-#else
-        0
-#endif
-        ;
 
     //
     // Покажем номер блока, если необходимо
@@ -84,54 +67,37 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                 QRectF dialogueNumberRect;
                 if (QLocale().textDirection() == Qt::LeftToRight) {
                     if (characterBlockStyle.marginsOnHalfPage().left() > 0) {
-                        dialogueNumberRect = QRectF(
-                            MeasurementHelper::mmToPx(exportTemplate.pageMargins().left()),
-                            _blockRect.top() <= _pageYPos
-                                ? (_pageYPos
-                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
-                                   + firstBlockYDelta)
-                                : _blockRect.top() + notFirstBlockYDelta,
-                            numberDelta, TextHelper::fineLineSpacing(_painter->font()));
+                        dialogueNumberRect
+                            = QRectF(MeasurementHelper::mmToPx(exportTemplate.pageMargins().left()),
+                                     _blockRect.top(), numberDelta,
+                                     TextHelper::fineLineSpacing(_painter->font()));
                     } else {
                         const int distanceBetweenSceneNumberAndText = 10;
-                        dialogueNumberRect = QRectF(
-                            0,
-                            _blockRect.top() <= _pageYPos
-                                ? (_pageYPos
-                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
-                                   + firstBlockYDelta)
-                                : _blockRect.top() + notFirstBlockYDelta,
-                            MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
-                                - distanceBetweenSceneNumberAndText,
-                            TextHelper::fineLineSpacing(_painter->font()));
+                        dialogueNumberRect
+                            = QRectF(0, _blockRect.top(),
+                                     MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
+                                         - distanceBetweenSceneNumberAndText,
+                                     TextHelper::fineLineSpacing(_painter->font()));
                     }
                 } else {
                     if (_block.blockFormat().rightMargin() > numberDelta) {
-                        dialogueNumberRect = QRectF(
-                            MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
-                                + _body.width() - numberDelta,
-                            _blockRect.top() <= _pageYPos
-                                ? (_pageYPos
-                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
-                                   + firstBlockYDelta)
-                                : _blockRect.top() + notFirstBlockYDelta,
-                            numberDelta, TextHelper::fineLineSpacing(_painter->font()));
+                        dialogueNumberRect
+                            = QRectF(MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
+                                         + _body.width() - numberDelta,
+                                     _blockRect.top(), numberDelta,
+                                     TextHelper::fineLineSpacing(_painter->font()));
                     } else {
                         const int distanceBetweenSceneNumberAndText = 10;
-                        dialogueNumberRect = QRectF(
-                            MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
-                                + _body.width() + distanceBetweenSceneNumberAndText,
-                            _blockRect.top() <= _pageYPos
-                                ? (_pageYPos
-                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
-                                   + firstBlockYDelta)
-                                : _blockRect.top() + notFirstBlockYDelta,
-                            MeasurementHelper::mmToPx(exportTemplate.pageMargins().right())
-                                - distanceBetweenSceneNumberAndText,
-                            TextHelper::fineLineSpacing(_painter->font()));
+                        dialogueNumberRect
+                            = QRectF(MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
+                                         + _body.width() + distanceBetweenSceneNumberAndText,
+                                     _blockRect.top(),
+                                     MeasurementHelper::mmToPx(exportTemplate.pageMargins().right())
+                                         - distanceBetweenSceneNumberAndText,
+                                     TextHelper::fineLineSpacing(_painter->font()));
                     }
                 }
-                _painter->drawText(dialogueNumberRect, Qt::AlignRight | Qt::AlignTop,
+                _painter->drawText(dialogueNumberRect, Qt::AlignRight | Qt::AlignVCenter,
                                    dialogueNumber);
             }
         }
@@ -149,15 +115,12 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
         //
         const auto& characterBlockStyle
             = exportTemplate.paragraphStyle(TextParagraphType::Character);
-        QRectF dialogueNumberRect;
+        QRectF titleRect;
         if (QLocale().textDirection() == Qt::LeftToRight) {
-            dialogueNumberRect = QRectF(
+            titleRect = QRectF(
                 MeasurementHelper::mmToPx(exportTemplate.pageMargins().left()
                                           + characterBlockStyle.marginsOnHalfPage().left()),
-                _blockRect.top() <= _pageYPos
-                    ? (_pageYPos + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top())
-                       + firstBlockYDelta)
-                    : _blockRect.top() + notFirstBlockYDelta,
+                _blockRect.top(),
                 _block.blockFormat().leftMargin()
                     - MeasurementHelper::mmToPx(characterBlockStyle.marginsOnHalfPage().left()),
                 TextHelper::fineLineSpacing(_painter->font()));
@@ -170,7 +133,7 @@ void AudioplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
         QString space;
         space.fill(' ', 100);
         _painter->drawText(
-            dialogueNumberRect, Qt::AlignLeft | Qt::AlignTop,
+            titleRect, Qt::AlignLeft | Qt::AlignTop,
             QString("%1:%2").arg(!paragraphStyle.title().isEmpty()
                                      ? paragraphStyle.title()
                                      : BusinessLayer::textParagraphTitle(_paragraphType),

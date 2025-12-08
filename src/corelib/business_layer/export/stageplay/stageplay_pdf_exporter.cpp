@@ -67,47 +67,32 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
                 QRectF dialogueNumberRect;
                 if (QLocale().textDirection() == Qt::LeftToRight) {
                     if (characterBlockStyle.marginsOnHalfPage().left() > 0) {
-                        dialogueNumberRect = QRectF(
-                            MeasurementHelper::mmToPx(exportTemplate.pageMargins().left()),
-                            _blockRect.top() <= _pageYPos
-                                ? (_pageYPos
-                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
-                                : _blockRect.top(),
-                            numberDelta, _blockRect.height());
+                        dialogueNumberRect
+                            = QRectF(MeasurementHelper::mmToPx(exportTemplate.pageMargins().left()),
+                                     _blockRect.top(), numberDelta, _blockRect.height());
                     } else {
                         const int distanceBetweenSceneNumberAndText = 10;
-                        dialogueNumberRect = QRectF(
-                            0,
-                            _blockRect.top() <= _pageYPos
-                                ? (_pageYPos
-                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
-                                : _blockRect.top(),
-                            MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
-                                - distanceBetweenSceneNumberAndText,
-                            _blockRect.height());
+                        dialogueNumberRect
+                            = QRectF(0, _blockRect.top(),
+                                     MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
+                                         - distanceBetweenSceneNumberAndText,
+                                     _blockRect.height());
                     }
                 } else {
                     if (_block.blockFormat().rightMargin() > numberDelta) {
-                        dialogueNumberRect = QRectF(
-                            MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
-                                + _body.width() - numberDelta,
-                            _blockRect.top() <= _pageYPos
-                                ? (_pageYPos
-                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
-                                : _blockRect.top(),
-                            numberDelta, _blockRect.height());
+                        dialogueNumberRect
+                            = QRectF(MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
+                                         + _body.width() - numberDelta,
+                                     _blockRect.top(), numberDelta, _blockRect.height());
                     } else {
                         const int distanceBetweenSceneNumberAndText = 10;
-                        dialogueNumberRect = QRectF(
-                            MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
-                                + _body.width() + distanceBetweenSceneNumberAndText,
-                            _blockRect.top() <= _pageYPos
-                                ? (_pageYPos
-                                   + MeasurementHelper::mmToPx(exportTemplate.pageMargins().top()))
-                                : _blockRect.top(),
-                            MeasurementHelper::mmToPx(exportTemplate.pageMargins().right())
-                                - distanceBetweenSceneNumberAndText,
-                            _blockRect.height());
+                        dialogueNumberRect
+                            = QRectF(MeasurementHelper::mmToPx(exportTemplate.pageMargins().left())
+                                         + _body.width() + distanceBetweenSceneNumberAndText,
+                                     _blockRect.top(),
+                                     MeasurementHelper::mmToPx(exportTemplate.pageMargins().right())
+                                         - distanceBetweenSceneNumberAndText,
+                                     _blockRect.height());
                     }
                 }
                 _painter->drawText(dialogueNumberRect, Qt::AlignRight | Qt::AlignTop,
@@ -186,8 +171,7 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
             const auto prefixWidth = TextHelper::fineTextWidthF(prefix, _painter->font());
             const auto prefixHeight = _painter->fontMetrics().boundingRect(prefix).height();
             const auto prefixLeft = _blockRect.left() // положение блока
-                + _block.blockFormat().leftMargin() // левый отступ блока
-                + blockTextIndent // красная строка
+                + (_block.layout()->lineCount() == 1 ? 0.0 : blockTextIndent) // красная строка
                 + alignmentDelta // пустая область из-за выравнивания
                 - prefixWidth; // ширина префикса
             const auto prefixTop = _blockRect.top();
@@ -210,8 +194,6 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
 
             //
             // Определим параметры блока, необходимые для вычисления положения постфикса
-            //
-            const qreal blockTextIndent = _block.blockFormat().textIndent();
             //
             // ... вычислим пустую область образованной из-за выравнивания текста внутри блока
             //     если выравнивание по левому краю, то её нет
@@ -239,8 +221,7 @@ void StageplayPdfExporter::printBlockDecorations(QPainter* _painter, qreal _page
             const auto postfixWidth = TextHelper::fineTextWidthF(postfix, _painter->font());
             const auto postfixHeight = _painter->fontMetrics().boundingRect(postfix).height();
             const auto postfixLeft = _blockRect.left() // положение блока
-                + _block.blockFormat().leftMargin() // левый отступ блока
-                + (_block.layout()->lineCount() == 1 ? blockTextIndent : 0.0) // красная строка
+                + 0.0 // красная строка (не учитываем)
                 + alignmentDelta // пустая область из-за выравнивания
                 + lastLineWidth(); // ширина текста
             const auto postfixTop = _blockRect.bottom() - postfixHeight;
