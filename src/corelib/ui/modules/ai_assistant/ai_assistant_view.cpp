@@ -4,6 +4,7 @@
 #include <ui/widgets/button/button.h>
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/combo_box/combo_box.h>
+#include <ui/widgets/dialog/dialog.h>
 #include <ui/widgets/icon_button/icon_button.h>
 #include <ui/widgets/label/label.h>
 #include <ui/widgets/label/link_label.h>
@@ -900,8 +901,22 @@ AiAssistantView::AiAssistantView(QWidget* _parent)
                 d->translateSourceText->text(),
                 d->translateLanguage->currentIndex().data(Qt::UserRole).toString());
         } else {
-            emit translateDocumentRequested(
-                d->translateLanguage->currentIndex().data(Qt::UserRole).toString());
+            auto dialog = new Dialog(topLevelWidget());
+            dialog->setContentMaximumWidth(Ui::DesignSystem::dialog().maximumWidth());
+            dialog->showDialog({},
+                               tr("Translation will be loaded in the current document and fully "
+                                  "replaced content. Do you want to continue?"),
+                               { { 0, tr("Cancel"), Dialog::RejectButton },
+                                 { 1, tr("Yes, translate"), Dialog::AcceptButton } });
+            connect(dialog, &Dialog::finished, this,
+                    [this, dialog](const Dialog::ButtonInfo& _presedButton) {
+                        dialog->hideDialog();
+                        if (_presedButton.type == Dialog::AcceptButton) {
+                            emit translateDocumentRequested(
+                                d->translateLanguage->currentIndex().data(Qt::UserRole).toString());
+                        }
+                    });
+            QObject::connect(dialog, &Dialog::disappeared, dialog, &Dialog::deleteLater);
         }
     });
     connect(d->translateInsertButton, &Button::clicked, this,
