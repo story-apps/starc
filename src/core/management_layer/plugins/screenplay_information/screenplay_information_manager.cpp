@@ -3,6 +3,7 @@
 #include "screenplay_information_view.h"
 
 #include <business_layer/model/screenplay/screenplay_information_model.h>
+#include <domain/document_object.h>
 
 #include <QApplication>
 #include <QFileDialog>
@@ -13,6 +14,8 @@ namespace ManagementLayer {
 class ScreenplayInformationManager::Implementation
 {
 public:
+    explicit Implementation(ScreenplayInformationManager* _q);
+
     /**
      * @brief Создать представление
      */
@@ -24,6 +27,8 @@ public:
     void setModelForView(BusinessLayer::AbstractModel* _model,
                          Ui::ScreenplayInformationView* _view);
 
+
+    ScreenplayInformationManager* q = nullptr;
 
     /**
      * @brief Предаставление для основного окна
@@ -40,6 +45,11 @@ public:
     };
     QVector<ViewAndModel> allViews;
 };
+
+ScreenplayInformationManager::Implementation::Implementation(ScreenplayInformationManager* _q)
+    : q(_q)
+{
+}
 
 Ui::ScreenplayInformationView* ScreenplayInformationManager::Implementation::createView(
     BusinessLayer::AbstractModel* _model)
@@ -138,6 +148,12 @@ void ScreenplayInformationManager::Implementation::setModelForView(
                 &BusinessLayer::ScreenplayInformationModel::setScreenplayTextVisible);
         connect(_view, &Ui::ScreenplayInformationView::screenplayStatisticsVisibleChanged, model,
                 &BusinessLayer::ScreenplayInformationModel::setScreenplayStatisticsVisible);
+
+        //
+        connect(_view, &Ui::ScreenplayInformationView::sendDocumentToReviewRequested, q,
+                [this, model](const QString& _comment) {
+                    emit q->sendDocumentToReviewRequested(model->document()->uuid(), _comment);
+                });
     }
 }
 
@@ -147,11 +163,16 @@ void ScreenplayInformationManager::Implementation::setModelForView(
 
 ScreenplayInformationManager::ScreenplayInformationManager(QObject* _parent)
     : QObject(_parent)
-    , d(new Implementation)
+    , d(new Implementation(this))
 {
 }
 
 ScreenplayInformationManager::~ScreenplayInformationManager() = default;
+
+QObject* ScreenplayInformationManager::asQObject()
+{
+    return this;
+}
 
 Ui::IDocumentView* ScreenplayInformationManager::view()
 {

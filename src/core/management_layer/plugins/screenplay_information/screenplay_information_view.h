@@ -19,6 +19,8 @@ public:
      */
     /** @{ */
     QWidget* asQWidget() override;
+    virtual void setProjectInfo(bool _isRemote, bool _isOwner, bool _allowGrantAccessToProject,
+                                bool _canBeSentForChecking) override;
     void setEditingMode(ManagementLayer::DocumentEditingMode _mode) override;
     /** @} */
 
@@ -45,6 +47,11 @@ public:
 
     void setScreenplayStatisticsVisible(bool _visible);
     Q_SIGNAL void screenplayStatisticsVisibleChanged(bool _visible);
+
+    /**
+     * @brief Запрос отправки документа на проверку
+     */
+    Q_SIGNAL void sendDocumentToReviewRequested(const QString& _comment);
 
 protected:
     /**

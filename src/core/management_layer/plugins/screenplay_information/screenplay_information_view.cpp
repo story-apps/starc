@@ -3,6 +3,7 @@
 #include <interfaces/management_layer/i_document_manager.h>
 #include <ui/design_system/design_system.h>
 #include <ui/modules/logline_generator/logline_generator_dialog.h>
+#include <ui/widgets/button/button.h>
 #include <ui/widgets/card/card.h>
 #include <ui/widgets/check_box/check_box.h>
 #include <ui/widgets/scroll_bar/scroll_bar.h>
@@ -24,6 +25,10 @@ public:
 
     QScrollArea* content = nullptr;
 
+    Card* checkingInfo = nullptr;
+    TextField* checkingComment = nullptr;
+    Button* sendForChecking = nullptr;
+
     Card* screenplayInfo = nullptr;
     QGridLayout* screenplayInfoLayout = nullptr;
     TextField* screenplayName = nullptr;
@@ -38,6 +43,9 @@ public:
 
 ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
     : content(new QScrollArea(_parent))
+    , checkingInfo(new Card(_parent))
+    , checkingComment(new TextField(checkingInfo))
+    , sendForChecking(new Button(checkingInfo))
     , screenplayInfo(new Card(_parent))
     , screenplayInfoLayout(new QGridLayout)
     , screenplayName(new TextField(screenplayInfo))
@@ -70,6 +78,11 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
         screenplayLogline,
     });
 
+    auto checkingLayout = UiHelper::makeHBoxLayout();
+    checkingLayout->addWidget(checkingComment, 1);
+    checkingLayout->addWidget(sendForChecking);
+    checkingInfo->setContentLayout(checkingLayout);
+
     screenplayInfoLayout->setContentsMargins({});
     screenplayInfoLayout->setSpacing(0);
     int row = 0;
@@ -92,9 +105,12 @@ ScreenplayInformationView::Implementation::Implementation(QWidget* _parent)
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setContentsMargins({});
     layout->setSpacing(0);
+    layout->addWidget(checkingInfo);
     layout->addWidget(screenplayInfo);
     layout->addStretch();
     contentWidget->setLayout(layout);
+
+    checkingInfo->hide();
 }
 
 
@@ -112,6 +128,9 @@ ScreenplayInformationView::ScreenplayInformationView(QWidget* _parent)
     layout->setSpacing(0);
     layout->addWidget(d->content);
     setLayout(layout);
+
+    connect(d->sendForChecking, &Button::clicked, this,
+            [this] { emit sendDocumentToReviewRequested(d->checkingComment->text()); });
 
     connect(d->screenplayName, &TextField::textChanged, this,
             [this] { emit nameChanged(d->screenplayName->text()); });
@@ -170,13 +189,26 @@ QWidget* ScreenplayInformationView::asQWidget()
     return this;
 }
 
+void ScreenplayInformationView::setProjectInfo(bool _isRemote, bool _isOwner,
+                                               bool _allowGrantAccessToProject,
+                                               bool _canBeSentForChecking)
+{
+    Q_UNUSED(_isRemote)
+    Q_UNUSED(_isOwner)
+    Q_UNUSED(_allowGrantAccessToProject)
+
+    d->checkingInfo->setVisible(_canBeSentForChecking);
+}
+
 void ScreenplayInformationView::setEditingMode(ManagementLayer::DocumentEditingMode _mode)
 {
     const auto readOnly = _mode != ManagementLayer::DocumentEditingMode::Edit;
+    d->checkingComment->setReadOnly(readOnly);
     d->screenplayName->setReadOnly(readOnly);
     d->screenplayTagline->setReadOnly(readOnly);
     d->screenplayLogline->setReadOnly(readOnly);
     const auto enabled = !readOnly;
+    d->sendForChecking->setEnabled(enabled);
     d->titlePageVisiblity->setEnabled(enabled);
     d->synopsisVisiblity->setEnabled(enabled);
     d->treatmentVisiblity->setEnabled(enabled);
@@ -238,6 +270,9 @@ void ScreenplayInformationView::setScreenplayStatisticsVisible(bool _visible)
 
 void ScreenplayInformationView::updateTranslations()
 {
+    d->checkingComment->setLabel(tr("Comment"));
+    d->sendForChecking->setText(tr("Send for checking"));
+
     d->screenplayName->setLabel(tr("Screenplay name"));
     d->screenplayTagline->setLabel(tr("Tagline"));
     d->screenplayLogline->setLabel(tr("Logline"));
@@ -253,30 +288,40 @@ void ScreenplayInformationView::designSystemChangeEvent(DesignSystemChangeEvent*
 {
     Widget::designSystemChangeEvent(_event);
 
-    setBackgroundColor(Ui::DesignSystem::color().surface());
+    setBackgroundColor(DesignSystem::color().surface());
 
     d->content->widget()->layout()->setContentsMargins(
-        QMarginsF(Ui::DesignSystem::layout().px24(),
-                  Ui::DesignSystem::compactLayout().topContentMargin(),
-                  Ui::DesignSystem::layout().px24(), Ui::DesignSystem::compactLayout().px24())
+        QMarginsF(DesignSystem::layout().px24(), DesignSystem::compactLayout().topContentMargin(),
+                  DesignSystem::layout().px24(), DesignSystem::compactLayout().px24())
             .toMargins());
 
+    d->checkingInfo->setBackgroundColor(DesignSystem::color().background());
     d->screenplayInfo->setBackgroundColor(DesignSystem::color().background());
-    for (auto textField : { d->screenplayName, d->screenplayTagline, d->screenplayLogline }) {
-        textField->setBackgroundColor(Ui::DesignSystem::color().onBackground());
-        textField->setTextColor(Ui::DesignSystem::color().onBackground());
+    for (auto textField :
+         { d->checkingComment, d->screenplayName, d->screenplayTagline, d->screenplayLogline }) {
+        textField->setBackgroundColor(DesignSystem::color().onBackground());
+        textField->setTextColor(DesignSystem::color().onBackground());
     }
     for (auto checkBox : { d->titlePageVisiblity, d->synopsisVisiblity, d->treatmentVisiblity,
                            d->screenplayTextVisiblity, d->screenplayStatisticsVisiblity }) {
-        checkBox->setBackgroundColor(Ui::DesignSystem::color().background());
-        checkBox->setTextColor(Ui::DesignSystem::color().onBackground());
+        checkBox->setBackgroundColor(DesignSystem::color().background());
+        checkBox->setTextColor(DesignSystem::color().onBackground());
     }
-    d->screenplayInfoLayout->setVerticalSpacing(Ui::DesignSystem::compactLayout().px16());
-    d->screenplayInfoLayout->setRowMinimumHeight(
-        0, static_cast<int>(Ui::DesignSystem::layout().px24()));
+    d->checkingComment->setCustomMargins(
+        { DesignSystem::layout().px24(), DesignSystem::compactLayout().px24(),
+          DesignSystem::layout().px24(), DesignSystem::compactLayout().px24() });
+    d->sendForChecking->setBackgroundColor(DesignSystem::color().accent());
+    d->sendForChecking->setTextColor(DesignSystem::color().accent());
+    d->sendForChecking->setContentsMargins(0, DesignSystem::compactLayout().px16(),
+                                           DesignSystem::compactLayout().px16(),
+                                           DesignSystem::layout().px16());
+    d->checkingInfo->layout()->setSpacing(DesignSystem::layout().px16());
+    d->screenplayInfoLayout->setVerticalSpacing(DesignSystem::compactLayout().px16());
+    d->screenplayInfoLayout->setRowMinimumHeight(0,
+                                                 static_cast<int>(DesignSystem::layout().px24()));
     d->screenplayInfoLayout->setRowMinimumHeight(
         d->screenplayInfoLayout->rowCount() - 1,
-        static_cast<int>(Ui::DesignSystem::compactLayout().px24()));
+        static_cast<int>(DesignSystem::compactLayout().px24()));
 }
 
 } // namespace Ui

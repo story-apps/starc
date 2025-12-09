@@ -455,7 +455,7 @@ public:
     /**
      * @brief Находится ли проект в команде
      */
-    bool isProjectInTeam = false;
+    int projectTeamId = Domain::kInvalidId;
 
     /**
      * @brief Может ли пользователь расшаривать доступ к документам проекта
@@ -3450,7 +3450,7 @@ void ProjectManager::reconfigureNovelNavigator()
 
 void ProjectManager::checkAvailabilityToEdit()
 {
-    d->pluginsBuilder.checkAvailabilityToEdit(d->isProjectInTeam);
+    d->pluginsBuilder.checkAvailabilityToEdit(d->projectTeamId != Domain::kInvalidId);
     d->updateViewsEditingMode();
 }
 
@@ -3523,7 +3523,7 @@ void ProjectManager::updateCurrentProject(BusinessLayer::ProjectsModelProjectIte
     d->projectPath = _project->path();
     d->isProjectRemote = _project->isRemote();
     d->isProjectOwner = _project->isOwner();
-    d->isProjectInTeam = _project->teamId() != Domain::kInvalidId;
+    d->projectTeamId = _project->teamId();
     d->allowGrantAccessToProject
         = d->isProjectOwner || (projectTeam != nullptr && projectTeam->allowGrantAccessToProject());
     d->editingMode = _project->editingMode();
@@ -3541,6 +3541,11 @@ void ProjectManager::updateCurrentProject(BusinessLayer::ProjectsModelProjectIte
     if (projectTeam != nullptr) {
         projectInformationModel->setTeammates(projectTeam->members());
     }
+
+    //
+    // Раз получили обновлённую информацию о проекте, проверим режим редактирования для всех вьюх
+    //
+    d->updateViewsEditingMode();
 }
 
 void ProjectManager::restoreCurrentProjectState(const QString& _path)
@@ -5279,7 +5284,11 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
         return;
     }
     Log::trace("Set project info");
-    view->setProjectInfo(d->isProjectRemote, d->isProjectOwner, d->allowGrantAccessToProject);
+    constexpr int testTeamId = 17;
+    const bool canBeSentForChecking
+        = d->projectTeamId == testTeamId && d->editingPermissions.contains(itemForShow->uuid());
+    view->setProjectInfo(d->isProjectRemote, d->isProjectOwner, d->allowGrantAccessToProject,
+                         canBeSentForChecking);
     Log::trace("Set editing mode");
     view->setEditingMode(d->documentEditingMode(itemForShow));
     Log::trace("Set view cursors");
@@ -5437,6 +5446,16 @@ void ProjectManager::showView(const QModelIndex& _itemIndex, const QString& _vie
             connect(documentManager, SIGNAL(generateImageRequested(QString, QString, QString)),
                     this, SIGNAL(generateImageRequested(QString, QString, QString)),
                     Qt::UniqueConnection);
+        }
+
+        //
+        // Добавляем коннект с тестовым методом
+        //
+        if (documentManager->metaObject()->indexOfSignal(
+                "sendDocumentToReviewRequested(QUuid,QString)")
+            != invalidSignalIndex) {
+            connect(documentManager, SIGNAL(sendDocumentToReviewRequested(QUuid, QString)), this,
+                    SIGNAL(sendDocumentToReviewRequested(QUuid, QString)), Qt::UniqueConnection);
         }
     }
 

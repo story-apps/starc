@@ -147,6 +147,12 @@ public:
     //  * @brief Запрос на создание документа заданного типа
     //  */
     // void createDocumentRequested(Domain::DocumentObjectType _type);
+
+
+    // /**
+    //  * @brief Запрос отправки документа на проверку
+    //  */
+    // void sendDocumentToReviewRequested(const QUuid& _documentUuid, const QString& _comment);
 };
 
 } // namespace ManagementLayer

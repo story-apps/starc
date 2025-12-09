@@ -49,7 +49,7 @@ public:
      * @brief Задать параметры проекта
      */
     virtual void setProjectInfo(bool /*_isRemote*/, bool /*_isOwner*/,
-                                bool /*_allowGrantAccessToProject*/)
+                                bool /*_allowGrantAccessToProject*/, bool /*_canBeSentForChecking*/)
     {
     }
 
@@ -131,6 +131,11 @@ public:
     // @brief Изменилась позиция курсора
     //
     // void cursorChanged(const QByteArray& _cursorData);
+
+    //
+    // @brief Пользователь отправил документ на проверку
+    //
+    // void sendForCheckingRequested();
 };
 
 } // namespace Ui

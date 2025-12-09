@@ -26,6 +26,7 @@ public:
      * @brief Реализуем интерфейс менеджера документа
      */
     /** @{ */
+    QObject* asQObject() override;
     Ui::IDocumentView* view() override;
     Ui::IDocumentView* view(BusinessLayer::AbstractModel* _model) override;
     Ui::IDocumentView* secondaryView() override;
@@ -34,6 +35,12 @@ public:
     void resetModels() override;
     void setEditingMode(DocumentEditingMode _mode) override;
     /** @} */
+
+signals:
+    /**
+     * @brief Запрос отправки документа на проверку
+     */
+    void sendDocumentToReviewRequested(const QUuid& _documentUuid, const QString& _comment);
 
 private:
     class Implementation;

@@ -3649,6 +3649,21 @@ void ApplicationManager::initConnections()
             d->cloudServiceManager.data(), &CloudServiceManager::aiGenerateText);
     connect(d->projectManager.data(), &ProjectManager::generateImageRequested,
             d->cloudServiceManager.data(), &CloudServiceManager::aiGenerateImage);
+    //
+    // Тестовый метод, для отправки документа на проверку
+    //
+    connect(d->projectManager.data(), &ProjectManager::sendDocumentToReviewRequested,
+            d->cloudServiceManager.data(),
+            [this](const QUuid& _documentUuid, const QString& _comment) {
+                const auto currentProject = d->projectsManager->currentProject();
+                if (currentProject == nullptr || currentProject->isLocal()) {
+                    return;
+                }
+
+                d->cloudServiceManager->sendDocumentToReview(currentProject->id(), _documentUuid,
+                                                             _comment);
+            });
+    //
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textRephrased,
             d->projectManager.data(), &ProjectManager::setRephrasedText);
     connect(d->cloudServiceManager.data(), &CloudServiceManager::textExpanded,

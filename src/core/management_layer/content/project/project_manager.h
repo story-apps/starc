@@ -355,6 +355,12 @@ signals:
     void importFileRequested(const QString& _filePath, const QUuid& _documentUuid,
                              Domain::DocumentObjectType _type);
 
+
+    /**
+     * @brief Запрос отправки документа на проверку
+     */
+    void sendDocumentToReviewRequested(const QUuid& _documentUuid, const QString& _comment);
+
 protected:
     /**
      * @brief Переопределяем для обработки события простоя пользователя
